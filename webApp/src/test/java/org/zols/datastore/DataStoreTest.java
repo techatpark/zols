@@ -22,9 +22,12 @@ public class DataStoreTest {
 	private DataStore dataStore;
 
 	
+        @Test
 	public void testSchemaCreate() {
-		Schema schema = new Schema();
-		schema.setName("employee");
+            
+            for (int i = 0; i < 100; i++) {
+                Schema schema = new Schema();
+		schema.setName(String.valueOf(i));
 		schema.setLabel("Employee");
 		schema.setDescription("Describe an Employee of the Organization");
 		
@@ -48,9 +51,12 @@ public class DataStoreTest {
 		
 		dataStore.create(schema,Schema.class);
 		System.out.println("dataStore " + schema.getLabel());
+            }
+            
+		
 	}
 	
-        @Test
+        
 	public void testMethod() {
             
         }
