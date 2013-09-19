@@ -20,8 +20,6 @@ $(function() {
             sort: "page.sort",
             order: "page.sort.dir"
         },
-        sortname: 'title',
-        sortorder: 'asc',
         height: 'auto',
         viewrecords: true,
         rowList: [10, 20, 50, 100],
@@ -46,18 +44,7 @@ $(function() {
         serializeDelData: function() {
             return "";
         }
-    });
-
-    var editOptions = {
-        onclickSubmit: function(params, postdata) {
-            params.url = URL + '/' + postdata.name;
-        }
-    };
-    var addOptions = {mtype: "POST",
-        onclickSubmit: function(params, postdata) {
-            delete postdata.id;
-            params.url = URL ;
-        }};
+    });   
     var delOptions = {
         onclickSubmit: function(params, postdata) {
             params.url = URL + '/' + postdata;
@@ -97,17 +84,17 @@ $(function() {
         height: 'auto',
         ondblClickRow: function(id) {
             jQuery(this).jqGrid('editGridRow', id, editOptions);
-        }
+        },
+        formatter: {idName: "name"}
     };
 
     $("#grid")
             .jqGrid(options)
             .navGrid('#pager',
-            {}, //options
-            editOptions,
-            addOptions,
+            { search: false,addfunc: function(){alert('add');},editfunc: function(data){alert('edit ' + data);}}, //options
+            {}, // edit options
+            {}, // add options 
             delOptions,
             {} // search options
     );
-
 });
