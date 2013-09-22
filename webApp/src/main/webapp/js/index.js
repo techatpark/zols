@@ -51,7 +51,7 @@ $(function() {
         }
     };
 
-    var URL = 'schemas';
+    var URL = '../schemas';
     var options = {
         url: URL,
         editurl: URL,

@@ -93,4 +93,10 @@ public class SchemaController {
         model.addAttribute("schema",new Schema());
         return "schema";
     }
+    
+    @RequestMapping(value = "/listing", method = GET)
+    public String listing() {         
+        return "listschema";
+    }
+    
 }
