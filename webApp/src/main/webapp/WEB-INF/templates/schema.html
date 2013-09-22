@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Schemas</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/base/jquery.ui.base.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/redmond/jquery-ui.css"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/ui.jqgrid.css" th:href="@{/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/jquery.idealforms.min.css" th:href="@{/css/jquery.idealforms.min.css}"/>
+    </head>
+    <body>
+        <div id="main">
+            <div class="container clearfix">
+                <div class="row">
+                    <div class="eightcol last">
+                        <!-- Begin Form -->
+                        <form id="my-form" th:object="${schema}">
+                            <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
+                            <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
+                            <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
+                            <div>
+                                <button id="submit">Submit</button>
+                                <button id="reset" type="button">Reset</button>
+                            </div>
+
+                        </form>
+
+                        <!-- End Form -->
+
+                    </div>
+
+                </div>
+            </div>
+        </div><!-- End Main -->
+
+
+
+        <script src="../../js/jquery-1.10.2.min.js" th:src="@{/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../js/i18n/grid.locale-en.js" th:src="@{/js/i18n/grid.locale-en.js}"></script>
+        <script src="../../js/jquery.jqGrid.min.js" th:src="@{/js/jquery.jqGrid.min.js}"></script>
+        <script src="../../js/jquery.idealforms.min.js" th:src="@{/js/jquery.idealforms.min.js}"></script>
+        <script src="../../js/form2js.js" th:src="@{/js/form2js.js}"></script>
+        <script src="../../js/jquery.toObject.js" th:src="@{/js/jquery.toObject.js}"></script>
+        <script>
+            var options = {
+                onFail: function() {
+                    alert($myform.getInvalid().length + ' invalid fields.')
+                },
+                inputs: {
+                    'password': {
+                        filters: 'required pass',
+                    },
+                    'name': {
+                        filters: 'required',
+                        data: {
+                            //ajax: { url:'validate.php' }
+                        }
+                    }
+                }
+            };
+
+            var $myform = $('#my-form').idealforms(options).data('idealforms');
+
+            $('#reset').click(function() {
+                $myform.reset().fresh().focusFirst();
+            });
+
+            $("#my-form").submit(function(e) {
+                e.preventDefault();
+                var base_url = '/webapp';
+                var formdata = $("#my-form").toObject({mode: 'first'});
+                $.ajax({
+                    url: base_url + "/schemas/2",
+                    type: 'PUT',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formdata),
+                    dataType: 'json'
+                }).done(function(data) {
+                    alert('done');
+                }).fail(function() {
+                    alert("error");
+                });
+            });
+
+            $myform.focusFirst();
+
+        </script>
+    </body>
+</html>

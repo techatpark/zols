@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.thymeleaf.util.Validate;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.model.Schema;
 
@@ -39,9 +39,7 @@ public class SchemaController {
 	@ResponseBody
 	public Schema read(@PathVariable(value = "name") String name) {
 		LOGGER.info("Reading schema with id {}", name);
-		Schema schema = dataStore.read(name, Schema.class);
-		Validate.isTrue(schema != null, "Unable to find schema with id: "
-				+ name);
+		Schema schema = dataStore.read(name, Schema.class);		
 		return schema;
 	}
 
@@ -50,8 +48,6 @@ public class SchemaController {
 	public void update(@PathVariable(value = "name") String name,
 			@RequestBody Schema schema) {
 		LOGGER.info("Updating schema with id {} with {}", name, schema);
-		Validate.isTrue(name.equals(schema.getName()),
-				"name doesn't match URL name: " + schema.getName());
 		dataStore.update(schema, Schema.class);
 	}
 
@@ -85,4 +81,16 @@ public class SchemaController {
 		LOGGER.error(ex.getMessage(), ex);
 		return ex.getMessage();
 	}
+        
+    @RequestMapping(value = "/edit/{name}", method = GET)
+    public String edit(@PathVariable(value = "name") String name,Model model) { 
+        model.addAttribute("schema", dataStore.read(name, Schema.class)); 
+        return "schema";
+    }
+    
+    @RequestMapping(value = "/add", method = GET)
+    public String add(Model model) {   
+        model.addAttribute("schema",new Schema());
+        return "schema";
+    }
 }

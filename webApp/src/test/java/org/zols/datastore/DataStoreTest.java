@@ -22,7 +22,7 @@ public class DataStoreTest {
 	private DataStore dataStore;
 
 	
-        @Test
+
 	public void testSchemaCreate() {
             
             for (int i = 0; i < 10; i++) {
@@ -56,7 +56,7 @@ public class DataStoreTest {
 		
 	}
 	
-        
+        @Test
 	public void testMethod() {
             
         }
