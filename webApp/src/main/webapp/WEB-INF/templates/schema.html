@@ -15,47 +15,50 @@
                     <div class="eightcol last">
                         <!-- Begin Form -->
                         <form id="my-form" th:object="${schema}">
-                            
-                             <div>
+                            <div>
                                 <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
                                 <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
                                 <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
                             </div>   
-                            <div><hr/></div>
                             <section th:each="attributes, stat : *{attributes}" th:name="*{attributes[__${stat.index}__].name}">
                                 <div><label>Name</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></div>
                                 <div><label>Type</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].type}"/></div>
                                 <div><label>Description</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].description}"/></div>
-                            </section>
-                            <div><hr/></div>
-                                                    
-                            <div>
-
-                            </div>   
+                            </section> 
                             <div>
                                 <button id="submit">Submit</button>
                                 <button id="reset" type="button">Reset</button>
                             </div>
                         </form>
-
                         <!-- End Form -->
-
                     </div>
 
                 </div>
             </div>
         </div><!-- End Main -->
-
-
-
         <script src="../../js/jquery-1.10.2.min.js" th:src="@{/js/jquery-1.10.2.min.js}"></script>
         <script src="../../js/jquery.idealforms.min.js" th:src="@{/js/jquery.idealforms.min.js}"></script>
         <script src="../../js/form2js.js" th:src="@{/js/form2js.js}"></script>
         <script src="../../js/jquery.toObject.js" th:src="@{/js/jquery.toObject.js}"></script>
         <script>
             var options = {
+                onSuccess: function() {
+                    var base_url = '/webapp';
+                    var formdata = $("#my-form").toObject({mode: 'first'});
+                    $.ajax({
+                        url: base_url + "/schemas/2",
+                        type: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formdata),
+                        dataType: 'json'
+                    }).done(function(data) {
+                        window.location = base_url + '/schemas/listing';
+                    }).fail(function() {
+                        alert("error");
+                    });
+                },
                 onFail: function() {
-                    alert($myform.getInvalid().length + ' invalid fields.')
+                    //alert($myform.getInvalid().length + ' invalid fields.')
                 },
                 inputs: {
                     'password': {
@@ -71,30 +74,13 @@
             };
 
             var $myform = $('#my-form').idealforms(options).data('idealforms');
-
             $('#reset').click(function() {
                 $myform.reset().fresh().focusFirst();
             });
-
             $("#my-form").submit(function(e) {
                 e.preventDefault();
-                var base_url = '/webapp';
-                var formdata = $("#my-form").toObject({mode: 'first'});
-                $.ajax({
-                    url: base_url + "/schemas/2",
-                    type: 'PUT',
-                    contentType: 'application/json',
-                    data: JSON.stringify(formdata),
-                    dataType: 'json'
-                }).done(function(data) {
-                    alert('done');
-                }).fail(function() {
-                    alert("error");
-                });
             });
-
             $myform.focusFirst();
-
         </script>
     </body>
 </html>

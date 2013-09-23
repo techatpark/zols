@@ -91,7 +91,7 @@ $(function() {
     $("#grid")
             .jqGrid(options)
             .navGrid('#pager',
-            { search: false,addfunc: function(){alert('add');},editfunc: function(data){alert('edit ' + data);}}, //options
+            { search: false,addfunc: function(){window.location = '../schemas/add';},editfunc: function(data){ window.location = '../schemas/edit/'+ data; ;}}, //options
             {}, // edit options
             {}, // add options 
             delOptions,
