@@ -15,14 +15,27 @@
                     <div class="eightcol last">
                         <!-- Begin Form -->
                         <form id="my-form" th:object="${schema}">
-                            <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
-                            <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
-                            <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
+                            
+                             <div>
+                                <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
+                                <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
+                                <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
+                            </div>   
+                            <div><hr/></div>
+                            <section th:each="attributes, stat : *{attributes}" th:name="*{attributes[__${stat.index}__].name}">
+                                <div><label>Name</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></div>
+                                <div><label>Type</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].type}"/></div>
+                                <div><label>Description</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].description}"/></div>
+                            </section>
+                            <div><hr/></div>
+                                                    
+                            <div>
+
+                            </div>   
                             <div>
                                 <button id="submit">Submit</button>
                                 <button id="reset" type="button">Reset</button>
                             </div>
-
                         </form>
 
                         <!-- End Form -->
