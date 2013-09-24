@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.model.BaseObject;
 import org.zols.datastore.model.Entity;
+import org.zols.datastore.util.DynamicBeanGenerator;
 
 /**
  *
@@ -30,8 +31,12 @@ public class DataController {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DataController.class);
+    
     @Autowired
     private DataStore dataStore;
+    
+    @Autowired
+    private DynamicBeanGenerator beanGenerator;
 
     @RequestMapping(value = "/{entityName}", method = POST)
     @ResponseBody
@@ -39,7 +44,7 @@ public class DataController {
             @PathVariable(value = "entityName") String entityName,
             @RequestBody String jsonString) {
         LOGGER.info("Creating new baseObject {}", jsonString);
-        Entity entity = dataStore.read(entityName, Entity.class);
-        return new BaseObject();
+        BaseObject baseObject = beanGenerator.getBaseObject("basic", jsonString);
+        return dataStore.create(baseObject, BaseObject.class);
     }
 }
