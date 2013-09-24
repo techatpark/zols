@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.zols.datastore.model.Schema;
+import org.zols.datastore.model.Entity;
 
 @Service
 public class DataStore {

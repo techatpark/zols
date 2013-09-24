@@ -16,54 +16,54 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.zols.datastore.DataStore;
-import org.zols.datastore.model.Schema;
+import org.zols.datastore.model.Entity;
 
 @Controller
-@RequestMapping(value = "/schemas")
-public class SchemaController {
+@RequestMapping(value = "/entities")
+public class EntityController {
 
 	private static final Logger LOGGER = LoggerFactory
-			.getLogger(SchemaController.class);
+			.getLogger(EntityController.class);
 
 	@Autowired
 	private DataStore dataStore;
 
 	@RequestMapping(method = POST)
 	@ResponseBody
-	public Schema create(@RequestBody Schema schema) {
-		LOGGER.info("Creating new schema {}", schema);
-		return dataStore.create(schema, Schema.class);
+	public Entity create(@RequestBody Entity entity) {
+		LOGGER.info("Creating new entity {}", entity);
+		return dataStore.create(entity, Entity.class);
 	}
 
 	@RequestMapping(value = "/{name}", method = GET)
 	@ResponseBody
-	public Schema read(@PathVariable(value = "name") String name) {
-		LOGGER.info("Reading schema with id {}", name);
-		Schema schema = dataStore.read(name, Schema.class);		
-		return schema;
+	public Entity read(@PathVariable(value = "name") String name) {
+		LOGGER.info("Reading entity with id {}", name);
+		Entity entity = dataStore.read(name, Entity.class);		
+		return entity;
 	}
 
 	@RequestMapping(value = "/{name}", method = PUT)
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void update(@PathVariable(value = "name") String name,
-			@RequestBody Schema schema) {
-		LOGGER.info("Updating schema with id {} with {}", name, schema);
-		dataStore.update(schema, Schema.class);
+			@RequestBody Entity entity) {
+		LOGGER.info("Updating entity with id {} with {}", name, entity);
+		dataStore.update(entity, Entity.class);
 	}
 
 	@RequestMapping(value = "/{name}", method = DELETE)
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(value = "name") String name) {
-		LOGGER.info("Deleting schema with id {}", name);
-		dataStore.delete(name, Schema.class);
+		LOGGER.info("Deleting entity with id {}", name);
+		dataStore.delete(name, Entity.class);
 	}
 
 	@RequestMapping(method = GET)
 	@ResponseBody
-	public Page<Schema> list(
+	public Page<Entity> list(
 			Pageable page) {
-		LOGGER.info("Listing schemas");
-		return dataStore.list(page, Schema.class);
+		LOGGER.info("Listing entities");
+		return dataStore.list(page, Entity.class);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
@@ -84,19 +84,19 @@ public class SchemaController {
         
     @RequestMapping(value = "/edit/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name,Model model) { 
-        model.addAttribute("schema", dataStore.read(name, Schema.class)); 
-        return "schema";
+        model.addAttribute("entity", dataStore.read(name, Entity.class)); 
+        return "entity";
     }
     
     @RequestMapping(value = "/add", method = GET)
     public String add(Model model) {   
-        model.addAttribute("schema",new Schema());
-        return "schema";
+        model.addAttribute("entity",new Entity());
+        return "entity";
     }
     
     @RequestMapping(value = "/listing", method = GET)
     public String listing() {         
-        return "listschema";
+        return "listentities";
     }
     
 }

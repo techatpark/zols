@@ -7,12 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 
- * This describes the schema of the entity added to zols datastore.
+ * This describes the entity of the entity added to zols datastore.
  * @author Sathish Kumar Thiyagarajan
  * 
  */
-@Document(collection = "schema")
-public class Schema {
+@Document(collection = "entity")
+public class Entity {
 
 	@Id
 	private String name;

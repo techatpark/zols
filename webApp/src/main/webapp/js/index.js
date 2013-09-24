@@ -51,7 +51,7 @@ $(function() {
         }
     };
 
-    var URL = '../schemas';
+    var URL = '../entities';
     var options = {
         url: URL,
         editurl: URL,
@@ -79,7 +79,7 @@ $(function() {
                 editrules: {required: true}
             }
         ],
-        caption: "Schemas",
+        caption: "entities",
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
@@ -91,7 +91,7 @@ $(function() {
     $("#grid")
             .jqGrid(options)
             .navGrid('#pager',
-            { search: false,addfunc: function(){window.location = '../schemas/add';},editfunc: function(data){ window.location = '../schemas/edit/'+ data; ;}}, //options
+            { search: false,addfunc: function(){window.location = '../entities/add';},editfunc: function(data){ window.location = '../entities/edit/'+ data; ;}}, //options
             {}, // edit options
             {}, // add options 
             delOptions,

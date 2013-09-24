@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>Edit Schemas</title>       
+        <title>Edit entities</title>       
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/ui.jqgrid.css" th:href="@{/css/ui.jqgrid.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../css/jquery.idealforms.min.css" th:href="@{/css/jquery.idealforms.min.css}"/>
@@ -14,17 +14,20 @@
                 <div class="row">
                     <div class="eightcol last">
                         <!-- Begin Form -->
-                        <form id="my-form" th:object="${schema}">
+                        <form id="my-form" th:object="${entity}">
+                            
                             <div>
                                 <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
                                 <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
                                 <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
-                            </div>   
+                            </div>
+                           
                             <section th:each="attributes, stat : *{attributes}" th:name="*{attributes[__${stat.index}__].name}">
                                 <div><label>Name</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></div>
                                 <div><label>Type</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].type}"/></div>
                                 <div><label>Description</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].description}"/></div>
                             </section> 
+                                
                             <div>
                                 <button id="submit">Submit</button>
                                 <button id="reset" type="button">Reset</button>
@@ -46,13 +49,13 @@
                     var base_url = '/webapp';
                     var formdata = $("#my-form").toObject({mode: 'first'});
                     $.ajax({
-                        url: base_url + "/schemas/2",
+                        url: base_url + "/entities/2",
                         type: 'PUT',
                         contentType: 'application/json',
                         data: JSON.stringify(formdata),
                         dataType: 'json'
                     }).done(function(data) {
-                        window.location = base_url + '/schemas/listing';
+                        window.location = base_url + '/entities/listing';
                     }).fail(function() {
                         alert("error");
                     });

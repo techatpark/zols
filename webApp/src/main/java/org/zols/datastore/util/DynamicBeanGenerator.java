@@ -7,7 +7,7 @@ import java.util.Map;
 import net.sf.cglib.beans.BeanGenerator;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.core.Predicate;
-import org.zols.datastore.model.Schema;
+import org.zols.datastore.model.Entity;
 
 /**
  * <code>DynamicBeanGenerator</code>
@@ -43,7 +43,7 @@ public class DynamicBeanGenerator {
         properties.put("foo", Integer.class);
         properties.put("bar", String.class);
         properties.put("baz", int[].class);
-        properties.put("schemas", Schema[].class);
+        properties.put("entities", Entity[].class);
 
         final Class<?> beanClass =
                 createBeanClass("some.ClassName", properties);
