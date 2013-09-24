@@ -3,7 +3,6 @@ package org.zols.datastore.model;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 
@@ -11,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * @author Sathish Kumar Thiyagarajan
  * 
  */
-@Document(collection = "entity")
 public class Entity {
 
 	@Id
