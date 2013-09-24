@@ -16,42 +16,36 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter;
 
-@Configuration 
+@Configuration
 @EnableWebMvc
 @Import({ViewConfiguration.class, ControllerConfiguration.class})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
-	
-	// Maps resources path to webapp/resources
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**").addResourceLocations("/");
-	}
-	
-	@Override
-	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-		converters.add(jsonHttpMessageConverter());
-		converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
-	}
 
-	@Bean
-	public JacksonObjectMapper jacksonObjectMapper() {
-		return new JacksonObjectMapper();
-	}
-	
-	@Bean
-	public MappingJacksonHttpMessageConverter jsonHttpMessageConverter() {
-		MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
-		converter.setObjectMapper(jacksonObjectMapper());
-		return converter;
-	}
+    // Maps resources path to webapp/resources
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**").addResourceLocations("/");
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(jsonHttpMessageConverter());
+        converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
+    }
+
+    @Bean
+    public MappingJacksonHttpMessageConverter jsonHttpMessageConverter() {
+        MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
+        //TODO: Check Whether it has converter
+        //converter.setObjectMapper(jacksonObjectMapper());
+        return converter;
+    }
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        super.addArgumentResolvers(argumentResolvers); 
+        super.addArgumentResolvers(argumentResolvers);
         argumentResolvers.add(
-				new ServletWebArgumentResolverAdapter(
-						new PageableArgumentResolver()));
+                new ServletWebArgumentResolverAdapter(
+                new PageableArgumentResolver()));
     }
-        
-        
 }
