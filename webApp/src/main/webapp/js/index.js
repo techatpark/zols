@@ -83,7 +83,7 @@ $(function() {
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            jQuery(this).jqGrid('editGridRow', id, editOptions);
+            window.location = '../entities/edit/'+ id;
         },
         formatter: {idName: "name"}
     };
@@ -91,7 +91,7 @@ $(function() {
     $("#grid")
             .jqGrid(options)
             .navGrid('#pager',
-            { search: false,addfunc: function(){window.location = '../entities/add';},editfunc: function(data){ window.location = '../entities/edit/'+ data; ;}}, //options
+            { search: false,addfunc: function(){window.location = '../entities/add';},editfunc: function(data){ window.location = '../entities/edit/'+ data;}}, //options
             {}, // edit options
             {}, // add options 
             delOptions,
