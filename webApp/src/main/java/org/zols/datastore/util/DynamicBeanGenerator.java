@@ -1,107 +1,56 @@
 package org.zols.datastore.util;
 
-import java.beans.IntrospectionException;
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import net.sf.cglib.beans.BeanGenerator;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.MethodProxy;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.zols.datastore.model.Attribute;
-import org.zols.datastore.model.SampleBean;
+import net.sf.cglib.core.NamingPolicy;
+import net.sf.cglib.core.Predicate;
 import org.zols.datastore.model.Schema;
-
 
 /**
  * <code>DynamicBeanGenerator</code>
- * 
- * Given an interface, generate the associated bean WARNING. If your interface
- * implements a set but not a get it will be ignored Same thing for the other
- * methods of your interface which are not property methods.
- * 
+ *
  * 
  */
 public class DynamicBeanGenerator {
 
-	protected final Log log = LogFactory.getLog(getClass());
+    public static Class<?> createBeanClass(
+            /* fully qualified class name */
+            final String className,
+            /* bean properties, name -> type */
+            final Map<String, Class<?>> properties) {
 
-	/**
-	 * <code>generate</code>
-	 * 
-	 * @param interfaceClass
-	 *            The interface the generated bean will be based on
-	 * @return a dynamic bean based on the interface
-	 * @throws IntrospectionException 
-	 * @throws IllegalAccessException 
-	 * @throws InstantiationException 
-	 */
-	@SuppressWarnings("unchecked")
-	public static Object generate(Schema schema) throws IntrospectionException, InstantiationException, IllegalAccessException {
-		// Extract properties
-		final List<Property> properties = getMethodProperties(schema);
-		// Generate the bean
-		final BeanGenerator bg = new BeanGenerator();
+        final BeanGenerator beanGenerator = new BeanGenerator();     
 
+        /* use our own hard coded class name instead of a real naming policy */
+        beanGenerator.setNamingPolicy(new NamingPolicy() {
+            @Override
+            public String getClassName(final String prefix,
+                    final String source, final Object key, final Predicate names) {
+                return className;
+            }
+        });
+        
+        BeanGenerator.addProperties(beanGenerator, properties);
+        return (Class<?>) beanGenerator.createClass();
+    }
 
-		PropertyDescriptor[] descriptorList = new PropertyDescriptor[schema.getAttributes().size()];
-		int index= 0;
-		for (Property property : properties) {
-			descriptorList[index++] = new PropertyDescriptor(property.getFieldName(), SampleBean.class);
-		}
-		
-		BeanGenerator.addProperties(bg, descriptorList);
-		
-		Class beanClass = (Class)  bg.createClass();
-		
-		return beanClass.newInstance();
-	}
+    public static void main(final String[] args) throws Exception {
+        final Map<String, Class<?>> properties =
+                new HashMap<String, Class<?>>();
+        properties.put("foo", Integer.class);
+        properties.put("bar", String.class);
+        properties.put("baz", int[].class);
+        properties.put("schemas", Schema[].class);
 
-	/**
-	 * <code>getMethodProperties</code>
-	 * 
-	 * @param methods
-	 *            a set of methods
-	 * @return a list of properties
-	 */
-	private static List<Property> getMethodProperties(Schema schema) {
-		List<Property> properties = new ArrayList<Property>(schema
-				.getAttributes().size());
+        final Class<?> beanClass =
+                createBeanClass("some.ClassName", properties);
+        System.out.println(beanClass);
+        for (final Method method : beanClass.getDeclaredMethods()) {
+            System.out.println(method);
+        }
 
-		for (Attribute attribute : schema.getAttributes()) {
-			properties.add(new Property(attribute.getName(), attribute
-					.getType()));
-		}
-
-		return properties;
-	}
-
-	private static class Property {
-		private String fieldName;
-		private Class type;
-
-		Property(String fieldName, String type) {
-			this.fieldName = fieldName;
-			if (type.equals("Integer")) {
-				this.type = Integer.class;
-			} else {
-				this.type = String.class;
-			}
-
-		}
-
-		String getFieldName() {
-			return fieldName;
-		}
-
-		Class getType() {
-			return type;
-		}
-	}
-
+    }
 }
