@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.model;
+package com.zols.web.datastore.domain;
 
 import org.springframework.data.annotation.Id;
 

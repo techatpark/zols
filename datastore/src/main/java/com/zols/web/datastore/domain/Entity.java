@@ -1,4 +1,4 @@
-package org.zols.datastore.model;
+package com.zols.web.datastore.domain;
 
 import java.util.List;
 

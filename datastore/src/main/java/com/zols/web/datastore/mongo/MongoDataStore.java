@@ -1,5 +1,10 @@
-package org.zols.datastore;
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.zols.web.datastore.mongo;
 
+import com.zols.web.datastore.DataStore;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +16,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DataStore {
+public class MongoDataStore extends DataStore {
 
     @Autowired
     private MongoOperations mongoOperation;
@@ -67,6 +72,4 @@ public class DataStore {
         }
         return null;
     }
-    
-
 }
