@@ -46,14 +46,13 @@
         <script>
             var options = {
                 onSuccess: function() {
-                    var base_url = '/webapp';
+                    var base_url = '';
                     var formdata = $("#my-form").toObject({mode: 'first'});
                     $.ajax({
-                        url: base_url + "/entities/2",
-                        type: 'PUT',
+                        url: base_url + "/entities",
+                        type: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify(formdata),
-                        dataType: 'json'
+                        data: JSON.stringify(formdata)                        
                     }).done(function(data) {
                         window.location = base_url + '/entities/listing';
                     }).fail(function() {
