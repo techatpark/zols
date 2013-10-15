@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Edit entities</title>       
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+
+    </head>
+    <body>
+        <form id="my-form" th:object="${entity}">
+
+            <div>
+                <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
+                <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
+                <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
+            </div>
+
+
+            <section id="Attributes">
+                <button id="addAttribute" type="button">Add Attribute</button>
+                <section th:each="attributes, stat : *{attributes}" th:name="*{attributes[__${stat.index}__].name}">
+                    <div><label>Name</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></div>
+                    <div><label>Type</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].type}"/></div>
+                    <div><label>Description</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].description}"/></div>
+                </section>
+            </section>
+
+
+            <div>
+                <button id="submit">Submit</button>
+                <button id="reset" type="button">Reset</button>
+            </div>
+        </form>
+
+        <script src="../../js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+
+    </body>
+</html>
