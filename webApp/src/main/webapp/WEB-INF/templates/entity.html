@@ -4,29 +4,26 @@
     <head>
         <meta charset="utf-8"/>
         <title>Edit entities</title>       
-        <link rel="stylesheet" type="text/css" media="screen" href="../../css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
 
     </head>
     <body>
         <form id="my-form" th:object="${entity}">
 
-            <div>
-                <div><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></div>
-                <div><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></div>
-                <div><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></div>
-            </div>
-
+            <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
+            <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
+            <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
 
             <section id="Attributes">
                 <button id="addAttribute" type="button">Add Attribute</button>
-                <section th:each="attributes, stat : *{attributes}" th:name="*{attributes[__${stat.index}__].name}">
-                    <div><label>Name</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></div>
-                    <div><label>Type</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].type}"/></div>
-                    <div><label>Description</label><input id="name" type="text" th:field="*{attributes[__${stat.index}__].description}"/></div>
+                <section th:each="attributes, stat : *{attributes}" th:name="'attributes[' + ${stat.index} +']'">
+                    <label>Name</label><input name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/>
+                    <label>Type</label><input name="attributes[0].type" type="text" th:field="*{attributes[__${stat.index}__].type}"/>
+                    <label>Description</label><input name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/>
+                    <button type="button" data-group="attributes">Remove Attribute</button>
                 </section>
             </section>
-
 
             <div>
                 <button id="submit">Submit</button>
@@ -34,9 +31,71 @@
             </div>
         </form>
 
-        <script src="../../js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
-        <script src="../../js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
-        <script src="../../js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+
+        <script src="../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                $("#addAttribute").click(function() {
+                    $('#Attributes').handlebars('attribute', {name: "$new$", index: $('#Attributes section').length});
+                    $('#Attributes section').last().find('button[data-group="attributes"]').each(function(index, value) {
+                        $(this).click(function() {
+                            doRemoveAction(this);
+                        });
+                    });
+                });
+            });
+            function doRemoveAction(removebutton) {
+                var section = $(removebutton).closest('section');
+                var sessionNameToBeRemoved = section.attr('name');
+                var removedSection = false;
+                $('#Attributes section').each(function(index, value) {
+                    if (!removedSection) {
+                        if ($(this).attr('name') === sessionNameToBeRemoved) {
+                            $(this).remove();
+                            removedSection = true;
+                            console.log('removed ' + $(this).attr('name'));
+                        }
+                    }
+                    else {
+                        doDecreaseIndex(this, index);
+                    }
+
+
+                });
+                section.remove();
+            }
+            //reduce index by one
+            function doDecreaseIndex(sessionToBeAdjusted, index) {
+                var currentName = $(sessionToBeAdjusted).attr('name');
+                var adjustedName = currentName.substring(0,currentName.lastIndexOf('[' + index + ']')) + '[' + (index - 1) + ']';
+                console.log('adjusting ' + currentName + ' to ' + adjustedName );
+                $(sessionToBeAdjusted).attr('name', adjustedName);
+                $(sessionToBeAdjusted).children().each(function(index, value) {
+                    var currentChildName = $(this).attr('name') ;
+                    
+                    if(currentChildName) {
+                        var adjustedChildName = currentChildName.replace(currentName,adjustedName) ;
+                        $(this).attr('name',adjustedChildName) ;
+                        
+                    }
+                    
+                });
+
+                console.log('adjusted ' + currentName + ' to ' + adjustedName);
+            }
+            $('button[data-group="attributes"]').each(function(index, value) {
+                $(this).click(function() {
+                    doRemoveAction(this);
+                });
+            });
+
+        </script>
+
 
     </body>
 </html>
