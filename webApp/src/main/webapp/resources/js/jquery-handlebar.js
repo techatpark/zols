@@ -8,7 +8,5 @@
         }).done(function(src) {
             component.append(Handlebars.compile(src)(data));
         });
-
-
     };
 })(jQuery);
