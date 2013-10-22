@@ -6,6 +6,7 @@ import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.UrlTemplateResolver;
 
 @Configuration
 public class ViewConfiguration {
@@ -29,11 +30,22 @@ public class ViewConfiguration {
         return resolver;
     }
     
+    public UrlTemplateResolver urlTemplateResolver() {
+        UrlTemplateResolver urlTemplateResolver = new UrlTemplateResolver();
+        urlTemplateResolver.setPrefix("http://localhost:8080/resources/");
+        urlTemplateResolver.setSuffix(".html");
+        urlTemplateResolver.setTemplateMode("HTML5");
+        urlTemplateResolver.setOrder(1);
+        urlTemplateResolver.setCacheable(false);
+        return urlTemplateResolver;
+    }
+    
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addTemplateResolver(servletContextTemplateResolver());
         engine.addTemplateResolver(classLoaderTemplateResolver());        
+        engine.addTemplateResolver(urlTemplateResolver());        
         return engine;
     }
     

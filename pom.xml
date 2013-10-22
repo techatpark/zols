@@ -6,22 +6,184 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Zols Application</name>
-    
+    <description>Dynamic Type System for Java</description>   
     <properties>
-        <org.springframework.version>3.2.4.RELEASE</org.springframework.version>
-        <org.springframework.data.version>1.3.1.RELEASE</org.springframework.data.version>
-        <org.aspectj-version>1.6.10</org.aspectj-version>
-        <junit.version>4.7</junit.version>      
-        <cglib.version>3.0</cglib.version>   
-        <asm-all>4.0</asm-all>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <java-version>1.6</java-version>
+        <org.springframework-version>4.0.0.BUILD-SNAPSHOT</org.springframework-version>
+        <org.springframework.mobile-version>1.1.0.BUILD-SNAPSHOT</org.springframework.mobile-version>
+        <jackson-version>1.9.13</jackson-version>
+        <thymeleaf-spring3-version>2.0.17</thymeleaf-spring3-version>
+        <org.aspectj-version>1.6.9</org.aspectj-version>
+        <org.slf4j-version>1.6.1</org.slf4j-version>
+        <log4j-version>1.2.16</log4j-version>
+        <javax.servlet.api-version>3.0.1</javax.servlet.api-version>        
+        <junit-version>4.9</junit-version>
+        <org.apache.maven.plugins.compiler-version>3.0</org.apache.maven.plugins.compiler-version>
+        <org.apache.maven.plugins.war-version>2.4</org.apache.maven.plugins.war-version>
+        <org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
+        <org.codehaus.mojo.tomcat-version>1.1</org.codehaus.mojo.tomcat-version>
     </properties>
+    
+    <repositories>
+        <repository>
+            <id>spring-milestone</id>
+            <name>SpringSource Milestone Repository</name>
+            <url>http://repo.springsource.org/libs-milestone</url>
+        </repository>
+        <repository>
+            <id>spring-snapshot</id>
+            <name>SpringSource Snapshot Repository</name>
+            <url>http://repo.springsource.org/snapshot</url>
+        </repository>
+    </repositories> 
+    
+    <dependencies>      
+        <!-- Spring -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${org.springframework-version}</version>
+            <exclusions>
+                <!-- Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson-version}</version>
+        </dependency>
+        
 
+        <!-- Aspect J -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${org.aspectj-version}</version>
+        </dependency>
+
+        <!-- @Inject -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
+
+        <!-- Logging -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${org.slf4j-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${org.slf4j-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${org.slf4j-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j-version}</version>
+            <scope>runtime</scope>
+        </dependency>        
+
+        <!-- Test -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>  
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${org.apache.maven.plugins.compiler-version}</version>
+                <configuration>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${org.apache.maven.plugins.war-version}</version>
+                <configuration>
+                    <!-- Servlet 3 wars do not require a web.xml -->
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>aspectj-maven-plugin</artifactId>
+                <version>${org.codehaus.mojo.aspectj-version}</version>
+                <dependencies>
+                    <!-- NB: You must use Maven 2.0.9 or above or these are ignored (see MNG-2972) -->
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjrt</artifactId>
+                        <version>${org.aspectj-version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjtools</artifactId>
+                        <version>${org.aspectj-version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <outxml>true</outxml>
+                    <source>${java-version}</source>
+                    <target>${java-version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>install</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>sources</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+        </plugins>
+    </build>
     <modules>
-        <module>datastore</module>
-        <module>webapp</module>  
+        <module>/datastore</module>  
+        <module>/webApp</module>  
     </modules>
 
 </project>
