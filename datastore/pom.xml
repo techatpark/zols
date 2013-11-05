@@ -5,46 +5,49 @@
     <artifactId>datastore</artifactId>
     <packaging>jar</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>Zols Datastore</name>
+    <name>Datastore</name>
     <url>http://maven.apache.org</url>  
     <parent>
         <groupId>org.zols.web</groupId>
         <artifactId>zols</artifactId>
         <version>1.0-SNAPSHOT</version>
-    </parent>
+        <relativePath>../pom.xml</relativePath>
+    </parent>   
     
-    <properties>
-        <org.springframework.data.mongodb-version>1.3.1.RELEASE</org.springframework.data.mongodb-version>
-        <cglib-version>3.0</cglib-version>   
-        <asm-all-version>4.0</asm-all-version>           
-    </properties>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${org.springframework-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.mobile</groupId>
-            <artifactId>spring-mobile-device</artifactId>
-            <version>${org.springframework.mobile-version}</version>
-        </dependency>
-        
-        <!-- Spring data mongodb -->
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>${org.springframework.data.mongodb-version}</version>
+            <version>${spring-data-mongodb-version}</version>
+            <exclusions>
+                <!-- Exclude Commons Logging in favor of SLF4j -->
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-beans</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-expression</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+
+            </exclusions>
         </dependency>
+        
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>${cglib-version}</version>
+            <artifactId>spring-context</artifactId>
+            <groupId>org.springframework</groupId>
+            <type>jar</type>
+            <version>${org.springframework-version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-expression</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
-        <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm-all</artifactId>
-            <version>${asm-all-version}</version>
-        </dependency>
-    </dependencies>    
+    </dependencies>
 </project>
