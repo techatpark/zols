@@ -85,18 +85,18 @@ public class EntityController {
     @RequestMapping(value = "/edit/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name,Model model) { 
         model.addAttribute("entity", dataStore.read(name, Entity.class)); 
-        return "entity";
+        return "datastore/entity";
     }
     
     @RequestMapping(value = "/add", method = GET)
     public String add(Model model) {   
         model.addAttribute("entity",new Entity());
-        return "entity";
+        return "datastore/entity";
     }
     
     @RequestMapping(value = "/listing", method = GET)
     public String listing() {         
-        return "listentities";
+        return "datastore/listentities";
     }
     
 }
