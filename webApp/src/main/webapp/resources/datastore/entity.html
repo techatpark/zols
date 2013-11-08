@@ -27,7 +27,7 @@
 
             <div>
                 <button id="submit">Submit</button>
-                <button id="reset" type="button">Reset</button>
+                <button id="cancel" type="button">Cancel</button>
             </div>
         </form>
 
@@ -70,6 +70,7 @@
 
                 $("#my-form").submit(function(e)
                 {
+                    console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
 
 
 
@@ -92,22 +93,11 @@
                     e.preventDefault();	//STOP default action
                 });
 
+                $('#cancel').click(function() {
+                    window.location.href = listing_pathname;
+                })
+
             });
-            function ajaxCall(url, type, data) {
-                var _template;
-                var _xhr = $.ajax({
-                    url: url,
-                    type: type,
-                    async: false,
-                    success: function(res) {
-                        _template = res;
-                    }
-                });
-                if (_xhr.status === 200) {
-                    console.log(viewname);
-                    return _template;
-                }
-            }
             function doRemoveAction(removebutton) {
                 var section = $(removebutton).closest('section');
                 var sessionNameToBeRemoved = section.attr('name');
@@ -149,7 +139,14 @@
             });
 
         </script>
-
+        <script id="attribute" type="text/x-handlebars-template">
+<section name="attributes[{{index}}]">                    
+    <label>Name</label><input name="attributes[{{index}}].name" type="text" />
+    <label>Type</label><input name="attributes[{{index}}].type" type="text" />
+    <label>Description</label><input name="attributes[{{index}}].description" type="text"/>
+    <button type="button" data-group="attributes">Remove Attribute</button>
+</section>
+        </script>
 
     </body>
 </html>

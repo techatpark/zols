@@ -25,7 +25,7 @@ $(function() {
         rowList: [10, 20, 50, 100],
         altRows: true,
         loadError: function(xhr, status, error) {
-            alert(error);
+
         }
     });
 
@@ -44,7 +44,7 @@ $(function() {
         serializeDelData: function() {
             return "";
         }
-    });   
+    });
     var delOptions = {
         onclickSubmit: function(params, postdata) {
             params.url = URL + '/' + postdata;
@@ -83,7 +83,7 @@ $(function() {
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            window.location = '../entities/edit/'+ id;
+            window.location = '../entities/edit/' + id;
         },
         formatter: {idName: "name"}
     };
@@ -91,10 +91,14 @@ $(function() {
     $("#grid")
             .jqGrid(options)
             .navGrid('#pager',
-            { search: false,addfunc: function(){window.location = '../entities/add';},editfunc: function(data){ window.location = '../entities/edit/'+ data;}}, //options
+                    {search: false, addfunc: function() {
+                            window.location = '../entities/add';
+                        }, editfunc: function(data) {
+                            window.location = '../entities/edit/' + data;
+                        }}, //options
             {}, // edit options
-            {}, // add options 
-            delOptions,
-            {} // search options
-    );
+                    {}, // add options 
+                    delOptions,
+                    {} // search options
+            );
 });

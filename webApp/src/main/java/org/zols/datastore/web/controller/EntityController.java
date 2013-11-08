@@ -51,7 +51,9 @@ public class EntityController {
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Entity entity) {
         LOGGER.info("Updating entity with id {} with {}", name, entity);
-        dataStore.update(entity, Entity.class);
+        if (name.equals(entity.getName())) {
+            dataStore.update(entity, Entity.class);
+        }
     }
 
     @RequestMapping(value = "/{name}", method = DELETE)
