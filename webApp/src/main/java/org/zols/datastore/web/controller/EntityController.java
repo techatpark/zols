@@ -116,27 +116,43 @@ public class EntityController {
 
     @RequestMapping(value = "/{entityName}", method = POST)
     @ResponseBody
-    public Object createData(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> contactMap) {
+    public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
-        Object obj = null ;
-        try {
-            BeanWrapper beanWrapper = new BeanWrapperImpl(clazz.newInstance());
-            
-            for (String entry : contactMap.keySet()) {
-                beanWrapper.setPropertyValue(entry, contactMap.get(entry));
-                
-            }
-            obj = beanWrapper.getWrappedInstance();
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(EntityController.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(EntityController.class.getName()).log(Level.SEVERE, null, ex);
+        return dataStore.create(getBaseObject(clazz, entityName, entityObjectMap), clazz);
+    }
+
+    @RequestMapping(value = "/{entityName}/{name}", method = PUT)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void update(@PathVariable(value = "entityName") String entityName,@PathVariable(value = "name") String name,
+            @RequestBody HashMap<String, String> entityObjectMap) {
+        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
+        BaseObject baseObject = getBaseObject(clazz, entityName, entityObjectMap);
+        if (name.equals(baseObject.getName())) {
+            dataStore.update(baseObject, clazz);
         }
+    }
+    
+    @RequestMapping(value = "/{entityName}/{name}", method = DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable(value = "entityName") String entityName,@PathVariable(value = "name") String name) {
+        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
+        dataStore.delete(name, clazz);
+    }
+    
+    @RequestMapping(value = "/get/{entityName}",method = GET)
+    @ResponseBody
+    public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
+            Pageable page) {
+        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
+        return (Page<BaseObject>) dataStore.list(page, clazz);
+    }
 
-            
-        
-
-        return obj;
+    private BaseObject getBaseObject(Class<? extends BaseObject> clazz, String entityName, HashMap<String, String> contactMap) {
+        BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
+        for (String entry : contactMap.keySet()) {
+            beanWrapper.setPropertyValue(entry, contactMap.get(entry));
+        }
+        return (BaseObject) beanWrapper.getWrappedInstance();
     }
 
 }
