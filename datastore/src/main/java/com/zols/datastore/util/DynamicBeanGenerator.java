@@ -8,6 +8,7 @@ import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Attribute;
 import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Entity;
+import java.util.Date;
 import net.sf.cglib.beans.BeanGenerator;
 import net.sf.cglib.core.NamingPolicy;
 import net.sf.cglib.core.Predicate;
@@ -51,7 +52,15 @@ public class DynamicBeanGenerator {
         for (Attribute attribute : entity.getAttributes()) {
             if (attribute.getType().equals("Integer")) {
                 beanGenerator.addProperty(attribute.getName(), Integer.class);
-            } else {
+            }
+            else if (attribute.getType().equals("Double")) {
+                beanGenerator.addProperty(attribute.getName(), Double.class);
+            }
+            else if (attribute.getType().equals("Float")) {
+                beanGenerator.addProperty(attribute.getName(), Float.class);
+            }else if (attribute.getType().equals("Date")) {
+                beanGenerator.addProperty(attribute.getName(), Date.class);
+            }else {
                 beanGenerator.addProperty(attribute.getName(), String.class);
             }
         }
