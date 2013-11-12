@@ -1,5 +1,6 @@
 package com.zols.datastore;
 
+import com.zols.datastore.domain.BaseObject;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +36,12 @@ public abstract class DataStore {
     public abstract <T> Page<T> list(Pageable pageable, Class<T> clazz);
 
     public abstract <T> List<T> list(Class<T> aClass);
+    
+    /**
+     * Creates a new object
+     * @param entityName name of the entity to be created
+     * @param object Object to be created
+     * @return created object
+     */
+    public abstract BaseObject create(String entityName,BaseObject object);
 }

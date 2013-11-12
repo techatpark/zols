@@ -1,17 +1,24 @@
 package org.zols.datastore.web.controller;
 
 import com.zols.datastore.DataStore;
+import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Entity;
+import com.zols.datastore.util.DynamicBeanGenerator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +36,9 @@ public class EntityController {
 
     @Autowired
     private DataStore dataStore;
+
+    @Autowired
+    private DynamicBeanGenerator dynamicBeanGenerator;
 
     @RequestMapping(method = POST)
     @ResponseBody
@@ -102,6 +112,31 @@ public class EntityController {
     @RequestMapping(value = "/listing", method = GET)
     public String listing() {
         return "datastore/listentities";
+    }
+
+    @RequestMapping(value = "/{entityName}", method = POST)
+    @ResponseBody
+    public Object createData(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> contactMap) {
+        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
+        Object obj = null ;
+        try {
+            BeanWrapper beanWrapper = new BeanWrapperImpl(clazz.newInstance());
+            
+            for (String entry : contactMap.keySet()) {
+                beanWrapper.setPropertyValue(entry, contactMap.get(entry));
+                
+            }
+            obj = beanWrapper.getWrappedInstance();
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(EntityController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(EntityController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+            
+        
+
+        return obj;
     }
 
 }

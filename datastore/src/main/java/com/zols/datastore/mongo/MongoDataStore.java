@@ -5,6 +5,7 @@
 package com.zols.datastore.mongo;
 
 import com.zols.datastore.DataStore;
+import com.zols.datastore.domain.BaseObject;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MongoDataStore extends DataStore {
-
+    
     @Autowired
     private MongoOperations mongoOperation;
 
@@ -32,7 +33,15 @@ public class MongoDataStore extends DataStore {
         return object;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param object
+     * @param clazz
+     * @return
+     */
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T update(Object object, Class<T> clazz) {
         mongoOperation.save(object);
         return (T) object;
@@ -71,5 +80,9 @@ public class MongoDataStore extends DataStore {
             return mongoOperation.find(query, aClass);
         }
         return null;
+    }
+
+    public BaseObject create(String entityName, BaseObject object) {        
+        return create(entityName,BaseObject.class);
     }
 }

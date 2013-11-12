@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class DynamicBeanGenerator {
     @Autowired
     private DataStore dataStore;
-    public final Class<?> getBeanClass(final String entityName) {
+    public final Class<? extends BaseObject> getBeanClass(final String entityName) {
         Entity entity = dataStore.read(entityName, Entity.class);
         Class clazz;
         try {
