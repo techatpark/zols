@@ -22,7 +22,7 @@ public class ViewConfiguration {
     
     public ServletContextTemplateResolver servletContextTemplateResolver() {
         ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
-        resolver.setPrefix("/WEB-INF/templates/");
+        resolver.setPrefix("/WEB-INF/resources/");
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
         resolver.setOrder(1);
