@@ -1,4 +1,4 @@
-package com.zols.datastore.domain;
+package com.zols.linkmanager.domain;
 
 import java.util.List;
 
@@ -19,6 +19,18 @@ public class Link {
     private String label;
 
     private String description;
+    
+    private String parentLinkName;
+
+    public String getParentLinkName() {
+        return parentLinkName;
+    }
+
+    public void setParentLinkName(String parentLinkName) {
+        this.parentLinkName = parentLinkName;
+    }
+    
+    
 
     public String getName() {
         return name;

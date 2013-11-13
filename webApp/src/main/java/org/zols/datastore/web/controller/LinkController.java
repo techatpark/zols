@@ -3,7 +3,7 @@ package org.zols.datastore.web.controller;
 import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Entity;
-import com.zols.datastore.domain.Link;
+import com.zols.linkmanager.domain.Link;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;

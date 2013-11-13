@@ -51,7 +51,7 @@ $(function() {
         }
     };
 
-    var URL = '../entities';
+    var URL = 'api/entities';
     var options = {
         url: URL,
         editurl: URL,
@@ -83,7 +83,7 @@ $(function() {
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            window.location = '../entities/edit/' + id;
+            window.location = 'entities/' + id;
         },
         formatter: {idName: "name"}
     };
@@ -92,9 +92,9 @@ $(function() {
             .jqGrid(options)
             .navGrid('#pager',
                     {search: false, addfunc: function() {
-                            window.location = '../entities/add';
+                            window.location = 'entities/add';
                         }, editfunc: function(data) {
-                            window.location = '../entities/edit/' + data;
+                            window.location = 'entities/' + data;
                         }}, //options
             {}, // edit options
                     {}, // add options 
