@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/entities")
+
 public class EntityController {
 
     private static final Logger LOGGER = LoggerFactory
@@ -40,14 +40,14 @@ public class EntityController {
     @Autowired
     private DynamicBeanGenerator dynamicBeanGenerator;
 
-    @RequestMapping(method = POST)
+    @RequestMapping(value = "/api/entities", method = POST)
     @ResponseBody
     public Entity create(@RequestBody Entity entity) {
         LOGGER.info("Creating new entity {}", entity);
         return dataStore.create(entity, Entity.class);
     }
 
-    @RequestMapping(value = "/{name}", method = GET)
+    @RequestMapping(value = "/api/entities/{name}", method = GET)
     @ResponseBody
     public Map<String, Entity> read(@PathVariable(value = "name") String name) {
         LOGGER.info("Reading entity with id {}", name);
@@ -56,7 +56,7 @@ public class EntityController {
         return map;
     }
 
-    @RequestMapping(value = "/{name}", method = PUT)
+    @RequestMapping(value = "/api/entities/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Entity entity) {
@@ -66,14 +66,14 @@ public class EntityController {
         }
     }
 
-    @RequestMapping(value = "/{name}", method = DELETE)
+    @RequestMapping(value = "/api/entities/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting entity with id {}", name);
         dataStore.delete(name, Entity.class);
     }
 
-    @RequestMapping(method = GET)
+    @RequestMapping(value = "/api/entities", method = GET)
     @ResponseBody
     public Page<Entity> list(
             Pageable page) {
@@ -97,33 +97,33 @@ public class EntityController {
         return ex.getMessage();
     }
 
-    @RequestMapping(value = "/edit/{name}", method = GET)
+    @RequestMapping(value = "/entities/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("entity", dataStore.read(name, Entity.class));
         return "datastore/entity";
     }
 
-    @RequestMapping(value = "/add", method = GET)
+    @RequestMapping(value = "/entities/add", method = GET)
     public String add(Model model) {
         model.addAttribute("entity", new Entity());
         return "datastore/entity";
     }
 
-    @RequestMapping(value = "/listing", method = GET)
+    @RequestMapping(value = "/entities", method = GET)
     public String listing() {
         return "datastore/listentities";
     }
 
-    @RequestMapping(value = "/{entityName}", method = POST)
+    @RequestMapping(value = "/api/data/{entityName}", method = POST)
     @ResponseBody
     public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         return dataStore.create(getBaseObject(clazz, entityName, entityObjectMap), clazz);
     }
 
-    @RequestMapping(value = "/{entityName}/{name}", method = PUT)
+    @RequestMapping(value = "/api/data/{entityName}/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@PathVariable(value = "entityName") String entityName,@PathVariable(value = "name") String name,
+    public void update(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name,
             @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         BaseObject baseObject = getBaseObject(clazz, entityName, entityObjectMap);
@@ -131,15 +131,15 @@ public class EntityController {
             dataStore.update(baseObject, clazz);
         }
     }
-    
-    @RequestMapping(value = "/{entityName}/{name}", method = DELETE)
+
+    @RequestMapping(value = "/api/data/{entityName}/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "entityName") String entityName,@PathVariable(value = "name") String name) {
+    public void delete(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         dataStore.delete(name, clazz);
     }
-    
-    @RequestMapping(value = "/get/{entityName}",method = GET)
+
+    @RequestMapping(value = "/api/data/{entityName}", method = GET)
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
             Pageable page) {
