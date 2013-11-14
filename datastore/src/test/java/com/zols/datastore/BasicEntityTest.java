@@ -22,52 +22,72 @@ public class BasicEntityTest {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BasicEntityTest.class);
-    
+
     @Autowired
     private DataStore dataStore;
-    
+
     /**
      * Basic Entity to test
      */
-    private Entity entity  ;
-    
+    private Entity entity;
+
     @Before
     public void beforeTest() {
-        entity  = getBasicEntity();
+        entity = getBasicEntity();
         dataStore.create(entity, Entity.class);
     }
 
     @Test
     public void testBasicEntityCreate() {
-        LOGGER.info("testing Entity Create",entity.getName());
+        LOGGER.info("testing Entity Create", entity.getName());
         Assert.assertTrue("basic entity should have name", entity.getName() != null);
-        LOGGER.info("tested Entity Create",entity.getName());
+        LOGGER.info("tested Entity Create", entity.getName());
     }
 
     @Test
     public void testBasicEntityRead() {
-        LOGGER.info("testing Entity Read",entity.getName());
+        LOGGER.info("testing Entity Read", entity.getName());
         Entity entityResult = dataStore.read(entity.getName(), Entity.class);
         Assert.assertEquals("basic entity has to be present with Label 'Basic Entity'", "Basic Entity", entityResult.getLabel());
-        LOGGER.info("tested Entity Read",entity.getName());
+        LOGGER.info("tested Entity Read", entity.getName());
     }
 
+    @Test
+    public void testSearchEntity() {
+        LOGGER.info("testing Entity Read", entity.getName());
+        Entity searchEntity = new Entity();
+        searchEntity.setName(entity.getName());
+        List entitiesResult = dataStore.list(searchEntity);
+        Assert.assertEquals("There should be one Entity in the db with name " + entity.getName(), 1, entitiesResult.size());
+        LOGGER.info("tested Entity Read", entity.getName());
+    }
     
+    @Test
+    public void testSearchAndRemove() {
+        LOGGER.info("testing Entity Read", entity.getName());
+        Entity searchEntity = new Entity();
+        searchEntity.setName(entity.getName());
+        dataStore.delete(searchEntity);
+        List entitiesResult = dataStore.list(searchEntity);
+        Assert.assertEquals("There should be one Entity in the db with name " + entity.getName(), 0, entitiesResult.size());
+        LOGGER.info("tested Entity Read", entity.getName());
+    }
 
     @After
     public void afterTest() {
-        LOGGER.info("Deleting 'basic' Entity",entity.getName());
+        LOGGER.info("Deleting 'basic' Entity", entity.getName());
         dataStore.delete(entity.getName(), Entity.class);
-        LOGGER.info("Deleted 'basic' Entity",entity.getName());
+        LOGGER.info("Deleted 'basic' Entity", entity.getName());
     }
-    
+
     /**
      * Entity Object with which we conduct all basic test cases.
-     * @return 
+     *
+     * @return
      */
     private Entity getBasicEntity() {
         Entity entity = new Entity();
-       //entity.setName("Basic");
+        //entity.setName("Basic");
         entity.setLabel("Basic Entity");
         entity.setDescription("Describe an Basic Entity");
         Attribute attribute = null;
@@ -77,8 +97,8 @@ public class BasicEntityTest {
         attribute.setName("count");
         attribute.setType("Integer");
         attributes.add(attribute);
-        entity.setAttributes(attributes);       
+        entity.setAttributes(attributes);
         return entity;
-    }   
-   
+    }
+
 }
