@@ -115,9 +115,9 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    public void delete(Object searchObject) {
+    public <T> T delete(T searchObject) {
         Query query = getListQuery(null, searchObject);
-        mongoOperation.remove(query, searchObject.getClass());
+        return (T) mongoOperation.findAndRemove(query, searchObject.getClass());
     }
 
 }

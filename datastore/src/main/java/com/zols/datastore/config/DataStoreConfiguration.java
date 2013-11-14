@@ -16,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 
 @Configuration
-@ComponentScan(basePackages = "com.zols.datastore")
+@ComponentScan(basePackages = "com.zols")
 public class DataStoreConfiguration {
 
     public @Bean

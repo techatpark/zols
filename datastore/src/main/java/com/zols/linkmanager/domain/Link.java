@@ -16,11 +16,45 @@ public class Link {
     @Id
     private String name;
 
+    /**
+     * Label of the link.
+     */
     private String label;
 
+    /**
+     * Description of the link.
+     */
     private String description;
-    
+
+    /**
+     * Parent name of the link.
+     */
     private String parentLinkName;
+
+    /**
+     * children of the link.
+     */
+    private List<Link> children;
+    /**
+     * category of the link.
+     */
+    private String categoryName;
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public List<Link> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<Link> children) {
+        this.children = children;
+    }
 
     public String getParentLinkName() {
         return parentLinkName;
@@ -29,8 +63,6 @@ public class Link {
     public void setParentLinkName(String parentLinkName) {
         this.parentLinkName = parentLinkName;
     }
-    
-    
 
     public String getName() {
         return name;
