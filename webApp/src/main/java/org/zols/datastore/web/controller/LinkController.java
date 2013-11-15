@@ -3,6 +3,7 @@ package org.zols.datastore.web.controller;
 import com.zols.datastore.DataStore;
 import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Link;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class LinkController {
     @Autowired
     private LinkManager linkManager;
 
-    @RequestMapping(value = "/api/links",method = POST)
+    @RequestMapping(value = "/api/links", method = POST)
     @ResponseBody
     public Link create(@RequestBody Link links) {
         LOGGER.info("Creating new links {}", links);
@@ -54,7 +55,7 @@ public class LinkController {
         linkManager.delete(name);
     }
 
-    @RequestMapping(value = "/api/links",method = GET)
+    @RequestMapping(value = "/api/links", method = GET)
     @ResponseBody
     public Page<Link> list(
             Pageable page) {
@@ -62,9 +63,17 @@ public class LinkController {
         return linkManager.list(page);
     }
 
-    @RequestMapping(value = "/links/add", method = GET)
-    public String add(Model model) {
+    @RequestMapping(value = "/api/links/category/{categoryName}", method = GET)
+    @ResponseBody
+    public List<Link> listByCategory(@PathVariable(value = "categoryName") String categoryName) {
+        LOGGER.info("Listing entities");
+        return linkManager.listByCategory(categoryName);
+    }
+
+    @RequestMapping(value = "/links/add/{categoryName}", method = GET)
+    public String add(Model model, @PathVariable(value = "categoryName") String categoryName) {
         model.addAttribute("link", new Link());
+        model.addAttribute("categoryName", categoryName);
         return "datastore/link";
     }
 
