@@ -54,7 +54,7 @@ public class LinkController {
         linkManager.delete(name);
     }
 
-    @RequestMapping(method = GET)
+    @RequestMapping(value = "/api/links",method = GET)
     @ResponseBody
     public Page<Link> list(
             Pageable page) {
