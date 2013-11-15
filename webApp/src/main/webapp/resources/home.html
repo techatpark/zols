@@ -11,9 +11,13 @@ and open the template in the editor.
     </head>
     <body>
         <article>
-            <header>
-                <h1>I am Header</h1>
-                <p><time datetime="2011-03-15"></time></p>
+            <header th:fragment="headTag">
+                <h1>I am Header the application</h1>
+                <p>Site:
+                    <span th:if="${currentSitePreference.normal}" th:remove="tag">Normal | <a href="?site_preference=mobile">Mobile</a> | <a href="?site_preference=tablet">Tablet</a></span>
+                    <span th:if="${currentSitePreference.mobile}" th:remove="tag"><a href="?site_preference=normal">Normal</a> | Mobile | <a href="?site_preference=tablet">Tablet</a></span>
+                    <span th:if="${currentSitePreference.tablet}" th:remove="tag"><a href="?site_preference=normal">Normal</a> | <a href="?site_preference=mobile">Mobile</a> | Tablet</span>
+                </p>
             </header>
         </article>
     </body>

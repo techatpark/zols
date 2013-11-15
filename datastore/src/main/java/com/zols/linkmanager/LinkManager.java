@@ -1,4 +1,4 @@
-package com.zols.datastore.util;
+package com.zols.linkmanager;
 
 import com.zols.datastore.DataStore;
 import com.zols.linkmanager.domain.Category;

@@ -5,12 +5,8 @@
  */
 package com.zols.linkmanager;
 
-import com.zols.datastore.util.LinkManager;
-import com.zols.datastore.DataStore;
+
 import com.zols.datastore.config.DataStoreConfiguration;
-import com.zols.linkmanager.domain.Category;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

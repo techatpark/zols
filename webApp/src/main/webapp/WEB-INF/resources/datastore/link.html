@@ -28,22 +28,27 @@
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
         <script type="text/javascript">
 
+            String.prototype.replaceAt = function(i, char) {
+                return this.substr(0, i) + char + this.substr(i);
+            };
+
+
             $(document).ready(function() {
 
                 var pathname = window.location.pathname;
                 var method = window.location.pathname;
                 var listing_pathname;
-                if (pathname.indexOf("/edit") !== -1) {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/edit')) + '/listing';
-                    pathname = pathname.replace(/(\s*\/edit)(?![\s\S]*\/edit)([^:]*)$/, "$2");
-                    method = 'PUT';
-
+                if (pathname.indexOf("/add") !== -1) {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+                    method = 'POST';
                 }
                 else {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add')) + '/listing';
-                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
-                    method = 'POST';
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
 
+                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+                    method = 'PUT';
                 }
 
 
@@ -84,10 +89,48 @@
 
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
-                });
+                })
 
             });
+            function doRemoveAction(removebutton) {
+                var section = $(removebutton).closest('section');
+                var sessionNameToBeRemoved = section.attr('name');
+                var removedSection = false;
+                $('#Attributes section').each(function(index, value) {
+                    if (!removedSection) {
+                        if ($(this).attr('name') === sessionNameToBeRemoved) {
+                            $(this).remove();
+                            removedSection = true;
+                            console.log('removed ' + $(this).attr('name'));
+                        }
+                    }
+                    else {
+                        doDecreaseIndex(this, index);
+                    }
+                });
+                section.remove();
+            }
+            //reduce index by one
+            function doDecreaseIndex(sessionToBeAdjusted, index) {
+                var currentName = $(sessionToBeAdjusted).attr('name');
+                var adjustedName = currentName.substring(0, currentName.lastIndexOf('[' + index + ']')) + '[' + (index - 1) + ']';
+                console.log('adjusting ' + currentName + ' to ' + adjustedName);
+                $(sessionToBeAdjusted).attr('name', adjustedName);
+                $(sessionToBeAdjusted).children().each(function(index, value) {
+                    var currentChildName = $(this).attr('name');
+                    if (currentChildName) {
+                        var adjustedChildName = currentChildName.replace(currentName, adjustedName);
+                        $(this).attr('name', adjustedChildName);
+                    }
 
+                });
+                console.log('adjusted ' + currentName + ' to ' + adjustedName);
+            }
+            $('button[data-group="attributes"]').each(function(index, value) {
+                $(this).click(function() {
+                    doRemoveAction(this);
+                });
+            });
         </script>
 
 

@@ -2,6 +2,8 @@ package org.zols.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mobile.device.view.LiteDeviceDelegatingViewResolver;
+import org.springframework.web.servlet.ViewResolver;
 import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -10,7 +12,7 @@ import org.thymeleaf.templateresolver.UrlTemplateResolver;
 
 @Configuration
 public class ViewConfiguration {
-    
+
     public ClassLoaderTemplateResolver classLoaderTemplateResolver() {
         ClassLoaderTemplateResolver classLoaderTemplateResolver = new ClassLoaderTemplateResolver();
         classLoaderTemplateResolver.setSuffix(".html");
@@ -19,7 +21,7 @@ public class ViewConfiguration {
         classLoaderTemplateResolver.setCacheable(false);
         return classLoaderTemplateResolver;
     }
-    
+
     public ServletContextTemplateResolver servletContextTemplateResolver() {
         ServletContextTemplateResolver resolver = new ServletContextTemplateResolver();
         resolver.setPrefix("/WEB-INF/resources/");
@@ -29,7 +31,7 @@ public class ViewConfiguration {
         resolver.setCacheable(false);
         return resolver;
     }
-    
+
     public UrlTemplateResolver urlTemplateResolver() {
         UrlTemplateResolver urlTemplateResolver = new UrlTemplateResolver();
         urlTemplateResolver.setPrefix("http://localhost:8080/zols/resources/");
@@ -39,20 +41,27 @@ public class ViewConfiguration {
         urlTemplateResolver.setCacheable(false);
         return urlTemplateResolver;
     }
-    
+
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addTemplateResolver(servletContextTemplateResolver());
-        engine.addTemplateResolver(classLoaderTemplateResolver());        
-        engine.addTemplateResolver(urlTemplateResolver());        
+        engine.addTemplateResolver(classLoaderTemplateResolver());
+        engine.addTemplateResolver(urlTemplateResolver());
         return engine;
     }
     
+
     @Bean
-    public ThymeleafViewResolver thymeleafViewResolver() {
-        ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+    public ViewResolver thymeleafViewResolver() {
+        ThymeleafViewResolver resolver = new org.zols.web.view.resolver.ViewResolver() ;
         resolver.setTemplateEngine(templateEngine());
-        return resolver;
+
+        LiteDeviceDelegatingViewResolver delegateResolver = new LiteDeviceDelegatingViewResolver(
+                resolver);
+        delegateResolver.setMobilePrefix("mobile/");
+        delegateResolver.setTabletPrefix("tablet/");
+
+        return delegateResolver;
     }
 }

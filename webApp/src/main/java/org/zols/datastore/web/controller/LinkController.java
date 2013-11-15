@@ -1,6 +1,7 @@
 package org.zols.datastore.web.controller;
 
 import com.zols.datastore.DataStore;
+import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping(value = "/links")
 public class LinkController {
 
     private static final Logger LOGGER = LoggerFactory
@@ -27,28 +27,31 @@ public class LinkController {
     @Autowired
     private DataStore dataStore;
 
-    @RequestMapping(method = POST)
+    @Autowired
+    private LinkManager linkManager;
+
+    @RequestMapping(value = "/api/links",method = POST)
     @ResponseBody
     public Link create(@RequestBody Link links) {
-        LOGGER.info("Creating new entity {}", links);
-        return dataStore.create(links, Link.class);
+        LOGGER.info("Creating new links {}", links);
+        return linkManager.add(links);
     }
 
-    @RequestMapping(value = "/{name}", method = PUT)
+    @RequestMapping(value = "/api/links/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Link links) {
-        LOGGER.info("Updating entity with id {} with {}", name, links);
+        LOGGER.info("Updating link with id {} with {}", name, links);
         if (name.equals(links.getName())) {
-            dataStore.update(links, Link.class);
+            linkManager.update(links);
         }
     }
 
-    @RequestMapping(value = "/{name}", method = DELETE)
+    @RequestMapping(value = "/api/links/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
-        LOGGER.info("Deleting entity with id {}", name);
-        dataStore.delete(name, Link.class);
+        LOGGER.info("Deleting links with id {}", name);
+        linkManager.delete(name);
     }
 
     @RequestMapping(method = GET)
@@ -56,22 +59,22 @@ public class LinkController {
     public Page<Link> list(
             Pageable page) {
         LOGGER.info("Listing entities");
-        return dataStore.list(page, Link.class);
+        return linkManager.list(page);
     }
 
-    @RequestMapping(value = "/add", method = GET)
+    @RequestMapping(value = "/links/add", method = GET)
     public String add(Model model) {
         model.addAttribute("link", new Link());
         return "datastore/link";
     }
 
-    @RequestMapping(value = "/edit/{name}", method = GET)
+    @RequestMapping(value = "/links/edit/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
-        model.addAttribute("link", dataStore.read(name, Link.class));
+        model.addAttribute("link", linkManager.get(name));
         return "datastore/link";
     }
 
-    @RequestMapping(value = "/listing", method = GET)
+    @RequestMapping(value = "/links", method = GET)
     public String listing() {
         return "datastore/listlinks";
     }

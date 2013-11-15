@@ -51,7 +51,7 @@ $(function() {
         }
     };
 
-    var URL = '../links';
+    var URL = 'api/links';
     var options = {
         url: URL,
         editurl: URL,
@@ -79,11 +79,11 @@ $(function() {
                 editrules: {required: true}
             }
         ],
-        caption: "entities",
+        caption: "links",
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            window.location = '../links/edit/' + id;
+            window.location = 'links/' + id;
         },
         formatter: {idName: "name"}
     };
@@ -92,9 +92,9 @@ $(function() {
             .jqGrid(options)
             .navGrid('#pager',
                     {search: false, addfunc: function() {
-                            window.location = '../links/add';
+                            window.location = '/links/add';
                         }, editfunc: function(data) {
-                            window.location = '../links/edit/' + data;
+                            window.location = '/links/' + data;
                         }}, //options
             {}, // edit options
                     {}, // add options 
