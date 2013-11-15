@@ -3,6 +3,7 @@ package com.zols.linkmanager;
 import com.zols.datastore.DataStore;
 import com.zols.linkmanager.domain.Category;
 import com.zols.linkmanager.domain.Link;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,10 +37,10 @@ public class LinkManager {
     }
 
     public Link add(Link link) {
-        return add(link, null);
+        return addChild(link, null);
     }
 
-    public Link add(Link link, String parentName) {
+    public Link addChild(Link link, String parentName) {
         link.setChildren(null);
         link.setParentLinkName(parentName);
         return dataStore.create(link, Link.class);
@@ -72,6 +73,13 @@ public class LinkManager {
 
     public Page<Link> list(Pageable page) {
         return dataStore.list(page, Link.class);
+    }
+
+    public List<Link> listByCategory(String categoryName) {
+        Link searchLink = new Link();
+        searchLink.setCategoryName(categoryName);
+        return dataStore.list(searchLink);
+
     }
 
 }
