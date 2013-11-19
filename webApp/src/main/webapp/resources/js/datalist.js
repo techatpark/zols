@@ -1,9 +1,6 @@
+var URL = '../api/';
 
-var contentData = null;
-
-function onChange() {
-    $(function() {
-        jQuery("#grid").jqGrid("GridUnload");
+function loadData(entityName, contentData) {    
         $.extend($.jgrid.defaults, {
             autowidth: true,
             shrinkToFit: true,
@@ -52,11 +49,9 @@ function onChange() {
         var delOptions = {
             onclickSubmit: function(params, postdata) {
                 console.log(postdata);
-                params.url = URL + '/' + postdata;
+                params.url = URL + 'data/' + postdata;
             }
         };
-
-        var URL = SERVER_URL + '/api/data/' + entityName;
 
         var colModelDynamic = [];
         colModelDynamic.push({
@@ -78,17 +73,15 @@ function onChange() {
                 editoptions: {required: true}
             });
         });
-
-
         var options = {
-            url: URL,
+            url: URL + 'data/' + entityName,
             editurl: URL,
             colModel: colModelDynamic,
             caption: entityName,
             pager: '#pager',
             height: 'auto',
             ondblClickRow: function(id) {
-                window.location = 'dataListChange.html' + '#id=' + id + "&entity=" + entityName;
+                //edit url
             },
             formatter: {idName: "name"}
         };
@@ -105,25 +98,20 @@ function onChange() {
                         delOptions,
                         {} // search options
                 );
-    });
 }
 
 $(document).ready(function() {
-
-    pathname = window.location.pathname;
-    entityName = pathname.substr(pathname.lastIndexOf('/') + 1);
-
+    var pathname = window.location.pathname;
+    var entityName = pathname.substr(pathname.lastIndexOf('/') + 1);
     $.ajax(
             {
-                url: SERVER_URL + '/api/entities/' + entityName,
+                url: URL + "entities/" + entityName,
                 type: 'GET',
                 dataType: "json",
                 contentType: 'application/json',
                 success: function(data, textStatus, jqXHR)
-                {
-                    contentData = data.entity;
-
-                    onChange();
+                {                    
+                    loadData(entityName,data.entity);
 
                 },
                 error: function(jqXHR, textStatus, errorThrown)
