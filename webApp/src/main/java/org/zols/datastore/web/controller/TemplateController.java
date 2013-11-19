@@ -26,6 +26,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Controller for Template Handling
+ * @author rahul_ma
+ */
 @Controller
 public class TemplateController {
     private static final Logger LOGGER = LoggerFactory
