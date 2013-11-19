@@ -111,6 +111,17 @@ public class EntityController {
         return "datastore/listentities";
     }
 
+    //dataList mapping
+    @RequestMapping(value = "/data/{entityName}", method = GET)
+    public String dataListListing() {
+        return "datastore/dataList";
+    }
+
+    @RequestMapping(value = "/dataListChange", method = GET)
+    public String dataListChange() {
+        return "datastore/dataListChange";
+    }
+
     @RequestMapping(value = "/api/data/{entityName}", method = POST)
     @ResponseBody
     public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
