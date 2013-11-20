@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
@@ -76,7 +77,13 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(deviceResolverHandlerInterceptor());
         registry.addInterceptor(sitePreferenceHandlerInterceptor());
+        registry.addInterceptor(pagePopulationInterceptor());
     }
+    
+    @Bean
+    public PagePopulationInterceptor pagePopulationInterceptor() {
+        return new PagePopulationInterceptor();
+    }    
 }
 
 
