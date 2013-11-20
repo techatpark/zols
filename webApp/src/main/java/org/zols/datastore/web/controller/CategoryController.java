@@ -20,6 +20,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Controller for Category
+ *
+ * @author poomalai
+ */
 @Controller
 public class CategoryController {
 

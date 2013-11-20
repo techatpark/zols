@@ -18,6 +18,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Controller for link
+ *
+ * @author poomalai
+ */
 @Controller
 public class LinkController {
 
