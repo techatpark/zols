@@ -27,6 +27,7 @@
         <script src="../../../../webApp/src/main/webapp/resourcesjs/jquery.jqGrid.min.js" th:src="@{/resources/js/jquery.jqGrid.min.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/common.js" th:src="@{/resources/js/common.js}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 URL = 'http://localhost:8080/zols';
@@ -60,33 +61,20 @@
                 });
             });
             function getCategoryLinks(category) {
-                console.log(URL + '/api/links/category/' + category);
-                $.ajax({
-                    url: URL + '/api/links/category/' + category,
-                    type: 'GET',
-                    dataType: "json",
-                    contentType: 'application/json',
-                    success: function(data, textStatus, jqXHR)
-                    {
-                        $("#childLink").empty();
-                        var childData = "";
-                        if (data.length > 0) {
-                            $("#childLink").handlebars('childList', data);
+                var _url = URL + '/api/links/category/' + category;
+                var _response = getData(_url, 'GET', 'json', 'application/json', false);
+                $("#childLink").empty();
+                if (_response.length > 0) {
+                    $("#childLink").handlebars('childList', _response);
 
-                            $("#childLink li").click(function() {
-                                onClickLink($(this).attr("id"));
-                            });
+                    $("#childLink li").click(function() {
+                        onClickLink($(this).attr("id"));
+                    });
 
-                        } else {
-                            childData = childData + "<li> No Record!</li>";
-                            $("#childLink").html(childData);
-                        }
-                    },
-                    error: function(jqXHR, textStatus, errorThrown)
-                    {
-                        console.log(jqXHR + "===" + textStatus);
-                    }
-                });
+                } else {
+
+                    $("#childLink").html("<li> No Record!</li>");
+                }
             }
 
             $("#my-form").submit(function(e)
@@ -100,11 +88,19 @@
 
             $('#addCategoryBtn').click(function() {
                 console.log(URL);
-                window.location = URL + '/links/add/' + categoryName;
+                window.location = URL + '/links/addunder/' + categoryName;
             });
 
             function onClickLink(id) {
-                console.log(id);
+                var _url = URL + '/api/links/' + id;
+                var _response = getData(_url, 'GET', 'json', 'application/json', false);
+                if (_response.length > 0) {
+                    console.log(_response);
+                } else {
+                    alert("No Records");
+                }
+
+
             }
         </script>
         <script id="childList" type="text/x-handlebars-template">

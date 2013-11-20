@@ -1,6 +1,5 @@
 package org.zols.datastore.web.controller;
 
-import com.zols.datastore.DataStore;
 import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Link;
 import java.util.List;
@@ -74,10 +73,17 @@ public class LinkController {
         return linkManager.listByParent(parentName);
     }
 
-    @RequestMapping(value = "/links/add/{categoryName}", method = GET)
-    public String add(Model model, @PathVariable(value = "categoryName") String categoryName) {
+    @RequestMapping(value = "/links/addunder/{categoryName}", method = GET)
+    public String addCategory(Model model, @PathVariable(value = "categoryName") String categoryName) {
         model.addAttribute("link", new Link());
         model.addAttribute("categoryName", categoryName);
+        return "datastore/link";
+    }
+
+    @RequestMapping(value = "/links/addchild/{parentName}", method = GET)
+    public String addParent(Model model, @PathVariable(value = "parentName") String parentName) {
+        model.addAttribute("link", new Link());
+        model.addAttribute("parentName", parentName);
         return "datastore/link";
     }
 
