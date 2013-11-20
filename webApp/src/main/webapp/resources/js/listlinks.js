@@ -1,5 +1,6 @@
 (function($) {
     $.fn.loadCategories = function() {
+        $("#link_category").empty();
         $.ajax({
             url: 'api/links/categories',
             type: 'GET',
