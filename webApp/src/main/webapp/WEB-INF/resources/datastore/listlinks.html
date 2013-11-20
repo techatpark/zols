@@ -12,7 +12,7 @@
         <div class="link">
             <div class="categoryContainer">
                 <select name ="linkCategory" id ="link_category"></select>
-                <button id="addCategoryBtn">+</button>
+                <button id="addCategoryBtn">+</button><button id="removeCategoryBtn">-</button>
             </div>
             <div class="linkContainer">
                 <ul id="childLink">
@@ -59,18 +59,17 @@
                         console.log(jqXHR + "===" + textStatus);
                     }
                 });
+                $("#removeCategoryBtn").click(function() {
+                    console.log($("#link_category").val());
+                });
+
             });
             function getCategoryLinks(category) {
                 var _url = URL + '/api/links/category/' + category;
-                var _response = getData(_url, 'GET', 'json', 'application/json', false);
+                var _response = getData(_url, 'GET', 'json', '', 'application/json', false);
                 $("#childLink").empty();
                 if (_response.length > 0) {
-                    $("#childLink").handlebars('childList', _response);
-
-                    $("#childLink li").click(function() {
-                        onClickLink($(this).attr("id"));
-                    });
-
+                    dynamicChildList(_response);
                 } else {
 
                     $("#childLink").html("<li> No Record!</li>");
@@ -87,27 +86,53 @@
             });
 
             $('#addCategoryBtn').click(function() {
-                console.log(URL);
                 window.location = URL + '/links/addunder/' + categoryName;
             });
 
             function onClickLink(id) {
                 var _url = URL + '/api/links/' + id;
-                var _response = getData(_url, 'GET', 'json', 'application/json', false);
+                var _response = getData(_url, 'GET', 'json', '', 'application/json', false);
                 if (_response.length > 0) {
-                    console.log(_response);
+                    $("#childLink").empty();
+                    dynamicChildList(_response);
                 } else {
                     alert("No Records");
                 }
 
 
             }
+            function dynamicChildList(_responseData) {
+
+                $("#childLink").handlebars('childList', _responseData);
+
+                $("#childLink li .parentLink").click(function() {
+                    onClickLink($(this).attr("id"));
+                });
+                $("#childLink li .addChild").click(function() {
+                    window.location = URL + '/links/addchild/' + $(this).attr('data-parent');
+                });
+                $("#childLink li .editlink").click(function() {
+                    window.location = URL + '/links/edit/' + $(this).attr('data-parent');
+                });
+
+
+                $("#childLink li .removeChild").click(function() {
+                    var parentName = $(this).attr('data-parent');
+                    if (parentName !== null) {
+                        var _url = URL + '/api/links/category/' + parentName;
+                        console.log(_url);
+                        getData(_url, 'DELETE', 'json', '', 'application/json', false);
+                        window.location.href = window.location.pathname;
+                    }
+                });
+            }
         </script>
         <script id="childList" type="text/x-handlebars-template">
             {{#each this}}
-            <li id="{{name}}" class="link">{{label}}<a href="javascript:void(0)">+</a><a href="javascript:void(0)">-</a></li>
+            <li><a href="javascript:void(0)" id="{{name}}" class="parentLink">{{label}}</a><a href="javascript:void(0)" class="addChild" data-parent="{{name}}">+</a><a href="javascript:void(0)" class="editlink" data-parent="{{name}}">Edit</a><a href="javascript:void(0)" class="removeChild" data-parent="{{name}}">-</a></li>
             {{/each}}
 
         </script>
+
     </body>
 </html>

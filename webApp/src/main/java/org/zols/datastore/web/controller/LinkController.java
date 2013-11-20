@@ -56,6 +56,13 @@ public class LinkController {
         linkManager.delete(name);
     }
 
+    @RequestMapping(value = "/api/links/category/{categoryName}", method = DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteByCategory(@PathVariable(value = "categoryName") String categoryName) {
+        LOGGER.info("Deleting links with id {}", categoryName);
+        linkManager.deleteLinkByCategory(categoryName);
+    }
+
     @RequestMapping(value = "/api/links", method = GET)
     @ResponseBody
     public Page<Link> list(
@@ -85,10 +92,10 @@ public class LinkController {
         return "datastore/link";
     }
 
-    @RequestMapping(value = "/links/addchild/{parentName}", method = GET)
-    public String addParent(Model model, @PathVariable(value = "parentName") String parentName) {
+    @RequestMapping(value = "/links/addchild/{parentLinkName}", method = GET)
+    public String addParent(Model model, @PathVariable(value = "parentLinkName") String parentLinkName) {
         model.addAttribute("link", new Link());
-        model.addAttribute("parentName", parentName);
+        model.addAttribute("parentLinkName", parentLinkName);
         return "datastore/link";
     }
 

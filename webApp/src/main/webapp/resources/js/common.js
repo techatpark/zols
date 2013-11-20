@@ -1,8 +1,9 @@
-function getData(URL, _type, _dataType, _contentType, _async) {
+function getData(URL, _type, _dataType, _data, _contentType, _async) {
     var _data;
     var _response = $.ajax({
         url: URL,
         type: _type,
+        data: _data,
         dataType: _dataType,
         contentType: _contentType,
         async: _async,

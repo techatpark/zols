@@ -66,10 +66,6 @@
                 $("#my-form").submit(function(e)
                 {
                     console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
-                    alert("category path:"+pathname);
-
-
-
                     $.ajax(
                             {
                                 url: pathname,
@@ -80,7 +76,7 @@
                                 success: function(data, textStatus, jqXHR)
                                 {
                                     window.location.href = listing_pathname;
-                                    alert("Category path::"+listing_pathname);
+                                    alert("Category path::" + listing_pathname);
                                 },
                                 error: function(jqXHR, textStatus, errorThrown)
                                 {

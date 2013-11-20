@@ -15,7 +15,7 @@
             <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
             <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
             <input type="hidden" id="categoryName" name="categoryName" th:value="${categoryName}" />
-            <input type="hidden" id="parentName" name="parentName" th:value="${parentName}" />
+            <input type="hidden" id="parentLinkName" name="parentLinkName" th:value="${parentLinkName}" />
             <div>
                 <button id="submit">Submit</button>
                 <button id="cancel" type="button">Cancel</button>
@@ -39,7 +39,7 @@
 
                 var pathname = window.location.pathname;
                 var method = window.location.pathname;
-                var listing_pathname;
+                var listing_pathname, list_path;
                 if (pathname.indexOf("/add") !== -1) {
                     listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
                     pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
@@ -47,8 +47,8 @@
                     method = 'POST';
                 }
                 else {
+                    pathname = pathname.replace("/edit", "");
                     listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
-
                     pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
                     method = 'PUT';
                 }
