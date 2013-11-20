@@ -35,8 +35,8 @@ public class CategoryController {
         LOGGER.info("Creating new categories {}", category);
         return linkManager.add(category);
     }
-    
-     @RequestMapping(value = "/api/categories/{name}", method = PUT)
+
+    @RequestMapping(value = "/api/categories/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Category category) {
@@ -45,17 +45,20 @@ public class CategoryController {
             linkManager.update(category);
         }
     }
-     @RequestMapping(value = "/api/categories/{name}", method = DELETE)
+
+    @RequestMapping(value = "/api/categories/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting categories with id {}", name);
         linkManager.deleteCategory(name);
     }
+
     @RequestMapping(value = "/categories/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("category", linkManager.getCategory(name));
         return "datastore/category";
     }
+
     @RequestMapping(value = "/categories/add", method = GET)
     public String add(Model model) {
         model.addAttribute("category", new Category());
@@ -67,7 +70,7 @@ public class CategoryController {
     public Page<Category> list(
             Pageable page) {
         LOGGER.info("Listing categories");
-        return linkManager.categoryList(page);
+        return linkManager.categoriesByPageable(page);
     }
 
     @RequestMapping(value = "/categories", method = GET)

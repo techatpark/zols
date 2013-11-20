@@ -26,9 +26,6 @@ public class LinkController {
             .getLogger(LinkController.class);
 
     @Autowired
-    private DataStore dataStore;
-
-    @Autowired
     private LinkManager linkManager;
 
     @RequestMapping(value = "/api/links", method = POST)
@@ -60,7 +57,7 @@ public class LinkController {
     public Page<Link> list(
             Pageable page) {
         LOGGER.info("Listing entities");
-        return linkManager.list(page);
+        return linkManager.linksByPageable(page);
     }
 
     @RequestMapping(value = "/api/links/category/{categoryName}", method = GET)
@@ -68,6 +65,13 @@ public class LinkController {
     public List<Link> listByCategory(@PathVariable(value = "categoryName") String categoryName) {
         LOGGER.info("Listing entities");
         return linkManager.listByCategory(categoryName);
+    }
+
+    @RequestMapping(value = "/api/links/{parentName}", method = GET)
+    @ResponseBody
+    public List<Link> listByParent(@PathVariable(value = "parentName") String parentName) {
+        LOGGER.info("Listing entities");
+        return linkManager.listByParent(parentName);
     }
 
     @RequestMapping(value = "/links/add/{categoryName}", method = GET)
@@ -79,7 +83,7 @@ public class LinkController {
 
     @RequestMapping(value = "/links/edit/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
-        model.addAttribute("link", linkManager.get(name));
+        model.addAttribute("link", linkManager.getLink(name));
         return "datastore/link";
     }
 

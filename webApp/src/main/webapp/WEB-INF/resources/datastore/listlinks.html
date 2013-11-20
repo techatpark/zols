@@ -15,16 +15,18 @@
                 <button id="addCategoryBtn">+</button>
             </div>
             <div class="linkContainer">
-                <ul id="linksList"></ul>
+                <ul id="childLink">
+
+                </ul>
 
             </div>
         </div>
-
-
         <script src="../../../../webApp/src/main/webapp/resourcesjs/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resourcesjs/jquery-ui-1.10.3.custom.min.js" th:src="@{/resources/js/jquery-ui-1.10.3.custom.min.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resourcesjs/i18n/grid.locale-en.js" th:src="@{/resources/js/i18n/grid.locale-en.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resourcesjs/jquery.jqGrid.min.js" th:src="@{/resources/js/jquery.jqGrid.min.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 URL = 'http://localhost:8080/zols';
@@ -58,7 +60,7 @@
                 });
             });
             function getCategoryLinks(category) {
-                console.log(category);
+                console.log(URL + '/api/links/category/' + category);
                 $.ajax({
                     url: URL + '/api/links/category/' + category,
                     type: 'GET',
@@ -66,7 +68,19 @@
                     contentType: 'application/json',
                     success: function(data, textStatus, jqXHR)
                     {
-                        console.log(data);
+                        $("#childLink").empty();
+                        var childData = "";
+                        if (data.length > 0) {
+                            $("#childLink").handlebars('childList', data);
+
+                            $("#childLink li").click(function() {
+                                onClickLink($(this).attr("id"));
+                            });
+
+                        } else {
+                            childData = childData + "<li> No Record!</li>";
+                            $("#childLink").html(childData);
+                        }
                     },
                     error: function(jqXHR, textStatus, errorThrown)
                     {
@@ -87,8 +101,16 @@
             $('#addCategoryBtn').click(function() {
                 console.log(URL);
                 window.location = URL + '/links/add/' + categoryName;
-            })
+            });
 
+            function onClickLink(id) {
+                console.log(id);
+            }
+        </script>
+        <script id="childList" type="text/x-handlebars-template">
+            {{#each this}}
+            <li id="{{name}}" class="link">{{label}}<a href="javascript:void(0)">+</a><a href="javascript:void(0)">-</a></li>
+            {{/each}}
 
         </script>
     </body>
