@@ -57,18 +57,18 @@ public class BasicEntityTest {
         LOGGER.info("testing Entity Read", entity.getName());
         Entity searchEntity = new Entity();
         searchEntity.setName(entity.getName());
-        List entitiesResult = dataStore.list(searchEntity);
+        List entitiesResult = dataStore.listByExample(searchEntity);
         Assert.assertEquals("There should be one Entity in the db with name " + entity.getName(), 1, entitiesResult.size());
         LOGGER.info("tested Entity Read", entity.getName());
     }
-    
+
     @Test
     public void testSearchAndRemove() {
         LOGGER.info("testing Entity Read", entity.getName());
         Entity searchEntity = new Entity();
         searchEntity.setName(entity.getName());
-        dataStore.delete(searchEntity);
-        List entitiesResult = dataStore.list(searchEntity);
+        dataStore.deleteByExample(searchEntity);
+        List entitiesResult = dataStore.listByExample(searchEntity);
         Assert.assertEquals("There should be one Entity in the db with name " + entity.getName(), 0, entitiesResult.size());
         LOGGER.info("tested Entity Read", entity.getName());
     }

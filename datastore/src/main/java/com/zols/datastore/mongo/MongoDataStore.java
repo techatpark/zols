@@ -109,13 +109,13 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    public <T> List<T> list(T searchObject) {
+    public <T> List<T> listByExample(T searchObject) {
         Query query = getListQuery(null, searchObject);
         return (List<T>) mongoOperation.find(query, searchObject.getClass());
     }
 
     @Override
-    public <T> T delete(T searchObject) {
+    public <T> T deleteByExample(T searchObject) {
         Query query = getListQuery(null, searchObject);
         return (T) mongoOperation.findAndRemove(query, searchObject.getClass());
     }

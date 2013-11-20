@@ -57,7 +57,7 @@ public abstract class DataStore {
      * @param searchObject
      * @return
      */
-    public abstract <T> T delete(T searchObject);
+    public abstract <T> T deleteByExample(T searchObject);
 
     /**
      * Get List of the Object with given count
@@ -85,6 +85,6 @@ public abstract class DataStore {
      * @param searchObject Search Object
      * @return List Object
      */
-    public abstract <T> List<T> list(T searchObject);
+    public abstract <T> List<T> listByExample(T searchObject);
 
 }
