@@ -10,7 +10,7 @@
     <description>Dynamic Type System for Java</description>   
         
     <modules>
-        <module>/webapp</module>
+        <module>/webApp</module>
         <module>/datastore</module>
     </modules>
         
