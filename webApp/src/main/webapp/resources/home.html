@@ -1,24 +1,91 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-    <head >
-        <title>I am Home</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <head th:fragment="headtag">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=0" />
+        <title>Zols Content Management System</title>
+        <link rel="shortcut icon" type="image/x-icon" href="css/images/favicon.ico" />
+        <link rel="stylesheet" href="css/style.css" type="text/css" th:href="@{/resources/css/style.css}" media="all" />
+        <link href='http://fonts.googleapis.com/css?family=Raleway:400,900,800,700,600,500,300,200,100' rel='stylesheet' type='text/css'/>	
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/jquery.idealforms.min.css" th:href="@{/resources/css/jquery.idealforms.min.css}"/>
+
+        <!--[if lt IE 9]>
+                <script src="js/modernizr.custom.js"></script>
+        <![endif]-->
+
     </head>
     <body>
-        <article>
-            <header th:fragment="headTag">
-                <h1>I am Header the application</h1>
-                <p>Site:
-                    <span th:if="${currentSitePreference.normal}" th:remove="tag">Normal | <a href="?site_preference=mobile">Mobile</a> | <a href="?site_preference=tablet">Tablet</a></span>
-                    <span th:if="${currentSitePreference.mobile}" th:remove="tag"><a href="?site_preference=normal">Normal</a> | Mobile | <a href="?site_preference=tablet">Tablet</a></span>
-                    <span th:if="${currentSitePreference.tablet}" th:remove="tag"><a href="?site_preference=normal">Normal</a> | <a href="?site_preference=mobile">Mobile</a> | Tablet</span>
-                </p>
-            </header>
-        </article>
+
+        <!-- wrapper -->
+        <div id="wrapper" th:fragment="contentwrapper">
+            <!-- shell -->
+            <div class="shell">
+                <!-- container -->
+                <div class="container">
+                    <!-- header -->
+                    <header id="header">
+                        <h1 id="logo"><a href="#">Retina</a></h1>
+                        <!-- search -->
+                        <div class="search">
+                            <form action="" method="post">
+                                <input type="text" class="field" value="keywords here ..." title="keywords here ..." />
+                                <input type="submit" class="search-btn" value="" />
+                                <div class="cl">&nbsp;</div>
+                            </form>
+                        </div>
+                        <!-- end of search -->
+                        <div class="cl">&nbsp;</div>
+                    </header>
+                    <!-- end of header -->
+                    <!-- navigaation -->
+                    <nav id="navigation">
+                        <a href="#" class="nav-btn">HOME<span></span></a>
+                        <ul>
+                            <li class="active"><a href="#">home</a></li>
+                            <li><a href="#">about us</a></li>
+                            <li><a href="#">services</a></li>
+                            <li><a href="#">projects</a></li>
+                            <li><a href="#">solutions</a></li>
+                            <li><a href="#">jobs</a></li>
+                            <li><a href="#">blog</a></li>
+                            <li><a href="#">contacts</a></li>
+                        </ul>
+                        <div class="cl">&nbsp;</div>
+                    </nav>
+                    <!-- end of navigation -->
+                    <!-- main -->
+                    <div class="main" id="contentholder">
+                    </div>
+                    <!-- end of main -->
+                    <div class="cl">&nbsp;</div>
+
+                    <!-- footer -->
+                    <div id="footer">
+                        <div class="footer-nav">
+                            <ul>
+                                <li><a href="#">Home</a></li>
+                                <li><a href="#">About</a></li>
+                                <li><a href="#">Services</a></li>
+                                <li><a href="#">Projects</a></li>
+                                <li><a href="#">Solutions</a></li>
+                                <li><a href="#">Jobs</a></li>
+                                <li><a href="#">Blog</a></li>
+                                <li><a href="#">Contacts</a></li>
+                            </ul>
+                            <div class="cl">&nbsp;</div>
+                        </div>
+                        <p class="copy">&copy; Copyright 2012<span>|</span>Sitename. Design by <a href="http://chocotemplates.com" target="_blank">ChocoTemplates.com</a></p>
+                        <div class="cl">&nbsp;</div>
+                    </div>
+                    <!-- end of footer -->
+                </div>
+                <!-- end of container -->
+            </div>
+            <!-- end of shell -->
+        </div>
+        <!-- end of wrapper -->
     </body>
 </html>
