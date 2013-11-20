@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LinkManager {
-
+    
     @Autowired
     private DataStore dataStore;
 
@@ -51,7 +51,7 @@ public class LinkManager {
      */
     public Category getCategory(String categoryName) {
         return dataStore.read(categoryName, Category.class);
-
+        
     }
 
     /**
@@ -71,7 +71,7 @@ public class LinkManager {
      */
     public Page<Category> categoriesByPageable(Pageable pageable) {
         return dataStore.list(pageable, Category.class);
-
+        
     }
 
     /**
@@ -103,7 +103,7 @@ public class LinkManager {
         Link linkByExample = new Link();
         linkByExample.setCategoryName(categoryName);
         return dataStore.listByExample(linkByExample);
-
+        
     }
 
     /**
@@ -136,7 +136,7 @@ public class LinkManager {
      */
     public Page<Link> linksByPageable(Pageable pageable) {
         return dataStore.list(pageable, Link.class);
-
+        
     }
 
     /**
@@ -155,8 +155,9 @@ public class LinkManager {
      */
     public void deleteLinkByCategory(String categoryName) {
         Link link = new Link();
+        delete(categoryName);
         link.setCategoryName(categoryName);
         dataStore.deleteByExample(link);
     }
-
+    
 }
