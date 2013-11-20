@@ -64,7 +64,7 @@ public class LinkManagerTest {
     
     @Test
     public void listByCategory() {
-        List list = linkmanager.listByCategory(categoryName);
+        List list = linkmanager.listFirstLevelByCategory(categoryName);
         System.out.println("List By Category===" + list);
     }
     
@@ -80,13 +80,7 @@ public class LinkManagerTest {
         System.out.println("Get link" + link);
     }
     
-    @Test
-    public void deleteByCatyegory() {
-        System.out.println("Delete By Category");
-        linkmanager.deleteLinkByCategory(categoryName);
-        Link link = linkmanager.getLink(linkName);
-    }
-    
+
     @Test
     public void deleteCategory() {
         System.out.println("Delete Category");

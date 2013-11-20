@@ -40,7 +40,11 @@ public class LinkManager {
      * @param categoryName String to be delete
      */
     public void deleteCategory(String categoryName) {
+        Link linksOfCategory = new Link();        
+        linksOfCategory.setCategoryName(categoryName);
+        dataStore.deleteByExample(linksOfCategory);
         dataStore.delete(categoryName, Category.class);
+        
     }
 
     /**
@@ -99,9 +103,9 @@ public class LinkManager {
      * @param categoryName Object to be search
      * @return link list object
      */
-    public List<Link> listByCategory(String categoryName) {
+    public List<Link> listFirstLevelByCategory(String categoryName) {
         Link linkByExample = new Link();
-        linkByExample.setCategoryName(categoryName);
+        linkByExample.setCategoryName(categoryName);        
         return dataStore.listByExample(linkByExample);
         
     }
@@ -148,16 +152,6 @@ public class LinkManager {
         dataStore.delete(link, Link.class);
     }
 
-    /**
-     * Delete a link with given Category name
-     *
-     * @param categoryName Object to be Delete
-     */
-    public void deleteLinkByCategory(String categoryName) {
-        Link link = new Link();
-        delete(categoryName);
-        link.setCategoryName(categoryName);
-        dataStore.deleteByExample(link);
-    }
+
     
 }

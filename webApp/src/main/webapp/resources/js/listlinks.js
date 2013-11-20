@@ -8,30 +8,46 @@
             success: function(data, textStatus, jqXHR)
             {
                 var categoryOption = '';
-                $.each(data.content, function(key, value) {                    
+                $.each(data.content, function(key, value) {
                     categoryOption += "<option value=" + value.name + " >" + value.label + "</option>";
                 });
                 $("#link_category").html(categoryOption);
-                $("#link_category").change(function() {                    
-                    $(this).loadLinksByCategory($("#link_category").val());
-                });
+                $(this).loadLinksByCategory();
+
             },
             error: function(jqXHR, textStatus, errorThrown)
             {
                 return false;
                 console.log(jqXHR + "===" + textStatus);
             }
+
         });
+        
     };
-    $.fn.loadLinksByCategory = function(categoryName) {
-        var _url = 'api/links/categories/' + categoryName;
-        var _response = getData(_url, 'GET', 'json', '', 'application/json', false);
+    $.fn.loadLinksByCategory = function() {
+        var _url = 'api/links/categories/' + $("#link_category").val();
+        var linksOfCategory = getData(_url, 'GET', 'json', '', 'application/json', false);
         $("#childLink").empty();
-        if (_response.length > 0) {
-            dynamicChildList(_response);
+        if (linksOfCategory.length > 0) {
+            $("#childLink").handlebars('childList',linksOfCategory);
+            $("#childLink").append("<li><a href='#'>Add More</a></li>");
         } else {
-            $("#childLink").html("<li> No Record!</li>");
+            $("#childLink").append("<li><a href='#'>Add</a></li>");
         }
+
+        $("#childLink a:last-child").click(function() {
+            $(this).addLinkUnder();
+        });
+        $(".addChild").click(function() {
+            $(this).addChild($(this).attr('data-parent'));
+        });
+
+    };
+    $.fn.addChild = function(parentLinkName) {
+        window.location = 'links/addchild/' + parentLinkName;
+    };
+    $.fn.addLinkUnder = function() {
+        window.location = 'links/addunder/' + $("#link_category").val();
     };
     $.fn.removeCategory = function() {
         $.ajax(
@@ -59,6 +75,10 @@
     });
     $('#removeCategoryBtn').click(function() {
         $(this).removeCategory();
+    });
+
+    $("#link_category").change(function() {
+        $(this).loadLinksByCategory();
     });
 
 })(jQuery);

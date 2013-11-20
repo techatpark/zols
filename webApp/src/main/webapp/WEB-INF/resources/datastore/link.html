@@ -14,8 +14,8 @@
             <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
             <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
             <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
-            <input type="hidden" id="categoryName" name="categoryName" th:value="${categoryName}" />
-            <input type="hidden" id="parentLinkName" name="parentLinkName" th:value="${parentLinkName}" />
+            <label>Category</label><input id="categoryName" name="categoryName" type="text" th:field="*{categoryName}"/>
+            <label>parent</label><input id="parentLinkName" name="parentLinkName" type="text" th:field="*{parentLinkName}"/>            
             <div>
                 <button id="submit">Submit</button>
                 <button id="cancel" type="button">Cancel</button>
