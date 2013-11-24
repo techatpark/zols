@@ -14,3 +14,9 @@ CGLib:
 -----
 Enhancer
 Mixin
+
+
+To Run the app:
+---------------
+mvn clean tomcat7:run
+
