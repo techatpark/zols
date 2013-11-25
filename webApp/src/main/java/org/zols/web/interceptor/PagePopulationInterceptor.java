@@ -31,6 +31,8 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {            
             modelAndView.addObject("title", "I am the title");
+            modelAndView.addObject("viewName",modelAndView.getViewName());
+            modelAndView.setViewName("home");
         }
     }
 }

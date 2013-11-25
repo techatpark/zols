@@ -34,7 +34,7 @@ public class ViewConfiguration {
 
     public UrlTemplateResolver urlTemplateResolver() {
         UrlTemplateResolver urlTemplateResolver = new UrlTemplateResolver();
-        urlTemplateResolver.setPrefix("http://localhost:8080/zols/resources/");
+        urlTemplateResolver.setPrefix("http://localhost:8081/zols/resources/");
         urlTemplateResolver.setSuffix(".html");
         urlTemplateResolver.setTemplateMode("HTML5");
         urlTemplateResolver.setOrder(1);

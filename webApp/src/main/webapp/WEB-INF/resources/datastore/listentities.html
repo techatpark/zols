@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:include="home:: headtag">
+    <head>
         <meta charset="utf-8"/>
         <title>List entities</title>       
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resourcescss/jquery.idealforms.min.css" th:href="@{/resources/css/jquery.idealforms.min.css}"/>
     </head>
-    <body>
-
-        <div th:include="home:: wrapper">
-            
-        </div>
-        
+    <body th:fragment="content">
         <table id="grid"></table>
         <div id="pager"></div>
         

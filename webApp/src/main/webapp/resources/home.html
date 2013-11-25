@@ -18,7 +18,7 @@
     <body>
 
         <!-- wrapper -->
-        <div id="wrapper" th:fragment="wrapper" >
+        <div id="wrapper">
             <!-- shell -->
             <div class="shell">
                 <!-- container -->
@@ -55,7 +55,7 @@
                     </nav>
                     <!-- end of navigation -->
                     <!-- main -->
-                    <div class="main" >
+                    <div class="main" th:include="${viewName}::content" >
                         CONTENT COMES HERE                        
                     </div>
                     <!-- end of main -->

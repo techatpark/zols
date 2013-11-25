@@ -8,7 +8,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
 
     </head>
-    <body>
+    <body th:fragment="content">
         <form id="my-form" th:object="${template}">
 
             <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
