@@ -9,7 +9,7 @@
 
     </head>
     <body th:fragment="content">
-        <form id="my-form" th:object="${locale}">
+        <form id="my-form" th:object="${language}">
 
             <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
             <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>

@@ -5,8 +5,9 @@
  */
 package org.zols.datastore.web.controller;
 
-import com.zols.localemanager.LocaleManager;
-import com.zols.localemanager.domain.Locale;
+
+import com.zols.languagemanager.LanguageManager;
+import com.zols.languagemanager.domain.Language;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,65 +27,65 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Controller for Locale Handling
+ * Controller for Language Handling
  *
  * @author Navin.
  */
 @Controller
-public class LocaleController {
+public class LanguageController {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(CategoryController.class);
 
     @Autowired
-    LocaleManager localeManager;
+    LanguageManager languagesManager;
 
-    @RequestMapping(value = "/api/locale", method = POST)
+    @RequestMapping(value = "/api/languages", method = POST)
     @ResponseBody
-    public Locale create(@RequestBody Locale locale) {
-        LOGGER.info("Creating new locale {}", locale);
-        return localeManager.add(locale);
+    public Language create(@RequestBody Language language) {
+        LOGGER.info("Creating new language {}", language);
+        return languagesManager.add(language);
     }
 
-    @RequestMapping(value = "/api/locale/{name}", method = PUT)
+    @RequestMapping(value = "/api/languages/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody Locale locale) {
-        LOGGER.info("Updating locale with id {} with {}", name, locale);
-        if (name.equals(locale.getName())) {
-            localeManager.update(locale);
+            @RequestBody Language language) {
+        LOGGER.info("Updating language with id {} with {}", name, language);
+        if (name.equals(language.getName())) {
+            languagesManager.update(language);
         }
     }
 
-    @RequestMapping(value = "/api/locale/{name}", method = DELETE)
+    @RequestMapping(value = "/api/languages/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
-        LOGGER.info("Deleting locale with id {}", name);
-        localeManager.deleteLocale(name);
+        LOGGER.info("Deleting language with id {}", name);
+        languagesManager.delete(name);
     }
 
-    @RequestMapping(value = "/locale/{name}", method = GET)
+    @RequestMapping(value = "/languages/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
-        model.addAttribute("locale", localeManager.getLocale(name));
-        return "datastore/locale";
+        model.addAttribute("language", languagesManager.get(name));
+        return "datastore/language";
     }
 
-    @RequestMapping(value = "/locale/add", method = GET)
+    @RequestMapping(value = "/languages/add", method = GET)
     public String add(Model model) {
-        model.addAttribute("locale", new Locale());
-        return "datastore/locale";
+        model.addAttribute("language", new Language());
+        return "datastore/language";
     }
 
-    @RequestMapping(value = "/api/locale", method = GET)
+    @RequestMapping(value = "/api/languages", method = GET)
     @ResponseBody
-    public Page<Locale> list(
+    public Page<Language> list(
             Pageable page) {
-        LOGGER.info("Listing locale");
-        return localeManager.localeList(page);
+        LOGGER.info("Listing languages");
+        return languagesManager.list(page);
     }
 
-    @RequestMapping(value = "/locale", method = GET)
+    @RequestMapping(value = "/languages", method = GET)
     public String listing() {
-        return "datastore/listlocale";
+        return "datastore/listlanguages";
     }
 }

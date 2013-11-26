@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var URL = 'api/locale';
+var URL = 'api/languages';
 $(function() {
 
     $.extend($.jgrid.defaults, {
@@ -89,7 +89,7 @@ $(function() {
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            window.location = 'locale/' + id;
+            window.location = 'languages/' + id;
         },
         formatter: {idName: "name"}
     };
@@ -98,9 +98,9 @@ $(function() {
             .jqGrid(options)
             .navGrid('#pager',
                     {search: false, addfunc: function() {
-                            window.location = 'locale/add';
+                            window.location = 'languages/add';
                         }, editfunc: function(data) {
-                            window.location = 'locale/' + data;
+                            window.location = 'languages/' + data;
                         }}, //options
             {}, // edit options
                     {}, // add options 
@@ -112,7 +112,7 @@ $(function() {
 $(document).ready(function() {
 
     $.ajax({
-        url: 'api/locale',
+        url: 'api/languages',
         type: 'GET',
         dataType: "json",
         contentType: 'application/json',
