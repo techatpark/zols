@@ -7,12 +7,6 @@ package org.zols.web.view.resolver;
 
 import java.util.Locale;
 import org.springframework.web.servlet.View;
-import org.thymeleaf.Template;
-import org.thymeleaf.TemplateProcessingParameters;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.context.IContext;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.spring3.view.ThymeleafView;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 
 /**
@@ -24,23 +18,23 @@ public class ViewResolver extends ThymeleafViewResolver {
     @Override
     public View resolveViewName(String viewName, Locale locale) throws Exception {    
         View view = super.resolveViewName(viewName, locale) ;
-        boolean b = isValidTemplate(viewName, locale);
-        b = b;
+//        boolean b = isValidTemplate(viewName, locale);
+//        b = b;
         return view; //To change body of generated methods, choose Tools | Templates.
     }
 
-    private boolean isValidTemplate(String viewName, Locale locale) {
-        boolean isValidTemplate = true ; 
-        Context context = new Context(locale);
-        TemplateProcessingParameters processingParameters
-                = new TemplateProcessingParameters(this.getTemplateEngine().getConfiguration(), viewName, context);
-        try {            
-            Template template = this.getTemplateEngine().getTemplateRepository().getTemplate(processingParameters);
-        } catch (Exception e) {            
-            isValidTemplate = false ;
-        }
-        
-        return isValidTemplate;
-    }
+//    private boolean isValidTemplate(String viewName, Locale locale) {
+//        boolean isValidTemplate = true ; 
+//        Context context = new Context(locale);
+//        TemplateProcessingParameters processingParameters
+//                = new TemplateProcessingParameters(this.getTemplateEngine().getConfiguration(), viewName, context);
+//        try {            
+//            Template template = this.getTemplateEngine().getTemplateRepository().getTemplate(processingParameters);
+//        } catch (Exception e) {            
+//            isValidTemplate = false ;
+//        }
+//        
+//        return isValidTemplate;
+//    }
 
 }

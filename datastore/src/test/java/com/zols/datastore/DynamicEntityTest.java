@@ -6,8 +6,6 @@ package com.zols.datastore;
 
 import com.zols.datastore.config.DataStoreConfiguration;
 import java.beans.IntrospectionException;
-import java.lang.reflect.Method;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;

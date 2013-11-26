@@ -155,10 +155,11 @@ public class EntityController {
         return (Page<BaseObject>) dataStore.list(page, clazz);
     }
 
-    private BaseObject getBaseObject(Class<? extends BaseObject> clazz, String entityName, HashMap<String, String> contactMap) {
+    private BaseObject getBaseObject(Class<? extends BaseObject> clazz, 
+            String entityName, HashMap<String, String> contactMap) {
         BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
-        for (String entry : contactMap.keySet()) {
-            beanWrapper.setPropertyValue(entry, contactMap.get(entry));
+        for (Map.Entry<String,String> entry : contactMap.entrySet()) {
+            beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
         }
         return (BaseObject) beanWrapper.getWrappedInstance();
     }

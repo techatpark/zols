@@ -6,10 +6,6 @@
 package org.zols.web.interceptor;
 
 import com.zols.linkmanager.LinkManager;
-import com.zols.linkmanager.domain.Link;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +20,6 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private LinkManager linkManager;
-
-    private Map<String, List<Link>> links;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {

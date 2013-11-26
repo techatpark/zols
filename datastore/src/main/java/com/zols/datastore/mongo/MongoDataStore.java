@@ -5,8 +5,6 @@
 package com.zols.datastore.mongo;
 
 import com.zols.datastore.DataStore;
-import com.zols.datastore.domain.BaseObject;
-import com.zols.datastore.domain.Entity;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import org.springframework.beans.BeanWrapper;
@@ -27,11 +25,13 @@ public class MongoDataStore extends DataStore {
     private MongoOperations mongoOperation;
 
     @SuppressWarnings("unchecked")
+    @Override
     public <T> T create(Object object, Class<T> clazz) {
         mongoOperation.insert(object);
         return (T) object;
     }
 
+    @Override
     public <T> T read(String name, Class<T> clazz) {
         T object = mongoOperation.findById(name, clazz);
         return object;
@@ -77,7 +77,7 @@ public class MongoDataStore extends DataStore {
             query.limit(pageable.getPageSize());
         }
         if (searchObjct != null) {
-            Object propertyValue = null;
+            Object propertyValue ;
             Criteria criteria = null;
             BeanWrapper beanWrapper = new BeanWrapperImpl(searchObjct);
             for (PropertyDescriptor propertyDescriptor : beanWrapper.getPropertyDescriptors()) {

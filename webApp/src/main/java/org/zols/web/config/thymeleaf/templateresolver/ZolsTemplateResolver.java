@@ -16,7 +16,7 @@ import org.thymeleaf.templateresolver.TemplateResolver;
  */
 public class ZolsTemplateResolver extends TemplateResolver {
 
-    private List<TemplateResolver> templateResolvers;
+    private final List<TemplateResolver> templateResolvers;
 
     public ZolsTemplateResolver() {
         templateResolvers = new ArrayList<TemplateResolver>();

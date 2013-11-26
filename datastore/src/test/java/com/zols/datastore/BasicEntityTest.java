@@ -86,11 +86,11 @@ public class BasicEntityTest {
      * @return
      */
     private Entity getBasicEntity() {
-        Entity entity = new Entity();
+
         //entity.setName("Basic");
         entity.setLabel("Basic Entity");
         entity.setDescription("Describe an Basic Entity");
-        Attribute attribute = null;
+        Attribute attribute ;
         List<Attribute> attributes = new ArrayList<Attribute>(1);
         attribute = new Attribute();
         attribute.setDescription("Count is an Integer");

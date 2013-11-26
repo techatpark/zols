@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.mapping.FieldNamingStrategy;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 
@@ -24,15 +23,26 @@ public class DataStoreConfiguration {
         return new SimpleMongoDbFactory(new MongoClient(), "zolsdb");
     }
 
+    @Bean
+    FieldNamingStrategy fieldNamingStrategy() {
+        return new FieldNamingStrategy();
+    }
+
     public @Bean
     MongoTemplate mongoTemplate() throws Exception {
         MongoTemplate mongoTemplate = new MongoTemplate(mongoDbFactory());
-        ((MongoMappingContext) mongoTemplate.getConverter().getMappingContext()).setFieldNamingStrategy(new FieldNamingStrategy() {
-            @Override
-            public String getFieldName(MongoPersistentProperty property) {
-                return property.getName().replaceAll("\\$cglib_prop_", "");
-            }
-        });
+        ((MongoMappingContext) mongoTemplate.getConverter().getMappingContext())
+                .setFieldNamingStrategy(fieldNamingStrategy());
         return mongoTemplate;
+    }
+
+    private static class FieldNamingStrategy 
+    implements org.springframework.data.mongodb.core.mapping.FieldNamingStrategy {
+
+        @Override
+        public String getFieldName(MongoPersistentProperty property) {
+            return property.getName().replaceAll("\\$cglib_prop_", "");
+        }
+
     }
 }
