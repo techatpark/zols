@@ -5,6 +5,8 @@
 package com.zols.datastore.config;
 
 import com.mongodb.MongoClient;
+import com.zols.datastore.ServiceMetaData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +20,12 @@ import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 @ComponentScan(basePackages = "com.zols")
 public class DataStoreConfiguration {
 
+    @Autowired
+    private ServiceMetaData serviceMetaData;
+
     public @Bean
     MongoDbFactory mongoDbFactory() throws Exception {
-        return new SimpleMongoDbFactory(new MongoClient(), "zolsdb");
+        return new SimpleMongoDbFactory(new MongoClient(), serviceMetaData.getDatabaseName());
     }
 
     @Bean
@@ -36,8 +41,8 @@ public class DataStoreConfiguration {
         return mongoTemplate;
     }
 
-    private static class FieldNamingStrategy 
-    implements org.springframework.data.mongodb.core.mapping.FieldNamingStrategy {
+    private static class FieldNamingStrategy
+            implements org.springframework.data.mongodb.core.mapping.FieldNamingStrategy {
 
         @Override
         public String getFieldName(MongoPersistentProperty property) {
