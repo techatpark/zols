@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.zols.localemanager.domain;
+package com.zols.languagemanager.domain;
 
 import org.springframework.data.annotation.Id;
 
@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
  *
  * @author Navin.
  */
-public class Locale {
+public class Language {
 
     @Id
     private String name;
