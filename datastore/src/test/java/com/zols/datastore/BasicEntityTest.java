@@ -86,7 +86,7 @@ public class BasicEntityTest {
      * @return
      */
     private Entity getBasicEntity() {
-
+        entity = new Entity();
         //entity.setName("Basic");
         entity.setLabel("Basic Entity");
         entity.setDescription("Describe an Basic Entity");
