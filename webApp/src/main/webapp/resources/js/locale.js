@@ -3,8 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 var URL = 'api/locale';
 $(function() {
 
@@ -130,7 +128,6 @@ $(document).ready(function() {
             return false;
             console.log(jqXHR + "===" + textStatus);
         }
-
     });
 });
 

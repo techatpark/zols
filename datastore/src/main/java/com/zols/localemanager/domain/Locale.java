@@ -9,7 +9,7 @@ import org.springframework.data.annotation.Id;
 
 /**
  *
- * @author Navin
+ * @author Navin.
  */
 public class Locale {
 

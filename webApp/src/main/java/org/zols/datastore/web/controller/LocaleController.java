@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 /**
  * Controller for Locale Handling
  *
- * @author Navin
+ * @author Navin.
  */
 @Controller
 public class LocaleController {

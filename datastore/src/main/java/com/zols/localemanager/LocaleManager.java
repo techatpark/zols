@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author Navin
+ * @author Navin.
  */
 @Service
 public class LocaleManager {
