@@ -87,7 +87,7 @@ public class LinkController {
         Link link = new Link();
         link.setCategoryName(categoryName);
         model.addAttribute("link", link);        
-        return "datastore/link";
+        return "com/zols/datastore/link";
     }
     
     @RequestMapping(value = "/links/addchild/{parentLinkName}", method = GET)
@@ -95,17 +95,17 @@ public class LinkController {
         Link link = new Link();
         link.setParentLinkName(parentLinkName);
         model.addAttribute("link", link);
-        return "datastore/link";
+        return "com/zols/datastore/link";
     }
     
     @RequestMapping(value = "/links/edit/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("link", linkManager.getLink(name));
-        return "datastore/link";
+        return "com/zols/datastore/link";
     }
     
     @RequestMapping(value = "/links", method = GET)
     public String listing() {
-        return "datastore/listlinks";
+        return "com/zols/datastore/listlinks";
     }
 }

@@ -97,29 +97,29 @@ public class EntityController {
     @RequestMapping(value = "/entities/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("entity", dataStore.read(name, Entity.class));
-        return "datastore/entity";
+        return "com/zols/datastore/entity";
     }
 
     @RequestMapping(value = "/entities/add", method = GET)
     public String add(Model model) {
         model.addAttribute("entity", new Entity());
-        return "datastore/entity";
+        return "com/zols/datastore/entity";
     }
 
     @RequestMapping(value = "/entities", method = GET)
     public String listing() {
-        return "datastore/listentities";
+        return "com/zols/datastore/listentities";
     }
 
     //dataList mapping
     @RequestMapping(value = "/data/{entityName}", method = GET)
     public String dataListListing() {
-        return "datastore/dataList";
+        return "com/zols/datastore/dataList";
     }
 
     @RequestMapping(value = "/dataListChange", method = GET)
     public String dataListChange() {
-        return "datastore/dataListChange";
+        return "com/zols/datastore/dataListChange";
     }
 
     @RequestMapping(value = "/api/data/{entityName}", method = POST)

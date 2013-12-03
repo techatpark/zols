@@ -65,12 +65,12 @@ public class TemplateController {
      @RequestMapping(value = "/templates/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("template", templateManager.getTemplate(name));
-        return "datastore/template";
+        return "com/zols/datastore/template";
     }
     @RequestMapping(value = "/templates/add", method = GET)
     public String add(Model model) {
         model.addAttribute("template", new Template());
-        return "datastore/template";
+        return "com/zols/datastore/template";
     }
 
     @RequestMapping(value = "/api/templates", method = GET)
@@ -83,6 +83,6 @@ public class TemplateController {
 
     @RequestMapping(value = "/templates", method = GET)
     public String listing() {
-        return "datastore/listtemplates";
+        return "com/zols/datastore/listtemplates";
     }
 }

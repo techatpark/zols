@@ -67,13 +67,13 @@ public class LanguageController {
     @RequestMapping(value = "/languages/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("language", languagesManager.get(name));
-        return "datastore/language";
+        return "com/zols/datastore/language";
     }
 
     @RequestMapping(value = "/languages/add", method = GET)
     public String add(Model model) {
         model.addAttribute("language", new Language());
-        return "datastore/language";
+        return "com/zols/datastore/language";
     }
 
     @RequestMapping(value = "/api/languages", method = GET)
@@ -86,6 +86,6 @@ public class LanguageController {
 
     @RequestMapping(value = "/languages", method = GET)
     public String listing() {
-        return "datastore/listlanguages";
+        return "com/zols/datastore/listlanguages";
     }
 }

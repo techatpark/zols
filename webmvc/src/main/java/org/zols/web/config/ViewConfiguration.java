@@ -45,9 +45,9 @@ public class ViewConfiguration {
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
-        engine.addTemplateResolver(servletContextTemplateResolver());
+//        engine.addTemplateResolver(servletContextTemplateResolver());
         engine.addTemplateResolver(classLoaderTemplateResolver());
-        engine.addTemplateResolver(urlTemplateResolver());
+//        engine.addTemplateResolver(urlTemplateResolver());
         return engine;
     }
     

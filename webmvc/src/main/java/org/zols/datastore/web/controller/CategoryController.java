@@ -61,13 +61,13 @@ public class CategoryController {
     @RequestMapping(value = "/links/categories/{name}", method = GET)
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("category", linkManager.getCategory(name));
-        return "datastore/category";
+        return "com/zols/datastore/category";
     }
 
     @RequestMapping(value = "/links/categories/add", method = GET)
     public String add(Model model) {
         model.addAttribute("category", new Category());
-        return "datastore/category";
+        return "com/zols/datastore/category";
     }
 
     @RequestMapping(value = "/api/links/categories", method = GET)
@@ -80,7 +80,7 @@ public class CategoryController {
 
     @RequestMapping(value = "/links/categories", method = GET)
     public String listing() {
-        return "datastore/listcategories";
+        return "com/zols/datastore/listcategories";
     }
 
 }
