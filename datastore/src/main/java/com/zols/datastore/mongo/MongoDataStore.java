@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import static com.zols.datastore.domain.Criteria.Type.*;
 
 @Service
 public class MongoDataStore extends DataStore {
@@ -77,7 +78,7 @@ public class MongoDataStore extends DataStore {
             query.limit(pageable.getPageSize());
         }
         if (searchObjct != null) {
-            Object propertyValue ;
+            Object propertyValue;
             Criteria criteria = null;
             BeanWrapper beanWrapper = new BeanWrapperImpl(searchObjct);
             for (PropertyDescriptor propertyDescriptor : beanWrapper.getPropertyDescriptors()) {
@@ -118,6 +119,48 @@ public class MongoDataStore extends DataStore {
     public <T> T deleteByExample(T searchObject) {
         Query query = getListQuery(null, searchObject);
         return (T) mongoOperation.findAndRemove(query, searchObject.getClass());
+    }
+
+    @Override
+    public <T> List<T> list(List<com.zols.datastore.domain.Criteria> criterias, Class<T> aClass) {
+        return (List<T>) mongoOperation.find(getQuery(criterias), aClass);
+    }
+
+    private Query getQuery(List<com.zols.datastore.domain.Criteria> criterias) {
+        Query query = new Query();
+        Criteria mongoCriteria = null;
+        for (com.zols.datastore.domain.Criteria criteria : criterias) {
+            if (mongoCriteria == null) {
+                mongoCriteria = Criteria.where(criteria.getFieldName());
+                addCariteriaCondition(mongoCriteria, criteria);
+            } else {
+                mongoCriteria.and(criteria.getFieldName());
+                addCariteriaCondition(mongoCriteria, criteria);
+            }
+        }
+        query.addCriteria(mongoCriteria);
+        return query;
+    }
+
+    private void addCariteriaCondition(Criteria mongoCriteria, com.zols.datastore.domain.Criteria criteria) {
+        switch (criteria.getType()) {
+            case GREATER_THAN_EQUALS:
+                mongoCriteria.gte(criteria.getValue());
+                break;
+
+            case GREATER_THAN:
+                mongoCriteria.gt(criteria.getValue());
+                break;
+
+            case LESSER_THAN_EQUALS:
+                mongoCriteria.lte(criteria.getValue());
+                break;
+
+            case LESSER_THAN:
+                mongoCriteria.lt(criteria.getValue());
+                break;
+
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.zols.datastore;
 
+import com.zols.datastore.domain.Criteria;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -86,5 +87,14 @@ public abstract class DataStore {
      * @return List Object
      */
     public abstract <T> List<T> listByExample(T searchObject);
+    
+    /**
+     * Get List of the Object
+     *
+     * @param aClass Type of the Object
+     * @param criterias 
+     * @return List Object
+     */
+    public abstract <T> List<T> list(List<Criteria> criterias,Class<T> aClass);
 
 }

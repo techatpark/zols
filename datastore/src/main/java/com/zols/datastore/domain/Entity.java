@@ -1,56 +1,68 @@
 package com.zols.datastore.domain;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
 
 /**
- * 
+ *
  * This describes the entity of the entity added to zols datastore.
+ *
  * @author Sathish Kumar Thiyagarajan
- * 
+ *
  */
 public class Entity {
 
-	@Id
-	private String name;
+    @Id
+    private String name;
 
-	private String label;
+    private String label;
 
-	private String description;
+    private String description;
 
-	private List<Attribute> attributes;
+    private Date createdDate;
 
-	public List<Attribute> getAttributes() {
-		return attributes;
-	}
+    private List<Attribute> attributes;
 
-	public void setAttributes(List<Attribute> attributes) {
-		this.attributes = attributes;
-	}
+    public List<Attribute> getAttributes() {
+        return attributes;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setAttributes(List<Attribute> attributes) {
+        this.attributes = attributes;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public String getLabel() {
-		return label;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
 
 }

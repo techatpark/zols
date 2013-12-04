@@ -2,8 +2,10 @@ package com.zols.datastore;
 
 import com.zols.datastore.config.DataStoreConfiguration;
 import com.zols.datastore.domain.Attribute;
+import com.zols.datastore.domain.Criteria;
 import com.zols.datastore.domain.Entity;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.junit.After;
 import org.junit.Assert;
@@ -73,6 +75,18 @@ public class BasicEntityTest {
         LOGGER.info("tested Entity Read", entity.getName());
     }
 
+    @Test
+    public void testGetByCriteria() {
+        LOGGER.info("testing Entity Read", entity.getName());
+
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("createdDate", Criteria.Type.LESSER_THAN, new Date()));
+
+        List<Entity> entitiesResult = dataStore.list(criterias,Entity.class);
+        Assert.assertEquals("There should be one Entity lesser than this date " + entity.getName(), 1, entitiesResult.size());
+        LOGGER.info("tested Entity Read", entity.getName());
+    }
+
     @After
     public void afterTest() {
         LOGGER.info("Deleting 'basic' Entity", entity.getName());
@@ -90,7 +104,7 @@ public class BasicEntityTest {
         //entity.setName("Basic");
         entity.setLabel("Basic Entity");
         entity.setDescription("Describe an Basic Entity");
-        Attribute attribute ;
+        Attribute attribute;
         List<Attribute> attributes = new ArrayList<Attribute>(1);
         attribute = new Attribute();
         attribute.setDescription("Count is an Integer");
@@ -98,6 +112,9 @@ public class BasicEntityTest {
         attribute.setType("Integer");
         attributes.add(attribute);
         entity.setAttributes(attributes);
+
+        entity.setCreatedDate(new Date());
+
         return entity;
     }
 
