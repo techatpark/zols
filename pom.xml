@@ -34,6 +34,7 @@
         <org.apache.maven.plugins.war-version>2.3</org.apache.maven.plugins.war-version>
         <org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
         <org.codehaus.mojo.tomcat-version>1.1</org.codehaus.mojo.tomcat-version>
+        <swagger-springmvc-version>0.6.5</swagger-springmvc-version>
     </properties>
 
     

@@ -17,13 +17,15 @@ import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumen
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.zols.swagger.RestDocumentationConfig;
 import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
-@Import({ViewConfiguration.class, ControllerConfiguration.class})
+@Import({RestDocumentationConfig.class,ViewConfiguration.class, ControllerConfiguration.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
@@ -52,7 +54,10 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     // Maps resources path to webapp/resources
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");        
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");  
+        // map all static resources coming to '/usage/**' to the resource files under the 'swagger' directory
+        ResourceHandlerRegistration registration = registry.addResourceHandler("/usage/**");
+        registration.addResourceLocations("classpath:swagger/");        
     }
 
     @Override
