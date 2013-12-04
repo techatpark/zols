@@ -1,5 +1,6 @@
 package org.zols.datastore.web.controller;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Entity;
@@ -38,6 +39,7 @@ public class EntityController {
     private DynamicBeanGenerator dynamicBeanGenerator;
 
     @RequestMapping(value = "/api/entities", method = POST)
+    @ApiIgnore
     @ResponseBody
     public Entity create(@RequestBody Entity entity) {
         LOGGER.info("Creating new entity {}", entity);
@@ -45,6 +47,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/entities/{name}", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Map<String, Entity> read(@PathVariable(value = "name") String name) {
         LOGGER.info("Reading entity with id {}", name);
@@ -54,6 +57,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/entities/{name}", method = PUT)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Entity entity) {
@@ -64,6 +68,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/entities/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting entity with id {}", name);
@@ -71,6 +76,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/entities", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<Entity> list(
             Pageable page) {
@@ -95,34 +101,40 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/entities/{name}", method = GET)
+    @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("entity", dataStore.read(name, Entity.class));
         return "com/zols/datastore/entity";
     }
 
     @RequestMapping(value = "/entities/add", method = GET)
+    @ApiIgnore
     public String add(Model model) {
         model.addAttribute("entity", new Entity());
         return "com/zols/datastore/entity";
     }
 
     @RequestMapping(value = "/entities", method = GET)
+    @ApiIgnore
     public String listing() {
         return "com/zols/datastore/listentities";
     }
 
     //dataList mapping
     @RequestMapping(value = "/data/{entityName}", method = GET)
+    @ApiIgnore
     public String dataListListing() {
         return "com/zols/datastore/dataList";
     }
 
     @RequestMapping(value = "/dataListChange", method = GET)
+    @ApiIgnore
     public String dataListChange() {
         return "com/zols/datastore/dataListChange";
     }
 
     @RequestMapping(value = "/api/data/{entityName}", method = POST)
+    @ApiIgnore
     @ResponseBody
     public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
@@ -130,6 +142,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/data/{entityName}/{name}", method = PUT)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name,
             @RequestBody HashMap<String, String> entityObjectMap) {
@@ -141,6 +154,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/data/{entityName}/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
@@ -148,6 +162,7 @@ public class EntityController {
     }
 
     @RequestMapping(value = "/api/data/{entityName}", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
             Pageable page) {

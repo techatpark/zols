@@ -6,6 +6,7 @@
 
 package org.zols.datastore.web.controller;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.templatemanager.TemplateManager;
 import com.zols.templatemanager.domain.Template;
 import org.slf4j.Logger;
@@ -37,7 +38,7 @@ public class TemplateController {
     
     @Autowired
     TemplateManager templateManager;
-    
+    @ApiIgnore
      @RequestMapping(value = "/api/templates", method = POST)
     @ResponseBody
     public Template create(@RequestBody Template template) {
@@ -46,6 +47,7 @@ public class TemplateController {
     }
     
      @RequestMapping(value = "/api/templates/{name}", method = PUT)
+     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Template template) {
@@ -56,6 +58,7 @@ public class TemplateController {
     }
     
     @RequestMapping(value = "/api/templates/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting template with id {}", name);
@@ -63,17 +66,20 @@ public class TemplateController {
     }
     
      @RequestMapping(value = "/templates/{name}", method = GET)
+     @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("template", templateManager.getTemplate(name));
         return "com/zols/datastore/template";
     }
     @RequestMapping(value = "/templates/add", method = GET)
+    @ApiIgnore
     public String add(Model model) {
         model.addAttribute("template", new Template());
         return "com/zols/datastore/template";
     }
 
     @RequestMapping(value = "/api/templates", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<Template> list(
             Pageable page) {
@@ -82,6 +88,7 @@ public class TemplateController {
     }
 
     @RequestMapping(value = "/templates", method = GET)
+    @ApiIgnore
     public String listing() {
         return "com/zols/datastore/listtemplates";
     }

@@ -6,6 +6,7 @@
 package org.zols.datastore.web.controller;
 
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.languagemanager.LanguageManager;
 import com.zols.languagemanager.domain.Language;
 import org.slf4j.Logger;
@@ -41,6 +42,7 @@ public class LanguageController {
     LanguageManager languagesManager;
 
     @RequestMapping(value = "/api/languages", method = POST)
+    @ApiIgnore
     @ResponseBody
     public Language create(@RequestBody Language language) {
         LOGGER.info("Creating new language {}", language);
@@ -48,6 +50,7 @@ public class LanguageController {
     }
 
     @RequestMapping(value = "/api/languages/{name}", method = PUT)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Language language) {
@@ -58,6 +61,7 @@ public class LanguageController {
     }
 
     @RequestMapping(value = "/api/languages/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting language with id {}", name);
@@ -65,18 +69,21 @@ public class LanguageController {
     }
 
     @RequestMapping(value = "/languages/{name}", method = GET)
+    @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("language", languagesManager.get(name));
         return "com/zols/datastore/language";
     }
 
     @RequestMapping(value = "/languages/add", method = GET)
+    @ApiIgnore
     public String add(Model model) {
         model.addAttribute("language", new Language());
         return "com/zols/datastore/language";
     }
 
     @RequestMapping(value = "/api/languages", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<Language> list(
             Pageable page) {
@@ -85,6 +92,7 @@ public class LanguageController {
     }
 
     @RequestMapping(value = "/languages", method = GET)
+    @ApiIgnore
     public String listing() {
         return "com/zols/datastore/listlanguages";
     }

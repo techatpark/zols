@@ -1,5 +1,6 @@
 package org.zols.datastore.web.controller;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Category;
 import org.slf4j.Logger;
@@ -35,6 +36,7 @@ public class CategoryController {
     private LinkManager linkManager;
 
     @RequestMapping(value = "/api/links/categories", method = POST)
+    @ApiIgnore
     @ResponseBody
     public Category create(@RequestBody Category category) {
         LOGGER.info("Creating new categories {}", category);
@@ -42,6 +44,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/api/links/categories/{name}", method = PUT)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Category category) {
@@ -52,6 +55,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/api/links/categories/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting categories with id {}", name);
@@ -59,18 +63,21 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/links/categories/{name}", method = GET)
+    @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("category", linkManager.getCategory(name));
         return "com/zols/datastore/category";
     }
 
     @RequestMapping(value = "/links/categories/add", method = GET)
+    @ApiIgnore
     public String add(Model model) {
         model.addAttribute("category", new Category());
         return "com/zols/datastore/category";
     }
 
     @RequestMapping(value = "/api/links/categories", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<Category> list(
             Pageable page) {
@@ -79,6 +86,7 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/links/categories", method = GET)
+    @ApiIgnore
     public String listing() {
         return "com/zols/datastore/listcategories";
     }

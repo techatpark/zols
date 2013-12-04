@@ -1,5 +1,6 @@
 package org.zols.datastore.web.controller;
 
+import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Link;
 import java.util.List;
@@ -33,6 +34,7 @@ public class LinkController {
     private LinkManager linkManager;
     
     @RequestMapping(value = "/api/links", method = POST)
+    @ApiIgnore
     @ResponseBody
     public Link create(@RequestBody Link link) {
         LOGGER.info("Creating new links {}", link);
@@ -44,6 +46,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/api/links/{name}", method = PUT)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Link links) {
@@ -54,6 +57,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/api/links/{name}", method = DELETE)
+    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting links with id {}", name);
@@ -61,6 +65,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/api/links", method = GET)
+    @ApiIgnore
     @ResponseBody
     public Page<Link> list(
             Pageable page) {
@@ -69,6 +74,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/api/links/categories/{categoryName}", method = GET)
+    @ApiIgnore
     @ResponseBody
     public List<Link> listByCategory(@PathVariable(value = "categoryName") String categoryName) {
         LOGGER.info("Listing entities");
@@ -76,6 +82,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/api/links/{parentName}", method = GET)
+    @ApiIgnore
     @ResponseBody
     public List<Link> listByParent(@PathVariable(value = "parentName") String parentName) {
         LOGGER.info("Listing entities");
@@ -83,6 +90,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/links/addunder/{categoryName}", method = GET)
+    @ApiIgnore
     public String addCategory(Model model, @PathVariable(value = "categoryName") String categoryName) {
         Link link = new Link();
         link.setCategoryName(categoryName);
@@ -91,6 +99,7 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/links/addchild/{parentLinkName}", method = GET)
+    @ApiIgnore
     public String addParent(Model model, @PathVariable(value = "parentLinkName") String parentLinkName) {
         Link link = new Link();
         link.setParentLinkName(parentLinkName);
@@ -99,12 +108,14 @@ public class LinkController {
     }
     
     @RequestMapping(value = "/links/edit/{name}", method = GET)
+    @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("link", linkManager.getLink(name));
         return "com/zols/datastore/link";
     }
     
     @RequestMapping(value = "/links", method = GET)
+    @ApiIgnore
     public String listing() {
         return "com/zols/datastore/listlinks";
     }
