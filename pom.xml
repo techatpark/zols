@@ -16,12 +16,13 @@
         
         
     
-  </modules>
+    </modules>
         
     <properties>
         <java-version>1.6</java-version>
         <org.springframework-version>3.2.4.RELEASE</org.springframework-version>
         <org.springframework.mobile-version>1.1.0.RELEASE</org.springframework.mobile-version>
+        <org.spring-security-version>3.2.0.RC2</org.spring-security-version>
         <cglib-version>3.0</cglib-version>   
         <asm-all-version>4.0</asm-all-version> 
         <jackson-version>1.9.13</jackson-version>
@@ -39,7 +40,12 @@
         <swagger-springmvc-version>0.6.5</swagger-springmvc-version>
     </properties>
 
-    
+    <repositories>
+        <repository>
+            <id>spring-snasphot</id>
+            <url>http://repo.springsource.org/libs-snapshot</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <!-- Spring -->

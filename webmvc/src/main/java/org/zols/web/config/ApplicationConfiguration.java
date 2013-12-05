@@ -25,7 +25,7 @@ import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
-@Import({RestDocumentationConfig.class,ViewConfiguration.class, ControllerConfiguration.class})
+@Import({SecurityConfig.class, RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
@@ -54,10 +54,10 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     // Maps resources path to webapp/resources
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");  
+        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
         // map all static resources coming to '/usage/**' to the resource files under the 'swagger' directory
         ResourceHandlerRegistration registration = registry.addResourceHandler("/usage/**");
-        registration.addResourceLocations("classpath:swagger/");        
+        registration.addResourceLocations("classpath:swagger/");
     }
 
     @Override
@@ -84,13 +84,9 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(sitePreferenceHandlerInterceptor());
         registry.addInterceptor(pagePopulationInterceptor());
     }
-    
+
     @Bean
     public PagePopulationInterceptor pagePopulationInterceptor() {
         return new PagePopulationInterceptor();
-    }    
+    }
 }
-
-
-
-
