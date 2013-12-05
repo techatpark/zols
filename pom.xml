@@ -10,10 +10,12 @@
         
     <modules>
         <module>/datastore</module>
+        <module>/linkmanager</module>
         <module>/webmvc</module>
         <module>/webApp</module>
         
         
+    
   </modules>
         
     <properties>

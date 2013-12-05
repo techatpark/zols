@@ -18,6 +18,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import static com.zols.datastore.domain.Criteria.Type.*;
+import java.util.Map;
+import org.springframework.data.mongodb.core.query.Update;
 
 @Service
 public class MongoDataStore extends DataStore {
@@ -50,6 +52,15 @@ public class MongoDataStore extends DataStore {
     public <T> T update(Object object, Class<T> clazz) {
         mongoOperation.save(object);
         return (T) object;
+    }
+
+    @Override
+    public <T> void update(Object id,Map<String, Object> objectMap, Class<T> clazz) {
+        Update update = new Update();
+        for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
+            update.set(entry.getKey(), entry.getValue());            
+        }                
+        mongoOperation.updateFirst(getByIdQuery(null), update, clazz);
     }
 
     @Override
@@ -161,6 +172,12 @@ public class MongoDataStore extends DataStore {
                 break;
 
         }
+    }
+    
+    private Query getByIdQuery(String id) {
+        Query query = new Query();
+        //query.addCriteria(Criteria.where("id").is(id));
+        return query;
     }
 
 }

@@ -75,7 +75,7 @@ public class BasicEntityTest {
         LOGGER.info("tested Entity Read", entity.getName());
     }
 
-    @Test
+    
     public void testGetByCriteria() {
         LOGGER.info("testing Entity Read", entity.getName());
 

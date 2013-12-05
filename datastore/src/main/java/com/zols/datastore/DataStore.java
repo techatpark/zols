@@ -2,6 +2,7 @@ package com.zols.datastore;
 
 import com.zols.datastore.domain.Criteria;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -41,6 +42,16 @@ public abstract class DataStore {
      * @return updated object
      */
     public abstract <T> T update(Object object, Class<T> clazz);
+    
+     /**
+     * partial update an Object with given Object Map
+     *
+     * @param <T> Type of the Object
+     * @param id
+     * @param objectMap Object Map to be updated
+     * @param clazz Class of the Object to be update
+     */
+    public abstract <T> void update(Object id,Map<String,Object> objectMap, Class<T> clazz);
 
     /**
      * Delete an Object with given name
