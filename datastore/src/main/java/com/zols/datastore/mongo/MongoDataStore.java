@@ -55,11 +55,11 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    public <T> void update(Object id,Map<String, Object> objectMap, Class<T> clazz) {
+    public <T> void update(Object id, Map<String, Object> objectMap, Class<T> clazz) {
         Update update = new Update();
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
-            update.set(entry.getKey(), entry.getValue());            
-        }                
+            update.set(entry.getKey(), entry.getValue());
+        }
         mongoOperation.updateFirst(getByIdQuery(null), update, clazz);
     }
 
@@ -145,15 +145,14 @@ public class MongoDataStore extends DataStore {
                 mongoCriteria = Criteria.where(criteria.getFieldName());
                 addCariteriaCondition(mongoCriteria, criteria);
             } else {
-                mongoCriteria.and(criteria.getFieldName());
-                addCariteriaCondition(mongoCriteria, criteria);
+                mongoCriteria.andOperator(addCariteriaCondition(Criteria.where(criteria.getFieldName()), criteria));
             }
         }
         query.addCriteria(mongoCriteria);
         return query;
     }
 
-    private void addCariteriaCondition(Criteria mongoCriteria, com.zols.datastore.domain.Criteria criteria) {
+    private Criteria addCariteriaCondition(Criteria mongoCriteria, com.zols.datastore.domain.Criteria criteria) {
         switch (criteria.getType()) {
             case GREATER_THAN_EQUALS:
                 mongoCriteria.gte(criteria.getValue());
@@ -172,8 +171,9 @@ public class MongoDataStore extends DataStore {
                 break;
 
         }
+        return mongoCriteria;
     }
-    
+
     private Query getByIdQuery(String id) {
         Query query = new Query();
         //query.addCriteria(Criteria.where("id").is(id));

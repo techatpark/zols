@@ -42,8 +42,8 @@ public abstract class DataStore {
      * @return updated object
      */
     public abstract <T> T update(Object object, Class<T> clazz);
-    
-     /**
+
+    /**
      * partial update an Object with given Object Map
      *
      * @param <T> Type of the Object
@@ -51,7 +51,7 @@ public abstract class DataStore {
      * @param objectMap Object Map to be updated
      * @param clazz Class of the Object to be update
      */
-    public abstract <T> void update(Object id,Map<String,Object> objectMap, Class<T> clazz);
+    public abstract <T> void update(Object id, Map<String, Object> objectMap, Class<T> clazz);
 
     /**
      * Delete an Object with given name
@@ -98,14 +98,19 @@ public abstract class DataStore {
      * @return List Object
      */
     public abstract <T> List<T> listByExample(T searchObject);
-    
+
     /**
      * Get List of the Object
      *
      * @param aClass Type of the Object
-     * @param criterias 
+     * @param criterias
      * @return List Object
      */
-    public abstract <T> List<T> list(List<Criteria> criterias,Class<T> aClass);
+    public abstract <T> List<T> list(List<Criteria> criterias, Class<T> aClass);
+    
+    /**
+     * 
+     */
 
 }
+
