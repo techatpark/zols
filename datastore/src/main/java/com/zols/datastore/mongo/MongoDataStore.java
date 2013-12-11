@@ -18,7 +18,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import static com.zols.datastore.domain.Criteria.Type.*;
+import java.lang.reflect.Field;
 import java.util.Map;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.query.Update;
 
 @Service
@@ -67,9 +69,7 @@ public class MongoDataStore extends DataStore {
 
     @Override
     public <T> T delete(String id, Class<T> clazz) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
-        T object = mongoOperation.findAndRemove(query, clazz);
+        T object = mongoOperation.findAndRemove(getByIdQuery(id,clazz), clazz);
         return object;
     }
 
@@ -176,10 +176,24 @@ public class MongoDataStore extends DataStore {
         return mongoCriteria;
     }
 
-    private Query getByIdQuery(String id) {
+    private Query getByIdQuery(String id,Class clazz) {
         Query query = new Query();
-        //query.addCriteria(Criteria.where("id").is(id));
+        query.addCriteria(Criteria.where(getIdField(clazz).getName()).is(id));
         return query;
+    }
+
+    private Field getIdField(Class clazz) {
+
+        for (Field field : clazz.getDeclaredFields()) {
+            Class type = field.getType();
+            String name = field.getName();
+            Id id = field.getAnnotation(Id.class);
+            if (id != null) {
+                return field;
+            }
+
+        }
+        return null;
     }
 
 }
