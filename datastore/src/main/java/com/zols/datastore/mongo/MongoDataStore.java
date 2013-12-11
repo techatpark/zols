@@ -55,18 +55,20 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    public <T> void update(Object id, Map<String, Object> objectMap, Class<T> clazz) {
+    public <T> void update(String id, Map<String, Object> objectMap, Class<T> clazz) {
+        Query query = new Query();
+        query.addCriteria(Criteria.where("id").is(id));
         Update update = new Update();
         for (Map.Entry<String, Object> entry : objectMap.entrySet()) {
             update.set(entry.getKey(), entry.getValue());
         }
-        mongoOperation.updateFirst(getByIdQuery(null), update, clazz);
+        mongoOperation.updateFirst(query, update, clazz);
     }
 
     @Override
-    public <T> T delete(String name, Class<T> clazz) {
+    public <T> T delete(String id, Class<T> clazz) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("name").is(name));
+        query.addCriteria(Criteria.where("id").is(id));
         T object = mongoOperation.findAndRemove(query, clazz);
         return object;
     }
@@ -143,16 +145,16 @@ public class MongoDataStore extends DataStore {
         for (com.zols.datastore.domain.Criteria criteria : criterias) {
             if (mongoCriteria == null) {
                 mongoCriteria = Criteria.where(criteria.getFieldName());
-                addCariteriaCondition(mongoCriteria, criteria);
+                addCriteriaCondition(mongoCriteria, criteria);
             } else {
-                mongoCriteria.andOperator(addCariteriaCondition(Criteria.where(criteria.getFieldName()), criteria));
+                mongoCriteria.andOperator(addCriteriaCondition(Criteria.where(criteria.getFieldName()), criteria));
             }
         }
         query.addCriteria(mongoCriteria);
         return query;
     }
 
-    private Criteria addCariteriaCondition(Criteria mongoCriteria, com.zols.datastore.domain.Criteria criteria) {
+    private Criteria addCriteriaCondition(Criteria mongoCriteria, com.zols.datastore.domain.Criteria criteria) {
         switch (criteria.getType()) {
             case GREATER_THAN_EQUALS:
                 mongoCriteria.gte(criteria.getValue());

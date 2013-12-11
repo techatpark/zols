@@ -6,27 +6,27 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
-@Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                .antMatchers("/api/projects").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .formLogin();
-    }
-
-    @Autowired
-    public void registerGlobalAuthentication(
-            AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .inMemoryAuthentication()
-                .withUser("harish").password("kavuri").roles("USER").and()
-                .withUser("rahul").password("rahul").roles("USER");
-    }
-}
+//
+//@Configuration
+//@EnableWebSecurity
+//public class SecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//    @Override
+//    protected void configure(HttpSecurity http) throws Exception {
+//        http
+//                .authorizeRequests()
+//                .antMatchers("/api/projects").authenticated()
+//                .anyRequest().permitAll()
+//                .and()
+//                .formLogin();
+//    }
+//
+//    @Autowired
+//    public void registerGlobalAuthentication(
+//            AuthenticationManagerBuilder auth) throws Exception {
+//        auth
+//                .inMemoryAuthentication()
+//                .withUser("harish").password("kavuri").roles("USER").and()
+//                .withUser("rahul").password("rahul").roles("USER");
+//    }
+//}

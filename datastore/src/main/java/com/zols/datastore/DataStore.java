@@ -51,7 +51,7 @@ public abstract class DataStore {
      * @param objectMap Object Map to be updated
      * @param clazz Class of the Object to be update
      */
-    public abstract <T> void update(Object id, Map<String, Object> objectMap, Class<T> clazz);
+    public abstract <T> void update(String id, Map<String, Object> objectMap, Class<T> clazz);
 
     /**
      * Delete an Object with given name
@@ -61,6 +61,8 @@ public abstract class DataStore {
      * @param clazz Class of the Object to be delete
      * @return Deleted Object
      */
+    
+    
     public abstract <T> T delete(String name, Class<T> clazz);
 
     /**
