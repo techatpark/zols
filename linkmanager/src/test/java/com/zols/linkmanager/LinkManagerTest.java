@@ -50,6 +50,16 @@ public class LinkManagerTest {
 
     }
 
+    @Test
+    public void deleteLink() {
+        //linkmanager.delete("Parent1");
+    }
+
+    @Test
+    public void deleteCategory() {
+        linkmanager.deleteCategory("header");
+    }
+
     @Before
     public void before() {
 
