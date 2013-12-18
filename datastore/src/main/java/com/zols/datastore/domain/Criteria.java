@@ -12,7 +12,7 @@ package com.zols.datastore.domain;
 public class Criteria {
 
     public enum Type {
-        GREATER_THAN,GREATER_THAN_EQUALS,LESSER_THAN_EQUALS,LESSER_THAN
+        GREATER_THAN,GREATER_THAN_EQUALS,LESSER_THAN_EQUALS,LESSER_THAN,IS,IS_NULL,IS_NOTNULL
     }
 
     private final String fieldName;

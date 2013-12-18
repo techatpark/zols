@@ -1,8 +1,10 @@
 package com.zols.linkmanager;
 
 import com.zols.datastore.DataStore;
+import com.zols.datastore.domain.Criteria;
 import com.zols.linkmanager.domain.Category;
 import com.zols.linkmanager.domain.Link;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -104,9 +106,10 @@ public class LinkManager {
      * @return link list object
      */
     public List<Link> listFirstLevelByCategory(String categoryName) {
-        Link linkByExample = new Link();
-        linkByExample.setCategoryName(categoryName);        
-        return dataStore.listByExample(linkByExample);
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("categoryName", Criteria.Type.IS, categoryName));        
+        criterias.add(new Criteria("parentLinkName", Criteria.Type.IS_NULL, null));        
+        return dataStore.list(criterias, Link.class);
         
     }
 

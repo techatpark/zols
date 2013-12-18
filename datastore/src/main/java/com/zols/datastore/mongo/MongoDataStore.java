@@ -69,7 +69,7 @@ public class MongoDataStore extends DataStore {
 
     @Override
     public <T> T delete(String id, Class<T> clazz) {
-        T object = mongoOperation.findAndRemove(getByIdQuery(id,clazz), clazz);
+        T object = mongoOperation.findAndRemove(getByIdQuery(id, clazz), clazz);
         return object;
     }
 
@@ -172,11 +172,23 @@ public class MongoDataStore extends DataStore {
                 mongoCriteria.lt(criteria.getValue());
                 break;
 
+            case IS:
+                mongoCriteria.is(criteria.getValue());
+                break;
+
+            case IS_NULL:
+                mongoCriteria.exists(false);
+                break;       
+
+            case IS_NOTNULL:
+                mongoCriteria.exists(true);
+                break;                 
+
         }
         return mongoCriteria;
     }
 
-    private Query getByIdQuery(String id,Class clazz) {
+    private Query getByIdQuery(String id, Class clazz) {
         Query query = new Query();
         query.addCriteria(Criteria.where(getIdField(clazz).getName()).is(id));
         return query;

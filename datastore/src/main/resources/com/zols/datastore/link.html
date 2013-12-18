@@ -6,20 +6,43 @@
         <title>Edit entities</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/static/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/static/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/static/css/form.css}"/>
 
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${link}">
 
-            <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
-            <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
-            <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
-            <label>Category</label><input id="categoryName" name="categoryName" type="text" th:field="*{categoryName}"/>
-            <label>parent</label><input id="parentLinkName" name="parentLinkName" type="text" th:field="*{parentLinkName}"/>            
-            <div>
-                <button id="submit">Submit</button>
-                <button id="cancel" type="button">Cancel</button>
-            </div>
+
+            <ul>
+                <li>                    
+                    <span class="required_notification">* Denotes Required Field</span>
+                </li>
+                <li>
+                    <label for="name">Name:</label>
+                    <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                </li>
+                <li>
+                    <label for="label">Label</label>
+                    <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                </li>
+                <li>
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                </li>
+
+                <li>
+                    <button id="submit" type="submit">Submit</button>
+                    <button id="cancel" type="button">Cancel</button>
+                </li>
+            </ul>
+
+
+
+
+
+            <input id="categoryName" name="categoryName" type="text" th:field="*{categoryName}"/>
+            <input id="parentLinkName" name="parentLinkName" type="text" th:field="*{parentLinkName}"/>            
+
         </form>
 
 

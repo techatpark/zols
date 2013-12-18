@@ -39,13 +39,13 @@
         <org.codehaus.mojo.tomcat-version>1.1</org.codehaus.mojo.tomcat-version>
         <swagger-springmvc-version>0.6.5</swagger-springmvc-version>
     </properties>
-
     <repositories>
         <repository>
             <id>spring-snasphot</id>
             <url>http://repo.springsource.org/libs-snapshot</url>
         </repository>
     </repositories>
+
 
     <dependencies>
         <!-- Spring -->
