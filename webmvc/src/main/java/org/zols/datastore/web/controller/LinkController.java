@@ -69,7 +69,7 @@ public class LinkController {
     @ResponseBody
     public Page<Link> list(
             Pageable page) {
-        LOGGER.info("Listing entities");
+        LOGGER.info("Listing links");
         return linkManager.linksByPageable(page);
     }
     
@@ -77,15 +77,15 @@ public class LinkController {
     @ApiIgnore
     @ResponseBody
     public List<Link> listByCategory(@PathVariable(value = "categoryName") String categoryName) {
-        LOGGER.info("Listing entities");
+        LOGGER.info("Listing links by category " +  categoryName);
         return linkManager.listFirstLevelByCategory(categoryName);
     }
     
-    @RequestMapping(value = "/api/links/{parentName}", method = GET)
+    @RequestMapping(value = "/api/links/children/{parentName}", method = GET)
     @ApiIgnore
     @ResponseBody
-    public List<Link> listByParent(@PathVariable(value = "parentName") String parentName) {
-        LOGGER.info("Listing entities");
+    public List<Link> childrenOf(@PathVariable(value = "parentName") String parentName) {
+        LOGGER.info("Listing links by parent " + parentName);
         return linkManager.listByParent(parentName);
     }
     

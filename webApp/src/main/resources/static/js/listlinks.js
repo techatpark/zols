@@ -24,26 +24,51 @@
             }
 
         });
-        
+
     };
     $.fn.loadLinksByCategory = function() {
         var _url = 'api/links/categories/' + $("#link_category").val();
         var linksOfCategory = getData(_url, 'GET', 'json', '', 'application/json', false);
+        $(this).loadLinks(linksOfCategory);
+    };
+
+    $.fn.loadLinksByParent = function(parentLinkName) {
+        var _url = 'api/links/children/' + parentLinkName;
+        var children = getData(_url, 'GET', 'json', '', 'application/json', false);
+        $(this).loadLinks(children);
+    };
+
+
+    $.fn.loadLinks = function(links) {
         $("#childLink").empty();
-        if (linksOfCategory.length > 0) {
-            $("#childLink").handlebars('childList',linksOfCategory);
-            $("#childLink").append("<li><a href='#'>Add More</a></li>");
+        if (links.length > 0) {
+            $("#childLink").handlebars('childList', links);
+            $("#childLink").append("<li><a href='#' class='addMoreLink'>Add More</a></li>");
         } else {
-            $("#childLink").append("<li><a href='#'>Add</a></li>");
+            $("#childLink").append("<li><a href='#' class='addMoreLink'>Add</a></li>");
         }
 
-        $("#childLink a:last-child").click(function() {
+        $(".addMoreLink").click(function() {
             $(this).addLinkUnder();
         });
         $(".addChild").click(function() {
             $(this).addChild($(this).attr('data-parent'));
         });
+        $(".editlink").click(function() {
+            $(this).editLink($(this).attr('data-parent'));
+        });
+        $('.removeChild').click(function() {
+            $(this).removeLink($(this).attr('data-parent'));
+        });
 
+        $(".parentLink").click(function() {
+            $(this).loadLinksByParent($(this).attr('data-parent'));
+        });
+    };
+
+
+    $.fn.editLink = function(parentLinkName) {
+        window.location = 'links/edit/' + parentLinkName;
     };
     $.fn.addChild = function(parentLinkName) {
         window.location = 'links/addchild/' + parentLinkName;
@@ -69,6 +94,24 @@
                 });
     };
 
+    $.fn.removeLink = function(linkName) {
+        $.ajax(
+                {
+                    url: 'api/links/' + linkName,
+                    type: 'DELETE',
+                    dataType: "json",
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        $(this).loadLinksByCategory();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        console.log(jqXHR + "===" + textStatus);
+                    }
+                });
+    };
+
 
     $(this).loadCategories();
 
@@ -78,6 +121,8 @@
     $('#removeCategoryBtn').click(function() {
         $(this).removeCategory();
     });
+
+
 
     $("#link_category").change(function() {
         $(this).loadLinksByCategory();
