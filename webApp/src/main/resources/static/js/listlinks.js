@@ -32,10 +32,12 @@
         $(this).loadLinks(linksOfCategory);
     };
 
-    $.fn.loadLinksByParent = function(parentLinkName) {
-        var _url = 'api/links/children/' + parentLinkName;
+    $.fn.loadLinksByParent = function(parentLink) {
+        var _url = 'api/links/children/' + parentLink.attr('data-parent');
         var children = getData(_url, 'GET', 'json', '', 'application/json', false);
+        $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="'+parentLink.attr('data-parent')+'">'+parentLink.html()+'</a></li>');
         $(this).loadLinks(children);
+        
     };
 
 
@@ -43,9 +45,9 @@
         $("#childLink").empty();
         if (links.length > 0) {
             $("#childLink").handlebars('childList', links);
-            $("#childLink").append("<li><a href='#' class='addMoreLink'>Add More</a></li>");
+            $("#childLink").append("<li><a href='javascript://' class='addMoreLink'>Add More</a></li>");
         } else {
-            $("#childLink").append("<li><a href='#' class='addMoreLink'>Add</a></li>");
+            $("#childLink").append("<li><a href='javascript://' class='addMoreLink'>Add</a></li>");
         }
 
         $(".addMoreLink").click(function() {
@@ -58,11 +60,23 @@
             $(this).editLink($(this).attr('data-parent'));
         });
         $('.removeChild').click(function() {
-            $(this).removeLink($(this).attr('data-parent'));
+            $(this).removeLink($(this));            
         });
 
         $(".parentLink").click(function() {
-            $(this).loadLinksByParent($(this).attr('data-parent'));
+            $(this).loadLinksByParent($(this));
+        });
+        
+        $('.breadcrumb a').click(function() {
+
+            if($(this).parent().index() !== 0 ) {
+                $(".breadcrumb li:gt("+($(this).parent().index()-1)+")").remove();
+            }
+            else {
+                $(".breadcrumb ul").empty();
+            }
+            $(this).loadLinksByParent($(this));
+            
         });
     };
 
@@ -94,16 +108,16 @@
                 });
     };
 
-    $.fn.removeLink = function(linkName) {
+    $.fn.removeLink = function(linkToRemove) {
         $.ajax(
                 {
-                    url: 'api/links/' + linkName,
+                    url: 'api/links/' + linkToRemove.attr('data-parent'),
                     type: 'DELETE',
                     dataType: "json",
                     contentType: 'application/json',
                     success: function(data, textStatus, jqXHR)
                     {
-                        $(this).loadLinksByCategory();
+                        linkToRemove.parent().remove();
                     },
                     error: function(jqXHR, textStatus, errorThrown)
                     {
