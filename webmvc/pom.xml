@@ -42,6 +42,13 @@
             <artifactId>spring-mobile-device</artifactId>
             <version>${org.springframework.mobile-version}</version>
         </dependency>
+        
+        <!-- File Upload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons-fileupload-version}</version>
+        </dependency>
 
         <!-- jackson -->
         <dependency>

@@ -15,6 +15,8 @@ import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumentResolver;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.MultipartResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
@@ -25,7 +27,7 @@ import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
-@Import({ RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class})
+@Import({RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
@@ -88,5 +90,10 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public PagePopulationInterceptor pagePopulationInterceptor() {
         return new PagePopulationInterceptor();
+    }
+
+    @Bean
+    public MultipartResolver multipartResolver() {
+        return new CommonsMultipartResolver();
     }
 }
