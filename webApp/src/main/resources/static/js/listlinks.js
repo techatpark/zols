@@ -33,11 +33,24 @@
     };
 
     $.fn.loadLinksByParent = function(parentLink) {
-        var _url = 'api/links/children/' + parentLink.attr('data-parent');
-        var children = getData(_url, 'GET', 'json', '', 'application/json', false);
-        $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="'+parentLink.attr('data-parent')+'">'+parentLink.html()+'</a></li>');
-        $(this).loadLinks(children);
-        
+        var parentLinkName = parentLink.attr('data-parent');
+        if (parentLinkName) {
+            var _url = 'api/links/children/' + parentLinkName;
+            var children = getData(_url, 'GET', 'json', '', 'application/json', false);
+
+            if ($('.breadcrumb ul li').length === 0) {
+                $('.breadcrumb ul').append('<li><a href="javascript://">/</a></li>');
+            }
+            $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="' + parentLinkName + '">' + parentLink.html() + '</a></li>');
+
+            $(this).loadLinks(children);
+        }
+        else {
+            $('.breadcrumb ul').empty();
+            $(this).loadLinksByCategory();
+        }
+
+
     };
 
 
@@ -45,13 +58,17 @@
         $("#childLink").empty();
         if (links.length > 0) {
             $("#childLink").handlebars('childList', links);
-            $("#childLink").append("<li><a href='javascript://' class='addMoreLink'>Add More</a></li>");
-        } else {
-            $("#childLink").append("<li><a href='javascript://' class='addMoreLink'>Add</a></li>");
-        }
+            
+        } 
 
         $(".addMoreLink").click(function() {
-            $(this).addLinkUnder();
+            if ($('.breadcrumb ul li').length === 0) {
+                $(this).addLinkUnder();
+            }
+            else {
+                $(this).addChild($(".breadcrumb ul li:last-child a").attr('data-parent'));
+            }
+            
         });
         $(".addChild").click(function() {
             $(this).addChild($(this).attr('data-parent'));
@@ -60,23 +77,23 @@
             $(this).editLink($(this).attr('data-parent'));
         });
         $('.removeChild').click(function() {
-            $(this).removeLink($(this));            
+            $(this).removeLink($(this));
         });
 
         $(".parentLink").click(function() {
             $(this).loadLinksByParent($(this));
         });
-        
+
         $('.breadcrumb a').click(function() {
 
-            if($(this).parent().index() !== 0 ) {
-                $(".breadcrumb li:gt("+($(this).parent().index()-1)+")").remove();
+            if ($(this).parent().index() !== 1) {
+                $(".breadcrumb li:gt(" + ($(this).parent().index() - 1) + ")").remove();
             }
             else {
                 $(".breadcrumb ul").empty();
             }
             $(this).loadLinksByParent($(this));
-            
+
         });
     };
 
