@@ -43,14 +43,12 @@
                     <!-- navigaation -->
                     <nav id="navigation">
                         <a href="#" class="nav-btn">HOME<span></span></a>
-                        <ul>
-                            <li class="active"><a href="#" th:href="@{/entities}">Entities</a></li>
-                            <li><a href="#" th:href="@{/links}">Links</a></li>
-                            <li><a href="#" th:href="@{/links/categories}">Categories</a></li>
-                            <li><a href="#" th:href="@{/templates}">Templates</a></li>
-                            <li><a href="#" th:href="@{/languages}">Languages</a></li>
-                   
+                        <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
+                            <li th:each="link : ${linkentry.value}">
+                                <a href="#" th:text="${link.label}"/>
+                            </li>
                         </ul>
+
                         <div class="cl">&nbsp;</div>
                     </nav>
                     <!-- end of navigation -->
@@ -64,15 +62,10 @@
                     <!-- footer -->
                     <div id="footer">
                         <div class="footer-nav">
-                            <ul>
-                                <li><a href="#" >Home</a></li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Services</a></li>
-                                <li><a href="#">Projects</a></li>
-                                <li><a href="#">Solutions</a></li>
-                                <li><a href="#">Jobs</a></li>
-                                <li><a href="#">Blog</a></li>
-                                <li><a href="#">Contacts</a></li>
+                            <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'footer'">
+                                <li th:each="link : ${linkentry.value}">
+                                    <a href="#" th:text="${link.label}"/>
+                                </li>
                             </ul>
                             <div class="cl">&nbsp;</div>
                         </div>

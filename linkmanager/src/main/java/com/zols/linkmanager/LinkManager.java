@@ -5,7 +5,9 @@ import com.zols.datastore.domain.Criteria;
 import com.zols.linkmanager.domain.Category;
 import com.zols.linkmanager.domain.Link;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LinkManager {
-    
+
     @Autowired
     private DataStore dataStore;
 
@@ -47,7 +49,7 @@ public class LinkManager {
             delete(link.getName());
         }
         dataStore.delete(categoryName, Category.class);
-        
+
     }
 
     /**
@@ -58,7 +60,7 @@ public class LinkManager {
      */
     public Category getCategory(String categoryName) {
         return dataStore.read(categoryName, Category.class);
-        
+
     }
 
     /**
@@ -66,7 +68,7 @@ public class LinkManager {
      *
      * @return searched Category List
      */
-    public List<Category> categoryList() {
+    public List<Category> getAllCategories() {
         return dataStore.list(Category.class);
     }
 
@@ -78,7 +80,7 @@ public class LinkManager {
      */
     public Page<Category> categoriesByPageable(Pageable pageable) {
         return dataStore.list(pageable, Category.class);
-        
+
     }
 
     /**
@@ -108,11 +110,12 @@ public class LinkManager {
      */
     public List<Link> listFirstLevelByCategory(String categoryName) {
         List<Criteria> criterias = new ArrayList<Criteria>();
-        criterias.add(new Criteria("categoryName", Criteria.Type.IS, categoryName));        
-        criterias.add(new Criteria("parentLinkName", Criteria.Type.IS_NULL, null));        
+        criterias.add(new Criteria("categoryName", Criteria.Type.IS, categoryName));
+        criterias.add(new Criteria("parentLinkName", Criteria.Type.IS_NULL, null));
         return dataStore.list(criterias, Link.class);
-        
+
     }
+    
 
     /**
      * Get the link with given link String
@@ -144,7 +147,7 @@ public class LinkManager {
      */
     public Page<Link> linksByPageable(Pageable pageable) {
         return dataStore.list(pageable, Link.class);
-        
+
     }
 
     /**
@@ -160,6 +163,22 @@ public class LinkManager {
         dataStore.delete(linkName, Link.class);
     }
 
+    public Map<String, List<Link>> getApplicationLinks() {
+        List<Category> categories = getAllCategories();
+        if (categories != null) {
+            Map<String, List<Link>> applicationLinks = new HashMap<String, List<Link>>(categories.size());
+            List<Link> firstlevelLinks ;
+            for (Category category : categories) {
+                firstlevelLinks = listFirstLevelByCategory(category.getName()) ;
+                for (Link link : firstlevelLinks) {
+                    link.setChildren(listByParent(link.getName()));
+                }
+                applicationLinks.put(category.getName(), firstlevelLinks);
+            }
+            return applicationLinks;
+        }
 
-    
+        return null;
+    }
+
 }

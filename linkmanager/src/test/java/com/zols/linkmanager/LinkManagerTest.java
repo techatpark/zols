@@ -9,6 +9,7 @@ import com.zols.datastore.config.DataStoreConfiguration;
 import com.zols.linkmanager.domain.Category;
 import com.zols.linkmanager.domain.Link;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +46,7 @@ public class LinkManagerTest {
     public void listByparent() {
         List<Link> links = linkmanager.listByParent("Parent1");
         for (Link link : links) {
-            System.out.println("link name " + link.getName());
+            //System.out.println("link name " + link.getName());
         }
 
     }
@@ -57,7 +58,18 @@ public class LinkManagerTest {
 
     @Test
     public void deleteCategory() {
-        linkmanager.deleteCategory("header");
+        //linkmanager.deleteCategory("header");
+    }
+    
+    @Test
+    public void testAllicationLinks() {
+        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
+        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
+            String string = entry.getKey();
+            List<Link> list = entry.getValue();
+            System.out.println("entry.getKey()");
+            
+        }
     }
 
     @Before
