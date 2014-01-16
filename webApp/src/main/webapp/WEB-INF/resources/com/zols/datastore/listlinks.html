@@ -4,10 +4,10 @@
     <head>
         <meta charset="utf-8"/>
         <title>List entities</title>       
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/static/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/static/css/ui.jqgrid.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/jquery.idealforms.min.css" th:href="@{/static/css/jquery.idealforms.min.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/breadcrumb.css" th:href="@{/static/css/breadcrumb.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/jquery.idealforms.min.css" th:href="@{/resources/css/jquery.idealforms.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/breadcrumb.css" th:href="@{/resources/css/breadcrumb.css}"/>
     </head>
     <body th:fragment="content">
         <div id="link">
@@ -27,14 +27,14 @@
                 <a href='javascript://' class='addMoreLink'>Add New</a>
             </div>
         </div>
-        <script th:src="@{/static/js/jquery-1.10.2.min.js}"></script>
-        <script th:src="@{/static/js/jquery-ui-1.10.3.custom.min.js}"></script>
-        <script th:src="@{/static/js/i18n/grid.locale-en.js}"></script>
-        <script th:src="@{/static/js/jquery.jqGrid.min.js}"></script>
-        <script th:src="@{/static/js/handlebars.js}"></script>
-        <script th:src="@{/static/js/jquery-handlebar.js}"></script>
-        <script th:src="@{/static/js/common.js}"></script>
-        <script th:src="@{/static/js/listlinks.js}"></script>
+        <script th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script th:src="@{/resources/js/jquery-ui-1.10.3.custom.min.js}"></script>
+        <script th:src="@{/resources/js/i18n/grid.locale-en.js}"></script>
+        <script th:src="@{/resources/js/jquery.jqGrid.min.js}"></script>
+        <script th:src="@{/resources/js/handlebars.js}"></script>
+        <script th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script th:src="@{/resources/js/common.js}"></script>
+        <script th:src="@{/resources/js/listlinks.js}"></script>
         <script id="childList" type="text/x-handlebars-template">
             {{#each this}}
             <li><a href="javascript:void(0)" id="{{name}}" data-parent="{{name}}" class="parentLink">{{label}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="addChild" data-parent="{{name}}">+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="editlink" data-parent="{{name}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="removeChild" data-parent="{{name}}">-</a></li>
