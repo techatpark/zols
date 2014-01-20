@@ -63,13 +63,13 @@ public class LinkManagerTest {
     
     @Test
     public void testAllicationLinks() {
-        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
-        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
-            String string = entry.getKey();
-            List<Link> list = entry.getValue();
-            System.out.println("entry.getKey()");
-            
-        }
+//        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
+//        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
+//            String string = entry.getKey();
+//            List<Link> list = entry.getValue();
+//            System.out.println("entry.getKey()");
+//            
+//        }
     }
 
     @Before
