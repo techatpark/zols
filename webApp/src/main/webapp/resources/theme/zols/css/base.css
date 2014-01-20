@@ -69,6 +69,9 @@ header #headerbg {
     width: 1024px;
     height: 80px; }
 
+#logo {
+    background-image: 'images/logo.png';
+}
 header #headerbg #logo {
     padding: 12px 0px 0px 35px; }
 
