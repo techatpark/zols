@@ -27,7 +27,7 @@ import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
-@Import({RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class})
+@Import({RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class,SecurityConfig.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
