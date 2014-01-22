@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
     <head>
         <title>Zols Content Management System</title>
         <link rel="stylesheet" type="text/css" href="../../resources/theme/zols/css/base.css" th:href="@{/resources/theme/zols/css/base.css}"/>   
@@ -14,7 +15,15 @@
         <header class="header" >
             <div id="headerbg">
                 <div id="logo"></div>
-                <div class="user">Welcome to <span>Username</span>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#"> Control Pane</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">Logout</a></div>                
+                <div th:fragment="logout" sec:authorize="isAuthenticated()" class="user">
+                    Welcome to <span sec:authentication="name">Username</span>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;<a href="#"> Control Pane</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/logout}">Logout</a>
+                </div>   
+                <div th:fragment="logout" sec:authorize="!isAuthenticated()" class="user">                    
+                    <a th:href="@{/login}">Login</a>
+                </div> 
             </div>
             <nav>      
                 <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
@@ -25,9 +34,11 @@
             </nav>
         </header>
         <section>
+           
             <div class="content contentpos" th:include="${viewName}::content" >
 
             </div>
+            
         </section>
         <footer class="footer">
             <div id="footerbg">

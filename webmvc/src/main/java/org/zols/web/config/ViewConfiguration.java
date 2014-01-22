@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mobile.device.view.LiteDeviceDelegatingViewResolver;
 import org.springframework.web.servlet.ViewResolver;
+import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -47,6 +48,7 @@ public class ViewConfiguration {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addTemplateResolver(servletContextTemplateResolver());
         engine.addTemplateResolver(classLoaderTemplateResolver());
+        engine.addDialect("sec",new SpringSecurityDialect());
 //        engine.addTemplateResolver(urlTemplateResolver());
         return engine;
     }

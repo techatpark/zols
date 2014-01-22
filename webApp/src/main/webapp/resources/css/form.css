@@ -7,13 +7,10 @@ form ul {
     padding:0px;
 }
 form li{
-    padding:12px; 
-    border-bottom:1px solid #eee;
+    padding:12px;     
     position:relative;
 } 
-form li:first-child, form li:last-child {
-    border-bottom:1px solid #777;
-}
+
 
 /* === Form Header === */
 form h2 {
@@ -137,4 +134,8 @@ form button:active {
     -ms-box-shadow: 0 0 10px 5px #356b0b inset;
     -o-box-shadow: 0 0 10px 5px #356b0b inset;
 
+}
+
+form legend {
+    color:blue;font-weight:bold;
 }

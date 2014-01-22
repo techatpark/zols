@@ -70,6 +70,11 @@
             <artifactId>thymeleaf-spring3</artifactId>
             <version>${thymeleaf-spring3-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity3</artifactId>
+            <version>${thymeleaf-extras-springsecurity3-version}</version>
+        </dependency>
         
         <dependency>
             <groupId>com.mangofactory</groupId>
