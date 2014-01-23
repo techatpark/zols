@@ -19,6 +19,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin();
+        // TODO: Remove This Later. CSRF Protection is must for Production Code
+        http.csrf().disable();
     }
 
     @Autowired
@@ -29,4 +31,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("admin").password("admin").roles("ADMIN").and()
                 .withUser("user").password("user").roles("USER");
     }
+
 }

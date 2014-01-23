@@ -6,25 +6,20 @@
         <title>Edit entities</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
-
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${entity}">
             <fieldset>
                 <legend>Entity</legend>
                 <ul>
-
-
                     <li><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></li>
                     <li><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></li>
                     <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
-                    <li>
-                        
+                    <li>                        
                         <section>
                             <button id="addAttribute" type="button">Add Attribute</button>
                             <fieldset>
-                                <legend>Attributes </legend>                       
-                                
+                                <legend>Attributes</legend>                                                       
                                 <ul>                                    
                                     <li id="Attributes">                                        
                                         <section th:each="attributes, stat : *{attributes}" th:name="'attributes[' + ${stat.index} +']'">
@@ -32,7 +27,7 @@
                                                 <legend th:text="'Attribute(' + ${stat.index} +')'">Attributes</legend>
                                             <ul>
                                                 <li><label>Name</label><input name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></li>
-                                                <li><label>Type</label><input name="attributes[0].type" type="text" th:field="*{attributes[__${stat.index}__].type}"/></li>
+                                                <li><label>Type</label><select name="attributes[0].type" th:field="*{attributes[__${stat.index}__].type}" data-master="attributeType"/></li>
                                                 <li><label>Description</label><input name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/></li>
                                                 <li><button type="button" data-group="attributes">Remove Attribute</button></li>
                                             </ul>
@@ -61,6 +56,7 @@
         <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
         <script type="text/javascript">
 
 
@@ -96,6 +92,8 @@
                             doRemoveAction(this);
                         });
                     });
+                    $("#my-form").dropdownFiller();
+                    
                 });
 
                 $("#my-form").submit(function(e)
@@ -126,6 +124,8 @@
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
                 })
+                
+                $("#my-form").dropdownFiller();
 
             });
             function doRemoveAction(removebutton) {
@@ -167,7 +167,7 @@
                     doRemoveAction(this);
                 });
             });
-
+            
         </script>
         <script id="attribute" type="text/x-handlebars-template">
             <section name="attributes[{{index}}]">
@@ -175,7 +175,7 @@
             <legend>Attribute({{index}})</legend>
             <ul>
             <li><label>Name</label><input name="attributes[{{index}}].name" type="text" /></li>
-            <li><label>Type</label><input name="attributes[{{index}}].type" type="text" /></li>
+            <li><label>Type</label><select name="attributes[{{index}}].type" data-master="attributeType"/></li>
             <li><label>Description</label><input name="attributes[{{index}}].description" type="text"/></li>
             <li><button type="button" data-group="attributes">Remove Attribute</button></li>
             </ul>
