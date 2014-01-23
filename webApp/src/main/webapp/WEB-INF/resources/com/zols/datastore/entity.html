@@ -19,12 +19,14 @@
                     <li><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></li>
                     <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
                     <li>
-                        <section >
+                        
+                        <section>
+                            <button id="addAttribute" type="button">Add Attribute</button>
                             <fieldset>
-                                <legend>Attributes</legend>
-                                <ul>
-                                    <li><button id="addAttribute" type="button">Add Attribute</button></li>
-                                    <li id="Attributes">
+                                <legend>Attributes </legend>                       
+                                
+                                <ul>                                    
+                                    <li id="Attributes">                                        
                                         <section th:each="attributes, stat : *{attributes}" th:name="'attributes[' + ${stat.index} +']'">
                                             <fieldset>
                                                 <legend th:text="'Attribute(' + ${stat.index} +')'">Attributes</legend>
@@ -35,10 +37,12 @@
                                                 <li><button type="button" data-group="attributes">Remove Attribute</button></li>
                                             </ul>
                                             </fieldset>
+                                            
                                         </section>
                                     </li>
                                 </ul>
                             </fieldset>
+                            
                         </section>
                     </li>    
 
