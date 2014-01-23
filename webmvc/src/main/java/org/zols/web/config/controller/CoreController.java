@@ -11,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @Controller
-@RequestMapping(value = "/core")
 public class CoreController {
     
-    @RequestMapping(value = "/templates/{name}", method = GET)
+    @RequestMapping(value = "/controlpanel", method = GET)
     @ApiIgnore
-    public String templates(@PathVariable(value = "name") String name) {         
-        return name;
+    public String controlPanel() {         
+        return "controlpanel";
     }
 }
