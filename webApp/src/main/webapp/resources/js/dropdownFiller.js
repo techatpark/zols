@@ -24,6 +24,10 @@
                 $.each(result, function() {
                     selectBox.append($("<option />").val(this.name).text(this.label));
                 });
+                if(selectBox.attr('value')){
+                    selectBox.val(selectBox.attr('value'));
+                }
+                
             }
         });
 
