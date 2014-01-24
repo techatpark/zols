@@ -123,14 +123,23 @@ public class EntityController {
     //dataList mapping
     @RequestMapping(value = "/data/{entityName}", method = GET)
     @ApiIgnore
-    public String dataListListing() {
-        return "com/zols/datastore/dataList";
+    public String listdata(@PathVariable(value = "entityName") String entityName, Model model) {
+        model.addAttribute("entity", dataStore.read(entityName, Entity.class));
+        return "com/zols/datastore/listdata";
     }
 
-    @RequestMapping(value = "/dataListChange", method = GET)
+    @RequestMapping(value = "/data/{entityName}/add", method = GET)
     @ApiIgnore
-    public String dataListChange() {
-        return "com/zols/datastore/dataListChange";
+    public String addData(@PathVariable(value = "entityName") String entityName, Model model) {
+        model.addAttribute("entity", dataStore.read(entityName, Entity.class));
+        model.addAttribute("entityName", entityName);
+        return "com/zols/datastore/data";
+    }
+
+    @RequestMapping(value = "/data/{entityName}/{dataName}", method = GET)
+    @ApiIgnore
+    public String editData() {
+        return "com/zols/datastore/data";
     }
 
     @RequestMapping(value = "/api/data/{entityName}", method = POST)
@@ -170,10 +179,10 @@ public class EntityController {
         return (Page<BaseObject>) dataStore.list(page, clazz);
     }
 
-    private BaseObject getBaseObject(Class<? extends BaseObject> clazz, 
+    private BaseObject getBaseObject(Class<? extends BaseObject> clazz,
             String entityName, HashMap<String, String> contactMap) {
         BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
-        for (Map.Entry<String,String> entry : contactMap.entrySet()) {
+        for (Map.Entry<String, String> entry : contactMap.entrySet()) {
             beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
         }
         return (BaseObject) beanWrapper.getWrappedInstance();

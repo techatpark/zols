@@ -89,7 +89,7 @@ function loadData(entityName, contentData) {
             .jqGrid(options)
             .navGrid('#pager',
                     {search: false, addfunc: function() {
-                            window.location = 'dataListChange.html#' + "&entity=" + entityName;
+                            window.location = entityName + '/add';
                         }, editfunc: function(data) {
                             window.location = 'dataListChange.html' + '#id=' + data + "&entity=" + entityName;
                         }}, //options
