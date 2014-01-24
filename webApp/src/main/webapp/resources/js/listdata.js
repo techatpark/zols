@@ -91,7 +91,7 @@ function loadData(entityName, contentData) {
                     {search: false, addfunc: function() {
                             window.location = entityName + '/add';
                         }, editfunc: function(data) {
-                            window.location = 'dataListChange.html' + '#id=' + data + "&entity=" + entityName;
+                            window.location = entityName +'/'+ data ;
                         }}, //options
             {}, // edit options
                     {}, // add options 

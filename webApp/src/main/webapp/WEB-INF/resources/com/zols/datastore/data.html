@@ -23,6 +23,10 @@ and open the template in the editor.
         <script type="text/javascript" th:src="@{/resources/js/jquery.toObject.js}"></script>
         <script type="text/javascript" th:src="@{/resources/js/prettyprint.js}"></script>
         <script type="text/javascript">
+            
+            String.prototype.replaceAt = function(i, char) {
+                return this.substr(0, i) + char + this.substr(i);
+            };
 
             $(document).ready(function() {
                 

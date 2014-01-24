@@ -131,14 +131,14 @@ public class EntityController {
     @RequestMapping(value = "/data/{entityName}/add", method = GET)
     @ApiIgnore
     public String addData(@PathVariable(value = "entityName") String entityName, Model model) {
-        model.addAttribute("entity", dataStore.read(entityName, Entity.class));
-        model.addAttribute("entityName", entityName);
+        model.addAttribute("entity", dataStore.read(entityName, Entity.class));       
         return "com/zols/datastore/data";
     }
 
     @RequestMapping(value = "/data/{entityName}/{dataName}", method = GET)
     @ApiIgnore
-    public String editData() {
+    public String editData(@PathVariable(value = "entityName") String entityName, Model model) {
+        model.addAttribute("entity", dataStore.read(entityName, Entity.class)); 
         return "com/zols/datastore/data";
     }
 

@@ -17,6 +17,8 @@ public class Template {
     private String name;
 
     private String label;
+    
+    private String content;
 
     private String description;
 
@@ -43,4 +45,14 @@ public class Template {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+    
+    
 }

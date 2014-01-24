@@ -11,13 +11,29 @@
     <body th:fragment="content">
         <form id="my-form" th:object="${template}">
 
-            <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
-            <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
-            <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
-            <div>
-                <button id="submit">Submit</button>
-                <button id="cancel" type="button">Cancel</button>
-            </div>
+            <ul>
+                <li>
+                    <label for="name">Name:</label>
+                    <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                </li>
+                <li>
+                    <label for="label">Label</label>
+                    <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                </li>
+                <li>
+                    <label for="content">Content</label>
+                    <textarea id="content" name="content" cols="40" rows="6" th:field="*{content}"/>
+                </li>
+                <li>
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                </li>
+
+                <li>
+                    <button id="submit" type="submit">Submit</button>
+                    <button id="cancel" type="button">Cancel</button>
+                </li>
+            </ul>
         </form>
 
 
