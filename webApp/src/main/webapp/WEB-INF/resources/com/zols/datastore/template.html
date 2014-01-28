@@ -21,8 +21,12 @@
                     <input id="label" name="label" type="text" th:field="*{label}" required=""/>
                 </li>
                 <li>
-                    <label for="content">Content</label>
-                    <textarea id="content" name="content" cols="40" rows="6" th:field="*{content}"/>
+                    <label for="dataType">Data Type</label>
+                    <select id="dataType" name="dataType" th:field="*{dataType}" th:value="*{dataType}" data-master="attributeType"/>                    
+                </li>
+                <li>
+                    <label for="path">Path</label>
+                    <input id="path" name="path" type="text" th:field="*{path}" required=""/>
                 </li>
                 <li>
                     <label for="description">Description</label>
@@ -42,6 +46,7 @@
         <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
         <script type="text/javascript">
 
 
@@ -71,7 +76,7 @@
                 $("#my-form").submit(function(e)
                 {
                     console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
-                   
+
 
 
 
@@ -85,7 +90,7 @@
                                 success: function(data, textStatus, jqXHR)
                                 {
                                     window.location.href = listing_pathname;
-                                    
+
                                 },
                                 error: function(jqXHR, textStatus, errorThrown)
                                 {
@@ -98,9 +103,11 @@
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
                 });
+                
+                $("#my-form").dropdownFiller();
 
             });
-           
+
         </script>
 
 
