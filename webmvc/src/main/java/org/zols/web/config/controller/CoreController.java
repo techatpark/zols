@@ -7,6 +7,7 @@ package org.zols.web.config.controller;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Entity;
+import com.zols.templatemanager.domain.Template;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +68,9 @@ public class CoreController {
             entity.setName("RichText");
             entity.setLabel("RichText");
             masterList.add(0, entity);
+        }
+        else if(name.equals("template")) {
+            masterList = dataStore.list(Template.class);
         }
         return masterList;
     }
