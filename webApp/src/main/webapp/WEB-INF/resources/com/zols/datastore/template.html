@@ -26,7 +26,7 @@
                 </li>
                 <li>
                     <label for="path">Path</label>
-                    <input id="path" name="path" type="text" th:field="*{path}" required=""/>
+                    <select id="path" name="path" th:field="*{path}" th:value="*{path}" data-master="templatePath"/>                    
                 </li>
                 <li>
                     <label for="description">Description</label>
@@ -103,7 +103,7 @@
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
                 });
-                
+
                 $("#my-form").dropdownFiller();
 
             });

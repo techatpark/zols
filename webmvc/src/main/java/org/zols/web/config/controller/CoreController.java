@@ -7,6 +7,7 @@ package org.zols.web.config.controller;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Entity;
+import com.zols.templatemanager.TemplateRepositoryManager;
 import com.zols.templatemanager.domain.Template;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ public class CoreController {
 
     @Autowired
     private DataStore dataStore;
+    
+    @Autowired
+    private TemplateRepositoryManager templateRepositoryManager;
 
     @RequestMapping(value = "/controlpanel", method = GET)
     @ApiIgnore
@@ -71,6 +75,9 @@ public class CoreController {
         }
         else if(name.equals("template")) {
             masterList = dataStore.list(Template.class);
+        }
+        else if(name.equals("templatePath")) {
+            masterList = templateRepositoryManager.templatePaths();
         }
         return masterList;
     }
