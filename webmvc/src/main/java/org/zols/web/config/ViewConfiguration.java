@@ -1,5 +1,9 @@
 package org.zols.web.config;
 
+import com.zols.datastore.DataStore;
+import com.zols.templatemanager.domain.TemplateRepository;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mobile.device.view.LiteDeviceDelegatingViewResolver;
@@ -8,11 +12,14 @@ import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring3.SpringTemplateEngine;
 import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
-import org.thymeleaf.templateresolver.UrlTemplateResolver;
 
 @Configuration
 public class ViewConfiguration {
+
+    @Autowired
+    private DataStore dataStore;
 
     public ClassLoaderTemplateResolver classLoaderTemplateResolver() {
         ClassLoaderTemplateResolver classLoaderTemplateResolver = new ClassLoaderTemplateResolver();
@@ -31,28 +38,59 @@ public class ViewConfiguration {
         resolver.setOrder(1);
         resolver.setCacheable(false);
         return resolver;
-    }    
+    }
+
+//    public FileTemplateResolver fileTemplateResolver() {
+//        FileTemplateResolver resolver = new FileTemplateResolver();
+//        resolver.setPrefix("D:/Projects/MarketThoughts/");
+//        resolver.setSuffix(".html");
+//        resolver.setTemplateMode("HTML5");
+//        resolver.setOrder(2);
+//        resolver.setCacheable(false);
+//        return resolver;
+//    }  
+    private void addTemplateRepositories(SpringTemplateEngine templateEngine) {
+        List<TemplateRepository> templateRepositories = dataStore.list(TemplateRepository.class);
+        if (templateRepositories != null) {
+            for (TemplateRepository templateRepository : templateRepositories) {
+                addTemplateResolver(templateRepository,templateEngine);
+            }
+
+        }
+    }
+
+    private void addTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
+        FileTemplateResolver resolver = new FileTemplateResolver();
+        resolver.setPrefix(templateRepository.getPath());
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setOrder(templateEngine.getTemplateResolvers().size());
+        resolver.setCacheable(false);
+        templateEngine.addTemplateResolver(resolver);
+    }
 
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addTemplateResolver(servletContextTemplateResolver());
-        engine.addTemplateResolver(classLoaderTemplateResolver());        
-        engine.addDialect("sec",new SpringSecurityDialect());        
+        engine.addTemplateResolver(classLoaderTemplateResolver());
+
+        engine.addDialect("sec", new SpringSecurityDialect());
 //        engine.addTemplateResolver(urlTemplateResolver());
         return engine;
     }
-    
 
     @Bean
     public ViewResolver thymeleafViewResolver() {
-        ThymeleafViewResolver resolver = new org.zols.web.view.resolver.ViewResolver() ;
+        ThymeleafViewResolver resolver = new org.zols.web.view.resolver.ViewResolver();
         resolver.setTemplateEngine(templateEngine());
 
         LiteDeviceDelegatingViewResolver delegateResolver = new LiteDeviceDelegatingViewResolver(
                 resolver);
         delegateResolver.setMobilePrefix("mobile/");
         delegateResolver.setTabletPrefix("tablet/");
+        
+        addTemplateRepositories(resolver.getTemplateEngine());
 
         return delegateResolver;
     }
