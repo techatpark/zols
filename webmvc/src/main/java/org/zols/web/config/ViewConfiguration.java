@@ -18,7 +18,7 @@ public class ViewConfiguration {
         ClassLoaderTemplateResolver classLoaderTemplateResolver = new ClassLoaderTemplateResolver();
         classLoaderTemplateResolver.setSuffix(".html");
         classLoaderTemplateResolver.setTemplateMode("HTML5");
-        classLoaderTemplateResolver.setOrder(1);
+        classLoaderTemplateResolver.setOrder(100);
         classLoaderTemplateResolver.setCacheable(false);
         return classLoaderTemplateResolver;
     }
@@ -31,24 +31,14 @@ public class ViewConfiguration {
         resolver.setOrder(1);
         resolver.setCacheable(false);
         return resolver;
-    }
-
-    public UrlTemplateResolver urlTemplateResolver() {
-        UrlTemplateResolver urlTemplateResolver = new UrlTemplateResolver();
-        urlTemplateResolver.setPrefix("http://localhost:8081/zols/resources/");
-        urlTemplateResolver.setSuffix(".html");
-        urlTemplateResolver.setTemplateMode("HTML5");
-        urlTemplateResolver.setOrder(1);
-        urlTemplateResolver.setCacheable(false);
-        return urlTemplateResolver;
-    }
+    }    
 
     @Bean
     public SpringTemplateEngine templateEngine() {
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.addTemplateResolver(servletContextTemplateResolver());
-        engine.addTemplateResolver(classLoaderTemplateResolver());
-        engine.addDialect("sec",new SpringSecurityDialect());
+        engine.addTemplateResolver(classLoaderTemplateResolver());        
+        engine.addDialect("sec",new SpringSecurityDialect());        
 //        engine.addTemplateResolver(urlTemplateResolver());
         return engine;
     }
