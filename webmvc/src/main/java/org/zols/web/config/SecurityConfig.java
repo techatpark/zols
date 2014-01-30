@@ -18,8 +18,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/controlpanel").authenticated()
                 .anyRequest().permitAll()
                 .and()
-                .formLogin();
-        // TODO: Remove This Later. CSRF Protection is must for Production Code
+                .formLogin()
+                .defaultSuccessUrl("/controlpanel");
+        // TODO: Remove this Later. CSRF Protection is must for Production Code
         http.csrf().disable();
     }
 

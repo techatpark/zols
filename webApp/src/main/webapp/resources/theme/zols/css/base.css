@@ -32,7 +32,7 @@ header nav {
 
 header nav ul li {
     display:inline;
-    padding:19px 0 0 59px;
+    padding:19px 0 0 42px;
 }
 
 
@@ -75,7 +75,10 @@ header nav ul {
     margin:0;
     padding:7px;
 }
-
+html body section {
+    padding: 0px 40px;
+    
+}
 .contentpos {    
     width:100%;
     margin:auto;

@@ -5,51 +5,29 @@
  */
 package com.zols.templatemanager;
 
+import com.zols.datastore.config.DataStoreConfiguration;
 import com.zols.datastore.domain.NameLabel;
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import java.util.regex.Matcher;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-/**
- *
- * @author sathish_ku
- */
+@ContextConfiguration(classes = {DataStoreConfiguration.class})
+@RunWith(SpringJUnit4ClassRunner.class)
 public class TemplateRepositoryManagerTest {
 
-    public TemplateRepositoryManagerTest() {
-    }
+    @Autowired
+    private TemplateRepositoryManager templateRepositoryManager;
 
-    @BeforeClass
-    public static void setUpClass() {
-    }
 
-    @AfterClass
-    public static void tearDownClass() {
-    }
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
-
-    /**
-     * Test of add method, of class TemplateRepositoryManager.
-     */
     @Test
-    public void testAdd() {
-        
+    public void testTemplatePath() throws IOException {
+        List<NameLabel> templatePaths = templateRepositoryManager.templatePaths() ;
+        for (NameLabel nameLabel : templatePaths) {
+            System.out.println(nameLabel.getName() + "=" + nameLabel.getLabel());
+        }
     }
-
-    
-
 }

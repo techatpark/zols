@@ -14,17 +14,32 @@
             <ul>
                 <li>
                     <label>Type</label>
-                    <input name="type" type="radio" value="file"/>File
-                    <input name="type" type="radio" value="ftp"/>FTP
+                    <select id="type" name="type" th:field="*{type}" th:value="*{type}" data-master="templateRepositoryType"/>
                 </li>
                 <li>
                     <label for="name">Name</label>
-                    <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                    <input id="name" name="name" type="text" th:field="*{name}" />
                 </li>    
                 <li>
                     <label for="path">Path</label>
-                    <input id="path" name="path" type="text" th:field="*{path}" required=""/>
+                    <input id="path" name="path" type="text" th:field="*{path}" />
                 </li> 
+                <li>
+                    <label for="host">Host</label>
+                    <input id="host" name="host" type="text" th:field="*{host}" />
+                </li>
+                <li>
+                    <label for="rootFolder">Root Folder</label>
+                    <input id="rootFolder" name="rootFolder" type="text" th:field="*{rootFolder}" />
+                </li> 
+                <li>
+                    <label for="userName">User Name</label>
+                    <input id="userName" name="userName" type="text" th:field="*{userName}" />
+                </li>
+                <li>
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="text" th:field="*{password}" />
+                </li>
                 <li>
                     <label for="description">Description</label>
                     <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
@@ -81,7 +96,6 @@
                                 url: pathname,
                                 type: method,
                                 data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
-                                dataType: "json",
                                 contentType: 'application/json',
                                 success: function(data, textStatus, jqXHR)
                                 {

@@ -7,8 +7,11 @@ package org.zols.web.config.controller;
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Entity;
+import com.zols.datastore.domain.NameLabel;
 import com.zols.templatemanager.TemplateRepositoryManager;
 import com.zols.templatemanager.domain.Template;
+import com.zols.templatemanager.domain.TemplateRepository;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,7 @@ public class CoreController {
 
     @RequestMapping(value = "/master/{name}", method = GET)
     @ResponseBody
-    public List master(@PathVariable(value = "name") String name) {
+    public List master(@PathVariable(value = "name") String name) throws IOException {
         List masterList = null;
         if (name.equals("attributeType")) {
             masterList = dataStore.list(Entity.class);
@@ -78,6 +81,22 @@ public class CoreController {
         }
         else if(name.equals("templatePath")) {
             masterList = templateRepositoryManager.templatePaths();
+        }
+        else if(name.equals("templateRepositoryType")) {
+            masterList = new ArrayList(2);
+            
+            NameLabel nameLabel = null ;
+            
+            nameLabel = new NameLabel();
+            nameLabel.setName(TemplateRepository.FILE_SYSTEM);
+            nameLabel.setLabel("File System");
+            masterList.add(nameLabel);
+            
+            nameLabel = new NameLabel();
+            nameLabel.setName(TemplateRepository.FTP);
+            nameLabel.setLabel("FTP");
+            masterList.add(nameLabel);
+            
         }
         return masterList;
     }
