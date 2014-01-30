@@ -38,7 +38,7 @@ form input {
     padding:3px 5px;
 }
 form textarea {padding:8px; width:300px;}
-form button {margin-left:15px;}
+
 
 /* form element visual styles */
 form input, form textarea { 
@@ -95,7 +95,7 @@ form input:required:valid + .form_hint {background: #28921f;}
 form input:required:valid + .form_hint::before {color:#28921f;}
 
 /* === Button Style === */
-form button {
+button {
     background-color: #68b12f;
     background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
     background: -webkit-linear-gradient(top, #68b12f, #50911e);
@@ -121,12 +121,13 @@ form button {
     text-align: center;
     text-shadow: 0 -1px 0 #396715;
     float: right;
+    margin-left:15px;
 }
-form button:hover {
+button:hover {
     opacity:.85;
     cursor: pointer; 
 }
-form button:active {
+button:active {
     border: 1px solid #20911e;
     box-shadow: 0 0 10px 5px #356b0b inset; 
     -webkit-box-shadow:0 0 10px 5px #356b0b inset ;

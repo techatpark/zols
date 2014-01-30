@@ -9,12 +9,41 @@
         this.onRender = onRender;
         this.entityUrl = entityUrl;
         this.prefix = [];
+        
         formDiv.empty();
+        formDiv.htmlText = "";
+        formDiv.firstEntity = true;
         formDiv.renderEntity(formDiv.attr('name'));
+        formDiv.firstEntity = true;
+        formDiv.html(formDiv.htmlText);
         formDiv.onRender();
         $('.jqte-test').jqte();
-
+        formDiv.htmlText = "";
+        
         return this;
+    };
+
+    $.fn.patchNameField = function() {
+        if (formDiv.firstEntity) {
+
+            var nameattribute = new Object();
+            nameattribute.name = "name";
+            nameattribute.type = "String";
+            nameattribute.description = "Name";
+
+            namecontrol = formDiv.getControl(nameattribute);
+
+            nameattribute.type = 'control-open';
+            namecontrolOpen = formDiv.getControl(nameattribute);
+            nameattribute.type = 'control-close';
+            namecontrolClose = formDiv.getControl(nameattribute);
+
+            formDiv.appendHtmlText(namecontrolOpen);
+            formDiv.appendHtmlText(namecontrol);
+            formDiv.appendHtmlText(namecontrolClose);
+
+        }
+
     };
 
     $.fn.renderEntity = function(entityName) {
@@ -23,22 +52,29 @@
             url: formDiv.entityUrl.replace('{{name}}', entityName),
             success: function(result) {
                 if (result.entity) {
+                    
                     entity = result.entity;
 
-                    $.each(result.entity.attributes, function(k, attribute) {
+                    var entityattribute = new Object();
+                    entityattribute.type = 'entity-open';
+                    entitycontrolOpen = formDiv.getControl(entityattribute);
+                    formDiv.appendHtmlText(entitycontrolOpen);
+                    
+                    
+                    formDiv.patchNameField();
+                    formDiv.firstEntity = false;
 
+                    $.each(entity.attributes, function(k, attribute) {
                         control = formDiv.getControl(attribute);
-
-                        console.log('control ' +control);
                         if (control) {
                             attribute.type = 'control-open';
                             controlOpen = formDiv.getControl(attribute);
                             attribute.type = 'control-close';
                             controlClose = formDiv.getControl(attribute);
 
-                            formDiv.append(controlOpen);
-                            formDiv.append(control);
-                            formDiv.append(controlClose);
+                            formDiv.appendHtmlText(controlOpen);
+                            formDiv.appendHtmlText(control);
+                            formDiv.appendHtmlText(controlClose);
                         }
                         else {
                             formDiv.prefix.push(attribute.name);
@@ -46,11 +82,19 @@
                             formDiv.prefix.pop(attribute.name);
                         }
                     });
+
+                    entityattribute.type = 'entity-close';
+                    entitycontrolClose = formDiv.getControl(entityattribute);
+                    formDiv.appendHtmlText(entitycontrolClose);
                 }
 
             },
             async: false
         });
+    };
+    
+    $.fn.appendHtmlText = function(htmlText) {
+        formDiv.htmlText += htmlText;        
     };
     $.fn.getControl = function(attribute) {
         var template = this.loadTemplate(attribute.type);
@@ -92,7 +136,7 @@
                 console.log('result on temp' + result);
                 template = Handlebars.compile(result);
             },
-            dataType:'html',
+            dataType: 'html',
             async: false
         });
 

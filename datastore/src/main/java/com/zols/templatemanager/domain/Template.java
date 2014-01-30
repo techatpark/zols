@@ -18,7 +18,9 @@ public class Template {
 
     private String label;
     
-    private String content;
+    private String dataType;
+    
+    private String path;
 
     private String description;
 
@@ -46,13 +48,23 @@ public class Template {
         this.description = description;
     }
 
-    public String getContent() {
-        return content;
+    public String getDataType() {
+        return dataType;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    
     
     
 }

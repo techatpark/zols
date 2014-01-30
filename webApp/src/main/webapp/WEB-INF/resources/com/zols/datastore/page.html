@@ -3,13 +3,13 @@
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>Edit Templates</title>
+        <title>Edit Pages</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
 
     </head>
     <body th:fragment="content">
-        <form id="my-form" th:object="${template}">
+        <form id="my-form" th:object="${page}">
 
             <ul>
                 <li>
@@ -17,21 +17,14 @@
                     <input id="name" name="name" type="text" th:field="*{name}" required=""/>
                 </li>
                 <li>
-                    <label for="label">Label</label>
-                    <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                    <label for="templateName">Template</label>
+                    <select id="templateName" name="templateName" th:field="*{templateName}" th:value="*{templateName}" data-master="template"/>                    
                 </li>
                 <li>
-                    <label for="dataType">Data Type</label>
-                    <select id="dataType" name="dataType" th:field="*{dataType}" th:value="*{dataType}" data-master="attributeType"/>                    
+                    <label for="dataName">Data</label>
+                    <input id="dataName" name="dataName" type="text" th:field="*{dataName}" required=""/>
                 </li>
-                <li>
-                    <label for="path">Path</label>
-                    <select id="path" name="path" th:field="*{path}" th:value="*{path}" data-master="templatePath"/>                    
-                </li>
-                <li>
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
-                </li>
+                
 
                 <li>
                     <button id="submit" type="submit">Submit</button>
@@ -103,7 +96,7 @@
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
                 });
-
+                
                 $("#my-form").dropdownFiller();
 
             });
