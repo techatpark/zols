@@ -137,6 +137,7 @@
     </dependencies>
 
     <build>
+    <pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -206,6 +207,7 @@
                 <version>2.1</version>
             </plugin>
         </plugins>
+        </pluginManagement>
     </build>
 
 </project>
