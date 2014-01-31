@@ -35,10 +35,9 @@
     -moz-transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
     transition: all 0.3s ease-out;
-}
-body.no-touch .boxInner:hover .titleBox, body.touch .boxInner.touchFocus .titleBox {
     margin-bottom: 0;
 }
+
 @media only screen and (max-width : 480px) {
     /* Smartphone view: 1 tile */
     .box {
