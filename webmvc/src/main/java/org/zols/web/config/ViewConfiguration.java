@@ -14,6 +14,7 @@ import org.thymeleaf.spring3.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
+import org.thymeleaf.templateresolver.UrlTemplateResolver;
 
 @Configuration
 public class ViewConfiguration {
@@ -53,14 +54,30 @@ public class ViewConfiguration {
         List<TemplateRepository> templateRepositories = dataStore.list(TemplateRepository.class);
         if (templateRepositories != null) {
             for (TemplateRepository templateRepository : templateRepositories) {
-                addTemplateResolver(templateRepository,templateEngine);
+                if (templateRepository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
+                    addFileSystemTemplateResolver(templateRepository,templateEngine);
+                }
+                else {
+                    addFTPTemplateResolver(templateRepository,templateEngine);
+                }
+                
             }
 
         }
     }
 
-    private void addTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
+    private void addFileSystemTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
         FileTemplateResolver resolver = new FileTemplateResolver();
+        resolver.setPrefix(templateRepository.getPath());
+        resolver.setSuffix(".html");
+        resolver.setTemplateMode("HTML5");
+        resolver.setOrder(templateEngine.getTemplateResolvers().size());
+        resolver.setCacheable(false);
+        templateEngine.addTemplateResolver(resolver);
+    }
+    
+    private void addFTPTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
+        UrlTemplateResolver resolver = new UrlTemplateResolver();
         resolver.setPrefix(templateRepository.getPath());
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
