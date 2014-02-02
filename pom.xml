@@ -14,12 +14,10 @@
 		<module>/linkmanager</module>
 		<module>/webmvc</module>
 		<module>/webApp</module>
-
-
-
 	</modules>
 
 	<properties>
+		<zols.version>1.0-SNAPSHOT</zols.version>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.2.4.RELEASE</org.springframework-version>
 		<org.springframework.mobile-version>1.1.0.RELEASE</org.springframework.mobile-version>
@@ -50,93 +48,184 @@
 		</repository>
 	</repositories>
 
+	<dependencyManagement>
+		<dependencies>
+			<!-- Spring -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-context</artifactId>
+				<version>${org.springframework-version}</version>
+				<exclusions>
+					<!-- Exclude Commons Logging in favor of SLF4j -->
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
-	<dependencies>
-		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
-			<exclusions>
-				<!-- Exclude Commons Logging in favor of SLF4j -->
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
+			<dependency>
+				<artifactId>spring-tx</artifactId>
+				<groupId>org.springframework</groupId>
+				<version>${org.springframework-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-expression</artifactId>
+				<version>${org.springframework-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+				<version>${org.springframework-version}</version>
+			</dependency>
 
-		<dependency>
-			<artifactId>spring-tx</artifactId>
-			<groupId>org.springframework</groupId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${org.springframework-version}</version>
-		</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${org.springframework-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${org.spring-security-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${org.spring-security-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>${org.spring-security-version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.mobile</groupId>
+				<artifactId>spring-mobile-device</artifactId>
+				<version>${org.springframework.mobile-version}</version>
+			</dependency>
+
+			<!-- File Upload -->
+			<dependency>
+				<groupId>commons-fileupload</groupId>
+				<artifactId>commons-fileupload</artifactId>
+				<version>${commons-fileupload-version}</version>
+			</dependency>
+
+			<!-- jackson -->
+			<dependency>
+				<groupId>org.codehaus.jackson</groupId>
+				<artifactId>jackson-mapper-asl</artifactId>
+				<version>${jackson-version}</version>
+			</dependency>
+
+			<!-- Servlet -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>${javax.servlet.api-version}</version>
+				<scope>provided</scope>
+			</dependency>
+
+			<!-- FTP -->
+			<dependency>
+				<groupId>commons-net</groupId>
+				<artifactId>commons-net</artifactId>
+				<version>${commons-net-version}</version>
+			</dependency>
+			<!-- Thymeleaf -->
+			<dependency>
+				<groupId>org.thymeleaf</groupId>
+				<artifactId>thymeleaf-spring3</artifactId>
+				<version>${thymeleaf-spring3-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.thymeleaf.extras</groupId>
+				<artifactId>thymeleaf-extras-springsecurity3</artifactId>
+				<version>${thymeleaf-extras-springsecurity3-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.mangofactory</groupId>
+				<artifactId>swagger-springmvc</artifactId>
+				<version>${swagger-springmvc-version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.zols.web</groupId>
+				<artifactId>linkmanager</artifactId>
+				<version>${zols.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.zols.web</groupId>
+				<artifactId>webmvc</artifactId>
+				<version>${zols.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.zols.web</groupId>
+				<artifactId>datastore</artifactId>
+				<version>${zols.version}</version>
+			</dependency>
 
 
-		<!-- CGLIB, only required and used for @Configuration usage -->
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<version>2.2</version>
-		</dependency>
+			<!-- CGLIB, only required and used for @Configuration usage -->
+			<dependency>
+				<groupId>cglib</groupId>
+				<artifactId>cglib-nodep</artifactId>
+				<version>2.2</version>
+			</dependency>
 
-		<!-- Aspect J -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${org.aspectj-version}</version>
-		</dependency>
+			<!-- Aspect J -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${org.aspectj-version}</version>
+			</dependency>
 
-		<!-- @Inject -->
-		<dependency>
-			<groupId>javax.inject</groupId>
-			<artifactId>javax.inject</artifactId>
-			<version>1</version>
-		</dependency>
+			<!-- @Inject -->
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>1</version>
+			</dependency>
 
-		<!-- Logging -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${org.slf4j-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${org.slf4j-version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${org.slf4j-version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j-version}</version>
-			<scope>runtime</scope>
-		</dependency>
+			<!-- Logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${org.slf4j-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${org.slf4j-version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${org.slf4j-version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j-version}</version>
+				<scope>runtime</scope>
+			</dependency>
 
 
-		<!-- Test -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit-version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+			<!-- Test -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit-version}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<pluginManagement>
