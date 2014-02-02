@@ -89,8 +89,8 @@ public class TemplateRepositoryManager {
                 filePath = path + File.separator + file.getName();
 
                 NameLabel nameLabel = new NameLabel();
-                nameLabel.setLabel(filePath);
-                nameLabel.setName(filePath.replace(".html", ""));
+                nameLabel.setLabel(file.getName());
+                nameLabel.setName(filePath.replaceFirst("\\\\", "").replaceAll("\\\\", "").replace(".html", ""));
                 nameLabels.add(nameLabel);
             }
 
@@ -115,7 +115,7 @@ public class TemplateRepositoryManager {
                     populateTemplatesFromFileSystem(nameLabels, file, dir.getAbsolutePath());
                 } else {
                     NameLabel nameLabel = new NameLabel();
-                    nameLabel.setLabel(file.getAbsolutePath().replaceAll("\\\\", "/").replaceFirst(rootPath, ""));
+                    nameLabel.setLabel(file.getName());
                     nameLabel.setName(file.getAbsolutePath().replaceAll("\\\\", "/").replaceFirst(rootPath, "").replaceAll(filter.getExt(), "").replaceFirst("/", ""));
                     nameLabels.add(nameLabel);
                 }

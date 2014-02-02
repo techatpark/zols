@@ -66,7 +66,7 @@ function loadData(entityName, contentData) {
     $.each(contentData.attributes, function(index, attribute) {
         colModelDynamic.push({
             name: attribute.name,
-            label: attribute.description,
+            label: attribute.label,
             key: true,
             index: 'name',
             editable: true,
@@ -77,7 +77,7 @@ function loadData(entityName, contentData) {
         url: URL + 'data/' + entityName,
         editurl: URL,
         colModel: colModelDynamic,
-        caption: entityName,
+        caption: contentData.label,
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
