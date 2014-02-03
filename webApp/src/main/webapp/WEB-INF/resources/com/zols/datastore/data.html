@@ -10,7 +10,7 @@ and open the template in the editor.
         <title>Dynamic Form</title>
     </head>
     <body th:fragment="content">
-        <form id="dynamicForm" th:name="${entity.name}"></form>   
+        <form id="dynamicForm" th:name="${entityName}" th:title="${dataName}"></form>   
         <button id="submit" type="submit">Submit</button>
         <button id="cancel" type="button">Cancel</button>
 
@@ -22,63 +22,7 @@ and open the template in the editor.
         <script type="text/javascript" src="../../../../../../webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
         <script type="text/javascript" src="../../../../../../webapp/resources/js/makeform.js" th:src="@{/resources/js/makeform/makeform.js}"></script>        
         <script type="text/javascript" src="../../../../../../webapp/resources/js/prettyprint.js" th:src="@{/resources/js/prettyprint.js}"></script>
-        <script type="text/javascript">
-            
-            String.prototype.replaceAt = function(i, char) {
-                return this.substr(0, i) + char + this.substr(i);
-            };
-
-            $(document).ready(function() {
-                
-                var pathname = window.location.pathname;
-                var method = window.location.pathname;
-                var listing_pathname;
-                if (pathname.indexOf("/add") !== -1) {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
-                    pathname = '../../api/data/'+$("#dynamicForm").attr('name');
-                    method = 'POST';
-                }
-                else {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
-                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
-                    method = 'PUT';
-                }
-                
-                function onRender() {
-
-                }
-
-                $("#dynamicForm").makeform("../../api/entities/{{name}}", "simple", "../../resources/js/makeform/theme", onRender);
-
-
-                $('#cancel').click(function() {
-                    window.location.href = listing_pathname;
-                });
-
-                $("#submit").click(function() { 
-                    $.ajax(
-                            {
-                                url: pathname,
-                                type: method,
-                                data: JSON.stringify($("#dynamicForm").toObject({mode: 'first'})),
-                                dataType: "json",
-                                contentType: 'application/json',
-                                success: function(data, textStatus, jqXHR)
-                                {
-                                    window.location.href = listing_pathname;
-                                },
-                                error: function(jqXHR, textStatus, errorThrown)
-                                {
-                                    console.log(jqXHR + "===" + textStatus);
-                                }
-                            });                    
-                });
-
-                function printJSON() {
-                    
-                }
-            });
-        </script>
+        <script type="text/javascript" src="../../../../../../webapp/resources/js/data.js" th:src="@{/resources/js/data.js}"></script>
 
     </body>
 </html>

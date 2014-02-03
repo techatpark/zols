@@ -58,11 +58,14 @@ public class Entity {
     }
 
     public Date getCreatedDate() {
-        return createdDate;
+    	if (createdDate != null)
+    		return (Date)(createdDate.clone());
+    	else 
+    		return null;
     }
 
     public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
+        this.createdDate =  (Date)(createdDate.clone());
     }
 
 }

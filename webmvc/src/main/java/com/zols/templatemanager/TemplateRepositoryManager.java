@@ -1,15 +1,10 @@
 package com.zols.templatemanager;
 
-import com.zols.datastore.DataStore;
-import com.zols.datastore.domain.NameLabel;
-import com.zols.templatemanager.domain.TemplateRepository;
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
@@ -17,6 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import com.zols.datastore.DataStore;
+import com.zols.datastore.domain.NameLabel;
+import com.zols.templatemanager.domain.TemplateRepository;
+import com.zols.utils.GenericExtFilter;
 
 @Service
 public class TemplateRepositoryManager {
@@ -89,8 +89,8 @@ public class TemplateRepositoryManager {
                 filePath = path + File.separator + file.getName();
 
                 NameLabel nameLabel = new NameLabel();
-                nameLabel.setLabel(filePath);
-                nameLabel.setName(filePath.replace(".html", ""));
+                nameLabel.setLabel(file.getName());
+                nameLabel.setName(filePath.replaceFirst("\\\\", "").replaceAll("\\\\", "").replace(".html", ""));
                 nameLabels.add(nameLabel);
             }
 
@@ -115,32 +115,13 @@ public class TemplateRepositoryManager {
                     populateTemplatesFromFileSystem(nameLabels, file, dir.getAbsolutePath());
                 } else {
                     NameLabel nameLabel = new NameLabel();
-                    nameLabel.setLabel(file.getAbsolutePath().replaceAll("\\\\", "/").replaceFirst(rootPath, ""));
+                    nameLabel.setLabel(file.getName());
                     nameLabel.setName(file.getAbsolutePath().replaceAll("\\\\", "/").replaceFirst(rootPath, "").replaceAll(filter.getExt(), "").replaceFirst("/", ""));
                     nameLabels.add(nameLabel);
                 }
             }
         }
 
-    }
-
-    // inner class, generic extension filter
-    private class GenericExtFilter implements FilenameFilter {
-
-        private String ext;
-
-        public GenericExtFilter(String ext) {
-            this.ext = ext;
-        }
-
-        public String getExt() {
-            return ext;
-        }
-
-        public boolean accept(File dir, String name) {
-            return ((!dir.getName().equals("mobile") && !dir.getName().equals("tablet")) && (name.endsWith(ext)
-                    || new File(dir.getAbsolutePath() + File.separator + name).isDirectory()));
-        }
     }
 
 }

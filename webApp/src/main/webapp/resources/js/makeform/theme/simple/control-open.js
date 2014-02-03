@@ -1,2 +1,2 @@
 <li>
-<label>{{description}}: </label>
+<label>{{label}}: </label>

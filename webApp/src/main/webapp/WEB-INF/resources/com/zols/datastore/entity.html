@@ -27,6 +27,7 @@
                                                 <legend th:text="'Attribute(' + ${stat.index} +')'">Attributes</legend>
                                             <ul>
                                                 <li><label>Name</label><input th:name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></li>
+                                                <li><label>Label</label><input th:name="attributes[0].label" type="text" th:field="*{attributes[__${stat.index}__].label}"/></li>
                                                 <li><label>Type</label><select th:name="attributes[0].type" th:field="*{attributes[__${stat.index}__].type}" th:value="*{attributes[__${stat.index}__].type}" data-master="attributeType"/></li>
                                                 <li><label>Description</label><input th:name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/></li>
                                                 <li><button type="button" data-group="attributes">Remove Attribute</button></li>
@@ -175,6 +176,7 @@
             <legend>Attribute({{index}})</legend>
             <ul>
             <li><label>Name</label><input name="attributes[{{index}}].name" type="text" /></li>
+            <li><label>Label</label><input name="attributes[{{index}}].label" type="text" /></li>
             <li><label>Type</label><select name="attributes[{{index}}].type" data-master="attributeType"/></li>
             <li><label>Description</label><input name="attributes[{{index}}].description" type="text"/></li>
             <li><button type="button" data-group="attributes">Remove Attribute</button></li>

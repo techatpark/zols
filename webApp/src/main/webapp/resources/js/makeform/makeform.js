@@ -2,14 +2,16 @@
 
     var formDiv;
 
-    $.fn.makeform = function(entityUrl, theme, themeUrl, onRender) {
+    $.fn.makeform = function(entityUrl, theme, themeUrl, onRender, dataObj) {
+        console.log('dataObj ' + JSON.stringify(dataObj));
         formDiv = this;
         this.themeUrl = themeUrl;
         this.theme = theme;
         this.onRender = onRender;
         this.entityUrl = entityUrl;
+        formDiv.dataObj = dataObj;
         this.prefix = [];
-        
+
         formDiv.empty();
         formDiv.htmlText = "";
         formDiv.firstEntity = true;
@@ -19,7 +21,7 @@
         formDiv.onRender();
         $('.jqte-test').jqte();
         formDiv.htmlText = "";
-        
+
         return this;
     };
 
@@ -30,6 +32,10 @@
             nameattribute.name = "name";
             nameattribute.type = "String";
             nameattribute.description = "Name";
+            nameattribute.label = "Name";
+            if(formDiv.dataObj){
+                nameattribute.value = formDiv.dataObj.name;
+            }            
 
             namecontrol = formDiv.getControl(nameattribute);
 
@@ -52,19 +58,25 @@
             url: formDiv.entityUrl.replace('{{name}}', entityName),
             success: function(result) {
                 if (result.entity) {
-                    
+
                     entity = result.entity;
 
-                    var entityattribute = new Object();
+                    var entityattribute = entity;
                     entityattribute.type = 'entity-open';
                     entitycontrolOpen = formDiv.getControl(entityattribute);
                     formDiv.appendHtmlText(entitycontrolOpen);
-                    
-                    
+
+
                     formDiv.patchNameField();
                     formDiv.firstEntity = false;
 
                     $.each(entity.attributes, function(k, attribute) {
+                        if (formDiv.dataObj) {
+                            attribute.value = formDiv.dataObj[attribute.name];
+
+                            var x = attribute.value.replace(" ", '-');
+                            console.log("valueew is::" + x);
+                        }
                         control = formDiv.getControl(attribute);
                         if (control) {
                             attribute.type = 'control-open';
@@ -92,13 +104,13 @@
             async: false
         });
     };
-    
+
     $.fn.appendHtmlText = function(htmlText) {
-        formDiv.htmlText += htmlText;        
+        formDiv.htmlText += htmlText;
     };
     $.fn.getControl = function(attribute) {
         var template = this.loadTemplate(attribute.type);
-        console.log('template ' + template);
+
         if (template) {
             var prefixString = formDiv.getPrefixString(attribute);
             if (prefixString) {
@@ -133,7 +145,7 @@
             cache: true,
             url: formDiv.themeUrl + '/' + formDiv.theme + '/' + type + '.js',
             success: function(result) {
-                console.log('result on temp' + result);
+
                 template = Handlebars.compile(result);
             },
             dataType: 'html',
