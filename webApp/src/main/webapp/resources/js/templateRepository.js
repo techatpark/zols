@@ -1,111 +1,76 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-$(function() {
+String.prototype.replaceAt = function(i, char) {
+    return this.substr(0, i) + char + this.substr(i);
+};
 
-    $.extend($.jgrid.defaults, {
-        autowidth: true,
-        shrinkToFit: true,
-        datatype: 'json',
-        jsonReader: {
-            repeatitems: false,
-            root: "content",
-            page: function(result) {
-                //Total number of records
-                return result.number + 1;
-            },
-            total: "totalPages",
-            records: "totalElements"
-        },
-        prmNames: {
-            page: "page.page",
-            rows: "page.size",
-            sort: "page.sort",
-            order: "page.sort.dir"
-        },
-        height: 'auto',
-        viewrecords: true,
-        rowList: [10, 20, 50, 100],
-        altRows: true,
-        loadError: function(xhr, status, error) {
+$(document).ready(function() {
 
+    if (!$("#type").val()) {
+        $(".boxInner img").click(function() {
+            $("#type").val($(this).attr('alt'));
+            showEdit();
+        });
+    }
+    else {
+        showEdit();
+    }
+
+    function showEdit() {
+        $(".wrap").hide();
+        if ($("#type").val() !== 'ftp') {
+            $("#host").parent().hide();
+            $("#rootFolder").parent().hide();
+            $("#userName").parent().hide();
+            $("#password").parent().hide();
         }
+        if ($("#type").val() === 'classpath') {
+            $("#path").parent().hide();
+        }
+        $("#my-form").show();
+    }
+
+    var pathname = window.location.pathname;
+    var method = window.location.pathname;
+    var listing_pathname;
+    if (pathname.indexOf("/add") !== -1) {
+        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+        pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+        pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+        method = 'POST';
+    }
+    else {
+        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+
+        pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+        method = 'PUT';
+    }
+
+    $("#my-form").submit(function(e)
+    {
+        console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+
+        $.ajax(
+                {
+                    url: pathname,
+                    type: method,
+                    data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        window.location.href = listing_pathname;
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        console.log(jqXHR + "===" + textStatus);
+                    }
+                });
+        e.preventDefault();	//STOP default action
     });
 
-    $.extend($.jgrid.edit, {
-        closeAfterEdit: true,
-        closeAfterAdd: true,
-        ajaxEditOptions: {contentType: "application/json"},
-        mtype: 'PUT',
-        serializeEditData: function(data) {
-            delete data.oper;
-            return JSON.stringify(data);
-        }
+    $('#cancel').click(function() {
+        window.location.href = listing_pathname;
     });
-    $.extend($.jgrid.del, {
-        mtype: 'DELETE',
-        serializeDelData: function() {
-            return "";
-        }
-    });
-    var delOptions = {
-        onclickSubmit: function(params, postdata) {
-            params.url = URL + '/' + postdata;
-        }
-    };
 
-    var URL = 'api/templateRepositories';
-    var options = {
-        url: URL,
-        editurl: URL,
-        colModel: [
-            {
-                name: 'name',
-                label: 'Name',
-                key: true,
-                index: 'name',
-                editable: true,
-                editoptions: {required: true}
-            },
-            {
-                name: 'label',
-                label: 'Label',
-                index: 'label',
-                editable: true,
-                editrules: {required: true}
-            },
-            {
-                name: 'description',
-                label: 'Description',
-                index: 'description',
-                editable: true,
-                editrules: {required: true}
-            }
-        ],
-        caption: "templateRepositories",
-        pager: '#pager',
-        height: 'auto',
-        ondblClickRow: function(id) {
-            window.location = 'templateRepositories/' + id;
-        },
-        formatter: {idName: "name"}
-    };
+    $("#my-form").dropdownFiller();
 
-    $("#grid")
-            .jqGrid(options)
-            .navGrid('#pager',
-                    {search: false, addfunc: function() {
-                            window.location = 'templateRepositories/add';
-                        }, editfunc: function(data) {
-                            window.location = 'templateRepositories/' + data;
-                        }}, //options
-            {}, // edit options
-                    {}, // add options 
-                    delOptions,
-                    {} // search options
-            );
 });
-
-

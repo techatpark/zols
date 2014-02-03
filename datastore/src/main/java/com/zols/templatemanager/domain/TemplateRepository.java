@@ -15,6 +15,7 @@ public class TemplateRepository {
 
     public static final String FILE_SYSTEM = "file";
     public static final String FTP = "ftp";
+    public static final String CLASSPATH = "classpath";
 
     @Id
     private String name;
