@@ -8,9 +8,9 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.Entity;
 import com.zols.datastore.domain.NameLabel;
-import com.zols.templatemanager.TemplateRepositoryManager;
+import com.zols.templatemanager.TemplateStorageManager;
 import com.zols.templatemanager.domain.Template;
-import com.zols.templatemanager.domain.TemplateRepository;
+import com.zols.templatemanager.domain.TemplateStorage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class CoreController {
     private DataStore dataStore;
     
     @Autowired
-    private TemplateRepositoryManager templateRepositoryManager;
+    private TemplateStorageManager templateStorageManager;
 
     @RequestMapping(value = "/controlpanel", method = GET)
     @ApiIgnore
@@ -80,20 +80,20 @@ public class CoreController {
             masterList = dataStore.list(Template.class);
         }
         else if(name.equals("templatePath")) {
-            masterList = templateRepositoryManager.templatePaths();
+            masterList = templateStorageManager.templatePaths();
         }
-        else if(name.equals("templateRepositoryType")) {
+        else if(name.equals("templateStorageType")) {
             masterList = new ArrayList(2);
             
             NameLabel nameLabel = null ;
             
             nameLabel = new NameLabel();
-            nameLabel.setName(TemplateRepository.FILE_SYSTEM);
+            nameLabel.setName(TemplateStorage.FILE_SYSTEM);
             nameLabel.setLabel("File System");
             masterList.add(nameLabel);
             
             nameLabel = new NameLabel();
-            nameLabel.setName(TemplateRepository.FTP);
+            nameLabel.setName(TemplateStorage.FTP);
             nameLabel.setLabel("FTP");
             masterList.add(nameLabel);
             

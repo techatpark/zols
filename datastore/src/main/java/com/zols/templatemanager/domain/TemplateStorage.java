@@ -11,7 +11,7 @@ import org.springframework.data.annotation.Id;
  *
  * @author rahul_ma
  */
-public class TemplateRepository {
+public class TemplateStorage {
 
     public static final String FILE_SYSTEM = "file";
     public static final String FTP = "ftp";

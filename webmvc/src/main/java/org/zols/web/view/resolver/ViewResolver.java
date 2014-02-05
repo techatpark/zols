@@ -29,7 +29,7 @@ public class ViewResolver extends ThymeleafViewResolver {
 //        TemplateProcessingParameters processingParameters
 //                = new TemplateProcessingParameters(this.getTemplateEngine().getConfiguration(), viewName, context);
 //        try {            
-//            Template template = this.getTemplateEngine().getTemplateRepository().getTemplate(processingParameters);
+//            Template template = this.getTemplateEngine().getTemplateStorage().getTemplate(processingParameters);
 //        } catch (Exception e) {            
 //            isValidTemplate = false ;
 //        }

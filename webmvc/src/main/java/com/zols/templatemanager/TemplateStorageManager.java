@@ -15,61 +15,61 @@ import org.springframework.stereotype.Service;
 
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.NameLabel;
-import com.zols.templatemanager.domain.TemplateRepository;
+import com.zols.templatemanager.domain.TemplateStorage;
 import com.zols.utils.GenericExtFilter;
 
 @Service
-public class TemplateRepositoryManager {
+public class TemplateStorageManager {
 
     @Autowired
     private DataStore dataStore;
 
-    public TemplateRepository add(TemplateRepository templateRepository) {
-        TemplateRepository repository = dataStore.create(templateRepository, TemplateRepository.class);
-        return repository;
+    public TemplateStorage add(TemplateStorage templateStorage) {
+        TemplateStorage Storage = dataStore.create(templateStorage, TemplateStorage.class);
+        return Storage;
     }
 
-    public void update(TemplateRepository templateRepository) {
-        dataStore.update(templateRepository, TemplateRepository.class);
+    public void update(TemplateStorage templateStorage) {
+        dataStore.update(templateStorage, TemplateStorage.class);
     }
 
-    public void deleteTemplateRepository(String templateRepositoryName) {
-        dataStore.delete(templateRepositoryName, TemplateRepository.class);
+    public void deleteTemplateStorage(String templateStorageName) {
+        dataStore.delete(templateStorageName, TemplateStorage.class);
     }
 
-    public TemplateRepository getTemplateRepository(String templateRepositoryName) {
-        return dataStore.read(templateRepositoryName, TemplateRepository.class);
+    public TemplateStorage getTemplateStorage(String templateStorageName) {
+        return dataStore.read(templateStorageName, TemplateStorage.class);
     }
 
-    public Page<TemplateRepository> templateRepositoryList(Pageable page) {
-        return dataStore.list(page, TemplateRepository.class);
+    public Page<TemplateStorage> templateStorageList(Pageable page) {
+        return dataStore.list(page, TemplateStorage.class);
     }
 
     public List<NameLabel> templatePaths() throws IOException {
         List<NameLabel> nameLabels = new ArrayList<NameLabel>();
-        List<TemplateRepository> templateRepositorys = dataStore.list(TemplateRepository.class);
-        for (TemplateRepository templateRepository : templateRepositorys) {
-            if (templateRepository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
-                populateTemplatesFromFileSystem(nameLabels, new File(templateRepository.getPath()), null);
+        List<TemplateStorage> templateStorages = dataStore.list(TemplateStorage.class);
+        for (TemplateStorage templateStorage : templateStorages) {
+            if (templateStorage.getType().equals(TemplateStorage.FILE_SYSTEM)) {
+                populateTemplatesFromFileSystem(nameLabels, new File(templateStorage.getPath()), null);
             } else {
-                populateTemplatesFromFTP(nameLabels, templateRepository, null);
+                populateTemplatesFromFTP(nameLabels, templateStorage, null);
             }
         }
         return nameLabels;
     }
 
-    private void populateTemplatesFromFTP(List<NameLabel> nameLabels, TemplateRepository templateRepository, String path) throws IOException {
+    private void populateTemplatesFromFTP(List<NameLabel> nameLabels, TemplateStorage templateStorage, String path) throws IOException {
 
         String filePath = null;
         if (path == null) {
-            path = templateRepository.getRootFolder();
+            path = templateStorage.getRootFolder();
         }
         if (path == null) {
             path = "";
         }
         FTPClient ftpClient = new FTPClient();
-        ftpClient.connect(templateRepository.getHost());
-        ftpClient.login(templateRepository.getUserName(), templateRepository.getPassword());
+        ftpClient.connect(templateStorage.getHost());
+        ftpClient.login(templateStorage.getUserName(), templateStorage.getPassword());
 
         // lists files and directories in the current working directory
         FTPFile[] files = ftpClient.listFiles(path, new FTPFileFilter() {
@@ -84,7 +84,7 @@ public class TemplateRepositoryManager {
         for (FTPFile file : files) {
 
             if (file.isDirectory()) {
-                populateTemplatesFromFTP(nameLabels, templateRepository, path + File.separator + file.getName());
+                populateTemplatesFromFTP(nameLabels, templateStorage, path + File.separator + file.getName());
             } else {
                 filePath = path + File.separator + file.getName();
 

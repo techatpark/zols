@@ -56,7 +56,7 @@ $(function() {
         }
     };
 
-    var URL = 'api/templateRepositories';
+    var URL = 'api/templateStorages';
     var options = {
         url: URL,
         editurl: URL,
@@ -84,11 +84,11 @@ $(function() {
                 editrules: {required: true}
             }
         ],
-        caption: "templateRepositories",
+        caption: "Template Storage",
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
-            window.location = 'templateRepositories/' + id;
+            window.location = 'templateStorages/' + id;
         },
         formatter: {idName: "name"}
     };
@@ -97,9 +97,9 @@ $(function() {
             .jqGrid(options)
             .navGrid('#pager',
                     {search: false, addfunc: function() {
-                            window.location = 'templateRepositories/add';
+                            window.location = 'templateStorages/add';
                         }, editfunc: function(data) {
-                            window.location = 'templateRepositories/' + data;
+                            window.location = 'templateStorages/' + data;
                         }}, //options
             {}, // edit options
                     {}, // add options 

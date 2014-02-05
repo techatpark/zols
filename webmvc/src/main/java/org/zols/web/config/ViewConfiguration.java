@@ -1,7 +1,7 @@
 package org.zols.web.config;
 
 import com.zols.datastore.DataStore;
-import com.zols.templatemanager.domain.TemplateRepository;
+import com.zols.templatemanager.domain.TemplateStorage;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -50,15 +50,15 @@ public class ViewConfiguration {
 //        resolver.setCacheable(false);
 //        return resolver;
 //    }  
-    private void addTemplateRepositories(SpringTemplateEngine templateEngine) {
-        List<TemplateRepository> templateRepositories = dataStore.list(TemplateRepository.class);
-        if (templateRepositories != null) {
-            for (TemplateRepository templateRepository : templateRepositories) {
-                if (templateRepository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
-                    addFileSystemTemplateResolver(templateRepository,templateEngine);
+    private void addtemplateStorages(SpringTemplateEngine templateEngine) {
+        List<TemplateStorage> templateStorages = dataStore.list(TemplateStorage.class);
+        if (templateStorages != null) {
+            for (TemplateStorage templateStorage : templateStorages) {
+                if (templateStorage.getType().equals(TemplateStorage.FILE_SYSTEM)) {
+                    addFileSystemTemplateResolver(templateStorage,templateEngine);
                 }
                 else {
-                    addFTPTemplateResolver(templateRepository,templateEngine);
+                    addFTPTemplateResolver(templateStorage,templateEngine);
                 }
                 
             }
@@ -66,9 +66,9 @@ public class ViewConfiguration {
         }
     }
 
-    private void addFileSystemTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
+    private void addFileSystemTemplateResolver(TemplateStorage templateStorage, SpringTemplateEngine templateEngine) {
         FileTemplateResolver resolver = new FileTemplateResolver();
-        resolver.setPrefix(templateRepository.getPath());
+        resolver.setPrefix(templateStorage.getPath());
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
         resolver.setOrder(templateEngine.getTemplateResolvers().size());
@@ -76,9 +76,9 @@ public class ViewConfiguration {
         templateEngine.addTemplateResolver(resolver);
     }
     
-    private void addFTPTemplateResolver(TemplateRepository templateRepository, SpringTemplateEngine templateEngine) {
+    private void addFTPTemplateResolver(TemplateStorage templateStorage, SpringTemplateEngine templateEngine) {
         UrlTemplateResolver resolver = new UrlTemplateResolver();
-        resolver.setPrefix(templateRepository.getPath());
+        resolver.setPrefix(templateStorage.getPath());
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
         resolver.setOrder(templateEngine.getTemplateResolvers().size());
@@ -107,7 +107,7 @@ public class ViewConfiguration {
         delegateResolver.setMobilePrefix("mobile/");
         delegateResolver.setTabletPrefix("tablet/");
         
-        addTemplateRepositories(resolver.getTemplateEngine());
+        addtemplateStorages(resolver.getTemplateEngine());
 
         return delegateResolver;
     }
