@@ -72,10 +72,13 @@ $(document).ready(function() {
         pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
         method = 'PUT';
     }
+    
+    
 
     $("#my-form").submit(function(e)
     {
         console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+        
         if(method === 'POST') {
             var createPageRequest = new Object();
             createPageRequest.page = $("#my-form").toObject({mode: 'first'});
@@ -89,6 +92,7 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     success: function(data, textStatus, jqXHR)
                     {
+                        listing_pathname = listing_pathname.replace('pages','page/'+data.name);
                         window.location.href = listing_pathname;
 
                     },
