@@ -1,111 +1,130 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this page file, choose Tools | Pages
- * and open the page in the editor.
- */
-$(function() {
+String.prototype.replaceAt = function(i, char) {
+    return this.substr(0, i) + char + this.substr(i);
+};
 
-    $.extend($.jgrid.defaults, {
-        autowidth: true,
-        shrinkToFit: true,
-        datatype: 'json',
-        jsonReader: {
-            repeatitems: false,
-            root: "content",
-            page: function(result) {
-                //Total number of records
-                return result.number + 1;
-            },
-            total: "totalPages",
-            records: "totalElements"
-        },
-        prmNames: {
-            page: "page.page",
-            rows: "page.size",
-            sort: "page.sort",
-            order: "page.sort.dir"
-        },
-        height: 'auto',
-        viewrecords: true,
-        rowList: [10, 20, 50, 100],
-        altRows: true,
-        loadError: function(xhr, status, error) {
+$(document).ready(function() {
 
+    function onRender() {
+
+    }
+
+    if (!$("#name").val()) {
+        $.ajax(
+                {
+                    url: '/zols/api/templates',
+                    type: 'GET',
+                    dataType: "json",
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        $(".wrap").show();
+
+                        var template;
+                        if (data.content) {
+                            for (index in data.content) {
+                                template = data.content[index];
+                                var box = $(".wrap").append('<div class="box"><div class="boxInner"><img src="../../../zols/resources/css/images/icons/entities.svg" alt="' + template.name + '" /><div class="titleBox">' + template.label + '</div></div></div>');
+                            }
+                        }
+                        $(".boxInner img").click(function() {
+                            $("#templateName").val($(this).attr('alt'));
+                            $("#dynamicForm").attr('name', template.dataType);
+                            $("#dynamicForm").makeform(
+                                    "../api/entities/{{name}}",
+                                    "simple",
+                                    "../resources/js/makeform/theme",
+                                    onRender,
+                                    null);
+                            showEdit();
+                        });
+
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        console.log(jqXHR + "===" + textStatus);
+                    }
+                });
+
+
+
+    }
+    else {
+        showEdit();
+    }
+
+    function showEdit() {
+        $(".wrap").hide();
+        $("#my-form").show();
+    }
+
+    var pathname = window.location.pathname;
+    var method = window.location.pathname;
+    var listing_pathname;
+    if (pathname.indexOf("/add") !== -1) {
+        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+        pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+        pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+        method = 'POST';
+    }
+    else {
+        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+        pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+        method = 'PUT';
+    }
+
+    $("#my-form").submit(function(e)
+    {
+        console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+        if(method === 'POST') {
+            var createPageRequest = new Object();
+            createPageRequest.page = $("#my-form").toObject({mode: 'first'});
+            createPageRequest.data = $("#dynamicForm").toObject({mode: 'first'});
+            $.ajax(
+                {
+                    url: pathname,
+                    type: method,
+                    data: JSON.stringify(createPageRequest),
+                    dataType: "json",
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        window.location.href = listing_pathname;
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        console.log(jqXHR + "===" + textStatus);
+                    }
+                });
         }
+        else {
+            $.ajax(
+                {
+                    url: pathname,
+                    type: method,
+                    data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                    dataType: "json",
+                    contentType: 'application/json',
+                    success: function(data, textStatus, jqXHR)
+                    {
+                        window.location.href = listing_pathname;
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown)
+                    {
+                        console.log(jqXHR + "===" + textStatus);
+                    }
+                });
+        }
+        
+        e.preventDefault();	//STOP default action
     });
 
-    $.extend($.jgrid.edit, {
-        closeAfterEdit: true,
-        closeAfterAdd: true,
-        ajaxEditOptions: {contentType: "application/json"},
-        mtype: 'PUT',
-        serializeEditData: function(data) {
-            delete data.oper;
-            return JSON.stringify(data);
-        }
+    $('#cancel').click(function() {
+        window.location.href = listing_pathname;
     });
-    $.extend($.jgrid.del, {
-        mtype: 'DELETE',
-        serializeDelData: function() {
-            return "";
-        }
-    });
-    var delOptions = {
-        onclickSubmit: function(params, postdata) {
-            params.url = URL + '/' + postdata;
-        }
-    };
 
-    var URL = 'api/pages';
-    var options = {
-        url: URL,
-        editurl: URL,
-        colModel: [
-            {
-                name: 'name',
-                label: 'Name',
-                key: true,
-                index: 'name',
-                editable: true,
-                editoptions: {required: true}
-            },
-            {
-                name: 'label',
-                label: 'Label',
-                index: 'label',
-                editable: true,
-                editrules: {required: true}
-            },
-            {
-                name: 'description',
-                label: 'Description',
-                index: 'description',
-                editable: true,
-                editrules: {required: true}
-            }
-        ],
-        caption: "pages",
-        pager: '#pager',
-        height: 'auto',
-        ondblClickRow: function(id) {
-            window.location = 'pages/' + id;
-        },
-        formatter: {idName: "name"}
-    };
 
-    $("#grid")
-            .jqGrid(options)
-            .navGrid('#pager',
-                    {search: false, addfunc: function() {
-                            window.location = 'pages/add';
-                        }, editfunc: function(data) {
-                            window.location = 'pages/' + data;
-                        }}, //options
-            {}, // edit options
-                    {}, // add options 
-                    delOptions,
-                    {} // search options
-            );
+
 });
-
-

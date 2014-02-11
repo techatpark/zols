@@ -7,6 +7,7 @@ package org.zols.datastore.web.controller;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.templatemanager.PageManager;
+import com.zols.templatemanager.domain.CreatePageRequest;
 import com.zols.templatemanager.domain.Page;
 import com.zols.templatemanager.domain.PageDetail;
 import org.slf4j.Logger;
@@ -43,9 +44,9 @@ public class PageController {
     @ApiIgnore
     @RequestMapping(value = "/api/pages", method = POST)
     @ResponseBody
-    public Page create(@RequestBody Page page) {
-        LOGGER.info("Creating new pages {}", page);
-        return pageManager.add(page);
+    public Page create(@RequestBody CreatePageRequest createPageRequest) {
+        LOGGER.info("Creating new pages {}", createPageRequest);
+        return pageManager.add(createPageRequest);
     }
 
     @RequestMapping(value = "/api/pages/{name}", method = PUT)

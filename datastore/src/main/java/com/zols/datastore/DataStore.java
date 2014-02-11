@@ -1,8 +1,12 @@
 package com.zols.datastore;
 
+import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Criteria;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -61,8 +65,6 @@ public abstract class DataStore {
      * @param clazz Class of the Object to be delete
      * @return Deleted Object
      */
-    
-    
     public abstract <T> T delete(String name, Class<T> clazz);
 
     /**
@@ -109,10 +111,13 @@ public abstract class DataStore {
      * @return List Object
      */
     public abstract <T> List<T> list(List<Criteria> criterias, Class<T> aClass);
-    
-    /**
-     * 
-     */
 
+    public BaseObject getBaseObject(Class<? extends BaseObject> clazz,
+            String entityName, HashMap<String, String> contactMap) {
+        BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
+        for (Map.Entry<String, String> entry : contactMap.entrySet()) {
+            beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
+        }
+        return (BaseObject) beanWrapper.getWrappedInstance();
+    }
 }
-

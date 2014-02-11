@@ -5,6 +5,7 @@
 package com.zols.datastore.mongo;
 
 import com.zols.datastore.DataStore;
+import com.zols.datastore.domain.BaseObject;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import org.springframework.beans.BeanWrapper;
@@ -19,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import static com.zols.datastore.domain.Criteria.Type.*;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.query.Update;
@@ -137,7 +139,7 @@ public class MongoDataStore extends DataStore {
     @Override
     public <T> List<T> list(List<com.zols.datastore.domain.Criteria> criterias, Class<T> aClass) {
         return (List<T>) mongoOperation.find(getQuery(criterias), aClass);
-    }
+    }    
 
     private Query getQuery(List<com.zols.datastore.domain.Criteria> criterias) {
         Query query = new Query();
@@ -207,5 +209,7 @@ public class MongoDataStore extends DataStore {
         }
         return null;
     }
+    
+    
 
 }

@@ -3,12 +3,16 @@ String.prototype.replaceAt = function(i, char) {
 };
 
 $(document).ready(function() {
+    
+
 
     if (!$("#type").val()) {
+        $(".wrap").show();
         $(".boxInner img").click(function() {
             $("#type").val($(this).attr('alt'));
             showEdit();
         });
+        
     }
     else {
         showEdit();

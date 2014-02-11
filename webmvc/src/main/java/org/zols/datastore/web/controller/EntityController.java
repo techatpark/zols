@@ -160,7 +160,7 @@ public class EntityController {
     @ResponseBody
     public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
-        return dataStore.create(getBaseObject(clazz, entityName, entityObjectMap), clazz);
+        return dataStore.create(dataStore.getBaseObject(clazz, entityName, entityObjectMap), clazz);
     }
 
     @RequestMapping(value = "/api/data/{entityName}/{name}", method = PUT)
@@ -169,7 +169,7 @@ public class EntityController {
     public void update(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name,
             @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
-        BaseObject baseObject = getBaseObject(clazz, entityName, entityObjectMap);
+        BaseObject baseObject = dataStore.getBaseObject(clazz, entityName, entityObjectMap);
         if (name.equals(baseObject.getName())) {
             dataStore.update(baseObject, clazz);
         }
@@ -192,13 +192,6 @@ public class EntityController {
         return (Page<BaseObject>) dataStore.list(page, clazz);
     }
 
-    private BaseObject getBaseObject(Class<? extends BaseObject> clazz,
-            String entityName, HashMap<String, String> contactMap) {
-        BeanWrapper beanWrapper = new BeanWrapperImpl(clazz);
-        for (Map.Entry<String, String> entry : contactMap.entrySet()) {
-            beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
-        }
-        return (BaseObject) beanWrapper.getWrappedInstance();
-    }
+    
 
 }
