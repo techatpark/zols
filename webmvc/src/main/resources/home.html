@@ -36,16 +36,22 @@
             </nav>
         </header>
         <section>
-           
+
             <div class="content contentpos" th:include="${viewName}::content" >
 
             </div>
-            
+
         </section>
         <footer class="footer">
 
-                <div id="copyrights">&#169; Copyright - All rights reserved.</div>
-                <div class="user userpos"><a href="#"> About Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">Contact Us</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#">Privacy Policy</a></div>
+            <div id="copyrights">&#169; Copyright - All rights reserved.</div>
+            <div class="user userpos">
+                <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'footer'">
+                    <li th:each="link : ${linkentry.value}">
+                        <a href="#" th:text="${link.label}">Menu1</a>
+                    </li>
+                </ul>                 
+            </div>
 
         </footer>
     </body>

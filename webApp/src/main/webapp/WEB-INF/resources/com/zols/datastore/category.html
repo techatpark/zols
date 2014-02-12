@@ -11,9 +11,6 @@
     <body th:fragment="content">
         <form id="my-form" th:object="${category}">
             <ul>
-                <li>                    
-                    <span class="required_notification">* Denotes Required Field</span>
-                </li>
                 <li>
                     <label for="name">Name:</label>
                     <input id="name" name="name" type="text" th:field="*{name}" required=""/>
