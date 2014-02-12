@@ -19,6 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
+                .loginPage("/login")
                 .defaultSuccessUrl("/controlpanel");
         // TODO: Remove this Later. CSRF Protection is must for Production Code
         http.csrf().disable();
