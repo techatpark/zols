@@ -26,7 +26,7 @@ public class CoreController {
 
     @Autowired
     private DataStore dataStore;
-    
+
     @Autowired
     private TemplateStorageManager templateStorageManager;
 
@@ -46,19 +46,20 @@ public class CoreController {
                 masterList = new ArrayList(5);
             }
             Entity entity = null;
-            entity = new Entity();
-            entity.setName("String");
-            entity.setLabel("String");
-            masterList.add(0, entity);
-
-            entity = new Entity();
-            entity.setName("Integer");
-            entity.setLabel("Integer");
-            masterList.add(0, entity);
 
             entity = new Entity();
             entity.setName("Double");
             entity.setLabel("Double");
+            masterList.add(0, entity);
+
+            entity = new Entity();
+            entity.setName("Date");
+            entity.setLabel("Date");
+            masterList.add(0, entity);
+
+            entity = new Entity();
+            entity.setName("RichText");
+            entity.setLabel("Rich Text");
             masterList.add(0, entity);
 
             entity = new Entity();
@@ -67,36 +68,33 @@ public class CoreController {
             masterList.add(0, entity);
 
             entity = new Entity();
-            entity.setName("Date");
-            entity.setLabel("Date");
+            entity.setName("Integer");
+            entity.setLabel("Integer");
             masterList.add(0, entity);
-            
+
             entity = new Entity();
-            entity.setName("RichText");
-            entity.setLabel("RichText");
+            entity.setName("String");
+            entity.setLabel("String");
             masterList.add(0, entity);
-        }
-        else if(name.equals("template")) {
+        } else if (name.equals("template")) {
             masterList = dataStore.list(Template.class);
-        }
-        else if(name.equals("templatePath")) {
+        } else if (name.equals("templatePath")) {
             masterList = templateStorageManager.templatePaths();
-        }
-        else if(name.equals("templateStorageType")) {
+        } else if (name.equals("templateStorageType")) {
             masterList = new ArrayList(2);
-            
-            NameLabel nameLabel = null ;
-            
+
+            NameLabel nameLabel = null;
+
             nameLabel = new NameLabel();
             nameLabel.setName(TemplateStorage.FILE_SYSTEM);
             nameLabel.setLabel("File System");
             masterList.add(nameLabel);
-            
+
             nameLabel = new NameLabel();
             nameLabel.setName(TemplateStorage.FTP);
             nameLabel.setLabel("FTP");
             masterList.add(nameLabel);
-            
+
         }
         return masterList;
     }

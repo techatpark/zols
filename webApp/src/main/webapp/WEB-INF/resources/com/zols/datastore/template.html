@@ -10,34 +10,36 @@
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${template}">
+            <fieldset>
+                <legend>Template</legend>
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                    </li>
+                    <li>
+                        <label for="label">Label</label>
+                        <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                    </li>
+                    <li>
+                        <label for="dataType">Data Type</label>
+                        <select id="dataType" name="dataType" th:field="*{dataType}" th:value="*{dataType}" data-master="attributeType"/>                    
+                    </li>
+                    <li>
+                        <label for="path">Path</label>
+                        <select id="path" name="path" th:field="*{path}" th:value="*{path}" data-master="templatePath"/>                    
+                    </li>
+                    <li>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                    </li>
 
-            <ul>
-                <li>
-                    <label for="name">Name:</label>
-                    <input id="name" name="name" type="text" th:field="*{name}" required=""/>
-                </li>
-                <li>
-                    <label for="label">Label</label>
-                    <input id="label" name="label" type="text" th:field="*{label}" required=""/>
-                </li>
-                <li>
-                    <label for="dataType">Data Type</label>
-                    <select id="dataType" name="dataType" th:field="*{dataType}" th:value="*{dataType}" data-master="attributeType"/>                    
-                </li>
-                <li>
-                    <label for="path">Path</label>
-                    <select id="path" name="path" th:field="*{path}" th:value="*{path}" data-master="templatePath"/>                    
-                </li>
-                <li>
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
-                </li>
-
-                <li>
-                    <button id="submit" type="submit">Submit</button>
-                    <button id="cancel" type="button">Cancel</button>
-                </li>
-            </ul>
+                    <li>
+                        <button id="submit" type="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+                </ul>
+            </fieldset>
         </form>
 
 

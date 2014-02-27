@@ -2,6 +2,7 @@ package org.zols.web.config;
 
 import com.zols.datastore.DataStore;
 import com.zols.templatemanager.domain.TemplateStorage;
+import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -68,7 +69,7 @@ public class ViewConfiguration {
 
     private void addFileSystemTemplateResolver(TemplateStorage templateStorage, SpringTemplateEngine templateEngine) {
         FileTemplateResolver resolver = new FileTemplateResolver();
-        resolver.setPrefix(templateStorage.getPath());
+        resolver.setPrefix(new File(templateStorage.getPath()).getPath()+File.separator);
         resolver.setSuffix(".html");
         resolver.setTemplateMode("HTML5");
         resolver.setOrder(templateEngine.getTemplateResolvers().size());

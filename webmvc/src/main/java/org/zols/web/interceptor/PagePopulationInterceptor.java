@@ -26,7 +26,7 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
         if (modelAndView != null) {            
             modelAndView.addObject("links", linkManager.getApplicationLinks());
             modelAndView.addObject("viewName",modelAndView.getViewName());
-            modelAndView.setViewName("home");
+            modelAndView.setViewName("index");
         }
     }
 }
