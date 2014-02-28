@@ -1,0 +1,1 @@
+<select type="text" name="{{name}}" {{#if value }}   value="{{value}}"   {{/if}} data-master="{{master}}"/>                    

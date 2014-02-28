@@ -3,7 +3,7 @@
     var formDiv;
 
     $.fn.dropdownFiller = function() {
-        formDiv = this;        
+        formDiv = this;
         $('select').each(function(index, value) {
             if ($(this).is(':empty')) {
                 var masterName = $(this).attr('data-master');
@@ -24,14 +24,29 @@
                 $.each(result, function() {
                     selectBox.append($("<option />").val(this.name).text(this.label));
                 });
-                if(selectBox.attr('value')){
+                if (selectBox.attr('value')) {
                     selectBox.val(selectBox.attr('value'));
                 }
-                
             }
         });
 
-
+        // Load From Data Store
+        if (selectBox.is(':empty')) {
+            $.ajax({
+                url: '/zols/api/data/' + selectBox.attr('data-master'),
+                success: function(result) {
+                    $.each(result.content, function() {
+                        selectBox.append($("<option />").val(this.name).text(this.name));
+                    });
+                    if (selectBox.attr('value')) {
+                        selectBox.val(selectBox.attr('value'));
+                    }
+                },
+                error: function(error) {
+                    alert('error');
+                }
+            });
+        }
 
     };
 

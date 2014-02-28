@@ -47,7 +47,9 @@ public class DynamicBeanGenerator {
 
     private void getProperties(BeanGenerator beanGenerator, final Entity entity) {
         for (Attribute attribute : entity.getAttributes()) {
-            if (attribute.getType().equals("Integer")) {
+            if (attribute.getType().equals("String")) {
+                beanGenerator.addProperty(attribute.getName(), String.class);
+            } else if (attribute.getType().equals("Integer")) {
                 beanGenerator.addProperty(attribute.getName(), Integer.class);
             } else if (attribute.getType().equals("Double")) {
                 beanGenerator.addProperty(attribute.getName(), Double.class);
@@ -55,25 +57,32 @@ public class DynamicBeanGenerator {
                 beanGenerator.addProperty(attribute.getName(), Float.class);
             } else if (attribute.getType().equals("Date")) {
                 beanGenerator.addProperty(attribute.getName(), Date.class);
-            } else {
+            } else if (attribute.getType().equals("RichText")) {
                 beanGenerator.addProperty(attribute.getName(), String.class);
+            } else {
+                if (attribute.isIsReference()) {
+                    beanGenerator.addProperty(attribute.getName(), String.class);
+                } else {
+                    beanGenerator.addProperty(attribute.getName(), getBeanClass(attribute.getType()));
+                }
+
             }
         }
     }
 
     private static final class NamingPolicy implements net.sf.cglib.core.NamingPolicy {
-        
+
         private final String className;
 
         public NamingPolicy(String className) {
-            this.className = className ;
-        }       
+            this.className = className;
+        }
 
         @Override
         public String getClassName(String prefix,
-                                     String source,
-                                     Object key,
-                                     Predicate names) {
+                String source,
+                Object key,
+                Predicate names) {
             return className;
         }
     }
