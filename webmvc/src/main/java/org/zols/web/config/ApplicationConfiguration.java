@@ -2,6 +2,8 @@ package org.zols.web.config;
 
 import java.nio.charset.Charset;
 import java.util.List;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.SerializationConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -79,13 +81,15 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public JacksonObjectMapper jacksonObjectMapper() {
-        return new JacksonObjectMapper();
+        JacksonObjectMapper jacksonObjectMapper = new JacksonObjectMapper();
+        jacksonObjectMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        return jacksonObjectMapper;
     }
 
     @Bean
     public MappingJacksonHttpMessageConverter jsonHttpMessageConverter() {
         MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
-        converter.setObjectMapper(jacksonObjectMapper());
+        converter.setObjectMapper(jacksonObjectMapper());        
         return converter;
     }
 

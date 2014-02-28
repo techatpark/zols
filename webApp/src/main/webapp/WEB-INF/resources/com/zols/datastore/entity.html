@@ -25,20 +25,35 @@
                                         <section th:each="attributes, stat : *{attributes}" th:name="'attributes[' + ${stat.index} +']'">
                                             <fieldset>
                                                 <legend th:text="'Attribute(' + ${stat.index} +')'">Attributes</legend>
-                                            <ul>
-                                                <li><label>Name</label><input th:name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/></li>
-                                                <li><label>Label</label><input th:name="attributes[0].label" type="text" th:field="*{attributes[__${stat.index}__].label}"/></li>
-                                                <li><label>Type</label><select th:name="attributes[0].type" th:field="*{attributes[__${stat.index}__].type}" th:value="*{attributes[__${stat.index}__].type}" data-master="attributeType"/></li>
-                                                <li><label>Description</label><input th:name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/></li>
-                                                <li><button type="button" data-group="attributes">Remove Attribute</button></li>
-                                            </ul>
+                                                <ul>
+                                                    <li>
+                                                        <label>Name</label><input th:name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Label</label><input th:name="attributes[0].label" type="text" th:field="*{attributes[__${stat.index}__].label}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Type</label><select th:name="attributes[0].type" th:field="*{attributes[__${stat.index}__].type}" th:value="*{attributes[__${stat.index}__].type}" data-master="attributeType"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Description</label><input th:name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Reference</label>
+                                                        <input type="checkbox" th:name="attributes[0].isReference"  th:field="*{attributes[__${stat.index}__].isReference}" />
+                                                    </li>
+
+                                                    <li>
+                                                        <button type="button" data-group="attributes">Remove Attribute</button>
+                                                    </li>
+                                                </ul>
                                             </fieldset>
-                                            
+
                                         </section>
                                     </li>
                                 </ul>
                             </fieldset>
-                            
+
                         </section>
                     </li>    
 
@@ -94,7 +109,7 @@
                         });
                     });
                     $("#my-form").dropdownFiller();
-                    
+
                 });
 
                 $("#my-form").submit(function(e)
@@ -125,7 +140,7 @@
                 $('#cancel').click(function() {
                     window.location.href = listing_pathname;
                 });
-                
+
                 $("#my-form").dropdownFiller();
 
             });
@@ -168,7 +183,7 @@
                     doRemoveAction(this);
                 });
             });
-            
+
         </script>
         <script id="attribute" type="text/x-handlebars-template">
             <section name="attributes[{{index}}]">

@@ -6,6 +6,7 @@ public class Attribute {
     private String label;
     private String description;
     private String type;
+    private boolean isReference;
     private boolean isArray;
     private boolean isUnique;
     private boolean isLocaleSpecific;
@@ -74,5 +75,15 @@ public class Attribute {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public boolean isIsReference() {
+        return isReference;
+    }
+
+    public void setIsReference(boolean isReference) {
+        this.isReference = isReference;
+    }
+    
+    
 
 }
