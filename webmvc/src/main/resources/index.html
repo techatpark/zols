@@ -17,12 +17,14 @@
         <header class="header" >
             <div id="headerbg">
                 <div id="logo"></div>
+                <!--/*/
                 <div th:fragment="logout" sec:authorize="isAuthenticated()" class="user">
                     Welcome to <span sec:authentication="name">Username</span>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/controlpanel}"> Control Panel</a>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/logout}">Logout</a>
                 </div>   
+                /*/-->
                 <div th:fragment="logout" sec:authorize="!isAuthenticated()" class="user">                    
                     <a th:href="@{/login}">Login</a>
                 </div> 
@@ -30,7 +32,10 @@
             <nav>      
                 <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
                     <li th:each="link : ${linkentry.value}">
-                        <a href="#" th:text="${link.label}">Menu1</a>
+                        <a th:href="${link.targetUrl}" th:text="${link.label}" >Menu1</a>
+                        <!--/*-->
+                        <a href="#">Menu2</a>
+                        <!--*/-->
                     </li>
                 </ul>                                
             </nav>

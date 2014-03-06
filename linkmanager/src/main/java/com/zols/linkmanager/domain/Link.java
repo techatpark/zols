@@ -30,6 +30,11 @@ public class Link {
      * Parent name of the link.
      */
     private String parentLinkName;
+    
+    /**
+     * Target Url.
+     */
+    private String targetUrl;
 
     /**
      * children of the link.
@@ -87,5 +92,15 @@ public class Link {
     public void setLabel(String label) {
         this.label = label;
     }
+
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public void setTargetUrl(String targetUrl) {
+        this.targetUrl = targetUrl;
+    }
+    
+    
 
 }

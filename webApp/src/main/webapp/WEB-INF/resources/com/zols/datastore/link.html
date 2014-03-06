@@ -11,10 +11,7 @@
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${link}">
-
-
             <ul>
-
                 <li>
                     <label for="name">Name:</label>
                     <input id="name" name="name" type="text" th:field="*{name}" required=""/>
@@ -22,6 +19,10 @@
                 <li>
                     <label for="label">Label</label>
                     <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                </li>
+                <li>
+                    <label for="targetUrl">Url</label>
+                    <input id="targetUrl" name="targetUrl" type="text" th:field="*{targetUrl}" required=""/>
                 </li>
                 <li>
                     <label for="description">Description</label>
