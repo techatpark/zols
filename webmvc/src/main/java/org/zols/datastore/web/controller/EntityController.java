@@ -187,9 +187,8 @@ public class EntityController {
     @ApiIgnore
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
-            Pageable page) {
-        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
-        return (Page<BaseObject>) dataStore.list(page, clazz);
+            Pageable page) {        
+        return dataStore.list(entityName, page);
     }
 
     

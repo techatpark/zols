@@ -2,11 +2,13 @@ package com.zols.datastore;
 
 import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Criteria;
+import com.zols.datastore.util.DynamicBeanGenerator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -16,6 +18,9 @@ import org.springframework.data.domain.Pageable;
  * @author Sathish Kumar Thiyagarajan
  */
 public abstract class DataStore {
+
+    @Autowired
+    private DynamicBeanGenerator dynamicBeanGenerator;
 
     /**
      * Creates a new object
@@ -119,5 +124,11 @@ public abstract class DataStore {
             beanWrapper.setPropertyValue(entry.getKey(), entry.getValue());
         }
         return (BaseObject) beanWrapper.getWrappedInstance();
+    }
+
+    public Page<BaseObject> list(String entityName,
+            Pageable page) {
+        Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
+        return (Page<BaseObject>) list(page, clazz);
     }
 }
