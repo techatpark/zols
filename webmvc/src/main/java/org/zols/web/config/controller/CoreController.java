@@ -59,6 +59,11 @@ public class CoreController {
             entity.setName("Double");
             entity.setLabel("Double");
             masterList.add(0, entity);
+            
+            entity = new Entity();
+            entity.setName("Time");
+            entity.setLabel("Time");
+            masterList.add(0, entity);
 
             entity = new Entity();
             entity.setName("Date");

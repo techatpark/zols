@@ -57,6 +57,8 @@ public class DynamicBeanGenerator {
                 beanGenerator.addProperty(attribute.getName(), Float.class);
             } else if (attribute.getType().equals("Date")) {
                 beanGenerator.addProperty(attribute.getName(), Date.class);
+            } else if (attribute.getType().equals("Time")) {
+                beanGenerator.addProperty(attribute.getName(), String.class);
             } else if (attribute.getType().equals("RichText")) {
                 beanGenerator.addProperty(attribute.getName(), String.class);
             } else {

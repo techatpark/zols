@@ -1,2 +1,2 @@
-<input type="date" name={{name}} />
+<input type="date" name={{name}} {{#if value }}   value="{{value}}"   {{/if}} />
 

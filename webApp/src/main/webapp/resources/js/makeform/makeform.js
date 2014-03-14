@@ -77,8 +77,8 @@
                             if (formDiv.dataObj) {
                                 attribute.value = formDiv.dataObj[attribute.name];
 
-                                var x = attribute.value.replace(" ", '-');
-                                console.log("valueew is::" + x);
+//                                var x = attribute.value.replace(" ", '-');
+//                                console.log("valueew is::" + x);
                             }
                             control = formDiv.getControl(attribute);
                             if (control) {
