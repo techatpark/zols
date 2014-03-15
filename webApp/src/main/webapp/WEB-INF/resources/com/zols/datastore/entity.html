@@ -194,6 +194,7 @@
             <li><label>Label</label><input name="attributes[{{index}}].label" type="text" /></li>
             <li><label>Type</label><select name="attributes[{{index}}].type" data-master="attributeType"/></li>
             <li><label>Description</label><input name="attributes[{{index}}].description" type="text"/></li>
+            <li><label>Reference</label><input type="checkbox" name="attributes[{{index}}].isReference"/><input type="hidden" name="_attributes[{{index}}].isReference" value="true"/></li>
             <li><button type="button" data-group="attributes">Remove Attribute</button></li>
             </ul>
             </fieldset>
