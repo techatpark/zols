@@ -74,6 +74,11 @@ public class CoreController {
             entity.setName("RichText");
             entity.setLabel("Rich Text");
             masterList.add(0, entity);
+            
+            entity = new Entity();
+            entity.setName("Boolean");
+            entity.setLabel("Boolean");
+            masterList.add(0, entity);
 
             entity = new Entity();
             entity.setName("Float");
