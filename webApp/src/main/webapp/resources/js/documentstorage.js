@@ -5,6 +5,29 @@
  */
 var URL = 'api/documentstorages';
 $(function() {
+    if (!$("#type").val()) {
+        $(".wrap").show();
+        $(".boxInner img").click(function() {
+            $("#type").val($(this).attr('alt'));
+            showEdit();
+        });
+
+    }
+    else {
+        showEdit();
+    }
+
+    function showEdit() {
+        $(".wrap").hide();
+        if ($("#type").val() !== 'ftp') {
+            $("#label").parent().hide();
+
+            $("#description").parent().hide();
+        }
+
+        $("#my-form").show();
+    }
+
 
     $.extend($.jgrid.defaults, {
         autowidth: true,
@@ -85,7 +108,7 @@ $(function() {
                 editrules: {required: true}
             }
         ],
-        caption: "locale",
+        caption: "DocumentStorage",
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {

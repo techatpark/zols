@@ -9,78 +9,103 @@
 
     </head>
     <body th:fragment="content">
-        <form id="my-form" th:object="${documentstorage}">
 
-            <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
-            <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
-            <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
-            <div>
-                <button id="submit">Submit</button>
-                <button id="cancel" type="button">Cancel</button>
+        <div class="wrap"  style="display: none">
+            <!-- Define all of the tiles: -->
+            <div class="box">
+                <div class="boxInner">
+                    <img th:src="@{/resources/css/images/icons/entities.svg}" src="../../../webapp/resources/css/images/icons/entities.svg" alt="file" />
+                    <div class="titleBox">File System</div>
+                </div>
             </div>
-        </form>
+            <div class="box">
+                <div class="boxInner">
+                    <img th:src="@{/resources/css/images/icons/template.svg}" src="../../../webapp/resources/css/images/icons/template.svg" alt="ftp" />
+                    <div class="titleBox">FTP System</div>
+                </div>
+            </div>
+        </div>
+            <form id="my-form" th:object="${documentstorage}" style="display: none">
+                <fieldset><legend>Document Storage</legend>            
+                    <ul>
+                         <li style="display: none">
+                    <label>Type</label>
+                    <input id="type" name="type" type="text" th:field="*{type}"/>
+                </li>
+                        <li> <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></li>
+                        <li><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></li>
+                        <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
+                        <li>
+                            <button id="submit">Submit</button>
+                            <button id="cancel" type="button">Cancel</button>
+                        </li>
+                    </ul>
+                </fieldset>
+            </form>
 
 
-        <script src="../../../../webApp/src/main/webapp/resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
-        <script src="../../../../webApp/src/main/webapp/resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
-        <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
-        <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
-        <script src="../../../../webApp/src/main/webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
-        <script type="text/javascript">
+            <script src="../../../../webApp/src/main/webapp/resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
+            <script src="../../../../webApp/src/main/webapp/resources/js/documentStorage.js" th:src="@{/resources/js/documentStorage.js}"></script>
+            <script type="text/javascript">
 
 
-            String.prototype.replaceAt = function(i, char) {
-                return this.substr(0, i) + char + this.substr(i);
-            };
+                String.prototype.replaceAt = function(i, char) {
+                    return this.substr(0, i) + char + this.substr(i);
+                };
 
 
-            $(document).ready(function() {
+                $(document).ready(function() {
 
-                var pathname = window.location.pathname;
-                var method = window.location.pathname;
-                var listing_pathname;
-                if (pathname.indexOf("/add") !== -1) {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
-                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
-                    pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
-                    method = 'POST';
-                }
-                else {
-                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+                    var pathname = window.location.pathname;
+                    var method = window.location.pathname;
+                    var listing_pathname;
+                    if (pathname.indexOf("/add") !== -1) {
+                        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                        pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                        pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+                        method = 'POST';
+                    }
+                    else {
+                        listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
 
-                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
-                    method = 'PUT';
-                }
+                        pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+                        method = 'PUT';
+                    }
 
-                $("#my-form").submit(function(e)
-                {
-                    console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
-                    $.ajax(
-                            {
-                                url: pathname,
-                                type: method,
-                                data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
-                                dataType: "json",
-                                contentType: 'application/json',
-                                success: function(data, textStatus, jqXHR)
+                    $("#my-form").submit(function(e)
+                    {
+                        console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+                        $.ajax(
                                 {
-                                    window.location.href = listing_pathname;
+                                    url: pathname,
+                                    type: method,
+                                    data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                                    dataType: "json",
+                                    contentType: 'application/json',
+                                    success: function(data, textStatus, jqXHR)
+                                    {
+                                        window.location.href = listing_pathname;
 
-                                },
-                                error: function(jqXHR, textStatus, errorThrown)
-                                {
-                                    console.log(jqXHR + "===" + textStatus);
-                                }
-                            });
-                    e.preventDefault();	//STOP default action
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown)
+                                    {
+                                        console.log(jqXHR + "===" + textStatus);
+                                    }
+                                });
+                        e.preventDefault();	//STOP default action
+                    });
+
+                    $('#cancel').click(function() {
+                        window.location.href = listing_pathname;
+                    });
+
                 });
-
-                $('#cancel').click(function() {
-                    window.location.href = listing_pathname;
-                });
-
-            });
-        </script>
+            </script>
 
 
     </body>
