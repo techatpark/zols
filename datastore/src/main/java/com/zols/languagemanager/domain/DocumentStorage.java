@@ -8,15 +8,20 @@ package com.zols.languagemanager.domain;
 import org.springframework.data.annotation.Id;
 
 /**
- *
- * @author Navin.
+ *Describes the attributes that should be inncluded in document storage
+ * @author Praveen pvn.
  */
 public class DocumentStorage {
-
+/**
+ * describes where the attributes to be stored 
+ * 
+ */
    public static final String FILE_SYSTEM = "file";
     public static final String FTP = "ftp";
     public static final String CLASSPATH = "classpath";
-
+/**
+ * attirbutes of the document storage usecase
+ */
     @Id
     private String name;
     private String description;
@@ -31,19 +36,31 @@ public class DocumentStorage {
     private String rootFolder;
     
     
-    
+/**
+ * get the label to the attribute 
+ * @return 
+ */
      public String getLabel() {
         return label;
     }
-
+/**
+ * set label attribute
+ * @param label 
+ */
     public void setLabel(String label) {
         this.label = label;
     }
-
+/***
+ * get the host name
+ * @return host
+ */
     public String getHost() {
         return host;
     }
-
+/**
+ * set host name
+ * @param host set host name as the user's current host
+ */
     public void setHost(String host) {
         this.host = host;
     }
@@ -52,11 +69,17 @@ public class DocumentStorage {
 
     
     
-    
+/**
+ * get the user name given by user
+ * @return 
+ */
     public String getUserName() {
         return userName;
     }
-
+/**
+ * set user name given by user
+ * @param userName 
+ */
     public void setUserName(String userName) {
         this.userName = userName;
     }
@@ -76,11 +99,17 @@ public class DocumentStorage {
     public void setRootFolder(String rootFolder) {
         this.rootFolder = rootFolder;
     }
-
+/**
+ * get path 
+ * @return 
+ */
     public String getPath() {
         return path;
     }
-
+/**
+ * set path where to be stored
+ * @param path 
+ */
     public void setPath(String path) {
         this.path = path;
     }
