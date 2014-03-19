@@ -116,6 +116,9 @@ public class CoreController {
         } else {
             Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(name);
             masterList = dataStore.list(clazz);
+            for (Object object : masterList) {
+                
+            }
         }
         return masterList;
     }

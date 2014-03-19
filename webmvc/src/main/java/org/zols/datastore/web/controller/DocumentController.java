@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,8 +16,8 @@ import org.zols.datastore.domain.Document;
 public class DocumentController {
 
 	
-	@RequestMapping(value = "/documents", method = RequestMethod.GET)
-	public String displayForm() {
+	@RequestMapping(value = "/documents/{{name}}", method = RequestMethod.GET)
+	public String documents(@PathVariable(value = "name") String name) {
 		return "com/zols/datastore/document";
 	}
 	

@@ -21,11 +21,24 @@ public class DocumentStorage {
     private String name;
     private String description;
     private String type;
+    private String label;
+
+   
     private String path;
     private String host;
     private String userName;
     private String password;
     private String rootFolder;
+    
+    
+    
+     public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
 
     public String getHost() {
         return host;
