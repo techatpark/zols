@@ -4,8 +4,8 @@
  */
 package com.zols.datastore.mongo;
 
+import com.mongodb.MongoException;
 import com.zols.datastore.DataStore;
-import com.zols.datastore.domain.BaseObject;
 import java.beans.PropertyDescriptor;
 import java.util.List;
 import org.springframework.beans.BeanWrapper;
@@ -19,9 +19,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import static com.zols.datastore.domain.Criteria.Type.*;
+import com.zols.datastore.exception.DataStoreException;
 import java.lang.reflect.Field;
-import java.util.HashMap;
+
 import java.util.Map;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.query.Update;
 
@@ -33,8 +35,13 @@ public class MongoDataStore extends DataStore {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T create(Object object, Class<T> clazz) {
-        mongoOperation.insert(object);
+    public <T> T create(Object object, Class<T> clazz) {  
+        try {
+            mongoOperation.insert(object);
+        }
+        catch(DuplicateKeyException duplicateKeyException) {
+            throw new DataStoreException(duplicateKeyException.getMessage(),duplicateKeyException);
+        }        
         return (T) object;
     }
 

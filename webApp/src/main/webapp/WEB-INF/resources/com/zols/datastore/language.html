@@ -10,14 +10,18 @@
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${language}">
-
-            <label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/>
-            <label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/>
-            <label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/>
-            <div>
-                <button id="submit">Submit</button>
-                <button id="cancel" type="button">Cancel</button>
-            </div>
+            <fieldset>
+                <legend>Language</legend>
+                <ul>
+                    <li><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></li>
+                    <li><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></li>
+                    <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
+                    <li>
+                        <button id="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+                </ul>
+            </fieldset>
         </form>
 
 

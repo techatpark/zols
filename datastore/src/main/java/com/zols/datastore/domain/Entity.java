@@ -24,80 +24,95 @@ public class Entity {
     private Date createdDate;
 
     private List<Attribute> attributes;
-    
 
- /**
-  * get the list of attributes
-  * @return The attributes
-  */
+    /**
+     * gets the list of attributes
+     * @return The attributes
+     */
     public List<Attribute> getAttributes() {
         return attributes;
     }
-/**
- * set name to the attributes
- * @param attributes The attributes to be got
- */
+
+    /**
+     * sets name to the attributes
+     * @param attributes The attributes to be got
+     */
     public void setAttributes(List<Attribute> attributes) {
         this.attributes = attributes;
     }
-/**
- * get the name of the entity
- * @return the name
- */
+
+    /**
+     * get the name of the entity
+     *
+     * @return the name
+     */
     public String getName() {
         return name;
     }
-/**
- * sets entity name
- * @param name name of the entity
- */
+
+    /**
+     * sets entity name
+     *
+     * @param name name of the entity
+     */
     public void setName(String name) {
         this.name = name;
     }
-/** 
- * gets description about entity
- * @return  description of the entity
- */
+
+    /**
+     * gets description about entity
+     *
+     * @return description of the entity
+     */
 
     public String getDescription() {
         return description;
     }
-/**
- * @param description description to be got 
- */
+
+    /**
+     * @param description description to be got
+     */
     public void setDescription(String description) {
         this.description = description;
     }
-/**
- * get label for the entity
- * @return label
- */
+
+    /**
+     * get label for the entity
+     *
+     * @return label
+     */
     public String getLabel() {
         return label;
     }
-/**
- * set the label
- * @param label 
- */
+
+    /**
+     * set the label
+     *
+     * @param label
+     */
     public void setLabel(String label) {
         this.label = label;
     }
-/**
- * get the date when this entity created
- * @return the date if user specified otherwise null
- */
+
+    /**
+     * get the date when this entity created
+     *
+     * @return the date if user specified otherwise null
+     */
     public Date getCreatedDate() {
-    	if (createdDate != null)
-    		return (Date)(createdDate.clone());
-    	else 
-    		return null;
+        if (createdDate != null) {
+            return (Date) (createdDate.clone());
+        } else {
+            return null;
+        }
     }
-/**
- * 
- * @param createdDate set the date to the database
- */
+
+    /**
+     *
+     * @param createdDate set the date to the database
+     */
     public void setCreatedDate(Date createdDate) {
-        this.createdDate =  (Date)(createdDate.clone());
+        this.createdDate = (Date) (createdDate.clone());
     }
 
 }

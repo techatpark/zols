@@ -4,13 +4,12 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.datastore.DataStore;
 import com.zols.datastore.domain.BaseObject;
 import com.zols.datastore.domain.Entity;
+import com.zols.datastore.exception.DataStoreException;
 import com.zols.datastore.util.DynamicBeanGenerator;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,6 +63,8 @@ public class EntityController {
         LOGGER.info("Updating entity with id {} with {}", name, entity);
         if (name.equals(entity.getName())) {
             dataStore.update(entity, Entity.class);
+        } else {
+            throw new DataStoreException("Invalid Record");
         }
     }
 
@@ -144,7 +145,7 @@ public class EntityController {
         model.addAttribute("dataName", dataName);
         return "com/zols/datastore/data";
     }
-    
+
     @RequestMapping(value = "api/data/{entityName}/{dataName}", method = GET)
     @ApiIgnore
     @ResponseBody
@@ -171,7 +172,13 @@ public class EntityController {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         BaseObject baseObject = dataStore.getBaseObject(clazz, entityName, entityObjectMap);
         if (name.equals(baseObject.getName())) {
-            dataStore.update(baseObject, clazz);
+            if (dataStore.read(baseObject.getName(), clazz) != null) {
+                dataStore.update(baseObject, clazz);
+            } else {
+                throw new DataStoreException("Record does not exist");
+            }
+        } else {
+            throw new DataStoreException("Invalid Record");
         }
     }
 
@@ -187,10 +194,8 @@ public class EntityController {
     @ApiIgnore
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
-            Pageable page) {        
+            Pageable page) {
         return dataStore.list(entityName, page);
     }
-
-    
 
 }
