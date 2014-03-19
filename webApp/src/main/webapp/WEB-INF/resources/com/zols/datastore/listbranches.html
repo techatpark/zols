@@ -3,20 +3,146 @@
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>List Braches</title>       
-        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <title>List Branches</title>  
+        <!--<link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/ui.jqgrid.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/jquery.idealforms.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/jquery.idealforms.min.css}"/>-->
+        
+        
     </head>
     <body th:fragment="content">
-
-        <table id="grid"></table>
-        <div id="pager"></div>
-
-        <script th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
-        <script th:src="@{/resources/js/jquery-ui-1.10.3.custom.min.js}"></script>
-        <script th:src="@{/resources/js/i18n/grid.locale-en.js}"></script>
-        <script th:src="@{/resources/js/jquery.jqGrid.min.js}"></script>
-        <script th:src="@{/resources/js/branch.js}"></script>
+        <script src="../../../../webApp/src/main/webapp/resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTUV2fR98XftHx-9PWw2URhdGVpIN38JA&amp;sensor=false&amp;libraries=places"></script>
+        <script type="text/javascript">
+            function initialize() {
+                geocoder = new google.maps.Geocoder();
+                var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+                var mapOptions = {
+                  center: myLatlng,
+                  zoom: 1
+                };
+                map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+              
+                // Place a draggable marker on the map
+                marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    draggable:true,
+                    title:"some default location"
+                });
+                var input = /** @type {HTMLInputElement} */(
+      document.getElementById('search_text'));
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
+                
+                google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                    console.log('in');
+                });
+      
+//                autocomplete = new google.maps.places.Autocomplete(document.getElementById('search_text'));
+//                autocomplete.bindTo('bounds', map);
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <input type='button' value='add' id='add_branch'/>
+        <div id='add_search' style='display:none;'>
+            <input type='text' id='search_text' />
+            <input type='button' id='search_button' value='search'/>
+        </div>
+        <div id='container'>
+                <div id='list'>
+                <ol>
+                    <li>
+                        <div id='name1'>abc</div>
+                        <div id='lat1'>1</div>
+                        <div id='long1'>1</div>
+                        <input id='button1' class='show_on_map' type='button' value='show on map' />
+                    </li>
+                    <li>
+                        <div id='name2'>xyz</div>
+                        <div id='lat2'>80</div>
+                        <div id='long2'>170</div>
+                        <input id='button2' class='show_on_map' type='button' value='show on map' />
+                    </li>
+                </ol>
+            </div>
+            <div id="map-canvas" style="height: 500px; width:50%;"></div>
+        
+        </div>
+        
+        <script>
+            
+            $('.show_on_map').click(function(){
+                marker.setMap(null); //remove existing marker
+                //console.log($(this).attr('id'));
+                var id = $(this).attr('id');
+                var id_number = id.match(/\d+$/);
+                //console.log(id_number);
+                var lat = $('#lat' + id_number[0]).text();
+                var long = $('#long' + id_number[0]).text();
+                var myLatlng = new google.maps.LatLng(lat, long);
+                
+                marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    draggable:true,
+                    title: $('#name' + id_number[0]).text()
+                });
+            });
+            
+            $('#add_branch').click(function(){
+                $('#add_search').show();
+            });
+            
+                /*
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://maps.googleapis.com/maps/api/place/autocomplete',
+                    data: {'input': stub, 'sensor': false, 'key': 'AIzaSyBTUV2fR98XftHx-9PWw2URhdGVpIN38JA'},
+                    dataType: 'jsonp'
+                }).done(function(response){
+                    console.log('response');
+                    console.log(response);
+                }).error(function(response){
+                    console.log('error');
+                    console.log(response);
+                });*/
+            
+            $('#search_button').click(function(){
+                marker.setMap(null); //remove existing marker
+                $('#add_search').hide();
+                var search_string = $('#search_text').val();
+                codeAddress(search_string);
+               });
+            
+            function codeAddress(search_string) {
+                //var address = document.getElementById("address").value;
+                geocoder.geocode( { 'address': search_string}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                  } else {
+                    alert("Geocode was not successful for the following reason: " + status);
+                    alert('position the marker and click to save');
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(0, 0),
+                        draggable: true,
+                        title: 'move it to location'
+                    });
+                    google.maps.event.addListener(marker, 'click', saveLocation);
+                  }
+                });
+            }
+            function saveLocation() {
+                var location_obj = marker.getPosition();
+                alert('latitude: ' + location_obj.k + '; longitude: ' + location_obj.A);
+                //console.log(location_obj);
+                //alert('marker location: ' + marker.getPosition);
+            }
+        </script>
     </body>
 </html>
