@@ -136,7 +136,7 @@ public class EntityController {
         return "com/zols/datastore/data";
     }
 
-    @RequestMapping(value = "/data/{entityName}/{dataName}", method = GET)
+    @RequestMapping(value = "/data/{entityName}/{dataName:.+}", method = GET)
     @ApiIgnore
     public String editData(@PathVariable(value = "entityName") String entityName,
             @PathVariable(value = "dataName") String dataName,
@@ -146,7 +146,7 @@ public class EntityController {
         return "com/zols/datastore/data";
     }
 
-    @RequestMapping(value = "api/data/{entityName}/{dataName}", method = GET)
+    @RequestMapping(value = "api/data/{entityName}/{dataName:.+}", method = GET)
     @ApiIgnore
     @ResponseBody
     public BaseObject readData(@PathVariable(value = "entityName") String entityName,
@@ -182,7 +182,7 @@ public class EntityController {
         }
     }
 
-    @RequestMapping(value = "/api/data/{entityName}/{name}", method = DELETE)
+    @RequestMapping(value = "/api/data/{entityName}/{name:.+}", method = DELETE)
     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name) {
