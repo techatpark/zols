@@ -47,14 +47,6 @@ public class BasicEntityTest {
     }
     
     @Test
-    public void testDuplicateEntityCreate() {
-        LOGGER.info("testing Entity Create", entity.getName());
-        dataStore.create(entity, Entity.class);
-        Assert.assertTrue("basic entity should have name", entity.getName() != null);
-        LOGGER.info("tested Entity Create", entity.getName());
-    }
-
-    @Test
     public void testBasicEntityRead() {
         LOGGER.info("testing Entity Read", entity.getName());
         Entity entityResult = dataStore.read(entity.getName(), Entity.class);

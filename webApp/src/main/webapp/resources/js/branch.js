@@ -78,7 +78,7 @@ $(function() {
                 editrules: {required: true}
             }
         ],
-        caption: "locale",
+        caption: "Branches",
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
