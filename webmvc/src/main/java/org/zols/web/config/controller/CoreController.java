@@ -89,6 +89,11 @@ public class CoreController {
             entity.setName("Integer");
             entity.setLabel("Integer");
             masterList.add(0, entity);
+            
+            entity = new Entity();
+            entity.setName("BigText");
+            entity.setLabel("Big Text");
+            masterList.add(0, entity);
 
             entity = new Entity();
             entity.setName("String");
