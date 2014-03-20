@@ -34,6 +34,7 @@ public class DocumentStorage {
     private String userName;
     private String password;
     private String rootFolder;
+    private String baseUrl;
 
     /**
      * *
@@ -129,4 +130,14 @@ public class DocumentStorage {
     public void setType(String type) {
         this.type = type;
     }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
+    }
+    
+    
 }

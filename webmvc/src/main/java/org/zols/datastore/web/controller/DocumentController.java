@@ -27,7 +27,9 @@ public class DocumentController {
 
     @RequestMapping(value = "/documents/{name}", method = RequestMethod.GET)
     public String documents(@PathVariable(value = "name") String name, Model map) {
-        map.addAttribute("documentStorage", documentStorageManager.get(name));
+        DocumentStorage documentStorage = documentStorageManager.get(name);
+        map.addAttribute("documentStorage", documentStorage);
+        map.addAttribute("files", new File(documentStorage.getPath()).listFiles());
         return "com/zols/datastore/document";
     }
 
@@ -35,10 +37,12 @@ public class DocumentController {
     public String save(@PathVariable(value = "name") String name, @ModelAttribute("document") Document document,Model map) throws IOException {
         DocumentStorage documentStorage = documentStorageManager.get(name);
         map.addAttribute("documentStorage", documentStorage);
-        List<MultipartFile> files = document.getFiles();
+        List<MultipartFile> multipartFiles = document.getFiles();
         String fileName = null ;
-        if (null != files && files.size() > 0) {
-            for (MultipartFile multipartFile : files) {
+        
+        
+        if (null != multipartFiles && multipartFiles.size() > 0) {
+            for (MultipartFile multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
                 fileName = multipartFile.getOriginalFilename();                  
                 byte[] bytes = multipartFile.getBytes();
@@ -46,11 +50,10 @@ public class DocumentController {
                         = new BufferedOutputStream(new FileOutputStream(new File(documentStorage.getPath() + File.separator + multipartFile.getOriginalFilename())));
                 stream.write(bytes);
                 stream.close();
-                
-
             }
         }
-
+        
+        map.addAttribute("files", new File(documentStorage.getPath()).listFiles());
         return "com/zols/datastore/document";
     }
 }
