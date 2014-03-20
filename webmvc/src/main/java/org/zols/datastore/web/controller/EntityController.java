@@ -164,7 +164,7 @@ public class EntityController {
         return dataStore.create(dataStore.getBaseObject(clazz, entityName, entityObjectMap), clazz);
     }
 
-    @RequestMapping(value = "/api/data/{entityName}/{name}", method = PUT)
+    @RequestMapping(value = "/api/data/{entityName}/{name:.+}", method = PUT)
     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name,

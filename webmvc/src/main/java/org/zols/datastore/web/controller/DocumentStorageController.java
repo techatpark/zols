@@ -71,7 +71,7 @@ public class DocumentStorageController {
     @RequestMapping(value = "/documentstorages/{name}", method = GET)
     @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
-        model.addAttribute("documentstorage", documentStorageManager.get(name));
+        model.addAttribute("documentStorage", documentStorageManager.get(name));
         return "com/zols/datastore/documentstorage";
     }
 
