@@ -71,14 +71,14 @@ public class DocumentStorageController {
     @RequestMapping(value = "/documentstorages/{name}", method = GET)
     @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
-        model.addAttribute("documentstorage", documentStorageManager.get(name));
+        model.addAttribute("documentStorage", documentStorageManager.get(name));
         return "com/zols/datastore/documentstorage";
     }
 
     @RequestMapping(value = "/documentstorages/add", method = GET)
     @ApiIgnore
     public String add(Model model) {
-        model.addAttribute("documentstorage", new DocumentStorage());
+        model.addAttribute("documentStorage", new DocumentStorage());
         return "com/zols/datastore/documentstorage";
     }
 

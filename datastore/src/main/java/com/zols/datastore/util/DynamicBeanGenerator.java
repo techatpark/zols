@@ -49,7 +49,9 @@ public class DynamicBeanGenerator {
         for (Attribute attribute : entity.getAttributes()) {
             if (attribute.getType().equals("String")) {
                 beanGenerator.addProperty(attribute.getName(), String.class);
-            } else if (attribute.getType().equals("Integer")) {
+            } else if (attribute.getType().equals("BigText")) {
+                beanGenerator.addProperty(attribute.getName(), String.class);
+            }else if (attribute.getType().equals("Integer")) {
                 beanGenerator.addProperty(attribute.getName(), Integer.class);
             } else if (attribute.getType().equals("Double")) {
                 beanGenerator.addProperty(attribute.getName(), Double.class);
