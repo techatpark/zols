@@ -6,7 +6,9 @@
 
 package org.zols.datastore;
 
-import org.zols.datastore.ServiceMetaData;
+import org.springframework.context.annotation.Bean;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,5 +16,10 @@ public class TestServiceMetaData implements ServiceMetaData {
     
     public String getDatabaseName() {
         return "testzols";        
+    }
+    
+    @Bean
+    public ExpressionParser expressionParser() {
+        return new SpelExpressionParser();
     }
 }

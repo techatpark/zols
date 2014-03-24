@@ -34,13 +34,12 @@ public class MongoDataStore extends DataStore {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T create(Object object, Class<T> clazz) {  
+    public <T> T create(Object object, Class<T> clazz) {
         try {
             mongoOperation.insert(object);
+        } catch (DuplicateKeyException duplicateKeyException) {
+            throw new DataStoreException(duplicateKeyException.getMessage(), duplicateKeyException);
         }
-        catch(DuplicateKeyException duplicateKeyException) {
-            throw new DataStoreException(duplicateKeyException.getMessage(),duplicateKeyException);
-        }        
         return (T) object;
     }
 
@@ -145,7 +144,7 @@ public class MongoDataStore extends DataStore {
     @Override
     public <T> List<T> list(List<org.zols.datastore.domain.Criteria> criterias, Class<T> aClass) {
         return (List<T>) mongoOperation.find(getQuery(criterias), aClass);
-    }    
+    }
 
     private Query getQuery(List<org.zols.datastore.domain.Criteria> criterias) {
         Query query = new Query();
@@ -186,11 +185,11 @@ public class MongoDataStore extends DataStore {
 
             case IS_NULL:
                 mongoCriteria.exists(false);
-                break;       
+                break;
 
             case IS_NOTNULL:
                 mongoCriteria.exists(true);
-                break;                 
+                break;
 
         }
         return mongoCriteria;
@@ -202,20 +201,24 @@ public class MongoDataStore extends DataStore {
         return query;
     }
 
+    /**
+     * Gets the Field which is annotated with @Id.class
+     *
+     * @param clazz
+     * @return
+     */
     private Field getIdField(Class clazz) {
-
-        for (Field field : clazz.getDeclaredFields()) {
-            Class type = field.getType();
-            String name = field.getName();
-            Id id = field.getAnnotation(Id.class);
-            if (id != null) {
-                return field;
+        Class superClass = clazz;
+        while (superClass != null) {
+            for (Field field : superClass.getDeclaredFields()) {
+                Id id = field.getAnnotation(Id.class);
+                if (id != null) {
+                    return field;
+                }
             }
-
+            superClass = superClass.getSuperclass();
         }
         return null;
     }
-    
-    
 
 }

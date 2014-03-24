@@ -131,4 +131,10 @@ public abstract class DataStore {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         return (Page<BaseObject>) list(page, clazz);
     }
+
+    public final Class<? extends BaseObject> getBeanClass(String entityName) {
+        return dynamicBeanGenerator.getBeanClass(entityName);
+    }
+    
+    
 }
