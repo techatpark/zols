@@ -15,18 +15,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
+        
         <dependency>
             <groupId>org.springframework.mobile</groupId>
             <artifactId>spring-mobile-device</artifactId>
@@ -78,6 +67,11 @@
             <groupId>org.zols</groupId>
             <artifactId>documentmanager</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>securitymanager</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,6 @@
 package org.zols.web.config;
 
+import org.zols.securitymanager.config.SecurityConfig;
 import java.nio.charset.Charset;
 import java.util.List;
 import org.codehaus.jackson.map.DeserializationConfig;

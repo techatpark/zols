@@ -1,4 +1,4 @@
-package org.zols.web.config;
+package org.zols.securitymanager.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

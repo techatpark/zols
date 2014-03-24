@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.zols.web.config;
+package org.zols.securitymanager.config;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;

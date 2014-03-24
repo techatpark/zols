@@ -1,5 +1,6 @@
 package org.zols.web.config;
 
+import org.zols.securitymanager.config.filter.CorsFilter;
 import javax.servlet.FilterRegistration.Dynamic;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;

@@ -17,6 +17,7 @@
         <module>localemanager</module>
         <module>branchmanager</module>
     <module>documentmanager</module>
+    <module>securitymanager</module>
   </modules>
 
     <properties>
