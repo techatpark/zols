@@ -4,6 +4,8 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.zols.linkmanager.LinkManager;
 import com.zols.linkmanager.domain.Link;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +118,12 @@ public class LinkController {
     
     @RequestMapping(value = "/links", method = GET)
     @ApiIgnore
-    public String listing() {
+    public String listing(Model model) {
+        MenuNode root = new MenuNode("muniyaandi vilas");
+        MenuNode  kaalai = root.addChildMenu("kaalai");
+        kaalai.addChildMenu("barotta");
+        root.addChildMenu("mathiyam");
+        model.addAttribute("menu", root);
         return "com/zols/datastore/listlinks";
     }
 }

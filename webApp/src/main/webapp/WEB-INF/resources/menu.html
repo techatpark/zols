@@ -1,0 +1,11 @@
+
+    <div th:fragment="menuContent (menu)">
+      <ul>
+        <li th:text="${menu.menuName}"> </li>
+        <div th:each="child : ${menu.childMenus}"> 
+          <div th:with="menu=${child.value}">
+            <div th:include="menu::menuContent (${menu})"/>
+          </div>
+        </div>
+      </ul>
+    </div>

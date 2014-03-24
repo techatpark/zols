@@ -10,6 +10,11 @@
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/breadcrumb.css" th:href="@{/resources/css/breadcrumb.css}"/>
     </head>
     <body th:fragment="content">
+
+
+
+    <div th:include="menu::menuContent(${menu})"/>
+
         <div id="link">
             <div id="categoryContainer" class="right-header">
                 <label><select name ="linkCategory" id="link_category"></select></label>
