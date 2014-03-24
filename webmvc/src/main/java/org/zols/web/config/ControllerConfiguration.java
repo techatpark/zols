@@ -1,6 +1,6 @@
 package org.zols.web.config;
 
-import com.zols.datastore.config.DataStoreConfiguration;
+import org.zols.datastore.config.DataStoreConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

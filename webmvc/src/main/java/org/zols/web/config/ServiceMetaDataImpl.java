@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ServiceMetaDataImpl implements com.zols.datastore.ServiceMetaData {
+public class ServiceMetaDataImpl implements org.zols.datastore.ServiceMetaData {
     
     @Autowired
     private ServletContext servletContext;

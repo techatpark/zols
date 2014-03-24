@@ -1,7 +1,7 @@
 package org.zols.web.config;
 
-import com.zols.datastore.DataStore;
-import com.zols.templatemanager.domain.TemplateStorage;
+import org.zols.datastore.DataStore;
+import org.zols.templatemanager.domain.TemplateStorage;
 import java.io.File;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
