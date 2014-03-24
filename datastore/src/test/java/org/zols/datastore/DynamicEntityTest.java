@@ -14,6 +14,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
+ * Test cases that test a Static Entity.
+ * Dynamic Entities are those for which there is a POJO available at compilation time.(For E.g Entity.java or Link.java)
+ */
+
+
+
+/**
  *
  * @author Sathish Kumar Thiyagarajan
  */
