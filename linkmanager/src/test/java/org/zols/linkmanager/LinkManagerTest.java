@@ -5,13 +5,9 @@
  */
 package org.zols.linkmanager;
 
-import org.zols.linkmanager.LinkManager;
-import org.zols.datastore.config.DataStoreConfiguration;
-import org.zols.linkmanager.domain.Category;
-import org.zols.linkmanager.domain.Link;
 import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -23,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.zols.datastore.config.DataStoreConfiguration;
+import org.zols.linkmanager.domain.Link;
 
 @ContextConfiguration(classes = {DataStoreConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -38,7 +36,7 @@ public class LinkManagerTest {
     public void listByCategory() {
         List<Link> links = linkmanager.listFirstLevelByCategory("header");
         for (Link link : links) {
-//            System.out.println("link name " + link.getName());
+            System.out.println("link name " + link.getName());
         }
 
     }
@@ -64,13 +62,26 @@ public class LinkManagerTest {
     
     @Test
     public void testAllicationLinks() {
-//        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
-//        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
-//            String string = entry.getKey();
-//            List<Link> list = entry.getValue();
-//            System.out.println("entry.getKey()");
-//            
-//        }
+        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
+        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
+            String string = entry.getKey();
+            List<Link> list = entry.getValue();
+            for(Link childLink : list){
+            	printLink(childLink, 0);
+            }
+            
+            
+        }
+    }
+    
+    private void printLink(Link link,int index){
+    	System.out.println(index + link.getName());
+		if (link.getChildren() != null) {
+			index ++;
+			for (Link childLink : link.getChildren()) {
+				printLink(childLink, index);
+			}
+		}
     }
 
     @Before

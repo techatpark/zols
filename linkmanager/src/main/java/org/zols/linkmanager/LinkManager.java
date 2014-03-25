@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class LinkManager {
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(LinkManager.class);
 
     @Autowired
     private DataStore dataStore;
@@ -170,15 +175,26 @@ public class LinkManager {
             List<Link> firstlevelLinks ;
             for (Category category : categories) {
                 firstlevelLinks = listFirstLevelByCategory(category.getName()) ;
-                for (Link link : firstlevelLinks) {
-                    link.setChildren(listByParent(link.getName()));
-                }
+                walkLinkTree(firstlevelLinks);
                 applicationLinks.put(category.getName(), firstlevelLinks);
             }
+            LOGGER.debug("" + applicationLinks.size());
             return applicationLinks;
         }
 
         return null;
+    }
+
+	private void walkLinkTree(List<Link> links) {
+		for (Link link : links) {
+		    List<Link> childLinks = getChildLinks(link);
+			link.setChildren(childLinks);
+			walkLinkTree(childLinks);
+		}
+	}
+    
+    private List<Link> getChildLinks(Link link){
+    	return listByParent(link.getName());
     }
 
 }
