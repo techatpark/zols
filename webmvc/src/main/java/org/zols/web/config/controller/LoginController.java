@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.web.controller;
+package org.zols.web.config.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
