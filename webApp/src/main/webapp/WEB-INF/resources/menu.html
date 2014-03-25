@@ -1,11 +1,6 @@
-
-    <div th:fragment="menuContent (menu)">
-      <ul>
-        <li th:text="${menu.menuName}"> </li>
-        <div th:each="child : ${menu.childMenus}"> 
-          <div th:with="menu=${child.value}">
-            <div th:include="menu::menuContent (${menu})"/>
-          </div>
-        </div>
-      </ul>
-    </div>
+<ul th:fragment="menuContent " >
+  <li th:text="${menu.name}"> <a href='#'> </a></li>
+  <ul  th:each="children:${menu.children}"
+     th:include="menu::menuContent" th:with="menu=${children}" > 
+  </ul>
+</ul>

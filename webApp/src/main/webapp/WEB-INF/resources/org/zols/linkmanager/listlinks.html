@@ -13,7 +13,7 @@
 
 
 
-    <div th:include="menu::menuContent(${menu})"/>
+    
 
         <div id="link">
             <div id="categoryContainer" class="right-header">
@@ -42,7 +42,8 @@
         <script th:src="@{/resources/js/listlinks.js}"></script>
         <script id="childList" type="text/x-handlebars-template">
             {{#each this}}
-            <li><a href="javascript:void(0)" id="{{name}}" data-parent="{{name}}" class="parentLink">{{label}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="addChild" data-parent="{{name}}">+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="editlink" data-parent="{{name}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="removeChild" data-parent="{{name}}">-</a></li>
+            <li><a href="javascript:void(0)" id="{{name}}"
+            data-parent="{{name}}" class="parentLink">{{name}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="addChild" data-parent="{{name}}">+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="editlink" data-parent="{{name}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="removeChild" data-parent="{{name}}">-</a></li>
             {{/each}}
         </script>
 

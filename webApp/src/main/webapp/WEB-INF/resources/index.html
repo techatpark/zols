@@ -15,7 +15,7 @@
     </head>
     <body>
         <header class="header" >
-            <div id="headerbg1">
+            <div id="headerbg">
                 <div id="logo"></div>
                 <!--/*/
                 <div th:fragment="logout" sec:authorize="isAuthenticated()" class="user">
@@ -29,15 +29,11 @@
                     <a th:href="@{/login}">Login</a>
                 </div>
             </div>
-            <nav>
-                <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
-                    <li th:each="link : ${linkentry.value}">
-                    	<a th:href="${link.targetUrl}"></a>
-                    	<ul th:include="menu::menuContent(${link})"></ul>
-                    </li>
-                  
-                </ul>
-            </nav>
+                <nav th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
+                  <ul th:each="menu : ${linkentry.value}"
+                  th:include="menu::menuContent"> 
+                    </ul>
+                </nav>
         </header>
         <section>
 
@@ -52,7 +48,7 @@
             <div class="user userpos">
                 <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'footer'">
                     <li th:each="link : ${linkentry.value}">
-                        <a href="#" th:text="${link.label}">Menu1</a>
+                        <a href="#" th:text="${link.name}">Menu1</a>
                     </li>
                 </ul>
             </div>
