@@ -20,6 +20,22 @@
 		<level value="info" />
 	</logger>
 	
+	<logger name="org.thymeleaf.TemplateEngine.cache.TEMPLATE_CACHE">
+		<level value="TRACE" />
+	</logger>
+
+	<logger name="org.thymeleaf.TemplateEngine.TIMER">
+		<level value="TRACE" />
+	</logger>
+
+	<logger name="org.thymeleaf.TemplateEngine.CONFIG">
+		<level value="TRACE" />
+	</logger>
+
+	<logger name="org.thymeleaf">
+		<level value="DEBUG" />
+	</logger>
+
 	<logger name="org.springframework.beans">
 		<level value="info" />
 	</logger>
