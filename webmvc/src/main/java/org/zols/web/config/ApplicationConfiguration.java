@@ -4,7 +4,6 @@ import org.zols.securitymanager.config.SecurityConfig;
 import java.nio.charset.Charset;
 import java.util.List;
 import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.SerializationConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -27,12 +26,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistra
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.zols.swagger.RestDocumentationConfig;
 import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @EnableWebMvc
-@Import({RestDocumentationConfig.class, ViewConfiguration.class, ControllerConfiguration.class,SecurityConfig.class})
+@Import({ViewConfiguration.class, ControllerConfiguration.class,SecurityConfig.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
