@@ -124,11 +124,6 @@ public class LinkController {
     @RequestMapping(value = "/links", method = GET)
     @ApiIgnore
     public String listing(Model model) {
-        MenuNode root = new MenuNode("muniyaandi vilas");
-        MenuNode  kaalai = root.addChildMenu("kaalai");
-        kaalai.addChildMenu("barotta");
-        root.addChildMenu("mathiyam");
-        model.addAttribute("menu", root);
         return "org/zols/linkmanager/listlinks";
     }
 }
