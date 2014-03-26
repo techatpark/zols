@@ -7,7 +7,7 @@ package org.zols.web.view.resolver;
 
 import java.util.Locale;
 import org.springframework.web.servlet.View;
-import org.thymeleaf.spring3.view.ThymeleafViewResolver;
+import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 
 /**
  *

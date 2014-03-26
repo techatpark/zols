@@ -37,12 +37,9 @@ public class DocumentController {
         DocumentStorage documentStorage = documentStorageManager.get(name);
         map.addAttribute("documentStorage", documentStorage);
         List<MultipartFile> multipartFiles = document.getFiles();
-        String fileName = null;
-
         if (null != multipartFiles && multipartFiles.size() > 0) {
             for (MultipartFile multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
-                fileName = multipartFile.getOriginalFilename();
                 byte[] bytes = multipartFile.getBytes();
                 BufferedOutputStream stream
                         = new BufferedOutputStream(new FileOutputStream(new File(documentStorage.getPath() + File.separator + multipartFile.getOriginalFilename())));
@@ -50,7 +47,6 @@ public class DocumentController {
                 stream.close();
             }
         }
-
         map.addAttribute("files", new File(documentStorage.getPath()).listFiles());
         return "org/zols/documentmanager/document";
     }
