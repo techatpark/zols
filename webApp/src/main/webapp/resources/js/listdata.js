@@ -1,4 +1,4 @@
-var URL = '../api/';
+            var URL = '../api/';
 
 function loadData(entityName, contentData) {
     $.extend($.jgrid.defaults, {
@@ -75,13 +75,14 @@ function loadData(entityName, contentData) {
     });
     var options = {
         url: URL + 'data/' + entityName,
-        editurl: URL,
+        editurl: URL + 'data/' + entityName,
         colModel: colModelDynamic,
         caption: contentData.label,
         pager: '#pager',
         height: 'auto',
         ondblClickRow: function(id) {
             //edit url
+            window.location = entityName + '/' + id;
         },
         formatter: {idName: "name"}
     };
