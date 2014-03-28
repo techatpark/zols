@@ -29,6 +29,7 @@ $(function() {
         rowList: [10, 20, 50, 100],
         altRows: true,
         loadError: function(xhr, status, error) {
+             $("#grid").clearGridData();
 
         }
     });
