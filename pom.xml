@@ -18,6 +18,7 @@
         <module>/branchmanager</module>
         <module>/documentmanager</module>
         <module>/securitymanager</module>
+        <module>swagger</module>
     </modules>
 
     <properties>
@@ -39,7 +40,8 @@
         <log4j-version>1.2.17</log4j-version>
         <javax.servlet.api-version>3.1.0</javax.servlet.api-version>
         <junit-version>4.11</junit-version>
-        <swagger-springmvc-version>0.8.2</swagger-springmvc-version>
+        <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
+        <spring-hateoas.version>0.9.0.RELEASE</spring-hateoas.version>
         <org.apache.maven.plugins.compiler-version>3.0</org.apache.maven.plugins.compiler-version>
         <org.apache.maven.plugins.war-version>2.3</org.apache.maven.plugins.war-version>
         <org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
@@ -158,7 +160,7 @@
             <dependency>
                 <groupId>com.mangofactory</groupId>
                 <artifactId>swagger-springmvc</artifactId>
-                <version>${swagger-springmvc-version}</version>
+                <version>${swagger-springmvc.version}</version>
             </dependency>
 
             <dependency>
