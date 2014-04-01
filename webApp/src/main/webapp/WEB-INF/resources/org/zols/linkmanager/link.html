@@ -11,6 +11,8 @@
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${link}">
+            <fieldset>
+                <legend>Links</legend>
             <ul>
                 <li>
                     <label for="name">Name:</label>
@@ -36,7 +38,9 @@
             </ul>
             <input id="categoryName" name="categoryName" type="hidden" th:field="*{categoryName}"/>
             <input id="parentLinkName" name="parentLinkName" type="hidden" th:field="*{parentLinkName}"/>            
+            </fieldset>
         </form>
+        
 
 
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>

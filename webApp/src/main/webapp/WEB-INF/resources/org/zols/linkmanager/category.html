@@ -10,6 +10,8 @@
     </head>
     <body th:fragment="content">
         <form id="my-form" th:object="${category}">
+            <fieldset>
+                <legend>Category</legend>
             <ul>
                 <li>
                     <label for="name">Name:</label>
@@ -29,6 +31,7 @@
                     <button id="cancel" type="button">Cancel</button>
                 </li>
             </ul>
+            </fieldset>
         </form>
 
 
