@@ -17,40 +17,44 @@
 	
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.thymeleaf.TemplateEngine.cache.TEMPLATE_CACHE">
-		<level value="TRACE" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.thymeleaf.TemplateEngine.TIMER">
-		<level value="TRACE" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.thymeleaf.TemplateEngine.CONFIG">
-		<level value="TRACE" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.thymeleaf">
-		<level value="DEBUG" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.springframework.beans">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 	
 	<logger name="org.springframework.context">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<logger name="org.springframework.web">
 		<level value="debug" />
 	</logger>
+	
+	<logger name="com.mangofactory">
+		<level value="debug" />
+	</logger>
 
 	<!-- Root Logger -->
 	<root>
-		<priority value="warn" />
+		<priority value="DEBUG" />
 		<appender-ref ref="console" />
 	</root>
 	
