@@ -19,3 +19,5 @@ To Run the app:
 ---------------
 mvn clean tomcat7:run
 
+Open the url http://localhost:8080/zols/links
+
