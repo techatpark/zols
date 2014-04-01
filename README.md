@@ -1,20 +1,19 @@
-zols
+Zols
 ====
 
 Zols is a Dynamic Schema Web Application. 
 
-TODO:
-=====
-Java Script:
------------
-AMD
-Grunt
+Installation:
+============
 
-CGLib:
+MongoDB:
+--------
+Download and install MongoDB. 
+Start MongoDB Server.
+
+Maven:
 -----
-Enhancer
-Mixin
-
+Download and install Maven
 
 To Run the app:
 ---------------
