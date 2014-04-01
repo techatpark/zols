@@ -1,9 +1,7 @@
 package org.zols.web.config;
 
-import org.zols.securitymanager.config.SecurityConfig;
 import java.nio.charset.Charset;
 import java.util.List;
-import org.codehaus.jackson.map.DeserializationConfig;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,7 +11,7 @@ import org.springframework.core.Ordered;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerInterceptor;
 import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumentResolver;
@@ -26,8 +24,11 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistra
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.zols.web.interceptor.PagePopulationInterceptor;
+import org.zols.securitymanager.config.SecurityConfig;
 import org.zols.swagger.config.SwaggerConfig;
+import org.zols.web.interceptor.PagePopulationInterceptor;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableWebMvc
@@ -79,17 +80,15 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
     }
 
-    @Bean
-    public JacksonObjectMapper jacksonObjectMapper() {
-        JacksonObjectMapper jacksonObjectMapper = new JacksonObjectMapper();
-        jacksonObjectMapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
-        return jacksonObjectMapper;
+    //@Bean
+    public void jacksonObjectMapper() {
+        
     }
 
     @Bean
-    public MappingJacksonHttpMessageConverter jsonHttpMessageConverter() {
-        MappingJacksonHttpMessageConverter converter = new MappingJacksonHttpMessageConverter();
-        converter.setObjectMapper(jacksonObjectMapper());        
+    public MappingJackson2HttpMessageConverter jsonHttpMessageConverter() {
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(new ObjectMapper());        
         return converter;
     }
 
