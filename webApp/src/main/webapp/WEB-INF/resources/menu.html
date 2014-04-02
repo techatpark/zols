@@ -1,6 +1,7 @@
 <ul th:fragment="menuContent " >
-  <li th:text="${menu.name}"> <a href='#'> </a></li>
+  <li > <a href='#' th:text="${menu.name}"> </a>
   <ul  th:each="children:${menu.children}"
      th:include="menu::menuContent" th:with="menu=${children}" > 
   </ul>
+  </li>
 </ul>
