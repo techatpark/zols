@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.zols.languagemanager.web;
+package org.zols.languagemanager.web;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
 import org.zols.languagemanager.LanguageManager;
