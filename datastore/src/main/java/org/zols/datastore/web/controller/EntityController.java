@@ -1,16 +1,18 @@
 package org.zols.datastore.web.controller;
 
-import com.mangofactory.swagger.annotations.ApiIgnore;
-import org.zols.datastore.domain.BaseObject;
-import org.zols.datastore.domain.Entity;
-import org.zols.datastore.exception.DataStoreException;
-import org.zols.datastore.util.DynamicBeanGenerator;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+
 import java.util.HashMap;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -19,10 +21,15 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.domain.BaseObject;
+import org.zols.datastore.domain.Entity;
+import org.zols.datastore.exception.DataStoreException;
+import org.zols.datastore.util.DynamicBeanGenerator;
+
+import com.mangofactory.swagger.annotations.ApiIgnore;
 
 @Controller
 
@@ -82,7 +89,8 @@ public class EntityController {
     public Page<Entity> list(
             Pageable page) {
         LOGGER.info("Listing entities");
-        return dataStore.list(page, Entity.class);
+        Pageable adjusted = new PageRequest(page.getPageNumber()-1, page.getPageSize(), page.getSort());
+        return dataStore.list(adjusted, Entity.class);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

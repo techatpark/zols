@@ -94,7 +94,7 @@ public class MongoDataStore extends DataStore {
     private Query getListQuery(Pageable pageable, Object searchObjct) {
         Query query = new Query();
         if (pageable != null) {
-            query.skip((pageable.getPageNumber() - 1) * pageable.getPageSize());
+            query.skip((pageable.getPageNumber() ) * pageable.getPageSize());
             query.limit(pageable.getPageSize());
         }
         if (searchObjct != null) {
