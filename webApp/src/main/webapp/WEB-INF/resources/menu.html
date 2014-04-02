@@ -1,7 +1,13 @@
 <ul th:fragment="menuContent " >
   <li > <a href='#' th:text="${menu.name}"> </a>
-  <ul  th:each="children:${menu.children}"
-     th:include="menu::menuContent" th:with="menu=${children}" > 
-  </ul>
+	  <th:block th:unless="${#lists.size(menu.children)} == 0">
+	  	<ul>
+		  <th:block  th:each="children:${menu.children}"
+		    		 th:include="menu::menuContent" 
+		    		 th:with="menu=${children}" > 
+		  </th:block>
+	  	</ul>
+	  </th:block>
   </li>
+  
 </ul>
