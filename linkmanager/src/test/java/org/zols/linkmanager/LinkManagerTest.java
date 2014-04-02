@@ -60,7 +60,7 @@ public class LinkManagerTest {
         //linkmanager.deleteCategory("header");
     }
     
-    @Test
+
     public void testAllicationLinks() {
         Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
         for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
