@@ -171,7 +171,7 @@
 
                 template = Handlebars.compile(result);
             },
-            dataType: 'html',
+            dataType: 'text',
             async: false
         });
 
