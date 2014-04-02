@@ -1,5 +1,5 @@
 <ul th:fragment="menuContent " >
-    <li > <a th:href="${menu.url}" th:text="${menu.name}"> </a>
+    <li > <a th:href="${menu.targetUrl}" th:text="${menu.name}"> </a>
     <th:block th:unless="${#lists.size(menu.children)} == 0">
         <ul>
             <th:block  th:each="children:${menu.children}"
