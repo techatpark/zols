@@ -60,25 +60,31 @@
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
-        </dependency>		
+        </dependency>	
+        <dependency>
+            <groupId>org.zols</groupId>
+            <artifactId>locale</artifactId>
+            <version>${project.version}</version>
+        </dependency>	
         <dependency>
             <groupId>org.zols</groupId>
             <artifactId>linkmanager</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.zols</groupId>
             <artifactId>template</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.zols</groupId>
             <artifactId>branchmanager</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.zols</groupId>
             <artifactId>documentmanager</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
