@@ -3,8 +3,7 @@ var URL = '../api/';
 function loadData(entityName, contentData) {
     $.extend($.jgrid.defaults, {
         autowidth: true,
-        shrinkToFit: true,
-        rowNum: 100,
+        shrinkToFit: true,       
         datatype: 'json',
         jsonReader: {
             repeatitems: false,
