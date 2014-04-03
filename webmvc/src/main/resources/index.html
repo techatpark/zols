@@ -48,7 +48,7 @@
             <div class="user userpos">
                 <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'footer'">
                     <li th:each="link : ${linkentry.value}">
-                        <a href="#" th:text="${link.name}">Menu1</a>
+                        <a th:href="${link.targetUrl}" th:text="${link.name}"> </a>
                     </li>
                 </ul>
             </div>
