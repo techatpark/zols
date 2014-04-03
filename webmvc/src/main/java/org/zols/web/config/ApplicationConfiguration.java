@@ -53,11 +53,12 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-        super.addArgumentResolvers(argumentResolvers); //To change body of generated methods, choose Tools | Templates.
+        super.addArgumentResolvers(argumentResolvers); 
         PageableHandlerMethodArgumentResolver pageableArgResolver = new PageableHandlerMethodArgumentResolver();
         pageableArgResolver.setPageParameterName("page.page");
         pageableArgResolver.setSizeParameterName("page.size");
-		argumentResolvers.add(pageableArgResolver);
+        pageableArgResolver.setOneIndexedParameters(true);
+        argumentResolvers.add(pageableArgResolver);
         argumentResolvers.add(sitePreferenceHandlerMethodArgumentResolver());
     }
     

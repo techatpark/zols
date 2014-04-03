@@ -89,8 +89,7 @@ public class EntityController {
     public Page<Entity> list(
             Pageable page) {
         LOGGER.info("Listing entities");
-        Pageable adjusted = new PageRequest(page.getPageNumber()-1, page.getPageSize(), page.getSort());
-        return dataStore.list(adjusted, Entity.class);
+        return dataStore.list(page, Entity.class);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
