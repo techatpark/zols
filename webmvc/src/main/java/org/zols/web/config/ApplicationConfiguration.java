@@ -1,8 +1,9 @@
 package org.zols.web.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.Charset;
 import java.util.List;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -28,11 +29,9 @@ import org.zols.securitymanager.config.SecurityConfig;
 import org.zols.swagger.config.SwaggerConfig;
 import org.zols.web.interceptor.PagePopulationInterceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 @Configuration
 @EnableWebMvc
-@Import({SwaggerConfig.class,ViewConfiguration.class, ControllerConfiguration.class,SecurityConfig.class})
+@Import({SwaggerConfig.class, ViewConfiguration.class, ControllerConfiguration.class, SecurityConfig.class})
 @ComponentScan(basePackages = {"org.zols"})
 public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
 
@@ -61,7 +60,7 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         argumentResolvers.add(pageableArgResolver);
         argumentResolvers.add(sitePreferenceHandlerMethodArgumentResolver());
     }
-    
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
@@ -84,16 +83,13 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
     }
 
-    //@Bean
-    public void jacksonObjectMapper() {
-        
-    }
-
     @Bean
     public MappingJackson2HttpMessageConverter jsonHttpMessageConverter() {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new ObjectMapper());        
-        return converter;
+        MappingJackson2HttpMessageConverter convertor = new MappingJackson2HttpMessageConverter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        convertor.setObjectMapper(mapper);
+        return convertor;
     }
 
     @Override

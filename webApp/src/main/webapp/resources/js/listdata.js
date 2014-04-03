@@ -1,9 +1,10 @@
-            var URL = '../api/';
+var URL = '../api/';
 
 function loadData(entityName, contentData) {
     $.extend($.jgrid.defaults, {
         autowidth: true,
         shrinkToFit: true,
+        rowNum: 100,
         datatype: 'json',
         jsonReader: {
             repeatitems: false,
@@ -92,7 +93,7 @@ function loadData(entityName, contentData) {
                     {search: false, addfunc: function() {
                             window.location = entityName + '/add';
                         }, editfunc: function(data) {
-                            window.location = entityName +'/'+ data ;
+                            window.location = entityName + '/' + data;
                         }}, //options
             {}, // edit options
                     {}, // add options 
