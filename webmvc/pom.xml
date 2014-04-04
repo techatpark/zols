@@ -73,7 +73,17 @@
         </dependency>
         <dependency>
             <groupId>org.zols</groupId>
+            <artifactId>feedback</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zols</groupId>
             <artifactId>template</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zols</groupId>
+            <artifactId>setting</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
