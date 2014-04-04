@@ -23,12 +23,14 @@ public class FeedbackManager {
     @Autowired
     private SettingManager settingManager;
 
-    public void create(FeedBack feedBack) throws IOException {
+    public FeedBack add(FeedBack feedBack) throws IOException {
         if (feedBack != null) {
             GitHub github = GitHub.connectUsingPassword(settingManager.get("GITHUB_USER").getValue(), settingManager.get("GITHUB_PASSWORD").getValue());
             GHRepository repository = github.getRepository(settingManager.get("GITHUB_REPO").getValue());
-            repository.createIssue(feedBack.getTitle()).body(feedBack.getDescription()).create();
+            GHIssue gHIssue = repository.createIssue(feedBack.getTitle()).body(feedBack.getDescription()).create();
+            feedBack.setId(String.valueOf(gHIssue.getNumber()));
         }
+        return feedBack;
     }
 
     public List<FeedBack> getFeedBacks() throws IOException {
