@@ -5,6 +5,7 @@
     $.fn.makeform = function(entityUrl, theme, themeUrl, onRender, dataObj) {
         console.log('dataObj ' + JSON.stringify(dataObj));
         formDiv = this;
+        formDiv.templates = new Object();
         this.themeUrl = themeUrl;
         this.theme = theme;
         this.onRender = onRender;
@@ -23,7 +24,7 @@
         $('.jqte-test').jqte();
         formDiv.dropdownFiller();
         formDiv.htmlText = "";
-
+        
         return this;
     };
 
@@ -92,14 +93,14 @@
                                 formDiv.appendHtmlText(controlClose);
                             }
                             else {
-                                if(!attribute.isReference) {
+                                if (!attribute.isReference) {
                                     formDiv.prefix.push(attribute.name);
-                                }                                
+                                }
                                 formDiv.renderEntity(attribute);
-                                if(!attribute.isReference) {
+                                if (!attribute.isReference) {
                                     formDiv.prefix.pop(attribute.name);
                                 }
-                                
+
                             }
                         });
 
@@ -162,21 +163,21 @@
     };
 
     $.fn.loadTemplate = function(type) {
-        var template = null;
-
-        $.ajax({
-            cache: true,
-            url: formDiv.themeUrl + '/' + formDiv.theme + '/' + type + '.js',
-            success: function(result) {
-
-                template = Handlebars.compile(result);
-            },
-            dataType: 'text',
-            async: false
-        });
-
-
+        var template = null;        
+        if(formDiv.templates.hasOwnProperty(type)){
+            template = template = formDiv.templates[type];
+        }else {            
+            $.ajax({
+                cache: true,
+                url: formDiv.themeUrl + '/' + formDiv.theme + '/' + type + '.js',
+                success: function(result) {
+                    formDiv.templates[type] = Handlebars.compile(result);
+                    template = formDiv.templates[type];
+                },
+                dataType: 'text',
+                async: false
+            });
+        }
         return template;
-
     };
 }(jQuery));
