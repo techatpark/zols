@@ -70,8 +70,7 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
     // Maps resources path to webapp/resources
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-        registry.addResourceHandler("/static/**").addResourceLocations("classpath:static/");
+        registry.addResourceHandler("/resources/**").addResourceLocations("classpath:static/").addResourceLocations("/resources/");        
         // map all static resources coming to '/usage/**' to the resource files under the 'swagger' directory
         ResourceHandlerRegistration registration = registry.addResourceHandler("/usage/**");
         registration.addResourceLocations("classpath:swagger/");
