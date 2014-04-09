@@ -21,7 +21,7 @@
         <module>/securitymanager</module>
         <module>/swagger</module>
         <module>/feedback</module>
-        <module>setting</module>
+        <module>/setting</module>
     </modules>
 
     <properties>
