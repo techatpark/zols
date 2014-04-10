@@ -33,7 +33,7 @@
         // Load From Data Store
         if (selectBox.is(':empty')) {
             $.ajax({
-                url: '/zols/api/data/' + selectBox.attr('data-master'),
+                url: '/zols/master/all/' + selectBox.attr('data-master'),
                 success: function(result) {
                     $.each(result.content, function() {
                         selectBox.append($("<option />").val(this.name).text(this.name));
