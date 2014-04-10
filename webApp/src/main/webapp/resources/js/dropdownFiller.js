@@ -17,9 +17,10 @@
     };
 
     $.fn.loadData = function(selectBox) {
-
+        var contextpath = document.URL.substring(document.URL.indexOf('/',document.URL.indexOf('//')+2));
+        contextpath = contextpath.substring(0,contextpath.indexOf('/',2));
         $.ajax({
-            url: '/zols/master/' + selectBox.attr('data-master'),
+            url: contextpath + '/master/' + selectBox.attr('data-master'),
             success: function(result) {
                 $.each(result, function() {
                     selectBox.append($("<option />").val(this.name).text(this.label));
@@ -33,7 +34,7 @@
         // Load From Data Store
         if (selectBox.is(':empty')) {
             $.ajax({
-                url: '/zols/master/all/' + selectBox.attr('data-master'),
+                url: contextpath + 'master/all/' + selectBox.attr('data-master'),
                 success: function(result) {
                     $.each(result[selectBox.attr('data-master')], function() {
                         selectBox.append($("<option />").val(this.name).text(this.name));
