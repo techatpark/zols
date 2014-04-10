@@ -16,8 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${org.springframework-version}</version>
+            <artifactId>spring-webmvc</artifactId>            
         </dependency>
         <dependency>
             <groupId>com.mangofactory</groupId>
@@ -66,8 +65,7 @@
         <dependency>
             <artifactId>spring-context</artifactId>
             <groupId>org.springframework</groupId>
-            <type>jar</type>
-            <version>${org.springframework-version}</version>
+            <type>jar</type>            
             <exclusions>
                 <exclusion>
                     <artifactId>spring-expression</artifactId>

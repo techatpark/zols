@@ -68,8 +68,7 @@
         </dependency>	
         <dependency>
             <groupId>org.zols</groupId>
-            <artifactId>linkmanager</artifactId>
-            <version>${project.version}</version>
+            <artifactId>linkmanager</artifactId>            
         </dependency>
         <dependency>
             <groupId>org.zols</groupId>
