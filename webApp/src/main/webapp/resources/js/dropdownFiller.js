@@ -35,7 +35,7 @@
             $.ajax({
                 url: '/zols/master/all/' + selectBox.attr('data-master'),
                 success: function(result) {
-                    $.each(result.content, function() {
+                    $.each(result[selectBox.attr('data-master')], function() {
                         selectBox.append($("<option />").val(this.name).text(this.name));
                     });
                     if (selectBox.attr('value')) {
