@@ -30,6 +30,7 @@ import org.zols.datastore.exception.DataStoreException;
 import org.zols.datastore.util.DynamicBeanGenerator;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import org.springframework.data.domain.Sort;
 
 @Controller
 
@@ -202,7 +203,57 @@ public class EntityController {
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
             Pageable page) {
-        return dataStore.list(entityName, page);
+        return dataStore.list(entityName, new MyPageable(page));
     }
 
+    private static class MyPageable implements Pageable {
+
+        private Pageable page;
+
+        public MyPageable(Pageable page) {
+        }
+
+        @Override
+        public int getPageNumber() {
+            return page.getPageNumber();
+        }
+
+        @Override
+        public int getPageSize() {
+            return 100;
+        }
+
+        @Override
+        public int getOffset() {
+            return page.getOffset();
+        }
+
+        @Override
+        public Sort getSort() {
+            return page.getSort();
+        }
+
+        @Override
+        public Pageable next() {
+            return page.next();
+        }
+
+        @Override
+        public Pageable previousOrFirst() {
+            return page.previousOrFirst();
+        }
+
+        @Override
+        public Pageable first() {
+            return page.first();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return page.hasPrevious();
+        }
+        
+        
+
+    }
 }
