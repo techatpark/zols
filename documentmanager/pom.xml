@@ -6,7 +6,7 @@
     <artifactId>documentmanager</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Document Manager</name>
-    <url>http://maven.apache.org</url>
+    
     <parent>
         <groupId>org.zols</groupId>
         <artifactId>zols</artifactId>

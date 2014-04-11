@@ -7,7 +7,7 @@
     <artifactId>webmvc</artifactId>
     <packaging>jar</packaging>
     <name>Web MVC</name>
-    <url>http://maven.apache.org</url>
+    
     <parent>
         <groupId>org.zols</groupId>
         <artifactId>zols</artifactId>
