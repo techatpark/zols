@@ -7,8 +7,8 @@
         <!--<link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/ui.jqgrid.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" th:href="@{/resources/css/jquery.idealforms.min.css}"/>-->
-        
-        
+
+
     </head>
     <body th:fragment="content">
         <script src="../../../../webApp/src/main/webapp/resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
@@ -18,22 +18,22 @@
                 geocoder = new google.maps.Geocoder();
                 var myLatlng = new google.maps.LatLng(-34.397, 150.644);
                 var mapOptions = {
-                  center: myLatlng,
-                  zoom: 1
+                    center: myLatlng,
+                    zoom: 1
                 };
                 map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-              
+
                 // Place a draggable marker on the map
                 marker = new google.maps.Marker({
                     position: myLatlng,
                     /*map: map,*/
-                    draggable:true,
-                    title:"some default location"
+                    draggable: true,
+                    title: "some default location"
                 });
                 var input = /** @type {HTMLInputElement} */(document.getElementById('search_text'));
                 var autocomplete = new google.maps.places.Autocomplete(input);
                 autocomplete.bindTo('bounds', map);
-                
+
                 google.maps.event.addListener(autocomplete, 'place_changed', function() {
                     //console.log('in');
                 });
@@ -46,65 +46,67 @@
             <input type='button' id='search_button' value='search'/>
         </div>
         <div id='container'>
-                <div id='list'>
+            <div id='list'>
                 <ol>
                 </ol>
             </div>
             <div id="map-canvas" style="height: 500px; width:50%;"></div>
-        
+
         </div>
-        
+
         <script>
 
-        function setupHandlers() {
-            $('#add_branch').click(function(){
-                window.location.href = 'branches/add';
-            });
-            
-            $('.show_on_map').on('click', function(){
-                marker.setMap(null); //remove existing marker
-                //console.log($(this).attr('id'));
-                var id = $(this).attr('id');
-                var id_number = id.match(/\d+$/);
-                //console.log(id_number);
-                var lat = $('#lat' + id_number[0]).text();
-                var long = $('#long' + id_number[0]).text();
-                var myLatlng = new google.maps.LatLng(lat, long);
-                
-                marker = new google.maps.Marker({
-                    position: myLatlng,
-                    map: map,
-                    draggable:true,
-                    title: $('#name' + id_number[0]).text()
+            function setupHandlers() {
+
+
+                $('.show_on_map').on('click', function() {
+                    marker.setMap(null); //remove existing marker
+                    //console.log($(this).attr('id'));
+                    var id = $(this).attr('id');
+                    var id_number = id.match(/\d+$/);
+                    //console.log(id_number);
+                    var lat = $('#lat' + id_number[0]).text();
+                    var long = $('#long' + id_number[0]).text();
+                    var myLatlng = new google.maps.LatLng(lat, long);
+
+                    marker = new google.maps.Marker({
+                        position: myLatlng,
+                        map: map,
+                        draggable: true,
+                        title: $('#name' + id_number[0]).text()
+                    });
                 });
-            });
-            
-            $(".edit").click(function(){
-                var id = $(this).attr('id');
-                var id_number = id.match(/\d+$/);
-                var name = $('#name' + id_number).text();
-                window.location.href = 'branches/' + name;
-            });
-            
-            $(".delete").click(function(){
-                var id = $(this).attr('id');
-                var id_number = id.match(/\d+$/);
-                var name = $('#name' + id_number).text();
-                $.ajax({
-                    url: 'api/branches/' + name,
-                    type: 'DELETE',
-                }).done(function(response){
-                    //console.log(response);
-                    var li = $('#name' + id_number).parent();
-                    li.remove();
-                    marker.setMap(null);
-                }).fail(function(error){
-                    alert('error: ' + JSON.stringify(error));
+
+                $(".edit").click(function() {
+                    var id = $(this).attr('id');
+                    var id_number = id.match(/\d+$/);
+                    var name = $('#name' + id_number).text();
+                    window.location.href = 'branches/' + name;
                 });
-            });
-        }
-            
+
+                $(".delete").click(function() {
+                    var id = $(this).attr('id');
+                    var id_number = id.match(/\d+$/);
+                    var name = $('#name' + id_number).text();
+                    $.ajax({
+                        url: 'api/branches/' + name,
+                        type: 'DELETE',
+                    }).done(function(response) {
+                        //console.log(response);
+                        var li = $('#name' + id_number).parent();
+                        li.remove();
+                        marker.setMap(null);
+                    }).fail(function(error) {
+                        alert('error: ' + JSON.stringify(error));
+                    });
+                });
+            }
+
             $(document).ready(function() {
+
+                $('#add_branch').click(function() {
+                    window.location.href = 'branches/add';
+                });
 //<!--
                 $.ajax({
                     url: 'api/branches',
@@ -149,8 +151,8 @@
                 });
                 //-->
             });
-            
-            function createInput (id, css_class, value, type) {
+
+            function createInput(id, css_class, value, type) {
                 var inputElement = document.createElement('input');
                 inputElement.type = type;
                 inputElement.id = id;
@@ -158,11 +160,11 @@
                 inputElement.value = value;
                 return inputElement;
             }
-            function createSpan(id, inner_html, display){
+            function createSpan(id, inner_html, display) {
                 var span = document.createElement('span');
                 span.id = id;
                 span.innerHTML = inner_html;
-                span.style.display=display;
+                span.style.display = display;
                 return span;
             }
         </script>
