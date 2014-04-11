@@ -208,9 +208,10 @@ public class EntityController {
 
     private static class MyPageable implements Pageable {
 
-        private Pageable page;
+        private final Pageable page;
 
         public MyPageable(Pageable page) {
+            this.page = page;
         }
 
         @Override
