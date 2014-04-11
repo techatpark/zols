@@ -203,58 +203,6 @@ public class EntityController {
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
             Pageable page) {
-        return dataStore.list(entityName, new MyPageable(page));
-    }
-
-    private static class MyPageable implements Pageable {
-
-        private final Pageable page;
-
-        public MyPageable(Pageable page) {
-            this.page = page;
-        }
-
-        @Override
-        public int getPageNumber() {
-            return page.getPageNumber();
-        }
-
-        @Override
-        public int getPageSize() {
-            return 100;
-        }
-
-        @Override
-        public int getOffset() {
-            return page.getOffset();
-        }
-
-        @Override
-        public Sort getSort() {
-            return page.getSort();
-        }
-
-        @Override
-        public Pageable next() {
-            return page.next();
-        }
-
-        @Override
-        public Pageable previousOrFirst() {
-            return page.previousOrFirst();
-        }
-
-        @Override
-        public Pageable first() {
-            return page.first();
-        }
-
-        @Override
-        public boolean hasPrevious() {
-            return page.hasPrevious();
-        }
-        
-        
-
-    }
+        return dataStore.list(entityName, page);
+    }   
 }
