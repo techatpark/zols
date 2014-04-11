@@ -50,6 +50,7 @@
         <swagger-springmvc.version>0.8.2</swagger-springmvc.version>
         <spring-hateoas.version>0.9.0.RELEASE</spring-hateoas.version>
         <github-api.version>1.50</github-api.version>
+        <javax.inject-version>1</javax.inject-version>        
         <org.apache.maven.plugins.compiler-version>3.0</org.apache.maven.plugins.compiler-version>
         <org.apache.maven.plugins.war-version>2.3</org.apache.maven.plugins.war-version>
         <org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
@@ -93,6 +94,7 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>${org.springframework-version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -123,6 +125,13 @@
                 <groupId>org.springframework.mobile</groupId>
                 <artifactId>spring-mobile-device</artifactId>
                 <version>${org.springframework.mobile-version}</version>
+            </dependency>
+            
+            <!-- Mongo DB -->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-mongodb</artifactId>
+                <version>${spring-data-mongodb-version}</version>            
             </dependency>
 
             <!-- File Upload -->
@@ -187,13 +196,18 @@
                 <artifactId>datastore</artifactId>
                 <version>${zols.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.zols</groupId>
+                <artifactId>setting</artifactId>
+                <version>${zols.version}</version>
+            </dependency>
 
 
             <!-- CGLIB, only required and used for @Configuration usage -->
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib-nodep</artifactId>
-                <version>2.2</version>
+                <version>${cglib-version}</version>
             </dependency>
 
             <!-- Aspect J -->
@@ -207,13 +221,13 @@
             <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
-                <version>1</version>
+                <version>${javax.inject-version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.springframework.hateoas</groupId>
                 <artifactId>spring-hateoas</artifactId>
-                <version>0.9.0.RELEASE</version>
+                <version>${spring-hateoas.version}</version>
             </dependency>
                         
             <dependency>
@@ -254,6 +268,7 @@
                 <version>${junit-version}</version>
                 <scope>test</scope>
             </dependency>
+            
         </dependencies>
     </dependencyManagement>
 

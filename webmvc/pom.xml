@@ -19,9 +19,7 @@
         <dependency>
             <groupId>org.springframework.mobile</groupId>
             <artifactId>spring-mobile-device</artifactId>
-        </dependency>
-
-		
+        </dependency>	
 
         <!-- jackson -->
         <dependency>
@@ -62,36 +60,36 @@
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
         </dependency>	
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>locale</artifactId>
             <version>${project.version}</version>
         </dependency>	
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>linkmanager</artifactId>            
         </dependency>
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>feedback</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>template</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>setting</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>branchmanager</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.zols</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>documentmanager</artifactId>
             <version>${project.version}</version>
         </dependency>
