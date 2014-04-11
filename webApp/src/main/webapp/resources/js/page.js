@@ -9,9 +9,11 @@ $(document).ready(function() {
     }
 
     if (!$("#name").val()) {
+        var contextpath = document.URL.substring(document.URL.indexOf('/',document.URL.indexOf('//')+2));
+        contextpath = contextpath.substring(0,contextpath.indexOf('/',2));
         $.ajax(
                 {
-                    url: '/zols/api/templates',
+                    url: contextpath + '/api/templates',
                     type: 'GET',
                     dataType: "json",
                     contentType: 'application/json',
@@ -23,7 +25,7 @@ $(document).ready(function() {
                         if (data.content) {
                             for (index in data.content) {
                                 template = data.content[index];
-                                var box = $(".wrap").append('<div class="box"><div class="boxInner"><img src="../../../zols/resources/css/images/icons/entities.svg" alt="' + template.name + '" /><div class="titleBox">' + template.label + '</div></div></div>');
+                                var box = $(".wrap").append('<div class="box"><div class="boxInner"><img src="../../..'+ contextpath + '/resources/css/images/icons/entities.svg" alt="' + template.name + '" /><div class="titleBox">' + template.label + '</div></div></div>');
                             }
                         }
                         $(".boxInner img").click(function() {
