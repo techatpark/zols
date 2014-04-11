@@ -4,17 +4,14 @@
     <modelVersion>4.0.0</modelVersion>    
     <groupId>org.zols</groupId>
     <artifactId>documentmanager</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>Document Manager</name>
-    
+    <packaging>jar</packaging>    
+    <name>Document Manager</name>    
     <parent>
         <groupId>org.zols</groupId>
         <artifactId>zols</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>

@@ -4,8 +4,7 @@
     <groupId>org.zols</groupId>
     <artifactId>feedback</artifactId>
     <packaging>jar</packaging>
-    <name>Feedback Manager</name>
-    
+    <name>Feedback Manager</name>    
     <parent>
         <groupId>org.zols</groupId>
         <artifactId>zols</artifactId>
