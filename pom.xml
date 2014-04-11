@@ -5,7 +5,7 @@
     <groupId>org.zols</groupId>
     <artifactId>zols</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <name>Zols</name>
     <description>Dynamic Type System for Java</description>
     <scm>
@@ -29,7 +29,8 @@
     </modules>
 
     <properties>
-        <zols.version>1.0-SNAPSHOT</zols.version>
+        <zols.version>0.1-SNAPSHOT</zols.version>
+        <zolsprepare-maven-plugin.version>0.1-SNAPSHOT</zolsprepare-maven-plugin.version>
         <java-version>1.6</java-version>
         <org.springframework-version>4.0.2.RELEASE</org.springframework-version>
         <org.springframework.mobile-version>1.1.1.RELEASE</org.springframework.mobile-version>
@@ -347,7 +348,7 @@
                 <plugin>
                     <groupId>zols</groupId>
                     <artifactId>zolsprepare-maven-plugin</artifactId>
-                    <version>1.0-SNAPSHOT</version>
+                    <version>${zolsprepare-maven-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
