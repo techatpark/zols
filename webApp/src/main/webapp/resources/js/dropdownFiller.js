@@ -34,7 +34,7 @@
         // Load From Data Store
         if (selectBox.is(':empty')) {
             $.ajax({
-                url: contextpath + 'master/all/' + selectBox.attr('data-master'),
+                url: contextpath + '/master/all/' + selectBox.attr('data-master'),
                 success: function(result) {
                     $.each(result[selectBox.attr('data-master')], function() {
                         selectBox.append($("<option />").val(this.name).text(this.name));
