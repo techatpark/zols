@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>Edit Templates</title>
+        <title>Feedback</title>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
         <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
 
@@ -14,7 +14,7 @@
                 <legend>Feedback</legend>
                 <ul>
                     <li><label>Title</label><input id="title" name="title" type="text" th:field="*{title}"/></li>                    
-                    <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
+                    <li><label>Description</label><textarea id="description" name="description" th:field="*{description}"/></li>
                     <li>
                         <button id="submit">Submit</button>
                         <button id="cancel" type="button">Cancel</button>
