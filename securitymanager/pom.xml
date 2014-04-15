@@ -38,6 +38,9 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>datastore</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>org.kohsuke</groupId>
+            <artifactId>github-api</artifactId>            
+        </dependency>
     </dependencies>
 </project>
