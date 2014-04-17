@@ -30,7 +30,7 @@ public class User implements UserDetails {
 	private String lastName;
 
 	/* Spring Security fields*/
-	private List<Role> authorities;
+	private Collection<? extends GrantedAuthority> authorities;
 	private boolean accountNonExpired = true;
 	private boolean accountNonLocked = true;
 	private boolean credentialsNonExpired = true;
@@ -83,7 +83,7 @@ public class User implements UserDetails {
 		return this.authorities;
 	}
 
-	public void setAuthorities(List<Role> authorities) {
+	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
 	}
 

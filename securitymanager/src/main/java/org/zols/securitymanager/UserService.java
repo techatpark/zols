@@ -2,17 +2,19 @@ package org.zols.securitymanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.kohsuke.github.GHMyself;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.zols.securitymanager.domain.Role;
 import org.zols.securitymanager.domain.User;
 
 @Service
@@ -28,12 +30,12 @@ public class UserService implements UserDetailsService {
             user.setUsername(userName);
             user.setPassword(password);
             
-            Role role = new Role();
-            role.setName("ADMIN");
-            List<Role> roles = new ArrayList<Role>();
-            roles.add(role);
+            SimpleGrantedAuthority role = new SimpleGrantedAuthority("ADMIN");
             
-            user.setAuthorities(roles);
+            Collection<SimpleGrantedAuthority> authorities  = new ArrayList<SimpleGrantedAuthority>();
+            authorities.add(role);
+            
+            user.setAuthorities(authorities);
             
             
         } catch (IOException ex) {
