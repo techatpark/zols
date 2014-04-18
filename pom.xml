@@ -80,9 +80,9 @@
                 <version>${org.springframework-version}</version>
             </dependency>
 
-            <dependency>
-                <artifactId>spring-tx</artifactId>
+            <dependency>                
                 <groupId>org.springframework</groupId>
+                <artifactId>spring-tx</artifactId>
                 <version>${org.springframework-version}</version>
             </dependency>
 
@@ -107,6 +107,17 @@
                 <artifactId>spring-webmvc</artifactId>
                 <version>${org.springframework-version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-messaging</artifactId>
+                <version>${org.springframework-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>${org.springframework-version}</version>
+            </dependency>       
+            
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-config</artifactId>
