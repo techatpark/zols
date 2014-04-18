@@ -12,7 +12,7 @@ import org.zols.web.domain.HelloMessage;
 @Controller
 public class GreetingController {
 
-    @MessageMapping("/hello")
+    @MessageMapping("/helloGreetings")
     @SendTo("/topic/greetings")
     public Greeting greeting(HelloMessage message) throws Exception {
         Thread.sleep(3000); // simulated delay

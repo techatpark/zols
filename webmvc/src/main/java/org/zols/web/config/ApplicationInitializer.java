@@ -25,11 +25,13 @@ public class ApplicationInitializer implements WebApplicationInitializer {
 				servletContext.addServlet("dispatcher", new DispatcherServlet(rootContext));
 		dispatcher.setLoadOnStartup(1); 
 		dispatcher.addMapping("/");
+		dispatcher.setAsyncSupported(true);
 		
 		Dynamic filter = servletContext.addFilter("characterEncodingFilter", CharacterEncodingFilter.class);
 		filter.addMappingForUrlPatterns(null, false, "/*");
 		filter.setInitParameter("encoding", "UTF-8");
 		filter.setInitParameter("forceEncoding", "true");
+		filter.setAsyncSupported(true);
 		
 		servletContext.addFilter("corsFilter", CorsFilter.class)
 			.addMappingForUrlPatterns(null, false, "/*");

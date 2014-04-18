@@ -1,9 +1,8 @@
 package org.zols.web.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.Charset;
 import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,7 @@ import org.springframework.mobile.device.site.SitePreferenceHandlerMethodArgumen
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
@@ -28,6 +28,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.zols.securitymanager.config.SecurityConfig;
 import org.zols.swagger.config.SwaggerConfig;
 import org.zols.web.interceptor.PagePopulationInterceptor;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @EnableWebMvc
@@ -60,6 +63,11 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         argumentResolvers.add(pageableArgResolver);
         argumentResolvers.add(sitePreferenceHandlerMethodArgumentResolver());
     }
+    
+    @Override
+	public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+		configurer.setDefaultTimeout(30*1000L);
+	}
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -81,6 +89,8 @@ public class ApplicationConfiguration extends WebMvcConfigurerAdapter {
         converters.add(jsonHttpMessageConverter());
         converters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
     }
+    
+    
 
     @Bean
     public MappingJackson2HttpMessageConverter jsonHttpMessageConverter() {
