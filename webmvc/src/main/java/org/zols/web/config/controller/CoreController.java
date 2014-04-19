@@ -5,6 +5,20 @@
 package org.zols.web.config.controller;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.domain.BaseObject;
 import org.zols.datastore.domain.Entity;
@@ -13,19 +27,9 @@ import org.zols.datastore.util.DynamicBeanGenerator;
 import org.zols.templatemanager.TemplateStorageManager;
 import org.zols.templatemanager.domain.Template;
 import org.zols.templatemanager.domain.TemplateStorage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@Api(value = "Core Operations")
 public class CoreController {
 
     @Autowired
@@ -43,7 +47,8 @@ public class CoreController {
         return "controlpanel";
     }
 
-    @RequestMapping(value = "/master/{name}", method = GET)
+    @ApiOperation(value = "Gets Master Data", notes = "Provided Master Data for Static and Dynamic Objects")
+    @RequestMapping(value = "/master/{name}", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List master(@PathVariable(value = "name") String name) throws IOException {
         List masterList = null;
