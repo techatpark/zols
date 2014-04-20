@@ -51,8 +51,8 @@ public class EntityController {
         return dataStore.create(entity, Entity.class);
     }
 
-    @RequestMapping(value = "/api/entities/{name}", method = GET)
-    @ApiIgnore
+    @ApiOperation(value = "Read", response =Map.class ,notes = "Return entity")
+    @RequestMapping(value = "/api/entities/{name}", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Map<String, Entity> read(@PathVariable(value = "name") String name) {
         LOGGER.info("Reading entity with id {}", name);
@@ -61,8 +61,8 @@ public class EntityController {
         return map;
     }
 
+    @ApiOperation(value = "Update", notes = "Updates an entity")
     @RequestMapping(value = "/api/entities/{name}", method = PUT)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Entity entity) {
@@ -74,16 +74,16 @@ public class EntityController {
         }
     }
 
+    @ApiOperation(value = "Delete", notes = "Deletes an entity")
     @RequestMapping(value = "/api/entities/{name}", method = DELETE)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting entity with id {}", name);
         dataStore.delete(name, Entity.class);
     }
 
-    @RequestMapping(value = "/api/entities", method = GET)
-    @ApiIgnore
+    @ApiOperation(value = "List", response = Page.class,notes = "List all entity")
+    @RequestMapping(value = "/api/entities", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Page<Entity> list(
             Pageable page) {
@@ -152,8 +152,8 @@ public class EntityController {
         return "org/zols/datastore/data";
     }
 
+    @ApiOperation(value = "Read data", response = BaseObject.class,notes = "Read entity")
     @RequestMapping(value = "api/data/{entityName}/{dataName:.+}", method = GET)
-    @ApiIgnore
     @ResponseBody
     public BaseObject readData(@PathVariable(value = "entityName") String entityName,
             @PathVariable(value = "dataName") String dataName,
@@ -162,16 +162,16 @@ public class EntityController {
         return dataStore.read(dataName, clazz);
     }
 
+    @ApiOperation(value = "create", response = BaseObject.class,notes = "create an entity")
     @RequestMapping(value = "/api/data/{entityName}", method = POST)
-    @ApiIgnore
     @ResponseBody
     public BaseObject create(@PathVariable(value = "entityName") String entityName, @RequestBody HashMap<String, String> entityObjectMap) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         return dataStore.create(dataStore.getBaseObject(clazz, entityName, entityObjectMap), clazz);
     }
 
+    @ApiOperation(value = "Update", notes = "update datastore entity")
     @RequestMapping(value = "/api/data/{entityName}/{name:.+}", method = PUT)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name,
             @RequestBody HashMap<String, String> entityObjectMap) {
@@ -188,16 +188,16 @@ public class EntityController {
         }
     }
 
+    @ApiOperation(value = "Delete", notes = "delete datastore entity")
     @RequestMapping(value = "/api/data/{entityName}/{name:.+}", method = DELETE)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "entityName") String entityName, @PathVariable(value = "name") String name) {
         Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(entityName);
         dataStore.delete(name, clazz);
     }
 
-    @RequestMapping(value = "/api/data/{entityName}", method = GET)
-    @ApiIgnore
+     @ApiOperation(value = "List",response = Page.class, notes = "List datastore")
+    @RequestMapping(value = "/api/data/{entityName}", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Page<BaseObject> list(@PathVariable(value = "entityName") String entityName,
             Pageable page) {
