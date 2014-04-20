@@ -7,8 +7,8 @@
 package org.zols.linkmanager.web;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import org.zols.linkmanager.LinkManager;
-import org.zols.linkmanager.domain.Link;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,14 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.zols.datastore.web.controller.MenuNode;
+import org.zols.linkmanager.LinkManager;
+import org.zols.linkmanager.domain.Link;
 
-/**
- * Controller for link
- *
- * @author poomalai
- */
 @Controller
+@Api(value = "Links",description = "operations about links")
 public class LinkController {
     
     private static final Logger LOGGER = LoggerFactory
@@ -40,8 +38,8 @@ public class LinkController {
     @Autowired
     private LinkManager linkManager;
     
-    @RequestMapping(value = "/api/links", method = POST)
-    @ApiIgnore
+    @ApiOperation(value = "Create", response = Link.class, notes = "Returns new link")
+    @RequestMapping(value = "/api/links", method = POST, consumes = APPLICATION_JSON_VALUE,produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Link create(@RequestBody Link link) {
         LOGGER.info("Creating new links {}", link);
@@ -52,8 +50,8 @@ public class LinkController {
         return linkManager.add(link);
     }
     
+    @ApiOperation(value = "Update", notes = "Updates existing link")
     @RequestMapping(value = "/api/links/{name}", method = PUT)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Link links) {
@@ -63,16 +61,23 @@ public class LinkController {
         }
     }
     
+    @ApiOperation(value = "Get link by name", response = Link.class, notes = "Get given link")
+    @RequestMapping(value = "/api/links/{name}", method = GET,produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Link getLinkByName(@PathVariable(value = "name") String name){
+        return linkManager.getLink(name);
+    }
+    
+    @ApiOperation(value = "Delete", notes = "Deletes given link")
     @RequestMapping(value = "/api/links/{name}", method = DELETE)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting links with id {}", name);
         linkManager.delete(name);
     }
     
-    @RequestMapping(value = "/api/links", method = GET)
-    @ApiIgnore
+    @ApiOperation(value = "List", response = Page.class, notes = "Returns all saved links")
+    @RequestMapping(value = "/api/links", method = GET,produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Page<Link> list(
             Pageable page) {
@@ -80,16 +85,16 @@ public class LinkController {
         return linkManager.linksByPageable(page);
     }
     
-    @RequestMapping(value = "/api/links/categories/{categoryName}", method = GET)
-    @ApiIgnore
+    @ApiOperation(value = "ListByCategory", response = List.class, notes = "Returns link by category")
+    @RequestMapping(value = "/api/links/categories/{categoryName}", method = GET,produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Link> listByCategory(@PathVariable(value = "categoryName") String categoryName) {
         LOGGER.info("Listing links by category " +  categoryName);
         return linkManager.listFirstLevelByCategory(categoryName);
     }
     
-    @RequestMapping(value = "/api/links/children/{parentName}", method = GET)
-    @ApiIgnore
+    @ApiOperation(value = "Children", response = List.class, notes = "Returns child links of given parent link")
+    @RequestMapping(value = "/api/links/children/{parentName}", method = GET,produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<Link> childrenOf(@PathVariable(value = "parentName") String parentName) {
         LOGGER.info("Listing links by parent " + parentName);
@@ -113,6 +118,7 @@ public class LinkController {
         model.addAttribute("link", link);
         return "org/zols/linkmanager/link";
     }
+    
     
     @RequestMapping(value = "/links/edit/{name}", method = GET)
     @ApiIgnore
