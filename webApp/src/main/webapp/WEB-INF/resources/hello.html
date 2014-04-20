@@ -3,14 +3,11 @@
       xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>Category</title>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
-        <link rel="stylesheet" type="text/css" media="screen" href="../../../../webApp/src/main/webapp/resources/css/form.css" th:href="@{/resources/css/form.css}"/>
+        <title>Hello</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/form.css" th:href="@{/resources/css/form.css}"/>
     </head>
     <body th:fragment="content">
-        <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
-                Javascript and reload this page!</h2></noscript>
+        
         <div>
             <div>
                 <button id="connect" onclick="connect();">Connect</button>
@@ -22,8 +19,12 @@
                 <p id="response"></p>
             </div>
         </div>
-        <script th:src="@{/resources/js/sockjs-0.3.4.js}"></script>
-        <script th:src="@{/resources/js/stomp.js}"></script>
-        <script th:src="@{/resources/js/hello.js}"></script>
+        <script src="../../resources/js/sockjs-0.3.4.js" th:src="@{/resources/js/sockjs-0.3.4.js}"></script>
+        <script src="../../resources/js/stomp.js" th:src="@{/resources/js/stomp.js}"></script>
+        <script src="../../resources/js/hello.js" th:src="@{/resources/js/hello.js}"></script>
+        <noscript>
+            <h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being enabled. Please enable
+                Javascript and reload this page!</h2>
+        </noscript>
     </body>
 </html>
