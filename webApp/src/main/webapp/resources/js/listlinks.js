@@ -27,7 +27,7 @@
 
     };
     $.fn.loadLinksByCategory = function() {
-        var _url = 'api/linkcategories/' + $("#link_category").val();
+        var _url = 'api/links/categories/' + $("#link_category").val();
         var linksOfCategory = getData(_url, 'GET', 'json', '', 'application/json', false);
         $('.breadcrumb ul').empty();
         $(this).loadLinks(linksOfCategory);
