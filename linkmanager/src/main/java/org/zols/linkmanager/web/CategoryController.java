@@ -40,7 +40,7 @@ public class CategoryController {
     @Autowired
     private LinkManager linkManager;
 
-    @RequestMapping(value = "/api/links/categories", method = POST)
+    @RequestMapping(value = "/api/linkcategories", method = POST)
     @ApiIgnore
     @ResponseBody
     public Category create(@RequestBody Category category) {
@@ -48,7 +48,7 @@ public class CategoryController {
         return linkManager.add(category);
     }
 
-    @RequestMapping(value = "/api/links/categories/{name}", method = PUT)
+    @RequestMapping(value = "/api/linkcategories/{name}", method = PUT)
     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
@@ -59,7 +59,7 @@ public class CategoryController {
         }
     }
 
-    @RequestMapping(value = "/api/links/categories/{name}", method = DELETE)
+    @RequestMapping(value = "/api/linkcategories/{name}", method = DELETE)
     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
@@ -67,21 +67,21 @@ public class CategoryController {
         linkManager.deleteCategory(name);
     }
 
-    @RequestMapping(value = "/links/categories/{name}", method = GET)
+    @RequestMapping(value = "/linkcategories/{name}", method = GET)
     @ApiIgnore
     public String edit(@PathVariable(value = "name") String name, Model model) {
         model.addAttribute("category", linkManager.getCategory(name));
         return "org/zols/linkmanager/category";
     }
 
-    @RequestMapping(value = "/links/categories/add", method = GET)
+    @RequestMapping(value = "/linkcategories/add", method = GET)
     @ApiIgnore
     public String add(Model model) {
         model.addAttribute("category", new Category());
         return "org/zols/linkmanager/category";
     }
 
-    @RequestMapping(value = "/api/links/categories", method = GET)
+    @RequestMapping(value = "/api/linkcategories", method = GET)
     @ApiIgnore
     @ResponseBody
     public Page<Category> list(
@@ -90,7 +90,7 @@ public class CategoryController {
         return linkManager.categoriesByPageable(page);
     }
 
-    @RequestMapping(value = "/links/categories", method = GET)
+    @RequestMapping(value = "/linkcategories", method = GET)
     @ApiIgnore
     public String listing() {
         return "org/zols/linkmanager/listcategories";

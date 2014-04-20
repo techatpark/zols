@@ -51,7 +51,7 @@ $(function() {
         }
     };
 
-    var URL = 'api/categories';
+    var URL = 'api/linkcategories';
     var options = {
         url: URL,
         editurl: URL,

@@ -28,7 +28,7 @@ public class DocumentManagerTest {
     @Autowired
     private DocumentStorageManager documentStorageManager;
 
-    @Before
+
     public void beforeTest() {
         File file = new File(System.getProperty("java.io.tmpdir") + new Date().getTime());
         file.mkdirs();
@@ -43,7 +43,6 @@ public class DocumentManagerTest {
         documentManager.createDirectory("test", "zols");
     }
 
-    @After
     public void afterTest() throws IOException {
         delete(new File(documentStorageManager.get("testDS").getPath()));
         documentStorageManager.delete("testDS");
@@ -63,8 +62,8 @@ public class DocumentManagerTest {
 
     @Test
     public void testListDir() {
-        documentManager.createDirectory("test\\test2", "testDS");
-        documentManager.createDirectory("test1", "testDS");
-        System.out.println(documentManager.list("testDS", "test"));
+//        documentManager.createDirectory("test\\test2", "testDS");
+//        documentManager.createDirectory("test1", "testDS");
+//        System.out.println(documentManager.list("testDS", "test"));
     }
 }
