@@ -6,14 +6,15 @@
 package org.zols.languagemanager.web;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
-import org.zols.languagemanager.LanguageManager;
-import org.zols.languagemanager.domain.Language;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.zols.languagemanager.LanguageManager;
+import org.zols.languagemanager.domain.Language;
 
 /**
  * Controller for Language Handling
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Navin.
  */
 @Controller
+@Api(value = "Language",description = "operations about Language")
 public class LanguageController {
 
     private static final Logger LOGGER = LoggerFactory
@@ -40,16 +44,16 @@ public class LanguageController {
     @Autowired
     LanguageManager languagesManager;
 
-    @RequestMapping(value = "/api/languages", method = POST)
-    @ApiIgnore
+    @ApiOperation(value = "Create", response = Language.class, notes = "Returns new language")
+    @RequestMapping(value = "/api/languages", method = POST,consumes = APPLICATION_JSON_VALUE,produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public Language create(@RequestBody Language language) {
         LOGGER.info("Creating new language {}", language);
         return languagesManager.add(language);
     }
 
+    @ApiOperation(value = "Update", notes = "Updates existing language")
     @RequestMapping(value = "/api/languages/{name}", method = PUT)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
             @RequestBody Language language) {
@@ -59,12 +63,19 @@ public class LanguageController {
         }
     }
 
+    @ApiOperation(value = "Delete", notes = "Deletes given language")
     @RequestMapping(value = "/api/languages/{name}", method = DELETE)
-    @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "name") String name) {
         LOGGER.info("Deleting language with id {}", name);
         languagesManager.delete(name);
+    }
+    
+    @ApiOperation(value = "get Language by name",response = Language.class , notes = "Return language")
+    @RequestMapping(value = "/api/languages/{name}", method = GET, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Language getLanguageByName(@PathVariable(value = "name") String name){
+        return languagesManager.get(name);
     }
 
     @RequestMapping(value = "/languages/{name}", method = GET)
@@ -81,8 +92,8 @@ public class LanguageController {
         return "org/zols/languagemanager/language";
     }
 
+    @ApiOperation(value = "List", response = Page.class, notes = "Returns all saved languages")
     @RequestMapping(value = "/api/languages", method = GET)
-    @ApiIgnore
     @ResponseBody
     public Page<Language> list(
             Pageable page) {
