@@ -8,7 +8,7 @@ package org.zols.documentmanager.domain;
 import org.springframework.data.annotation.Id;
 
 /**
- * Describes the attributes that should be inncluded in document storage
+ * Describes the attributes that should be included in document storage
  *
  * @author Praveen pvn.
  */
