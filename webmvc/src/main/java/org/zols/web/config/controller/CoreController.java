@@ -47,6 +47,12 @@ public class CoreController {
         return "controlpanel";
     }
 
+    @RequestMapping(value = "/", method = GET)
+    @ApiIgnore
+    public String index() {
+        return "index";
+    }
+
     @ApiOperation(value = "Gets Master Data", notes = "Provided Master Data for Static and Dynamic Objects")
     @RequestMapping(value = "/master/{name}", method = GET, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -63,7 +69,7 @@ public class CoreController {
             entity.setName("Double");
             entity.setLabel("Double");
             masterList.add(0, entity);
-            
+
             entity = new Entity();
             entity.setName("Time");
             entity.setLabel("Time");
@@ -78,7 +84,7 @@ public class CoreController {
             entity.setName("RichText");
             entity.setLabel("Rich Text");
             masterList.add(0, entity);
-            
+
             entity = new Entity();
             entity.setName("Boolean");
             entity.setLabel("Boolean");
@@ -93,7 +99,7 @@ public class CoreController {
             entity.setName("Integer");
             entity.setLabel("Integer");
             masterList.add(0, entity);
-            
+
             entity = new Entity();
             entity.setName("BigText");
             entity.setLabel("Big Text");
@@ -126,7 +132,7 @@ public class CoreController {
             Class<? extends BaseObject> clazz = dynamicBeanGenerator.getBeanClass(name);
             masterList = dataStore.list(clazz);
             for (Object object : masterList) {
-                
+
             }
         }
         return masterList;
