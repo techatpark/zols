@@ -23,11 +23,12 @@
                     Welcome to <span sec:authentication="name">Username</span>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/controlpanel}"> Control Panel</a>
+                    &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/api}"> API</a>
                     &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/logout}">Logout</a>
                 </div>
                 /*/-->
                 <div th:fragment="logout" sec:authorize="!isAuthenticated()" class="user">
-                    <a th:href="@{/login}">Login</a>
+                    <a th:href="@{/api}">API</a> | <a th:href="@{/login}">Login</a>
                 </div>
             </div>
                 <nav th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
