@@ -29,7 +29,7 @@ import org.zols.templatemanager.domain.Template;
 import org.zols.templatemanager.domain.TemplateStorage;
 
 @Controller
-@Api(value = "Core Operations")
+@Api(value = "Core",description = "Core Operations")
 public class CoreController {
 
     @Autowired
