@@ -187,6 +187,10 @@ public class LinkManager {
 
 	private void walkLinkTree(List<Link> links) {
 		for (Link link : links) {
+                    //Assign Default Url
+                    if(link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0 ) {
+                        link.setTargetUrl("/pages/add");
+                    }
 		    List<Link> childLinks = getChildLinks(link);
 			link.setChildren(childLinks);
 			walkLinkTree(childLinks);
