@@ -16,6 +16,7 @@ import org.zols.templatemanager.domain.Template;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.zols.linkmanager.LinkManager;
 
 /**
  *
@@ -29,6 +30,9 @@ public class PageManager {
 
     @Autowired
     private TemplateManager templateManager;
+    
+    @Autowired
+    private LinkManager linkManager;
 
     @Autowired
     private DynamicBeanGenerator dynamicBeanGenerator;
@@ -42,7 +46,9 @@ public class PageManager {
                         createPageRequest.getData()),
                 beanClass);
         page.setDataName(object.getName());
-        return dataStore.create(page, Page.class);
+        page = dataStore.create(page, Page.class);
+        linkManager.linkUrl(createPageRequest.getLinkName(), "/page/"+page.getName());       
+        return page;
     }
 
     public void update(Page page) {

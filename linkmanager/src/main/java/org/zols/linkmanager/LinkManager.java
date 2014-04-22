@@ -120,7 +120,6 @@ public class LinkManager {
         return dataStore.list(criterias, Link.class);
 
     }
-    
 
     /**
      * Get the link with given link String
@@ -167,14 +166,20 @@ public class LinkManager {
         }
         dataStore.delete(linkName, Link.class);
     }
+    
+    public void linkUrl(String linkName,String urlTobeLinked) {
+        Link link = getLink(linkName);
+        link.setTargetUrl(urlTobeLinked);
+        update(link);
+    }
 
     public Map<String, List<Link>> getApplicationLinks() {
         List<Category> categories = getAllCategories();
         if (categories != null) {
             Map<String, List<Link>> applicationLinks = new HashMap<String, List<Link>>(categories.size());
-            List<Link> firstlevelLinks ;
+            List<Link> firstlevelLinks;
             for (Category category : categories) {
-                firstlevelLinks = listFirstLevelByCategory(category.getName()) ;
+                firstlevelLinks = listFirstLevelByCategory(category.getName());
                 walkLinkTree(firstlevelLinks);
                 applicationLinks.put(category.getName(), firstlevelLinks);
             }
@@ -185,20 +190,20 @@ public class LinkManager {
         return null;
     }
 
-	private void walkLinkTree(List<Link> links) {
-		for (Link link : links) {
-                    //Assign Default Url
-                    if(link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0 ) {
-                        link.setTargetUrl("/pages/add");
-                    }
-		    List<Link> childLinks = getChildLinks(link);
-			link.setChildren(childLinks);
-			walkLinkTree(childLinks);
-		}
-	}
-    
-    private List<Link> getChildLinks(Link link){
-    	return listByParent(link.getName());
+    private void walkLinkTree(List<Link> links) {
+        for (Link link : links) {
+            //Assign Default Url
+            if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
+                link.setTargetUrl("/pages/add?link=" + link.getName());
+            }
+            List<Link> childLinks = getChildLinks(link);
+            link.setChildren(childLinks);
+            walkLinkTree(childLinks);
+        }
+    }
+
+    private List<Link> getChildLinks(Link link) {
+        return listByParent(link.getName());
     }
 
 }

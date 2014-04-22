@@ -5,7 +5,6 @@
  */
 package org.zols.templatemanager.domain;
 
-import org.zols.datastore.domain.BaseObject;
 import java.util.HashMap;
 
 /**
@@ -15,6 +14,7 @@ import java.util.HashMap;
 public class CreatePageRequest {
 
     private Page page;
+    private String linkName;
     private HashMap<String, String> data;
 
     public Page getPage() {
@@ -32,5 +32,13 @@ public class CreatePageRequest {
     public void setData(HashMap<String, String> data) {
         this.data = data;
     }
+
+    public String getLinkName() {
+        return linkName;
+    }
+
+    public void setLinkName(String linkName) {
+        this.linkName = linkName;
+    }   
 
 }

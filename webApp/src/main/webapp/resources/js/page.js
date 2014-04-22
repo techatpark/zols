@@ -85,6 +85,7 @@ $(document).ready(function() {
             var createPageRequest = new Object();
             createPageRequest.page = $("#my-form").toObject({mode: 'first'});
             createPageRequest.data = $("#dynamicForm").toObject({mode: 'first'});
+            createPageRequest.linkName= $("#dynamicForm").attr("name");
             $.ajax(
                 {
                     url: pathname,

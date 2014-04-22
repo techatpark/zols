@@ -27,6 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -89,7 +90,8 @@ public class PageController {
 
     @RequestMapping(value = "/pages/add", method = GET)
     @ApiIgnore
-    public String add(Model model) {
+    public String add(Model model,@RequestParam(value = "link")String link) {
+        model.addAttribute("link", link);
         model.addAttribute("page", new Page());
         return "org/zols/templatemanager/page";
     }
