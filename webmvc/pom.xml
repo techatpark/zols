@@ -18,6 +18,15 @@
         
         <dependency>
             <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>            
+        </dependency>   
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>            
+        </dependency>                 
+        
+        <dependency>
+            <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>            
         </dependency>
         <dependency>
@@ -68,6 +77,11 @@
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
         </dependency>	
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>datastore</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>locale</artifactId>
