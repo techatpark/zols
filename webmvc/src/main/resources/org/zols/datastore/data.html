@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Data</title>
+    </head>
+    <body th:fragment="content">
+        <form id="dynamicForm" th:name="${entityName}" th:title="${dataName}"></form>   
+        <button id="submit" type="submit">Submit</button>
+        <button id="cancel" type="button">Cancel</button>
+
+        <div id="jsonData" style="float:left; width:50%;"></div>
+        <script type="text/javascript" src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/jquery-te-1.4.0.min.js" th:src="@{/resources/js/jquery-te-1.4.0.min.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/makeform/makeform.js" th:src="@{/resources/js/makeform/makeform.js}"></script>        
+        <script src="../../../../../resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/prettyprint.js" th:src="@{/resources/js/prettyprint.js}"></script>
+        <script type="text/javascript" src="../../../../../resources/js/data.js" th:src="@{/resources/js/data.js}"></script>
+
+    </body>
+</html>

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Edit entities</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+    </head>
+    <body th:fragment="content">
+        <form id="my-form" th:object="${entity}">
+            <fieldset>
+                <legend>Entity</legend>
+                <ul>
+                    <li><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></li>
+                    <li><label>Label</label><input id="label" name="label" type="text" th:field="*{label}"/></li>
+                    <li><label>Description</label><input id="description" name="description" type="text" th:field="*{description}"/></li>
+                    <li>                        
+                        <section>
+                            <button id="addAttribute" type="button">Add Attribute</button>
+                            <fieldset>
+                                <legend>Attributes</legend>                                                       
+                                <ul>                                    
+                                    <li id="Attributes">                                        
+                                        <section th:each="attributes, stat : *{attributes}" th:name="'attributes[' + ${stat.index} +']'">
+                                            <fieldset>
+                                                <legend th:text="'Attribute(' + ${stat.index} +')'">Attributes</legend>
+                                                <ul>
+                                                    <li>
+                                                        <label>Name</label><input th:name="attributes[0].name" type="text" th:field="*{attributes[__${stat.index}__].name}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Label</label><input th:name="attributes[0].label" type="text" th:field="*{attributes[__${stat.index}__].label}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Type</label><select th:name="attributes[0].type" th:field="*{attributes[__${stat.index}__].type}" th:value="*{attributes[__${stat.index}__].type}" data-master="attributeType"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Description</label><input th:name="attributes[0].description" type="text" th:field="*{attributes[__${stat.index}__].description}"/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Reference</label>
+                                                        <input type="checkbox" th:name="attributes[0].isReference"  th:field="*{attributes[__${stat.index}__].isReference}" />
+                                                    </li>
+
+                                                    <li>
+                                                        <button type="button" data-group="attributes">Remove Attribute</button>
+                                                    </li>
+                                                </ul>
+                                            </fieldset>
+
+                                        </section>
+                                    </li>
+                                </ul>
+                            </fieldset>
+
+                        </section>
+                    </li>    
+
+                    <li>
+                        <button id="submit" type="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+
+                </ul>
+            </fieldset>
+        </form>
+
+
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../../../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script src="../../../../../resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
+        <script type="text/javascript">
+
+
+            String.prototype.replaceAt = function(i, char) {
+                return this.substr(0, i) + char + this.substr(i);
+            };
+
+
+            $(document).ready(function() {
+
+                var pathname = window.location.pathname;
+                var method = window.location.pathname;
+                var listing_pathname;
+                if (pathname.indexOf("/add") !== -1) {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+                    method = 'POST';
+                }
+                else {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+
+                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+                    method = 'PUT';
+                }
+
+
+                console.log(pathname + ' == ' + listing_pathname);
+                $("#addAttribute").click(function() {
+                    $('#Attributes').handlebars('attribute', {name: "$new$", index: $('#Attributes section').length});
+                    $('#Attributes section').last().find('button[data-group="attributes"]').each(function(index, value) {
+                        $(this).click(function() {
+                            doRemoveAction(this);
+                        });
+                    });
+                    $("#my-form").dropdownFiller();
+
+                });
+
+                $("#my-form").submit(function(e)
+                {
+                    console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+
+
+
+                    $.ajax(
+                            {
+                                url: pathname,
+                                type: method,
+                                data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function(data, textStatus, jqXHR)
+                                {
+                                    window.location.href = listing_pathname;
+                                },
+                                error: function(jqXHR, textStatus, errorThrown)
+                                {
+                                    console.log(jqXHR + "===" + textStatus);
+                                }
+                            });
+                    e.preventDefault();	//STOP default action
+                });
+
+                $('#cancel').click(function() {
+                    window.location.href = listing_pathname;
+                });
+
+                $("#my-form").dropdownFiller();
+
+            });
+            function doRemoveAction(removebutton) {
+                var section = $(removebutton).closest('section');
+                var sessionNameToBeRemoved = section.attr('name');
+                var removedSection = false;
+                $('#Attributes section').each(function(index, value) {
+                    if (!removedSection) {
+                        if ($(this).attr('name') === sessionNameToBeRemoved) {
+                            $(this).remove();
+                            removedSection = true;
+                            console.log('removed ' + $(this).attr('name'));
+                        }
+                    }
+                    else {
+                        doDecreaseIndex(this, index);
+                    }
+                });
+                section.remove();
+            }
+            //reduce index by one
+            function doDecreaseIndex(sessionToBeAdjusted, index) {
+                var currentName = $(sessionToBeAdjusted).attr('name');
+                var adjustedName = currentName.substring(0, currentName.lastIndexOf('[' + index + ']')) + '[' + (index - 1) + ']';
+                console.log('adjusting ' + currentName + ' to ' + adjustedName);
+                $(sessionToBeAdjusted).attr('name', adjustedName);
+                $(sessionToBeAdjusted).children().each(function(index, value) {
+                    var currentChildName = $(this).attr('name');
+                    if (currentChildName) {
+                        var adjustedChildName = currentChildName.replace(currentName, adjustedName);
+                        $(this).attr('name', adjustedChildName);
+                    }
+
+                });
+                console.log('adjusted ' + currentName + ' to ' + adjustedName);
+            }
+            $('button[data-group="attributes"]').each(function(index, value) {
+                $(this).click(function() {
+                    doRemoveAction(this);
+                });
+            });
+
+        </script>
+        <script id="attribute" type="text/x-handlebars-template">
+            <section name="attributes[{{index}}]">
+            <fieldset>
+            <legend>Attribute({{index}})</legend>
+            <ul>
+            <li><label>Name</label><input name="attributes[{{index}}].name" type="text" /></li>
+            <li><label>Label</label><input name="attributes[{{index}}].label" type="text" /></li>
+            <li><label>Type</label><select name="attributes[{{index}}].type" data-master="attributeType"/></li>
+            <li><label>Description</label><input name="attributes[{{index}}].description" type="text"/></li>
+            <li><label>Reference</label><input type="checkbox" name="attributes[{{index}}].isReference"/><input type="hidden" name="_attributes[{{index}}].isReference" value="true"/></li>
+            <li><button type="button" data-group="attributes">Remove Attribute</button></li>
+            </ul>
+            </fieldset>
+            </section>
+        </script>
+
+    </body>
+</html>

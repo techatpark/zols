@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Template</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+
+    </head>
+    <body th:fragment="content">
+        <form id="my-form" th:object="${template}">
+            <fieldset>
+                <legend>Template</legend>
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                    </li>
+                    <li>
+                        <label for="label">Label</label>
+                        <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                    </li>
+                    <li>
+                        <label for="dataType">Data Type</label>
+                        <select id="dataType" name="dataType" th:field="*{dataType}" th:value="*{dataType}" data-master="attributeType"/>                    
+                    </li>
+                    <li>
+                        <label for="path">Path</label>
+                        <select id="path" name="path" th:field="*{path}" th:value="*{path}" data-master="templatePath"/>                    
+                    </li>
+                    <li>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                    </li>
+
+                    <li>
+                        <button id="submit" type="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+                </ul>
+            </fieldset>
+        </form>
+
+
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../../../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script src="../../../../../resources/js/dropdownFiller.js" th:src="@{/resources/js/dropdownFiller.js}"></script>
+        <script type="text/javascript">
+
+
+            String.prototype.replaceAt = function(i, char) {
+                return this.substr(0, i) + char + this.substr(i);
+            };
+
+
+            $(document).ready(function() {
+
+                var pathname = window.location.pathname;
+                var method = window.location.pathname;
+                var listing_pathname;
+                if (pathname.indexOf("/add") !== -1) {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+                    method = 'POST';
+                }
+                else {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+
+                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+                    method = 'PUT';
+                }
+
+                $("#my-form").submit(function(e)
+                {
+                    console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+
+
+
+
+                    $.ajax(
+                            {
+                                url: pathname,
+                                type: method,
+                                data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function(data, textStatus, jqXHR)
+                                {
+                                    window.location.href = listing_pathname;
+
+                                },
+                                error: function(jqXHR, textStatus, errorThrown)
+                                {
+                                    console.log(jqXHR + "===" + textStatus);
+                                }
+                            });
+                    e.preventDefault();	//STOP default action
+                });
+
+                $('#cancel').click(function() {
+                    window.location.href = listing_pathname;
+                });
+
+                $("#my-form").dropdownFiller();
+
+            });
+
+        </script>
+
+
+    </body>
+</html>

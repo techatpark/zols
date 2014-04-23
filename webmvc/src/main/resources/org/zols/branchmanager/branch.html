@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Edit Branch</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+
+    </head>
+    <body th:fragment="content">
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBTUV2fR98XftHx-9PWw2URhdGVpIN38JA&amp;sensor=false&amp;libraries=places"></script>
+        <script type="text/javascript">
+            function initialize() {
+                geocoder = new google.maps.Geocoder();
+                var myLatlng = new google.maps.LatLng(-34.397, 150.644);
+                var mapOptions = {
+                  center: myLatlng,
+                  zoom: 1
+                };
+                map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+              
+                // Place a draggable marker on the map
+                marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    draggable:true,
+                    title:"some default location"
+                });
+                var input = /** @type {HTMLInputElement} */(document.getElementById('search_text'));
+                var autocomplete = new google.maps.places.Autocomplete(input);
+                autocomplete.bindTo('bounds', map);
+                
+                google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                    //console.log('in');
+                });
+            }
+            google.maps.event.addDomListener(window, 'load', initialize);
+        </script>
+        <div>
+            <label>name: </label>
+            <input type='text' value='' id='name' />
+        </div>
+        <div id='locate' >
+            <label>location: </label>
+            <input type='text' id='search_text' />
+            <input type='button' id='search_button' value='locate'/>
+            <br/>
+            <input type='button' value='Save location' id='save_location'/>
+        </div>
+        <div id='edit_details' style="display:none">
+            <label>Edit Description</label>
+            <textarea id='description' style="width:300px; height:100px;"/>
+            <br/>
+            <label>Edit Address</label>
+            <textarea id='address' style="width:300px; height:100px;"/>
+            <!--<br/>
+            <label>Features(TODO):</label>
+            <label>Feature 1</label>
+            <input type='checkbox' id='feature1'  />
+            <label>Feature 2</label>
+            <input type='checkbox' id='feature2' />
+            <label>Feature 3</label>
+            <input type='checkbox' id='feature3'  />
+            <br/>-->
+            <input type='button' value='Save details' id='save_details'/>
+        </div>
+        <div id='container'>
+            <div id="map-canvas" style="height: 500px; width:50%;"></div>
+        </div>
+        
+        <script>
+            var isAdd=true; //false for edit
+            var url_split = window.location.href.split('/');
+            var url_last = url_split.slice(-1);
+            var url = "";
+            var method = "";
+            var rest = {
+                add : {
+                    url: '../api/branches',
+                    method: 'POST'
+                },
+                current: {
+                    url: '../api/branches/' + url_last,
+                    method: 'GET'
+                },
+                update: {
+                    url: '../api/branches/' + url_last,
+                    method: 'PUT'
+                }
+            }
+            if(url_last == 'add') {//new
+                isAdd = true;
+                url = rest.add.url;
+                method = rest.add.method;
+            } else {//update
+                isAdd = false;
+                url = rest.update.url;
+                method = rest.update.method;
+                populate();
+            }
+            
+            function populate() {
+                $.ajax({
+                    url: rest.current.url,
+                    method: rest.current.method,
+                }).done(function(response){
+                    //console.log(response);
+                    $('#description').val(response.description);
+                    $('#address').val(response.address);
+                    $('#name').val(response.name);
+                    //$('#locate').hide();
+                    $('#edit_details').show();
+                    //put marker on map
+                    var myLatlng = new google.maps.LatLng(response.latitude, response.longitude);
+                    marker.setPosition(myLatlng);
+                    
+                }).fail(function(error){
+                    alert(JSON.stringify(error));
+                });
+            }
+            
+            $('#save_location').click(function(){
+                $('#edit_details').show();
+                //TODO: make marker immovable
+                
+            });
+            
+            $('#save_details').click(function(){
+                //Send details to backend
+                var name = $('#name').val()
+                var description = $('#description').val();
+                var address = $('#address').val();
+                var location_obj = marker.getPosition();
+                var features = {};
+                $.ajax({
+                    url: url,
+                    data: JSON.stringify({name: name, description: description, address: address, latitude: location_obj.k, longitude: location_obj.A/*, features: ''*/}),
+                    type: method,
+                    contentType: 'application/json'
+                }).done(function(response){
+                    //console.log(JSON.stringify(response));
+                    window.location = '../branches';
+                }).fail(function(error){
+                    alert('error: ' +  JSON.stringify(error));
+                });
+                //window.location = '../branches';
+            });
+            
+            $('#search_button').click(function(){
+                marker.setMap(null); //remove existing marker
+                var search_string = $('#search_text').val();
+                codeAddress(search_string);
+            });
+            
+            function codeAddress(search_string) {
+                //var address = document.getElementById("address").value;
+                geocoder.geocode( { 'address': search_string}, function(results, status) {
+                  if (status == google.maps.GeocoderStatus.OK) {
+                    map.setCenter(results[0].geometry.location);
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location,
+                        draggable: true
+                    });
+                    var address = results[0].formatted_address;
+                    $('#address').val(address);
+                  } else {
+                    //alert("Geocode was not successful for the following reason: " + status);
+                    //alert('position the marker and click to save');
+                    alert('Address not located. Manually position marker on map.');
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: new google.maps.LatLng(0, 0),
+                        draggable: true,
+                        title: 'move it to location'
+                    });
+                    google.maps.event.addListener(marker, 'click', saveLocation);
+                  }
+                });
+            }
+            //below not used
+            function saveLocation() {
+                /*var location_obj = marker.getPosition();
+                alert('latitude: ' + location_obj.k + '; longitude: ' + location_obj.A);*/
+            }
+        </script>
+    </body>
+</html>

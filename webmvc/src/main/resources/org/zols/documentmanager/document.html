@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Document</title>
+        <style>
+            body {font-family: "Trebuchet MS";}
+            h1 {font-size: 1.5em;}
+        </style>
+
+
+    </head>
+    <body th:fragment="content">
+
+        <div th:object="${documentStorage}">
+            <h1 th:text="*{description}"></h1>
+        </div>
+
+        <p>Select files to upload. Press Add button to add more file inputs.</p>
+        <button id="addFile" type="button">Add File</button>
+        <form method="post" th:action="@{/documents/}+${documentStorage.name}" th:object="${document}" enctype="multipart/form-data">
+            <fieldset><legend>File Manager</legend>                
+                <ul id="files">                    
+                    <li><input name="files[0]" type="file" /><button type="button">X</button></li>                         
+                </ul>      
+                <button type="submit" value="Upload" >Upload</button>
+            </fieldset>  
+        </form>
+
+        <ul th:each="file : ${files}">
+            <li>
+                <a th:href="${documentStorage.baseUrl}+'/'+${file.name}" th:text="${file.name}">Menu1</a>
+            </li>
+        </ul>
+
+        <script th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#addFile').click(function() {
+                    var name = 'files[' + $('#files').children().length + ']';
+                    $('#files').append('<li><input type="file" /><button type="button">X</button></li>');
+                    $('#files input:last').attr('name', name);
+                });
+
+                $("#files li button").click(function() {
+                    $(this).parent().remove();
+                });
+
+
+            });
+        </script>
+    </body>
+</html>

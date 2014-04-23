@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Document Storage</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+
+    </head>
+    <body th:fragment="content">
+
+        <div class="wrap"  style="display: none">
+            <!-- Define all of the tiles: -->
+            <div class="box">
+                <div class="boxInner">
+                    <img th:src="@{/resources/css/images/icons/entities.svg}" src="../../../webapp/resources/css/images/icons/entities.svg" alt="file" />
+                    <div class="titleBox">File System</div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="boxInner">
+                    <img th:src="@{/resources/css/images/icons/template.svg}" src="../../../webapp/resources/css/images/icons/template.svg" alt="ftp" />
+                    <div class="titleBox">FTP System</div>
+                </div>
+            </div>
+            <div class="box">
+                <div class="boxInner">
+                    <img th:src="@{/resources/css/images/icons/template.svg}" src="../../../webapp/resources/css/images/icons/template.svg" alt="classpath" />
+                    <div class="titleBox">Class Path</div>
+                </div>
+            </div>
+        </div>
+
+        <form id="my-form" th:object="${documentStorage}" style="display: none">
+            <ul>
+                <li style="display: none">
+                    <label>Type</label>
+                    <input id="type" name="type" type="text" th:field="*{type}"/>
+                </li>
+                <li>
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" th:field="*{name}" />
+                </li>    
+                <li>
+                    <label for="path">Path</label>
+                    <input id="path" name="path" type="text" th:field="*{path}" />
+                </li> 
+                <li>
+                    <label for="host">Host</label>
+                    <input id="host" name="host" type="text" th:field="*{host}" />
+                </li>
+                <li>
+                    <label for="rootFolder">Root Folder</label>
+                    <input id="rootFolder" name="rootFolder" type="text" th:field="*{rootFolder}" />
+                </li> 
+                <li>
+                    <label for="userName">User Name</label>
+                    <input id="userName" name="userName" type="text" th:field="*{userName}" />
+                </li>
+                <li>
+                    <label for="password">Password</label>
+                    <input id="password" name="password" type="text" th:field="*{password}" />
+                </li>
+                <li>
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                </li>
+                <li>
+                    <label for="baseUrl">Base URL</label>
+                    <input id="baseUrl" name="baseUrl" type="text" th:field="*{baseUrl}" />
+                </li>
+                <li>
+                    <button id="submit" type="submit">Submit</button>
+                    <button id="cancel" type="button">Cancel</button>
+                </li>
+            </ul>
+        </form>
+
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../../../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script src="../../../../../resources/js/documentstorage.js" th:src="@{/resources/js/documentstorage.js}"></script>
+
+
+
+    </body>
+</html>

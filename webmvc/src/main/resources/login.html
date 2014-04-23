@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Login</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../resources/css/form.css" th:href="@{/resources/css/form.css}"/>
+    </head>
+    <body th:fragment="content">
+        <form name="f" th:action="@{/login}" method="post">     
+            <fieldset>
+                <legend>Please Login</legend>
+                <div th:if="${param.error}" class="alert alert-error">    
+                    Invalid username and password.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success"> 
+                    You have been logged out.
+                </div>
+                <ul>
+                    <li>
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username"/> 
+                    </li>
+                    <li>
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password"/>   
+                    </li>
+                    <li>
+                        <button type="submit" class="btn">Log in</button>
+                    </li>
+                </ul>
+            </fieldset>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Setting</title>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+
+    </head>
+    <body th:fragment="content">
+        <form id="my-form" th:object="${setting}">
+            <fieldset>
+                <legend>Language</legend>
+                <ul>
+                    <li><label>Name</label><input id="name" name="name" type="text" th:field="*{name}"/></li>
+                    <li><label>Value</label><input id="label" name="value" type="text" th:field="*{value}"/></li>
+                    
+                    <li>
+                        <button id="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+                </ul>
+            </fieldset>
+        </form>
+
+
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../../../../resources/js/form2js.js" th:src="@{/resources/js/form2js.js}"></script>
+        <script src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../../resources/js/jquery.toObject.js" th:src="@{/resources/js/jquery.toObject.js}"></script>
+        <script type="text/javascript">
+
+
+            String.prototype.replaceAt = function(i, char) {
+                return this.substr(0, i) + char + this.substr(i);
+            };
+
+
+            $(document).ready(function() {
+
+                var pathname = window.location.pathname;
+                var method = window.location.pathname;
+                var listing_pathname;
+                if (pathname.indexOf("/add") !== -1) {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.substr(0, pathname.lastIndexOf('/add'));
+                    pathname = pathname.replace(/(\s*\/)(?![\s\S]*\/)([^:]*)$/, "/api/$2");
+                    method = 'POST';
+                }
+                else {
+                    listing_pathname = pathname.substr(0, pathname.lastIndexOf('/'));
+
+                    pathname = pathname.replaceAt(pathname.substr(0, pathname.lastIndexOf('/')).lastIndexOf('/'), '/api');
+                    method = 'PUT';
+                }
+
+                $("#my-form").submit(function(e)
+                {
+                    console.log(JSON.stringify($("#my-form").toObject({mode: 'first'})));
+                    $.ajax(
+                            {
+                                url: pathname,
+                                type: method,
+                                data: JSON.stringify($("#my-form").toObject({mode: 'first'})),
+                                dataType: "json",
+                                contentType: 'application/json',
+                                success: function(data, textStatus, jqXHR)
+                                {
+                                    window.location.href = listing_pathname;
+
+                                },
+                                error: function(jqXHR, textStatus, errorThrown)
+                                {
+                                    console.log(jqXHR + "===" + textStatus);
+                                }
+                            });
+                    e.preventDefault();	//STOP default action
+                });
+
+                $('#cancel').click(function() {
+                    window.location.href = listing_pathname;
+                });
+
+            });
+        </script>
+
+
+    </body>
+</html>

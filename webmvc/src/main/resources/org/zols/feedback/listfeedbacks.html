@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>List Feedback</title>
+    </head>
+    <body th:fragment="content">
+        <a th:href="@{/feedback/add}">Add New</a>
+        <ul>
+            <li th:each="feedback : ${feedbacks}" th:text="${feedback.title}">En las Orillas del Sar</li>
+        </ul>        
+    </body>
+</html>

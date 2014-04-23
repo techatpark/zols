@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="utf-8"/>
+        <title>List Links</title>       
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/redmond/jquery-ui-1.10.3.custom.min.css" th:href="@{/resources/css/redmond/jquery-ui-1.10.3.custom.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/ui.jqgrid.css" th:href="@{/resources/css/ui.jqgrid.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/jquery.idealforms.min.css" th:href="@{/resources/css/jquery.idealforms.min.css}"/>
+        <link rel="stylesheet" type="text/css" media="screen" href="../../../../../resources/css/breadcrumb.css" th:href="@{/resources/css/breadcrumb.css}"/>
+    </head>
+    <body th:fragment="content">
+
+
+
+    
+
+        <div id="link">
+            <div id="categoryContainer" class="right-header">
+                <label><select name ="linkCategory" id="link_category"></select></label>
+                <button id="addCategoryBtn">+</button><button id="removeCategoryBtn">-</button>
+            </div>
+
+            <div class="breadcrumb">
+                <ul>
+                    
+                </ul>
+            </div>
+            <div id="linkContainer">
+                <ul id="childLink">
+                </ul>
+                <a href='javascript://' class='addMoreLink'>Add New</a>
+            </div>
+        </div>
+        <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>
+        <script src="../../../../../resources/js/jquery-ui-1.10.3.custom.min.js" th:src="@{/resources/js/jquery-ui-1.10.3.custom.min.js}"></script>
+        <script src="../../../../../resources/js/i18n/grid.locale-en.js" th:src="@{/resources/js/i18n/grid.locale-en.js}"></script>
+        <script src="../../../../../resources/js/jquery.jqGrid.min.js" th:src="@{/resources/js/jquery.jqGrid.min.js}"></script>
+        <script src="../../../../../resources/js/handlebars.js" th:src="@{/resources/js/handlebars.js}"></script>
+        <script src="../../../../../resources/js/jquery-handlebar.js" th:src="@{/resources/js/jquery-handlebar.js}"></script>
+        <script src="../../../../../resources/js/common.js" th:src="@{/resources/js/common.js}"></script>
+        <script src="../../../../../resources/js/listlinks.js" th:src="@{/resources/js/listlinks.js}"></script>
+        <script id="childList" type="text/x-handlebars-template">
+            {{#each this}}
+            <li><a href="javascript:void(0)" id="{{name}}"
+            data-parent="{{name}}" class="parentLink">{{name}}</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="addChild" data-parent="{{name}}">+</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="editlink" data-parent="{{name}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:void(0)" class="removeChild" data-parent="{{name}}">-</a></li>
+            {{/each}}
+        </script>
+
+    </body>
+</html>
