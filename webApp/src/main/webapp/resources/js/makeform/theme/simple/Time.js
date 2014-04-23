@@ -1,1 +1,0 @@
-<input type="time" name={{name}} {{#if value }}   value="{{value}}"   {{/if}} />
