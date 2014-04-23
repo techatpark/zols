@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zols.datastore.config.DataStoreConfiguration;
+import org.zols.linkmanager.domain.Category;
 import org.zols.linkmanager.domain.Link;
 
 @ContextConfiguration(classes = {DataStoreConfiguration.class})
@@ -32,76 +34,40 @@ public class LinkManagerTest {
     @Autowired
     private LinkManager linkmanager;
 
-    @Test
-    public void listByCategory() {
-        List<Link> links = linkmanager.listFirstLevelByCategory("header");
-        for (Link link : links) {
-            System.out.println("link name " + link.getName());
-        }
-
-    }
-
-    @Test
-    public void listByparent() {
-        List<Link> links = linkmanager.listByParent("Parent1");
-        for (Link link : links) {
-            //System.out.println("link name " + link.getName());
-        }
-
-    }
-
-    @Test
-    public void deleteLink() {
-        //linkmanager.delete("Parent1");
-    }
-
-    @Test
-    public void deleteCategory() {
-        //linkmanager.deleteCategory("header");
-    }
-    
-
-    public void testAllicationLinks() {
-        Map<String,List<Link>> applicationLinks = linkmanager.getApplicationLinks();
-        for (Map.Entry<String, List<Link>> entry : applicationLinks.entrySet()) {
-            String string = entry.getKey();
-            List<Link> list = entry.getValue();
-            for(Link childLink : list){
-            	printLink(childLink, 0);
-            }
-            
-            
-        }
-    }
-    
-    private void printLink(Link link,int index){
-    	System.out.println(index + link.getName());
-		if (link.getChildren() != null) {
-			index ++;
-			for (Link childLink : link.getChildren()) {
-				printLink(childLink, index);
-			}
-		}
-    }
+    private Link link;
+    private Category category;
 
     @Before
     public void before() {
+        category = new Category();
+        category.setName("header");
+        category.setLabel("Header");
+        linkmanager.add(category);
 
+        link = new Link();
+        link.setName("link");
+        link.setLabel("Link");
+        link.setCategoryName(category.getName());
+        linkmanager.add(link);
+    }
+
+    @Test
+    public void testCreateLink() {
+        Link createdLink = linkmanager.getLink(link.getName());
+        Assert.assertNotNull("Created Link available", createdLink);
+    }
+
+    @Test
+    public void testLinkUrl() {
+        String urlTobeLinked = "http://www.google.com";
+        linkmanager.linkUrl(link.getName(), urlTobeLinked);
+        Link updatedLink = linkmanager.getLink(link.getName());
+        Assert.assertEquals("Created Link available", urlTobeLinked ,updatedLink.getTargetUrl());
     }
 
     @After
     public void after() {
-
-    }
-
-    @AfterClass
-    public static void afterClass() {
-        LOGGER.debug("afterClass");
-    }
-
-    @BeforeClass
-    public static void beforeClass() {
-        LOGGER.debug("beforeClass");
+        linkmanager.deleteCategory(category.getName());
     }
 
 }

@@ -10,7 +10,7 @@
     </head>
     <body th:fragment="content">
         
-        <div class="wrap">
+        <div class="wrap" th:name="${link}">
             
         </div>
         
@@ -35,7 +35,7 @@
             </ul>
         </form>
         
-        <form id="dynamicForm" th:name="${link}"></form>
+        <form id="dynamicForm" ></form>
 
 
         <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>

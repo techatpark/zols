@@ -13,6 +13,6 @@ import org.springframework.stereotype.Service;
 public class TestServiceMetaData implements ServiceMetaData {
     
     public String getDatabaseName() {
-        return "zols";        
+        return "testzols";        
     }
 }
