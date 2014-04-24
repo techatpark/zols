@@ -14,6 +14,13 @@
         <developerConnection>scm:git:https://sathishk@github.com/sathishk/zols.git</developerConnection>
         <url>https://github.com/sathishk/zols</url>
     </scm>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <modules>
         <module>/datastore</module>
         <module>/linkmanager</module>        
@@ -57,7 +64,6 @@
         <org.codehaus.mojo.aspectj-version>1.4</org.codehaus.mojo.aspectj-version>
         <org.codehaus.mojo.tomcat-version>1.1</org.codehaus.mojo.tomcat-version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
