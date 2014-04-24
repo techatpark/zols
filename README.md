@@ -3,11 +3,21 @@ Zols
 
 Zols is a Light weighted Content Management System built on Spring Framework. Apart from providing anything you want from a CMS, Zols is unique in three ways:
 
-(1) Zols is not a web application. It is a library which can be easily integrated with any existing Spring MVC Application. This means that this saves the hassle of handling a separate deployment.
+# Pluggable CMS
+Zols is not a web application.
+It is a library which can be easily integrated with any existing Spring MVC Application. 
+This means that this saves the hassle of handling a separate deployment.
 
-(2) Zols uses strict natural templating. HTML Projects can be directly linked to CMS. Designers are free to modify HTML files which will reflect in real time within the CMS.
+#From HTML to CMS in no time
+Zols uses strict natural templating. HTML Projects can be directly linked to CMS. Designers are free to modify HTML files which will reflect in real time within the CMS.
 
-(3) Clear Separation of data. Anything you enter into the system is native data which can be separately processed and analyzed.
+#Store domain and data
+Dates as dates, and SSN's as SSN's. Store them in the format that you
+want to be saved, and extract the data with the domain.
+This means that you can perform custom queries like searching within
+date ranges or searching for a range of ZIP codes in your CMS naturally
+without any custom coding. 
+
 
 
 Installation:
