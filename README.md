@@ -1,11 +1,11 @@
 Zols
 ====
 
-Zols is a Light weighted Content Management System built on Spring Framework. Apart from providing anything you want from a CMS, Zols is unique in three ways
+Zols is a Light weighted Content Management System built on Spring Framework. Apart from providing anything you want from a CMS, Zols is unique in three ways:
 
-(1) Zols is not a web application. It is a library which can be easily integrated with any existing Spring MVC Application. NO SEPARATE DEPLOYMENT !!
+(1) Zols is not a web application. It is a library which can be easily integrated with any existing Spring MVC Application. This means that this saves the hassle of handling a separate deployment.
 
-(2) Zols uses strict natural templating. HTML Projects can be directly linked to CMS. Designers are free to modify HTML files which will reflect in real time @ CMS.
+(2) Zols uses strict natural templating. HTML Projects can be directly linked to CMS. Designers are free to modify HTML files which will reflect in real time within the CMS.
 
 (3) Clear Separation of data. Anything you enter into the system is native data which can be separately processed and analyzed.
 
@@ -13,9 +13,10 @@ Zols is a Light weighted Content Management System built on Spring Framework. Ap
 Installation:
 ==========
 
-As mentioned above you dont need to run zols as web application. You can include zols into your Spring application easily. Detailed sample is available @ https://github.com/sathishk/zols-sample.
+As mentioned above you don't need to run zols as web application. You can include zols into your Spring application easily. Detailed sample is available @ https://github.com/sathishk/zols-sample.
 
-Anyways, For testing purpose, you can run zols as give below.
+Anyways, For testing purpose, you can run zols as given below in the
+steps section.
 
 Prerequisites
 -------------
@@ -29,15 +30,24 @@ Git
 
 Steps:
 ---------------
-git clone https://github.com/sathishk/zols.git
 
-cd zols
+1)  `git clone https://github.com/sathishk/zols.git`
 
-mvn clean install
+2) `cd zols`
 
-cd webApp
+3) Start a mongo server as documented in the mongo website. Create a
+database named 'zols' within the mongo instance.
 
-mvn tomcat7:run
+4) From within the `zols` folder, run:
 
-That is all. You can access the application @ http://localhost:8080/zols
+5) `mvn clean install`
+
+6) `cd webApp`
+
+7) `mvn tomcat7:run`
+
+That is all. You can access the application @ `http://localhost:8080/zols`
+
+Login to the application using the userid / password as "admin" and
+"admin".
 
