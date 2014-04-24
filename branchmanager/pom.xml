@@ -6,10 +6,12 @@
     <artifactId>branchmanager</artifactId>
     <name>Branch Manager</name>
     <packaging>jar</packaging>
+    <url>http://sathishk.github.io/zols</url>
     <parent>
         <groupId>org.zols</groupId>
         <artifactId>zols</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.RELEASE</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>    
     <dependencies>
         <dependency>

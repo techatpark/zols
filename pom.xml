@@ -5,9 +5,10 @@
     <groupId>org.zols</groupId>
     <artifactId>zols</artifactId>
     <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.RELEASE</version>
     <name>Zols</name>
-    <description>Dynamic Type System for Java</description>
+    <description>Light Weight CMS</description>
+    <url>http://sathishk.github.io/zols</url>
     <scm>
         <connection>scm:git:git://github.com/sathishk/zols.git</connection>
         <developerConnection>scm:git:https://sathishk@github.com/sathishk/zols.git</developerConnection>
@@ -15,9 +16,7 @@
     </scm>
     <modules>
         <module>/datastore</module>
-        <module>/linkmanager</module>
-        <module>/webmvc</module>
-        <module>/webApp</module>
+        <module>/linkmanager</module>        
         <module>/template</module>
         <module>/localemanager</module>
         <module>/branchmanager</module>
@@ -26,11 +25,12 @@
         <module>/swagger</module>
         <module>/feedback</module>
         <module>/setting</module>
+        <module>/webmvc</module>
+        <module>/webApp</module>
     </modules>
 
     <properties>
-        <zols.version>0.1-SNAPSHOT</zols.version>
-        <zolsprepare-maven-plugin.version>0.1-SNAPSHOT</zolsprepare-maven-plugin.version>
+        <zols.version>0.1.RELEASE</zols.version>        
         <java-version>1.6</java-version>
         <org.springframework-version>4.0.2.RELEASE</org.springframework-version>
         <org.springframework.mobile-version>1.1.1.RELEASE</org.springframework.mobile-version>
@@ -355,12 +355,7 @@
                     <groupId>org.apache.tomcat.maven</groupId>
                     <artifactId>tomcat7-maven-plugin</artifactId>
                     <version>2.1</version>
-                </plugin>
-                <plugin>
-                    <groupId>zols</groupId>
-                    <artifactId>zolsprepare-maven-plugin</artifactId>
-                    <version>${zolsprepare-maven-plugin.version}</version>
-                </plugin>
+                </plugin>                
             </plugins>
         </pluginManagement>
 
