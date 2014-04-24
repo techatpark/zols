@@ -13,6 +13,10 @@ Zols is a Light weighted Content Management System built on Spring Framework. Ap
 Installation:
 ==========
 
+As mentioned above you dont need to run zols as web application. You can include zols into your Spring application easily. Detailed sample is available @ https://github.com/sathishk/zols-sample.
+
+Anyways, For testing purpose, you can run zols as give below.
+
 Prerequisites
 -------------
 JDK 1.7
@@ -27,11 +31,13 @@ Steps:
 ---------------
 git clone https://github.com/sathishk/zols.git
 
+cd zols
+
 mvn clean install
 
 cd webApp
 
 mvn tomcat7:run
 
-That is all. You can access http://localhost:8080/zols
+That is all. You can access the application @ http://localhost:8080/zols
 
