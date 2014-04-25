@@ -46,7 +46,7 @@
         </section>
         <footer class="footer">
 
-            <div id="copyrights">&#169; Copyright - All rights reserved.</div>
+            <div id="copyrights" th:text="${version}">&#169; Copyright - All rights reserved.</div>
             <div class="user userpos">
                 <ul th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'footer'">
                     <li th:each="link : ${linkentry.value}">
