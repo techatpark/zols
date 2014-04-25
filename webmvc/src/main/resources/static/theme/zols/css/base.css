@@ -6,7 +6,7 @@ body {
 }
 
 header #headerbg {
-    background-color:#292929;
+    background-color: #4472B9;
     color:#fff;
     height:68px;
     margin:auto;
@@ -24,7 +24,7 @@ header #headerbg .user {
 
 header nav {
     clear:both;
-    background-color:#3F3F3F;
+    background-color: #335487;
     height:30px;
     width:100%;
     margin:auto;
@@ -43,7 +43,9 @@ nav ul li:hover > ul {
 nav ul {
 
     /* background: #efefef; */ 
-    background-color:#3F3F3F;
+    
+
+    /* background-color:#3F3F3F; */
     /* background: -webkit-linear-gradient(top, #efefef 0%,#bbbbbb 100%); */ 
     /* box-shadow: 0px 0px 9px rgba(0,0,0,0.15); */
     padding:12px 0 0 35px;
@@ -101,7 +103,7 @@ footer {
     position:fixed;
     left:0;
     bottom:0;
-    background-color:#292929;
+    background-color: #23221F;
     color:#fff;
     width:100%;
     height:40px;
