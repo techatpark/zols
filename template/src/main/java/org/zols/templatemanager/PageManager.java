@@ -47,7 +47,8 @@ public class PageManager {
                 beanClass);
         page.setDataName(object.getName());
         page = dataStore.create(page, Page.class);
-        linkManager.linkUrl(createPageRequest.getLinkName(), "/page/"+page.getName());       
+        if(!createPageRequest.getLinkName().isEmpty())
+        	linkManager.linkUrl(createPageRequest.getLinkName(), "/page/"+page.getName());       
         return page;
     }
 

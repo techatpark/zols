@@ -90,7 +90,7 @@ public class PageController {
 
     @RequestMapping(value = "/pages/add", method = GET)
     @ApiIgnore
-    public String add(Model model,@RequestParam(value = "link")String link) {
+    public String add(Model model,@RequestParam(value = "link", required=false)String link) {
         model.addAttribute("link", link);
         model.addAttribute("page", new Page());
         return "org/zols/templatemanager/page";
