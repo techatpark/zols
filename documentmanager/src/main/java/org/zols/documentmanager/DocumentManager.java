@@ -18,8 +18,8 @@ import org.zols.documentmanager.domain.Document;
 import org.zols.documentmanager.domain.DocumentStorage;
 
 /**
- *
- * @author navin_kr
+ *DocumentManager provides methods to access and add files to the file systems. 
+ * 
  */
 @Service
 public class DocumentManager {
@@ -27,6 +27,12 @@ public class DocumentManager {
     @Autowired
     private DocumentStorageManager documentStorageManager;
 
+    /**
+     * Upload documents
+     * @param document document to be uploaded
+     * @param documentPath source path of the document
+     * @throws IOException 
+     */
     public void upload(Document document, String documentPath) throws IOException {
         List<MultipartFile> multipartFiles = document.getFiles();
         if (null != multipartFiles && multipartFiles.size() > 0) {
@@ -52,6 +58,12 @@ public class DocumentManager {
         newDir.mkdirs();
     }
     
+    /**
+     * List all the files in the current directory
+     * @param documentStorageName type of storage
+     * @param folderPath the directory to list the files
+     * @return 
+     */
     public List<Document> list(String documentStorageName,String folderPath) {
         DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
         String path = documentStorage.getPath()+(null==folderPath ? "" : (File.separator+folderPath));
