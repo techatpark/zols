@@ -170,6 +170,7 @@ footer li + li::before {
 header #headerbg .user a,header nav ul li a,footer .user a {
     text-decoration:none;
     color:#fff;
+    padding: 0px 0px 0px 28px;
 }
 
 header #headerbg span,header nav ul li a:hover {
