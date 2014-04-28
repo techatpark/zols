@@ -1,0 +1,57 @@
+#forkongithub a{background:#23221F;color:#fff;text-decoration:none;font-family:arial, sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}#forkongithub a:hover{background:#335487;color:#fff;}#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}#forkongithub a::after{bottom:1px;top:auto;}@media screen and (min-width:800px){#forkongithub{position:absolute;display:block;top:0;right:0;width:200px;overflow:hidden;height:200px;}#forkongithub a{width:200px;position:absolute;top:60px;right:-60px;transform:rotate(45deg);-webkit-transform:rotate(45deg);box-shadow:4px 4px 10px rgba(0,0,0,0.8);}}
+
+/* 'widths' sub menu */
+#layoutdims {
+    clear:both;
+    border-top:4px solid #000;
+    margin:0;
+    padding:6px 15px !important;
+    text-align:right;
+}
+/* column container */
+.colmask {
+    position:relative;	/* This fixes the IE7 overflow hidden bug */
+    clear:both;
+    float:left;
+    width:100%;			/* width of whole page */
+    overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+    float:left;
+    width:100%;			/* width of page */
+    position:relative;
+    text-align: center;
+}
+.col1,
+.col2,
+.col3 {
+    float:left;
+    position:relative;
+    padding:0 0 1em 0;	/* no left and right padding on columns, we just make them narrower instead 
+                                    only padding top and bottom is included here, make it whatever value you need */
+    overflow:hidden;
+}
+.threecol .colmid {
+    right:25%;			/* width of the right column */
+    	/* center column background colour */
+}
+.threecol .colleft {
+    right:50%;			/* width of the middle column */
+    	/* left column background colour */
+}
+.threecol .col1 {
+    width:46%;			/* width of center column content (column width minus padding on either side) */
+    left:102%;			/* 100% plus left padding of center column */
+}
+.threecol .col2 {
+    width:21%;			/* Width of left column content (column width minus padding on either side) */
+    left:31%;			/* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+    width:21%;			/* Width of right column content (column width minus padding on either side) */
+    left:85%;			/* Please make note of the brackets here:
+                                    (100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
