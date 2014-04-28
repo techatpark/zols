@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title>Zols | Embeddable CMS</title>
         <link rel="stylesheet" type="text/css" href="css/base.css" />
@@ -11,30 +9,18 @@
         <header class="header" >
             <div id="headerbg">
                 <div id="logo"></div>
-                <!--/*/
-                <div th:fragment="logout" sec:authorize="isAuthenticated()" class="user">
-                    Welcome to <span sec:authentication="name">Username</span>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/controlpanel}"> Control Panel</a>
-                    &nbsp;&nbsp;|&nbsp;&nbsp;<a th:href="@{/logout}">Logout</a>
-                </div>
-                /*/-->
-                <div th:fragment="logout" sec:authorize="!isAuthenticated()" class="user">
+                <div class="user">
                     <span id="forkongithub"><a href="https://github.com/sathishk/zols">Fork us @ GitHub</a></span>
                 </div>
             </div>
-            <nav th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
-                <ul th:each="menu : ${linkentry.value}"
-                    th:include="menu::menuContent"> 
+            <nav >
+                <ul> 
                 </ul>
             </nav>
         </header>
         <section>
-
-
-
-            <div class="content contentpos" >
-
+           <div class="content contentpos" >                
+                <h1 style="text-align: center">Content Management Simplified !!</h1>
                 <div class="colmask threecol">                    
                     <div class="colmid">
                         <div class="colleft">
@@ -43,11 +29,11 @@
                             </div>
                             <div class="col2">
                                 <h1>Native Data</h1>
-                                <p>Content is no longer just a text. Any data we enter into zols is stored in it's native format. For E.g Dates, Time, Number etc. Which will provide the posiblity of addtional search capablities.</p>
+                                <p>Content is no longer just a text. Any data we enter here is stored in it's native format. For E.g Dates, Time, Number etc. Which we can read, update, delete and query by clearly documented REST API</p>
                             </div>
                             <div class="col3">
                                 <h1>HTML to CSS in no Time</h1>
-                                <p>Make changes to HTML files and see it is up and running in CMS</p>
+                                <p>Directly link your HTML Projects to CMS. Make changes to HTML files and see it up and running in no time.This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.</p>
                             </div>
                         </div>
                     </div>
@@ -55,24 +41,16 @@
                 <div class="colmask threecol">                    
                     <div class="colmid">
                         <div class="colleft">
-                            <div class="col1" >
-                                <h1>Embedded CMS</h1>
-                                Zols can either be run as a standalone CMS or as an embedded CMS within an existing Spring Web Application. This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.
-                                <p></p>
-                            </div>
-                            <div class="col2" >
-                            </div>
-                            <div class="col3" >
-
-                            </div>
+                            <div class="col1">
+                                <h1>Embedded CMS</h1>                                
+                                <p>Tired of integrating CMS Applications? Feel the power of keeping Content management just as a library.All you need is to include some jars to your Spring MVC application. Your CMS in your application straight away</p>
+                            </div>                            
                         </div>
                     </div>
                 </div>
             </div>
-
         </section>
         <footer class="footer">
-
             <div id="copyrights">Apache License, Version 2.0</div>
             <div class="user userpos">
                 <ul>
