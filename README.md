@@ -4,8 +4,7 @@ Zols
 Zols is a Light weighted Content Management System built on Spring Framework. Apart from providing everything you want from a CMS, Zols is unique in three ways:
 
 ### Embeddable CMS
-Zols can either be run as a standalone CMS or as an embedded CMS within an existing Spring Web Application. This gives the power of quickly bootstrapping 
-and testing our your HTML authoring and be able to quickly deploy it in the production. 
+Zols can either be run as a standalone CMS or as an embedded CMS within an existing Spring Web Application. This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production. 
 
 Unlike many other CMS which are webapplication, Zols is just a library(jar file) which can be easily integrated with any of your existing Spring MVC Application. 
 There is no hassle of handling a separate deployment. 
@@ -53,5 +52,5 @@ Login to the application using `username/password` as `admin/admin`.
 Zols is released under version 2.0 of the [Apache License][].
 
 [here]:https://github.com/sathishk/zols-sample
-[mongo website]: https://www.mongodb.org/‎
+[mongo website]: https://www.mongodb.org/
 [Apache License]: http://www.apache.org/licenses/LICENSE-2.0
