@@ -11,6 +11,7 @@ header #headerbg {
     height:68px;
     margin:auto;
     padding:12px 0 0 35px;
+    position: relative;
 }
 
 header #headerbg #logo {
@@ -93,6 +94,7 @@ nav ul ul ul {
 /** Menu end **/
 .content div#layout {
     background-color:#fff;
+    position: relative;
 }
 
 .content div#layout .layoutinner .rect {
@@ -136,7 +138,10 @@ html body section {
 .contentpos {    
     width:100%;
     margin:auto;
-    padding:15px 0 50px ;
+    padding: 15px 40px 15px 40px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .contentpos div#layout {
@@ -144,13 +149,12 @@ html body section {
     height:487px;
     margin:auto;
     padding:0 0 0 162px;
+    position:relative;
 }
 
 .contentpos div#layout .layoutinner {
     padding-top:204px;
 }
-
-
 
 footer ul {
     padding: 0px 14px 0 22px;
