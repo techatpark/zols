@@ -6,7 +6,7 @@ Zols is a Light weighted Content Management System built on Spring Framework. Ap
 ### Embeddable CMS
 Zols can either be run as a standalone CMS or as an embedded CMS within an existing Spring Web Application. This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production. 
 
-All you need is to include some jars to your Spring MVC application. Your CMS in your application straight away
+All you need is to include some jars to your Spring MVC application. Your CMS is in your application straight away
 
 ### From HTML to CMS in no time
 Directly link your HTML Projects to CMS. Make changes to HTML files and see it up and running in no time.This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.
