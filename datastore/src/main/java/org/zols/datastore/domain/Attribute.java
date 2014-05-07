@@ -10,7 +10,16 @@ public class Attribute {
     private boolean isArray;
     private boolean isUnique;
     private boolean isLocaleSpecific;
-    private int index;
+    private boolean isSearcheable;
+    public boolean isSearcheable() {
+		return isSearcheable;
+	}
+
+	public void setSearcheable(boolean isSearcheable) {
+		this.isSearcheable = isSearcheable;
+	}
+
+	private int index;
 
     public boolean isUnique() {
         return isUnique;

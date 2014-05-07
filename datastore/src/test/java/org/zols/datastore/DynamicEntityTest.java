@@ -4,24 +4,31 @@
  */
 package org.zols.datastore;
 
-import org.zols.datastore.config.DataStoreConfiguration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import junit.framework.Assert;
+
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.zols.datastore.config.DataStoreConfiguration;
 import org.zols.datastore.domain.Attribute;
 import org.zols.datastore.domain.BaseObject;
+import org.zols.datastore.domain.Criteria;
 import org.zols.datastore.domain.Entity;
 
 /**
@@ -63,16 +70,23 @@ public class DynamicEntityTest {
         dataStore.create(entity, Entity.class);
         baseObjectClass = dataStore.getBeanClass(entity.getName());        
         baseObject = (BaseObject) baseObjectClass.newInstance();
-        Expression expression = expressionParser.parseExpression("count");        
-        expression.setValue(baseObject, 20);        
+        Expression expression = expressionParser.parseExpression("count1");        
+        expression.setValue(baseObject, "20");        
         dataStore.create(baseObject, baseObjectClass);       
     }
 
+    
     @Test
-    public void testCreate() {
-        Assert.assertNotNull("Base Object created",baseObject.getName());
+    public void testSearchThroughAttributes() {
+    	Pageable pageable = new PageRequest(0, 10);
+    	List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("count1", Criteria.Type.IS, "20"));
+        
+    	System.out.println(dataStore.list(criterias,baseObjectClass));
+    	Page<BaseObject> listOfEntities = dataStore.list(pageable, "basic","20");
+    	
     }
-
+    
     @After
     public void afterTest() {
         LOGGER.info("Deleting 'Dynamic' Objects", entity.getName());
@@ -91,9 +105,10 @@ public class DynamicEntityTest {
         Attribute attribute;
         List<Attribute> attributes = new ArrayList<Attribute>(1);
         attribute = new Attribute();
-        attribute.setDescription("Count is an Integer");
-        attribute.setName("count");
-        attribute.setType("Integer");
+        attribute.setDescription("Count1 is an Integer");
+        attribute.setName("count1");
+        attribute.setType("String");
+        attribute.setSearcheable(true);
         attributes.add(attribute);
         entity.setAttributes(attributes);
         entity.setCreatedDate(new Date());

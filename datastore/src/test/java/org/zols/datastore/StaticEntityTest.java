@@ -90,6 +90,17 @@ public class StaticEntityTest {
         Assert.assertEquals("There should be one Entity lesser than this date " + entity.getName(), 1, entitiesResult.size());
         LOGGER.info("tested Entity Read", entity.getName());
     }
+    
+    public void testGetByCount() {
+        LOGGER.info("testing Entity Read", entity.getName());
+
+        List<Criteria> criterias = new ArrayList<Criteria>();
+        criterias.add(new Criteria("createdDate", Criteria.Type.LESSER_THAN, new Date()));
+
+        List<Entity> entitiesResult = dataStore.list(criterias,Entity.class);
+        Assert.assertEquals("There should be one Entity lesser than this date " + entity.getName(), 1, entitiesResult.size());
+        LOGGER.info("tested Entity Read", entity.getName());
+    }
 
     @After
     public void afterTest() {
@@ -105,7 +116,7 @@ public class StaticEntityTest {
      */
     private Entity getBasicEntity() {
         entity = new Entity();
-        //entity.setName("Basic");
+        entity.setName("Basic");
         entity.setLabel("Basic Entity");
         entity.setDescription("Describe an Basic Entity");
         Attribute attribute;

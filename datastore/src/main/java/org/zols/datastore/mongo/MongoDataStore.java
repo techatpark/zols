@@ -1,30 +1,28 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.zols.datastore.mongo;
 
-import org.zols.datastore.DataStore;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.stereotype.Service;
-import static org.zols.datastore.domain.Criteria.Type.*;
-import org.zols.datastore.exception.DataStoreException;
-import java.lang.reflect.Field;
-
-import java.util.Map;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.stereotype.Service;
+import org.zols.datastore.DataStore;
+import org.zols.datastore.domain.Attribute;
+import org.zols.datastore.domain.BaseObject;
+import org.zols.datastore.domain.Entity;
+import org.zols.datastore.exception.DataStoreException;
 
 @Service
 public class MongoDataStore extends DataStore {
@@ -87,6 +85,38 @@ public class MongoDataStore extends DataStore {
         if (totalRecords != 0) {
             Page<T> objects = new PageImpl<T>(mongoOperation.find(query, clazz), pageable, totalRecords);
             return objects;
+        }
+        return null;
+    }
+    
+    @Override
+    public  Page<BaseObject> list(Pageable pageable, String entityName, String attributePart) {
+        Query query = getListQuery(pageable, null);
+        
+        Class<? extends BaseObject> clazz = (Class<BaseObject>)getBeanClass(entityName);
+        Entity entity= read(entityName, Entity.class);
+        
+        for(Attribute attr : entity.getAttributes()){
+        	if(attr.isSearcheable()){
+        		Criteria where = Criteria.where(attr.getName());
+        		query.addCriteria(where.regex(attributePart));
+        	}
+        		
+        }
+        
+        for(BaseObject baseobj : mongoOperation.findAll(clazz)){
+        	System.out.println(baseobj);
+        	BeanWrapper wrapper = new BeanWrapperImpl(baseobj);
+        	for(PropertyDescriptor desc : wrapper.getPropertyDescriptors()){
+        		System.out.println(desc.getName());
+        	}
+        }
+        Class clazz2 = (Class<BaseObject>)clazz;
+        int totalRecords = (int) mongoOperation.count(query, clazz2);
+        if (totalRecords != 0) 
+        {
+        	Page<? extends BaseObject> objects = new PageImpl<BaseObject>(mongoOperation.find(query, clazz2), pageable, totalRecords);
+            return (Page<BaseObject>)objects;
         }
         return null;
     }

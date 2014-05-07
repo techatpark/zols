@@ -3,9 +3,11 @@ package org.zols.datastore;
 import org.zols.datastore.domain.BaseObject;
 import org.zols.datastore.domain.Criteria;
 import org.zols.datastore.util.DynamicBeanGenerator;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -135,6 +137,8 @@ public abstract class DataStore {
     public final Class<? extends BaseObject> getBeanClass(String entityName) {
         return dynamicBeanGenerator.getBeanClass(entityName);
     }
+
+	public abstract  Page<BaseObject> list(Pageable pageable, String entityName, String attributePart);
     
     
 }
