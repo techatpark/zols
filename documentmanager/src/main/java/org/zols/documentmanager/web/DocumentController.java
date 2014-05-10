@@ -40,10 +40,10 @@ public class DocumentController {
 
     @RequestMapping(value = "/documents/{name}", method = RequestMethod.POST)
     @ApiIgnore
-    public String save(@PathVariable(value = "name") String name, @ModelAttribute("document") Upload document, Model map) throws IOException {
-        DocumentStorage documentStorage = documentStorageManager.get(name);
+    public String save(@PathVariable(value = "name") String documentStorageName, @ModelAttribute("document") Upload document, Model map) throws IOException {
+        DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
         map.addAttribute("documentStorage", documentStorage);
-        documentManager.upload(document, documentStorage.getPath());
+        documentManager.upload(documentStorage, document);
         map.addAttribute("files", new File(documentStorage.getPath()).listFiles());
         return "org/zols/documentmanager/document";
     }

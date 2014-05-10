@@ -30,19 +30,35 @@ public class DocumentManager {
 
     /**
      * Upload documents
-     *
+     * 
+     * @param documentStorage DocumentStorage in which the files have to be uploaded
      * @param upload documents to be uploaded
-     * @param documentPath source path of the document
      * @throws IOException
      */
-    public void upload(Upload upload, String documentPath) throws IOException {
+    public void upload(DocumentStorage documentStorage,Upload upload) throws IOException {
+        upload(documentStorage,upload,null);
+    }
+
+    /**
+     * Upload documents
+     *
+     * @param documentStorage DocumentStorage in which the files have to be uploaded
+     * @param upload documents to be uploaded
+     * @param rootFolderPath source path of the document
+     * @throws IOException
+     */
+    public void upload(DocumentStorage documentStorage,Upload upload,  String rootFolderPath) throws IOException {        
+        String folderPath = documentStorage.getPath();        
+        if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
+            folderPath = folderPath + File.separator + rootFolderPath;
+        }        
         List<MultipartFile> multipartFiles = upload.getFiles();
         if (null != multipartFiles && multipartFiles.size() > 0) {
             for (MultipartFile multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
                 byte[] bytes = multipartFile.getBytes();
                 BufferedOutputStream stream
-                        = new BufferedOutputStream(new FileOutputStream(new File(documentPath + File.separator + multipartFile.getOriginalFilename())));
+                        = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getOriginalFilename())));
                 stream.write(bytes);
                 stream.close();
             }
@@ -51,25 +67,27 @@ public class DocumentManager {
 
     /**
      * Creates a directory in the given document path
-     * 
-     *@param documentStorageName the path in which the directory will be created
-     *@param directoryName the name of the directory to be created
+     *
+     * @param documentStorageName the path in which the directory will be
+     * created
+     * @param directoryName the name of the directory to be created
      */
     public void createDirectory(String documentStorageName, String directoryName) {
         createDirectory(documentStorageName, null, directoryName);
     }
-    
+
     /**
      * Creates a directory in the given document path
-     * 
-     * @param documentStorageName the path in which the directory will be created
+     *
+     * @param documentStorageName the path in which the directory will be
+     * created
      * @param rootFolderPath folder where we need to create directory
      * @param directoryName the name of the directory to be created
      */
-    public void createDirectory(String documentStorageName, String rootFolderPath,String directoryName) {
+    public void createDirectory(String documentStorageName, String rootFolderPath, String directoryName) {
         DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
         String folderPath = documentStorage.getPath();
-        if( rootFolderPath != null && rootFolderPath.trim().length() != 0) {
+        if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
         }
         File newFolder = new File(folderPath + File.separator + directoryName);
@@ -85,8 +103,8 @@ public class DocumentManager {
      */
     public List<Document> list(String documentStorageName, String folderPath) {
         DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
-        String path = documentStorage.getPath() ;
-        if(folderPath !=null && folderPath.trim().length() !=0 ) {
+        String path = documentStorage.getPath();
+        if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
         }
         List<Document> documents = new ArrayList<Document>();
@@ -101,7 +119,7 @@ public class DocumentManager {
         }
         return documents;
     }
-    
+
     /**
      * List all the files in the current directory
      *
@@ -110,10 +128,10 @@ public class DocumentManager {
      * @param folderPath the directory to list the files
      * @return
      */
-    public List<Document> list(String documentStorageName, String rootFolderPath,String folderPath) {
+    public List<Document> list(String documentStorageName, String rootFolderPath, String folderPath) {
         DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
-        String path = documentStorage.getPath() ;
-        if(folderPath !=null && folderPath.trim().length() !=0 ) {
+        String path = documentStorage.getPath();
+        if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
         }
         List<Document> documents = new ArrayList<Document>();
