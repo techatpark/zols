@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.zols.datastore.config.DataStoreConfiguration;
+import org.zols.documentmanager.domain.Document;
 import org.zols.documentmanager.domain.DocumentStorage;
 
 @ContextConfiguration(classes = {DataStoreConfiguration.class})
@@ -51,8 +54,19 @@ public class DocumentManagerTest {
         LOGGER.debug("Created a File based Document Storage ", documentStorage.getName());
     }
 
+    @Test
     public void testCreateFolder() {
-        documentManager.createDirectory("test", "zols");
+        documentManager.createDirectory(DOCUMENT_STORAGE_NAME, "NEW_DIR");
+        List<Document> documents = documentManager.list(DOCUMENT_STORAGE_NAME, null);
+        Assert.assertEquals("NEW_DIR",documents.get(0).getFileName());
+    }
+    
+    @Test
+    public void testCreateInnerFolder() {
+        documentManager.createDirectory(DOCUMENT_STORAGE_NAME, "NEW_DIR");
+        documentManager.createDirectory(DOCUMENT_STORAGE_NAME, "NEW_DIR","NEW_DIR2");
+        List<Document> documents = documentManager.list(DOCUMENT_STORAGE_NAME, "NEW_DIR");
+        Assert.assertEquals("NEW_DIR2",documents.get(0).getFileName());
     }
 
     @After
@@ -79,10 +93,5 @@ public class DocumentManagerTest {
         }
     }
 
-    @Test
-    public void testListDir() {
-//        documentManager.createDirectory("test\\test2", "testDS");
-//        documentManager.createDirectory("test1", "testDS");
-//        System.out.println(documentManager.list("testDS", "test"));
-    }
+   
 }
