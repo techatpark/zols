@@ -13,6 +13,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,34 +24,51 @@ import org.zols.documentmanager.domain.DocumentStorage;
 @ContextConfiguration(classes = {DataStoreConfiguration.class})
 @RunWith(SpringJUnit4ClassRunner.class)
 public class DocumentManagerTest {
+    
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DocumentManagerTest.class);
 
     @Autowired
     private DocumentManager documentManager;
     @Autowired
     private DocumentStorageManager documentStorageManager;
+    
+    private static final String DOCUMENT_STORAGE_NAME = "testDS";
 
-
-    public void beforeTest() {
+    @Before
+    public void beforeTest() {        
+        
         File file = new File(System.getProperty("java.io.tmpdir") + new Date().getTime());
         file.mkdirs();
+        LOGGER.debug("Created a temporary Folder ", file.getAbsolutePath());
+        
         DocumentStorage documentStorage = new DocumentStorage();
         documentStorage.setType("file");
-        documentStorage.setName("testDS");
+        documentStorage.setName(DOCUMENT_STORAGE_NAME);
         documentStorage.setPath(file.getAbsolutePath());
         documentStorageManager.add(documentStorage);
+        
+        LOGGER.debug("Created a File based Document Storage ", documentStorage.getName());
     }
 
     public void testCreateFolder() {
         documentManager.createDirectory("test", "zols");
     }
 
+    @After
     public void afterTest() throws IOException {
-        delete(new File(documentStorageManager.get("testDS").getPath()));
-        documentStorageManager.delete("testDS");
+        DocumentStorage documentStorage = documentStorageManager.get(DOCUMENT_STORAGE_NAME);
+        File tempFolder = new File(documentStorage.getPath());
+        
+        delete(tempFolder);
+        LOGGER.debug("Deleted the temporary Folder ", tempFolder.getAbsolutePath());
+        
+        documentStorageManager.delete(DOCUMENT_STORAGE_NAME);
+        LOGGER.debug("Deleted the Document Storage ", DOCUMENT_STORAGE_NAME);
 
     }
 
-    void delete(File f) throws IOException {
+    private void delete(File f) throws IOException {
         if (f.isDirectory()) {
             for (File c : f.listFiles()) {
                 delete(c);

@@ -1,30 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.zols.documentmanager.domain;
 
 import org.springframework.data.annotation.Id;
 
 /**
- * Describes the attributes that should be included in document storage
- *
- * @author Praveen pvn.
+ * Document Storage contains storage information of Documents
  */
 public class DocumentStorage {
 
     /**
      * describes where the attributes to be stored
-     *
      */
     public static final String FILE_SYSTEM = "file";
     public static final String FTP = "ftp";
     public static final String CLASSPATH = "classpath";
     
-    /**
-     * attirbutes of the document storage usecase
-     */
     @Id
     private String name;
     private String description;

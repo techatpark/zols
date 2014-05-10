@@ -4,6 +4,8 @@ import com.mangofactory.swagger.annotations.ApiIgnore;
 import com.wordnik.swagger.annotations.Api;
 import java.io.File;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.zols.documentmanager.DocumentManager;
 import org.zols.documentmanager.DocumentStorageManager;
-import org.zols.documentmanager.domain.Document;
+import org.zols.documentmanager.domain.Upload;
 import org.zols.documentmanager.domain.DocumentStorage;
 
 @Controller
 public class DocumentController {
+
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(DocumentController.class);
 
     @Autowired
     DocumentStorageManager documentStorageManager;
@@ -35,7 +40,7 @@ public class DocumentController {
 
     @RequestMapping(value = "/documents/{name}", method = RequestMethod.POST)
     @ApiIgnore
-    public String save(@PathVariable(value = "name") String name, @ModelAttribute("document") Document document, Model map) throws IOException {
+    public String save(@PathVariable(value = "name") String name, @ModelAttribute("document") Upload document, Model map) throws IOException {
         DocumentStorage documentStorage = documentStorageManager.get(name);
         map.addAttribute("documentStorage", documentStorage);
         documentManager.upload(document, documentStorage.getPath());

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.zols.documentmanager.domain.Document;
 import org.zols.documentmanager.domain.DocumentStorage;
+import org.zols.documentmanager.domain.Upload;
 
 /**
  *DocumentManager provides methods to access and add files to the file systems. 
@@ -29,12 +30,12 @@ public class DocumentManager {
 
     /**
      * Upload documents
-     * @param document document to be uploaded
+     * @param upload documents to be uploaded
      * @param documentPath source path of the document
      * @throws IOException 
      */
-    public void upload(Document document, String documentPath) throws IOException {
-        List<MultipartFile> multipartFiles = document.getFiles();
+    public void upload(Upload upload, String documentPath) throws IOException {
+        List<MultipartFile> multipartFiles = upload.getFiles();
         if (null != multipartFiles && multipartFiles.size() > 0) {
             for (MultipartFile multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
@@ -68,7 +69,7 @@ public class DocumentManager {
         DocumentStorage documentStorage = documentStorageManager.get(documentStorageName);
         String path = documentStorage.getPath()+(null==folderPath ? "" : (File.separator+folderPath));
         List<Document> documents = new ArrayList<Document>();
-        Document document = null;
+        Document document;
         for(File innerFile :new File(path).listFiles()){
             document = new Document();
             document.setFileName(innerFile.getName());
