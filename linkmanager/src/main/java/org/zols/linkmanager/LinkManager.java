@@ -1,9 +1,5 @@
 package org.zols.linkmanager;
 
-import org.zols.datastore.DataStore;
-import org.zols.datastore.domain.Criteria;
-import org.zols.linkmanager.domain.Category;
-import org.zols.linkmanager.domain.Link;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,9 +7,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.zols.datastore.DataStore;
+import org.zols.datastore.domain.Criteria;
+import org.zols.linkmanager.domain.Category;
+import org.zols.linkmanager.domain.Link;
+import org.zols.linkmanager.provider.LinkProvider;
 
 @Service
 public class LinkManager {
@@ -23,6 +25,9 @@ public class LinkManager {
 
     @Autowired
     private DataStore dataStore;
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     /**
      * Creates a new Category with given Object
@@ -166,28 +171,32 @@ public class LinkManager {
         }
         dataStore.delete(linkName, Link.class);
     }
-    
-    public void linkUrl(String linkName,String urlTobeLinked) {
+
+    public void linkUrl(String linkName, String urlTobeLinked) {
         Link link = getLink(linkName);
         link.setTargetUrl(urlTobeLinked);
         update(link);
     }
 
     public Map<String, List<Link>> getApplicationLinks() {
+        Map<String, List<Link>> applicationLinks = new HashMap<String, List<Link>>();
         List<Category> categories = getAllCategories();
         if (categories != null) {
-            Map<String, List<Link>> applicationLinks = new HashMap<String, List<Link>>(categories.size());
             List<Link> firstlevelLinks;
             for (Category category : categories) {
                 firstlevelLinks = listFirstLevelByCategory(category.getName());
                 walkLinkTree(firstlevelLinks);
                 applicationLinks.put(category.getName(), firstlevelLinks);
             }
-            LOGGER.debug("" + applicationLinks.size());
-            return applicationLinks;
         }
 
-        return null;
+        Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
+
+        for (Map.Entry<String, LinkProvider> entry : beansMap.entrySet()) {
+            applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
+        }
+
+        return applicationLinks;
     }
 
     private void walkLinkTree(List<Link> links) {

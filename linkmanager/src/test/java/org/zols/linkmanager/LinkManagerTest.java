@@ -7,12 +7,9 @@ package org.zols.linkmanager;
 
 import java.util.List;
 import java.util.Map;
-
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -51,6 +48,13 @@ public class LinkManagerTest {
         linkmanager.add(link);
     }
 
+    
+    @Test
+    public void testApplicationLinks() {
+        Map<String, List<Link>> createdLink = linkmanager.getApplicationLinks();
+        Assert.assertNotNull("Created Link available", createdLink);
+    }
+    
     @Test
     public void testCreateLink() {
         Link createdLink = linkmanager.getLink(link.getName());
