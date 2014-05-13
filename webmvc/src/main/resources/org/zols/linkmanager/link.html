@@ -22,7 +22,7 @@
                     <label for="label">Label</label>
                     <input id="label" name="label" type="text" th:field="*{label}" required=""/>
                 </li>
-                <li>
+                <li style="display: none">
                     <label for="targetUrl">Url</label>
                     <input id="targetUrl" name="targetUrl" type="text" th:field="*{targetUrl}"/>
                 </li>
@@ -30,7 +30,6 @@
                     <label for="description">Description</label>
                     <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
                 </li>
-
                 <li>
                     <button id="submit" type="submit">Submit</button>
                     <button id="cancel" type="button">Cancel</button>
