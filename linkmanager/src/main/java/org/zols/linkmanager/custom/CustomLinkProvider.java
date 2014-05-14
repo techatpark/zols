@@ -30,8 +30,7 @@ public class CustomLinkProvider implements LinkProvider{
         List<Link> links = new ArrayList<Link>(1);
         Link l = new Link();
         l.setName("Custom");
-        l.setLabel("Custom");
-        l.setChildren(new ArrayList<Link>());
+        l.setLabel("Custom");        
         links.add(l);
         return links;
     }
