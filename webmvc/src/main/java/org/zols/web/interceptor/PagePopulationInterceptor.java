@@ -27,7 +27,7 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null) {
-            if(appVersion == null) {
+            if (appVersion == null) {
                 appVersion = getVersion(request);
             }
             modelAndView.addObject("version", appVersion);
@@ -40,9 +40,11 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
     private String getVersion(HttpServletRequest request) {
         String version = null;
         Set<String> libPath = request.getServletContext().getResourcePaths("/WEB-INF/lib");
-        for (String libFile : libPath) {
-            if (libFile.contains("webmvc")) {
-                version = libFile.replace("/WEB-INF/lib/webmvc-", "").replaceAll(".jar", "");
+        if (libPath != null) {
+            for (String libFile : libPath) {
+                if (libFile.contains("webmvc")) {
+                    version = libFile.replace("/WEB-INF/lib/webmvc-", "").replaceAll(".jar", "");
+                }
             }
         }
         return version;
