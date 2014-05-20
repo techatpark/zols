@@ -6,10 +6,10 @@
         <title>Control Panel</title>
         <link rel="stylesheet" type="text/css" media="screen" href="static/css/tiles.css" th:href="@{/resources/css/tiles.css}"/>    </head>
     <body th:fragment="content">
-        <div class="wrap">
+        <div class="wrap" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'controlpanel'">
             <!-- Define all of the tiles: -->
-            <div class="box" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'controlpanel'">
-                <div class="boxInner" th:each="menu : ${linkentry.value}">
+            <div class="box" th:each="menu : ${linkentry.value}">
+                <div class="boxInner" >
                     <a th:href="@{${menu.targetUrl}}"><img th:src="@{${menu.iconUrl}}" src="../../../webapp/resources/css/images/icons/entities.svg" alt="${menu.label}" /></a>
                     <div class="titleBox" th:text="${menu.label}">Entities</div>
                 </div>
