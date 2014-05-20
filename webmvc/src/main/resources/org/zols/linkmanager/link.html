@@ -13,33 +13,37 @@
         <form id="my-form" th:object="${link}">
             <fieldset>
                 <legend>Links</legend>
-            <ul>
-                <li>
-                    <label for="name">Name:</label>
-                    <input id="name" name="name" type="text" th:field="*{name}" required=""/>
-                </li>
-                <li>
-                    <label for="label">Label</label>
-                    <input id="label" name="label" type="text" th:field="*{label}" required=""/>
-                </li>
-                <li style="display: none">
-                    <label for="targetUrl">Url</label>
-                    <input id="targetUrl" name="targetUrl" type="text" th:field="*{targetUrl}"/>
-                </li>
-                <li>
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
-                </li>
-                <li>
-                    <button id="submit" type="submit">Submit</button>
-                    <button id="cancel" type="button">Cancel</button>
-                </li>
-            </ul>
-            <input id="categoryName" name="categoryName" type="hidden" th:field="*{categoryName}"/>
-            <input id="parentLinkName" name="parentLinkName" type="hidden" th:field="*{parentLinkName}"/>            
+                <ul>
+                    <li>
+                        <label for="name">Name:</label>
+                        <input id="name" name="name" type="text" th:field="*{name}" required=""/>
+                    </li>
+                    <li>
+                        <label for="label">Label</label>
+                        <input id="label" name="label" type="text" th:field="*{label}" required=""/>
+                    </li>
+                    <li>
+                        <label for="iconUrl">Icon</label>
+                        <input id="iconUrl" name="iconUrl" type="text" th:field="*{iconUrl}"/>
+                    </li>
+                    <li style="display: none">
+                        <label for="targetUrl">Url</label>
+                        <input id="targetUrl" name="targetUrl" type="text" th:field="*{targetUrl}"/>
+                    </li>
+                    <li>
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" cols="40" rows="6" th:field="*{description}"/>
+                    </li>
+                    <li>
+                        <button id="submit" type="submit">Submit</button>
+                        <button id="cancel" type="button">Cancel</button>
+                    </li>
+                </ul>
+                <input id="categoryName" name="categoryName" type="hidden" th:field="*{categoryName}"/>
+                <input id="parentLinkName" name="parentLinkName" type="hidden" th:field="*{parentLinkName}"/>            
             </fieldset>
         </form>
-        
+
 
 
         <script src="../../../../../resources/js/jquery-1.10.2.min.js" th:src="@{/resources/js/jquery-1.10.2.min.js}"></script>

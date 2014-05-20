@@ -30,11 +30,16 @@ public class Link {
      * Parent name of the link.
      */
     private String parentLinkName;
-    
+
     /**
      * Target Url.
      */
     private String targetUrl;
+
+    /**
+     * Icon Url.
+     */
+    private String iconUrl;
 
     /**
      * children of the link.
@@ -99,6 +104,14 @@ public class Link {
 
     public void setTargetUrl(String targetUrl) {
         this.targetUrl = targetUrl;
+    }
+
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
     }
     
     
