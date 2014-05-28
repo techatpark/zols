@@ -5,6 +5,9 @@
  */
 package org.zols.setting;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +39,18 @@ public class SettingManager {
 
     public Page<Setting> list(Pageable page) {
         return dataStore.list(page, Setting.class);
+    }
+    
+    public Map<String,Object> getSettings() {
+        Map<String,Object> map = null ;
+        List<Setting> settings = dataStore.list(Setting.class);
+        if(settings != null) {
+            map = new HashMap<String, Object>(settings.size());
+            for (Setting setting : settings) {
+                map.put(setting.getName(), setting.getValue());
+            }
+        }       
+        return map;
     }
 
 }

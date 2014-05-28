@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.zols.linkmanager.LinkManager;
+import org.zols.setting.SettingManager;
 
 /**
  *
@@ -21,6 +22,9 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     private LinkManager linkManager;
+    
+    @Autowired
+    private SettingManager settingManager;
 
     private String appVersion;
 
@@ -32,6 +36,7 @@ public class PagePopulationInterceptor extends HandlerInterceptorAdapter {
             }
             modelAndView.addObject("version", appVersion);
             modelAndView.addObject("links", linkManager.getApplicationLinks());
+            modelAndView.addObject("settings", settingManager.getSettings());
             modelAndView.addObject("viewName", modelAndView.getViewName());
             modelAndView.setViewName("index");
         }
