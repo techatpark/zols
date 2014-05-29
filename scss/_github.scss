@@ -1,0 +1,57 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 28, 2014, 2:48:50 PM
+    Author     : vijayasekar_c
+*/
+
+#forkongithub a {
+    background: none repeat scroll 0 0 #fd310e;
+    color: #FFFFFF;
+    font-family: arial,sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 2rem;
+    padding: 5px 40px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.5s ease 0s;
+}
+
+#forkongithub a:before, #forkongithub a:after {
+    
+    content: "";
+    display: block;
+    height: 1px;
+    left: 0;
+    position: absolute;
+    top: 1px;
+    width: 100%;
+}
+#forkongithub a:after {
+    bottom: 1px;
+    top: auto;
+}
+@media screen and (min-width: 800px) {
+#forkongithub {
+    display: block;
+    height: 400px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 400px;
+}
+#forkongithub a {
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
+    font: 14px/14px arial;
+    position: absolute;
+    right: -48px;
+    top: 35px;
+    transform: rotate(45deg);
+}
+}
