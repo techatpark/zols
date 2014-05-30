@@ -10,4 +10,8 @@ and open the template in the editor.
 
 @import "_github.scss";
 @import "_applayout.scss";
-body{background-color: #eff3f6; margin: 0;}
+@import 'bourbon/bourbon';
+body{background-color: red; margin: 0;}
+section {
+  @include linear-gradient(to top, red, orange);
+}
