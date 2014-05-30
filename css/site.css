@@ -142,7 +142,7 @@ header nav ul {
 #search input[type="text"]:focus {
   width: 200px; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_github\.scss}line{font-family:\000033}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_github\.scss}line{font-family:\000033}}
 #forkongithub {
   position: absolute;
   display: block;
@@ -153,7 +153,7 @@ header nav ul {
   height: 200px;
   z-index: 10; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_github\.scss}line{font-family:\0000313}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_github\.scss}line{font-family:\0000313}}
 #forkongithub a {
   color: white;
   background: #000;
@@ -178,33 +178,33 @@ and open the template in the editor.
     Created on : May 30, 2014, 6:29:21 PM
     Author     : sathish_ku
 */
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000311}}
 #app-caption {
   float: left;
   width: 460px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000314}}
   #app-caption h1 {
     font-size: 40px; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000319}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000319}}
 #demo-video {
   width: 480px;
   float: right; }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000324}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000324}}
 #main_features {
   float: left;
   padding-top: 65px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000327}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000327}}
   #main_features section {
     width: 302px;
     float: left;
     padding-right: 26px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000328}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000328}}
     #main_features section h4 {
       font-size: 30px;
       color: #3e3e40;
       border-bottom: solid #d4d8db 1px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\/_homepage\.scss}line{font-family:\0000330}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_site\/_homepage\.scss}line{font-family:\0000330}}
   #main_features section:last-child {
     padding-right: 0px; }
