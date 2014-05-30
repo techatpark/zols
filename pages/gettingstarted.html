@@ -1,26 +1,32 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
-        <title>Zols | Embeddable CMS</title>
-        <link rel="stylesheet" type="text/css" href="../css/base.css" />
-        <link rel="stylesheet" type="text/css" href="../css/github.css" />
+        <title>Zols | Embeded CMS</title>
+        <link href="../css/site.css" rel="stylesheet"/>
     </head>
     <body>
-        <header class="header" >
-            <div id="headerbg">
-                <div id="logo"></div><h3 class="tag1">Content Management <br>Simplified !!</h3>
-                <span id="forkongithub"><a href="https://github.com/sathishk/zols">Fork us @ GitHub</a></span>
-            </div>
-            <nav>
-                <ul> 
-                    <li class="selected"><a href="../index.html">About</a></li>
-                    <li><a>Getting Started</a></li>
-                </ul>
-            </nav>
+        <header>
+            <section class="wrapper">
+                <a href="" class="logo"></a>
+                <nav>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Guides</a></li>
+                        <li><a href="#">Samples</a></li>
+                        <li><a href="#">Builds</a></li>
+                    </ul>
+                </nav>
+                <form method="get" action="/search" id="search">
+                    <input name="q" type="text" size="40" placeholder="Search..." />
+                </form>
+                <span id="forkongithub">
+                    <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
+                </span>
+            </section>
+
         </header>
-        <section>
-            <div class="content contentpos" >                
-                <h1>Prerequisites</h1>
+        <section class="wrapper">
+            <section id="content"><h1>Prerequisites</h1>
                 <ol>
                     <li>JDK 1.7</li>
                     <li>Maven</li>
@@ -44,17 +50,19 @@
                     <h3>Quick Demo</h3>
                     <iframe width="210" height="158" src="http://www.youtube.com/v/RbR3Yol8hGo" frameborder="0" allowfullscreen=""></iframe> 
                 </div>
-            </div>
+            </section>
         </section>
-        <footer class="footer">
-            <div id="copyrights">Apache License, Version 2.0</div>
-            <div class="user userpos">
-                <ul>
-                    <li>
-                        <a href="http://www.github.com/sathishk/zols/issues">Feebback @ Github</a>
-                    </li>
-                </ul>
-            </div>
+
+        <footer>
+            <section class="wrapper">
+                <aside>Apache License V2</aside>
+                <nav>
+                    <ul>
+                        <li><a href="#">API</a></li>                    
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </nav>
+            </section>
         </footer>
     </body>
 </html>
