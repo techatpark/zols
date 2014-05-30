@@ -1,66 +1,70 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
     <head>
-        <title>Zols | Embeddable CMS</title>
-        <link rel="stylesheet" type="text/css" href="css/base.css" />
-        <link rel="stylesheet" type="text/css" href="css/github.css" />
+        <title>Zols | Embeded CMS</title>
+        <link href="css/site.css" rel="stylesheet"/>
     </head>
     <body>
-        <header class="header" >
-            <a href="index.html" class="logo"></a>
-            <h3 class="tag1">Content Management <br>Simplified !!</h3>
-            <div id="headerbg">
-                <div id="logo"></div>
-                <span id="forkongithub"><a href="https://github.com/sathishk/zols">Fork us @ GitHub</a></span>
-            </div>
-            <nav>
-                <ul> 
-                    <li class="selected"><a>About</a></li>
-                    <li><a href="pages/gettingstarted.html">Getting Started</a></li>
-                </ul>
-            </nav>
+        <header>
+            <section class="wrapper">
+                <a href="" class="logo"></a>
+                <nav>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Guides</a></li>
+                        <li><a href="#">Samples</a></li>
+                        <li><a href="#">Builds</a></li>
+                    </ul>
+                </nav>
+                <div class="search-bar">
+                    <div class="search-and-submit">
+                        <input type="search" placeholder="Enter Search" />
+                        <button type="submit">
+                            <img src="https://raw.githubusercontent.com/Magnus-G/Random/master/search-icon-black.png" alt="">
+                        </button>
+                    </div>
+                </div>
+                <span id="forkongithub">
+                    <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
+                </span>
+            </section>
+
         </header>
-        <section>
-           <div class="content contentpos" >                
-                
-                <div class="colmask threecol">                    
-                    <div class="colmid">
-                        <div class="colleft">
-                            <div class="col1" >
-                                <iframe width="420" height="315" src="http://www.youtube.com/v/RbR3Yol8hGo" frameborder="0" allowfullscreen=""></iframe>                                
-                            </div>
-                            <div class="col2">
-                                <h1>Native Data</h1>
-                                <p>Content is no longer just a text. Any data we enter here is stored in it's native format. For E.g Dates, Time, Number etc. Which we can read, update, delete and query by clearly documented REST API</p>
-                            </div>
-                            <div class="col3">
-                                <h1>HTML to CMS in no Time</h1>
-                                <p>Directly link your HTML Projects to CMS. Make changes to HTML files and see it up and running in no time.This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="colmask threecol">                    
-                    <div class="colmid">
-                        <div class="colleft">
-                            <div class="col1">
-                                <h1>Embedded CMS</h1>                                
-                                <p>Tired of integrating CMS Applications? Feel the power of keeping Content management just as a library.All you need is to include some jars to your Spring MVC application. Your CMS in your application straight away</p>
-                            </div>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <section class="wrapper">
+            <section id="content">
+                <section class="app-caption">
+                    <h1>"Content <br>Management <br>Simplified"</h1>
+                    <h2><b>Embeded</b> Content Management System</h2>
+                </section>
+                <section class="demo-video"><img src="css/images/video_img.jpg" alt="video"></section>
+                <section title="main_features">
+                    <section>
+                        <h4>Embedded CMS</h4>
+                        <article>Tired of integrating CMS Applications? Feel the power of keeping Content management just as a library.All you need is to include some jars to your Spring MVC application. Your CMS in your application straight away</article>
+                    </section>
+                    <section>
+                        <h4>Native Data</h4>
+                        <article>Content is no longer just a text. Any data we enter here is stored in it's native format. For E.g Dates, Time, Number etc. Which we can read, update, delete and query by clearly documented REST API</article>
+                    </section>
+                    <section>
+                        <h4>HTML to CMS in no Time</h4>
+                        <article>Directly link your HTML Projects to CMS. Make changes to HTML files and see it up and running in no time.This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.</article>
+                    </section>
+
+                </section>
+            </section>
         </section>
-        <footer class="footer">
-            <div id="copyrights">Apache License, Version 2.0</div>
-            <div class="user userpos">
-                <ul>
-                    <li>
-                        <a href="http://www.github.com/sathishk/zols/issues">Feebback @ Github</a>
-                    </li>
-                </ul>
-            </div>
+
+        <footer>
+            <section class="wrapper">
+                <aside>Apache License V2</aside>
+                <nav>
+                    <ul>
+                        <li><a href="#">API</a></li>                    
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </nav>
+            </section>
         </footer>
     </body>
 </html>

@@ -1,12 +1,127 @@
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\000031}}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000322}}
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000326}}
+body {
+  line-height: 1;
+  font-family: Arial; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000330}}
+ol, ul {
+  list-style: none; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000333}}
+blockquote, q {
+  quotes: none; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000336}}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_reset\.scss}line{font-family:\0000341}}
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\000034}}
+.wrapper {
+  width: 960px;
+  margin: 0px auto; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\000039}}
+header {
+  background-color: #3e6baf;
+  height: 70px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000312}}
+  header .logo {
+    background: url("images/logo.jpg") no-repeat;
+    width: 124px;
+    height: 74px;
+    float: left; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000320}}
+section[title="main_features"] {
+  padding-top: 65px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000322}}
+  section[title="main_features"] section {
+    width: 302px;
+    float: left;
+    padding-right: 26px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000323}}
+    section[title="main_features"] section h4 {
+      font-size: 30px;
+      color: #3e3e40;
+      border-bottom: solid #d4d8db 1px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000325}}
+  section[title="main_features"] section:last-child {
+    padding-right: 0px; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000328}}
+footer {
+  background-color: #23221f;
+  height: 30px;
+  position: absolute;
+  bottom: 0px;
+  width: 100%; }
+
 /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
 /* 
-    Created on : May 28, 2014, 2:46:47 PM
-    Author     : vijayasekar_c
+    Created on : May 30, 2014, 5:16:44 PM
+    Author     : sathish_ku
 */
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_headermenu\.scss}line{font-family:\0000312}}
+header nav ul {
+  display: inline;
+  border: 0;
+  margin: 0;
+  float: left;
+  padding-top: 26px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_headermenu\.scss}line{font-family:\0000313}}
+  header nav ul li {
+    float: left;
+    list-style-type: none;
+    border: 0;
+    margin: 0;
+    padding: 0 15px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_headermenu\.scss}line{font-family:\0000314}}
+    header nav ul li a {
+      color: #feffff;
+      text-decoration: none; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_headermenu\.scss}line{font-family:\0000315}}
+    header nav ul li a:hover {
+      color: #feffff;
+      text-decoration: underline; }
+
 /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -16,229 +131,56 @@ and open the template in the editor.
     Created on : May 28, 2014, 2:48:50 PM
     Author     : vijayasekar_c
 */
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000311}}
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000310}}
 #forkongithub a {
-  background: none repeat scroll 0 0 #fd310e;
-  color: #FFFFFF;
-  font-family: arial,sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  line-height: 2rem;
-  padding: 5px 40px;
-  position: relative;
-  text-align: center;
+  background: #000;
+  color: #fff;
   text-decoration: none;
-  transition: all 0.5s ease 0s; }
+  font-family: arial, sans-serif;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 40px;
+  font-size: 16px;
+  line-height: 2rem; }
+
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000321}}
+#forkongithub a:hover {
+  background: #060;
+  color: #fff; }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000325}}
-#forkongithub a:before, #forkongithub a:after {
+#forkongithub a::before, #forkongithub a::after {
   content: "";
+  width: 100%;
   display: block;
-  height: 1px;
-  left: 0;
   position: absolute;
   top: 1px;
-  width: 100%; }
+  left: 0;
+  height: 1px;
+  background: #fff; }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000335}}
-#forkongithub a:after {
+#forkongithub a::after {
   bottom: 1px;
   top: auto; }
 
-@media screen and (min-width: 800px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000340}}
-  #forkongithub {
-    display: block;
-    height: 400px;
-    overflow: hidden;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 400px; }
+@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000339}}
+#forkongithub {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  width: 200px;
+  overflow: hidden;
+  height: 200px;
+  z-index: 10; }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_github\.scss}line{font-family:\0000349}}
-  #forkongithub a {
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8);
-    font: 14px/14px arial;
-    position: absolute;
-    right: -48px;
-    top: 35px;
-    transform: rotate(45deg); } }
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : May 28, 2014, 3:35:05 PM
-    Author     : vijayasekar_c
-*/
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000311}}
-.mainContainer {
-  width: 960px;
-  margin: 0 auto; }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000314}}
-header {
-  background-image: url("../assets/layout/header_bg.jpg");
-  background-repeat: repeat-x;
-  width: 100%;
-  height: 70px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000315}}
-  header .logo {
-    width: 123px;
-    float: left; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000317}}
-  header nav ul {
-    display: inline;
-    border: 0;
-    margin: 0;
-    float: left;
-    padding-top: 26px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000318}}
-    header nav ul li {
-      float: left;
-      list-style-type: none;
-      border: 0;
-      margin: 0;
-      padding: 0 15px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000319}}
-      header nav ul li a {
-        color: #feffff;
-        text-decoration: none; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000320}}
-      header nav ul li a:hover {
-        color: #feffff;
-        text-decoration: underline; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000324}}
-  header .getStar {
-    margin: 22px 0 0 80px;
-    float: right;
-    width: 130px;
-    height: 30px;
-    padding: 5px 18px;
-    border: 1px solid #164E07;
-    background: -webkit-gradient(linear, left top, left bottom, from(#489b15), to(#2f7208));
-    background: -webkit-linear-gradient(top, #489b15, #2f7208);
-    background: -moz-linear-gradient(top, #489b15, #2f7208);
-    background: -ms-linear-gradient(top, #489b15, #2f7208);
-    background: -o-linear-gradient(top, #489b15, #2f7208);
-    background-color: #307309;
-    /*        box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 2px #73B44C;
-            -webkit-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 2px #73B44C;
-            -moz-box-shadow: 0px 7px 2px -5px #1A1A1A, inset 0px 0px 2px #73B44C;*/
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    color: #FFFFFF;
-    font-size: 13px;
-    font-family: Arial;
-    text-decoration: none;
-    font-weight: bold;
-    -webkit-transition: 0.2s;
-    -moz-transition: 0.2s;
-    -o-transition: 0.2s;
-    cursor: pointer; }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000353}}
-#content {
-  width: 100%;
-  padding: 20px 0 20px 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000354}}
-  #content h1 {
-    font-size: 50px;
-    color: #9da0a5; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000355}}
-  #content h2 {
-    font-size: 25px;
-    color: #5b5c60;
-    font-style: normal; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000356}}
-  #content .app-caption {
-    width: 500px;
-    height: 395px;
-    float: left;
-    margin: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000357}}
-  #content .demo-video {
-    width: 460px;
-    height: 395px;
-    float: left; }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000360}}
-#main-features {
-  padding-top: 65px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000361}}
-  #main-features section {
-    width: 302px;
-    float: left;
-    padding-right: 26px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000362}}
-    #main-features section h4 {
-      font-size: 30px;
-      color: #3e3e40;
-      border-bottom: solid #d4d8db 1px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000364}}
-  #main-features section:last-child {
-    padding-right: 0px; }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000367}}
-footer {
+#forkongithub a {
+  width: 260px;
   position: absolute;
-  bottom: 0px;
-  width: 100%;
-  height: 50px;
-  background-color: #151618;
-  color: #ffffff;
-  padding-top: 10px; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000368}}
-  footer aside {
-    float: left; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000369}}
-  footer nav {
-    text-align: right;
-    float: right; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000370}}
-    footer nav ul {
-      display: inline;
-      margin: 0; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000371}}
-      footer nav ul li {
-        list-style-type: none;
-        margin: 0;
-        padding: 0 15px;
-        float: right; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000372}}
-        footer nav ul li a {
-          color: #feffff;
-          text-decoration: none; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000373}}
-        footer nav ul li a:hover {
-          color: #feffff;
-          text-decoration: underline; }
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/_applayout\.scss}line{font-family:\0000375}}
-    footer nav .dividerLine {
-      border-right: 1px solid #ffffff; }
-
-/*footer{ position: absolute;bottom: 0px; width: 100%; height: 50px; background-color: #151618; color: #ffffff; padding-top: 1px;
-        .leftSide{float: left;}
-        .rightSide{text-align: right;
-            ul{display: inline; margin: 0;
-               li{list-style-type: none; margin: 0; padding: 0 15px; float: right;
-                a{color: #feffff; text-decoration: none;}
-                a:hover{color: #feffff; text-decoration: underline;}}
-            }
-            .dividerLine{border-right: 1px solid #ffffff;}
-            }
-}*/
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\.scss}line{font-family:\0000314}}
-body {
-  background-color: red;
-  margin: 0; }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/C\:\/Users\/sathish_ku\/Documents\/NetBeansProjects\/zols\/scss\/site\.scss}line{font-family:\0000315}}
-section {
-  background-color: red;
-  background-image: -webkit-linear-gradient(bottom, red, orange);
-  background-image: linear-gradient(to top,red, orange); 
-}
+  top: 60px;
+  right: -60px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.8); }

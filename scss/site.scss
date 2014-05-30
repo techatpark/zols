@@ -1,17 +1,5 @@
-/*
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
-*/
-/* 
-    Created on : May 28, 2014, 2:46:47 PM
-    Author     : vijayasekar_c
-*/
-
-@import "_github.scss";
-@import "_applayout.scss";
 @import 'bourbon/bourbon';
-body{background-color: red; margin: 0;}
-section {
-  @include linear-gradient(to top, red, orange);
-}
+@import "_reset.scss";
+@import "_applayout.scss";
+@import "_headermenu.scss";
+@import "_github.scss";
