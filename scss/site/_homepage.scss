@@ -1,0 +1,31 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 30, 2014, 6:29:21 PM
+    Author     : sathish_ku
+*/
+
+#app-caption {
+    float: left;
+    width: ($screen-width/2)-20;
+    h1{
+        font-size: 40px;
+    }
+}
+
+#demo-video{
+    width: $screen-width/2;
+    float: right;
+}
+
+#main_features{
+    float: left;
+    padding-top: 65px;
+    section{ width: 302px; float: left; padding-right: 26px;
+             h4{font-size: 30px; color: #3e3e40; border-bottom: solid #d4d8db 1px;}
+    }
+    section:last-child{ padding-right: 0px;}
+}

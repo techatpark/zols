@@ -8,51 +8,38 @@ and open the template in the editor.
     Author     : sathish_ku
 */
 
-header nav {
-    ul{display: inline; border: 0; margin: 0; float: left; padding-top: 26px;
-       li {float: left; list-style-type: none; border: 0; margin: 0; padding: 0 15px;
-           a{color: #feffff; text-decoration: none;}
-           a:hover{color: #feffff; text-decoration: underline;}
-       }
+header {
+
+    nav {
+
+        ul{display: inline; border: 0; margin: 0; float: left; padding-top: 26px;
+           li {float: left; list-style-type: none; border: 0; margin: 0; padding: 0 15px;
+               a{color: #feffff; text-decoration: none;}
+               a:hover{color: #feffff; text-decoration: underline;}
+           }
+        }
     }
 }
+#search input[type="text"] {
+    background: url(images/search-white.png) no-repeat 10px 6px #fcfcfc;
+    border: 1px solid #d1d1d1;
+    font: bold 12px Arial,Helvetica,Sans-serif;
+    color: #bebebe;
+    width: 150px;
+    padding: 6px 15px 6px 35px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+    -webkit-transition: all 0.7s ease 0s;
+    -moz-transition: all 0.7s ease 0s;
+    -o-transition: all 0.7s ease 0s;
+    transition: all 0.7s ease 0s;
+}
 
-.search-bar {
-  $search-bar-border-color: $base-border-color;
-  $search-bar-border: 1px solid $search-bar-border-color;
-  $search-bar-background: lighten($search-bar-border-color, 10);
-
-  position: relative; 
-  display: inline-block;
-
-  input {
-    @include box-sizing(border-box);
-    display: block;
-  }
-
-  div.search-and-submit {
-    position: relative;
-
-    input[type=search] {
-      @include appearance(none);
-      width: 100%;
-      padding: .5em .8em;
-      font-size: .9em;
-      font-style: italic;
-      border-radius: $base-border-radius * 2;
-      margin: 0;
-    }
-
-    button[type=submit] {
-      @include button(simple, lighten($base-border-color, 10));
-      @include position(absolute, 0.3em 0.3em 0.3em 0);
-      outline: none;
-      padding: 5px 10px;
-
-      img {
-        height: 12px;
-        opacity: .7;
-      }
-    }
-  }
+#search input[type="text"]:focus {
+    width: 200px;
 }

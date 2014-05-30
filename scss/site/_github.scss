@@ -1,0 +1,28 @@
+$box-size:200px;
+
+#forkongithub {
+    position:absolute;
+    display:block;
+    top:0;
+    right:0;
+    width:$box-size;
+    overflow:hidden;
+    height:$box-size;
+    z-index: 10;
+}
+#forkongithub a {
+    color:$navigation-font-color;
+    background:#000;
+    text-decoration:none;
+    text-align:center;
+    font-weight:bold;
+    padding:8px 40px;
+    font-size:16px;
+    width:260px;
+    position:absolute;
+    top:40px;
+    right:-108px;
+    transform:rotate(45deg);
+    -webkit-transform:rotate(45deg);
+}
+

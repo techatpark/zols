@@ -16,14 +16,9 @@
                         <li><a href="#">Builds</a></li>
                     </ul>
                 </nav>
-                <div class="search-bar">
-                    <div class="search-and-submit">
-                        <input type="search" placeholder="Enter Search" />
-                        <button type="submit">
-                            <img src="https://raw.githubusercontent.com/Magnus-G/Random/master/search-icon-black.png" alt="">
-                        </button>
-                    </div>
-                </div>
+                <form method="get" action="/search" id="search">
+                    <input name="q" type="text" size="40" placeholder="Search..." />
+                </form>
                 <span id="forkongithub">
                     <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
                 </span>
@@ -32,12 +27,15 @@
         </header>
         <section class="wrapper">
             <section id="content">
-                <section class="app-caption">
+                <section id="app-caption">
                     <h1>"Content <br>Management <br>Simplified"</h1>
                     <h2><b>Embeded</b> Content Management System</h2>
                 </section>
-                <section class="demo-video"><img src="css/images/video_img.jpg" alt="video"></section>
-                <section title="main_features">
+                <section id="demo-video">
+                    <iframe title="YouTube video player" src="http://www.youtube.com/embed/hqiNL4Hn04A" width="480" height="390" frameborder="0">
+                    </iframe>
+                </section>
+                <section id="main_features">
                     <section>
                         <h4>Embedded CMS</h4>
                         <article>Tired of integrating CMS Applications? Feel the power of keeping Content management just as a library.All you need is to include some jars to your Spring MVC application. Your CMS in your application straight away</article>
@@ -50,7 +48,6 @@
                         <h4>HTML to CMS in no Time</h4>
                         <article>Directly link your HTML Projects to CMS. Make changes to HTML files and see it up and running in no time.This gives the power of quickly bootstrapping and testing our your HTML authoring and be able to quickly deploy it in the production.</article>
                     </section>
-
                 </section>
             </section>
         </section>

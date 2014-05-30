@@ -1,34 +1,44 @@
 $primary-color:#3E6BAF;
 $footer-color:#23221F;
-
+$navigation-font-color:#FFF;
+$screen-width:960px;
 .wrapper {
-    width: 960px;
+    width: $screen-width;
     margin: 0px auto;
 }
 
 header {
     background-color: $primary-color;
     height: 70px;
+    color:$navigation-font-color;
     .logo{
         background: url('images/logo.jpg') no-repeat;
         width: 124px;
-        height: 74px;
+        height: 70px;
         float: left;
     }
 }
 
-section[title="main_features"]{
-    padding-top: 65px;
-    section{ width: 302px; float: left; padding-right: 26px;
-             h4{font-size: 30px; color: #3e3e40; border-bottom: solid #d4d8db 1px;}
-    }
-    section:last-child{ padding-right: 0px;}
+#content {
+    width: 100%;
+    display: block;
 }
 
 footer {
     background-color: $footer-color;
+    color:$navigation-font-color;
     height: 30px;
-    position: absolute;
+    position: fixed;
     bottom: 0px;
     width: 100%;
+    nav {
+        float:right;
+        ul {
+            li {
+                a {
+                    color:$navigation-font-color;
+                }
+            }
+        }
+    }
 }
