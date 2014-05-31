@@ -225,6 +225,57 @@ body > header #search input[type="text"] {
 .flat a:hover:after, .flat a.active:after {
   background: #9EEB62; }
 
+/*http://thecodeplayer.com/walkthrough/css3-itemlist-navigation*/
+#items {
+  width: 100%;
+  text-align: center;
+  margin: 0px auto;
+  padding: 10px; }
+
+.itemlist {
+  /*centering*/
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 5px; }
+
+.itemlist a {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  font-size: 12px;
+  line-height: 36px;
+  min-width: 200px;
+  color: white;
+  background: linear-gradient(#666666, #333333); }
+
+/*since the first link does not have a triangle before it we can reduce the left padding to make it look consistent with other links*/
+.itemlist a:first-child {
+  padding: 10px;
+  border-radius: 5px 0 0 5px;
+  /*to match with the parent's radius*/ }
+
+.itemlist a:last-child {
+  border-radius: 0 5px 5px 0;
+  /*this was to prevent glitches on hover*/ }
+
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 31, 2014, 11:24:52 AM
+    Author     : sathish_ku
+*/
+#content header {
+  width: 100%;
+  height: 40px;
+  display: block; }
+  #content header section:first-child {
+    float: left; }
+  #content header section:last-child {
+    float: right; }
+
 #forkongithub {
   position: absolute;
   display: block;

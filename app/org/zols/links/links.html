@@ -21,14 +21,39 @@
         </header>
         <section class="wrapper">
             <section id="content">
-                <header><h4>Links</h4><section></section></header>
+                <header>
+                    <section><h4>Links</h4></section>
+                    <section>
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <option value="header">Header</option>
+                        </select>
+                        <button id="editBtn">E</button>
+                        <button id="deleteBtn">-</button>
+                    </section>
+                </header>
+                
                 <div class="breadcrumb flat">
                     <a href="#" class="active">Browse</a>
                     <a href="#">Compare</a>
                     <a href="#">Order Confirmation</a>
                     <a href="#">Checkout</a>
                 </div>
-                <p></p>
+                <section id="items">
+                    <ul class="itemlist">
+                    <li><a href="">Test</a></li>
+                    <li><a href="">Test</a></li>
+                    <li><a href="">Test</a></li>
+                    <li><a href="">Test</a></li>
+                    <li><a href="">Test</a></li>
+                </ul>
+                    <br>
+                    <br>
+                    <br>
+                    <a id="addMore" href="javascript://">Add More</a>
+                </section>
+                
+                
             </section>
         </section>
 
@@ -43,5 +68,9 @@
                 </nav>
             </section>
         </footer>
+        
+        <script type="text/javascript" src="../../../../js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="../../../../js/org/zols/links/links.js"></script>
+        
     </body>
 </html>
