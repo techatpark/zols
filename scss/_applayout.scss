@@ -7,7 +7,7 @@ $screen-width:960px;
     margin: 0px auto;
 }
 
-header {
+body>header {
     background-color: $primary-color;
     height: 70px;
     color:$navigation-font-color;
@@ -24,7 +24,7 @@ header {
     display: block;
 }
 
-footer {
+body>footer {
     background-color: $footer-color;
     color:$navigation-font-color;
     height: 30px;
