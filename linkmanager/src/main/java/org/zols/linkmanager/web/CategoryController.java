@@ -6,6 +6,7 @@
 package org.zols.linkmanager.web;
 
 import com.mangofactory.swagger.annotations.ApiIgnore;
+import java.util.List;
 import org.zols.linkmanager.LinkManager;
 import org.zols.linkmanager.domain.Category;
 import org.slf4j.Logger;
@@ -84,10 +85,10 @@ public class CategoryController {
     @RequestMapping(value = "/api/linkcategories", method = GET)
     @ApiIgnore
     @ResponseBody
-    public Page<Category> list(
+    public List<Category>  list(
             Pageable page) {
         LOGGER.info("Listing categories");
-        return linkManager.categoriesByPageable(page);
+        return linkManager.getAllCategories();
     }
 
     @RequestMapping(value = "/linkcategories", method = GET)

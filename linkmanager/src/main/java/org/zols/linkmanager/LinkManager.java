@@ -81,17 +81,7 @@ public class LinkManager {
     public List<Category> getAllCategories() {
         return dataStore.list(Category.class);
     }
-
-    /**
-     * Get the list of Category with given Pageable
-     *
-     * @param pageable Object to be get
-     * @return list of categories
-     */
-    public Page<Category> categoriesByPageable(Pageable pageable) {
-        return dataStore.list(pageable, Category.class);
-
-    }
+    
 
     /**
      * Create a new Link with given link Object
