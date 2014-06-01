@@ -5,12 +5,12 @@
     var $category = $("#category");
     var $links = $("#items>ul");
 
-    var $sectionone = $("#content>section:nth-child(2)");
-    var $sectiontwo = $("#content>section:nth-child(3)");
-    var $sectionthree = $("#content>section:nth-child(4)");
+    function show(sectionName) {
+        $("#content>section").hide();
+        $("#content>section#" + sectionName).show();
+    }
 
-    $sectiontwo.hide();
-    $sectionthree.hide();
+    show('listing');
 
     $("#submitCategory").on("click", function() {
         var formData = $('#category-form').toObject();
@@ -48,8 +48,7 @@
     });
 
     function createCategory() {
-        $sectionone.hide();
-        $sectiontwo.show();
+        show("categoryform");
         $("form#category-form").removeAttr('category-link');
         $("form#category-form :input").each(function() {
             $(this).val('');
@@ -57,8 +56,7 @@
     }
 
     $("#cancelCategory").on("click", function() {
-        $sectiontwo.hide();
-        $sectionone.show();
+        show("listing");
     });
 
     $("#submitLink").on("click", function() {
@@ -95,13 +93,10 @@
 
     });
     function onSave() {
-        $sectiontwo.hide();
-        $sectionthree.hide();
-        $sectionone.show();
+        show("listing");
     }
     $("#cancelLink").on("click", function() {
-        $sectionthree.hide();
-        $sectionone.show();
+        show("listing");
     });
 
 
@@ -116,8 +111,7 @@
             $("form#category-form :input").each(function() {
                 $(this).val(category[$(this).attr('name')]);
             });
-            $sectionone.hide();
-            $sectiontwo.show();
+            show("categoryform");
 
         });
     }
@@ -138,6 +132,23 @@
 
     $category.on("change", function() {
         loadLinksByCategory();
+    });
+
+    $("#createNew").on("click", function() {
+        createCategory();
+    });
+
+    function createLink() {
+        $("form#link-form").removeAttr('data-link');
+        $("form#link-form :input").each(function() {
+            $(this).val('');
+        });
+        setParentLink();
+        show("linkform");
+
+    }
+    $("#createLink").on("click", function() {
+        createLink();
     });
 
 
@@ -172,12 +183,18 @@
                 dataType: 'json',
                 contentType: 'application/json'
             }).done(function(links) {
-                var linksHtml = '';
-                links.forEach(function(link) {
-                    linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a></li>";
-                });
-                $links.html(linksHtml);
-                addLinkListener();
+                if (links && links.length > 0) {
+                    var linksHtml = '';
+                    links.forEach(function(link) {
+                        linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a><a role='delete' href='#deleteLink'>-</a></li>";
+                    });
+                    $links.html(linksHtml);
+                    addLinkListener();
+                }
+                else {
+                    show("nolinks");
+                }
+
             });
         }
     }
@@ -200,19 +217,20 @@
     }
 
     $("#addMore").on("click", function() {
-        $sectionone.hide();
-        $sectiontwo.hide();
-        $("form#link-form").removeAttr('data-link');
-        $("form#link-form :input").each(function() {
-            $(this).val('');
-        });
-        setParentLink();
-        $sectionthree.show();
+        createLink();
     });
 
+    $("#delLink").on("click", function() {
+        deleteLink($(this).parent().attr('data-link'));
+    });
     function addLinkListener() {
-        $("#items>ul li a[role='edit']").on("click", function() {
-            editLink($(this).parent().attr('name'));
+        $("#items>ul li a").on("click", function() {
+            if ($(this).attr('role') === 'edit') {
+                editLink($(this).parent().attr('name'));
+            } else {                
+                $("#deleteLink div").attr("data-link", $(this).parent().attr('name'));
+            }
+
         });
         $("#items>ul li p").on("click", function() {
             navigateInto($(this).parent().attr('name'));
@@ -220,14 +238,10 @@
     }
 
     function navigateInto(linkName) {
-
         if ($('.breadcrumb ul li').length === 0) {
             $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="/">/</a></li>');
         }
         $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="' + linkName + '">' + linkName + '</a></li>');
-
-
-
         loadLinksByParent(linkName);
     }
     $(".breadcrumb ul").on('click', 'li:not(:last-child) a', function() {
@@ -258,15 +272,24 @@
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(link) {
-            $sectionone.hide();
-            $sectiontwo.hide();
-            $sectionthree.show();
+            show("linkform");
             $("form#link-form").attr('data-link', linkName);
             setParentLink();
             $("form#link-form :input").each(function() {
                 $(this).val(link[$(this).attr('name')]);
             });
 
+        });
+    }
+
+    function deleteLink(linkName) {
+        $.ajax({
+            url: base_url + "/api/links/" + linkName,
+            type: 'DELETE',
+            dataType: 'json',
+            contentType: 'application/json'
+        }).done(function() {
+            refreshLinks();
         });
     }
 
@@ -285,14 +308,21 @@
     function loadCategories() {
         $.ajax({
             url: base_url + "/api/linkcategories"
-        }).done(function(categories) {           
-            var categoryOption = '';
-            categories.forEach(function(category) {
-                categoryOption += "<option value=" + category.name + " >" + category.label + "</option>";
-            });
-            categoryOption += "<option value='/'>Create New</option>";
-            $category.html(categoryOption);
-            loadLinksByCategory();
+        }).done(function(categories) {
+            $category.empty();
+            if (categories) {
+                var categoryOption = '';
+                categories.forEach(function(category) {
+                    categoryOption += "<option value=" + category.name + " >" + category.label + "</option>";
+                });
+                categoryOption += "<option value='/'>Create New</option>";
+                $category.html(categoryOption);
+                loadLinksByCategory();
+            }
+            else {
+                show("nocategory");
+            }
+
         });
     }
 

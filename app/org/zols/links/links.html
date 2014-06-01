@@ -28,10 +28,12 @@
                         <select id="category">                            
                         </select>
                         <button id="editBtn">E</button>
-                        <button id="deleteBtn">-</button>
+                        <a href="#deleteCategory">-</a>
+                        
                     </section>
                 </header>
-                <section>
+                
+                <section id="listing">
                     <nav class="breadcrumb">
                         <ul>
 
@@ -46,7 +48,7 @@
                     </section>
                 </section>
 
-                <section>
+                <section id="categoryform">
                     <form id="category-form" >
                         <fieldset>                        
                             <ul>
@@ -72,7 +74,7 @@
                     </form>
                 </section>
 
-                <section>
+                <section id="linkform">
                     <form id="link-form" >
                         <fieldset>                        
                             <ul>
@@ -97,7 +99,37 @@
                         </fieldset>
                     </form>
                 </section>
+                
+                <section id="nocategory">
+                    <p>There are no category click here to add <a href="javascript://" id="createNew" >new</a></p>
+                </section>
+                <section id="nolinks">
+                    <p>There are no links click here to add <a href="javascript://" id="createLink" >new</a></p>
+                </section>
+                
+<div id="deleteCategory" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2>Delete Category</h2>
+		<p>Are you sure you want to delete</p>
+                
+		<a href="#close" id="deleteBtn">Ok</a>
+                <a href="#close">Close</a>
+	</div>
+</div>
 
+
+
+<div id="deleteLink" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<h2>Delete Link</h2>
+		<p>Are you sure you want to delete</p>
+                
+		<a href="#close" id="delLink">Ok</a>
+                <a href="#close">Close</a>
+	</div>
+</div>
 
             </section>
         </section>
