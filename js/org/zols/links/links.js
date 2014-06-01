@@ -131,17 +131,31 @@
     }
 
     function navigateInto(linkName) {
-        
-        if ($('.breadcrumb a').length === 0) {
-            $('.breadcrumb').append('<a data-parent="/" href="javascript://">/</a>');
+        if ($('.breadcrumb ul li').length === 0) {
+            $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="/">/</a></li>');
         }
-        $('.breadcrumb').append('<a href="javascript://" data-parent="' + linkName + '">' + linkName + '</a></li>');
+        $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="' + linkName + '">' + linkName + '</a></li>');
+
+        $('.breadcrumb a').click(function() {
+            var parentLinkName = $(this).attr('data-parent');
+            if (parentLinkName === '/') {
+                $(".breadcrumb ul").empty();
+                loadLinksByCategory();
+            }
+            else {
+                if ($(this).parent().index() !== 1) {
+                    $(".breadcrumb li:gt(" + ($(this).parent().index() - 1) + ")").remove();
+                    loadLinksByParent($(this).attr('data-parent'));
+                }                             
+            }
+            
+        });
+
         loadLinksByParent(linkName);
     }
 
 
     function loadLinksByParent(parentLinkName) {
-        alert('loadLinksByParent ' + parentLinkName);
         $links.empty();
         $.ajax({
             url: base_url + "/api/links/children/" + parentLinkName,
