@@ -14,18 +14,35 @@
 
     $("#submitCategory").on("click", function() {
         var formData = $('#category-form').toObject();
-        $.ajax(
-                {
-                    url: base_url + "/api/linkcategories",
-                    type: 'POST',
-                    data: JSON.stringify(formData),
-                    dataType: "json",
-                    contentType: 'application/json'
-                }).done(function() {
-            loadCategories();
-            $sectiontwo.hide();
-            $sectionone.show();
-        });
+
+        var categoryName = $('#category-form').attr('data-category');
+        if (categoryName) {
+            $.ajax(
+                    {
+                        url: base_url + "/api/linkcategories/" + categoryName,
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        contentType: 'application/json'
+                    }).done(function() {
+                loadCategories();
+                onSave();
+            });
+        }
+        else {
+            $.ajax(
+                    {
+                        url: base_url + "/api/linkcategories",
+                        type: 'POST',
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        contentType: 'application/json'
+                    }).done(function() {
+                loadCategories();
+                onSave();
+            });
+        }
+
 
         console.log(formData);
     });
@@ -33,6 +50,7 @@
     function createCategory() {
         $sectionone.hide();
         $sectiontwo.show();
+        $("form#category-form").removeAttr('category-link');
         $("form#category-form :input").each(function() {
             $(this).val('');
         });
@@ -45,8 +63,40 @@
 
     $("#submitLink").on("click", function() {
         var formData = $('#link-form').toObject();
-        console.log(formData);
+        formData.categoryName = $category.val();
+        formData.parentLinkName = $('#link-form').attr('data-parent');
+        var linkName = $('#link-form').attr('data-link');
+        if (linkName) {
+            $.ajax(
+                    {
+                        url: base_url + "/api/links/" + linkName,
+                        type: 'PUT',
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        contentType: 'application/json'
+                    }).done(function() {
+                onSave();
+            });
+        }
+        else {
+            $.ajax(
+                    {
+                        url: base_url + "/api/links",
+                        type: 'POST',
+                        data: JSON.stringify(formData),
+                        dataType: "json",
+                        contentType: 'application/json'
+                    }).done(function() {
+                onSave();
+            });
+        }
+
     });
+    function onSave() {
+        $sectiontwo.hide();
+        $sectionthree.hide();
+        $sectionone.show();
+    }
     $("#cancelLink").on("click", function() {
         $sectionthree.hide();
         $sectionone.show();
@@ -60,6 +110,7 @@
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(category) {
+            $("form#category-form").attr('data-category', $category.val());
             $("form#category-form :input").each(function() {
                 $(this).val(category[$(this).attr('name')]);
             });
@@ -115,9 +166,11 @@
     $("#addMore").on("click", function() {
         $sectionone.hide();
         $sectiontwo.hide();
+        $("form#link-form").removeAttr('data-link');
         $("form#link-form :input").each(function() {
             $(this).val('');
         });
+        setParentLink();
         $sectionthree.show();
     });
 
@@ -187,10 +240,23 @@
             $sectionone.hide();
             $sectiontwo.hide();
             $sectionthree.show();
+            $("form#link-form").attr('data-link', linkName);
+            setParentLink();
             $("form#link-form :input").each(function() {
                 $(this).val(link[$(this).attr('name')]);
             });
+
         });
+    }
+
+    function setParentLink() {
+        var $lastParent = $(".breadcrumb ul li:last-child a");
+        if ($lastParent) {
+            $("form#link-form").attr('data-parent', $lastParent.attr('data-parent'));
+        }
+        else {
+            $("form#link-form").removeAttr('data-parent');
+        }
     }
 
 
