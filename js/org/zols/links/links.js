@@ -76,6 +76,7 @@
                         contentType: 'application/json'
                     }).done(function() {
                 onSave();
+                refreshLinks();
             });
         }
         else {
@@ -88,6 +89,7 @@
                         contentType: 'application/json'
                     }).done(function() {
                 onSave();
+                refreshLinks();
             });
         }
 
@@ -139,7 +141,24 @@
     });
 
 
+    function refreshLinks() {
+        var selectedParent = getSelectedParent();
+        if (selectedParent) {
+            loadLinksByParent(selectedParent);
+        }
+        else {
+            loadLinksByCategory();
+        }
 
+
+    }
+
+    function getSelectedParent() {
+        if ($('.breadcrumb ul li').length > 0) {
+            return $(".breadcrumb ul li:last-child a").attr('data-parent');
+        }
+        return null;
+    }
 
     function loadLinksByCategory() {
         var categoryName = $category.val();
@@ -161,6 +180,23 @@
                 addLinkListener();
             });
         }
+    }
+
+    function loadLinksByParent(parentLinkName) {
+        $links.empty();
+        $.ajax({
+            url: base_url + "/api/links/children/" + parentLinkName,
+            dataType: 'json',
+            contentType: 'application/json'
+        }).done(function(links) {
+            var linksHtml = '';
+            links.forEach(function(link) {
+                linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a></li>";
+            });
+            $links.html(linksHtml);
+            addLinkListener();
+        });
+
     }
 
     $("#addMore").on("click", function() {
@@ -213,22 +249,7 @@
 
     });
 
-    function loadLinksByParent(parentLinkName) {
-        $links.empty();
-        $.ajax({
-            url: base_url + "/api/links/children/" + parentLinkName,
-            dataType: 'json',
-            contentType: 'application/json'
-        }).done(function(links) {
-            var linksHtml = '';
-            links.forEach(function(link) {
-                linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a></li>";
-            });
-            $links.html(linksHtml);
-            addLinkListener();
-        });
 
-    }
 
 
     function editLink(linkName) {
@@ -250,9 +271,9 @@
     }
 
     function setParentLink() {
-        var $lastParent = $(".breadcrumb ul li:last-child a");
-        if ($lastParent) {
-            $("form#link-form").attr('data-parent', $lastParent.attr('data-parent'));
+        var selectedParent = getSelectedParent();
+        if (selectedParent) {
+            $("form#link-form").attr('data-parent', selectedParent);
         }
         else {
             $("form#link-form").removeAttr('data-parent');
@@ -264,7 +285,7 @@
     function loadCategories() {
         $.ajax({
             url: base_url + "/api/linkcategories"
-        }).done(function(categories) {
+        }).done(function(categories) {           
             var categoryOption = '';
             categories.forEach(function(category) {
                 categoryOption += "<option value=" + category.name + " >" + category.label + "</option>";
