@@ -10,7 +10,7 @@
             success: function(data, textStatus, jqXHR)
             {
                 var categoryOption = '';
-                $.each(data.content, function(key, value) {
+                $.each(data, function(key, value) {
                     categoryOption += "<option value=" + value.name + " >" + value.label + "</option>";
                 });
                 $("#link_category").html(categoryOption);
@@ -50,8 +50,6 @@
             $('.breadcrumb ul').empty();
             $(this).loadLinksByCategory();
         }
-
-
     };
 
 

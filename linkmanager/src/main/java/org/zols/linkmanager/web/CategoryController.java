@@ -49,6 +49,14 @@ public class CategoryController {
         return linkManager.add(category);
     }
 
+    @RequestMapping(value = "/api/linkcategories/{name}", method = GET)
+    @ApiIgnore
+    @ResponseBody
+    public Category get(@PathVariable(value = "name") String name) {
+        LOGGER.info("Getting category ", name);
+        return linkManager.getCategory(name);
+    }
+
     @RequestMapping(value = "/api/linkcategories/{name}", method = PUT)
     @ApiIgnore
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
@@ -85,7 +93,7 @@ public class CategoryController {
     @RequestMapping(value = "/api/linkcategories", method = GET)
     @ApiIgnore
     @ResponseBody
-    public List<Category>  list(
+    public List<Category> list(
             Pageable page) {
         LOGGER.info("Listing categories");
         return linkManager.getAllCategories();
