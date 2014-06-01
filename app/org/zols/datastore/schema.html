@@ -21,7 +21,72 @@
         </header>
         <section class="wrapper">
             <section id="content">
-                Page will come here 
+                <form id="schema-form">
+                    <fieldset>                        
+                        <ul>
+                            <li>
+                                <label>Title</label>
+                                <input name="title" type="text" value="Example Schema" required=""/>
+                            </li>
+                            <li>
+                                <label>Type</label>
+                                <input name="type" type="text" value="object" required=""/>
+                            </li>
+                            <li>
+                                <fieldset>
+                                    <ul>
+                                        <li><fieldset>
+                                                <legend>Property One</legend>
+                                                <ul>
+                                                    <li>
+                                                        <label>First Name</label>
+                                                        <input type="text" value="firstName" data-previous-value="firstName" data-role="property_name" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Type</label>
+                                                        <input name="properties.firstName.type" type="text" value="string" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Description</label>
+                                                        <input name="properties.firstName.description" type="text" value="string" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Required</label>
+                                                        <input name="required[0]" type="checkbox" value="firstName" required=""/>
+                                                    </li>
+                                                </ul>
+                                            </fieldset></li>
+                                        <li><fieldset><legend>Property Two</legend>     
+                                                <ul>
+                                                    <li>
+                                                        <label>Last Name</label>
+                                                        <input type="text" value="age" data-previous-value="age" data-role="property_name" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Type</label>
+                                                        <input name="properties.age.type" type="text" value="integer" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Description</label>
+                                                        <input name="properties.age.description" type="text" value="string" required=""/>
+                                                    </li>
+                                                    <li>
+                                                        <label>Required</label>
+                                                        <input name="required[1]" type="checkbox" value="age" required=""/>
+                                                    </li>
+                                                </ul>
+                                            </fieldset></li>
+                                    </ul>
+                                </fieldset>
+
+                            </li>
+                            <li>
+                                <button id="submitCategory" type="button">Submit</button>
+                                <button id="cancelCategory" type="button">Cancel</button>
+                            </li>
+                        </ul>
+                    </fieldset>
+                </form>
             </section>
         </section>
 
@@ -36,5 +101,12 @@
                 </nav>
             </section>
         </footer>
+
+        <script type="text/javascript" src="../../../../js/jquery-2.1.1.min.js"></script>        
+        <script type="text/javascript" src="../../../../js/form2js/form2js.js"></script>
+        <script type="text/javascript" src="../../../../js/form2js/jquery.toObject.js"></script>
+        <script type="text/javascript" src="../../../../js/form2js/js2form.js"></script>
+        <script type="text/javascript" src="../../../../js/org/zols/datastore/schema.js"></script>
+
     </body>
 </html>
