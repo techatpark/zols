@@ -14,7 +14,11 @@
 	border-radius: 5px;
 }
 
-.itemlist a {
+.itemlist li {
+    display: block;
+}
+
+.itemlist p {
 	text-decoration: none;
 	outline: none;
 	display: block;
@@ -27,14 +31,14 @@
 }
 
 /*since the first link does not have a triangle before it we can reduce the left padding to make it look consistent with other links*/
-.itemlist a:first-child {
+.itemlist p:first-child {
 	padding: 10px;
 	border-radius: 5px 0 0 5px; /*to match with the parent's radius*/
 }
-.itemlist a:first-child:before {
+.itemlist p:first-child:before {
 
 }
-.itemlist a:last-child {
+.itemlist p:last-child {
 	border-radius: 0 5px 5px 0; /*this was to prevent glitches on hover*/
 }
 

@@ -25,35 +25,78 @@
                     <section><h4>Links</h4></section>
                     <section>
                         <label for="category">Category</label>
-                        <select id="category">
-                            <option value="header">Header</option>
+                        <select id="category">                            
                         </select>
                         <button id="editBtn">E</button>
                         <button id="deleteBtn">-</button>
                     </section>
                 </header>
-                
-                <div class="breadcrumb flat">
-                    <a href="#" class="active">Browse</a>
-                    <a href="#">Compare</a>
-                    <a href="#">Order Confirmation</a>
-                    <a href="#">Checkout</a>
-                </div>
-                <section id="items">
-                    <ul class="itemlist">
-                    <li><a href="">Test</a></li>
-                    <li><a href="">Test</a></li>
-                    <li><a href="">Test</a></li>
-                    <li><a href="">Test</a></li>
-                    <li><a href="">Test</a></li>
-                </ul>
-                    <br>
-                    <br>
-                    <br>
-                    <a id="addMore" href="javascript://">Add More</a>
+                <section>
+                    <div class="breadcrumb flat">
+
+                    </div>
+                    <section id="items">
+                        <ul class="itemlist">
+                            <li><p>Test</p></li>
+                            
+                        </ul>
+                        <a id="addMore" href="javascript://">Add More</a>
+                    </section>
                 </section>
-                
-                
+
+                <section>
+                    <form id="category-form" >
+                        <fieldset>                        
+                            <ul>
+                                <li>
+                                    <label >Name:</label>
+                                    <input name="name" type="text"  required=""/>
+                                </li>
+                                <li>
+                                    <label >Label</label>
+                                    <input name="label" type="text" required=""/>
+                                </li>
+                                <li>
+                                    <label >Description</label>
+                                    <textarea name="description" cols="40" rows="6"></textarea>
+                                </li>
+
+                                <li>
+                                    <button id="submitCategory" type="button">Submit</button>
+                                    <button id="cancelCategory" type="button">Cancel</button>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </form>
+                </section>
+
+                <section>
+                    <form id="link-form" >
+                        <fieldset>                        
+                            <ul>
+                                <li>
+                                    <label>Name:</label>
+                                    <input name="name" type="text"  required=""/>
+                                </li>
+                                <li>
+                                    <label>Label</label>
+                                    <input name="label" type="text" required=""/>
+                                </li>
+                                <li>
+                                    <label>Description</label>
+                                    <textarea name="description" cols="40" rows="6"></textarea>
+                                </li>
+
+                                <li>
+                                    <button id="submitLink" type="button">Submit</button>
+                                    <button id="cancelLink" type="button">Cancel</button>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </form>
+                </section>
+
+
             </section>
         </section>
 
@@ -68,9 +111,13 @@
                 </nav>
             </section>
         </footer>
-        
+
         <script type="text/javascript" src="../../../../js/jquery-2.1.1.min.js"></script>
+        <script type="text/javascript" src="../../../../js/rivets.min.js"></script>
+        <script type="text/javascript" src="../../../../js/form2js/form2js.js"></script>
+        <script type="text/javascript" src="../../../../js/form2js/jquery.toObject.js"></script>
+        <script type="text/javascript" src="../../../../js/form2js/js2form.js"></script>
         <script type="text/javascript" src="../../../../js/org/zols/links/links.js"></script>
-        
+
     </body>
 </html>
