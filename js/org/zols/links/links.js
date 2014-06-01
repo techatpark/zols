@@ -9,10 +9,6 @@
     var $sectiontwo = $("#content>section:nth-child(3)");
     var $sectionthree = $("#content>section:nth-child(4)");
 
-
-
-
-
     $sectiontwo.hide();
     $sectionthree.hide();
 
@@ -57,19 +53,23 @@
     });
 
 
+    function editCategory() {
 
-    $("#editBtn").on("click", function() {
         $.ajax({
             url: base_url + "/api/linkcategories/" + $category.val(),
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(category) {
-            $sectionone.hide();
-            $sectiontwo.show();
             $("form#category-form :input").each(function() {
                 $(this).val(category[$(this).attr('name')]);
             });
+            $sectionone.hide();
+            $sectiontwo.show();
+
         });
+    }
+    $("#editBtn").on("click", function() {
+        editCategory();
     });
 
     $("#deleteBtn").on("click", function() {
@@ -131,29 +131,34 @@
     }
 
     function navigateInto(linkName) {
+
         if ($('.breadcrumb ul li').length === 0) {
             $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="/">/</a></li>');
         }
         $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="' + linkName + '">' + linkName + '</a></li>');
 
-        $('.breadcrumb a').click(function() {
-            var parentLinkName = $(this).attr('data-parent');
-            if (parentLinkName === '/') {
-                $(".breadcrumb ul").empty();
-                loadLinksByCategory();
-            }
-            else {
-                if ($(this).parent().index() !== 1) {
-                    $(".breadcrumb li:gt(" + ($(this).parent().index() - 1) + ")").remove();
-                    loadLinksByParent($(this).attr('data-parent'));
-                }                             
-            }
-            
-        });
+
 
         loadLinksByParent(linkName);
     }
+    $(".breadcrumb ul").on('click', 'li:not(:last-child) a', function() {
+        var parentLinkName = $(this).attr('data-parent');
+        console.log('parentLinkName ' + parentLinkName);
 
+
+
+        if (parentLinkName === '/') {
+            $(".breadcrumb ul").empty();
+            loadLinksByCategory();
+        }
+        else {
+//                if ($(this).parent().index() !== 1) {
+            $(".breadcrumb li:gt(" + ($(this).parent().index()) + ")").remove();
+            loadLinksByParent($(this).attr('data-parent'));
+//                }                             
+        }
+
+    });
 
     function loadLinksByParent(parentLinkName) {
         $links.empty();
