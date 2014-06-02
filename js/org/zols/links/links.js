@@ -160,8 +160,6 @@
         else {
             loadLinksByCategory();
         }
-
-
     }
 
     function getSelectedParent() {
@@ -184,19 +182,22 @@
                 contentType: 'application/json'
             }).done(function(links) {
                 if (links && links.length > 0) {
-                    var linksHtml = '';
-                    links.forEach(function(link) {
-                        linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a><a role='delete' href='#deleteLink'>-</a></li>";
-                    });
-                    $links.html(linksHtml);
-                    addLinkListener();
+                    createLinks(links);
                 }
                 else {
                     show("nolinks");
                 }
-
             });
         }
+    }
+
+    function createLinks(links) {
+        var linksHtml = '';
+        links.forEach(function(link) {
+            linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a><a role='delete' href='#deleteLink'>-</a></li>";
+        });
+        $links.html(linksHtml);
+        addLinkListener();
     }
 
     function loadLinksByParent(parentLinkName) {
@@ -206,14 +207,8 @@
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(links) {
-            var linksHtml = '';
-            links.forEach(function(link) {
-                linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a></li>";
-            });
-            $links.html(linksHtml);
-            addLinkListener();
+            createLinks(links);
         });
-
     }
 
     $("#addMore").on("click", function() {
@@ -227,7 +222,7 @@
         $("#items>ul li a").on("click", function() {
             if ($(this).attr('role') === 'edit') {
                 editLink($(this).parent().attr('name'));
-            } else {                
+            } else {
                 $("#deleteLink div").attr("data-link", $(this).parent().attr('name'));
             }
 
