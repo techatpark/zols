@@ -1,0 +1,289 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1;
+  font-family: Arial; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.wrapper {
+  width: 960px;
+  margin: 0px auto; }
+
+body > header {
+  background-color: #3e6baf;
+  height: 70px;
+  color: white; }
+  body > header .logo {
+    background: url("images/logo.jpg") no-repeat;
+    width: 124px;
+    height: 70px;
+    float: left; }
+
+#content {
+  width: 100%;
+  display: block; }
+
+body > footer {
+  background-color: #23221f;
+  color: white;
+  height: 30px;
+  position: fixed;
+  bottom: 0px;
+  width: 100%; }
+  body > footer nav {
+    float: right; }
+    body > footer nav ul li a {
+      color: white; }
+
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 30, 2014, 5:16:44 PM
+    Author     : sathish_ku
+*/
+body > header nav ul {
+  display: inline;
+  border: 0;
+  margin: 0;
+  float: left;
+  padding-top: 26px; }
+  body > header nav ul li {
+    float: left;
+    list-style-type: none;
+    border: 0;
+    margin: 0;
+    padding: 0 15px; }
+    body > header nav ul li a {
+      color: #feffff;
+      text-decoration: none; }
+    body > header nav ul li a:hover {
+      color: #feffff;
+      text-decoration: underline; }
+body > header #search input[type="text"] {
+  background: url(images/search-white.png) no-repeat 10px 6px #fcfcfc;
+  border: 1px solid #d1d1d1;
+  font: bold 12px Arial,Helvetica,Sans-serif;
+  color: #bebebe;
+  width: 150px;
+  padding: 6px 15px 6px 35px;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  border-radius: 20px;
+  text-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15) inset;
+  -webkit-transition: all 0.7s ease 0s;
+  -moz-transition: all 0.7s ease 0s;
+  -o-transition: all 0.7s ease 0s;
+  transition: all 0.7s ease 0s; }
+
+.breadcrumb {
+  text-align: center; }
+
+.breadcrumb ul {
+  list-style: none;
+  display: inline-table; }
+
+.breadcrumb ul li {
+  display: inline; }
+
+.breadcrumb ul li a {
+  display: block;
+  float: left;
+  height: 50px;
+  background: #3498db;
+  text-align: center;
+  padding: 30px 40px 0 80px;
+  position: relative;
+  margin: 0 10px 0 0;
+  font-size: 20px;
+  text-decoration: none;
+  color: #fff; }
+
+.breadcrumb ul li a:after {
+  content: "";
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-left: 40px solid #3498db;
+  position: absolute;
+  right: -40px;
+  top: 0;
+  z-index: 1; }
+
+.breadcrumb ul li a:before {
+  content: "";
+  border-top: 40px solid transparent;
+  border-bottom: 40px solid transparent;
+  border-left: 40px solid #d4f2ff;
+  position: absolute;
+  left: 0;
+  top: 0; }
+
+.breadcrumb ul li:first-child a {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px; }
+
+.breadcrumb ul li:first-child a:before {
+  display: none; }
+
+.breadcrumb ul li:last-child a {
+  padding-right: 80px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px; }
+
+.breadcrumb ul li:last-child a:after {
+  display: none; }
+
+.breadcrumb ul li a:hover {
+  background: #fa5ba5; }
+
+.breadcrumb ul li a:hover:after {
+  border-left-color: #fa5ba5; }
+
+/*http://thecodeplayer.com/walkthrough/css3-itemlist-navigation*/
+#items {
+  width: 100%;
+  text-align: center;
+  margin: 0px auto;
+  padding: 10px; }
+
+.itemlist {
+  /*centering*/
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 5px; }
+
+.itemlist li {
+  display: block; }
+
+.itemlist p {
+  text-decoration: none;
+  outline: none;
+  display: block;
+  font-size: 12px;
+  line-height: 36px;
+  min-width: 200px;
+  color: white;
+  background: linear-gradient(#666666, #333333); }
+
+/*since the first link does not have a triangle before it we can reduce the left padding to make it look consistent with other links*/
+.itemlist p:first-child {
+  padding: 10px;
+  border-radius: 5px 0 0 5px;
+  /*to match with the parent's radius*/ }
+
+.itemlist p:last-child {
+  border-radius: 0 5px 5px 0;
+  /*this was to prevent glitches on hover*/ }
+
+.modalDialog {
+  position: fixed;
+  font-family: Arial, Helvetica, sans-serif;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 99999;
+  opacity: 0;
+  -webkit-transition: opacity 400ms ease-in;
+  -moz-transition: opacity 400ms ease-in;
+  transition: opacity 400ms ease-in;
+  pointer-events: none; }
+
+.modalDialog:target {
+  opacity: 1;
+  pointer-events: auto; }
+
+.modalDialog > div {
+  width: 400px;
+  position: relative;
+  margin: 10% auto;
+  padding: 5px 20px 13px 20px;
+  border-radius: 10px;
+  background: #fff;
+  background: -moz-linear-gradient(white, #999999);
+  background: -webkit-linear-gradient(white, #999999);
+  background: -o-linear-gradient(white, #999999); }
+
+.close {
+  background: #606061;
+  color: #FFFFFF;
+  line-height: 25px;
+  position: absolute;
+  right: -12px;
+  text-align: center;
+  top: -10px;
+  width: 24px;
+  text-decoration: none;
+  font-weight: bold;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  border-radius: 12px;
+  -moz-box-shadow: 1px 1px 3px #000;
+  -webkit-box-shadow: 1px 1px 3px #000;
+  box-shadow: 1px 1px 3px #000; }
+
+.close:hover {
+  background: #00d9ff; }
+
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : May 31, 2014, 11:24:52 AM
+    Author     : sathish_ku
+*/
+#content header {
+  width: 100%;
+  height: 40px;
+  display: block; }
+  #content header section:first-child {
+    float: left; }
+  #content header section:last-child {
+    float: right; }
+
+/*# sourceMappingURL=app.css.map */
