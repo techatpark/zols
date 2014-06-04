@@ -1,5 +1,5 @@
 $primary-color:#3E6BAF;
-$footer-color:#23221F;
+$footer-color:#151617;
 $navigation-font-color:#FFF;
 $screen-width:960px;
 .wrapper {
@@ -28,18 +28,36 @@ body>header {
 body>footer {
     background-color: $footer-color;
     color:$navigation-font-color;
-    height: 30px;
+    height: 14px;
     position: fixed;
     bottom: 0px;
     width: 100%;
+    padding:20px 0px;
+    aside {font: normal 14px/18px arial; float: left;}
     nav {
         float:right;
         ul {
             li {
+                display:inline;
+                padding:0px 12px 0px 0px;
+                font: normal 14px/24px arial;
                 a {
+                    text-decoration: none;
+                    font: normal 14px/24px arial;
                     color:$navigation-font-color;
+                    border-right: solid 1px #313334;
+                }
+                a.api {
+                    background: url(../css/images/apiIcon.png)no-repeat left top;
+                    padding:4px 12px 4px 32px;
+                }
+                a.feedback {
+                    background: url(../css/images/feedbackIcon.png)no-repeat left top;
+                    border-right: none;
+                    padding:4px 0px 4px 32px;
                 }
             }
         }
+        ul li:last-child  {padding:0px 0px 0px 0px;}
     }
 }

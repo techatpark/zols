@@ -69,16 +69,36 @@ body > header {
   display: block; }
 
 body > footer {
-  background-color: #23221f;
+  background-color: #151617;
   color: white;
-  height: 30px;
+  height: 14px;
   position: fixed;
   bottom: 0px;
-  width: 100%; }
+  width: 100%;
+  padding: 20px 0px; }
+  body > footer aside {
+    font: normal 14px/18px arial;
+    float: left; }
   body > footer nav {
     float: right; }
-    body > footer nav ul li a {
-      color: white; }
+    body > footer nav ul li {
+      display: inline;
+      padding: 0px 12px 0px 0px;
+      font: normal 14px/24px arial; }
+      body > footer nav ul li a {
+        text-decoration: none;
+        font: normal 14px/24px arial;
+        color: white;
+        border-right: solid 1px #313334; }
+      body > footer nav ul li a.api {
+        background: url(../css/images/apiIcon.png) no-repeat left top;
+        padding: 4px 12px 4px 32px; }
+      body > footer nav ul li a.feedback {
+        background: url(../css/images/feedbackIcon.png) no-repeat left top;
+        border-right: none;
+        padding: 4px 0px 4px 32px; }
+    body > footer nav ul li:last-child {
+      padding: 0px 0px 0px 0px; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
