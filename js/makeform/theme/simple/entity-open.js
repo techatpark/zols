@@ -1,3 +1,3 @@
 <fieldset>
-<legend>{{label}}</legend>
+<legend>{{title}}</legend>
 <ul>

@@ -8,11 +8,16 @@
         dummyProp.type = 'control-open';
         var controlOpenTemplate = loadTemplate(dummyProp);
         dummyProp.type = 'control-close';
-        var controlCloseTemplate = loadTemplate(dummyProp);        
+        var controlCloseTemplate = loadTemplate(dummyProp);
+        dummyProp.type = 'entity-open';
+        var entityOpenTemplate = loadTemplate(dummyProp);
+        dummyProp.type = 'entity-close';
+        var entityCloseTemplate = loadTemplate(dummyProp);    
         
         makeform.empty();
         var properties = formData.properties;
         var property ;
+        makeform.append(entityOpenTemplate(formData));
         for (var key in properties) {
             if (properties.hasOwnProperty(key)) {
                 property = properties[key];                
@@ -21,6 +26,7 @@
                 makeform.append(controlCloseTemplate(property));
             }
         }
+        makeform.append(entityCloseTemplate(formData));
         makeform.show();
 
         function getControl(property) {
