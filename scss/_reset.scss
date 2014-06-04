@@ -26,6 +26,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
         font-family: Arial;
+        background: #f0f3f5;
 }
 ol, ul {
 	list-style: none;
@@ -42,3 +43,7 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+.clear {
+    clear: both;
+}
+:focus {outline:none;}
