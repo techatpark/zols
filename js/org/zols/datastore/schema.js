@@ -1,11 +1,12 @@
 (function($) {
 
     var base_url = "http://localhost:8080/zols";
-
+    
+    $("#data-form").hide();
 
     $("#submitCategory").on('click', function() {
         var formData = $('#schema-form').toObject();
-        console.log(JSON.stringify(formData));
+        $('#data-form').makeform(formData,'../../../../js/makeform/theme/','simple');        
     });
 
     $("#schema-form input[data-role='property_name']").on('change', function() {
