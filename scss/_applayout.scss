@@ -12,10 +12,11 @@ body>header {
     height: 70px;
     color:$navigation-font-color;
     .logo{
-        background: url('images/logo.jpg') no-repeat;
+        background: url('images/logo.png') no-repeat;
         width: 124px;
         height: 70px;
         float: left;
+        margin: 0px 108px 0px 0px;
     }
 }
 
