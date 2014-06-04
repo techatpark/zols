@@ -7,6 +7,29 @@ and open the template in the editor.
     Created on : May 30, 2014, 6:29:21 PM
     Author     : sathish_ku
 */
+
+@mixin primaryBtn {
+    border:solid 1px #174d09;
+    color:#ffffff;
+    text-decoration: none;
+    background: #499e14;
+    background: -moz-linear-gradient(top,  #499e14 0%, #2f7009 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#499e14), color-stop(100%,#2f7009));
+    background: -webkit-linear-gradient(top,  #499e14 0%,#2f7009 100%);
+    background: -o-linear-gradient(top,  #499e14 0%,#2f7009 100%);
+    background: -ms-linear-gradient(top,  #499e14 0%,#2f7009 100%);
+    background: linear-gradient(to bottom,  #499e14 0%,#2f7009 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499e14', endColorstr='#2f7009',GradientType=0 );
+    padding:10px 34px;
+    display: inline-block;
+    @include border-radius(4px);
+    text-shadow: 0 -1px 0 rgba(0,0,0,0.54);
+    -webkit-box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
+    box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
+}
+
+
+
 section.wrapper{
     width: 960px;
     margin: 0px auto;
@@ -51,26 +74,10 @@ section.wrapper{
                 color:#5a5b5e;
             }
             a {
-                border:solid 1px #174d09;
-                color:#ffffff;
-                text-decoration: none;
-                background: #499e14;
-                background: -moz-linear-gradient(top,  #499e14 0%, #2f7009 100%);
-                background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#499e14), color-stop(100%,#2f7009));
-                background: -webkit-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-                background: -o-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-                background: -ms-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-                background: linear-gradient(to bottom,  #499e14 0%,#2f7009 100%);
-                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499e14', endColorstr='#2f7009',GradientType=0 );
-                padding:10px 34px;
-                display: inline-block;
-                @include border-radius(4px);
-                text-shadow: 0 -1px 0 rgba(0,0,0,0.54);
-                -webkit-box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
-                box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
+                @include primaryBtn;
             }
             a:hover {
-                background: #307109;
+                
             }
         }
 
@@ -92,28 +99,16 @@ section.wrapper{
                 border-bottom: solid #d4d8db 1px;
                 margin:0px 0px 10px 0px;}
              article {
-                 font: normal 14px arial;
+                 font: normal 14px/18px arial;
                  color: #3d3d3f; 
              }
     }
+    section:last-of-type   { padding-right: 0px; }
     a {
-        border:solid 1px #174d09;
-        color:#ffffff;
-        text-decoration: none;
-        background: #499e14;
-        background: -moz-linear-gradient(top,  #499e14 0%, #2f7009 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#499e14), color-stop(100%,#2f7009));
-        background: -webkit-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-        background: -o-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-        background: -ms-linear-gradient(top,  #499e14 0%,#2f7009 100%);
-        background: linear-gradient(to bottom,  #499e14 0%,#2f7009 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#499e14', endColorstr='#2f7009',GradientType=0 );
-        padding:10px 34px;
-        display: inline-block;
-        @include border-radius(4px);
-        text-shadow: 0 -1px 0 rgba(0,0,0,0.54);
-        -webkit-box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
-        box-shadow:inset 0 1px 0 0 rgba(255,255,255,.24);
+        margin:20px 0px 0px 0px;
+        @include primaryBtn;
+        float: right;
+        
     }
-    section:last-child { padding-right: 0px;}
+    
 }
