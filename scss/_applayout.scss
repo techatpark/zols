@@ -39,25 +39,27 @@ body>footer {
         ul {
             li {
                 display:inline;
-                padding:0px 12px 0px 0px;
+                padding:4px 20px 4px 32px;
                 font: normal 14px/24px arial;
+                border-right: solid 1px #313334;
                 a {
                     text-decoration: none;
                     font: normal 14px/24px arial;
                     color:$navigation-font-color;
-                    border-right: solid 1px #313334;
+                    padding:0px 0px 0px 32px;
+                    display: inline-block;
+                }
+                a:hover {
+                    opacity:0.24;
                 }
                 a.api {
                     background: url(../css/images/apiIcon.png)no-repeat left top;
-                    padding:4px 12px 4px 32px;
                 }
                 a.feedback {
                     background: url(../css/images/feedbackIcon.png)no-repeat left top;
-                    border-right: none;
-                    padding:4px 0px 4px 32px;
                 }
             }
         }
-        ul li:last-child  {padding:0px 0px 0px 0px;}
+        ul li:last-child  {padding:0px 0px 0px 12px; border-right: none;}
     }
 }
