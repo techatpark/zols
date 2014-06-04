@@ -1,15 +1,24 @@
 (function($) {
 
-
-
     $.fn.makeform = function(formData, themeUrl, theme) {
         var makeform = $(this);
         var templates = new Object();
+        
+        var dummyProp = new Object();
+        dummyProp.type = 'control-open';
+        var controlOpenTemplate = loadTemplate(dummyProp);
+        dummyProp.type = 'control-close';
+        var controlCloseTemplate = loadTemplate(dummyProp);        
+        
         makeform.empty();
         var properties = formData.properties;
+        var property ;
         for (var key in properties) {
             if (properties.hasOwnProperty(key)) {
-                makeform.append(getControl(properties[key]));
+                property = properties[key];                
+                makeform.append(controlOpenTemplate(property));
+                makeform.append(getControl(property));
+                makeform.append(controlCloseTemplate(property));
             }
         }
         makeform.show();
@@ -43,7 +52,6 @@
             }
             return template;
         }
-        ;
 
 
         return this;
