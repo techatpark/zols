@@ -17,17 +17,20 @@
         makeform.empty();
         var properties = formData.properties;
         var property ;
-        makeform.append(entityOpenTemplate(formData));
+        var formHTML = '';
+        formHTML += entityOpenTemplate(formData);
         for (var key in properties) {
             if (properties.hasOwnProperty(key)) {
                 property = properties[key];       
                 property.name = key;
-                makeform.append(controlOpenTemplate(property));
-                makeform.append(getControl(property));
-                makeform.append(controlCloseTemplate(property));
+                formHTML += controlOpenTemplate(property);
+                formHTML += getControl(property);
+                formHTML += controlCloseTemplate(property);
             }
         }
-        makeform.append(entityCloseTemplate(formData));
+        formHTML += entityCloseTemplate(formData);
+        
+        makeform.html(formHTML);
         makeform.show();
 
         function getControl(property) {
