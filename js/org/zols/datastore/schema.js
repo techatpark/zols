@@ -4,9 +4,17 @@
     
     $("#data-form").hide();
 
-    $("#submitCategory").on('click', function() {
+    $("#generateBtn").on('click', function() {
         var formData = $('#schema-form').toObject();
+        console.log("Generating form for Schema ") ;
+        console.log(formData) ;
         $('#data-form').makeform(formData,'../../../../js/makeform/theme/','simple');        
+    });
+    
+    $("#showDataBtn").on('click', function() {
+        var formData = $('#data-form').toObject();
+        console.log("Retriving Dynamic Form Data ") ;
+        console.log(formData) ;               
     });
 
     $("#schema-form input[data-role='property_name']").on('change', function() {

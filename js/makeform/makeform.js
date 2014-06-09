@@ -20,7 +20,8 @@
         makeform.append(entityOpenTemplate(formData));
         for (var key in properties) {
             if (properties.hasOwnProperty(key)) {
-                property = properties[key];                
+                property = properties[key];       
+                property.name = key;
                 makeform.append(controlOpenTemplate(property));
                 makeform.append(getControl(property));
                 makeform.append(controlCloseTemplate(property));

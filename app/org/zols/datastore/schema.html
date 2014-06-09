@@ -3,6 +3,7 @@
     <head>
         <title>Schema</title>
         <link href="../../../../css/site.css" rel="stylesheet"/>
+        <link href="../../../../css/schema.css" rel="stylesheet"/>
     </head>
     <body>
         <header>
@@ -15,83 +16,101 @@
                         <li><a href="#">Samples</a></li>
                         <li><a href="#">Builds</a></li>
                     </ul>
-                </nav>                
+                </nav>
+                <form method="get" action="/search" id="search">
+                    <input name="q" type="text" size="40" placeholder="Search..." />
+                </form>
+                <div class="forkGit">
+                    <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
+                </div>
             </section>
 
         </header>
         <section class="wrapper">
             <section id="content">
-                <form id="schema-form">
-                    <fieldset>                        
-                        <ul>
-                            <li>
-                                <label>Title</label>
-                                <input name="title" type="text" value="Example Schema" required=""/>
-                            </li>
-                            <li>
-                                <label>Type</label>
-                                <input name="type" type="text" value="object" required=""/>
-                            </li>
-                            <li>
-                                <fieldset>
-                                    <ul>
-                                        <li><fieldset>
-                                                <legend>Property One</legend>
-                                                <ul>
-                                                    <li>
-                                                        <label>Name</label>
-                                                        <input type="text" value="firstName" data-previous-value="firstName" data-role="property_name" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Type</label>
-                                                        <input name="properties.firstName.type" type="text" value="string" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Description</label>
-                                                        <input name="properties.firstName.description" type="text" value="Name Of Person" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Required</label>
-                                                        <input name="required[0]" type="checkbox" value="firstName" required=""/>
-                                                    </li>
-                                                </ul>
-                                            </fieldset></li>
-                                        <li><fieldset><legend>Property Two</legend>     
-                                                <ul>
-                                                    <li>
-                                                        <label>Name</label>
-                                                        <input type="text" value="age" data-previous-value="age" data-role="property_name" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Type</label>
-                                                        <input name="properties.age.type" type="text" value="integer" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Description</label>
-                                                        <input name="properties.age.description" type="text" value="Age Of Person" required=""/>
-                                                    </li>
-                                                    <li>
-                                                        <label>Required</label>
-                                                        <input name="required[1]" type="checkbox" value="age" required=""/>
-                                                    </li>
-                                                </ul>
-                                            </fieldset></li>
-                                    </ul>
-                                </fieldset>
 
-                            </li>
-                            <li>
-                                <button id="submitCategory" type="button">Submit</button>
-                                <button id="cancelCategory" type="button">Cancel</button>
-                            </li>
-                        </ul>
-                    </fieldset>
-                </form>
+                <section id="schema">
+                    <form id="schema-form">
+                        <fieldset>                        
+                            <ul>
+                                <li>
+                                    <label>Title</label>
+                                    <input name="title" type="text" value="Example Schema" required=""/>
+                                </li>
+                                <li>
+                                    <label>Type</label>
+                                    <input name="type" type="text" value="object" required=""/>
+                                </li>
+                                <li>
+                                    <fieldset>
+                                        <ul>
+                                            <li><fieldset>
+                                                    <legend>Property One</legend>
+                                                    <ul>
+                                                        <li>
+                                                            <label>Name</label>
+                                                            <input type="text" value="firstName" data-previous-value="firstName" data-role="property_name" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Type</label>
+                                                            <input name="properties.firstName.type" type="text" value="string" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Description</label>
+                                                            <input name="properties.firstName.description" type="text" value="Name Of Person" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Required</label>
+                                                            <input name="required[0]" type="checkbox" value="firstName" required=""/>
+                                                        </li>
+                                                    </ul>
+                                                </fieldset></li>
+                                            <li><fieldset><legend>Property Two</legend>     
+                                                    <ul>
+                                                        <li>
+                                                            <label>Name</label>
+                                                            <input type="text" value="age" data-previous-value="age" data-role="property_name" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Type</label>
+                                                            <input name="properties.age.type" type="text" value="integer" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Description</label>
+                                                            <input name="properties.age.description" type="text" value="Age Of Person" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <label>Required</label>
+                                                            <input name="required[1]" type="checkbox" value="age" required=""/>
+                                                        </li>
+                                                        <li>
+                                                            <button id="generateBtn" type="button">Generate</button>
+                                                        </li>
+                                                    </ul>
+                                                </fieldset></li>
+                                        </ul>
+                                    </fieldset>
 
-                <form id="data-form">
+                                </li>
 
-                </form>
+                            </ul>
+                        </fieldset>
+                    </form>
+                </section>
 
+                <section id="data">
+
+                    <form id="data-form">
+
+                    </form>
+
+                </section>
+
+
+                <div class="clear"></div>
+                <section id="actions">
+                            <button id="showDataBtn" type="button">Show Data</button>            
+                </section>
 
             </section>
         </section>
@@ -101,8 +120,8 @@
                 <aside>Apache License V2</aside>
                 <nav>
                     <ul>
-                        <li><a href="#">API</a></li>                    
-                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#" class="api">API</a></li>                    
+                        <li><a href="#" class="feedback">Feedback</a></li>
                     </ul>
                 </nav>
             </section>
