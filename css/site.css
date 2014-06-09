@@ -411,7 +411,7 @@ section.wrapper {
         margin: 0px 0px 50px 0px; }
       section.wrapper section#content #app-caption h1:before {
         content: '\201C';
-        font: italic 140px arial;
+        font: italic 160px arial;
         position: absolute;
         left: -16px;
         top: -40px;
@@ -420,7 +420,7 @@ section.wrapper {
         z-index: 1; }
       section.wrapper section#content #app-caption h1:after {
         content: '\201D';
-        font: italic 140px/10px arial;
+        font: italic 160px/10px arial;
         color: #dcdee2;
         text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
         bottom: -32px;
