@@ -75,7 +75,7 @@ body > footer {
   position: fixed;
   bottom: 0px;
   width: 100%;
-  padding: 20px 0px; }
+  padding: 10px 0px 14px 0px; }
   body > footer aside {
     font: normal 14px/18px arial;
     float: left; }
@@ -83,22 +83,24 @@ body > footer {
     float: right; }
     body > footer nav ul li {
       display: inline;
-      padding: 0px 12px 0px 0px;
-      font: normal 14px/24px arial; }
+      padding: 4px 20px 4px 32px;
+      font: normal 14px/24px arial;
+      border-right: solid 1px #313334; }
       body > footer nav ul li a {
         text-decoration: none;
         font: normal 14px/24px arial;
         color: white;
-        border-right: solid 1px #313334; }
+        padding: 0px 0px 0px 32px;
+        display: inline-block; }
+      body > footer nav ul li a:hover {
+        opacity: 0.24; }
       body > footer nav ul li a.api {
-        background: url(../css/images/apiIcon.png) no-repeat left top;
-        padding: 4px 12px 4px 32px; }
+        background: url(../css/images/apiIcon.png) no-repeat left top; }
       body > footer nav ul li a.feedback {
-        background: url(../css/images/feedbackIcon.png) no-repeat left top;
-        border-right: none;
-        padding: 4px 0px 4px 32px; }
+        background: url(../css/images/feedbackIcon.png) no-repeat left top; }
     body > footer nav ul li:last-child {
-      padding: 0px 0px 0px 0px; }
+      padding: 0px 0px 0px 12px;
+      border-right: none; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -396,12 +398,12 @@ section.wrapper {
   width: 960px;
   margin: 0px auto; }
   section.wrapper section#content {
-    margin: 50px 0px 0px 0px; }
+    margin: 40px 0px 0px 0px; }
     section.wrapper section#content #app-caption {
       float: left;
       width: 480px; }
       section.wrapper section#content #app-caption h1 {
-        font: normal 48px/60px arial;
+        font: normal 44px/52px arial;
         color: #9c9fa4;
         position: relative;
         padding: 0px 0px 0px 48px;
@@ -409,7 +411,7 @@ section.wrapper {
         margin: 0px 0px 50px 0px; }
       section.wrapper section#content #app-caption h1:before {
         content: '\201C';
-        font: italic 160px arial;
+        font: italic 140px arial;
         position: absolute;
         left: -16px;
         top: -40px;
@@ -418,7 +420,7 @@ section.wrapper {
         z-index: 1; }
       section.wrapper section#content #app-caption h1:after {
         content: '\201D';
-        font: italic 160px/10px arial;
+        font: italic 140px/10px arial;
         color: #dcdee2;
         text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
         bottom: -32px;
@@ -456,12 +458,12 @@ section.wrapper {
           background: #2f7009 !important; }
 
 #demo-video {
-  width: 480px;
+  width: auto;
   float: right; }
 
 #main_features {
   float: left;
-  margin: 65px 0px 40px 0px; }
+  margin: 40px 0px 40px 0px; }
   #main_features section {
     width: 302px;
     float: left;

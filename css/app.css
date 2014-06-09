@@ -75,7 +75,7 @@ body > footer {
   position: fixed;
   bottom: 0px;
   width: 100%;
-  padding: 20px 0px; }
+  padding: 10px 0px 14px 0px; }
   body > footer aside {
     font: normal 14px/18px arial;
     float: left; }
@@ -83,22 +83,24 @@ body > footer {
     float: right; }
     body > footer nav ul li {
       display: inline;
-      padding: 0px 12px 0px 0px;
-      font: normal 14px/24px arial; }
+      padding: 4px 20px 4px 32px;
+      font: normal 14px/24px arial;
+      border-right: solid 1px #313334; }
       body > footer nav ul li a {
         text-decoration: none;
         font: normal 14px/24px arial;
         color: white;
-        border-right: solid 1px #313334; }
+        padding: 0px 0px 0px 32px;
+        display: inline-block; }
+      body > footer nav ul li a:hover {
+        opacity: 0.24; }
       body > footer nav ul li a.api {
-        background: url(../css/images/apiIcon.png) no-repeat left top;
-        padding: 4px 12px 4px 32px; }
+        background: url(../css/images/apiIcon.png) no-repeat left top; }
       body > footer nav ul li a.feedback {
-        background: url(../css/images/feedbackIcon.png) no-repeat left top;
-        border-right: none;
-        padding: 4px 0px 4px 32px; }
+        background: url(../css/images/feedbackIcon.png) no-repeat left top; }
     body > footer nav ul li:last-child {
-      padding: 0px 0px 0px 0px; }
+      padding: 0px 0px 0px 12px;
+      border-right: none; }
 
 /*
 To change this license header, choose License Headers in Project Properties.

@@ -37,11 +37,11 @@ section.wrapper{
     width: 960px;
     margin: 0px auto;
     section#content {
-        margin: 50px 0px 0px 0px;
+        margin: 40px 0px 0px 0px;
         #app-caption {
             float:left;
             width:480px;
-            h1 {font: normal 48px/60px arial;
+            h1 {font: normal 44px/52px arial;
                 color:#9c9fa4;
                 position:relative;
                 padding: 0px 0px 0px 48px;
@@ -50,7 +50,7 @@ section.wrapper{
             }
             h1:before {
                 content:'\201C';
-                font: italic 160px arial;
+                font: italic 140px arial;
                 position:absolute;
                 left:-16px;
                 top:-40px;
@@ -60,7 +60,7 @@ section.wrapper{
             }
             h1:after {
                 content:'\201D';
-                font: italic 160px/10px arial;
+                font: italic 140px/10px arial;
                 color:#dcdee2;
                 text-shadow: 1px 2px 1px rgba(0,0,0,0.15);
                 bottom:-32px;
@@ -89,13 +89,13 @@ section.wrapper{
 
 
 #demo-video{
-    width: $screen-width/2;
+    width: auto;
     float: right;
 }
 
 #main_features{
     float: left;
-    margin:65px 0px 40px 0px;
+    margin:40px 0px 40px 0px;
     section{ width: 302px; float: left; padding-right: 26px;
              h4{font: normal 24px georgia;
                 color: #3d3d3f; 
