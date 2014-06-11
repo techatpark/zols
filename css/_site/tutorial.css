@@ -1,0 +1,62 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jun 11, 2014, 6:33:46 PM
+    Author     : Rajesh_ve
+*/
+.topicHeader {
+  margin: 40px 0px 0px 0px;
+  border-bottom: solid 1px #e7eaeb;
+  padding: 0px 0px 6px 0px; }
+  .topicHeader ul.prevTopic {
+    float: left;
+    width: 25%;
+    color: #9da3a5;
+    font: normal 14px/18px Arial;
+    background: url(../../css/images/menuIcon.png) left top no-repeat;
+    background-size: 20px 17px;
+    padding: 0px 0px 0px 30px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+  .topicHeader h3 {
+    float: left;
+    width: 50%;
+    text-align: center;
+    color: #575a5c;
+    font: bold 18px/24px Arial;
+    padding: 0px 0px 0px 0px; }
+  .topicHeader ul.nextTopic {
+    float: right;
+    width: 25%;
+    text-align: right;
+    color: #9da3a5;
+    font: normal 14px/18px Arial;
+    background: url(../../css/images/menuIcon.png) right top no-repeat;
+    background-size: 20px 17px;
+    padding: 0px 30px 0px 0px;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box; }
+
+#content p {
+  color: #707374;
+  font: normal 14px/18px Arial;
+  padding: 0px 0px 14px 0px; }
+#content .videotutorial {
+  float: right;
+  padding: 0px 0px 0px 24px; }
+#content h1 {
+  color: #575a5c;
+  font: bold 18px/24px Arial;
+  padding: 0px 0px 10px 0px; }
+#content ul li {
+  color: #707374;
+  list-style: disc;
+  margin: 0px 0px 0px 10px;
+  font: normal 14px/24px Arial; }
+
+/*# sourceMappingURL=tutorial.css.map */
