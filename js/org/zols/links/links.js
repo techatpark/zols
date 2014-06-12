@@ -43,17 +43,21 @@
             });
         }
 
-
-        console.log(formData);
     });
 
-    function createCategory() {
-        show("categoryform");
-        $("form#category-form").removeAttr('category-link');
-        $("form#category-form :input").each(function() {
-            $(this).val('');
-        });
-    }
+    $(".breadcrumb ul").on('click', 'li:not(:last-child) a', function() {
+        var parentLinkName = $(this).attr('data-parent');
+        if (parentLinkName === '/') {
+            $(".breadcrumb ul").empty();
+            loadLinksByCategory();
+        }
+        else {
+            $(".breadcrumb li:gt(" + ($(this).parent().index()) + ")").remove();
+            loadLinksByParent($(this).attr('data-parent'));
+        }
+    });
+
+
 
     $("#cancelCategory").on("click", function() {
         show("listing");
@@ -92,40 +96,22 @@
         }
 
     });
+
     function onSave() {
         show("listing");
     }
+
     $("#cancelLink").on("click", function() {
         show("listing");
     });
 
 
-    function editCategory() {
-
-        $.ajax({
-            url: base_url + "/api/linkcategories/" + $category.val(),
-            dataType: 'json',
-            contentType: 'application/json'
-        }).done(function(category) {
-            $("form#category-form").attr('data-category', $category.val());
-            $("form#category-form :input").each(function() {
-                $(this).val(category[$(this).attr('name')]);
-            });
-            show("categoryform");
-
-        });
-    }
     $("#editBtn").on("click", function() {
         editCategory();
     });
 
     $("#deleteBtn").on("click", function() {
-        $.ajax({
-            url: base_url + "/api/linkcategories/" + $category.val(),
-            type: 'DELETE',
-            dataType: 'json',
-            contentType: 'application/json'
-        }).done(function() {
+        deleteCategory($category.val()).done(function() {
             loadCategories();
         });
     });
@@ -138,6 +124,40 @@
         createCategory();
     });
 
+    $("#createLink").on("click", function() {
+        createLink();
+    });
+    
+    $("#addMore").on("click", function() {
+        createLink();
+    });
+
+    $("#delLink").on("click", function() {
+        deleteLink($(this).parent().attr('data-link'));
+    });
+
+    function createCategory() {
+        show("categoryform");
+        $("form#category-form").removeAttr('category-link');
+        $("form#category-form :input").each(function() {
+            $(this).val('');
+        });
+    }
+
+    function editCategory() {
+        $.ajax({
+            url: base_url + "/api/linkcategories/" + $category.val(),
+            dataType: 'json',
+            contentType: 'application/json'
+        }).done(function(category) {
+            $("form#category-form").attr('data-category', $category.val());
+            $("form#category-form :input").each(function() {
+                $(this).val(category[$(this).attr('name')]);
+            });
+            show("categoryform");
+        });
+    }
+
     function createLink() {
         $("form#link-form").removeAttr('data-link');
         $("form#link-form :input").each(function() {
@@ -147,10 +167,15 @@
         show("linkform");
 
     }
-    $("#createLink").on("click", function() {
-        createLink();
-    });
 
+    function deleteCategory(categoryName) {
+        return $.ajax({
+            url: base_url + "/api/linkcategories/" + categoryName,
+            type: 'DELETE',
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    }
 
     function refreshLinks() {
         var selectedParent = getSelectedParent();
@@ -211,13 +236,7 @@
         });
     }
 
-    $("#addMore").on("click", function() {
-        createLink();
-    });
-
-    $("#delLink").on("click", function() {
-        deleteLink($(this).parent().attr('data-link'));
-    });
+    
     function addLinkListener() {
         $("#items>ul li a").on("click", function() {
             if ($(this).attr('role') === 'edit') {
@@ -239,25 +258,6 @@
         $('.breadcrumb ul').append('<li><a href="javascript://" data-parent="' + linkName + '">' + linkName + '</a></li>');
         loadLinksByParent(linkName);
     }
-    $(".breadcrumb ul").on('click', 'li:not(:last-child) a', function() {
-        var parentLinkName = $(this).attr('data-parent');
-        console.log('parentLinkName ' + parentLinkName);
-
-
-
-        if (parentLinkName === '/') {
-            $(".breadcrumb ul").empty();
-            loadLinksByCategory();
-        }
-        else {
-//                if ($(this).parent().index() !== 1) {
-            $(".breadcrumb li:gt(" + ($(this).parent().index()) + ")").remove();
-            loadLinksByParent($(this).attr('data-parent'));
-//                }                             
-        }
-
-    });
-
 
 
 
