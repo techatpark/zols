@@ -22,114 +22,126 @@
         <section class="wrapper">
             <section id="content">
                 <header>
-                    <section><h4>Links</h4></section>
                     <section>
-                        <label for="category">Category</label>
-                        <select id="category">                            
-                        </select>
-                        <button id="editBtn">E</button>
-                        <a href="#deleteCategory">-</a>
-                        
+                        <h4>Links</h4>
+                        <div class="toolTip">
+                            <p>Lorem ipsum dolor sit amet, consectetur adipi scing elit.</p>
+                        </div>
                     </section>
+                    <div class="clear"></div>
                 </header>
-                
-                <section id="listing">
-                    <nav class="breadcrumb">
-                        <ul>
 
-                        </ul>
-                    </nav>
-                    <section id="items">
-                        <ul class="itemlist">
-                            <li><p>Test</p></li>
+                <div class="createNew">
+                    <h1>There are no categories <br />Create a new category <a href="#">here</a></h1>
+                </div>
 
-                        </ul>
-                        <a id="addMore" href="javascript://">Add More</a>
-                    </section>
-                </section>
+                <!-- <section>
+                     <label for="category">Category</label>
+                     <select id="category">                            
+                     </select>
+                     <button id="editBtn">E</button>
+                     <a href="#deleteCategory">-</a>
+                 </section>
+                 <div class="clear"></div>
+             </header>
 
-                <section id="categoryform">
-                    <form id="category-form" >
-                        <fieldset>                        
-                            <ul>
-                                <li>
-                                    <label >Name:</label>
-                                    <input name="name" type="text"  required=""/>
-                                </li>
-                                <li>
-                                    <label >Label</label>
-                                    <input name="label" type="text" required=""/>
-                                </li>
-                                <li>
-                                    <label >Description</label>
-                                    <textarea name="description" cols="40" rows="6"></textarea>
-                                </li>
+             <section id="listing">
+                 <nav class="breadcrumb">
+                     <ul>
 
-                                <li>
-                                    <button id="submitCategory" type="button">Submit</button>
-                                    <button id="cancelCategory" type="button">Cancel</button>
-                                </li>
-                            </ul>
-                        </fieldset>
-                    </form>
-                </section>
+                     </ul>
+                 </nav>
+                 <section id="items">
+                     <ul class="itemlist">
+                         <li><p>Test</p></li>
 
-                <section id="linkform">
-                    <form id="link-form" >
-                        <fieldset>                        
-                            <ul>
-                                <li>
-                                    <label>Name:</label>
-                                    <input name="name" type="text"  required=""/>
-                                </li>
-                                <li>
-                                    <label>Label</label>
-                                    <input name="label" type="text" required=""/>
-                                </li>
-                                <li>
-                                    <label>Description</label>
-                                    <textarea name="description" cols="40" rows="6"></textarea>
-                                </li>
+                     </ul>
+                     <a id="addMore" href="javascript://">Add More</a>
+                 </section>
+             </section>
 
-                                <li>
-                                    <button id="submitLink" type="button">Submit</button>
-                                    <button id="cancelLink" type="button">Cancel</button>
-                                </li>
-                            </ul>
-                        </fieldset>
-                    </form>
-                </section>
-                
-                <section id="nocategory">
-                    <p>There are no category click here to add <a href="javascript://" id="createNew" >new</a></p>
-                </section>
-                <section id="nolinks">
-                    <p>There are no links click here to add <a href="javascript://" id="createLink" >new</a></p>
-                </section>
-                
-<div id="deleteCategory" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<h2>Delete Category</h2>
-		<p>Are you sure you want to delete</p>
-                
-		<a href="#close" id="deleteBtn">Ok</a>
-                <a href="#close">Close</a>
-	</div>
-</div>
+             <section id="categoryform">
+                 <form id="category-form" >
+                     <fieldset>                        
+                         <ul>
+                             <li>
+                                 <label >Name:</label>
+                                 <input name="name" type="text"  required=""/>
+                             </li>
+                             <li>
+                                 <label >Label</label>
+                                 <input name="label" type="text" required=""/>
+                             </li>
+                             <li>
+                                 <label >Description</label>
+                                 <textarea name="description" cols="40" rows="6"></textarea>
+                             </li>
+
+                             <li>
+                                 <button id="submitCategory" type="button">Submit</button>
+                                 <button id="cancelCategory" type="button">Cancel</button>
+                             </li>
+                         </ul>
+                     </fieldset>
+                 </form>
+             </section>
+
+             <section id="linkform">
+                 <form id="link-form" >
+                     <fieldset>                        
+                         <ul>
+                             <li>
+                                 <label>Name:</label>
+                                 <input name="name" type="text"  required=""/>
+                             </li>
+                             <li>
+                                 <label>Label</label>
+                                 <input name="label" type="text" required=""/>
+                             </li>
+                             <li>
+                                 <label>Description</label>
+                                 <textarea name="description" cols="40" rows="6"></textarea>
+                             </li>
+
+                             <li>
+                                 <button id="submitLink" type="button">Submit</button>
+                                 <button id="cancelLink" type="button">Cancel</button>
+                             </li>
+                         </ul>
+                     </fieldset>
+                 </form>
+             </section>
+
+             <section id="nocategory">
+                 <p>There are no category click here to add <a href="javascript://" id="createNew" >new</a></p>
+             </section>
+             <section id="nolinks">
+                 <p>There are no links click here to add <a href="javascript://" id="createLink" >new</a></p>
+             </section>
+
+             <div id="deleteCategory" class="modalDialog">
+                 <div>
+                     <a href="#close" title="Close" class="close">X</a>
+                     <h2>Delete Category</h2>
+                     <p>Are you sure you want to delete</p>
+
+                     <a href="#close" id="deleteBtn">Ok</a>
+                     <a href="#close">Close</a>
+                 </div>
+             </div>
 
 
 
-<div id="deleteLink" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<h2>Delete Link</h2>
-		<p>Are you sure you want to delete</p>
-                
-		<a href="#close" id="delLink">Ok</a>
-                <a href="#close">Close</a>
-	</div>
-</div>
+             <div id="deleteLink" class="modalDialog">
+                 <div>
+                     <a href="#close" title="Close" class="close">X</a>
+                     <h2>Delete Link</h2>
+                     <p>Are you sure you want to delete</p>
+
+                     <a href="#close" id="delLink">Ok</a>
+                     <a href="#close">Close</a>
+                 </div>
+             </div>-->
 
             </section>
         </section>
@@ -139,8 +151,8 @@
                 <aside>Apache License V2</aside>
                 <nav>
                     <ul>
-                        <li><a href="#">API</a></li>                    
-                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#" class="api">API</a></li>                    
+                        <li><a href="#" class="feedback">Feedback</a></li>
                     </ul>
                 </nav>
             </section>
