@@ -8,7 +8,7 @@ and open the template in the editor.
     Author     : sathish_ku
 */
 #content {
-    header {
+    header.pageTitle {
         width: 100%;
         display:block;
         section:first-child{ float: left;}
@@ -16,38 +16,39 @@ and open the template in the editor.
         margin:40px 0px 0px 0px;
         border-bottom: solid 1px #e7eaeb;
         padding: 0px 0px 6px 0px;
-    }
-    h4 {
+        h4 {
         color:#6c6e70;
         margin:0px 0px 0px 10px;
         font: normal 20px/24px Arial;
         float:left;
     }
-    .toolTip {
+    }
+   
+    a.toolTip {
         background: url(images/helpIcon.png) no-repeat left top;
         width:26px; height: 32px;
         float:left;
         background-size: 26px 32px;
         margin:0px 0px 0px 12px;
-        cursor: pointer;
-        display: inline-block;
+        display: inline;
         position: relative;
-        
-        &:hover p {
-            opacity: 1.0;
-            visibility: visible;
+        text-decoration:none;
+        -webkit-transition: all 0.24s ease-in;
+        -moz-transition: all 0.24s ease-in;
+        -ms-transition: all 0.24s ease-in;
+        -o-transition: all 0.24s ease-in;
+        transition: all 0.24s ease-in;
+        &:hover {
+            text-decoration:none;
         }
     }
-    
-    .toolTip p {
-        position:absolute;
-        left:-12px; top:38px;
+    a.toolTip span {
+        display:none;
         background: #f6f1dc;
         border: solid 1px #c6c1a8;
         width: 160px;
         padding: 8px;
         @include border-radius(4px);
-        opacity: 0.0;
         color:#535759;
         font: normal 12px/14px Arial;
         -webkit-transition: all 0.24s ease-in;
@@ -56,8 +57,8 @@ and open the template in the editor.
         -o-transition: all 0.24s ease-in;
         transition: all 0.24s ease-in;
     }
-    .toolTip p:after, .toolTip p:before {
-	bottom: 100%;
+    a.toolTip span:after, a.toolTip span:before {
+        bottom: 100%;
 	left: 13%;
 	border: solid transparent;
 	content: " ";
@@ -66,18 +67,26 @@ and open the template in the editor.
 	position: absolute;
 	pointer-events: none;
     }
-    .toolTip p:after {
+    a.toolTip span:after {
 	border-color: rgba(246, 241, 220, 0);
 	border-bottom-color: #f6f1dc;
 	border-width: 8px;
 	margin-left: -8px;
     }
-    .toolTip p:before {
+    a.toolTip span:before {
 	border-color: rgba(198, 193, 168, 0);
 	border-bottom-color: #c6c1a8;
 	border-width: 9px;
 	margin-left: -9px;
     }
+    a.toolTip:hover span {
+        display:inline;
+        position:absolute;
+        left:-14px;
+        top:38px;
+    }
+    
+    
     .info {
         margin:200px 0px 0px 0px;
         h1 {

@@ -351,38 +351,40 @@ and open the template in the editor.
     Created on : May 31, 2014, 11:24:52 AM
     Author     : sathish_ku
 */
-#content header {
+#content header.pageTitle {
   width: 100%;
   display: block;
   margin: 40px 0px 0px 0px;
   border-bottom: solid 1px #e7eaeb;
   padding: 0px 0px 6px 0px; }
-  #content header section:first-child {
+  #content header.pageTitle section:first-child {
     float: left; }
-  #content header section:last-child {
+  #content header.pageTitle section:last-child {
     float: right; }
-#content h4 {
-  color: #6c6e70;
-  margin: 0px 0px 0px 10px;
-  font: normal 20px/24px Arial;
-  float: left; }
-#content .toolTip {
+  #content header.pageTitle h4 {
+    color: #6c6e70;
+    margin: 0px 0px 0px 10px;
+    font: normal 20px/24px Arial;
+    float: left; }
+#content a.toolTip {
   background: url(images/helpIcon.png) no-repeat left top;
   width: 26px;
   height: 32px;
   float: left;
   background-size: 26px 32px;
   margin: 0px 0px 0px 12px;
-  cursor: pointer;
-  display: inline-block;
-  position: relative; }
-  #content .toolTip:hover p {
-    opacity: 1.0;
-    visibility: visible; }
-#content .toolTip p {
-  position: absolute;
-  left: -12px;
-  top: 38px;
+  display: inline;
+  position: relative;
+  text-decoration: none;
+  -webkit-transition: all 0.24s ease-in;
+  -moz-transition: all 0.24s ease-in;
+  -ms-transition: all 0.24s ease-in;
+  -o-transition: all 0.24s ease-in;
+  transition: all 0.24s ease-in; }
+  #content a.toolTip:hover {
+    text-decoration: none; }
+#content a.toolTip span {
+  display: none;
   background: #f6f1dc;
   border: solid 1px #c6c1a8;
   width: 160px;
@@ -391,7 +393,6 @@ and open the template in the editor.
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   border-radius: 4px;
-  opacity: 0.0;
   color: #535759;
   font: normal 12px/14px Arial;
   -webkit-transition: all 0.24s ease-in;
@@ -399,7 +400,7 @@ and open the template in the editor.
   -ms-transition: all 0.24s ease-in;
   -o-transition: all 0.24s ease-in;
   transition: all 0.24s ease-in; }
-#content .toolTip p:after, #content .toolTip p:before {
+#content a.toolTip span:after, #content a.toolTip span:before {
   bottom: 100%;
   left: 13%;
   border: solid transparent;
@@ -408,16 +409,21 @@ and open the template in the editor.
   width: 0;
   position: absolute;
   pointer-events: none; }
-#content .toolTip p:after {
+#content a.toolTip span:after {
   border-color: rgba(246, 241, 220, 0);
   border-bottom-color: #f6f1dc;
   border-width: 8px;
   margin-left: -8px; }
-#content .toolTip p:before {
+#content a.toolTip span:before {
   border-color: rgba(198, 193, 168, 0);
   border-bottom-color: #c6c1a8;
   border-width: 9px;
   margin-left: -9px; }
+#content a.toolTip:hover span {
+  display: inline;
+  position: absolute;
+  left: -14px;
+  top: 38px; }
 #content .info {
   margin: 200px 0px 0px 0px; }
   #content .info h1 {
