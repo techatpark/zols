@@ -418,16 +418,16 @@ and open the template in the editor.
   border-bottom-color: #c6c1a8;
   border-width: 9px;
   margin-left: -9px; }
-#content .createNew {
+#content .info {
   margin: 200px 0px 0px 0px; }
-  #content .createNew h1 {
+  #content .info h1 {
     color: #3d3d3f;
     font: normal 24px/36px georgia;
     text-align: center; }
-    #content .createNew h1 a {
+    #content .info h1 a {
       color: #f16d0b;
       position: relative; }
-    #content .createNew h1 a:after {
+    #content .info h1 a:after {
       position: absolute;
       background: url(images/hereArrow.png) left top no-repeat;
       left: 56px;
