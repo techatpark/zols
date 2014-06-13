@@ -22,6 +22,31 @@ and open the template in the editor.
         font: normal 20px/24px Arial;
         float:left;
     }
+    .categorySelector {
+        float: right;
+        label {
+            color:#8d9194;
+            font: normal 14px/18px Arial;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -ms-appearance: none;
+            -o-appearance: none;
+            appearance: none;
+            @include border-radius(4px);
+            font: bold 14px/14px Arial;
+            color:#8d9194;
+            padding:6px 0px;
+            border:solid 1px #dddfe1;
+            width:236px;
+        }
+        select option:last-child {
+            border-top:solid 1px #dddfe1;
+            font: bold 14px/14px Arial;
+        }
+    }
+    
     }
    
     a.toolTip {
