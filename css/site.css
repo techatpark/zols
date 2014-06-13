@@ -631,21 +631,23 @@ and open the template in the editor.
     -webkit-box-sizing: border-box;
     box-sizing: border-box; }
 
-#content p {
-  color: #707374;
-  font: normal 14px/18px Arial;
-  padding: 0px 0px 14px 0px; }
-#content .videotutorial {
-  float: right;
-  padding: 0px 0px 0px 24px; }
-#content h1 {
-  color: #575a5c;
-  font: bold 18px/24px Arial;
-  padding: 0px 0px 10px 0px; }
-#content ul li {
-  color: #707374;
-  list-style: disc;
-  margin: 0px 0px 0px 10px;
-  font: normal 14px/24px Arial; }
+.topicContent {
+  margin: 40px 0px 0px 0px; }
+  .topicContent p {
+    color: #707374;
+    font: normal 14px/18px Arial;
+    padding: 0px 0px 14px 0px; }
+  .topicContent .videotutorial {
+    float: right;
+    padding: 0px 0px 0px 24px; }
+  .topicContent h1 {
+    color: #575a5c;
+    font: bold 18px/24px Arial;
+    padding: 0px 0px 10px 0px; }
+  .topicContent ul li {
+    color: #707374;
+    list-style: disc;
+    margin: 0px 0px 0px 10px;
+    font: normal 14px/24px Arial; }
 
 /*# sourceMappingURL=site.css.map */
