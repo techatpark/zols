@@ -29,24 +29,45 @@ and open the template in the editor.
             font: normal 14px/18px Arial;
         }
         select {
+            @include border-radius(4px);
+            font: bold 14px/17px Arial;
+            color:#8d9194;
+            padding:7px 0px 8px 0px;
+            border:solid 1px #dddfe1;
+            width:236px;
             -webkit-appearance: none;
             -moz-appearance: none;
             -ms-appearance: none;
             -o-appearance: none;
             appearance: none;
-            @include border-radius(4px);
-            font: bold 14px/14px Arial;
-            color:#8d9194;
-            padding:6px 0px;
-            border:solid 1px #dddfe1;
-            width:236px;
+            background: #ffffff url("../css/images/dropdownArrow.png") no-repeat right 1px top 1px;
+            text-indent: 0.01px;
+            text-overflow: '';
         }
         select option:last-child {
             border-top:solid 1px #dddfe1;
-            font: bold 14px/14px Arial;
+        }
+        a.editBtn {
+            width: 36px; height: 36px;
+            margin: 0px;
+            background: url(../css/images/editIcon.png) left top no-repeat;
+            background-size: 36px 36px;
+            border: none;
+            display: inline-block;
+            padding:8px 0px 0px 0px;
+            text-indent: -9999px;
+        }
+        a.deleteBtn {
+            width: 36px; height: 36px;
+            margin: 0px;
+            background: url(../css/images/deleteIcon.png) left top no-repeat;
+            background-size: 36px 36px;
+            border: none;
+            display: inline-block;
+            padding:8px 0px 0px 0px;
+            text-indent: -9999px;
         }
     }
-    
     }
    
     a.toolTip {

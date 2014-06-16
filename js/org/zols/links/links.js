@@ -310,7 +310,7 @@
                 categories.forEach(function(category) {
                     categoryOption += "<option value=" + category.name + " >" + category.label + "</option>";
                 });
-                categoryOption += "<option value='/'>Create New</option>";
+                categoryOption += "<optgroup label=''><option value='/'>Create New</option></optgroup><optgroup ></optgroup>";
                 $category.html(categoryOption);
                 loadLinksByCategory();
             }
