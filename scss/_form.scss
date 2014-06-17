@@ -7,7 +7,10 @@ and open the template in the editor.
     Created on : Jun 12, 2014, 6:18:18 PM
     Author     : Rajesh_ve
 */
-
+.contact_form {
+    width:560px ;
+    margin: 80px auto 0px auto;    
+}
 .contact_form h2, .contact_form label {font-family:Georgia, Times, "Times New Roman", serif;}
 
 .contact_form h2 {
@@ -30,31 +33,33 @@ and open the template in the editor.
 }
 .contact_form li{
     padding:12px; 
-    border-bottom:1px solid #eee;
     position:relative;
 }
 .contact_form li:first-child, .contact_form li:last-child {
-    border-bottom:1px solid #777;
+    
 }
 .contact_form label {
     width:150px;
     margin-top: 3px;
     display:inline-block;
     float:left;
-    padding:3px;
+    padding:3px 8px 3px 3px;
+    font: normal 14px Arial;
+    color:#6e7173;
+    text-align: right;
 }
 .contact_form input {
     height:20px; 
     width:220px; 
     padding:5px 8px;
+    border:solid 1px #dddfe1;
 }
 .contact_form textarea {padding:8px; width:300px;}
 .contact_form button {margin-left:156px;}
 
 .contact_form input, .contact_form textarea { 
-    border:1px solid #aaa;
-    box-shadow: 0px 0px 3px #ccc, 0 10px 15px #eee inset;
-    border-radius:2px;
+    border:solid 1px #dddfe1;
+    @include border-radius(4px);
     -moz-transition: padding .25s; 
     -webkit-transition: padding .25s; 
     -o-transition: padding .25s;
@@ -67,8 +72,8 @@ input:required, textarea:required {
 }
 .contact_form input:focus, .contact_form textarea:focus {
     background: #fff; 
-    border:1px solid #555; 
-    box-shadow: 0 0 3px #aaa; 
+    border:1px solid #16adde; 
+    /*box-shadow: 0 0 1px #16adde;*/ 
 }
 /* Button Style */
 button.submit {
@@ -139,14 +144,11 @@ button.submit:active {
 }
 .contact_form input:focus:invalid, .contact_form textarea:focus:invalid { /* when a field is considered invalid by the browser */
     background: #fff url(images/invalid.png) no-repeat 98% center;
-    box-shadow: 0 0 5px #d45252;
-    border-color: #b03535;
+
 }
 
 .contact_form input:required:valid, .contact_form textarea:required:valid { /* when a field is considered valid by the browser */
     background: #fff url(images/valid.png) no-repeat 98% center;
-    box-shadow: 0 0 5px #5cd053;
-    border-color: #28921f;
 }
 *:focus {outline: none;}
 :-moz-placeholder {
@@ -160,3 +162,4 @@ button.submit:active {
 ::-webkit-validation-bubble-message {
     padding: 1em;
 }
+
