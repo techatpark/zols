@@ -556,7 +556,9 @@ and open the template in the editor.
   width: 346px; }
 
 input:required, textarea:required {
-  background: #333333 url(images/red_asterisk.png) no-repeat 98% center;
+  background: white url(images/red_asterisk.png) no-repeat 98% center; }
+
+input:required:after, textarea:required:after {
   content: '';
   width: 0px;
   height: 0px;
