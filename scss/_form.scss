@@ -75,9 +75,7 @@ input:after, textarea:required:after {
     
 }
 .contact_form input:focus, .contact_form textarea:focus {
-    background: #fff; 
-    border:1px solid #16adde; 
-    background: #fff url(images/inputReqIcon.png) no-repeat top right;
+    
 }
 /* Button Style */
 button.submit {

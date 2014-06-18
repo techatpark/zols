@@ -566,11 +566,6 @@ and open the template in the editor.
 input:required, textarea:required {
   background: white url(images/inputReqIcon.png) no-repeat top right; }
 
-.contact_form input:focus, .contact_form textarea:focus {
-  background: #fff;
-  border: 1px solid #16adde;
-  background: white url(images/inputReqIcon.png) no-repeat top right; }
-
 /* Button Style */
 button.submit {
   background-color: #68b12f;
