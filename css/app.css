@@ -522,8 +522,9 @@ and open the template in the editor.
   padding: 0px; }
 
 .contact_form li {
-  padding: 12px;
-  position: relative; }
+  padding: 0px;
+  position: relative;
+  margin: 0px 0px 10px 0px; }
 
 .contact_form label {
   width: 150px;
@@ -537,9 +538,7 @@ and open the template in the editor.
 
 .contact_form input {
   height: 20px;
-  width: 220px;
-  padding: 5px 8px;
-  border: solid 1px #dddfe1; }
+  padding: 5px 8px; }
 
 .contact_form textarea {
   padding: 8px;
@@ -554,14 +553,21 @@ and open the template in the editor.
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   border-radius: 4px;
-  -moz-transition: padding .25s;
-  -webkit-transition: padding .25s;
-  -o-transition: padding .25s;
-  transition: padding .25s;
-  padding-right: 30px; }
+  width: 346px; }
 
 input:required, textarea:required {
-  background: white url(images/red_asterisk.png) no-repeat 98% center; }
+  background: #333333 url(images/red_asterisk.png) no-repeat 98% center;
+  content: '';
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  left: 50%;
+  bottom: 0px;
+  margin-left: -6px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid red;
+  border-top: 6px solid transparent; }
 
 .contact_form input:focus, .contact_form textarea:focus {
   background: #fff;
@@ -642,8 +648,7 @@ button.submit:active {
 
 /* change form hint arrow color when valid */
 .contact_form input:focus, .contact_form textarea:focus {
-  /* add this to the already existing style */
-  padding-right: 70px; }
+  /* add this to the already existing style */ }
 
 .contact_form input:focus:invalid, .contact_form textarea:focus:invalid {
   /* when a field is considered invalid by the browser */
