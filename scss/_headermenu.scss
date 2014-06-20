@@ -52,6 +52,18 @@ body>header {
     #search input[type="text"] placeholder {
         color:#999999;
     }
+    ::-webkit-input-placeholder { 
+        color: #999999;
+    }
+    :-moz-placeholder { 
+        color:#999999;
+    }
+    ::-moz-placeholder { 
+        color:#999999;
+    }
+    :-ms-input-placeholder {
+        color: #999;
+    }
     .forkGit {
         position: absolute;
         display: block;
