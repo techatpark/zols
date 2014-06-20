@@ -49,6 +49,9 @@ body>header {
         @include border-radius(4px);
         margin: 21px 0px 0px 0px;
     }
+    #search input[type="text"] placeholder {
+        color:#999999;
+    }
     .forkGit {
         position: absolute;
         display: block;
@@ -83,8 +86,8 @@ body>header {
         -webkit-transform: rotate(45deg);
     }
     .forkGit a:hover {
-            background: #f73818;
-        }
+        background: #f73818;
+    }
     
 }
 

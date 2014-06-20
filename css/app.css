@@ -159,6 +159,8 @@ body > header {
     -ms-border-radius: 4px;
     border-radius: 4px;
     margin: 21px 0px 0px 0px; }
+  body > header #search input[type="text"] placeholder {
+    color: #999999; }
   body > header .forkGit {
     position: absolute;
     display: block;
