@@ -1,9 +1,10 @@
 (function($) {
 
-    var base_url = "http://localhost:8080/zols";
+    var base_url = "http://localhost:8080";
 
     var $category = $("#category");
     var $links = $("#items>ul");
+    var $categorySelector = $(".categorySelector");
 
     function show(sectionName) {
         $("#content>section").hide();
@@ -19,7 +20,7 @@
         if (categoryName) {
             $.ajax(
                     {
-                        url: base_url + "/api/linkcategories/" + categoryName,
+                        url: base_url + "/api/link_categories/" + categoryName,
                         type: 'PUT',
                         data: JSON.stringify(formData),
                         dataType: "json",
@@ -32,7 +33,7 @@
         else {
             $.ajax(
                     {
-                        url: base_url + "/api/linkcategories",
+                        url: base_url + "/api/link_categories",
                         type: 'POST',
                         data: JSON.stringify(formData),
                         dataType: "json",
@@ -99,6 +100,7 @@
 
     function onSave() {
         show("listing");
+        $categorySelector.show();
     }
 
     $("#cancelLink").on("click", function() {
@@ -146,7 +148,7 @@
 
     function editCategory() {
         $.ajax({
-            url: base_url + "/api/linkcategories/" + $category.val(),
+            url: base_url + "/api/link_categories/" + $category.val(),
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(category) {
@@ -170,7 +172,7 @@
 
     function deleteCategory(categoryName) {
         return $.ajax({
-            url: base_url + "/api/linkcategories/" + categoryName,
+            url: base_url + "/api/link_categories/" + categoryName,
             type: 'DELETE',
             dataType: 'json',
             contentType: 'application/json'
@@ -202,7 +204,7 @@
         else {
             $links.empty();
             $.ajax({
-                url: base_url + "/api/links/categories/" + categoryName,
+                url: base_url + "/api/link_categories/" + categoryName+"/first_level_links",
                 dataType: 'json',
                 contentType: 'application/json'
             }).done(function(links) {
@@ -228,7 +230,7 @@
     function loadLinksByParent(parentLinkName) {
         $links.empty();
         $.ajax({
-            url: base_url + "/api/links/children/" + parentLinkName,
+            url: base_url + "/api/links/childen_of/" + parentLinkName,
             dataType: 'json',
             contentType: 'application/json'
         }).done(function(links) {
@@ -302,7 +304,7 @@
 
     function loadCategories() {
         $.ajax({
-            url: base_url + "/api/linkcategories"
+            url: base_url + "/api/link_categories"
         }).done(function(categories) {
             $category.empty();
             if (categories) {
@@ -316,6 +318,7 @@
             }
             else {
                 show("nocategory");
+                $categorySelector.hide();
             }
 
         });
