@@ -137,13 +137,35 @@
     $("#delLink").on("click", function() {
         deleteLink($(this).parent().attr('data-link'));
     });
+    
+    $("#choose_repo_type li a").on("click", function() {
+        createCategoryWithType($(this).attr('data-type'));
+    });
 
     function createCategory() {
+        show("choose_repo_type");        
+    }
+    
+    function createCategoryWithType(type) {
         show("categoryform");
+                
         $("form#category-form").removeAttr('category-link');
+        
+        
+        
+
         $("form#category-form :input").each(function() {
             $(this).val('');
         });
+        
+        $("form#category-form :input[name='type']").val(type);
+        
+        if (type !== 'ftp') {
+            $("form#category-form :input[name='host']").parent().hide();
+            $("form#category-form :input[name='rootFolder']").parent().hide();
+            $("form#category-form :input[name='userName']").parent().hide();
+            $("form#category-form :input[name='password']").parent().hide();
+        }
     }
 
     function editCategory() {
