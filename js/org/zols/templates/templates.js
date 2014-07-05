@@ -139,20 +139,17 @@
     });
     
     $("#choose_repo_type li a").on("click", function() {
-        createCategoryWithType($(this).attr('data-type'));
+        showCategoryWithType($(this).attr('data-type'));
     });
 
     function createCategory() {
         show("choose_repo_type");        
     }
     
-    function createCategoryWithType(type) {
+    function showCategoryWithType(type) {
         show("categoryform");
                 
-        $("form#category-form").removeAttr('category-link');
-        
-        
-        
+        $("form#category-form").removeAttr('category-link');        
 
         $("form#category-form :input").each(function() {
             $(this).val('');
@@ -166,6 +163,12 @@
             $("form#category-form :input[name='userName']").parent().hide();
             $("form#category-form :input[name='password']").parent().hide();
         }
+        else {
+            $("form#category-form :input[name='host']").parent().show();
+            $("form#category-form :input[name='rootFolder']").parent().show();
+            $("form#category-form :input[name='userName']").parent().show();
+            $("form#category-form :input[name='password']").parent().show();
+        }
     }
 
     function editCategory() {
@@ -175,6 +178,7 @@
             contentType: 'application/json'
         }).done(function(category) {
             $("form#category-form").attr('data-category', $category.val());
+            showCategoryWithType(category.type);
             $("form#category-form :input").each(function() {
                 $(this).val(category[$(this).attr('name')]);
             });
