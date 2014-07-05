@@ -43,6 +43,18 @@
 
 
                 <section id="listing">
+
+                    <p>Select files to upload. Press Add button to add more file inputs.</p>
+                    <button id="addFile" type="button">Add File</button>
+                    <form method="post" id="uploadForm" enctype="multipart/form-data">
+                        <fieldset><legend>File Manager</legend>                
+                            <ul id="files">                    
+                                <li><input name="files[0]" type="file" /><button type="button">X</button></li>                         
+                            </ul>      
+                            <button type="submit" value="Upload" >Upload</button>
+                        </fieldset>  
+                    </form>
+
                     <nav class="breadcrumb">
                         <ul>
 

@@ -6,6 +6,18 @@
     var $links = $("#items>ul");
     var $categorySelector = $(".categorySelector");
 
+    $('#addFile').click(function() {
+        var name = 'files[' + $('#files').children().length + ']';
+        $('#files').append('<li><input type="file" /><button type="button">X</button></li>');
+        $('#files input:last').attr('name', name);
+    });
+
+    $("#files li button").click(function() {
+        $(this).parent().remove();
+    });
+    
+    $("#uploadForm").attr("action",base_url+"/api/documents/file");
+
     function show(sectionName) {
         $("#content>section").hide();
         $("#content>section#" + sectionName).show();
@@ -129,7 +141,7 @@
     $("#createLink").on("click", function() {
         createLink();
     });
-    
+
     $("#addMore").on("click", function() {
         createLink();
     });
@@ -137,26 +149,26 @@
     $("#delLink").on("click", function() {
         deleteLink($(this).parent().attr('data-link'));
     });
-    
+
     $("#choose_repo_type li a").on("click", function() {
         showCategoryWithType($(this).attr('data-type'));
     });
 
     function createCategory() {
-        show("choose_repo_type");        
+        show("choose_repo_type");
     }
-    
+
     function showCategoryWithType(type) {
         show("categoryform");
-                
-        $("form#category-form").removeAttr('category-link');        
+
+        $("form#category-form").removeAttr('category-link');
 
         $("form#category-form :input").each(function() {
             $(this).val('');
         });
-        
+
         $("form#category-form :input[name='type']").val(type);
-        
+
         if (type !== 'ftp') {
             $("form#category-form :input[name='host']").parent().hide();
             $("form#category-form :input[name='rootFolder']").parent().hide();
@@ -264,7 +276,7 @@
         });
     }
 
-    
+
     function addLinkListener() {
         $("#items>ul li a").on("click", function() {
             if ($(this).attr('role') === 'edit') {
