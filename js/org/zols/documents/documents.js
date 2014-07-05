@@ -230,7 +230,7 @@
         else {
             $links.empty();
             $.ajax({
-                url: base_url + "/api/document_repositories/" + categoryName+"/first_level_links",
+                url: base_url + "/api/documents/" + categoryName,
                 dataType: 'json',
                 contentType: 'application/json'
             }).done(function(links) {
@@ -247,7 +247,7 @@
     function createLinks(links) {
         var linksHtml = '';
         links.forEach(function(link) {
-            linksHtml += "<li name='" + link.name + "'><p>" + link.label + "</p><a role='edit' href='#'>E</a><a role='delete' href='#deleteLink'>-</a></li>";
+            linksHtml += "<li name='" + link.fileName + "' dir='" + link.isDir + "'><p>" + link.fileName + "</p><a role='edit' href='#'>E</a><a role='delete' href='#deleteLink'>-</a></li>";
         });
         $links.html(linksHtml);
         addLinkListener();
