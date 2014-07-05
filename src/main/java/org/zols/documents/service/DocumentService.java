@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,7 @@ import org.zols.documents.domain.Upload;
  */
 @Service
 public class DocumentService {
-    
+
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DocumentService.class);
 
@@ -36,25 +37,22 @@ public class DocumentService {
     /**
      * Upload documents
      *
-     * @param documentRepository DocumentRepository in which the files have to
-     * be uploaded
+     * @param documentRepositoryName
      * @param upload documents to be uploaded
-     * @throws IOException
      */
-    public void upload(DocumentRepository documentRepository, Upload upload) throws IOException {
-        upload(documentRepository, upload, null);
+    public void upload(String documentRepositoryName, Upload upload){
+        upload(documentRepositoryName, upload, null);
     }
 
     /**
      * Upload documents
      *
-     * @param documentRepository DocumentRepository in which the files have to
-     * be uploaded
+     * @param documentRepositoryName
      * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
-     * @throws IOException
      */
-    public void upload(DocumentRepository documentRepository, Upload upload, String rootFolderPath) throws IOException {
+    public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) {
+        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
@@ -63,11 +61,17 @@ public class DocumentService {
         if (null != multipartFiles && multipartFiles.size() > 0) {
             for (MultipartFile multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
-                byte[] bytes = multipartFile.getBytes();
-                BufferedOutputStream stream
-                        = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getOriginalFilename())));
-                stream.write(bytes);
-                stream.close();
+                byte[] bytes;
+                try {
+                    bytes = multipartFile.getBytes();
+
+                    BufferedOutputStream stream
+                            = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getOriginalFilename())));
+                    stream.write(bytes);
+                    stream.close();
+                } catch (IOException ex) {
+                    java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }
@@ -102,16 +106,6 @@ public class DocumentService {
     }
 
     /**
-     * List all the files in the root directory
-     *
-     * @param documentRepositoryName type of storage
-     * @return
-     */
-    public List<Document> list(String documentRepositoryName) {
-        return list(documentRepositoryName, null);
-    }
-
-    /**
      * List all the files in the current directory
      *
      * @param documentRepositoryName type of storage
@@ -124,9 +118,9 @@ public class DocumentService {
         if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
         }
-        
+
         LOGGER.info("Listing documents from file path {}", path);
-        
+
         List<Document> documents = new ArrayList<>();
         Document document;
         for (File innerFile : new File(path).listFiles()) {
