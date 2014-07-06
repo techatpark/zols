@@ -28,14 +28,19 @@ public class DocumentController {
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.GET)
     public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
-        return documentService.list(documentRepositoryName, getFolderPath(documentRepositoryName, request));
+        return documentService.list(documentRepositoryName, getFilePath(documentRepositoryName, request));
+    }
+    
+    @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.DELETE)
+    public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
+        documentService.delete(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void upload(@PathVariable(value = "documentRepositoryName") String documentRepositoryName,
             @ModelAttribute("document") Upload upload, HttpServletRequest request) {
-        documentService.upload(documentRepositoryName, upload, getFolderPath(documentRepositoryName, request));
+        documentService.upload(documentRepositoryName, upload, getFilePath(documentRepositoryName, request));
     }
 
     /**
@@ -45,7 +50,7 @@ public class DocumentController {
      * @param request
      * @return null - if no folder path found
      */
-    private String getFolderPath(String documentRepositoryName, HttpServletRequest request) {
+    private String getFilePath(String documentRepositoryName, HttpServletRequest request) {
         String folderPath = request.getRequestURL().toString();
         String textToMatch = "/api/documents/" + documentRepositoryName + "/";
         int startPointOdFolderPath = folderPath.indexOf(textToMatch);

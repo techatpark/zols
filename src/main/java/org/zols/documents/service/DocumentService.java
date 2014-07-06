@@ -95,6 +95,17 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
+    public void delete(String documentRepositoryName, String filePath) {
+        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String path = documentRepository.getPath();
+        if (filePath != null && filePath.trim().length() != 0) {
+            path = path + File.separator + filePath;
+        }
+        LOGGER.info("Deleting a file form {}", path);
+        File file = new File(path);
+        file.delete();
+    }
+
     /**
      * List all the files in the current directory
      *
@@ -118,7 +129,7 @@ public class DocumentService {
             document.setRepositoryName(documentRepositoryName);
             document.setFileName(innerFile.getName());
             document.setIsDir(innerFile.isDirectory());
-            document.setPath(innerFile.getPath());
+            document.setPath(innerFile.getPath().replaceAll(path, ""));
             documents.add(document);
         }
         return documents;
