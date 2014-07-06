@@ -39,16 +39,6 @@ public class DocumentService {
      *
      * @param documentRepositoryName
      * @param upload documents to be uploaded
-     */
-    public void upload(String documentRepositoryName, Upload upload){
-        upload(documentRepositoryName, upload, null);
-    }
-
-    /**
-     * Upload documents
-     *
-     * @param documentRepositoryName
-     * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
      */
     public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) {

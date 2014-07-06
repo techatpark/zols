@@ -28,14 +28,14 @@ public class DocumentController {
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.GET)
     public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
-        return documentService.list(documentRepositoryName,getFolderPath(documentRepositoryName, request));
+        return documentService.list(documentRepositoryName, getFolderPath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void upload(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, 
-            @ModelAttribute("document") Upload document) {        
-        documentService.upload(documentRepositoryName, document);        
+    public void upload(@PathVariable(value = "documentRepositoryName") String documentRepositoryName,
+            @ModelAttribute("document") Upload upload, HttpServletRequest request) {
+        documentService.upload(documentRepositoryName, upload, getFolderPath(documentRepositoryName, request));
     }
 
     /**
