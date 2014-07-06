@@ -7,6 +7,7 @@ package org.zols.documents.service;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -103,7 +104,22 @@ public class DocumentService {
         }
         LOGGER.info("Deleting a file form {}", path);
         File file = new File(path);
-        file.delete();
+        try {
+            delete(file);
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+        private void delete(File f) throws IOException {
+        if (f.isDirectory()) {
+            for (File c : f.listFiles()) {
+                delete(c);
+            }
+        }
+        if (!f.delete()) {
+            throw new FileNotFoundException("Failed to delete file: " + f);
+        }
     }
 
     /**
