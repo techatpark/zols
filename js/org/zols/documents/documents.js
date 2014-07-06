@@ -16,7 +16,7 @@
         $(this).parent().remove();
     });
     
-    $("#uploadForm").attr("action",base_url+"/api/documents/file");
+    $("#uploadForm").attr("action",base_url+"/api/documents/file/new");
 
     function show(sectionName) {
         $("#content>section").hide();
