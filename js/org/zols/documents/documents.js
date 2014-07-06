@@ -319,7 +319,7 @@
 
     function deleteLink(linkName) {
         $.ajax({
-            url: base_url + "/api/documents/" + linkName,
+            url: base_url + "/api/documents/" + $category.val() + "/" +linkName,
             type: 'DELETE',
             dataType: 'json',
             contentType: 'application/json'
