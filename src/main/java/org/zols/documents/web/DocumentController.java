@@ -30,7 +30,12 @@ public class DocumentController {
     public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
         return documentService.list(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
-    
+
+    @RequestMapping(value = "/filter/{documentRepositoryName}/**", method = RequestMethod.GET)
+    public List<Document> listAll(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
+        return documentService.listAll(documentRepositoryName, getFilePath(documentRepositoryName, request));
+    }
+
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.DELETE)
     public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
         documentService.delete(documentRepositoryName, getFilePath(documentRepositoryName, request));

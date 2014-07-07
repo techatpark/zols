@@ -110,8 +110,8 @@ public class DocumentService {
             java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-        private void delete(File f) throws IOException {
+
+    private void delete(File f) throws IOException {
         if (f.isDirectory()) {
             for (File c : f.listFiles()) {
                 delete(c);
@@ -145,8 +145,48 @@ public class DocumentService {
             document.setRepositoryName(documentRepositoryName);
             document.setFileName(innerFile.getName());
             document.setIsDir(innerFile.isDirectory());
-            document.setPath(innerFile.getPath().replaceAll(path, ""));
+            document.setPath(innerFile.getPath().replaceAll(new File(path).getPath(), ""));
             documents.add(document);
+        }
+        return documents;
+    }
+
+    /**
+     * List all the files in the current directory
+     *
+     * @param documentRepositoryName type of storage
+     * @param folderPath the directory to list the files
+     * @return
+     */
+    public List<Document> listAll(String documentRepositoryName, String folderPath) {
+        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String path = documentRepository.getPath();
+        if (folderPath != null && folderPath.trim().length() != 0) {
+            path = path + File.separator + folderPath;
+        }
+
+        LOGGER.info("Listing all nested documents inside {}", path);
+
+        return getFiles(path, documentRepositoryName, new File(path));
+    }
+
+    private List<Document> getFiles(String path, String documentRepositoryName, File folder) {
+        Document document;
+        String filePath ;
+        List<Document> documents = new ArrayList<>();
+        if (folder.isDirectory()) {
+            for (File innerFile : folder.listFiles()) {
+                if (innerFile.isFile()) {
+                    document = new Document();
+                    document.setRepositoryName(documentRepositoryName);
+                    document.setFileName(innerFile.getName());
+                    filePath = innerFile.getPath();
+                    document.setPath(filePath.substring(filePath.indexOf(new File(path).getPath())));
+                    documents.add(document);
+                } else {
+                    documents.addAll(getFiles(path, documentRepositoryName, innerFile));
+                }
+            }
         }
         return documents;
     }
