@@ -22,8 +22,8 @@
         </dependency>
         <dependency>
             <groupId>org.jodel</groupId>
-            <artifactId>Jodel</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>jodel-store</artifactId>
+            <version>0.1.0</version>
         </dependency>
         
         <dependency>
