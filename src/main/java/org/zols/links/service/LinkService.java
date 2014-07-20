@@ -6,12 +6,12 @@
 package org.zols.links.service;
 
 import java.util.List;
-import org.jodel.store.DataStore;
-import org.jodel.store.query.Filter;
-import org.jodel.store.query.Query;
+import org.zols.datastore.DataStore;
+import org.zols.datastore.query.Filter;
+import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.jodel.store.query.Filter.Operator.*;
+import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zols.links.domain.Link;

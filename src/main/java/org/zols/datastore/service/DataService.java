@@ -7,7 +7,7 @@ package org.zols.datastore.service;
 
 import java.util.List;
 import java.util.Map;
-import org.jodel.store.DataStore;
+import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;

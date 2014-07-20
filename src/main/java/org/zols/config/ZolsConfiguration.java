@@ -5,8 +5,8 @@
  */
 package org.zols.config;
 
-import org.jodel.store.DataStore;
-import org.jodel.store.mongo.MongoDataStore;
+import org.zols.datastore.DataStore;
+import org.zols.datastore.mongo.MongoDataStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
