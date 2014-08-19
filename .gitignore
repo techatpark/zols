@@ -1,8 +1,8 @@
 **/*ipr
 **/*iws
 **/*iml
-target
-bin
+**/target
+**/bin
 .settings
 .classpath
 .project
