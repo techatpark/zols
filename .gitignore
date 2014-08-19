@@ -3,6 +3,11 @@
 **/*iml
 **/target
 **/bin
+**/bower_components
+**/dist
+**/node_modules
+**/.sass-cache
+**/.tmp
 .settings
 .classpath
 .project
