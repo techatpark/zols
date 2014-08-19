@@ -1,78 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+  
+    <name>Zols</name>
+    <description>Open Source Content Management System</description>
     <modelVersion>4.0.0</modelVersion>
-
-    <name>Zols Jodel Base</name>
     <groupId>org.zols</groupId>
-    <artifactId>web</artifactId>
-    <version>0.1.0</version>
+    <artifactId>zols</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1-SNAPSHOT</version>
     
-
+    <scm>
+        <connection>scm:git:git://github.com/sathishk/zols.git</connection>
+        <developerConnection>scm:git:https://sathishk@github.com/sathishk/zols.git</developerConnection>
+        <url>https://github.com/sathishk/zols</url>
+    </scm> 
+    
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.1.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
+    
+    <modules>
+        <module>zols-cms-plugin</module>
+        <module>zols-cms</module>
+    </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version>0.8.5</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jsonSchema</artifactId>
-            <version>2.4.0-rc3</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>            
-        </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <properties>
-        <start-class>org.sample.app.Application</start-class>
-        <java.version>1.7</java.version>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin> 
-                <artifactId>maven-compiler-plugin</artifactId> 
-                <version>2.3.2</version> 
-            </plugin>
-        </plugins>
-    </build>
-
-    <repositories>
-        <repository>
-            <id>spring-releases</id>
-            <url>http://repo.spring.io/libs-release</url>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>http://repo.spring.io/libs-release</url>
-        </pluginRepository>
-    </pluginRepositories>
+  
 </project>

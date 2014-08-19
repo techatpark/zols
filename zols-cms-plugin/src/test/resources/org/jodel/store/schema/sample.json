@@ -1,0 +1,22 @@
+{
+    "type": "object",
+    "properties": {
+        "isMale": {
+            "type": "string"
+        },
+        "name": {
+            "type": "string",
+            "required": true,
+            "id": true
+        },
+        "salary": {
+            "type": "number"
+        },
+        "age": {
+            "type": "integer"
+        },
+        "longSalary": {
+            "type": "integer"
+        }
+    }
+}
