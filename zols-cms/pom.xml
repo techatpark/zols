@@ -32,6 +32,9 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
     </dependencies>
+    <properties>
+        <start-class>org.zols.cms.Application</start-class>        
+    </properties>
     <build>
         <plugins>
             <plugin>

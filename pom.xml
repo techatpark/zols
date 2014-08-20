@@ -28,6 +28,13 @@
         <module>zols-cms-plugin</module>
         <module>zols-cms</module>
     </modules>
+    
+    <properties>
+        <swagger-springmvc-version>0.8.5</swagger-springmvc-version>
+        <jackson-module-jsonSchema-version>2.4.0-rc3</jackson-module-jsonSchema-version>
+        <java.version>1.7</java.version>
+        <maven-compiler-plugin-version>2.3.2</maven-compiler-plugin-version>
+    </properties>
 
   
 </project>

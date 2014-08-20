@@ -11,7 +11,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zols-cms-plugin</artifactId>
-    <packaging>jar</packaging>
+    <packaging>jar</packaging>    
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -21,13 +21,13 @@
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
-            <version>0.8.5</version>
+            <version>${swagger-springmvc-version}</version>
         </dependency>
         
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jsonSchema</artifactId>
-            <version>2.4.0-rc3</version>
+            <version>${jackson-module-jsonSchema-version}</version>
         </dependency>
         
         <dependency>
@@ -47,15 +47,13 @@
     </dependencies>
 
     <properties>
-        <start-class>org.sample.app.Application</start-class>
-        <java.version>1.7</java.version>
+        <start-class>org.sample.app.Application</start-class>        
     </properties>
 
     <build>
         <plugins>
             <plugin> 
                 <artifactId>maven-compiler-plugin</artifactId> 
-                <version>2.3.2</version> 
                 <configuration>
                     <excludes>
                         <exclude>**/src/main/java/org/sample/app/Application/*.java</exclude>
