@@ -3,6 +3,7 @@
 **/*iml
 **/target
 **/bin
+**/nbproject
 **/bower_components
 **/dist
 **/node_modules
@@ -22,3 +23,4 @@
 \#*
 .DS_Store
 build
+/zols-ui/app/nbproject/private/

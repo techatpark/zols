@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" xmlns:th="http://www.thymeleaf.org">
+<html class="no-js">
     <head>
         <meta charset="utf-8"/>
         <title>Zols Content Management System</title>
@@ -20,9 +20,7 @@
         <script src="../bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
     </head>
-
     <body>
-
         <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">
@@ -34,31 +32,30 @@
                     </button>
                     <a class="navbar-brand" href="#">Project name</a>
                 </div>
-                <div class="navbar-collapse collapse">
-                    <form class="navbar-form navbar-right" role="form">
-                        <div class="form-group">
-                            <input type="text" placeholder="Email" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" placeholder="Password" class="form-control"/>
-                        </div>
-                        <button type="submit" class="btn btn-success">Sign in</button>
-                    </form>
-                </div><!--/.navbar-collapse -->
+                
             </div>
         </div>
-        <div class="container">
-            <p th:if="${param.logout}" class="alert">You have been logged out</p>
-            <p th:if="${param.error}" class="alert alert-error">There was an error, please try again</p>
-            <h2>Login with Username and Password</h2>
-            <form name="form" th:action="@{/login}" action="/login" method="POST">
-                <fieldset>
-                    <input type="text" name="username" value="" placeholder="Username" />
-                    <input type="password" name="password" placeholder="Password" />
-                </fieldset>
-                <input type="submit" id="login" value="Login"
-                       class="btn btn-primary" />
-            </form>
-        </div>
-    </body>
+	<div class="container">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<a class="brand" href="http://www.thymeleaf.org"> Thymeleaf -
+					Plain </a>
+				<ul class="nav">
+					<li><a th:href="@{/}" href="home.html"> Home </a></li>
+					<li><a th:href="@{/logout}" href="logout"> Logout </a></li>
+				</ul>
+			</div>
+		</div>
+		<h1 th:text="${title}">Title</h1>
+		<div id="created" th:text="${#dates.format(timestamp)}">July 11,
+			2012 2:17:16 PM CDT</div>
+		<div>
+			There was an unexpected error (type=<span th:text="${error}">Bad</span>, status=<span th:text="${status}">500</span>).
+		</div>
+		<div th:text="${message}">Fake content</div>
+		<div>
+			Please contact the operator with the above information.
+		</div>
+	</div>
+</body>
 </html>
