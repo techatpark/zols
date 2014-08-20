@@ -9,30 +9,38 @@ import java.io.File;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
+import org.thymeleaf.templateresolver.TemplateResolver;
 
+@EnableConfigurationProperties(ThymeleafProperties.class)
 @Configuration
 public class ThmeleafExtension {
 
     @Autowired
+    private ThymeleafProperties properties;
+
+    @Autowired
     private SpringTemplateEngine templateEngine;
-    
+
     @Value("${app.local.template.folder}")
     private String localTemplateFolder;
-    
-    @Value("${app.name}")
-    private String appName;
 
     @PostConstruct
-    public void extension() {
+    public void intializeTemplates() {
         FileTemplateResolver resolver = new FileTemplateResolver();
-        resolver.setPrefix(localTemplateFolder+File.separator+appName+File.separator);
-        resolver.setSuffix(".html");
-        resolver.setTemplateMode("HTML5");
-        resolver.setOrder(templateEngine.getTemplateResolvers().size());
-        resolver.setCacheable(false);
+        File file = new File(localTemplateFolder);
+        resolver.setPrefix(file.getAbsolutePath() + File.separator);
+        intializeResolver(resolver);
         templateEngine.addTemplateResolver(resolver);
+    }
+
+    private void intializeResolver(TemplateResolver resolver) {
+        resolver.setSuffix(this.properties.getSuffix());
+        resolver.setTemplateMode(this.properties.getMode());
+        resolver.setCharacterEncoding(this.properties.getEncoding());
+        resolver.setCacheable(this.properties.isCache());
     }
 }
