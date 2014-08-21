@@ -51,6 +51,15 @@
     </properties>
 
     <build>
+        <resources>
+            <resource>
+                <directory>../zols-ui/app</directory> 
+                <targetPath>templates</targetPath>   
+                <excludes>
+                    <exclude>/nbproject/**</exclude>
+                </excludes>    
+            </resource>
+        </resources>
         <plugins>
             <plugin> 
                 <artifactId>maven-compiler-plugin</artifactId> 
