@@ -1,10 +1,12 @@
 {
-  "name": "zols-ui",
-  "private": true,
+  "name": "zolsUi",
+  "version": "0.0.0",
   "dependencies": {
-    "bootstrap-sass-official": "~3.1.1",
-    "modernizr": "~2.6.2",
-    "jquery": "~1.11.0"
+    "modernizr": "2.8.x",
+    "angular": "1.2.x",
+    "bootstrap-sass-official": "3.1.x"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "angular-mocks": "1.2.x"
+  }
 }
