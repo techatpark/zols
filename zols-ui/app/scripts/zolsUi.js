@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('zolsUi', []);
+angular.module('zolsUi', ['ui.bootstrap']);
