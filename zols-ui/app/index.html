@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" ng-app="zolsUi">
+<html class="no-js" >
     <head>
         <meta charset="utf-8">
         <title>Zols</title>
@@ -20,9 +20,9 @@
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="container" ng-controller="MainCtrl">
+        <div class="container">
 
-            <nav class="navbar " role="navigation">
+            <nav class="navbar" role="navigation">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -31,7 +31,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Brand</a>
+                    <a class="navbar-brand" href="#">Zols</a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -91,17 +91,71 @@
                     <img src="images/yeoman.png" alt="I'm Yeoman"><br>
                     Always a pleasure scaffolding your apps.
                 </p>
-                <p><a class="btn btn-lg btn-success" ng-href="#">Splendid!</a></p>
+                <p><a class="btn btn-lg btn-success" >Splendid!</a></p>
             </div>
 
             <div class="row">
-                <div class="col-sm-6 col-md-4" ng-repeat="awesomeThing in awesomeThings| orderBy:'rank'">
+                <div class="col-sm-6 col-md-4">
                     <div class="thumbnail">
-                        <img class="pull-right" ng-src="images/{{awesomeThing.logo}}" alt="{{awesomeThing.title}}">
+                        <img src="images/protractor.png" class="pull-right" alt="Protractor">
                         <div class="caption">
-                            <h3>{{awesomeThing.title}}</h3>
-                            <p>{{awesomeThing.description}}</p>
-                            <p><a ng-href="{{awesomeThing.url}}">{{awesomeThing.url}}</a></p>
+                            <h3 >Protractor</h3>
+                            <p >End to end test framework for AngularJS applications built on top of WebDriverJS.</p>
+                            <p><a href="https://github.com/angular/protractor">https://github.com/angular/protractor</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/karma.png" class="pull-right" alt="Karma">
+                        <div class="caption">
+                            <h3 >Karma</h3>
+                            <p >Spectacular Test Runner for JavaScript.</p>
+                            <p><a href="http://karma-runner.github.io/"  >http://karma-runner.github.io/</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/jasmine.png" class="pull-right" alt="Jasmine">
+                        <div class="caption">
+                            <h3 >Jasmine</h3>
+                            <p >Behavior-Driven JavaScript.</p>
+                            <p><a href="http://jasmine.github.io/" >http://jasmine.github.io/</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/bootstrap.png" class="pull-right" alt="Bootstrap">
+                        <div class="caption">
+                            <h3 >Bootstrap</h3>
+                            <p >Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile first projects on the web.</p>
+                            <p><a href="http://getbootstrap.com/" >http://getbootstrap.com/</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/gulp.png" class="pull-right" alt="GulpJS">
+                        <div class="caption">
+                            <h3 >GulpJS</h3>
+                            <p >The streaming build system.</p>
+                            <p><a href="http://gulpjs.com/"  >http://gulpjs.com/</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/browsersync.png" class="pull-right"  alt="BrowserSync">
+                        <div class="caption">
+                            <h3 >BrowserSync</h3>
+                            <p >Time-saving synchronised browser testing.</p>
+                            <p><a href="http://browsersync.io/"  >http://browsersync.io/</a></p>
+                        </div>
+                    </div>
+                </div><div class="col-sm-6 col-md-4 " >
+                    <div class="thumbnail">
+                        <img src="images/angular.png" class="pull-right"  alt="AngularJS">
+                        <div class="caption">
+                            <h3 >AngularJS</h3>
+                            <p >HTML enhanced for web apps!</p>
+                            <p><a href="https://angularjs.org/"  >https://angularjs.org/</a></p>
                         </div>
                     </div>
                 </div>
@@ -138,14 +192,13 @@
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
-        <script src="bower_components/angular/angular.js"></script>
-        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/zolsUi.js"></script>
-        <script src="scripts/main/main-ctrl.js"></script>
+        <script src="scripts/zolsUi.js"></script>       
         <!-- inject:partials -->
         <!-- endinject -->
         <!-- endbuild -->
