@@ -1,5 +1,6 @@
 package org.sample.app;
 
+import com.mangofactory.swagger.plugin.EnableSwagger;
 import java.util.Date;
 import java.util.Map;
 import static org.springframework.boot.SpringApplication.run;
@@ -12,6 +13,7 @@ import org.zols.plugin.EnableCMS;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableCMS
+@EnableSwagger
 public class Application {
     
     @Controller
