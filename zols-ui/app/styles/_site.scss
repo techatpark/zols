@@ -1,0 +1,62 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5 Nov, 2014, 12:31:53 PM
+    Author     : sathish
+*/
+
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
+}
+
+.thumbnail {
+    height: 200px;
+
+    img.pull-right {
+        width: 50px;
+    }
+}
+
+.footer{
+    background: #151618;
+}
+
+
+.forkGit {
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    width: 200px;
+    overflow: hidden;
+    height: 200px;
+    z-index: 10; }
+.forkGit a {
+    background: #ff8b5d;
+    background: -moz-linear-gradient(-45deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
+    background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #ff8b5d), color-stop(50%, #fd2e0c), color-stop(100%, #ff8b5d));
+    background: -webkit-linear-gradient(-45deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
+    background: -o-linear-gradient(-45deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
+    background: -ms-linear-gradient(-45deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
+    background: linear-gradient(135deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff8b5d', endColorstr='#ff8b5d',GradientType=1 );
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px 40px;
+    font-size: 16px;
+    width: 260px;
+    position: absolute;
+    top: 44px;
+    right: -108px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg); }
+.forkGit a:hover {
+    background: #f73818; }
