@@ -17,7 +17,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-                
+        
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
@@ -50,50 +50,4 @@
         <start-class>org.sample.app.Application</start-class>        
     </properties>
 
-    <!--    <build>
-        <resources>
-            <resource>
-                <directory>../zols-ui/app</directory> 
-                <targetPath>templates</targetPath>   
-                <excludes>
-                    <exclude>/nbproject/**</exclude>
-                </excludes>    
-            </resource>
-        </resources>
-        <plugins>
-            <plugin> 
-                <artifactId>maven-compiler-plugin</artifactId> 
-                <configuration>
-                    <excludes>
-                        <exclude>org/sample/app/*.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>-->
-    
-    <build>
-        <resources>
-            <resource>
-                <directory>../zols-ui/app</directory> 
-                <targetPath>templates</targetPath>   
-                <excludes>
-                    <exclude>/nbproject/**</exclude>
-                </excludes>    
-            </resource>
-        </resources>
-        <plugins>
-            <plugin> 
-                <artifactId>maven-compiler-plugin</artifactId> 
-                <configuration>
-<!--                    <excludes>
-                        <exclude>org/sample/app/*.java</exclude>
-                    </excludes>-->
-                </configuration>
-            </plugin>
-            
-            
-        </plugins>
-    </build>
-    
 </project>
