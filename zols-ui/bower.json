@@ -3,10 +3,9 @@
   "version": "0.0.0",
   "dependencies": {
     "modernizr": "2.8.x",
-    "bootstrap-sass-official": "3.x.x",    
-    "jquery": "2.x.x"    
+    "bootstrap-sass-official": "3.x.x",
+    "jquery": "2.x.x",
+    "jsviews": "~1.0.0-alpha"
   },
-  "devDependencies": {
-
-  }
+  "devDependencies": {}
 }
