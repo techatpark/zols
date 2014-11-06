@@ -3,9 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "modernizr": "2.8.x",
-    "jquery": "1.x.x",
-    "bootstrap-sass-official": "~3.3.0",
-    "bootstrap": "~3.3.0"
+    "bootstrap-sass-official": "~3.3.0",    
+    "jquery": "2.x.x"    
   },
   "devDependencies": {
 
