@@ -108,7 +108,20 @@
             
             </div>-->
 
+            <section id="carousel"> 
+                <div class="page-header">
+                    <div class="container">
+                        <div class="row-fluid">
+                            <h1>Links</h1>
+                        </div>
+                    </div>
+                </div>
 
+                <div class="container">
+                    <div class="row"><div id="result"></div>				
+                    </div>
+                </div>
+            </section>
 
             <hr/>
 
@@ -117,9 +130,6 @@
             </div>
 
         </div>
-
-
-
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
@@ -140,29 +150,22 @@
         <!-- endbower -->
         <!-- endbuild -->
 
-
-        <div id="result"></div>
-
         <script id="viewLink" type="text/x-jsrender">
-          <label>Name:</label> {{:name}}<br/>
-          <label>Label:</label> {{:label}}<br/>
-          <label>Description:</label> {{:description}}<br/>
-          <a onclick="editCategory()" > edit </a>
+            <label>Name:</label> {{:name}}<br/>
+            <label>Label:</label> {{:label}}<br/>
+            <label>Description:</label> {{:description}}<br/>
+            <a onclick="$.fn.editCategory()" > edit </a>
         </script>
         <script id="editLink" type="text/x-jsrender">
-          <input data-link="name trigger=true" /> <br/>
+            <input data-link="name trigger=true" /> <br/>
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/zolsUi.js"></script>       
+        <script src="scripts/links.js"></script>       
         <!-- inject:partials -->
         <!-- endinject -->
         <!-- endbuild -->
 
-        <script>
-
-listFirstCategory();
-        </script>
         <!-- References        
         http://bootsnipp.com/snippets/featured/responsive-breadcrumbs
         http://bootsnipp.com/snippets/featured/triangle-breadcrumbs-arrows
