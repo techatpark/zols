@@ -2,7 +2,7 @@
 <html class="no-js" >
     <head>
         <meta charset="utf-8"/>
-        <title>Zols</title>
+        <title>Zols - Link Manager</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -108,17 +108,36 @@
             
             </div>-->
 
-            <section id="carousel"> 
+            <section > 
                 <div class="page-header">
-                    <div class="container">
-                        <div class="row-fluid">
-                            <h1>Links</h1>
+                    <div class="container-fluid">
+
+                        <div class="row show-grid">
+                            <div class="col-md-9"><h1>Links</h1></div>
+                            <div class="col-md-3 right"><label>Category</label>
+                                <div class="btn-group">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            Dropdown
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" id="categories">
+                                            <li class="divider"></li>
+                                            <li><a id="createCategory">Create New</a></li>
+                                        </ul>
+                                    </div>
+                                    <button type="button" class="btn btn-default" >E</button>
+                                    <button type="button" class="btn btn-default">D</button>
+                                </div></div>
                         </div>
+
+
                     </div>
                 </div>
 
                 <div class="container">
-                    <div class="row"><div id="result"></div>				
+                    <div class="row">
+                        <div id="result"></div>				
                     </div>
                 </div>
             </section>
@@ -151,13 +170,17 @@
         <!-- endbuild -->
 
         <script id="viewLink" type="text/x-jsrender">
-            <label>Name:</label> {{:name}}<br/>
-            <label>Label:</label> {{:label}}<br/>
-            <label>Description:</label> {{:description}}<br/>
-            <a onclick="$.fn.editCategory()" > edit </a>
+            {{for category}}
+            <li>
+                <a href="#">{{:name}}</a>                
+            </li>
+            {{/for}}
         </script>
-        <script id="editLink" type="text/x-jsrender">
-            <input data-link="name trigger=true" /> <br/>
+        <script id="editLink" type="text/x-jsrender">            
+            <input data-link="name"/><br/>            
+            <input data-link="label"/><br/>            
+            <input data-link="description"/><br/>            
+            <button type="button" class="btn btn-default" onclick="$.fn.saveCategory()">E</button>
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
