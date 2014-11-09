@@ -113,12 +113,13 @@
                     <div class="container-fluid">
 
                         <div class="row show-grid">
-                            <div class="col-md-9"><h1>Links</h1></div>
-                            <div class="col-md-3 right"><label>Category</label>
+                            <div class="col-md-9"><h4>Links</h4></div>
+                            <div class="col-md-3 right">
+                                <label>Category</label>
                                 <div class="btn-group" id="category-list">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                          <span > Dropdown</span>
+                                            <span > Dropdown</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu" id="categories">
@@ -126,7 +127,8 @@
                                     </div>
                                     <button type="button" id="edit_selected" class="btn btn-default" >E</button>
                                     <button type="button" id="delete_selected" class="btn btn-default">D</button>
-                                </div></div>
+                                </div>
+                            </div>
                         </div>
 
 
@@ -134,25 +136,30 @@
                 </div>
 
                 <div class="container">
+                    <ol id="linksBreadcrumb" class="breadcrumb">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Library</a></li>
+                        <li class="active">Data</li>
+                    </ol>
                     <div class="row">
                         <div id="result"></div>				
                     </div>
                 </div>
             </section>
-<div class="modal fade bs-example-modal-sm" 
-      id="delete-conf-model"
-      tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      Do you want to delete the content?
-    </div>
-    <div class="modal-footer">
-        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
-      </div>
-    
-  </div>
-</div>
+            <div class="modal fade bs-example-modal-sm" 
+                 id="delete-conf-model"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        Do you want to delete the content?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                    </div>
+
+                </div>
+            </div>
             <hr/>
 
             <div class="footer">
@@ -180,72 +187,126 @@
         <!-- endbower -->
         <!-- endbuild -->
 
-		<script id="listLink" type="text/x-jsrender">
+        <script id="listLink" type="text/x-jsrender">
+            <ul class="list-group">                    
             {{for link}}
-            <li>
-                <a class="catName" href="#">{{:name}}</a>                
+            <li class="list-group-item">
+            <a class="catName" href="#">{{:name}}</a>                
             </li>
             {{/for}}
+            </ul>
+            <a id="addMoreLinkBtn" href="#">Add More</a>
         </script>
 
-        <script id="viewLink" type="text/x-jsrender">
+        <script id="listCategory" type="text/x-jsrender">
             {{for category}}
             <li>
-                <a class="catName" href="#">{{:name}}</a>                
+            <a class="catName" href="#">{{:name}}</a>                
             </li>
             {{/for}}
             <li class="divider"></li>
             <li><a id="createCategory">Create New</a></li>
         </script>
-        <script id="editLink" type="text/x-jsrender">
 
-<div class="form-horizontal">
-<fieldset>
+        <script id="catetoryForm" type="text/x-jsrender">
+            <div class="form-horizontal">
+            <fieldset>
 
-<!-- Form Name -->
-<legend>Form Name</legend>
+            <!-- Form Name -->
+            <legend>Category</legend>
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="name">Name</label>  
-  <div class="col-md-4">
-  <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
-    
-  </div>
-</div>
+            <!-- Text input-->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="name">Name</label>  
+            <div class="col-md-4">
+            <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
 
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="label">Label</label>  
-  <div class="col-md-4">
-  <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
-    
-  </div>
-</div>
+            </div>
+            </div>
 
-<!-- Textarea -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="description">Description</label>
-  <div class="col-md-4">                     
-    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-  </div>
-</div>
+            <!-- Text input-->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="label">Label</label>  
+            <div class="col-md-4">
+            <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
 
-<!-- Button (Double) -->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="saveBtn"></label>
-  <div class="col-md-8">
-    <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
-    <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
-  </div>
-</div>
+            </div>
+            </div>
 
-</fieldset>
-</div>
+            <!-- Textarea -->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="description">Description</label>
+            <div class="col-md-4">                     
+            <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+            </div>
+            </div>
+
+            <!-- Button (Double) -->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="saveBtn"></label>
+            <div class="col-md-8">
+            <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
+            <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
+            </div>
+            </div>
+
+            </fieldset>
+            </div>
 
 
-           
+
         </script>
+
+
+        <script id="linkForm" type="text/x-jsrender">
+            <div class="form-horizontal">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Link</legend>
+
+            <!-- Text input-->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="name">Name</label>  
+            <div class="col-md-4">
+            <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
+
+            </div>
+            </div>
+
+            <!-- Text input-->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="label">Label</label>  
+            <div class="col-md-4">
+            <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
+
+            </div>
+            </div>
+
+            <!-- Textarea -->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="description">Description</label>
+            <div class="col-md-4">                     
+            <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+            </div>
+            </div>
+
+            <!-- Button (Double) -->
+            <div class="form-group">
+            <label class="col-md-4 control-label" for="saveBtn"></label>
+            <div class="col-md-8">
+            <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveLink()">Save</button>
+            <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
+            </div>
+            </div>
+
+            </fieldset>
+            </div>
+
+
+
+        </script>
+
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
         <script src="scripts/links.js"></script>       
