@@ -189,11 +189,54 @@
             <li class="divider"></li>
             <li><a id="createCategory">Create New</a></li>
         </script>
-        <script id="editLink" type="text/x-jsrender">            
-            <input data-link="name"/><br/>            
-            <input data-link="label"/><br/>            
-            <input data-link="description"/><br/>            
-            <button type="button" class="btn btn-default" onclick="$.fn.saveCategory()">E</button>
+        <script id="editLink" type="text/x-jsrender">
+
+<div class="form-horizontal">
+<fieldset>
+
+<!-- Form Name -->
+<legend>Form Name</legend>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="name">Name</label>  
+  <div class="col-md-4">
+  <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="label">Label</label>  
+  <div class="col-md-4">
+  <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="description">Description</label>
+  <div class="col-md-4">                     
+    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+  </div>
+</div>
+
+<!-- Button (Double) -->
+<div class="form-group">
+  <label class="col-md-4 control-label" for="saveBtn"></label>
+  <div class="col-md-8">
+    <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
+    <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
+  </div>
+</div>
+
+</fieldset>
+</div>
+
+
+           
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
