@@ -180,6 +180,14 @@
         <!-- endbower -->
         <!-- endbuild -->
 
+		<script id="listLink" type="text/x-jsrender">
+            {{for link}}
+            <li>
+                <a class="catName" href="#">{{:name}}</a>                
+            </li>
+            {{/for}}
+        </script>
+
         <script id="viewLink" type="text/x-jsrender">
             {{for category}}
             <li>

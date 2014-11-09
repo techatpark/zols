@@ -10,6 +10,8 @@
     var template;
 
     var selectedCategory;
+    var currentLinks;
+    var listOfLinks;
     var confirmationPromise;
 
     $('#edit_selected').on('click',function(){
@@ -31,7 +33,7 @@
       });
     });
 
-    $.fn.listFirstCategory = function() {
+    $.fn.listCategories = function() {
         $.get(base_url + '/link_categories').done(function(data) {
             var template = $.templates("#viewLink");
             template.link('#categories',{ category : data});
@@ -39,17 +41,34 @@
               $.fn.createCategory();
             });
             if(data.length >0){
-              $($('#category-list').find('button')[0].children[0]).text(data[0].name);
-              selectedCategory = data[0];
-              $.fn.editSelectedCategory();
+              $.fn.setSelectedCategory(data[0]);
             }
             $('#categories .catName').on('click',function(){
-              $($(this).closest('.btn-group').find('button')[0].children[0]).text($.view(this).data.name);
-              selectedCategory = $.view(this).data;
+              $.fn.setSelectedCategory($.view(this).data);
             })
         });
     };
-
+    
+    $.fn.setSelectedCategory = function(selectedCategoryData) {
+        $($('#category-list').find('button')[0].children[0]).text(selectedCategoryData.name);
+    	selectedCategory = selectedCategoryData;
+    	$.fn.listCategoryLinks();
+    };
+    $.fn.listCategoryLinks = function(){
+    	  $.get(base_url + '/link_categories/'+selectedCategory.name+'/first_level_links').done(function(data) {
+              var template = $.templates("#listLink");
+              currentLinks = {link :data}
+              
+              template.link('#result',currentLinks);
+              $('#result li a').on('click', function(){
+            	  console.log( $.view(this).data);
+            	  $.get(base_url + '/links/childen_of/'+$.view(this).data.name).done(function(data) {
+            		  currentLinks = {link :data};
+            		  template.link('#result',currentLinks);
+            	  });
+              });
+          });
+    };
     $.fn.saveCategory = function() {
       console.log(selectedCategory);
       $.ajax({
@@ -67,7 +86,7 @@
         url: base_url + '/link_categories/'+ selectedCategory.name,
         dataType : 'json'
       }).done(function(data) {
-        $.fn.listFirstCategory();
+        $.fn.listCategories();
       });
     };
     $.fn.editSelectedCategory = function() {
@@ -82,7 +101,7 @@
     };
 
 
-    $.fn.listFirstCategory();
+    $.fn.listCategories();
 
 
 }(jQuery));
