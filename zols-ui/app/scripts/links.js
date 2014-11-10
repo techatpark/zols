@@ -127,7 +127,8 @@
         $('#linksBreadcrumb a').on('click', function() {
             var selectedLinkIndex = $(this).parent().index();
             if (selectedLinkIndex === 0) {
-
+                parentLinks = [];
+                $.fn.refreshList();
             } else {
                 var parentLinkData = parentLinks[selectedLinkIndex - 1];
                 parentLinks = parentLinks.slice(0, selectedLinkIndex);
