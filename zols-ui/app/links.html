@@ -137,9 +137,6 @@
 
                 <div class="container">
                     <ol id="linksBreadcrumb" class="breadcrumb">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Library</a></li>
-                        <li class="active">Data</li>
                     </ol>
                     <div class="row">
                         <div id="result"></div>				
@@ -186,6 +183,14 @@
         <script src="bower_components/jsviews/jsviews.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
+
+        <script id="breadcrumb" type="text/x-jsrender">
+            <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+            {{for parentLink}}
+            <li><a href="#">{{:name}}</a></li>
+            {{/for}}
+        </script>
+
 
         <script id="listLink" type="text/x-jsrender">
             <ul class="list-group">                    
