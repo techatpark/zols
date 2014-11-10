@@ -111,10 +111,13 @@
             <section > 
                 <div class="page-header">
                     <div class="container-fluid">
-
                         <div class="row show-grid">
-                            <div class="col-md-9"><h4>Links</h4></div>
-                            <div class="col-md-3 right">
+                            <div class="col-md-9">
+                                <h4>Links
+                                    <span class="badge"><i class="glyphicon glyphicon-question-sign"></i></span>
+                                </h4>
+                            </div>
+                            <div class="col-md-3 right" id="categoryHeader">
                                 <label>Category</label>
                                 <div class="btn-group" id="category-list">
                                     <div class="btn-group">
@@ -125,8 +128,8 @@
                                         <ul class="dropdown-menu" role="menu" id="categories">
                                         </ul>
                                     </div>
-                                    <button type="button" id="edit_selected" class="btn btn-default" >E</button>
-                                    <button type="button" id="delete_selected" class="btn btn-default">D</button>
+                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
+                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -136,8 +139,10 @@
                 </div>
 
                 <div class="container">
-                    <ol id="linksBreadcrumb" class="breadcrumb">
-                    </ol>
+                    <div class="row" id="linksBreadcrumb">
+
+                    </div>
+
                     <div class="row">
                         <div id="result"></div>				
                     </div>
@@ -184,29 +189,44 @@
         <!-- endbower -->
         <!-- endbuild -->
 
+        <script id="noCategory" type="text/x-jsrender">
+            There are no Category to display click <a>here</a>
+        </script>
+        
+        <script id="noLink" type="text/x-jsrender">
+            There are no Link to display click <a>here</a>
+        </script>
+
         <script id="breadcrumb" type="text/x-jsrender">
+            <ol  class="breadcrumb">                    
             <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
             {{for parentLink}}
             <li><a href="#">{{:name}}</a></li>
             {{/for}}
+            </ol>
         </script>
 
-
         <script id="listLink" type="text/x-jsrender">
+            {{if link.length !==0}}
+
             <ul class="list-group">                    
             {{for link}}
             <li class="list-group-item">
-            <a class="catName" href="#">{{:name}}</a>                
+            <a href="#">{{:name}}</a>
+            <span class="badge"><i class="glyphicon glyphicon-remove"></i></span>
+            <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
             </li>
             {{/for}}
             </ul>
+            {{/if}}
+
             <a id="addMoreLinkBtn" href="#">Add More</a>
         </script>
 
         <script id="listCategory" type="text/x-jsrender">
             {{for category}}
             <li>
-            <a class="catName" href="#">{{:name}}</a>                
+            <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
             </li>
             {{/for}}
             <li class="divider"></li>
@@ -250,8 +270,8 @@
             <div class="form-group">
             <label class="col-md-4 control-label" for="saveBtn"></label>
             <div class="col-md-8">
-            <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
-            <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
+            <button name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
+            <button name="discardBtn" class="btn btn-danger" onclick="$.fn.refreshList()">Discard Changes</button>
             </div>
             </div>
 
@@ -300,8 +320,8 @@
             <div class="form-group">
             <label class="col-md-4 control-label" for="saveBtn"></label>
             <div class="col-md-8">
-            <button id="saveBtn" name="saveBtn" class="btn btn-success" onclick="$.fn.saveLink()">Save</button>
-            <button id="discardBtn" name="discardBtn" class="btn btn-danger">Discard Changes</button>
+            <button name="saveBtn" class="btn btn-success" onclick="$.fn.saveLink()">Save</button>
+            <button name="discardBtn" class="btn btn-danger" onclick="$.fn.refreshList()">Discard Changes</button>
             </div>
             </div>
 
