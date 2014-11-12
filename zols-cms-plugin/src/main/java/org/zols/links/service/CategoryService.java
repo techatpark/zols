@@ -85,12 +85,7 @@ public class CategoryService {
      */
     public Boolean delete(String categoryName) {
         LOGGER.info("Deleting Category {}", categoryName);
-        List<Link> linksUnderCategory = getFirstLevelLinks(categoryName);
-        if (linksUnderCategory != null) {
-            for (Link link : linksUnderCategory) {
-                delete(link.getName());
-            }
-        }
+        linkService.deleteLinksUnder(categoryName);        
         return dataStore.delete(Category.class, categoryName);
     }
 

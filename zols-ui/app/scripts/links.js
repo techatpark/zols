@@ -43,6 +43,8 @@
                 $('#result a').click(function() {
                     $.fn.createCategory();
                 });
+                $('#linksBreadcrumb').empty();
+                parentLinks = [];
             } else {
                 $('#categoryHeader').show();
                 var template = $.templates("#listCategory");

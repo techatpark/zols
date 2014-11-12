@@ -75,6 +75,19 @@ public class LinkService {
         LOGGER.info("Deleting Link {}", linkName);
         return dataStore.delete(Link.class, linkName);
     }
+    
+    /**
+     * Get the list of link with given Parent name
+     *
+     * @param categoryName String to be search
+     * @return list of links
+     */
+    public Boolean deleteLinksUnder(String categoryName) {
+        LOGGER.info("Deleting links under category {}", categoryName);
+        Query query = new Query();
+        query.addFilter(new Filter<>("categoryName", EQUALS, categoryName));
+        return dataStore.delete(Link.class, query);
+    }
 
     
 
