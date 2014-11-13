@@ -16,7 +16,7 @@
     var confirmationPromise;
 
     $('#edit_selected').on('click', function() {
-        $.fn.editSelectedCategory();
+        $.fn.renderCategory();
     });
     $("#del_conf_ok").on('click', function() {
         $("#delete-conf-model").modal('hide');
@@ -106,7 +106,7 @@
 
             $('#result .glyphicon-edit').on('click', function() {
                 selectedLink = currentLinks.link[$(this).parent().parent().index()];
-                $.fn.editSelectedLink();
+                $.fn.renderLink();
             });
         }
 
@@ -173,24 +173,22 @@
             $.fn.listCategories();
         });
     };
-    $.fn.editSelectedCategory = function() {
-        if (selectedCategory) {
-            template = $.templates("#catetoryForm");
+    $.fn.renderCategory = function() {
+        if (selectedCategory && selectedCategory.name) {
             selectedCategory.isEdit = true;
-            template.link('#result', selectedCategory);
         }
+        template = $.templates("#catetoryForm");
+        template.link('#result', selectedCategory);
+        $("#result form").submit(function(event) {
+            alert("Handler for .submit() called.");
+            event.preventDefault();
+        });
     };
+
 
     $.fn.createCategory = function() {
         selectedCategory = {};
-        template = $.templates("#catetoryForm");
-        template.link('#result', selectedCategory);
-    };
-
-    $.fn.createLink = function() {
-        selectedLink = {};
-        template = $.templates("#linkForm");
-        template.link('#result', selectedLink);
+        $.fn.renderCategory();
     };
 
     $.fn.refreshList = function() {
@@ -241,12 +239,17 @@
             $.fn.refreshList();
         });
     };
-    $.fn.editSelectedLink = function() {
-        if (selectedLink) {
+    $.fn.renderLink = function() {
+        if (selectedLink && selectedLink.name) {
             template = $.templates("#linkForm");
             selectedLink.isEdit = true;
             template.link('#result', selectedLink);
         }
+    };
+    
+    $.fn.createLink = function() {
+        selectedLink = {};
+        $.fn.renderLink();
     };
 
 

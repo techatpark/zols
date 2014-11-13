@@ -234,7 +234,7 @@
         </script>
 
         <script id="catetoryForm" type="text/x-jsrender">
-            <div class="form-horizontal">
+            <form class="form-horizontal">
             <fieldset>
 
             <!-- Form Name -->
@@ -273,13 +273,13 @@
             <div class="form-group">
             <label class="col-md-4 control-label" for="saveBtn"></label>
             <div class="col-md-8">
-            <button name="saveBtn" class="btn btn-success" onclick="$.fn.saveCategory()">Save</button>
-            <button name="discardBtn" class="btn btn-danger" onclick="$.fn.refreshList()">Discard Changes</button>
+            <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+            <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
             </div>
             </div>
 
             </fieldset>
-            </div>
+            </form>
 
 
 
