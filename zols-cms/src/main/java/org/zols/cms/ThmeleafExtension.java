@@ -8,7 +8,6 @@ package org.zols.cms;
 import java.io.File;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -24,9 +23,8 @@ public class ThmeleafExtension {
 
     @Autowired
     private SpringTemplateEngine templateEngine;
-
-    @Value("${app.local.template.folder}")
-    private String localTemplateFolder;
+    
+    private String localTemplateFolder ="../zols-ui/app";
 
     @PostConstruct
     public void intializeTemplates() {

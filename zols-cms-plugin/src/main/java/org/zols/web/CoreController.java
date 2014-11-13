@@ -16,6 +16,11 @@ public class CoreController {
         return "index";
     }
     
+    @RequestMapping("/login")
+    public String login() {        
+        return "login";
+    }
+    
     @RequestMapping("/controlpanel")
     public String controlpanel() {        
         return "controlpanel";
