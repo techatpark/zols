@@ -18,13 +18,15 @@ import org.zols.web.interceptor.PagePopulationInterceptor;
 @Configuration
 @ComponentScan("org.zols")
 public class ZolsConfiguration extends WebMvcConfigurerAdapter{
-    
-    @Autowired
-    private PagePopulationInterceptor pagePopulationInterceptor; 
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(pagePopulationInterceptor);
+        registry.addInterceptor(pagePopulationInterceptor());
+    }
+    
+    @Bean
+    public PagePopulationInterceptor pagePopulationInterceptor() {
+        return new PagePopulationInterceptor();
     }
     
     @Bean
