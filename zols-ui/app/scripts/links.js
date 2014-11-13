@@ -9,9 +9,10 @@
 
     var template;
     var selectedCategory;
+    var listOfCategories;
     var parentLinks = [];
     var selectedLink;
-    var currentLinks;
+    var listOfLinks;
 
     var confirmationPromise;
 
@@ -47,6 +48,7 @@
                 parentLinks = [];
             } else {
                 $('#categoryHeader').show();
+                listOfCategories = data;
                 var template = $.templates("#listCategory");
                 template.link('#categories', {category: data});
                 $('#createCategory').click(function() {
@@ -84,9 +86,9 @@
                 $.fn.createLink();
             });
         } else {
-            currentLinks = {link: listofLinks};
+            listOfLinks = {link: listofLinks};
             var template = $.templates("#listLink");
-            template.link('#result', currentLinks);
+            template.link('#result', listOfLinks);
             $('#addMoreLinkBtn').on('click', function() {
                 $.fn.createLink();
             });
@@ -96,7 +98,7 @@
             });
 
             $('#result .glyphicon-remove').on('click', function() {
-                selectedLink = currentLinks.link[$(this).parent().parent().index()];
+                selectedLink = listOfLinks.link[$(this).parent().parent().index()];
                 $("#delete-conf-model").modal('show');
                 confirmationPromise = $.Deferred();
                 confirmationPromise.done(function() {
@@ -105,7 +107,7 @@
             });
 
             $('#result .glyphicon-edit').on('click', function() {
-                selectedLink = currentLinks.link[$(this).parent().parent().index()];
+                selectedLink = listOfLinks.link[$(this).parent().parent().index()];
                 $.fn.renderLink();
             });
         }
@@ -180,8 +182,8 @@
         template = $.templates("#catetoryForm");
         template.link('#result', selectedCategory);
         $("#result form").submit(function(event) {
-            alert("Handler for .submit() called.");
             event.preventDefault();
+            $.fn.saveCategory();
         });
     };
 
@@ -194,6 +196,9 @@
     $.fn.refreshList = function() {
         if (parentLinks.length !== 0) {
             $.fn.listChildren(parentLinks[parentLinks.length - 1]);
+        }
+        else if (!listOfCategories) {
+            $.fn.listCategories();
         }
         else {
             $.fn.setSelectedCategory(selectedCategory);
@@ -241,12 +246,16 @@
     };
     $.fn.renderLink = function() {
         if (selectedLink && selectedLink.name) {
-            template = $.templates("#linkForm");
             selectedLink.isEdit = true;
-            template.link('#result', selectedLink);
         }
+        template = $.templates("#linkForm");        
+        template.link('#result', selectedLink);
+        $("#result form").submit(function(event) {
+            event.preventDefault();
+            $.fn.saveLink();
+        });
     };
-    
+
     $.fn.createLink = function() {
         selectedLink = {};
         $.fn.renderLink();
