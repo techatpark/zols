@@ -5,7 +5,9 @@
  */
 package org.zols.links.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
@@ -14,12 +16,16 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.links.domain.Category;
 import org.zols.links.domain.Link;
 
 @Service
 public class LinkService {
 
     private static final Logger LOGGER = getLogger(LinkService.class);
+    
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private DataStore dataStore;
@@ -75,7 +81,7 @@ public class LinkService {
         LOGGER.info("Deleting Link {}", linkName);
         return dataStore.delete(Link.class, linkName);
     }
-    
+
     /**
      * Get the list of link with given Parent name
      *
@@ -88,8 +94,6 @@ public class LinkService {
         query.addFilter(new Filter<>("categoryName", EQUALS, categoryName));
         return dataStore.delete(Link.class, query);
     }
-
-    
 
     /**
      * Get the list of link with given Parent name
@@ -109,6 +113,22 @@ public class LinkService {
         return dataStore.list(Link.class);
     }
 
-  
+    public Map<String, List<Link>> getApplicationLinks() {
+        List<Category> categories = categoryService.list();
+        if (categories != null) {
+            Map<String, List<Link>> applicationLinks = new HashMap<>(categories.size());
+            List<Link> firstlevelLinks;
+            for (Category category : categories) {
+                firstlevelLinks = categoryService.getFirstLevelLinks(category.getName());
+                for (Link link : firstlevelLinks) {
+                    link.setChildren(listChildren(link.getName()));
+                }
+                applicationLinks.put(category.getName(), firstlevelLinks);
+            }
+            return applicationLinks;
+        }
+
+        return null;
+    }
 
 }
