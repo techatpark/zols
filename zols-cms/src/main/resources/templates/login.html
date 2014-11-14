@@ -1,20 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-        <meta charset="utf-8"/>
-        <title>Login</title>
-        <meta name="description" content=""/>
-        <meta name="viewport" content="width=device-width"/>
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-        <!-- build:css({.tmp,app}) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css"/>
-        <!-- endbuild -->
-
-        <!-- build:js scripts/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <!-- endbuild -->
-    </head>
+<title>Login</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"
+	href="../../css/bootstrap.min.css" />
+</head>
 <body onload="document.f.username.focus();">
 	<div class="container">
 		<div class="navbar">
@@ -26,7 +16,7 @@
 				</ul>
 			</div>
 		</div>
-		<div class="content" th:fragment="content" >
+		<div class="content">
 			<p th:if="${param.logout}" class="alert">You have been logged out</p>
 			<p th:if="${param.error}" class="alert alert-error">There was an error, please try again</p>
 			<h2>Login with Username and Password</h2>

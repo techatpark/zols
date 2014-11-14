@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.cms;
+package sample.ui.method;
 
 import java.io.File;
 import javax.annotation.PostConstruct;

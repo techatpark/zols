@@ -5,6 +5,7 @@
  */
 package org.zols.web;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,12 +17,9 @@ public class CoreController {
         return "index";
     }
     
-    @RequestMapping("/login")
-    public String login() {        
-        return "login";
-    }
     
     @RequestMapping("/controlpanel")
+    @Secured("ROLE_ADMIN")
     public String controlpanel() {        
         return "controlpanel";
     }

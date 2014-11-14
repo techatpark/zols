@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.zols.cms;
+package sample.ui.method;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
