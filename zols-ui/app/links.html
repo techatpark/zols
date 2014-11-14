@@ -108,8 +108,8 @@
             
             </div>-->
 
-            <div class="container-fluid">
-                <div class="row" th:fragment="content" >
+            <div class="container-fluid" th:fragment="content">
+                <div class="row"  >
                     <div class="page-header">
                         <div class="container-fluid">
                             <div class="row show-grid">
@@ -124,7 +124,7 @@
                                 <div class="col-md-3 right" id="categoryHeader">
                                     <label>Category</label>                                    
                                     <label data-bind-col="categoryname" id="categorynameLbl">Category Name</label>
-                                    
+
                                     <div class="btn-group" id="category-list">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
@@ -144,32 +144,192 @@
                         </div>
                     </div>
 
-                    
-                        <div class="row-fluid" id="linksBreadcrumb">
 
-                        </div>
+                    <div class="row-fluid" id="linksBreadcrumb">
 
-                        <div class="row-fluid" id="result">
-                            			
-                        </div>
-                    
-                </div>
-            </div>
-            <div class="modal fade bs-example-modal-sm" 
-                 id="delete-conf-model"
-                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-sm">
-                    <div class="modal-content">
-                        Do you want to delete the content?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
                     </div>
 
+                    <div class="row-fluid" id="result">
+
+                    </div>
 
                 </div>
+
+                <div class="modal fade bs-example-modal-sm" 
+                     id="delete-conf-model"
+                     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                            Do you want to delete the content?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <script id="noCategory" type="text/x-jsrender">
+                    There are no Category to display click <a>here</a>
+                </script>
+
+                <script id="noLink" type="text/x-jsrender">
+                    There are no Link to display click <a>here</a>
+                </script>
+
+                <script id="breadcrumb" type="text/x-jsrender">
+                    <ol  class="breadcrumb">                    
+                    <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+                    {{for parentLink}}
+                    <li><a href="#">{{:name}}</a></li>
+                    {{/for}}
+                    </ol>
+                </script>
+
+                <script id="listLink" type="text/x-jsrender">
+                    {{if link.length !==0}}
+
+                    <ul class="list-group">                    
+                    {{for link}}
+                    <li class="list-group-item">
+                    <a href="#">{{:name}}</a>
+                    <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                    <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                    </li>
+                    {{/for}}
+                    </ul>
+                    {{/if}}
+
+                    <a id="addMoreLinkBtn" href="#">Add More</a>
+                </script>
+
+                <script id="listCategory" type="text/x-jsrender">
+                    {{for category}}
+                    <li>
+                    <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
+                    </li>
+                    {{/for}}
+                    <li class="divider"></li>
+                    <li><a id="createCategory">Create New</a></li>
+                </script>
+
+                <script id="catetoryForm" type="text/x-jsrender">
+                    <form class="form-horizontal">
+                    <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Category</legend>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="name">Name</label>  
+                    <div class="col-md-4">
+                    {{if isEdit}}
+                    <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                    {{else}}
+                    <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                    {{/if}}
+                    </div>
+                    </div>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Label</label>  
+                    <div class="col-md-4">
+                    <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+
+                    </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="description">Description</label>
+                    <div class="col-md-4">                     
+                    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                    </div>
+                    </div>
+
+                    <!-- Button (Double) -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                    <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                    <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                    </div>
+                    </div>
+
+                    </fieldset>
+                    </form>
+
+
+
+                </script>
+
+
+                <script id="linkForm" type="text/x-jsrender">
+                    <form class="form-horizontal">
+                    <fieldset>
+
+                    <!-- Form Name -->
+                    <legend>Link</legend>
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="name">Name</label>  
+                    <div class="col-md-4">
+                    {{if isEdit}}
+                    <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                    {{else}}
+                    <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                    {{/if}}
+                    </div>
+                    </div>
+
+
+                    <!-- Text input-->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Label</label>  
+                    <div class="col-md-4">
+                    <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+
+                    </div>
+                    </div>
+
+                    <!-- Textarea -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="description">Description</label>
+                    <div class="col-md-4">                     
+                    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                    </div>
+                    </div>
+
+                    <!-- Button (Double) -->
+                    <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                    <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                    <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                    </div>
+                    </div>
+
+                    </fieldset>
+                    </form>
+
+
+
+                </script>
+
+
+                <!-- build:js({app,.tmp}) scripts/main.js -->
+                <script src="scripts/links.js"></script>       
+                <!-- inject:partials -->
+                <!-- endinject -->
+                <!-- endbuild -->
+
             </div>
+
             <hr/>
 
             <div class="footer">
@@ -197,162 +357,10 @@
         <!-- endbower -->
         <!-- endbuild -->
 
-        <script id="noCategory" type="text/x-jsrender">
-            There are no Category to display click <a>here</a>
-        </script>
-
-        <script id="noLink" type="text/x-jsrender">
-            There are no Link to display click <a>here</a>
-        </script>
-
-        <script id="breadcrumb" type="text/x-jsrender">
-            <ol  class="breadcrumb">                    
-            <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-            {{for parentLink}}
-            <li><a href="#">{{:name}}</a></li>
-            {{/for}}
-            </ol>
-        </script>
-
-        <script id="listLink" type="text/x-jsrender">
-            {{if link.length !==0}}
-
-            <ul class="list-group">                    
-            {{for link}}
-            <li class="list-group-item">
-            <a href="#">{{:name}}</a>
-            <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-            <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
-            </li>
-            {{/for}}
-            </ul>
-            {{/if}}
-
-            <a id="addMoreLinkBtn" href="#">Add More</a>
-        </script>
-
-        <script id="listCategory" type="text/x-jsrender">
-            {{for category}}
-            <li>
-            <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
-            </li>
-            {{/for}}
-            <li class="divider"></li>
-            <li><a id="createCategory">Create New</a></li>
-        </script>
-
-        <script id="catetoryForm" type="text/x-jsrender">
-            <form class="form-horizontal">
-            <fieldset>
-
-            <!-- Form Name -->
-            <legend>Category</legend>
-
-            <!-- Text input-->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="name">Name</label>  
-            <div class="col-md-4">
-            {{if isEdit}}
-            <label class="col-md-4 control-label" for="name">{{:name}}</label>  
-            {{else}}
-            <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
-            {{/if}}
-            </div>
-            </div>
-
-            <!-- Text input-->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="label">Label</label>  
-            <div class="col-md-4">
-            <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
-
-            </div>
-            </div>
-
-            <!-- Textarea -->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="description">Description</label>
-            <div class="col-md-4">                     
-            <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-            </div>
-            </div>
-
-            <!-- Button (Double) -->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="saveBtn"></label>
-            <div class="col-md-8">
-            <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
-            <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-            </div>
-            </div>
-
-            </fieldset>
-            </form>
 
 
 
-        </script>
 
-
-        <script id="linkForm" type="text/x-jsrender">
-            <form class="form-horizontal">
-            <fieldset>
-
-            <!-- Form Name -->
-            <legend>Link</legend>
-
-            <!-- Text input-->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="name">Name</label>  
-            <div class="col-md-4">
-            {{if isEdit}}
-            <label class="col-md-4 control-label" for="name">{{:name}}</label>  
-            {{else}}
-            <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required="">
-            {{/if}}
-            </div>
-            </div>
-
-
-            <!-- Text input-->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="label">Label</label>  
-            <div class="col-md-4">
-            <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required="">
-
-            </div>
-            </div>
-
-            <!-- Textarea -->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="description">Description</label>
-            <div class="col-md-4">                     
-            <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-            </div>
-            </div>
-
-            <!-- Button (Double) -->
-            <div class="form-group">
-            <label class="col-md-4 control-label" for="saveBtn"></label>
-            <div class="col-md-8">
-            <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
-            <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-            </div>
-            </div>
-
-            </fieldset>
-            </form>
-
-
-
-        </script>
-
-
-        <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/links.js"></script>       
-        <!-- inject:partials -->
-        <!-- endinject -->
-        <!-- endbuild -->
 
         <!-- References        
         http://bootsnipp.com/snippets/featured/responsive-breadcrumbs

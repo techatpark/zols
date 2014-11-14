@@ -24,4 +24,9 @@ public class CoreController {
         return "controlpanel";
     }
     
+    @RequestMapping("/links")
+    public String links() {        
+        return "links";
+    }
+    
 }

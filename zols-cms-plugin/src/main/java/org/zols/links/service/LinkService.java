@@ -23,7 +23,7 @@ import org.zols.links.domain.Link;
 public class LinkService {
 
     private static final Logger LOGGER = getLogger(LinkService.class);
-    
+
     @Autowired
     private CategoryService categoryService;
 
@@ -120,10 +120,13 @@ public class LinkService {
             List<Link> firstlevelLinks;
             for (Category category : categories) {
                 firstlevelLinks = categoryService.getFirstLevelLinks(category.getName());
-                for (Link link : firstlevelLinks) {
-                    link.setChildren(listChildren(link.getName()));
+                if (firstlevelLinks != null) {
+                    for (Link link : firstlevelLinks) {
+                        link.setChildren(listChildren(link.getName()));
+                    }
+                    applicationLinks.put(category.getName(), firstlevelLinks);
                 }
-                applicationLinks.put(category.getName(), firstlevelLinks);
+
             }
             return applicationLinks;
         }
