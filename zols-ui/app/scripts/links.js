@@ -6,6 +6,8 @@
     $.ajaxSetup({
         contentType: 'application/json'
     });
+    
+    $('[data-toggle="tooltip"]').tooltip();
 
     var template;
     var selectedCategory;

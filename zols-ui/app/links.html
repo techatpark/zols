@@ -108,49 +108,51 @@
             
             </div>-->
 
-            <section > 
-                <div class="page-header">
-                    <div class="container-fluid">
-                        <div class="row show-grid">
-                            <div class="col-md-9">
-                                <h4>
-                                    Links
-                                    <span class="badge">                  
-                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
-                                    </span>
-                                </h4>
-                            </div>
-                            <div class="col-md-3 right" id="categoryHeader">
-                                <label>Category</label>
-                                <div class="btn-group" id="category-list">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span > Dropdown</span>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu" id="categories">
-                                        </ul>
+            <div class="container-fluid">
+                <div class="row" th:fragment="content" >
+                    <div class="page-header">
+                        <div class="container-fluid">
+                            <div class="row show-grid">
+                                <div class="col-md-9">
+                                    <h4>
+                                        Links
+                                        <span class="badge">                  
+                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                        </span>
+                                    </h4>
+                                </div>
+                                <div class="col-md-3 right" id="categoryHeader">
+                                    <label>Category</label>
+                                    <div class="btn-group" id="category-list">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                                <span > Dropdown</span>
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" role="menu" id="categories">
+                                            </ul>
+                                        </div>
+                                        <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
+                                        <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
                                     </div>
-                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
-                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
                                 </div>
                             </div>
+
+
+                        </div>
+                    </div>
+
+                    
+                        <div class="col-md-9" id="linksBreadcrumb">
+
                         </div>
 
-
-                    </div>
+                        <div class="center-block" id="result">
+                            			
+                        </div>
+                    
                 </div>
-
-                <div class="container">
-                    <div class="row" id="linksBreadcrumb">
-
-                    </div>
-
-                    <div class="row">
-                        <div id="result"></div>				
-                    </div>
-                </div>
-            </section>
+            </div>
             <div class="modal fade bs-example-modal-sm" 
                  id="delete-conf-model"
                  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -162,6 +164,7 @@
                         <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
                     </div>
+
 
                 </div>
             </div>
