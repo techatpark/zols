@@ -97,7 +97,7 @@
                 $.fn.addParentLink($.view(this).data);
             });
 
-            $('#result .glyphicon-remove').on('click', function() {
+            $('#result .glyphicon-trash').on('click', function() {
                 selectedLink = listOfLinks.link[$(this).parent().parent().index()];
                 $("#delete-conf-model").modal('show');
                 confirmationPromise = $.Deferred();

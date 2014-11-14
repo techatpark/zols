@@ -113,8 +113,11 @@
                     <div class="container-fluid">
                         <div class="row show-grid">
                             <div class="col-md-9">
-                                <h4>Links
-                                    <span class="badge"><i class="glyphicon glyphicon-question-sign"></i></span>
+                                <h4>
+                                    Links
+                                    <span class="badge">                  
+                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                    </span>
                                 </h4>
                             </div>
                             <div class="col-md-3 right" id="categoryHeader">
@@ -129,7 +132,7 @@
                                         </ul>
                                     </div>
                                     <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
-                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-remove"></i></button>
+                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -192,7 +195,7 @@
         <script id="noCategory" type="text/x-jsrender">
             There are no Category to display click <a>here</a>
         </script>
-        
+
         <script id="noLink" type="text/x-jsrender">
             There are no Link to display click <a>here</a>
         </script>
@@ -213,7 +216,7 @@
             {{for link}}
             <li class="list-group-item">
             <a href="#">{{:name}}</a>
-            <span class="badge"><i class="glyphicon glyphicon-remove"></i></span>
+            <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
             <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
             </li>
             {{/for}}
@@ -304,7 +307,7 @@
             {{/if}}
             </div>
             </div>
-        
+
 
             <!-- Text input-->
             <div class="form-group">
