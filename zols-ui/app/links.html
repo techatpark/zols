@@ -122,11 +122,13 @@
                                     </h4>
                                 </div>
                                 <div class="col-md-3 right" id="categoryHeader">
-                                    <label>Category</label>
+                                    <label>Category</label>                                    
+                                    <label data-bind-col="categoryname" id="categorynameLbl">Category Name</label>
+                                    
                                     <div class="btn-group" id="category-list">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                <span > Dropdown</span>
+                                                <span data-bind-col="categoryname">Dropdown</span>
                                                 <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" role="menu" id="categories">
@@ -143,11 +145,11 @@
                     </div>
 
                     
-                        <div class="col-md-9" id="linksBreadcrumb">
+                        <div class="row-fluid" id="linksBreadcrumb">
 
                         </div>
 
-                        <div class="center-block" id="result">
+                        <div class="row-fluid" id="result">
                             			
                         </div>
                     
