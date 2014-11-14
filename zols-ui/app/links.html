@@ -14,329 +14,6 @@
         <!-- build:js scripts/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
-    </head>
-    <body>
-        <!--[if lt IE 10]>
-          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-        <div class="container">
-
-            <nav class="navbar navbar-default" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="javascript:void(0)">Zols</a>
-                </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="javascript:void(0)">Link  3</a></li>
-                        <li><a href="javascript:void(0)">Link</a></li>
-                        <li class="dropdown">
-                            <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="javascript:void(0)">Action</a></li>
-                                <li><a href="javascript:void(0)">Another action</a></li>
-                                <li><a href="javascript:void(0)">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li><a href="javascript:void(0)">Separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search"/>
-                        </div>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </form>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span> 
-                                <strong>Sathish</strong>
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <div class="navbar-login">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <p class="text-center">
-                                                    <span class="glyphicon glyphicon-user icon-size"></span>
-                                                </p>
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <p class="text-left"><strong>Sathish Kumar</strong></p>
-                                                <p class="text-left small">correoElectronico@email.com</p>
-                                                <p class="text-left">
-                                                    <a href="#" class="btn btn-primary btn-block btn-sm">View Profile</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <div class="navbar-login navbar-login-session">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p>
-                                                    <a href="#" class="btn btn-danger btn-block">Logout</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </nav>
-
-
-
-
-            <!--            <div class="forkGit">
-                                <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
-            
-            </div>-->
-
-            <div class="container-fluid" th:fragment="content">
-                <div class="row"  >
-                    <div class="page-header">
-                        <div class="container-fluid">
-                            <div class="row show-grid">
-                                <div class="col-md-9">
-                                    <h4>
-                                        Links
-                                        <span class="badge">                  
-                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
-                                        </span>
-                                    </h4>
-                                </div>
-                                <div class="col-md-3 right" id="categoryHeader">
-                                    <label>Category</label>                                    
-                                    <label data-bind-col="categoryname" id="categorynameLbl">Category Name</label>
-
-                                    <div class="btn-group" id="category-list">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                                <span data-bind-col="categoryname">Dropdown</span>
-                                                <span class="caret"></span>
-                                            </button>
-                                            <ul class="dropdown-menu" role="menu" id="categories">
-                                            </ul>
-                                        </div>
-                                        <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
-                                        <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-
-                    <div class="row-fluid" id="linksBreadcrumb">
-
-                    </div>
-
-                    <div class="row-fluid" id="result">
-
-                    </div>
-
-                </div>
-
-                <div class="modal fade bs-example-modal-sm" 
-                     id="delete-conf-model"
-                     tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-sm">
-                        <div class="modal-content">
-                            Do you want to delete the content?
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <script id="noCategory" type="text/x-jsrender">
-                    There are no Category to display click <a>here</a>
-                </script>
-
-                <script id="noLink" type="text/x-jsrender">
-                    There are no Link to display click <a>here</a>
-                </script>
-
-                <script id="breadcrumb" type="text/x-jsrender">
-                    <ol  class="breadcrumb">                    
-                    <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-                    {{for parentLink}}
-                    <li><a href="#">{{:name}}</a></li>
-                    {{/for}}
-                    </ol>
-                </script>
-
-                <script id="listLink" type="text/x-jsrender">
-                    {{if link.length !==0}}
-
-                    <ul class="list-group">                    
-                    {{for link}}
-                    <li class="list-group-item">
-                    <a href="#">{{:name}}</a>
-                    <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-                    <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
-                    </li>
-                    {{/for}}
-                    </ul>
-                    {{/if}}
-
-                    <a id="addMoreLinkBtn" href="#">Add More</a>
-                </script>
-
-                <script id="listCategory" type="text/x-jsrender">
-                    {{for category}}
-                    <li>
-                    <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
-                    </li>
-                    {{/for}}
-                    <li class="divider"></li>
-                    <li><a id="createCategory">Create New</a></li>
-                </script>
-
-                <script id="catetoryForm" type="text/x-jsrender">
-                    <form class="form-horizontal">
-                    <fieldset>
-
-                    <!-- Form Name -->
-                    <legend>Category</legend>
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="name">Name</label>  
-                    <div class="col-md-4">
-                    {{if isEdit}}
-                    <label class="col-md-4 control-label" for="name">{{:name}}</label>  
-                    {{else}}
-                    <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
-                    {{/if}}
-                    </div>
-                    </div>
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="label">Label</label>  
-                    <div class="col-md-4">
-                    <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
-
-                    </div>
-                    </div>
-
-                    <!-- Textarea -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="description">Description</label>
-                    <div class="col-md-4">                     
-                    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-                    </div>
-                    </div>
-
-                    <!-- Button (Double) -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="saveBtn"></label>
-                    <div class="col-md-8">
-                    <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
-                    <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-                    </div>
-                    </div>
-
-                    </fieldset>
-                    </form>
-
-
-
-                </script>
-
-
-                <script id="linkForm" type="text/x-jsrender">
-                    <form class="form-horizontal">
-                    <fieldset>
-
-                    <!-- Form Name -->
-                    <legend>Link</legend>
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="name">Name</label>  
-                    <div class="col-md-4">
-                    {{if isEdit}}
-                    <label class="col-md-4 control-label" for="name">{{:name}}</label>  
-                    {{else}}
-                    <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
-                    {{/if}}
-                    </div>
-                    </div>
-
-
-                    <!-- Text input-->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="label">Label</label>  
-                    <div class="col-md-4">
-                    <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
-
-                    </div>
-                    </div>
-
-                    <!-- Textarea -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="description">Description</label>
-                    <div class="col-md-4">                     
-                    <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-                    </div>
-                    </div>
-
-                    <!-- Button (Double) -->
-                    <div class="form-group">
-                    <label class="col-md-4 control-label" for="saveBtn"></label>
-                    <div class="col-md-8">
-                    <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
-                    <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-                    </div>
-                    </div>
-
-                    </fieldset>
-                    </form>
-
-
-
-                </script>
-
-
-                <!-- build:js({app,.tmp}) scripts/main.js -->
-                <script src="scripts/links.js"></script>       
-                <!-- inject:partials -->
-                <!-- endinject -->
-                <!-- endbuild -->
-
-            </div>
-
-            <hr/>
-
-            <div class="footer">
-                <p>With ♥ from <a href="https://twitter.com/Swiip">@Swiip</a></p>
-            </div>
-
-        </div>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
@@ -356,6 +33,245 @@
         <script src="bower_components/jsviews/jsviews.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
+
+    </head>
+    <body>
+
+
+
+        <div class="container-fluid" th:fragment="content">
+            <div class="row"  >
+                <div class="page-header">
+                    <div class="container-fluid">
+                        <div class="row show-grid">
+                            <div class="col-md-9">
+                                <h4>
+                                    Links
+                                    <span class="badge">                  
+                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                    </span>
+                                </h4>
+                            </div>
+                            <div class="col-md-3 right" id="categoryHeader">
+                                <label>Category</label>                                    
+                                <label data-bind-col="categoryname" id="categorynameLbl">Category Name</label>
+
+                                <div class="btn-group" id="category-list">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            <span data-bind-col="categoryname">Dropdown</span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" id="categories">
+                                        </ul>
+                                    </div>
+                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
+                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div class="row-fluid" id="linksBreadcrumb">
+
+                </div>
+
+                <div class="row-fluid" id="result">
+
+                </div>
+
+            </div>
+
+            <div class="modal fade bs-example-modal-sm" 
+                 id="delete-conf-model"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        Do you want to delete the content?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script id="noCategory" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Category to display click <a>here</a>
+                </div>
+                </div>
+            </script>
+
+            <script id="noLink" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Link to display click <a>here</a>
+                </div>
+                </div>
+            </script>
+
+            <script id="breadcrumb" type="text/x-jsrender">
+                <ol  class="breadcrumb">                    
+                <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+                {{for parentLink}}
+                <li><a href="#">{{:name}}</a></li>
+                {{/for}}
+                </ol>
+            </script>
+
+            <script id="listLink" type="text/x-jsrender">
+                {{if link.length !==0}}
+
+                <ul class="list-group">                    
+                {{for link}}
+                <li class="list-group-item">
+                <a href="#">{{:name}}</a>
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="addMoreLinkBtn" href="#">Add More</a>
+            </script>
+
+            <script id="listCategory" type="text/x-jsrender">
+                {{for category}}
+                <li>
+                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
+                </li>
+                {{/for}}
+                <li class="divider"></li>
+                <li><a id="createCategory">Create New</a></li>
+            </script>
+
+            <script id="catetoryForm" type="text/x-jsrender">
+                <form class="form-horizontal">
+                <fieldset>
+
+                <!-- Form Name -->
+                <legend>Category</legend>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>  
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                {{else}}
+                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                {{/if}}
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="label">Label</label>  
+                <div class="col-md-4">
+                <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+
+                </div>
+                </div>
+
+                <!-- Textarea -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="description">Description</label>
+                <div class="col-md-4">                     
+                <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+
+                </fieldset>
+                </form>
+
+
+
+            </script>
+
+
+            <script id="linkForm" type="text/x-jsrender">
+                <form class="form-horizontal">
+                <fieldset>
+
+                <!-- Form Name -->
+                <legend>Link</legend>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>  
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                {{else}}
+                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                {{/if}}
+                </div>
+                </div>
+
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="label">Label</label>  
+                <div class="col-md-4">
+                <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+
+                </div>
+                </div>
+
+                <!-- Textarea -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="description">Description</label>
+                <div class="col-md-4">                     
+                <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+
+                </fieldset>
+                </form>
+
+
+
+            </script>
+
+
+            <!-- build:js({app,.tmp}) scripts/main.js -->
+            <script src="scripts/links.js"></script>       
+            <!-- inject:partials -->
+            <!-- endinject -->
+            <!-- endbuild -->
+
+        </div>
+
+
+
+
 
 
 
