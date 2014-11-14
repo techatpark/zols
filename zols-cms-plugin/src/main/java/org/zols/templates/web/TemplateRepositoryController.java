@@ -19,6 +19,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zols.templates.domain.Template;
 import org.zols.templates.domain.TemplateRepository;
 import org.zols.templates.service.TemplateRepositoryService;
 
@@ -68,5 +69,11 @@ public class TemplateRepositoryController {
     public List<TemplateRepository> list() {
         LOGGER.info("Getting TemplateRepositories ");
         return templateRepositoryService.list();
+    }
+    
+    @RequestMapping(value = "/{name}/first_level_templates", method = GET)    
+    public List<Template> listTemplates(@PathVariable(value = "name") String name) {
+        LOGGER.info("Getting templates of repository {} ",name);
+        return templateRepositoryService.listTemplates(name);
     }
 }

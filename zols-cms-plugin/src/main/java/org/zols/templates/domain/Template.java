@@ -19,6 +19,8 @@ public class Template {
     private String label;
 
     private String dataType;
+    
+    private String repositoryName;
 
     private String path;
 
@@ -63,5 +65,14 @@ public class Template {
     public void setPath(String path) {
         this.path = path;
     }
+
+    public String getRepositoryName() {
+        return repositoryName;
+    }
+
+    public void setRepositoryName(String repositoryName) {
+        this.repositoryName = repositoryName;
+    } 
+    
 
 }

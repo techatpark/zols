@@ -11,6 +11,10 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import org.zols.datastore.query.Query;
+import org.zols.templates.domain.Template;
 import org.zols.templates.domain.TemplateRepository;
 
 /**
@@ -85,5 +89,12 @@ public class TemplateRepositoryService {
     public List<TemplateRepository> list() {
         LOGGER.info("Getting TemplateRepositories ");
         return dataStore.list(TemplateRepository.class);
+    }
+    
+    public List<Template> listTemplates(String repositoryName) {
+        LOGGER.info("Getting templates of repository  {}", repositoryName);
+        Query query = new Query();
+        query.addFilter(new Filter<>("repositoryName", EQUALS, repositoryName));
+        return dataStore.list(Template.class, query);
     }
 }
