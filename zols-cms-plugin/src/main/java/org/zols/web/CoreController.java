@@ -7,6 +7,7 @@ package org.zols.web;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -27,6 +28,11 @@ public class CoreController {
     @RequestMapping("/links")
     public String links() {        
         return "links";
+    }
+    
+    @RequestMapping("/pages/{name}")
+    public String pages(@PathVariable(value = "name") String name) {        
+        return name;
     }
     
 }

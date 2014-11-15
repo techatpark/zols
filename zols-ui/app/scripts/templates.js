@@ -13,7 +13,6 @@
     var template;
     var selectedTemplateRepository;
     var listOfCategories;
-    var parentTemplates = [];
     var selectedTemplate;
     var listOfTemplates;
 
@@ -46,9 +45,7 @@
                 template.link('#result', {});
                 $('#result a').click(function() {
                     $.fn.createTemplateRepository();
-                });
-                $('#templatesBreadcrumb').empty();
-                parentTemplates = [];
+                });                
             } else {
                 $('#templateRepositoryHeader').show();
                 listOfCategories = data;
@@ -72,10 +69,10 @@
     };
 
     $.fn.setSelectedTemplateRepository = function(selectedTemplateRepositoryData) {
-        parentTemplates = [];
+        
         $('[data-bind-col="templateRepositoryname"]').text(selectedTemplateRepositoryData.label);
         selectedTemplateRepository = selectedTemplateRepositoryData;
-        $('#templatesBreadcrumb').empty();
+        
         $.get(base_url + '/template_repositories/' + selectedTemplateRepository.name + '/first_level_templates').done(function(data) {
             $.fn.listTemplates(data);
         });
@@ -120,30 +117,7 @@
 
     };
 
-    $.fn.addParentTemplate = function(ParentTemplateData) {
-        parentTemplates.push(ParentTemplateData);
-        $.fn.listChildren(ParentTemplateData);
-    };
 
-    $.fn.listChildren = function(ParentTemplateData) {
-        $.get(base_url + '/templates/childen_of/' + ParentTemplateData.name).done(function(data) {
-            $.fn.listTemplates(data);
-        });
-        template = $.templates("#breadcrumb");
-        template.link('#templatesBreadcrumb', {parentTemplate: parentTemplates});
-        $('#templatesBreadcrumb a').on('click', function() {
-            var selectedTemplateIndex = $(this).parent().index();
-            if (selectedTemplateIndex === 0) {
-                parentTemplates = [];
-                $.fn.refreshList();
-            } else {
-                var parentTemplateData = parentTemplates[selectedTemplateIndex - 1];
-                parentTemplates = parentTemplates.slice(0, selectedTemplateIndex);
-                $.fn.listChildren(parentTemplateData);
-            }
-
-        });
-    };
 
     $.fn.saveTemplateRepository = function() {
         if (selectedTemplateRepository.isEdit) {
@@ -212,10 +186,7 @@
     };
 
     $.fn.refreshList = function() {
-        if (parentTemplates.length !== 0) {
-            $.fn.listChildren(parentTemplates[parentTemplates.length - 1]);
-        }
-        else if (!listOfCategories) {
+        if (!listOfCategories) {
             $.fn.listTemplateRepositories();
         }
         else {
@@ -229,9 +200,6 @@
 
     $.fn.saveTemplate = function() {
         selectedTemplate.repositoryName = selectedTemplateRepository.name;
-        if (parentTemplates.length !== 0) {
-            selectedTemplate.parentTemplateName = parentTemplates[parentTemplates.length - 1].name;
-        }
 
         if (selectedTemplate.isEdit) {
             delete selectedTemplate.isEdit;

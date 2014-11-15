@@ -76,9 +76,6 @@
                 </div>
 
 
-                <div class="row-fluid" id="templatesBreadcrumb">
-
-                </div>
 
                 <div class="row-fluid" id="result">
 
@@ -129,14 +126,7 @@
                 </div>
             </script>
 
-            <script id="breadcrumb" type="text/x-jsrender">
-                <ol  class="breadcrumb">                    
-                <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
-                {{for parentTemplate}}
-                <li><a href="#">{{:name}}</a></li>
-                {{/for}}
-                </ol>
-            </script>
+
 
             <script id="listTemplate" type="text/x-jsrender">
                 {{if link.length !==0}}
@@ -297,10 +287,26 @@
                 <label class="col-md-4 control-label" for="label">Label</label>  
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
-
                 </div>
                 </div>
 
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="dataType">Data Type</label>  
+                <div class="col-md-4">
+                <input id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="path">Path</label>  
+                <div class="col-md-4">
+                <input id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>                
+                
+                
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
@@ -336,16 +342,7 @@
 
 
 
-
-
-
-
-
-
-
         <!-- References        
-        http://bootsnipp.com/snippets/featured/responsive-breadcrumbs
-        http://bootsnipp.com/snippets/featured/triangle-breadcrumbs-arrows
         -->
 
     </body>
