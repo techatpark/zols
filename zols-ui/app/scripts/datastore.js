@@ -1,7 +1,10 @@
 'use strict';
 
-(function($) {
+(function ($) {
     var base_url = 'http://localhost:8080/api';
+
+    // Set an option globally
+    JSONEditor.defaults.options.theme = 'bootstrap3';
 
     $.ajaxSetup({
         contentType: 'application/json'
@@ -17,45 +20,47 @@
     var selectedTemplate;
     var listOfTemplates;
 
+    var editor;
+
     var confirmationPromise;
 
-    $('#edit_selected').on('click', function() {
+    $('#edit_selected').on('click', function () {
         $.fn.renderSchema();
     });
-    $("#del_conf_ok").on('click', function() {
+    $("#del_conf_ok").on('click', function () {
         $("#delete-conf-model").modal('hide');
         confirmationPromise.resolve();
     });
-    $("del_conf_cancel").on('click', function() {
+    $("del_conf_cancel").on('click', function () {
         confirmationPromise.reject();
     });
 
-    $('#delete_selected').on('click', function() {
+    $('#delete_selected').on('click', function () {
         $("#delete-conf-model").modal('show');
         confirmationPromise = $.Deferred();
-        confirmationPromise.done(function() {
+        confirmationPromise.done(function () {
             $.fn.deleteSchema();
         });
     });
 
-    $.fn.listSchemas = function() {
-        $.get(base_url + '/schema').done(function(data) {
+    $.fn.listSchemas = function () {
+        $.get(base_url + '/schema').done(function (data) {
             if (data === "") {
                 $('#schemaHeader').hide();
                 var template = $.templates("#noSchema");
                 template.link('#result', {});
-                $('#result a').click(function() {
+                $('#result a').click(function () {
                     $.fn.createSchema();
-                });                
+                });
             } else {
                 $('#schemaHeader').show();
                 listOfCategories = data;
                 var template = $.templates("#listSchema");
                 template.link('#categories', {schema: data});
-                $('#createSchema').click(function() {
+                $('#createSchema').click(function () {
                     $.fn.createSchema();
                 });
-                $('#categories .catName').on('click', function() {
+                $('#categories .catName').on('click', function () {
                     $.fn.setSelectedSchema($.view(this).data);
                 });
 
@@ -69,45 +74,45 @@
         });
     };
 
-    $.fn.setSelectedSchema = function(selectedSchemaData) {
-        
+    $.fn.setSelectedSchema = function (selectedSchemaData) {
+
         $('[data-bind-col="schemaname"]').text(selectedSchemaData.title);
         selectedSchema = selectedSchemaData;
-        
-        $.get(base_url + '/schema').done(function(data) {
+
+        $.get(base_url + '/data/' + selectedSchema.id).done(function (data) {
             $.fn.listTemplates(data);
         });
 
     };
-    $.fn.listTemplates = function(listofTemplates) {
+    $.fn.listTemplates = function (listofTemplates) {
         if (listofTemplates === "") {
             var template = $.templates("#noTemplate");
             template.link('#result', {});
-            $('#result a').click(function() {
+            $('#result a').click(function () {
                 $.fn.createTemplate();
             });
         } else {
             listOfTemplates = {link: listofTemplates};
             var template = $.templates("#listTemplate");
             template.link('#result', listOfTemplates);
-            $('#addMoreTemplateBtn').on('click', function() {
+            $('#addMoreTemplateBtn').on('click', function () {
                 $.fn.createTemplate();
             });
 
-            $('#result li a').on('click', function() {
+            $('#result li a').on('click', function () {
                 $.fn.addParentTemplate($.view(this).data);
             });
 
-            $('#result .glyphicon-trash').on('click', function() {
+            $('#result .glyphicon-trash').on('click', function () {
                 selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
                 $("#delete-conf-model").modal('show');
                 confirmationPromise = $.Deferred();
-                confirmationPromise.done(function() {
+                confirmationPromise.done(function () {
                     $.fn.deleteTemplate();
                 });
             });
 
-            $('#result .glyphicon-edit').on('click', function() {
+            $('#result .glyphicon-edit').on('click', function () {
                 selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
                 $.fn.renderTemplate();
             });
@@ -151,7 +156,7 @@
                 $.fn.onError(data);
             });
         }
-        
+
 
     };
 
@@ -186,20 +191,20 @@
         $.fn.renderSchema();
     };
 
-    $.fn.refreshList = function() {
-        
+    $.fn.refreshList = function () {
+
         $('#schema-list').show();
         $('#schemanameLbl').hide();
         $('#schemaHeader').show();
-        if (!listOfCategories) {            
+        if (!listOfCategories) {
             $.fn.listSchemas();
         }
-        else {            
+        else {
             $.fn.setSelectedSchema(selectedSchema);
-        }        
+        }
     };
 
-    $.fn.saveTemplate = function() {
+    $.fn.saveTemplate = function () {
         selectedTemplate.repositoryName = selectedSchema.name;
 
         if (selectedTemplate.isEdit) {
@@ -209,9 +214,9 @@
                 url: base_url + '/templates/' + selectedTemplate.name,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.refreshList();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         } else {
@@ -220,9 +225,9 @@
                 url: base_url + '/templates',
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.refreshList();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         }
@@ -230,38 +235,52 @@
     };
 
 
-    $.fn.deleteTemplate = function() {
+    $.fn.deleteTemplate = function () {
         $.ajax({
             method: 'DELETE',
             url: base_url + '/templates/' + selectedTemplate.name,
             dataType: 'json'
-        }).done(function(data) {
+        }).done(function (data) {
             $.fn.refreshList();
-        }).error(function(data) {
+        }).error(function (data) {
             $.fn.onError(data);
         });
     };
-    $.fn.renderTemplate = function() {
-        if (selectedTemplate && selectedTemplate.name) {
-            selectedTemplate.isEdit = true;
-        }
-        template = $.templates("#linkForm");
-        template.link('#result', selectedTemplate);
-        $("#result form").submit(function(event) {
-            event.preventDefault();
-            $.fn.saveTemplate();
+    $.fn.renderTemplate = function () {
+
+        $.get(base_url + '/schema/' + selectedSchema.id).done(function (data) {
+
+            if (selectedTemplate && selectedTemplate.name) {
+                selectedTemplate.isEdit = true;
+            }
+            template = $.templates("#linkForm");
+            template.link('#result', selectedTemplate);
+            $("#result form").submit(function (event) {
+                event.preventDefault();
+                $.fn.saveTemplate();
+            });
+            $('#schema-list').hide();
+            $('#schemanameLbl').show();
+
+            $("#editor_holder").empty();
+            var element = document.getElementById('editor_holder');
+            editor = new JSONEditor(element, {schema: data, disable_properties: true, disable_collapse: true, disable_edit_json: true});
+            if (selectedTemplate.isEdit) {
+                editor.setValue(selectedTemplate);
+            }
+
         });
-        $('#schema-list').hide();
-        $('#schemanameLbl').show();
+
+
 
     };
 
-    $.fn.createTemplate = function() {
+    $.fn.createTemplate = function () {
         selectedTemplate = {};
         $.fn.renderTemplate();
     };
 
-    $.fn.onError = function(data) {
+    $.fn.onError = function (data) {
         $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
     };
 

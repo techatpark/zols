@@ -164,19 +164,19 @@
                 <legend>Schema</legend>
 
                 <!-- Text input-->
-               <div class="form-group">
-                
-                
+                <div class="form-group">
+
+
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="schema">Schema</label>
                 <div class="col-md-4">                     
                 <textarea class="form-control" id="schema" name="schema" data-link="schema" rows="8" cols="50"></textarea>
-                
+
                 </div>
                 </div>
-        
-                     
+
+
 
                 <!-- Button (Double) -->
                 <div class="form-group">
@@ -196,68 +196,25 @@
 
 
             <script id="linkForm" type="text/x-jsrender">
-                <form class="form-horizontal">
+               <form class="form-horizontal">
                 <fieldset>
 
                 <!-- Form Name -->
-                <legend>Template</legend>
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Name</label>  
-                <div class="col-md-4">
-                {{if isEdit}}
-                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
-                {{else}}
-                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
-                {{/if}}
-                </div>
-                </div>
-
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="label">Label</label>  
-                <div class="col-md-4">
-                <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="dataType">Data Type</label>  
-                <div class="col-md-4">
-                <input id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="path">Path</label>  
-                <div class="col-md-4">
-                <input id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>                
+                <legend>Data</legend>
                 
+                <div class="form-group" id="editor_holder">
+                    
+                </div>
                 
-                <!-- Textarea -->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="description">Description</label>
-                <div class="col-md-4">                     
-                <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
-                </div>
-                </div>
-
                 <!-- Button (Double) -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="saveBtn"></label>
                 <div class="col-md-8">
-                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
                 <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
                 </div>
                 </div>
-
-                </fieldset>
+            </fieldset>
                 </form>
             </script>
 
