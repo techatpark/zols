@@ -15,7 +15,8 @@
     $('#schemanameLbl').hide();
 
     var selectedTemplateRepository;
-    var listOfCategories;
+    var listOfSchemas;
+    var selectedSchema;
     var editor;
 
     var confirmationPromise;
@@ -50,7 +51,7 @@
                 });
             } else {
                 $('#schemaHeader').show();
-                listOfCategories = data;
+                listOfSchemas = data;
                 var template = $.templates("#listTemplateRepository");
                 template.link('#categories', {schema: data});
                 $('#createTemplateRepository').click(function () {
@@ -83,11 +84,7 @@
     $.fn.listTemplates = function (data) {
         $("#editor_holder").html("");
         var element = document.getElementById('editor_holder');
-
         editor = new JSONEditor(element, {schema: data, disable_properties: true, disable_collapse: true, disable_edit_json: true});
-
-
-
     };
 
     $("#saveBtn").click(function (e) {
@@ -97,7 +94,7 @@
 
 
     $.fn.refreshList = function () {
-        if (!listOfCategories) {
+        if (!listOfSchemas) {
             $.fn.listSchema();
         }
         else {
@@ -108,8 +105,8 @@
         $('#schemanameLbl').hide();
         $('#schemaHeader').show();
     };
-    
-     $.fn.saveSchema = function () {
+
+    $.fn.saveSchema = function () {
 
         selectedSchema.schema = JSON.parse(selectedSchema.schema);
         //selectedSchema.schema.type = selectedSchema.schemaType;

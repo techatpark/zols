@@ -53,14 +53,6 @@ public class ValidatorTest {
         System.out.println("validatedObject " + jSONUtil.getAsJsonString(validatedObject.getDataObject()));
     }
 
-    @Test
-    public void testGetObjectFromString() throws IOException {
-        System.out.println("\nString Based");
-        Map<String, Object> stringDataObject = jSONUtil.getJsonStringObject("sample");
-        ValidatedObject validatedObject = validator.getObject(jSONUtil.getJsonSchemaAsString("sample"), stringDataObject);
-        System.out.println("Schema " + jSONUtil.getAsJsonString(validatedObject.getJsonSchema()));
-        System.out.println("stringDataObject " + jSONUtil.getAsJsonString(stringDataObject));
-        System.out.println("validatedObject " + jSONUtil.getAsJsonString(validatedObject.getDataObject()));
-    }
+    
 
 }

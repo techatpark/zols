@@ -35,7 +35,7 @@ public abstract class DataStore {
     
     public Map<String, Object> create(String schemaName,Map<String, Object> jsonData) {
         Schema schema = read(Schema.class,schemaName);
-        ValidatedObject validatedObject = validator.getObject(schema.getSchema(),jsonData);
+        ValidatedObject validatedObject = validator.getObject(schema,jsonData);
         return create(validatedObject.getJsonSchema(), validatedObject.getDataObject());
     }
     
@@ -46,7 +46,7 @@ public abstract class DataStore {
 
     public boolean update(String schemaName,Map<String, Object> jsonData) {
         Schema schema = read(Schema.class,schemaName);
-        ValidatedObject validatedObject = validator.getObject(schema.getSchema(),jsonData);
+        ValidatedObject validatedObject = validator.getObject(schema,jsonData);
         return update(validatedObject.getJsonSchema(), validatedObject.getDataObject());
     }
 

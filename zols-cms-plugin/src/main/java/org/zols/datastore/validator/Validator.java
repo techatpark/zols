@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Id;
+import org.zols.datastore.domain.Schema;
 
 /**
  *
@@ -48,8 +49,9 @@ public class Validator {
         return new ValidatedObject(jsonSchema, getObject(jsonSchema, jsonData));
     }
 
-    public ValidatedObject getObject(String jsonSchemaAsString, Map<String, Object> jsonData) {
-        JsonSchema jsonSchema = getJsonSchema(jsonSchemaAsString);
+    public ValidatedObject getObject(Schema schema, Map<String, Object> jsonData) {
+        JsonSchema jsonSchema = getJsonSchema(schema.getSchema());
+        jsonSchema.setId(schema.getName());
         return new ValidatedObject(jsonSchema, getObject(jsonSchema, jsonData));
     }
 
