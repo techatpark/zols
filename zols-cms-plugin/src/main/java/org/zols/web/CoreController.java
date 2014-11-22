@@ -14,25 +14,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CoreController {
 
     @RequestMapping("/")
-    public String index() {        
+    public String index() {
         return "index";
     }
-    
-    
+
     @RequestMapping("/controlpanel")
     @Secured("ROLE_ADMIN")
-    public String controlpanel() {        
+    public String controlpanel() {
         return "controlpanel";
     }
-    
+
     @RequestMapping("/links")
-    public String links() {        
+    public String links() {
         return "links";
     }
-    
+
+    @RequestMapping("/schema")
+    public String schema() {
+        return "schema";
+    }
+
     @RequestMapping("/pages/{name}")
-    public String pages(@PathVariable(value = "name") String name) {        
+    public String pages(@PathVariable(value = "name") String name) {
         return name;
     }
-    
+
 }
