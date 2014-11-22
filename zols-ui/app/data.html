@@ -2,7 +2,7 @@
 <html class="no-js" >
     <head>
         <meta charset="utf-8"/>
-        <title>Zols - Schema Manager</title>
+        <title>Zols - Data Store</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -47,13 +47,30 @@
                         <div class="row show-grid">
                             <div class="col-md-8">
                                 <h4>
-                                    Schema
+                                    Data Store
                                     <span class="badge">                  
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>
                                 </h4>
                             </div>
-                           
+                            <div class="col-md-4 right" id="schemaHeader">
+                                <label>Schema</label>                                    
+                                <label data-bind-col="schemaname" id="schemanameLbl">TemplateRepository Name</label>
+
+                                <div class="btn-group" id="schema-list">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            <span data-bind-col="schemaname">Dropdown</span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" id="categories">
+                                        </ul>
+                                    </div>
+                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
+                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
+                                </div>
+                            </div>
+                            
                         </div>
 
 
@@ -81,36 +98,53 @@
                     </div>
                 </div>
             </div>
+            
+            <div class="form-group" >
+                
+                <div class="form-group" id="editor_holder">
+                    
+                </div>
+                
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+            </div>
+            
 
 
-           
-            <script id="noSchema" type="text/x-jsrender">
+            <script id="noTemplateRepository" type="text/x-jsrender">
                 <div class="jumbotron">
                 <div class="container">
-                There are no Schema to display click <a>here</a>
+                There are no TemplateRepository to display click <a>here</a>
                 </div>
                 </div>
             </script>
 
-
-
-            <script id="listSchema" type="text/x-jsrender">
-                {{if link.length !==0}}
-
-                <ul class="list-group">                    
-                {{for link}}
-                <li class="list-group-item">
-                <a href="#">{{:title}}</a>
-                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
-                </li>
-                {{/for}}
-                </ul>
-                {{/if}}
-
-                <a id="addMoreSchemaBtn" href="#">Add More</a>
+            <script id="getTemplateRepositoryType" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                <p>Please select a Repository Type</p>
+                <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a> 
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> 
+                </p>
+                </div>
+                </div>
             </script>
 
+            <script id="noTemplate" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Template to display click <a>here</a>
+                </div>
+                </div>
+            </script>
+            
             <script id="schemaForm" type="text/x-jsrender">
                 <form class="form-horizontal">
                 <fieldset>
@@ -150,8 +184,39 @@
             </script>
 
 
+
+            <script id="listTemplate" type="text/x-jsrender">
+                {{if link.length !==0}}
+
+                <ul class="list-group">                    
+                {{for link}}
+                <li class="list-group-item">
+                <a href="#">{{:name}}</a>
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="addMoreTemplateBtn" href="#">Add More</a>
+            </script>
+
+            <script id="listTemplateRepository" type="text/x-jsrender">
+                {{for schema}}
+                <li>
+                <a class="catName" href="#" data-name="{{:name}}">{{:title}}</a>                
+                </li>
+                {{/for}}
+                <li class="divider"></li>
+                <li><a id="createTemplateRepository">Create New</a></li>
+            </script>
+
+            
+
+
             <!-- build:js({app,.tmp}) scripts/main.js -->
-            <script src="scripts/schema.js"></script>       
+            <script src="scripts/data.js"></script>       
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
