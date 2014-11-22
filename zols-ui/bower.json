@@ -5,7 +5,8 @@
     "modernizr": "2.8.x",
     "bootstrap-sass-official": "3.x.x",
     "jquery": "2.x.x",
-    "jsviews": "~1.0.0-alpha"
+    "jsviews": "~1.0.0-alpha",
+    "json-editor":"0.7.13"
   },
   "devDependencies": {}
 }
