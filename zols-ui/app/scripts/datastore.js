@@ -211,7 +211,7 @@
             delete selectedTemplate.isEdit;
             $.ajax({
                 method: 'PUT',
-                url: base_url + '/templates/' + selectedTemplate.name,
+                url: base_url + '/data/' + selectedSchema.id + '/' +selectedTemplate.name,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
             }).done(function (data) {
@@ -222,7 +222,7 @@
         } else {
             $.ajax({
                 method: 'POST',
-                url: base_url + '/templates',
+                url: base_url + '/data/'+ selectedSchema.id ,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
             }).done(function (data) {
@@ -238,7 +238,7 @@
     $.fn.deleteTemplate = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/templates/' + selectedTemplate.name,
+            url: base_url + '/data/' + selectedSchema.id + '/'+ selectedTemplate.name,
             dataType: 'json'
         }).done(function (data) {
             $.fn.refreshList();
