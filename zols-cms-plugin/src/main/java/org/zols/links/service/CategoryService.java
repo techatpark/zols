@@ -8,6 +8,7 @@ package org.zols.links.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
@@ -42,7 +43,7 @@ public class CategoryService {
      * @param category Object to be Create
      * @return created Category object
      */
-    public Category create(Category category) {
+    public Category create(@Valid Category category) {
         Category createdCategory = null;
         if (category != null) {
             createdCategory = dataStore.create(Category.class, category);

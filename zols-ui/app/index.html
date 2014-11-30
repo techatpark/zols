@@ -65,8 +65,9 @@
                         </li>
                     </ul> 
 
-                    <ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
-                        <li class="dropdown">
+                    <ul class="nav navbar-nav navbar-right" >
+                        <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
+                        <li class="dropdown" sec:authorize="isAuthenticated()"  >
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <span class="glyphicon glyphicon-user"></span> 
                                 <strong sec:authentication="name">Sathish</strong>

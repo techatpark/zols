@@ -29,9 +29,9 @@ public class CoreController {
         return "links";
     }
 
-    @RequestMapping("/schema")
-    public String schema() {
-        return "schema";
+    @RequestMapping("/datastore")
+    public String datastore() {
+        return "datastore";
     }
 
     @RequestMapping("/pages/{name}")

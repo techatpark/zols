@@ -1,6 +1,7 @@
 package org.zols.links.domain;
 
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,7 +12,8 @@ public class Category {
 
     @Id
     private String name;
-
+    
+    @Size(max = 5)
     private String label;
 
     private String description;

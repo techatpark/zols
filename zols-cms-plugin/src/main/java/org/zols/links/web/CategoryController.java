@@ -6,6 +6,7 @@
 package org.zols.links.web;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
