@@ -34,6 +34,11 @@ public class CoreController {
         return "datastore";
     }
 
+    @RequestMapping("/templates")
+    public String templates() {
+        return "templates";
+    }
+
     @RequestMapping("/pages/{name}")
     public String pages(@PathVariable(value = "name") String name) {
         return name;
