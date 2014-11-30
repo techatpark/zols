@@ -135,3 +135,21 @@ and open the template in the editor.
     -webkit-transform: rotate(45deg); }
 .forkGit a:hover {
     background: #f73818; }
+
+.navbar-inverse .nav {
+    padding: 15px 0;
+}
+
+.navbar-inverse .navbar-brand {
+    padding: 0 15px;
+}
+
+@media(min-width:768px) {
+    body {
+        padding-top: 100px; /* Required padding for .navbar-fixed-top. Change if height of navigation changes. */
+    }
+
+    .navbar-inverse .navbar-brand {
+        padding: 15px 0;
+    }
+}

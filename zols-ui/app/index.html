@@ -42,7 +42,7 @@
 
         <div class="container">
 
-            <nav class="navbar navbar-default" role="navigation">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -51,18 +51,20 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="javascript:void(0)">Zols</a>
+                    <a class="navbar-brand" href="#">
+                        <img class="img-responsive" src="images/logo_150x50.png" alt="">
+                    </a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
                         <li th:each="link : ${linkentry.value}">
-                            <a th:href="${link.targetUrl}" th:text="${link.label}" >Menu1</a>
-                            <!--/*-->
-                            <a href="#">Menu2</a>
-                            <!--*/-->
+                            <a th:href="${link.targetUrl}" th:text="${link.label}" >Menu1</a>                            
                         </li>
+                        <!--/*-->
+                        <li><a href="#">Menu2</a></li>
+                        <!--*/-->
                     </ul> 
 
                     <ul class="nav navbar-nav navbar-right" >

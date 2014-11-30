@@ -1,11 +1,11 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 
 $body-bg:#EFF3F6 ;
-$navbar-default-bg : #3d68ac;
-$navbar-default-link-color: #ffffff;
-$navbar-default-link-hover-color: #ffffff;
-$navbar-default-link-active-color: #ffffff;
-$navbar-default-link-active-bg:#264571;
+$navbar-inverse-bg : #3d68ac;
+$navbar-inverse-link-color: #ffffff;
+$navbar-inverse-link-hover-color: #ffffff;
+$navbar-inverse-link-active-color: #ffffff;
+$navbar-inverse-link-active-bg:#264571;
 
 @import '../bower_components/bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
 @import '_breadcrum.scss';
