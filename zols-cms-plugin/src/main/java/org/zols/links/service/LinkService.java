@@ -39,8 +39,15 @@ public class LinkService {
     public Link create(Link link) {
         Link createdLink = null;
         if (link != null) {
+            
             createdLink = dataStore.create(Link.class, link);
             LOGGER.info("Created Link {}", createdLink.getName());
+            
+            if(link.getTargetUrl() == null || link.getTargetUrl().trim().length() ==0) {
+                LOGGER.info("Setting Default Link URL {}", createdLink.getName());
+                createdLink.setTargetUrl("/create_page/"+createdLink.getName());
+                update(createdLink);
+            }
         }
         return createdLink;
     }

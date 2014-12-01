@@ -43,5 +43,10 @@ public class CoreController {
     public String pages(@PathVariable(value = "name") String name) {
         return name;
     }
+    
+    @RequestMapping("/create_page/{linkName}")
+    public String createPage(@PathVariable(value = "linkName") String linkName) {
+        return "create_page";
+    }
 
 }
