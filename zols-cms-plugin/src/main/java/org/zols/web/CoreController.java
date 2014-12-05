@@ -7,6 +7,7 @@ package org.zols.web;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -45,7 +46,8 @@ public class CoreController {
     }
     
     @RequestMapping("/create_page/{linkName}")
-    public String createPage(@PathVariable(value = "linkName") String linkName) {
+    public String createPage(@PathVariable(value = "linkName") String linkName,Model model) {
+        model.addAttribute("linkName", linkName);
         return "create_page";
     }
 
