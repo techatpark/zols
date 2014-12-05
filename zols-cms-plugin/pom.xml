@@ -24,10 +24,18 @@
             <scope>provided</scope>
         </dependency>
         
+<!-- Key . Should be added during build       
+<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>-->
+        
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
             <version>${swagger-springmvc-version}</version>
+            <scope>provided</scope>
         </dependency>
         
         <dependency>

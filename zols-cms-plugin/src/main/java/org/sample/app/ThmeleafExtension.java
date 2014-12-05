@@ -16,7 +16,6 @@ import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 import org.zols.templates.domain.TemplateRepository;
 import org.zols.templates.service.TemplateRepositoryService;
-import org.zols.templates.service.TemplateService;
 
 @EnableConfigurationProperties(ThymeleafProperties.class)
 @Configuration
