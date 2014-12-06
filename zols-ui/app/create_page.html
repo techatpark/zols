@@ -16,6 +16,7 @@
         <!-- endbuild -->
 
         <!-- build:js scripts/vendor.js -->
+     <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
@@ -111,7 +112,7 @@
 
 
             <!-- build:js({app,.tmp}) scripts/main.js -->
-            <script src="scripts/create_page.js"></script>       
+            <script src="scripts/create_page.js" th:src="@{/scripts/create_page.js}"></script>       
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
