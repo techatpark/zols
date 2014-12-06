@@ -140,5 +140,23 @@ public class LinkService {
 
         return null;
     }
+    
+    /**
+     * Update a Link with given Url
+     *
+     * @param linkName
+     * @param url
+     * @return
+     */
+    public Boolean linkUrl(String linkName,String url) {
+        Boolean updated = false;
+        if (linkName != null) {
+            LOGGER.info("Updating Link with url {}", linkName);
+            Link link = read(linkName);
+            link.setTargetUrl(url);
+            updated = update(link);
+        }
+        return updated;
+    }
 
 }

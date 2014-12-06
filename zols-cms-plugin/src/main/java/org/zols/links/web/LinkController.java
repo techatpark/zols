@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.PATCH;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,17 +28,17 @@ import org.zols.links.service.LinkService;
 public class LinkController {
 
     private static final Logger LOGGER = getLogger(LinkController.class);
-    
-    @Autowired
-    private LinkService linkService;    
 
-    @RequestMapping(method = POST)    
+    @Autowired
+    private LinkService linkService;
+
+    @RequestMapping(method = POST)
     public Link create(@RequestBody Link link) {
         LOGGER.info("Creating new links {}", link.getName());
         return linkService.create(link);
     }
 
-    @RequestMapping(value = "/{name}", method = GET)    
+    @RequestMapping(value = "/{name}", method = GET)
     public Link read(@PathVariable(value = "name") String name) {
         LOGGER.info("Getting link ", name);
         return linkService.read(name);
@@ -46,7 +47,7 @@ public class LinkController {
     @RequestMapping(value = "/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody Link link) {        
+            @RequestBody Link link) {
         if (name.equals(link.getName())) {
             LOGGER.info("Updating links with id {} with {}", name, link);
             linkService.update(link);
@@ -59,16 +60,23 @@ public class LinkController {
         LOGGER.info("Deleting links with id {}", name);
         linkService.delete(name);
     }
-    
-    @RequestMapping(method = GET)    
+
+    @RequestMapping(method = GET)
     public List<Link> list() {
         LOGGER.info("Getting Links ");
         return linkService.list();
     }
-    
-    @RequestMapping(value = "/childen_of/{name}",method = GET)    
+
+    @RequestMapping(value = "/childen_of/{name}", method = GET)
     public List<Link> listChildren(@PathVariable(value = "name") String name) {
-        LOGGER.info("Getting childen of Link {}",name);
+        LOGGER.info("Getting childen of Link {}", name);
         return linkService.listChildren(name);
+    }
+
+    @RequestMapping(value = "/{name}/link_url", method = PATCH)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void linkUrl(@PathVariable(value = "name") String name,
+            @RequestBody String url) {
+        linkService.linkUrl(name, url);
     }
 }

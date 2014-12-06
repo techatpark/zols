@@ -22,13 +22,28 @@
             }
         });
     };
-    
-    $.fn.linkUrl = function() {
-        console.log(link);
-        $.fn.listPageOptions();
+
+    $.fn.linkUrl = function () {
+        $.ajax({
+            method: 'PATCH',
+            url: base_url + '/links/' + link.name + '/link_url',
+            dataType: 'json',
+            data: link.targetUrl
+        }).done(function (data) {
+            $.fn.listPageOptions();
+        }).error(function (data) {
+            $.fn.onError(data);
+        });
+
+    };
+
+
+    $.fn.onError = function (data) {
+        $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
     };
 
     $.fn.listPageOptions();
+
 
 
 
