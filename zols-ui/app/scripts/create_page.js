@@ -20,9 +20,29 @@
                 });
 
             }
+            else if ($(this).attr('data-type') === 'create_new_page') {
+                $.get(base_url + '/templates')
+                        .done(function (data) {
+                            $.fn.listTemplates(data);
+                        });
+            }
         });
     };
 
+    $.fn.listTemplates = function (listofTemplates) {
+        if (listofTemplates === "") {
+            var template = $.templates("#noTemplate");
+            template.link('#result', {});
+            $('#result a').click(function () {
+                $.fn.createTemplate();
+            });
+        } else {
+            var template = $.templates("#listTemplates");
+            template.link('#result', {link: listofTemplates});
+            $('#result .glyphicon-arrow-right').on('click', function () {
+            });
+        }
+    };
     $.fn.linkUrl = function () {
         $.ajax({
             method: 'PATCH',

@@ -16,7 +16,7 @@
         <!-- endbuild -->
 
         <!-- build:js scripts/vendor.js -->
-     <!-- build:js scripts/vendor.js -->
+        <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
@@ -66,15 +66,29 @@
 
             </div>
 
+            <script id="listTemplates" type="text/x-jsrender">
+                {{if link.length !==0}}
+
+                <ul class="list-group">                    
+                {{for link}}
+                <li class="list-group-item">
+                <a href="#">{{:name}}</a>
+                <span class="badge"><i class="glyphicon glyphicon-arrow-right"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+            </script>
+
             <script id="pageOptions" type="text/x-jsrender">
                 <div class="jumbotron">
-                        <div class="container">
-                            <p>
-                                <a class="btn btn-primary btn-lg" role="button" data-type="link_url">Link URL</a> 
-                                <a class="btn btn-primary btn-lg" role="button" data-type="create_new_page">Crate new Page</a> 
-                            </p>
-                        </div>
-                    </div>
+                <div class="container">
+                <p>
+                <a class="btn btn-primary btn-lg" role="button" data-type="link_url">Link URL</a> 
+                <a class="btn btn-primary btn-lg" role="button" data-type="create_new_page">Crate new Page</a> 
+                </p>
+                </div>
+                </div>
             </script>
 
             <script id="linkUrlForm" type="text/x-jsrender">
