@@ -1,0 +1,3 @@
+mvn clean deploy -Dgpg.keyname="Sathish Kumar" -Dgpg.passphrase="xxx"
+gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 212333CA
+mvn versions:set -DnewVersion=0.0.1
