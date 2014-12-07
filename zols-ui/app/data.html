@@ -41,60 +41,33 @@
 
 
         <div class="container-fluid" th:fragment="content">
-            
-            <div class="form-group" >
-                
+
+            <div class="form-group">
+
                 <div class="form-group" id="editor_holder">
-                    
+                    lllljkljkjkljl
                 </div>
-                
+
                 <!-- Button (Double) -->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="saveBtn"></label>
-                <div class="col-md-8">
-                <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
-                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-                </div>
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                        <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
+                        <button name="discardBtn" class="btn btn-danger" type="button">Discard Changes</button>
+                    </div>
                 </div>
             </div>
-            
-
-
-
-
-            <script id="listTemplate" type="text/x-jsrender">
-                {{if link.length !==0}}
-
-                <ul class="list-group">                    
-                {{for link}}
-                <li class="list-group-item">
-                <a href="#">{{:name}}</a>
-                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
-                </li>
-                {{/for}}
-                </ul>
-                {{/if}}
-
-                <a id="addMoreTemplateBtn" href="#">Add More</a>
-            </script>
-
-            <script id="listTemplateRepository" type="text/x-jsrender">
-                {{for schema}}
-                <li>
-                <a class="catName" href="#" data-name="{{:name}}">{{:title}}</a>                
-                </li>
-                {{/for}}
-            </script>
-
-            
-
 
             <!-- build:js({app,.tmp}) scripts/main.js -->
             <script src="scripts/data.js"></script>       
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
+
+            <script>
+                $("#editor_holder").jsonEditor({schemaName: "54841af344aebc43ee3b12f6"});
+                //$.fn.showEditor('54841af344aebc43ee3b12f6');  
+            </script>
 
         </div>
 

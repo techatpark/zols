@@ -1,33 +1,34 @@
 'use strict';
-
 (function ($) {
 
-    // Set an option globally
-    JSONEditor.defaults.options.theme = 'bootstrap3';
+    $.fn.jsonEditor = function (options) {
 
-    var base_url = 'http://localhost:8080/api';
+        // This is the easiest way to have default options.
 
-    $.ajaxSetup({
-        contentType: 'application/json'
-    });
+        var $element = this;
+        var settings = $.extend({theme: 'bootstrap3', disable_properties: true, disable_collapse: true, disable_edit_json: true}, JSONEditor.defaults.options);
 
-    
-    $.fn.showEditor = function (schemaName) {
-        $.get(base_url + '/schema/' + schemaName).done(function (data) {
-            $("#editor_holder").html("");
-            var element = document.getElementById('editor_holder');
-            editor = new JSONEditor(element, {schema: data, disable_properties: true, disable_collapse: true, disable_edit_json: true});
+        settings = $.extend(settings, options);
+
+        var editor;
+        var base_url = 'http://localhost:8080/api';
+
+        $.ajaxSetup({
+            contentType: 'application/json'
         });
+
+
+        $.fn.setSchemaName = function (schemaName) {
+            $.get(base_url + '/schema/' + schemaName).done(function (data) {
+                $element.empty();
+                editor = new JSONEditor($element[0], $.extend(settings, {schema: data}));
+            });
+        };
+        
+        $.fn.setSchemaName(options.schemaName);
+
+        return this;
+
     };
-
-    $("#saveBtn").click(function (e) {
-        var value = editor.getValue();
-        console.log(value);
-    });
-
-
-   
-
-    $.fn.showEditor('54841af344aebc43ee3b12f6');
 
 }(jQuery));
