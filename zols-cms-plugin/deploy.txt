@@ -1,3 +1,11 @@
 mvn clean deploy -Dgpg.keyname="Sathish Kumar" -Dgpg.passphrase="xxx"
 gpg --keyserver hkp://pool.sks-keyservers.net --send-keys 212333CA
 mvn versions:set -DnewVersion=0.0.1
+
+References:
+http://central.sonatype.org/pages/requirements.html
+http://maven.apache.org/guides/mini/guide-central-repository-upload.html
+http://central.sonatype.org/pages/ossrh-guide.html
+http://central.sonatype.org/pages/apache-maven.html
+http://central.sonatype.org/pages/working-with-pgp-signatures.html
+http://central.sonatype.org/pages/working-with-pgp-signatures.html
