@@ -25,6 +25,10 @@
             });
         };
         
+        $.fn.getValue = function () {
+            return editor.getValue();
+        };
+        
         $.fn.setSchemaName(options.schemaName);
 
         return this;

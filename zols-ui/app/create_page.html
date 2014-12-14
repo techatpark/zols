@@ -53,14 +53,12 @@
                             </div>
 
                         </div>
-
-
                     </div>
                 </div>
 
 
 
-                <div class="row-fluid" id="result" data-link-name="one" th:attr="data-link-name=${linkName}">
+                <div class="row-fluid" id="result" data-link-name="Link1" th:attr="data-link-name=${linkName}">
 
                 </div>
 
@@ -89,6 +87,24 @@
                 </p>
                 </div>
                 </div>
+            </script>
+
+            <script id="data_entry" type="text/x-jsrender">
+                <form class="form-horizontal" >
+
+                <div class="form-group" id="editor_holder">
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.listPageOptions()">Discard Changes</button>
+                </div>
+                </div>
+                </form>
+
             </script>
 
             <script id="linkUrlForm" type="text/x-jsrender">
@@ -126,7 +142,8 @@
 
 
             <!-- build:js({app,.tmp}) scripts/main.js -->
-            <script src="scripts/create_page.js" th:src="@{/scripts/create_page.js}"></script>       
+            <script src="scripts/create_page.js" th:src="@{/scripts/create_page.js}"></script>  
+            <script src="scripts/data.js" th:src="@{/scripts/data.js}"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->

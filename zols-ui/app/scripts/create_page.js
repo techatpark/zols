@@ -4,6 +4,8 @@
     var base_url = 'http://localhost:8080/api';
     var link;
     var template;
+    var templates;
+    var page_request;
 
     $.fn.listPageOptions = function () {
         template = $.templates("#pageOptions");
@@ -13,7 +15,6 @@
                 link = {name: $('#result').attr('data-link-name'), targetUrl: ""};
                 template = $.templates("#linkUrlForm");
                 template.link('#result', link);
-
                 $("#result form").submit(function (event) {
                     event.preventDefault();
                     $.fn.linkUrl();
@@ -30,6 +31,7 @@
     };
 
     $.fn.listTemplates = function (listofTemplates) {
+
         if (listofTemplates === "") {
             var template = $.templates("#noTemplate");
             template.link('#result', {});
@@ -37,9 +39,35 @@
                 $.fn.createTemplate();
             });
         } else {
+            templates = listofTemplates;
             var template = $.templates("#listTemplates");
             template.link('#result', {link: listofTemplates});
             $('#result .glyphicon-arrow-right').on('click', function () {
+                page_request = {};
+                page_request.linkName = $('#result').attr('data-link-name');
+                page_request.template = listofTemplates[$(this).parent().parent().index()];
+                var template = $.templates("#data_entry");
+                template.link('#result', page_request);
+                console.log(page_request);
+                var editor = $("#editor_holder").jsonEditor({schemaName: page_request.template.dataType});
+
+                $("#result form").submit(function (event) {
+                    event.preventDefault();
+                    page_request.data = editor.getValue();
+                    $.ajax({
+                        method: 'POST',
+                        url: base_url + '/pages',
+                        dataType: 'json',
+                        data: page_request
+                    }).done(function (data) {
+                        alert('success');
+                    }).error(function (data) {
+                        $.fn.onError(data);
+                    });
+                });
+
+
+
             });
         }
     };
@@ -54,7 +82,6 @@
         }).error(function (data) {
             $.fn.onError(data);
         });
-
     };
 
 
@@ -63,9 +90,4 @@
     };
 
     $.fn.listPageOptions();
-
-
-
-
-
 }(jQuery));

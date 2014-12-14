@@ -173,7 +173,7 @@ public abstract class DataStore {
      * @param jsonSchema
      * @return
      */
-    protected String getIdField(JsonSchema jsonSchema) {
+    public String getIdField(JsonSchema jsonSchema) {
         String idField = null;
         String idValue;
         Map<String, JsonSchema> properties = jsonSchema.asObjectSchema().getProperties();
