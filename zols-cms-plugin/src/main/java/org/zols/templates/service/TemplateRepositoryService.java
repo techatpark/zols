@@ -59,7 +59,7 @@ public class TemplateRepositoryService {
      * Update a TemplateRepository with given Object
      *
      * @param templateRepository Object to be update
-     * @return
+     * @return status of the Update Operation
      */
     public Boolean update(TemplateRepository templateRepository) {
         Boolean updated = false;
@@ -74,7 +74,7 @@ public class TemplateRepositoryService {
      * Delete a TemplateRepository with given String
      *
      * @param templateRepositoryName String to be delete
-     * @return
+     * @return status of the Delete Operation
      */
     public Boolean delete(String templateRepositoryName) {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
@@ -84,13 +84,18 @@ public class TemplateRepositoryService {
     /**
      * List all TemplateRepositories
      *
-     * @return
+     * @return list of all Template Repositories
      */
     public List<TemplateRepository> list() {
         LOGGER.info("Getting TemplateRepositories ");
         return dataStore.list(TemplateRepository.class);
     }
     
+    /**
+     * List templates under given repository
+     * @param repositoryName
+     * @return list of templates
+     */
     public List<Template> listTemplates(String repositoryName) {
         LOGGER.info("Getting templates of repository  {}", repositoryName);
         Query query = new Query();

@@ -55,7 +55,7 @@ public class TemplateService {
      * Update a Template with given Object
      *
      * @param template Object to be update
-     * @return
+     * @return status of the update Operation
      */
     public Boolean update(Template template) {
         Boolean updated = false;
@@ -70,7 +70,7 @@ public class TemplateService {
      * Delete a Template with given String
      *
      * @param templateName String to be delete
-     * @return
+     * @return status of the Delete Operation
      */
     public Boolean delete(String templateName) {
         LOGGER.info("Deleting Template  {}", templateName);
@@ -80,7 +80,7 @@ public class TemplateService {
     /**
      * List all Templates
      *
-     * @return
+     * @return list of all the Templates
      */
     public List<Template> list() {
         LOGGER.info("Getting Templates ");

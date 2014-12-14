@@ -67,7 +67,7 @@ public class CategoryService {
      * Update a Category with given Object
      *
      * @param category Object to be update
-     * @return
+     * @return status of the Update
      */
     public Boolean update(Category category) {
         Boolean updated = false;

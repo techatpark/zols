@@ -33,12 +33,24 @@ public abstract class DataStore {
         validator = new Validator();
     }
     
+    /**
+     * 
+     * @param schemaName
+     * @param jsonData
+     * @return created Object
+     */
     public Map<String, Object> create(String schemaName,Map<String, Object> jsonData) {
         Schema schema = read(Schema.class,schemaName);
         ValidatedObject validatedObject = validator.getObject(schema,jsonData);
         return create(validatedObject.getJsonSchema(), validatedObject.getDataObject());
     }
     
+    /**
+     * 
+     * @param schemaName
+     * @param name
+     * @return Object with given name
+     */
     public Map<String, Object> read(String schemaName, String name) {        
         return read(read(schemaName), name);
     }
@@ -189,6 +201,8 @@ public abstract class DataStore {
 
     /**
      * Schema Related Methods
+     * @param jsonSchema
+     * @return created json schema
      */
     public JsonSchema create(JsonSchema jsonSchema) {
         Schema schema = new Schema();

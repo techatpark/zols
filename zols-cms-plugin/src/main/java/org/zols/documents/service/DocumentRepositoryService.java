@@ -55,7 +55,7 @@ public class DocumentRepositoryService {
      * Update a DocumentRepository with given Object
      *
      * @param documentRepository Object to be update
-     * @return
+     * @return status of the update operation
      */
     public Boolean update(DocumentRepository documentRepository) {
         Boolean updated = false;
@@ -80,7 +80,7 @@ public class DocumentRepositoryService {
     /**
      * List all DocumentRepositories
      *
-     * @return
+     * @return list of Document Repositories
      */
     public List<DocumentRepository> list() {
         LOGGER.info("Getting DocumentRepositories ");

@@ -55,7 +55,7 @@ public class DocumentRepository {
     /**
      * get the user name given by user
      *
-     * @return
+     * @return user name
      */
     public String getUserName() {
         return userName;
@@ -89,7 +89,7 @@ public class DocumentRepository {
     /**
      * get path
      *
-     * @return
+     * @return path
      */
     public String getPath() {
         return path;

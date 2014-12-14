@@ -67,7 +67,7 @@ public class LinkService {
      * Update a Link with given Object
      *
      * @param link Object to be update
-     * @return
+     * @return status of the Update operation
      */
     public Boolean update(Link link) {
         Boolean updated = false;
@@ -82,7 +82,7 @@ public class LinkService {
      * Delete a Link with given String
      *
      * @param linkName String to be delete
-     * @return
+     * @return status of the Delete operation
      */
     public Boolean delete(String linkName) {
         LOGGER.info("Deleting Link {}", linkName);
@@ -117,7 +117,7 @@ public class LinkService {
 
     /**
      * 
-     * @return 
+     * @return list of links
      */
     public List<Link> list() {
         LOGGER.info("Getting Links ");
@@ -126,7 +126,7 @@ public class LinkService {
 
     /**
      * 
-     * @return 
+     * @return list of application links
      */
     public Map<String, List<Link>> getApplicationLinks() {
         List<Category> categories = categoryService.list();
@@ -154,7 +154,7 @@ public class LinkService {
      *
      * @param linkName
      * @param url
-     * @return
+     * @return status of the Update
      */
     public Boolean linkUrl(String linkName,String url) {
         Boolean updated = false;

@@ -57,7 +57,7 @@ public class SchemaService {
      * Update a JsonSchema with given Object
      *
      * @param schema Object to be update
-     * @return
+     * @return status of the Update Operation
      */
     public Boolean update(JsonSchema schema) {
         Boolean updated = false;
@@ -82,7 +82,7 @@ public class SchemaService {
     /**
      * List all JsonSchemas
      *
-     * @return
+     * @return list of schema
      */
     public List<JsonSchema> list() {
         LOGGER.info("Getting JsonSchemas ");

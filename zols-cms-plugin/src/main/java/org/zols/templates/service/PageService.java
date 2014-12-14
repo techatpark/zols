@@ -76,7 +76,7 @@ public class PageService {
      * Update a Page with given Object
      *
      * @param page Object to be update
-     * @return
+     * @return returns the status of the Update Operation
      */
     public Boolean update(Page page) {
         Boolean updated = false;
@@ -91,7 +91,7 @@ public class PageService {
      * Delete a Page with given String
      *
      * @param pageName String to be delete
-     * @return
+     * @return status of the delete operation
      */
     public Boolean delete(String pageName) {
         LOGGER.info("Deleting Page {}", pageName);
@@ -101,7 +101,7 @@ public class PageService {
     /**
      * List all Pages
      *
-     * @return
+     * @return list of all pages
      */
     public List<Page> list() {
         LOGGER.info("Getting Pages ");

@@ -127,7 +127,7 @@ public class DocumentService {
      *
      * @param documentRepositoryName type of storage
      * @param folderPath the directory to list the files
-     * @return
+     * @return list of documents
      */
     public List<Document> list(String documentRepositoryName, String folderPath) {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
@@ -156,7 +156,7 @@ public class DocumentService {
      *
      * @param documentRepositoryName type of storage
      * @param folderPath the directory to list the files
-     * @return
+     * @return list of documents
      */
     public List<Document> listAll(String documentRepositoryName, String folderPath) {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);

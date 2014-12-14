@@ -6,7 +6,7 @@
 package org.zols.datastore.query;
 
 /**
- *
+ * 
  * @author sathish_ku
  * @param <T>
  */
@@ -79,7 +79,7 @@ public class Filter<T> {
     /**
      * gets name of the filter
      *
-     * @return
+     * @return name
      */
     public String getName() {
         return name;
@@ -88,7 +88,7 @@ public class Filter<T> {
     /**
      * Gets operator of the Filter
      *
-     * @return
+     * @return operator
      */
     public Operator getOperator() {
         return operator;
@@ -97,7 +97,7 @@ public class Filter<T> {
     /**
      * gets value of the Filter
      *
-     * @return
+     * @return value object
      */
     public T getValue() {
         return value;
