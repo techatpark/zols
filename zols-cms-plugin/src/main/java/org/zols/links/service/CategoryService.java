@@ -82,7 +82,7 @@ public class CategoryService {
      * Delete a Category with given String
      *
      * @param categoryName String to be delete
-     * @return
+     * @return status of Delete
      */
     public Boolean delete(String categoryName) {
         LOGGER.info("Deleting Category {}", categoryName);
@@ -90,6 +90,10 @@ public class CategoryService {
         return dataStore.delete(Category.class, categoryName);
     }
 
+    /**
+     * 
+     * @return list all the categories
+     */
     public List<Category> list() {
         return dataStore.list(Category.class);
     }
@@ -108,6 +112,10 @@ public class CategoryService {
         return dataStore.list(Link.class, query);
     }
 
+    /**
+     * 
+     * @return all the application links
+     */
     public Map<String, List<Link>> getApplicationLinks() {
         Map<String, List<Link>> applicationLinks = new HashMap<>();
         List<Category> categories = list();

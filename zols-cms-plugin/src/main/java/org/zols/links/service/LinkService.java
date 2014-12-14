@@ -115,11 +115,19 @@ public class LinkService {
         return dataStore.list(Link.class, query);
     }
 
+    /**
+     * 
+     * @return 
+     */
     public List<Link> list() {
         LOGGER.info("Getting Links ");
         return dataStore.list(Link.class);
     }
 
+    /**
+     * 
+     * @return 
+     */
     public Map<String, List<Link>> getApplicationLinks() {
         List<Category> categories = categoryService.list();
         if (categories != null) {
