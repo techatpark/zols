@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var replace = require('gulp-replace');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license']
@@ -86,6 +87,15 @@ gulp.task('fonts', function () {
 
 gulp.task('clean', function () {
   return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.rimraf());
+});
+
+gulp.task('thymeleaf', function () {
+  return gulp.src('dist/*.html')
+    .pipe(replace('src="scripts/', 'th:src="@{scripts/'))
+    .pipe(replace('.js">', '.js}">'))
+    .pipe(replace('href="styles/', 'th:href="@{styles/'))
+    .pipe(replace('.css">', '.css}"/>'))
+    .pipe(gulp.dest('dist'));
 });
 
 gulp.task('build', ['html', 'partials', 'images', 'fonts']);
