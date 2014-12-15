@@ -70,7 +70,7 @@ public class DocumentRepositoryService {
      * Delete a DocumentRepository with given String
      *
      * @param documentRepositoryName String to be delete
-     * @return
+     * @return status of the delete operation
      */
     public Boolean delete(String documentRepositoryName) {
         LOGGER.info("Deleting Document Repository {}", documentRepositoryName);

@@ -72,7 +72,7 @@ public class SchemaService {
      * Delete a JsonSchema with given String
      *
      * @param schemaName String to be delete
-     * @return
+     * @return status of the Delete Operation
      */
     public Boolean delete(String schemaName) {
         LOGGER.info("Deleting JsonSchema  {}", schemaName);

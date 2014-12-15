@@ -93,7 +93,7 @@ public class TemplateRepositoryService {
     
     /**
      * List templates under given repository
-     * @param repositoryName
+     * @param repositoryName name of the repository
      * @return list of templates
      */
     public List<Template> listTemplates(String repositoryName) {

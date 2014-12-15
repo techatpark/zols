@@ -56,7 +56,7 @@ public class LinkService {
      * Get the Link with given String
      *
      * @param linkName String to be Search
-     * @return searched Link
+     * @return Link
      */
     public Link read(String linkName) {
         LOGGER.info("Reading Link {}", linkName);
@@ -152,8 +152,8 @@ public class LinkService {
     /**
      * Update a Link with given Url
      *
-     * @param linkName
-     * @param url
+     * @param linkName name of the Link
+     * @param url URL to be linked
      * @return status of the Update
      */
     public Boolean linkUrl(String linkName,String url) {

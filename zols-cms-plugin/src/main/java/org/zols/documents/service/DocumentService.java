@@ -38,7 +38,7 @@ public class DocumentService {
     /**
      * Upload documents
      *
-     * @param documentRepositoryName
+     * @param documentRepositoryName name of the repository
      * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
      */

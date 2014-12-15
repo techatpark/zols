@@ -25,7 +25,7 @@ public class Query {
 
     /**
      * gets filters from the query
-     * @return 
+     * @return list of filters
      */
     public List<Filter> getFilters() {
         return filters;
@@ -33,7 +33,7 @@ public class Query {
 
     /**
      * Adds a Filter to the query
-     * @param filter 
+     * @param filter filter to be added
      */
     public void addFilter(Filter filter) {
         filters.add(filter);

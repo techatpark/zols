@@ -8,7 +8,7 @@ package org.zols.datastore.query;
 /**
  * 
  * @author sathish_ku
- * @param <T>
+ * @param <T> type of the object for which this filter has to be applied
  */
 public class Filter<T> {
 
@@ -22,19 +22,19 @@ public class Filter<T> {
          */
         EQUALS,
         /**
-         * Compare with >
+         * Compare with 
          */
         GREATER_THAN,
         /**
-         * Compare with >=
+         * Compare with 
          */
         GREATER_THAN_EQUALS,
         /**
-         * Compare with <
+         * Compare with 
          */
         LESSER_THAN,
         /**
-         * Compare with <=
+         * Compare with
          */
         LESSER_THAN_EQUALS,
         /**
@@ -54,9 +54,9 @@ public class Filter<T> {
     /**
      * Intialize the Filter
      *
-     * @param name
-     * @param operator
-     * @param value
+     * @param name name of the filter
+     * @param operator operator of the filter
+     * @param value value of the filter
      */
     public Filter(String name, Operator operator, T value) {
         this.name = name;
@@ -67,8 +67,8 @@ public class Filter<T> {
     /**
      * Intialize the Filter without value
      *
-     * @param name
-     * @param operator
+     * @param name name of the filter
+     * @param operator operator of the filter
      */
     public Filter(String name, Operator operator) {
         this.name = name;

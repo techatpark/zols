@@ -12,7 +12,7 @@ public class DocumentRepository {
      */
     public static final String FILE_SYSTEM = "file";
     public static final String FTP = "ftp";
-   
+
     @Id
     private String name;
     private String label;
@@ -33,21 +33,10 @@ public class DocumentRepository {
         this.label = label;
     }
 
-    /**
-     * *
-     * get the host name
-     *
-     * @return host
-     */
     public String getHost() {
         return host;
     }
 
-    /**
-     * set host name
-     *
-     * @param host set host name as the user's current host
-     */
     public void setHost(String host) {
         this.host = host;
     }
@@ -86,20 +75,10 @@ public class DocumentRepository {
         this.rootFolder = rootFolder;
     }
 
-    /**
-     * get path
-     *
-     * @return path
-     */
     public String getPath() {
         return path;
     }
 
-    /**
-     * set path where to be stored
-     *
-     * @param path
-     */
     public void setPath(String path) {
         this.path = path;
     }
@@ -135,6 +114,5 @@ public class DocumentRepository {
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
-    
-    
+
 }

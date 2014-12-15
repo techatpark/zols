@@ -35,8 +35,8 @@ public abstract class DataStore {
     
     /**
      * 
-     * @param schemaName
-     * @param jsonData
+     * @param schemaName name of the schema
+     * @param jsonData Dynamic Data for the given schema
      * @return created Object
      */
     public Map<String, Object> create(String schemaName,Map<String, Object> jsonData) {
@@ -47,8 +47,8 @@ public abstract class DataStore {
     
     /**
      * 
-     * @param schemaName
-     * @param name
+     * @param schemaName name of the schema
+     * @param name name of the Schema data
      * @return Object with given name
      */
     public Map<String, Object> read(String schemaName, String name) {        
@@ -56,16 +56,33 @@ public abstract class DataStore {
     }
     
 
+    /**
+     * 
+     * @param schemaName name of the schema
+     * @param jsonData Dynamic Data for the given schema
+     * @return status of the update operation
+     */
     public boolean update(String schemaName,Map<String, Object> jsonData) {
         Schema schema = read(Schema.class,schemaName);
         ValidatedObject validatedObject = validator.getObject(schema,jsonData);
         return update(validatedObject.getJsonSchema(), validatedObject.getDataObject());
     }
 
+    /**
+     * 
+     * @param schemaName name of the schema
+     * @param name name of the Schema data
+     * @return status of the delete operation
+     */
     public boolean delete(String schemaName, String name) {
         return delete(read(schemaName), name);
     }
     
+    /**
+     * 
+     * @param schemaName name of the schema
+     * @return lis of dynamic objects
+     */
     public List<Map<String, Object>> list(String schemaName) {
         return list(read(schemaName));
     }
@@ -120,7 +137,7 @@ public abstract class DataStore {
      *
      * @param <T> Type of the Object
      * @param clazz Class of the Object to be read
-     * @param query
+     * @param query query for the retrival
      * @return object with given name
      */
     public <T> List<T> list(Class<T> clazz, Query query) {
@@ -140,8 +157,8 @@ public abstract class DataStore {
      *
      * @param <T> Type of the Object
      * @param clazz Class of the Object to be read
-     * @param pageNumber
-     * @param pageSize
+     * @param pageNumber page number 
+     * @param pageSize size of the page
      * @return object with given name
      */
     public <T> List<T> list(Class<T> clazz, int pageNumber, int pageSize) {
@@ -149,8 +166,8 @@ public abstract class DataStore {
     }
 
     /**
-     * @param dataObject
-     * @return
+     * @param dataObject dataObject
+     * @return status of the update
      */
     public boolean update(Object dataObject) {
         ValidatedObject validatedObject = validator.getObject(dataObject);
@@ -182,8 +199,8 @@ public abstract class DataStore {
     /**
      * gets Id field of a schema
      *
-     * @param jsonSchema
-     * @return
+     * @param jsonSchema schema object
+     * @return name of the id field
      */
     public String getIdField(JsonSchema jsonSchema) {
         String idField = null;
@@ -201,7 +218,7 @@ public abstract class DataStore {
 
     /**
      * Schema Related Methods
-     * @param jsonSchema
+     * @param jsonSchema schema object
      * @return created json schema
      */
     public JsonSchema create(JsonSchema jsonSchema) {
@@ -251,9 +268,9 @@ public abstract class DataStore {
      */
     /**
      *
-     * @param validatedDataObject
-     * @param jsonSchema
-     * @return
+     * @param validatedDataObject validated object
+     * @param jsonSchema schema of dynamic data
+     * @return dynamic data as map
      */
     protected abstract Map<String, Object> create(
             JsonSchema jsonSchema,
@@ -261,9 +278,9 @@ public abstract class DataStore {
 
     /**
      *
-     * @param jsonSchema
-     * @param idValue
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @param idValue dynamic object name
+     * @return dynamic data as map
      */
     protected abstract Map<String, Object> read(
             JsonSchema jsonSchema,
@@ -271,43 +288,43 @@ public abstract class DataStore {
 
     /**
      *
-     * @param jsonSchema
-     * @param idValue
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @param idValue dynamic object name
+     * @return status of the delete operation
      */
     protected abstract boolean delete(JsonSchema jsonSchema,
             String idValue);
 
     /**
      *
-     * @param jsonSchema
-     * @param query
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @param query query to delete
+     * @return status of the delete operation
      */
     protected abstract boolean delete(JsonSchema jsonSchema,
             Query query);
 
     /**
      *
-     * @param jsonSchema
-     * @param validatedDataObject
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @param validatedDataObject validated Object
+     * @return status of the update operation
      */
     protected abstract boolean update(JsonSchema jsonSchema,
             Map<String, Object> validatedDataObject);
 
     /**
      *
-     * @param jsonSchema
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @return list of dynamic objects
      */
     protected abstract List<Map<String, Object>> list(JsonSchema jsonSchema);
 
     /**
      *
-     * @param jsonSchema
-     * @param query
-     * @return
+     * @param jsonSchema schema of dynamic data
+     * @param query query to be used
+     * @return list of dynamic objects
      */
     protected abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
             Query query);
