@@ -158,6 +158,13 @@
             ga('send', 'pageview');
         </script>
 
+        <script>
+            var re = (class|id|style)="[^"]+";
+            var str = ' src="scripts/modernizr-c1ff1650.js"';
+            var newstr = str.replace(re, "$1");
+            console.log(newstr);
+        </script>
+
 
 
         <!-- build:js({app,.tmp}) scripts/main.js -->

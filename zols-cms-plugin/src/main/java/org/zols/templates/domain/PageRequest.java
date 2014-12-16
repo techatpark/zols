@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author sathish
  */
-public class CreatePageRequest {
+public class PageRequest {
     private String linkName;
     private Template template;
     private Map<String, Object> data;

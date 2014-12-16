@@ -7,6 +7,10 @@
     var templates;
     var page_request;
 
+    $.ajaxSetup({
+        contentType: 'application/json'
+    });
+
     $.fn.listPageOptions = function () {
         template = $.templates("#pageOptions");
         template.link('#result', null);
@@ -58,7 +62,7 @@
                         method: 'POST',
                         url: base_url + '/pages',
                         dataType: 'json',
-                        data: page_request
+                        data: JSON.stringify(page_request)
                     }).done(function (data) {
                         alert('success');
                     }).error(function (data) {

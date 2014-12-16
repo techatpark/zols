@@ -14,8 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.service.DataService;
 import org.zols.links.service.LinkService;
-import org.zols.templates.domain.CreatePageRequest;
+import org.zols.templates.domain.PageRequest;
 import org.zols.templates.domain.Page;
+import org.zols.templates.domain.Template;
 
 /**
  *
@@ -35,30 +36,52 @@ public class PageService {
     @Autowired
     private DataStore dataStore;
 
+    @Autowired
+    private TemplateService templateService;
     /**
      * Creates a new Page with given Object
      *
-     * @param createPageRequest Object to be Create
+     * @param pageRequest Object to be Create
      * @return created Page object
      */
-    public Page create(CreatePageRequest createPageRequest) {
+    public Page create(PageRequest pageRequest) {
         Page createdPage = null;
-        if (createPageRequest != null) {
+        if (pageRequest != null) {
             
-            Map<String,Object> createdData = dataService.create(createPageRequest.getTemplate().getDataType(), createPageRequest.getData());
+            Map<String,Object> createdData = dataService.create(pageRequest.getTemplate().getDataType(), pageRequest.getData());
             
-            String dataName = createdData.get(dataService.getIdField(createPageRequest.getTemplate().getDataType())).toString();
+            String dataName = createdData.get(dataService.getIdField(pageRequest.getTemplate().getDataType())).toString();
             
             Page page = new Page();
             page.setDataName(dataName);
-            page.setTemplateName(createPageRequest.getTemplate().getName());
+            page.setTemplateName(pageRequest.getTemplate().getName());
             
             createdPage = dataStore.create(Page.class, page);
             LOGGER.info("Created Page {}", createdPage.getName());
             
-            linkService.linkUrl(createPageRequest.getLinkName(), "/pages/"+createdPage.getName());
+            linkService.linkUrl(pageRequest.getLinkName(), "/pages/"+createdPage.getName());
         }
         return createdPage;
+    }
+    
+    /**
+     * Get the Page Request with given String
+     *
+     * @param pageName String to be Search
+     * @return searched Page
+     */
+    public PageRequest readRequest(String pageName) {
+        LOGGER.info("Reading Page Request {}", pageName);
+        PageRequest pageRequest;
+        Page page = read(pageName);
+        if(page != null) {
+            pageRequest = new PageRequest();
+            Template template = templateService.read(page.getTemplateName());
+            pageRequest.setTemplate(template);
+            pageRequest.setData(dataService.read(template.getDataType(), page.getDataName()));
+            return pageRequest;
+        }
+        return null;
     }
 
     /**

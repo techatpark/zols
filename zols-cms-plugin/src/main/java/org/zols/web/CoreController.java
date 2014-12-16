@@ -5,14 +5,20 @@
  */
 package org.zols.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.zols.templates.domain.PageRequest;
+import org.zols.templates.service.PageService;
 
 @Controller
 public class CoreController {
+    
+    @Autowired
+    private PageService pageService;
 
     @RequestMapping("/")
     public String index() {
@@ -41,8 +47,10 @@ public class CoreController {
     }
 
     @RequestMapping("/pages/{name}")
-    public String pages(@PathVariable(value = "name") String name) {
-        return name;
+    public String pages(@PathVariable(value = "name") String name,Model model) {
+        PageRequest pageRequest = pageService.readRequest(name);
+        model.addAttribute("data", pageRequest.getData());
+        return pageRequest.getTemplate().getName();
     }
     
     @RequestMapping("/create_page/{linkName}")

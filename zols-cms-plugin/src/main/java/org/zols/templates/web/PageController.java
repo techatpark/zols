@@ -20,7 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.zols.templates.domain.CreatePageRequest;
+import org.zols.templates.domain.PageRequest;
 import org.zols.templates.domain.Page;
 import org.zols.templates.service.PageService;
 
@@ -33,7 +33,7 @@ public class PageController {
     private PageService pageService;
 
     @RequestMapping(method = POST)
-    public Page create(@RequestBody CreatePageRequest createPageRequest) {
+    public Page create(@RequestBody PageRequest createPageRequest) {
         LOGGER.info("Creating new pages {}", createPageRequest.getLinkName());
         return pageService.create(createPageRequest);
     }
