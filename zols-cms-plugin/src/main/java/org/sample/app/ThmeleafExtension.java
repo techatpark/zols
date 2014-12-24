@@ -40,19 +40,23 @@ public class ThmeleafExtension {
         intializeResolver(resolver);
         templateEngine.addTemplateResolver(resolver);
 
-        List<TemplateRepository> templateRepositories = templateRepositoryService.list();
-        if (templateRepositories != null) {
-            for (TemplateRepository templateRepository : templateRepositories) {
-                switch (templateRepository.getType()) {
-                    case "file":
-                        resolver = new FileTemplateResolver();
-                        file = new File(templateRepository.getPath());
-                        resolver.setPrefix(file.getAbsolutePath() + File.separator);
-                        intializeResolver(resolver);
-                        templateEngine.addTemplateResolver(resolver);
-                        break;
+        try {
+            List<TemplateRepository> templateRepositories = templateRepositoryService.list();
+            if (templateRepositories != null) {
+                for (TemplateRepository templateRepository : templateRepositories) {
+                    switch (templateRepository.getType()) {
+                        case "file":
+                            resolver = new FileTemplateResolver();
+                            file = new File(templateRepository.getPath());
+                            resolver.setPrefix(file.getAbsolutePath() + File.separator);
+                            intializeResolver(resolver);
+                            templateEngine.addTemplateResolver(resolver);
+                            break;
+                    }
                 }
             }
+
+        } catch (Exception e) {
         }
 
     }

@@ -5,9 +5,6 @@
  */
 package org.zols.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.zols.datastore.DataStore;
-import org.zols.datastore.mongo.MongoDataStore;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -29,8 +26,5 @@ public class ZolsConfiguration extends WebMvcConfigurerAdapter{
         return new PagePopulationInterceptor();
     }
     
-    @Bean
-    public DataStore dataStore() {
-        return new MongoDataStore();
-    }
+
 }

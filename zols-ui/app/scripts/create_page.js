@@ -64,7 +64,7 @@
                         dataType: 'json',
                         data: JSON.stringify(page_request)
                     }).done(function (data) {
-                        alert('success');
+                        window.location = base_url + '/../pages/'+data.name;
                     }).error(function (data) {
                         $.fn.onError(data);
                     });

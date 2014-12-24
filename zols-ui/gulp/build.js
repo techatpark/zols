@@ -89,7 +89,7 @@ gulp.task('clean', function () {
   return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.rimraf());
 });
 
-gulp.task('thymeleaf', function () {
+gulp.task('thymeleaf',['html'], function () {
   return gulp.src('dist/*.html')
     .pipe(replace('src="scripts/', 'th:src="@{scripts/'))
     .pipe(replace('.js">', '.js}">'))

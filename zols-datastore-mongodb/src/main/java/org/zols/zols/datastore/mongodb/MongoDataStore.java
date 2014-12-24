@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.mongo;
+package org.zols.zols.datastore.mongodb;
 
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.mongodb.BasicDBObject;
