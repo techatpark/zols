@@ -2,6 +2,7 @@
 **/*iws
 **/*iml
 **/target
+**/data
 **/bin
 **/nbproject
 **/bower_components
