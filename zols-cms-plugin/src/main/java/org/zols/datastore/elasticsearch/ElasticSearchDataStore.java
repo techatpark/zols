@@ -9,6 +9,9 @@ import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.elasticsearch.action.ActionRequest;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -17,6 +20,7 @@ import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.node.Node;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+import static org.elasticsearch.river.RiverIndexName.Conf.indexName;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.stereotype.Service;
@@ -30,15 +34,26 @@ import org.zols.datastore.query.Query;
 public class ElasticSearchDataStore extends DataStore {
 
     private final Node node;
+    private final String indexName = "zols";
 
     public ElasticSearchDataStore() {
         node = nodeBuilder().local(true).node();
+        createIndexIfNotExists();
+    }
+
+    private void createIndexIfNotExists() {
+        IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName);
+        if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
+            CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
+            node.client().admin().indices().create(createIndexRequest).actionGet();
+        }
     }
 
     @Override
     protected Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex("zols", jsonSchema.getId(), idValue)
+        IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
+                .setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
@@ -47,14 +62,18 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
-        GetResponse getResponse = node.client().prepareGet("zols", jsonSchema.getId(), idValue).execute().actionGet();
+        GetResponse getResponse = node.client()
+                .prepareGet(indexName, jsonSchema.getId(), idValue)
+                .setOperationThreaded(false)
+                .execute()
+                .actionGet();
         return getResponse.getSource();
     }
 
     @Override
     protected boolean delete(JsonSchema jsonSchema, String idValue) {
         DeleteResponse response = node.client()
-                .prepareDelete("zols", jsonSchema.getId(), idValue)
+                .prepareDelete(indexName, jsonSchema.getId(), idValue)
                 .execute()
                 .actionGet();
         return response.isFound();
@@ -68,7 +87,8 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex("zols", jsonSchema.getId(), idValue)
+        IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
+                .setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
@@ -85,7 +105,7 @@ public class ElasticSearchDataStore extends DataStore {
         List<Map<String, Object>> list = null;
         SearchResponse response = node.client()
                 .prepareSearch()
-                .setIndices("zols")
+                .setIndices(indexName)
                 .setTypes(jsonSchema.getId())
                 .setPostFilter(getFilterBuilder(query))
                 .execute().actionGet();
