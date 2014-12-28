@@ -53,18 +53,18 @@ public class ElasticSearchDataStore extends DataStore {
     protected Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
         IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
-                .setOperationThreaded(false)
+                
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
-        return read(jsonSchema, idValue);
+        return ( response.isCreated() ? read(jsonSchema, idValue) : null );
     }
 
     @Override
     protected Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
         GetResponse getResponse = node.client()
                 .prepareGet(indexName, jsonSchema.getId(), idValue)
-                .setOperationThreaded(false)
+                
                 .execute()
                 .actionGet();
         return getResponse.getSource();
@@ -74,6 +74,7 @@ public class ElasticSearchDataStore extends DataStore {
     protected boolean delete(JsonSchema jsonSchema, String idValue) {
         DeleteResponse response = node.client()
                 .prepareDelete(indexName, jsonSchema.getId(), idValue)
+                
                 .execute()
                 .actionGet();
         return response.isFound();
@@ -88,11 +89,11 @@ public class ElasticSearchDataStore extends DataStore {
     protected boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
         IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
-                .setOperationThreaded(false)
+                
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
-        return true;
+        return response.isCreated();
     }
 
     @Override
