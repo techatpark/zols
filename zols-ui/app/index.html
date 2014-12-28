@@ -41,101 +41,66 @@
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="container">
-
-            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-                <!-- Brand and toggle get grouped for better mobile display -->
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                        <img class="img-responsive" src="images/logo_150x50.png" th:src="@{/images/logo_150x50.png}" alt=""/>
+                        <img class="img-responsive" src="images/logo_120x40.png" th:src="@{/images/logo_120x40.png}" alt=""/>
                     </a>
                 </div>
-
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
-                        <li th:each="link : ${linkentry.value}">
-                            <a th:href="${link.targetUrl}" th:text="${link.label}" href="/links.html">Links</a>                            
-                        </li>
-                        <!--/*-->
-                        <li><a href="templates.html">Templates</a></li>
-                        <li><a href="datastore.html">Data Store</a></li>
-                        <!--*/-->
-                    </ul> 
-
-                    <ul class="nav navbar-nav navbar-right" >
-                        <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
-                        <li class="dropdown" sec:authorize="isAuthenticated()">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="glyphicon glyphicon-user"></span> 
-                                <strong sec:authentication="name">Sathish</strong>
-                                <span class="glyphicon glyphicon-chevron-down"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <div class="navbar-login">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <p class="text-center">
-                                                    <span class="glyphicon glyphicon-user icon-size"></span>
-                                                </p>
-                                            </div>
-                                            <div class="col-lg-8">
-                                                <p class="text-left"><strong sec:authentication="name">Sathish Kumar</strong></p>
-                                                <p class="text-left small" sec:authentication="principal.authorities">correoElectronico@email.com</p>
-                                                <p class="text-left">
-                                                    <a href="controlpanel.html" th:href="@{/controlpanel}" class="btn btn-primary btn-block btn-sm">Control Panel</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="#">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
                                 <li class="divider"></li>
-                                <li>
-                                    <div class="navbar-login navbar-login-session">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <p>
-                                                    <a href="login.html" th:href="@{/logout}" class="btn btn-danger btn-block">Logout</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                <li class="dropdown-header">Nav header</li>
+                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">One more separated link</a></li>
                             </ul>
                         </li>
                     </ul>
-                </div><!-- /.navbar-collapse -->
-            </nav>
-
-
-
-
-            <!--            <div class="forkGit">
-                                <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
-            
-            </div>-->
-            <div class="container">
-                <div class="row" th:include="${viewName}::content" th:fragment="content">
-                    Home Page
-                </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link</a></li>
+                        <li><a href="#">Link</a></li>
+                        <li><a href="#">Link</a></li>
+                    </ul>
+                </div><!--/.nav-collapse -->
             </div>
+        </nav>
 
-
-
-            <hr/>
-
-            <div class="footer">
-                <p>With ♥ from <a href="https://twitter.com/Swiip">@Swiip</a></p>
+        <!-- Begin page content -->
+        <div class="container">
+            <div class="page-header">
+                <h1>Sticky footer with fixed navbar</h1>
             </div>
-
+            <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body > .container</code>.</p>
+            <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
         </div>
+
+        <footer class="footer navbar-fixed-bottom">
+            <div class="container">
+                <ul class="nav navbar-nav"><li><a href="#">Link</a></li></ul>
+                                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Link</a></li>
+                        <li><a href="#">Link</a></li>
+                        <li><a href="#">Link</a></li>
+                    </ul>
+            </div>
+        </footer>
 
 
 
@@ -159,8 +124,8 @@
         </script>
 
         <script>
-            var re = (class|id|style)="[^"]+";
-            var str = ' src="scripts/modernizr-c1ff1650.js"';
+            var re = (class | id | style) = "[^"] + ";
+                    var str = ' src="scripts/modernizr-c1ff1650.js"';
             var newstr = str.replace(re, "$1");
             console.log(newstr);
         </script>
