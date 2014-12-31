@@ -42,14 +42,13 @@ public class ThmeleafExtension {
             List<TemplateRepository> templateRepositories = templateRepositoryService.list();
             if (templateRepositories != null) {
                 for (TemplateRepository templateRepository : templateRepositories) {
-                    switch (templateRepository.getType()) {
-                        case "file":
-                            resolver = new FileTemplateResolver();
-                            file = new File(templateRepository.getPath());
-                            resolver.setPrefix(file.getAbsolutePath() + File.separator);
-                            intializeResolver(resolver);
-                            templateEngine.addTemplateResolver(resolver);
-                            break;
+                    if ("file".equals(templateRepository.getType())) {
+                        resolver = new FileTemplateResolver();
+                        file = new File(templateRepository.getPath());
+                        resolver.setPrefix(file.getAbsolutePath() + File.separator);
+                        intializeResolver(resolver);
+                        templateEngine.addTemplateResolver(resolver);
+                        break;
                     }
                 }
             }
