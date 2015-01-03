@@ -1,21 +1,12 @@
 'use strict';
 var gulp = require('gulp');
-var clean = require('gulp-clean');
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license']
 });
 
 var replace = require('gulp-replace');
 
-gulp.task('cleanspringboot', function () {
-  return gulp.src(['../zols-cms-plugin/src/main/resources/templates'
-		, '../zols-cms-plugin/src/main/resources/static']
-		, { read: false })
-	.pipe(clean({force: true}));
-	
-});
-
-gulp.task('thymeleaf',['build','cleanspringboot'], function () {
+gulp.task('thymeleaf',['build'], function () {
   return gulp.src('dist/*.html')
     .pipe(replace('src="scripts/', 'th:src="@{scripts/'))
     .pipe(replace('.js">', '.js}">'))

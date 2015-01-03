@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var clean = require('gulp-clean');
 
 var $ = require('gulp-load-plugins')({
   pattern: ['gulp-*', 'main-bower-files', 'uglify-save-license']
@@ -85,7 +86,12 @@ gulp.task('fonts', function () {
 });
 
 gulp.task('clean', function () {
-  return gulp.src(['.tmp', 'dist'], { read: false }).pipe($.rimraf());
+  return gulp.src(['.tmp'
+			, 'dist'
+			,'../zols-cms-plugin/src/main/resources/templates'
+			, '../zols-cms-plugin/src/main/resources/static'
+		], { read: false })
+		.pipe(clean({force: true}));
 });
 
 gulp.task('build', ['html', 'partials', 'images', 'fonts']);
