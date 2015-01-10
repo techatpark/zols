@@ -113,7 +113,8 @@
                 <p>Please select a Repository Type</p>
                 <p>
                 <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a> 
-                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> 
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="url">URL</a> 
+                <!--<a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> -->
                 </p>
                 </div>
                 </div>
@@ -191,7 +192,7 @@
                 </div>
                 </div>
 
-                {{if type === 'file'}}
+                {{if type === 'file' || type === 'url'}}
                 <!-- Text input-->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="path">Path</label>  

@@ -83,7 +83,7 @@
         </nav>
 
         <!-- Begin page content -->
-        <div class="container">
+        <div class="container" th:include="${viewName}::content" th:fragment="content">
             <div class="page-header">
                 <h1>Sticky footer with fixed navbar</h1>
             </div>
