@@ -5,30 +5,31 @@
  */
 package org.zols.datastore.elasticsearch;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.elasticsearch.action.ActionRequest;
+
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.node.Node;
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
-import static org.elasticsearch.river.RiverIndexName.Conf.indexName;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 import org.zols.datastore.query.Query;
+
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 
 @Service
 public class ElasticSearchDataStore extends DataStore {
@@ -74,7 +75,6 @@ public class ElasticSearchDataStore extends DataStore {
     protected boolean delete(JsonSchema jsonSchema, String idValue) {
         DeleteResponse response = node.client()
                 .prepareDelete(indexName, jsonSchema.getId(), idValue)
-                
                 .execute()
                 .actionGet();
         return response.isFound();
@@ -82,7 +82,10 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected boolean delete(JsonSchema jsonSchema, Query query) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
+    			.setQuery(termQuery("_type", jsonSchema.getId()))
+                .execute().actionGet();
+    	return true;
     }
 
     @Override
@@ -122,6 +125,8 @@ public class ElasticSearchDataStore extends DataStore {
         }
         return list;
     }
+    
+    
 
     private FilterBuilder getFilterBuilder(Query query) {
         FilterBuilder filterBuilder = null;
