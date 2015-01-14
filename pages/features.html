@@ -12,7 +12,7 @@
                 <nav>
                     <ul>
                         <li><a href="../">About</a></li>
-                        <li><a href="gettingstarted.html">Guides</a></li>
+                        <li><a href="gettingstarted.html">Guide</a></li>
                         <li><a class="active">Features</a></li>
                         <li><a href="#">Samples</a></li>
                     </ul>
@@ -38,19 +38,32 @@
                     </ul>
                     <div class="clear"></div>
                 </header>
-                <section class="topicContent" >
-                    
+                <section class="topicContent" >                    
                     <p>
-                        Below are the out of the box features zols provide.You can build any custom feature on top of this and deploy to the CMS easily.Zols is build with collection of loosely copuled components. Each component berings its own feature. Any application build using zols is a valid pluggable component.                        
-                    </p>                    
+                        Below are the out of the box features zols provide.You can build any custom feature on top of this and deploy to the CMS easily.Zols is build with collection of loosely coupled components. Each component brings its own feature. Any application build using zols is a valid pluggable component.                        
+                    </p>  
+					<h1>Embedded CMS</h1>
+					<p>
+						Zols can run as a standalone CMS or as an embedded CMS within an existing Spring Web Application.
+						Include the necessary jars to your Spring Application, and CMS is enabled right-away.
+					</p>					
                     <h1>Schema Builder</h1>
                     <p>
 						Users can define Schema of the content using Schema builder. For E.g we build a education portal then we shall model the data types such as School, College, Location and Classrooms using schema builder. This will later be used to get the content from content authoring.
-					</p>
-                    
+					</p>                    
                     <h1>Template Repository</h1>
                     <p>
 						Template Repository is the way for designers to link their HTML Projects into the CMS. Designers can keep their HTML Code in either File System or Static Server.  Once this is configured properly, Any changes that happens in these HTML code will directly reflect in the website.
+					</p>
+					
+					<h1>Adaptive Design</h1>
+                    <p>
+						Zols uses Adaptive Design strategy. Designers can provide device specific templates (Mobile, Tablet or Desktop) which will be considered while rendering the page across the devices.
+					</p>
+					
+					<h1>Role Based Security</h1>
+                    <p>
+						Zols is build with Spring Security. Access to the url/methods can be secured based on user roles.
 					</p>
                     
                     <h1>Document Repository</h1>
