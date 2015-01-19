@@ -30,6 +30,10 @@ import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
 
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 
 @Service
 public class ElasticSearchDataStore extends DataStore {
@@ -83,7 +87,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean delete(JsonSchema jsonSchema, Query query) {
 		DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
-    			.setQuery(termQuery("_type", jsonSchema.getId()))
+    			.setQuery(getQueryBuilder(query))
                 .execute().actionGet();
     	return true;
     }
@@ -151,6 +155,11 @@ public class ElasticSearchDataStore extends DataStore {
             }
         }
         return filterBuilder;
+    }
+    
+    private QueryBuilder getQueryBuilder(Query query) {
+        QueryBuilder queryBuilder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), getFilterBuilder(query));
+        return queryBuilder;
     }
 
 }
