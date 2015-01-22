@@ -19,9 +19,7 @@
     var listOfCategories;
     var selectedTemplate;
     var listOfTemplates;
-
     var editor;
-
     var confirmationPromise;
 
     $('#edit_selected').on('click', function () {
@@ -41,6 +39,16 @@
         confirmationPromise.done(function () {
             $.fn.deleteSchema();
         });
+    });
+
+    $('#result').on('click', '#addAttr', function () {
+        var template = $.templates("#attributeTemplate");
+        $("#schemaLayout").append(template.render({}));
+
+    });
+
+    $("#result").on('click', '.deleteAttr', function () {
+        $(this).parents(":eq(1)").remove();
     });
 
     $.fn.listSchemas = function () {
@@ -127,7 +135,24 @@
 
     $.fn.saveSchema = function () {
 
-        selectedSchema.schema = JSON.parse(selectedSchema.schema);
+        var schemaObj = {};
+        schemaObj.id = $("#schemaId").val();
+        schemaObj.title = $("#title").val();
+        schemaObj.properties = {};
+        schemaObj.required = [];
+        $("#schemaLayout .row input[type='text']").each(function(i,data){
+           var dataValue = $(this).val();
+           var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
+           schemaObj["properties"][dataValue] = {};
+           schemaObj["properties"][dataValue]["type"]=$(this).parent().next().find("select").val();
+           if($checkbox.is(":checked")){
+               schemaObj.required.push(dataValue);
+           }
+        });
+       console.log(JSON.stringify(schemaObj));
+
+
+        /*selectedSchema.schema = JSON.parse(selectedSchema.schema);
         //selectedSchema.schema.type = selectedSchema.schemaType;
         if (selectedSchema.isEdit) {
             delete selectedSchema.isEdit;
@@ -155,7 +180,7 @@
             }).error(function (data) {
                 $.fn.onError(data);
             });
-        }
+        }*/
 
 
     };
@@ -211,7 +236,7 @@
             delete selectedTemplate.isEdit;
             $.ajax({
                 method: 'PUT',
-                url: base_url + '/data/' + selectedSchema.id + '/' +selectedTemplate.name,
+                url: base_url + '/data/' + selectedSchema.id + '/' + selectedTemplate.name,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
             }).done(function (data) {
@@ -222,7 +247,7 @@
         } else {
             $.ajax({
                 method: 'POST',
-                url: base_url + '/data/'+ selectedSchema.id ,
+                url: base_url + '/data/' + selectedSchema.id,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
             }).done(function (data) {
@@ -238,7 +263,7 @@
     $.fn.deleteTemplate = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + selectedSchema.id + '/'+ selectedTemplate.name,
+            url: base_url + '/data/' + selectedSchema.id + '/' + selectedTemplate.name,
             dataType: 'json'
         }).done(function (data) {
             $.fn.refreshList();

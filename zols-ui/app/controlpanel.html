@@ -16,51 +16,64 @@
         <!-- endbuild -->
     </head>
     <body>
-            <div class="container">
-                <div class="row" th:fragment="content" >
-                    <div class="page-header">
-                        <div class="container">
-                            <div class="row-fluid">
-                                <h1>Control Panel</h1>
-                            </div>
-                        </div>
-                    </div>
-
+        <div class="container">
+            <div class="row" th:fragment="content" >
+                <div class="page-header">
                     <div class="container">
-                        <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
-                                <div class="quote"><i class="fa fa-quote-left fa-4x"></i></div>
-                                <div class="carousel slide" id="fade-quote-carousel" data-ride="carousel" data-interval="3000">
-                                    <!-- Carousel indicators -->
-                                    <ol class="carousel-indicators">
-                                        <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>                                   
-                                    </ol>
-                                    <!-- Carousel items -->
-                                    <div class="carousel-inner">
-                                        <div class="active item">
-                                            <div class="row row-centered">                                                
-                                                <a href="/datastore.html" th:href="@{/datastore}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
-                                                <a href="/templates.html" th:href="@{/templates}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
-                                                <a href="/links.html" th:href="@{/links}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
-                                                <a href="/documents.html" th:href="@{/documents}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
-                                                <a href="/users.html" th:href="@{/users}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
-                                                <a href="/setting.html" th:href="@{/setting}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>							
+                        <div class="row-fluid">
+                            <h1>Control Panel</h1>
                         </div>
                     </div>
                 </div>
+
+                <div class="container">
+                    <div class="row">
+                        <section id="carousel">    				
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-8 col-md-offset-2">
+                                        <div class="quote"><i class="fa fa-quote-left fa-4x"></i></div>
+                                        <div class="carousel slide" id="fade-quote-carousel" data-ride="carousel" >
+                                            <!-- Carousel indicators -->
+                                            <ol class="carousel-indicators">
+                                                <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
+                                                <li data-target="#fade-quote-carousel" data-slide-to="1"></li>
+                                                <li data-target="#fade-quote-carousel" data-slide-to="2"></li>
+                                            </ol>
+                                            <!-- Carousel items -->
+                                            <div class="carousel-inner">
+                                                <div class="active item">
+                                                    <div class="row row-centered">                                                
+                                                        <a href="/datastore.html" th:href="@{/datastore}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
+                                                        <a href="/templates.html" th:href="@{/templates}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
+                                                        <a href="/links.html" th:href="@{/links}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
+                                                        <a href="/documents.html" th:href="@{/documents}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
+                                                        <a href="/users.html" th:href="@{/users}"><img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/></a>
+                                                        <a href="/setting.html" th:href="@{/setting}"><img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/></a>
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <blockquote>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                                    </blockquote>
+                                                    <div class="profile-circle" style="background-color: rgba(77,5,51,.2);"></div>
+                                                </div>
+                                                <div class="item">
+                                                    <blockquote>
+                                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, veritatis nulla eum laudantium totam tempore optio doloremque laboriosam quas, quos eaque molestias odio aut eius animi. Impedit temporibus nisi accusamus.</p>
+                                                    </blockquote>
+                                                    <div class="profile-circle" style="background-color: rgba(145,169,216,.2);"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>							
+                                </div>
+                            </div>
+                        </section>							
+                    </div>
+                </div>
             </div>
-
-
-
-
-
-
+        </div>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
@@ -80,7 +93,7 @@
             ga('send', 'pageview');
         </script>
 
-        <!-- build:js scripts/vendor.js -->
+        <!-- build:js scripts/zols.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/dist/jquery.js"></script>
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/affix.js"></script>
@@ -107,7 +120,7 @@
         <!-- endbuild -->
 
         <!-- References 
-        
+        http://bootsnipp.com/snippets/6GM92
         http://bootsnipp.com/snippets/featured/fade-quote-carousel
         http://bootsnipp.com/snippets/featured/smooth-animated-thumbnails
         http://bootsnipp.com/snippets/featured/fat-and-flat-blue-button

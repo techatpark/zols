@@ -11,7 +11,7 @@ gulp.task('styles', function () {
   return gulp.src('app/styles/*.scss')
     .pipe($.plumber())
     .pipe($.rubySass({style: 'expanded'}))
-    .pipe($.autoprefixer('last 1 version'))
+    //.pipe($.autoprefixer('last 1 version'))
     .pipe(gulp.dest('.tmp/styles'))
     .pipe($.size());
 });
@@ -50,10 +50,10 @@ gulp.task('html', ['styles', 'scripts', 'partials'], function () {
       addPrefix: '../'
     }))
     .pipe($.useref.assets())
-    .pipe($.rev())
+    //.pipe($.rev())
     .pipe(jsFilter)
     .pipe($.ngAnnotate())
-    .pipe($.uglify({preserveComments: $.uglifySaveLicense}))
+    //.pipe($.uglify({preserveComments: $.uglifySaveLicense}))
     .pipe(jsFilter.restore())
     .pipe(cssFilter)
     .pipe($.replace('bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap','fonts'))
