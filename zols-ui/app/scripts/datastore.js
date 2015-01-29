@@ -186,11 +186,13 @@
 
     };
 
-    function setSchemaObj(){
+    function setSchemaObject(){
         //var schemaObj={"id":"hgghg","title":"trtrtr","properties":{"ytytyty":{"type":"string"},"uyuyuy":{"type":"string"},"gjgjgj":{"type":"string"}},"required":["uyuyuy"]};
-        var schemaObj={"id":"sample","title":"Sample Schem","properties":{"name":{"type":"string","id":"true","required":true},"firstName":{"type":"string"}}};
-        var keys = Object.keys(schemaObj.properties);
+        //var schemaObj={"id":"sample","title":"Sample Schem","properties":{"name":{"type":"string","id":"true","required":true},"firstName":{"type":"string"}}};
+        var schemaObj={"id":"sample","title":"Sample Schem","type":"object"};
+       var keys = Object.keys(schemaObj.properties);
         var j=0;
+        
         $("#schemaId").val(schemaObj.id);
         $("#title").val(schemaObj.title);
         $("#type").val(schemaObj.type);
@@ -251,7 +253,7 @@
             $.fn.saveSchema();
         });
         
-        setSchemaObj();
+        setSchemaObject();
     };
 
     $.fn.createSchema = function () {
