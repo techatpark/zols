@@ -47,8 +47,8 @@
 
     });
 
-    $("#result").on('click', '.deleteAttr', function () {
-        $(this).parents(":eq(1)").remove();
+    $("#result").on('click', '.glyphicon-remove', function () {
+        $(this).parents(":eq(1)").parent().remove();
     });
 
     $.fn.listSchemas = function () {
@@ -138,6 +138,7 @@
         var schemaObj = {};
         schemaObj.id = $("#schemaId").val();
         schemaObj.title = $("#title").val();
+        schemaObj.type= $("#type").val();
         schemaObj.properties = {};
         schemaObj.required = [];
         $("#schemaLayout .row input[type='text']").each(function(i,data){
@@ -185,6 +186,46 @@
 
     };
 
+    function setSchemaObj(){
+        //var schemaObj={"id":"hgghg","title":"trtrtr","properties":{"ytytyty":{"type":"string"},"uyuyuy":{"type":"string"},"gjgjgj":{"type":"string"}},"required":["uyuyuy"]};
+        var schemaObj={"id":"sample","title":"Sample Schem","properties":{"name":{"type":"string","id":"true","required":true},"firstName":{"type":"string"}}};
+        var keys = Object.keys(schemaObj.properties);
+        var j=0;
+        $("#schemaId").val(schemaObj.id);
+        $("#title").val(schemaObj.title);
+        $("#type").val(schemaObj.type);
+        var template = $.templates("#attributeTemplate");
+        
+        for(var i=0;i<keys.length;i++){
+            $("#schemaLayout").append(template.render({}));
+        }
+        /** v4 Logic **/
+        /*$("#schemaLayout .row input[type='text']").each(function(i,data){
+            var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
+            var $select = $(this).parent().next().find("select");
+            $(this).val(keys[i]);
+            $select.val(schemaObj.properties[keys[i]].type);
+            if(schemaObj.required[j] === keys[i] ){
+                $checkbox.prop("checked",true);
+                j++;
+            }
+            
+        });*/
+        
+        /** v3 Logic**/
+        
+        $("#schemaLayout .form-group input[type='text']").each(function(i){
+            var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
+            var $select = $(this).parent().next().find("select");
+            $(this).val(keys[i]);
+            $select.val(schemaObj.properties[keys[i]].type);
+            if(schemaObj.properties[keys[i]].required){
+                $checkbox.prop("checked",true);
+            }
+            
+        });
+        
+    }
 
     $.fn.deleteSchema = function () {
         $.ajax({
@@ -209,6 +250,8 @@
             event.preventDefault();
             $.fn.saveSchema();
         });
+        
+        setSchemaObj();
     };
 
     $.fn.createSchema = function () {

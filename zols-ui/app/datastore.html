@@ -53,7 +53,7 @@
                                     </span>
                                 </h4>
                             </div>
-                            <div class="col-md-4 right" id="schemaHeader">
+                            <div class="pull-right" id="schemaHeader">
                                 <label>Schema</label>                                    
                                 <label data-bind-col="schemaname" id="schemanameLbl">Schema Name</label>
 
@@ -83,6 +83,7 @@
                 </div>
 
             </div>
+            
 
             <div class="modal fade bs-example-modal-sm" 
                  id="delete-conf-model"
@@ -108,22 +109,44 @@
             </script>
 
             <script id="attributeTemplate" type="text/x-jsrender">
-                <div class="attr">
-                    <div class="row">
-                       <label class="col-md-4 control-label" for="name">Name</label>
-                       <input class="col-md-1" name="name" type="text">                        
-                    </div>
-                    <div class="row">
-                       <label class="col-md-4 control-label" for="type">Type</label>
-                       <select class="schemaType col-md-1" name="type">
-                          <option name="string" value="string">String</option>        
-                       </select>
-                    </div>
-                    <div class="row"><label class="col-md-4 control-label" for="required">Required</label>
-                    <input class="col-md-1" name="required" type="checkbox">
-                    <button name="discardBtn" class="btn btn-danger deleteAttr" type="button">Remove</button>
-                    </div>
-                 </div>
+                
+                <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Panel 1</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-remove"></i></span>
+                </div>
+                <div class="panel-body">
+                    <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>  
+                <div class="col-md-4">
+                <input name="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+                
+                <!-- Select input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="type">Type</label>  
+                <div class="col-md-4">
+                <select name="type" type="text" placeholder="" class="form-control input-md">
+                <option name="string" value="string">String</option>        
+                </select>
+                </div>
+                </div>
+        
+                <!-- checkbox input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="required">Required</label>  
+                <div class="col-md-4">
+                <input name="required" type="checkbox"  class="form-control input-md"/>
+                </div>
+                </div>
+                                
+                </div>
+                </div>
+                
+                
             </script>
 
 
@@ -160,34 +183,42 @@
 
                 <!-- Form Name -->
                 <legend>Schema</legend>
-
+        
                 <!-- Text input-->
                 <div class="form-group">
-                <!-- Grid -->
-                
-                <div class="row">
-                <label class="col-md-4 control-label" for="id">Id</label>
-                <input class="col-md-1" name="id" data-link="id" id="schemaId"/>
+                <label class="col-md-4 control-label" for="id">Id</label>  
+                <div class="col-md-4">
+                <input name="id" data-link="id" id="schemaId" type="text" placeholder="" class="form-control input-md" required=""/>
+
                 </div>
-                <div class="row">
-                <label class="col-md-4 control-label" for="title">Title</label> 
-                <input class="col-md-1" name="title" id="title" data-link="title"/>
-                
                 </div>
-                
         
-        
-        
-        <!-- Button (Double) -->
+                <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="addAttr"></label>
-                <div class="col-md-8">
-                <button name="addAttr" class="btn btn-success" id="addAttr" type="button">Add attributes</button>
+                <label class="col-md-4 control-label" for="title">Title</label>  
+                <div class="col-md-4">
+                <input name="title" id="title" data-link="title" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-              
-<div class="form-group" id="schemaLayout">
-</div>
+            
+    
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="type">Type</label>  
+                <div class="col-md-4">
+                <input name="type" id="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+            
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Attributes</h3>
+                    <span class="pull-right clickable"><i id="addAttr" class="glyphicon glyphicon-plus"></i></span>
+                </div>
+                <div class="panel-body" id="schemaLayout">
+                 </div>
+            </div>
 
                 <!-- Button (Double) -->
                 <div class="form-group">
@@ -197,42 +228,12 @@
                 <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
                 </div>
                 </div>
-                </div>
 
 
 
                 </fieldset>
                 </form>
-
-
-
-
             </script>
-
-
-            <script id="linkForm" type="text/x-jsrender">
-                <form class="form-horizontal">
-                <fieldset>
-
-                <!-- Form Name -->
-                <legend>Data</legend>
-
-                <div class="form-group" id="editor_holder">
-
-                </div>
-
-                <!-- Button (Double) -->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="saveBtn"></label>
-                <div class="col-md-8">
-                <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
-                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
-                </div>
-                </div>
-                </fieldset>
-                </form>
-            </script>
-
 
             <!-- build:js({app,.tmp}) scripts/main.js -->
             <script src="scripts/datastore.js"></script>       
