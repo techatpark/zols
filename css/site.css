@@ -871,7 +871,7 @@ and open the template in the editor.
     box-sizing: border-box; }
 
 .topicContent {
-  margin: 40px 0px 0px 0px; }
+  margin: 40px 0px 40px 0px; }
   .topicContent p {
     color: #707374;
     font: normal 14px/18px Arial;
