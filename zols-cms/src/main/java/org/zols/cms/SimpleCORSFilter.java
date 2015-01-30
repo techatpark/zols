@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package sample.ui.method;
+package org.zols.cms;
 
 import java.io.IOException;
 import javax.servlet.Filter;

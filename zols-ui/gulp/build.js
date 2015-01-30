@@ -88,7 +88,7 @@ gulp.task('fonts', function () {
 gulp.task('clean', function () {
   return gulp.src(['.tmp'
 			, 'dist'
-			,'../zols-cms-plugin/src/main/resources/templates'
+			,'../zols-cms-plugin/src/main/resources/zolstemplates'
 			, '../zols-cms-plugin/src/main/resources/static'
 		], { read: false })
 		.pipe(clean({force: true}));
