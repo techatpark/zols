@@ -42,12 +42,13 @@
     });
 
     $('#result').on('click', '#addAttr', function () {
-        var template = $.templates("#attributeTemplate");
-        $("#schemaLayout").append(template.render({}));
-
+        var totalProperties = Object.keys(selectedSchema.properties).length;
+        selectedSchema.properties['newProperty' + totalProperties] = { 'required' : false};
+        $.fn.renderSchema();
     });
 
     $("#result").on('click', '.glyphicon-remove', function () {
+        //TODO: need to delete the property object from the selectedSchema variable here.
         $(this).parents(":eq(1)").parent().remove();
     });
 
@@ -131,59 +132,8 @@
 
     };
 
-
-
     $.fn.saveSchema = function () {
-
-        var schemaObj = {};
-        schemaObj.id = $("#schemaId").val();
-        schemaObj.title = $("#title").val();
-        schemaObj.type= $("#type").val();
-        schemaObj.properties = {};
-        schemaObj.required = [];
-        $("#schemaLayout .row input[type='text']").each(function(i,data){
-           var dataValue = $(this).val();
-           var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
-           schemaObj["properties"][dataValue] = {};
-           schemaObj["properties"][dataValue]["type"]=$(this).parent().next().find("select").val();
-           if($checkbox.is(":checked")){
-               schemaObj.required.push(dataValue);
-           }
-        });
-       console.log(JSON.stringify(schemaObj));
-
-
-        /*selectedSchema.schema = JSON.parse(selectedSchema.schema);
-        //selectedSchema.schema.type = selectedSchema.schemaType;
-        if (selectedSchema.isEdit) {
-            delete selectedSchema.isEdit;
-            delete selectedSchema.schema.isEdit;
-            $.ajax({
-                method: 'PUT',
-                url: base_url + '/schema/' + selectedSchema.id,
-                dataType: 'json',
-                data: JSON.stringify(selectedSchema.schema)
-            }).done(function (data) {
-                listOfCategories = null;
-                $.fn.refreshList();
-            }).error(function (data) {
-                $.fn.onError(data);
-            });
-        } else {
-            $.ajax({
-                method: 'POST',
-                url: base_url + '/schema',
-                dataType: 'json',
-                data: JSON.stringify(selectedSchema.schema)
-            }).done(function (data) {
-                listOfCategories = null;
-                $.fn.refreshList();
-            }).error(function (data) {
-                $.fn.onError(data);
-            });
-        }*/
-
-
+       console.log(JSON.stringify(selectedSchema));
     };
 
     function setSchemaObject(){
@@ -192,12 +142,12 @@
         var schemaObj={"id":"sample","title":"Sample Schem","type":"object"};
        var keys = Object.keys(schemaObj.properties);
         var j=0;
-        
+
         $("#schemaId").val(schemaObj.id);
         $("#title").val(schemaObj.title);
         $("#type").val(schemaObj.type);
         var template = $.templates("#attributeTemplate");
-        
+
         for(var i=0;i<keys.length;i++){
             $("#schemaLayout").append(template.render({}));
         }
@@ -211,22 +161,22 @@
                 $checkbox.prop("checked",true);
                 j++;
             }
-            
+
         });*/
-        
+
         /** v3 Logic**/
-        
-        $("#schemaLayout .form-group input[type='text']").each(function(i){
+
+        $('#schemaLayout .form-group input[type="text"]').each(function(i){
             var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
-            var $select = $(this).parent().next().find("select");
+            var $select = $(this).parent().next().find('select');
             $(this).val(keys[i]);
             $select.val(schemaObj.properties[keys[i]].type);
             if(schemaObj.properties[keys[i]].required){
-                $checkbox.prop("checked",true);
+                $checkbox.prop('checked',true);
             }
-            
+
         });
-        
+
     }
 
     $.fn.deleteSchema = function () {
@@ -246,18 +196,23 @@
             selectedSchema.isEdit = true;
             selectedSchema.schema = JSON.stringify(selectedSchema);
         }
-        schema = $.templates("#schemaForm");
+        schema = $.templates('#schemaForm');
         schema.link('#result', selectedSchema);
-        $("#result form").submit(function (event) {
+        $('#result form').submit(function (event) {
             event.preventDefault();
             $.fn.saveSchema();
         });
-        
-        setSchemaObject();
+
+        // setSchemaObject();
     };
 
     $.fn.createSchema = function () {
-        selectedSchema = {};
+        selectedSchema = {
+        properties:{
+        'first': {
+          'required': true
+        }
+        }};
         $.fn.renderSchema();
     };
 
