@@ -26,4 +26,4 @@
 build
 /zols-ui/app/nbproject/private/
 /zols-cms-plugin/src/main/resources/static
-/zols-cms-plugin/src/main/resources/templates
+/zols-cms-plugin/src/main/resources/zolstemplates

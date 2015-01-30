@@ -5,8 +5,8 @@
  */
 package org.zols.datastore.service;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.List;
+import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -33,11 +33,11 @@ public class SchemaService {
      * @param schema Object to be Create
      * @return created JsonSchema object
      */
-    public JsonSchema create(JsonSchema schema) {
-        JsonSchema createdJsonSchema = null;
+    public String create(Map<String,Object> schema) {
+        String createdJsonSchema = null;
         if (schema != null) {
             createdJsonSchema = dataStore.create(schema);
-            LOGGER.info("Created JsonSchema  {}", createdJsonSchema.getId());
+            LOGGER.info("Created JsonSchema  {}", createdJsonSchema);
         }
         return createdJsonSchema;
     }
@@ -48,7 +48,7 @@ public class SchemaService {
      * @param schemaName String to be Search
      * @return searched JsonSchema
      */
-    public JsonSchema read(String schemaName) {
+    public String read(String schemaName) {
         LOGGER.info("Reading JsonSchema  {}", schemaName);
         return dataStore.read(schemaName);
     }
@@ -59,7 +59,7 @@ public class SchemaService {
      * @param schema Object to be update
      * @return status of the Update Operation
      */
-    public Boolean update(JsonSchema schema) {
+    public Boolean update(String schema) {
         Boolean updated = false;
         if (schema != null) {
             LOGGER.info("Updating JsonSchema  {}", schema);
@@ -84,7 +84,7 @@ public class SchemaService {
      *
      * @return list of schema
      */
-    public List<JsonSchema> list() {
+    public List<Map<String,Object>> list() {
         LOGGER.info("Getting JsonSchemas ");
         return dataStore.list();
     }

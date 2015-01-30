@@ -5,8 +5,8 @@
  */
 package org.zols.datastore.web;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +36,13 @@ public class SchemaControler {
     private SchemaService schemaService;
 
     @RequestMapping(method = POST)
-    public JsonSchema create(@RequestBody JsonSchema jsonSchema) {
-        LOGGER.info("Creating new jsonSchemas {}", jsonSchema.getId());
+    public String create(@RequestBody Map<String,Object> jsonSchema) {
+        LOGGER.info("Creating new jsonSchemas {}", jsonSchema);
         return schemaService.create(jsonSchema);
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public JsonSchema read(@PathVariable(value = "id") String id) {
+    public String read(@PathVariable(value = "id") String id) {
         LOGGER.info("Getting jsonSchema ", id);
         return schemaService.read(id);
     }
@@ -50,11 +50,11 @@ public class SchemaControler {
     @RequestMapping(value = "/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "id") String id,
-            @RequestBody JsonSchema jsonSchema) {
-        if (id.equals(jsonSchema.getId())) {
-            LOGGER.info("Updating jsonSchemas with id {} with {}", id, jsonSchema);
-            schemaService.update(jsonSchema);
-        }
+            @RequestBody String jsonSchema) {
+
+        LOGGER.info("Updating jsonSchemas with id {} with {}", id, jsonSchema);
+        schemaService.update(jsonSchema);
+
     }
 
     @RequestMapping(value = "/{id}", method = DELETE)
@@ -65,7 +65,7 @@ public class SchemaControler {
     }
 
     @RequestMapping(method = GET)
-    public List<JsonSchema> list() {
+    public List<Map<String,Object>>  list() {
         LOGGER.info("Getting JsonSchemas ");
         return schemaService.list();
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package sample.ui.method;
+package org.zols.cms;
 
 import java.util.Date;
 import java.util.Map;

@@ -11,8 +11,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring4.SpringTemplateEngine;
+import org.thymeleaf.spring4.resourceresolver.SpringResourceResourceResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 import org.thymeleaf.templateresolver.UrlTemplateResolver;
@@ -34,6 +36,7 @@ public class TemplateConfiguration {
 
     @PostConstruct
     public void intializeTemplates() {
+        addZolsTemplates();
         TemplateResolver resolver;
         File file;
         try {
@@ -60,6 +63,20 @@ public class TemplateConfiguration {
 
         } catch (Exception e) {
         }
+    }
+
+    private void addZolsTemplates() {
+        TemplateResolver resolver = new TemplateResolver();
+        resolver.setResourceResolver(thymeleafResourceResolver());
+        resolver.setPrefix("classpath:/zolstemplates/");
+
+        intializeResolver(resolver);
+        templateEngine.addTemplateResolver(resolver);
+    }
+
+    @Bean
+    public SpringResourceResourceResolver thymeleafResourceResolver() {
+        return new SpringResourceResourceResolver();
     }
 
     private void intializeResolver(TemplateResolver resolver) {

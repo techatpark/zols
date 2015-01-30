@@ -29,8 +29,9 @@ gulp.task('copystatic',['thymeleaf'], function () {
 
 gulp.task('copytemplates',['thymeleaf'], function () {
   return gulp.src(['dist/**/*.html'
-		,'!dist/index.html'])
-  .pipe(gulp.dest('../zols-cms-plugin/src/main/resources/templates'));
+		//,'!dist/index.html'
+		])
+  .pipe(gulp.dest('../zols-cms-plugin/src/main/resources/zolstemplates'));
 });
 
 gulp.task('release', ['copystatic', 'copytemplates']);

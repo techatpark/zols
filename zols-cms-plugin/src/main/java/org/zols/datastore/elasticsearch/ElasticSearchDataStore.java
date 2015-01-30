@@ -5,7 +5,6 @@
  */
 package org.zols.datastore.elasticsearch;
 
-import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
@@ -37,15 +35,15 @@ import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 
 @Service
 public class ElasticSearchDataStore extends DataStore {
-
+    
     private final Node node;
     private final String indexName = "zols";
-
+    
     public ElasticSearchDataStore() {
         node = nodeBuilder().local(true).node();
         createIndexIfNotExists();
     }
-
+    
     private void createIndexIfNotExists() {
         IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName);
         if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
@@ -53,68 +51,65 @@ public class ElasticSearchDataStore extends DataStore {
             node.client().admin().indices().create(createIndexRequest).actionGet();
         }
     }
-
+    
     @Override
-    protected Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    protected Map<String, Object> createData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
-                
+        IndexResponse response = node.client().prepareIndex(indexName, getId(jsonSchema), idValue)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
-        return ( response.isCreated() ? read(jsonSchema, idValue) : null );
+        return (response.isCreated() ? readData(jsonSchema, idValue) : null);
     }
-
+    
     @Override
-    protected Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
+    protected Map<String, Object> readData(String jsonSchema, String idValue) {
         GetResponse getResponse = node.client()
-                .prepareGet(indexName, jsonSchema.getId(), idValue)
-                
+                .prepareGet(indexName, getId(jsonSchema), idValue)
                 .execute()
                 .actionGet();
         return getResponse.getSource();
     }
-
+    
     @Override
-    protected boolean delete(JsonSchema jsonSchema, String idValue) {
+    protected boolean deleteData(String jsonSchema, String idValue) {
         DeleteResponse response = node.client()
-                .prepareDelete(indexName, jsonSchema.getId(), idValue)
+                .prepareDelete(indexName, getId(jsonSchema), idValue)
                 .execute()
                 .actionGet();
         return response.isFound();
     }
-
+    
     @Override
-    protected boolean delete(JsonSchema jsonSchema, Query query) {
-		DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
-    			.setQuery(getQueryBuilder(query))
+    protected boolean deleteData(String jsonSchema, Query query) {
+        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName).setTypes(getId(jsonSchema))
+                .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
-    	return true;
+        return true;
     }
-
+    
     @Override
-    protected boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    protected boolean updateData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.getId(), idValue)
-                
+        IndexResponse response = node.client().prepareIndex(indexName, getId(jsonSchema), idValue)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
         return response.isCreated();
     }
-
+    
     @Override
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema) {
-        return list(jsonSchema, null);
+    protected List<Map<String, Object>> listData(String jsonSchema) {
+        return listData(jsonSchema, null);
     }
-
+    
     @Override
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) {
+    protected List<Map<String, Object>> listData(String jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
         SearchResponse response = node.client()
                 .prepareSearch()
                 .setIndices(indexName)
-                .setTypes(jsonSchema.getId())
+                .setTypes(getId(jsonSchema))
                 .setPostFilter(getFilterBuilder(query))
                 .execute().actionGet();
         SearchHits hits = response.getHits();
@@ -130,8 +125,6 @@ public class ElasticSearchDataStore extends DataStore {
         return list;
     }
     
-    
-
     private FilterBuilder getFilterBuilder(Query query) {
         FilterBuilder filterBuilder = null;
         if (query != null) {
@@ -161,5 +154,5 @@ public class ElasticSearchDataStore extends DataStore {
         QueryBuilder queryBuilder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), getFilterBuilder(query));
         return queryBuilder;
     }
-
+    
 }

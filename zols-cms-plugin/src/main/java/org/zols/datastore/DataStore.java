@@ -5,14 +5,18 @@
  */
 package org.zols.datastore;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.script.ScriptException;
 import org.zols.datastore.domain.Schema;
 import org.zols.datastore.query.Query;
-import org.zols.datastore.validator.ValidatedObject;
-import org.zols.datastore.validator.Validator;
+import org.zols.datastore.validator.TV4;
 
 /**
  * Data Store is used to Store static and Dynamic Objects using JSON Schema
@@ -24,69 +28,87 @@ public abstract class DataStore {
     /**
      * JSON Schema validator
      */
-    protected final Validator validator;
+    protected final TV4 tv4;
 
     /**
      * Intialize the DataStore with JSON Schema validator
      */
     public DataStore() {
-        validator = new Validator();
+        tv4 = new TV4();
     }
-    
+
     /**
-     * 
+     *
      * @param schemaName name of the schema
      * @param jsonData Dynamic Data for the given schema
      * @return created Object
      */
-    public Map<String, Object> create(String schemaName,Map<String, Object> jsonData) {
-        Schema schema = read(Schema.class,schemaName);
-        ValidatedObject validatedObject = validator.getObject(schema,jsonData);
-        return create(validatedObject.getJsonSchema(), validatedObject.getDataObject());
+    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) {
+        Schema schema = read(Schema.class, schemaName);
+        try {
+            if (tv4.validate(jsonData, schema.getSchema())) {
+                return createData(schema.getSchema(), jsonData);
+            }
+        } catch (ScriptException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-    
+
     /**
-     * 
+     *
      * @param schemaName name of the schema
      * @param name name of the Schema data
      * @return Object with given name
      */
-    public Map<String, Object> read(String schemaName, String name) {        
-        return read(read(schemaName), name);
+    public Map<String, Object> read(String schemaName, String name) {
+        return readData(read(schemaName), name);
     }
-    
 
     /**
-     * 
+     *
      * @param schemaName name of the schema
      * @param jsonData Dynamic Data for the given schema
      * @return status of the update operation
      */
-    public boolean update(String schemaName,Map<String, Object> jsonData) {
-        Schema schema = read(Schema.class,schemaName);
-        ValidatedObject validatedObject = validator.getObject(schema,jsonData);
-        return update(validatedObject.getJsonSchema(), validatedObject.getDataObject());
+    public boolean update(String schemaName, Map<String, Object> jsonData) {
+        Schema schema = read(Schema.class, schemaName);
+        try {
+            if (tv4.validate(jsonData, schema.getSchema())) {
+                return updateData(schema.getSchema(), jsonData);
+            }
+        } catch (ScriptException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     /**
-     * 
+     *
      * @param schemaName name of the schema
      * @param name name of the Schema data
      * @return status of the delete operation
      */
     public boolean delete(String schemaName, String name) {
-        return delete(read(schemaName), name);
+        return DataStore.this.deleteData(read(schemaName), name);
     }
-    
+
     /**
-     * 
+     *
      * @param schemaName name of the schema
      * @return lis of dynamic objects
      */
     public List<Map<String, Object>> list(String schemaName) {
-        return list(read(schemaName));
+        return DataStore.this.listData(read(schemaName));
     }
-
 
     /**
      * Creates a new object
@@ -97,8 +119,19 @@ public abstract class DataStore {
      * @return created object
      */
     public <T> T create(Class<T> clazz, Object object) {
-        ValidatedObject validatedObject = validator.getObject(object);
-        return validator.getObjectOfType(clazz, create(validatedObject.getJsonSchema(), validatedObject.getDataObject()));
+        Map<String, Object> jsonData = tv4.getValueAsMap(object);
+
+        try {
+            String jsonSchema = tv4.getJsonSchema(clazz);
+            if (tv4.validate(jsonData, jsonSchema)) {
+                return tv4.getObjectOfType(clazz, createData(jsonSchema, jsonData));
+            }
+        } catch (ScriptException | NoSuchMethodException | JsonProcessingException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -110,7 +143,12 @@ public abstract class DataStore {
      * @return object with given name
      */
     public <T> T read(Class<T> clazz, String name) {
-        return validator.getObjectOfType(clazz, read(validator.getJsonSchema(clazz), name));
+        try {
+            return tv4.getObjectOfType(clazz, readData(tv4.getJsonSchema(clazz), name));
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -121,13 +159,20 @@ public abstract class DataStore {
      * @return object with given name
      */
     public <T> List<T> list(Class<T> clazz) {
-        List<Map<String, Object>> listOfMap = list(validator.getJsonSchema(clazz));
-        if (listOfMap != null && !listOfMap.isEmpty()) {
-            List<T> listOfObject = new ArrayList<>(listOfMap.size());
-            for (Map<String, Object> map : listOfMap) {
-                listOfObject.add(validator.getObjectOfType(clazz, map));
+        try {
+            List<Map<String, Object>> listOfMap;
+
+            listOfMap = listData(tv4.getJsonSchema(clazz));
+            if (listOfMap != null && !listOfMap.isEmpty()) {
+                List<T> listOfObject = new ArrayList<>(listOfMap.size());
+                for (Map<String, Object> map : listOfMap) {
+                    listOfObject.add(tv4.getObjectOfType(clazz, map));
+                }
+                return listOfObject;
             }
-            return listOfObject;
+
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -141,13 +186,18 @@ public abstract class DataStore {
      * @return object with given name
      */
     public <T> List<T> list(Class<T> clazz, Query query) {
-        List<Map<String, Object>> listOfMap = list(validator.getJsonSchema(clazz), query);
-        if (listOfMap != null && !listOfMap.isEmpty()) {
-            List<T> listOfObject = new ArrayList<>(listOfMap.size());
-            for (Map<String, Object> map : listOfMap) {
-                listOfObject.add(validator.getObjectOfType(clazz, map));
+        try {
+            List<Map<String, Object>> listOfMap = listData(tv4.getJsonSchema(clazz), query);
+            if (listOfMap != null && !listOfMap.isEmpty()) {
+                List<T> listOfObject = new ArrayList<>(listOfMap.size());
+                for (Map<String, Object> map : listOfMap) {
+                    listOfObject.add(tv4.getObjectOfType(clazz, map));
+                }
+                return listOfObject;
             }
-            return listOfObject;
+
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -157,7 +207,7 @@ public abstract class DataStore {
      *
      * @param <T> Type of the Object
      * @param clazz Class of the Object to be read
-     * @param pageNumber page number 
+     * @param pageNumber page number
      * @param pageSize size of the page
      * @return object with given name
      */
@@ -166,12 +216,18 @@ public abstract class DataStore {
     }
 
     /**
-     * @param dataObject dataObject
+     * @param object dataObject
      * @return status of the update
      */
-    public boolean update(Object dataObject) {
-        ValidatedObject validatedObject = validator.getObject(dataObject);
-        return update(validatedObject.getJsonSchema(), validatedObject.getDataObject());
+    public boolean update(Object object) {
+        try {
+            Map<String, Object> jsonData = tv4.getValueAsMap(object);
+            String jsonSchema = tv4.getJsonSchema(object.getClass());
+            return updateData(jsonSchema, jsonData);
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     /**
@@ -182,7 +238,12 @@ public abstract class DataStore {
      * @return successFlag
      */
     public boolean delete(Class clazz, String name) {
-        return delete(validator.getJsonSchema(clazz), name);
+        try {
+            return deleteData(tv4.getJsonSchema(clazz), name);
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
     /**
@@ -193,7 +254,25 @@ public abstract class DataStore {
      * @return successFlag
      */
     public boolean delete(Class clazz, Query query) {
-        return delete(validator.getJsonSchema(clazz), query);
+        try {
+            return deleteData(tv4.getJsonSchema(clazz), query);
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    public String getIdField(String jsonSchema) {
+        try {
+            return tv4.getIdField(jsonSchema);
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public String getId(String jsonSchema) {
+        return tv4.getId(jsonSchema);
     }
 
     /**
@@ -218,45 +297,52 @@ public abstract class DataStore {
 
     /**
      * Schema Related Methods
-     * @param jsonSchema schema object
+     *
+     * @param jsonSchemaObject schema object
      * @return created json schema
      */
-    public JsonSchema create(JsonSchema jsonSchema) {
+    public String create(Map<String, Object> jsonSchemaObject) {
         Schema schema = new Schema();
-        schema.setName(jsonSchema.getId());
-        schema.setSchema(validator.getAsJsonString(jsonSchema));
-        schema = create(Schema.class, schema);
-        JsonSchema addedJsonSchema = validator.getJsonSchema(schema.getSchema());
-        addedJsonSchema.setId(schema.getName());
-        return addedJsonSchema;
+        String jsonSchema;
+        try {
+            jsonSchema = tv4.getValueAsString(jsonSchemaObject);
+            schema.setName(getId(jsonSchema));
+            schema.setSchema(jsonSchema);
+            schema = create(Schema.class, schema);
+            return schema.getSchema();
+        } catch (JsonProcessingException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+
     }
 
-    public JsonSchema read(String schemaName) {
+    public String read(String schemaName) {
         Schema schema = read(Schema.class, schemaName);
-        JsonSchema addedJsonSchema = validator.getJsonSchema(schema.getSchema());
-        addedJsonSchema.setId(schemaName);
-        return addedJsonSchema;
+        return schema.getSchema();
     }
 
     public boolean delete(String schemaName) {
         return delete(Schema.class, schemaName);
     }
 
-    public boolean update(JsonSchema jsonSchema) {
-        Schema schema = read(Schema.class, jsonSchema.getId());
-        schema.setSchema(validator.getAsJsonString(jsonSchema));
+    public boolean update(String jsonSchema) {
+        Schema schema = read(Schema.class, getId(jsonSchema));
+        schema.setSchema(jsonSchema);
         return update(schema);
     }
 
-    public List<JsonSchema> list() {
+    public List<Map<String,Object>> list() {
         List<Schema> schemas = list(Schema.class);
         if (schemas != null) {
-            List<JsonSchema> jsonSchemas = new ArrayList<>(schemas.size());
+            List<Map<String,Object>>  jsonSchemas = new ArrayList<>(schemas.size());
             JsonSchema addedJsonSchema;
             for (Schema schema : schemas) {
-                addedJsonSchema = validator.getJsonSchema(schema.getSchema());
-                addedJsonSchema.setId(schema.getName());
-                jsonSchemas.add(addedJsonSchema);
+                try {
+                    jsonSchemas.add(tv4.getValueAsMap(schema.getSchema()));
+                } catch (IOException ex) {
+                    Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             return jsonSchemas;
         }
@@ -272,8 +358,8 @@ public abstract class DataStore {
      * @param jsonSchema schema of dynamic data
      * @return dynamic data as map
      */
-    protected abstract Map<String, Object> create(
-            JsonSchema jsonSchema,
+    protected abstract Map<String, Object> createData(
+            String jsonSchema,
             Map<String, Object> validatedDataObject);
 
     /**
@@ -282,8 +368,8 @@ public abstract class DataStore {
      * @param idValue dynamic object name
      * @return dynamic data as map
      */
-    protected abstract Map<String, Object> read(
-            JsonSchema jsonSchema,
+    protected abstract Map<String, Object> readData(
+            String jsonSchema,
             String idValue);
 
     /**
@@ -292,7 +378,7 @@ public abstract class DataStore {
      * @param idValue dynamic object name
      * @return status of the delete operation
      */
-    protected abstract boolean delete(JsonSchema jsonSchema,
+    protected abstract boolean deleteData(String jsonSchema,
             String idValue);
 
     /**
@@ -301,7 +387,7 @@ public abstract class DataStore {
      * @param query query to delete
      * @return status of the delete operation
      */
-    protected abstract boolean delete(JsonSchema jsonSchema,
+    protected abstract boolean deleteData(String jsonSchema,
             Query query);
 
     /**
@@ -310,7 +396,7 @@ public abstract class DataStore {
      * @param validatedDataObject validated Object
      * @return status of the update operation
      */
-    protected abstract boolean update(JsonSchema jsonSchema,
+    protected abstract boolean updateData(String jsonSchema,
             Map<String, Object> validatedDataObject);
 
     /**
@@ -318,7 +404,7 @@ public abstract class DataStore {
      * @param jsonSchema schema of dynamic data
      * @return list of dynamic objects
      */
-    protected abstract List<Map<String, Object>> list(JsonSchema jsonSchema);
+    protected abstract List<Map<String, Object>> listData(String jsonSchema);
 
     /**
      *
@@ -326,7 +412,7 @@ public abstract class DataStore {
      * @param query query to be used
      * @return list of dynamic objects
      */
-    protected abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
+    protected abstract List<Map<String, Object>> listData(String jsonSchema,
             Query query);
 
 }
