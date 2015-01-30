@@ -13,6 +13,8 @@ import java.util.Map;
 
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.action.admin.indices.refresh.RefreshAction;
+import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.action.get.GetResponse;
@@ -27,9 +29,9 @@ import org.springframework.stereotype.Service;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
-
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 
@@ -50,6 +52,7 @@ public class ElasticSearchDataStore extends DataStore {
             CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
             node.client().admin().indices().create(createIndexRequest).actionGet();
         }
+       // node.client().admin().indices().refresh(null);
     }
     
     @Override
@@ -57,8 +60,10 @@ public class ElasticSearchDataStore extends DataStore {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
         IndexResponse response = node.client().prepareIndex(indexName, getId(jsonSchema), idValue)
                 .setSource(validatedDataObject)
+                .setOperationThreaded(false)
                 .execute()
                 .actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         return (response.isCreated() ? readData(jsonSchema, idValue) : null);
     }
     
@@ -66,6 +71,7 @@ public class ElasticSearchDataStore extends DataStore {
     protected Map<String, Object> readData(String jsonSchema, String idValue) {
         GetResponse getResponse = node.client()
                 .prepareGet(indexName, getId(jsonSchema), idValue)
+                .setOperationThreaded(false)
                 .execute()
                 .actionGet();
         return getResponse.getSource();
@@ -75,16 +81,21 @@ public class ElasticSearchDataStore extends DataStore {
     protected boolean deleteData(String jsonSchema, String idValue) {
         DeleteResponse response = node.client()
                 .prepareDelete(indexName, getId(jsonSchema), idValue)
+                .setOperationThreaded(false)
                 .execute()
                 .actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         return response.isFound();
     }
     
     @Override
     protected boolean deleteData(String jsonSchema, Query query) {
-        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName).setTypes(getId(jsonSchema))
+        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
+        		.setListenerThreaded(false)
+        		.setTypes(getId(jsonSchema))
                 .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         return true;
     }
     
@@ -92,9 +103,11 @@ public class ElasticSearchDataStore extends DataStore {
     protected boolean updateData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
         IndexResponse response = node.client().prepareIndex(indexName, getId(jsonSchema), idValue)
+        		.setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         return response.isCreated();
     }
     
