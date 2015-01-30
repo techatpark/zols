@@ -47,7 +47,7 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    protected Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> dataObject) {
+    protected Map<String, Object> createData(JsonSchema jsonSchema, Map<String, Object> dataObject) {
         String idField = getIdField(jsonSchema);
         Object idFieldValue = dataObject.remove(idField);
         if (idFieldValue != null) {
@@ -61,14 +61,14 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    protected Map<String, Object> read(JsonSchema jsonSchema, String idValue) {        
+    protected Map<String, Object> readData(JsonSchema jsonSchema, String idValue) {        
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue;        
         DBObject query = new BasicDBObject(ID_FIELD, idFieldValue);
         return getDataMap(db.getCollection(jsonSchema.getId()).findOne(query), getIdField(jsonSchema));
     }
 
     @Override
-    protected boolean delete(JsonSchema jsonSchema, String idValue) {
+    protected boolean deleteData(JsonSchema jsonSchema, String idValue) {
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue;        
         DBObject query = new BasicDBObject(ID_FIELD, idFieldValue);
         db.getCollection(jsonSchema.getId()).remove(query);
@@ -76,7 +76,7 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    protected boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    protected boolean updateData(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idField = getIdField(jsonSchema);
         String idValue = validatedDataObject.get(idField).toString();
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue; 
@@ -88,7 +88,7 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema) {
+    protected List<Map<String, Object>> listData(JsonSchema jsonSchema) {
         String idField = getIdField(jsonSchema);
         List<DBObject> dBObjects = db.getCollection(jsonSchema.getId()).find().toArray();
         if (dBObjects != null) {
@@ -102,14 +102,14 @@ public class MongoDataStore extends DataStore {
     }
     
     @Override
-    protected boolean delete(JsonSchema jsonSchema, Query query) {
+    protected boolean deleteData(JsonSchema jsonSchema, Query query) {
         String idField = getIdField(jsonSchema);
         db.getCollection(jsonSchema.getId()).remove(getQueryObject(idField,query));        
         return true;
     }
 
     @Override
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) {
+    protected List<Map<String, Object>> listData(JsonSchema jsonSchema, Query query) {
         String idField = getIdField(jsonSchema);
         List<DBObject> dBObjects = db.getCollection(jsonSchema.getId()).find(getQueryObject(idField,query)).toArray();
         if (dBObjects != null) {
