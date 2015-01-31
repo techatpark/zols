@@ -710,7 +710,7 @@ section.wrapper {
   width: 960px;
   margin: 0px auto; }
   section.wrapper section#content {
-    margin: 0px 0px 0px 0px; }
+    margin: 25px 0px 0px 0px; }
     section.wrapper section#content #app-caption {
       float: left;
       width: 480px; }
