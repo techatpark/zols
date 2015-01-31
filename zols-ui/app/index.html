@@ -12,7 +12,7 @@
         <!-- endbuild -->
 
         <!-- build:js scripts/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js" th:src="@{/bower_components/modernizr/modernizr.js}"></script>
+        <script src="bower_components/modernizr/modernizr.js" th:src="@{/scripts/modernizr.js}"></script>
         <!-- endbuild -->
 
         <!-- build:js scripts/zols.js -->
@@ -56,27 +56,40 @@
                     </a>
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li class="divider"></li>
-                                <li class="dropdown-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
+                    <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
+                        <li th:each="link : ${linkentry.value}">
+                            <a th:href="${link.targetUrl}" th:text="${link.label}" href="/links.html">Links</a>                            
                         </li>
+                        <!--/*-->
+                        <li><a href="templates.html">Templates</a></li>
+                        <li><a href="datastore.html">Data Store</a></li>
+                        <!--*/-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Link</a></li>
-                        <li><a href="#">Link</a></li>
-                        <li><a href="#">Link</a></li>
+                        <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
+
+
+
+                        <li class="dropdown" sec:authorize="isAuthenticated()">
+                            <a  href="javascript://" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                <span sec:authentication="name">User</span> <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li>
+                                    <a href="controlpanel.html" th:href="@{/controlpanel}" >
+                                        Control Panel
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="login.html" th:href="@{/logout}">
+                                        Logout
+                                    </a>
+                                </li>                                
+                            </ul>                  
+                            
+                        </li>
+
+
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -85,20 +98,22 @@
         <!-- Begin page content -->
         <div class="container" th:include="${viewName}::content" th:fragment="content">
             <div class="page-header">
-                <h1>Sticky footer with fixed navbar</h1>
+                <h1>Welcome to Zols</h1>
             </div>
-            <p class="lead">Pin a fixed-height footer to the bottom of the viewport in desktop browsers with this custom HTML and CSS. A fixed navbar has been added with <code>padding-top: 60px;</code> on the <code>body > .container</code>.</p>
-            <p>Back to <a href="../sticky-footer">the default sticky footer</a> minus the navbar.</p>
+            <p class="lead">Thanks for installing Zols.</p>
+            <p>Please get started and configure your content from <a href="/controlpanel.html" th:href="@{/controlpanel}">here</a>.</p>
         </div>
 
         <footer class="footer navbar-fixed-bottom">
             <div class="container">
-                <ul class="nav navbar-nav"><li><a href="#">Link</a></li></ul>
-                                    <ul class="nav navbar-nav navbar-right">
-                        <li><a href="#">Link</a></li>
-                        <li><a href="#">Link</a></li>
-                        <li><a href="#">Link</a></li>
-                    </ul>
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License V2</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="https://github.com/sathishk/zols/issues">Feedback</a></li>                    
+                </ul>
             </div>
         </footer>
 
@@ -132,11 +147,11 @@
 
 
 
-        <!-- build:js({app,.tmp}) scripts/main.js -->
+<!--         build:js({app,.tmp}) scripts/main.js 
         <script src="scripts/zolsUi.js" th:src="@{/scripts/zolsUi.js}"></script>       
-        <!-- inject:partials -->
-        <!-- endinject -->
-        <!-- endbuild -->
+         inject:partials 
+         endinject 
+         endbuild -->
 
         <!-- References 
         

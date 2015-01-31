@@ -2,7 +2,7 @@
 <html class="no-js" >
     <head>
         <meta charset="utf-8"/>
-        <title>Zols - Schema Manager</title>
+        <title>Zols - Data Store</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -45,15 +45,15 @@
                 <div class="page-header">
                     <div class="container-fluid">
                         <div class="row show-grid">
-                            <div class="col-md-8">
+                            <div class="pull-left">
                                 <h4>
                                     Schema
-                                    <span class="badge">                  
+                                    <span class="badge">
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>
                                 </h4>
                             </div>
-                           
+                            
                         </div>
 
 
@@ -68,7 +68,8 @@
 
             </div>
 
-            <div class="modal fade bs-example-modal-sm" 
+
+            <div class="modal fade bs-example-modal-sm"
                  id="delete-conf-model"
                  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
@@ -83,7 +84,6 @@
             </div>
 
 
-           
             <script id="noSchema" type="text/x-jsrender">
                 <div class="jumbotron">
                 <div class="container">
@@ -92,15 +92,58 @@
                 </div>
             </script>
 
+            <script id="attributeTemplate" type="text/x-jsrender">
 
+                <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        #{{:#getIndex()+1}}</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-remove" data-link="name{:key}"></i></span>
+                </div>
+                <div class="panel-body">
+                    <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>
+                <div class="col-md-4">
+                <input name="name" data-link="key" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="type">Type</label>
+                <div class="col-md-4">
+                <select name="type" type="text" placeholder="" class="form-control input-md">
+                <option name="string" value="string">String</option>
+                </select>
+                </div>
+                </div>
+
+                <!-- checkbox input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="required">Required</label>
+                <div class="col-md-4">
+                <input name="required" type="checkbox"  data-link="prop.required" class="form-control input-md"/>
+                </div>
+                </div>
+
+                </div>
+                </div>
+
+
+            </script>
+
+
+            
 
             <script id="listSchema" type="text/x-jsrender">
-                {{if link.length !==0}}
+     
+                {{if schema.length !==0}}
 
-                <ul class="list-group">                    
-                {{for link}}
+                <ul class="list-group">
+                {{for schema}}
                 <li class="list-group-item">
-                <a href="#">{{:title}}</a>
+                <a href="#" data-name="{{:id}}">{{:title}}</a>
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
@@ -108,7 +151,8 @@
                 </ul>
                 {{/if}}
 
-                <a id="addMoreSchemaBtn" href="#">Add More</a>
+                <a id="createSchema" href="#">Add More</a>
+                
             </script>
 
             <script id="schemaForm" type="text/x-jsrender">
@@ -119,48 +163,67 @@
                 <legend>Schema</legend>
 
                 <!-- Text input-->
-               <div class="form-group">
-                
-                
-                <!-- Textarea -->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="schema">Schema</label>
-                <div class="col-md-4">                     
-                <textarea class="form-control" id="schema" name="schema" data-link="schema" rows="8" cols="50"></textarea>
-                
+                <label class="col-md-4 control-label" for="id">Id</label>
+                <div class="col-md-4">
+                <input name="id" data-link="id" id="schemaId" type="text" placeholder="" class="form-control input-md" required=""/>
+
                 </div>
                 </div>
-        
-                     
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="title">Title</label>
+                <div class="col-md-4">
+                <input name="title" id="title" data-link="title" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="type">Type</label>
+                <div class="col-md-4">
+                <input name="type" id="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <div class="panel panel-primary">
+                <div class="panel-heading">
+                <h3 class="panel-title">
+                Attributes</h3>
+                <span class="pull-right clickable"><i id="addAttr" class="glyphicon glyphicon-plus"></i></span>
+                </div>
+                <div class="panel-body" id="schemaLayout">
+                {^{props properties}}
+                {^{include tmpl="#attributeTemplate"/}}
+                {{/props}}
+                </div>
+                </div>
 
                 <!-- Button (Double) -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="saveBtn"></label>
                 <div class="col-md-8">
-                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="saveBtn" class="btn btn-success" type="submit" >Save</button>
                 <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
                 </div>
                 </div>
 
                 </fieldset>
                 </form>
-
-
-
             </script>
 
-
-            <!-- build:js({app,.tmp}) scripts/schema.js -->
-            <script src="scripts/schema.js"></script>       
+            <!-- build:js({app,.tmp}) scripts/main.js -->
+            <script src="scripts/schema.js"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
 
+
         </div>
 
-
-
-        <!-- References        
+        <!-- References
         -->
 
     </body>
