@@ -11,16 +11,12 @@
     });
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('#schemanameLbl').hide();
 
+    var schemaTemplate;
     var schema;
-    var template;
-    var selectedSchema;
-    var listOfCategories;
-    var selectedTemplate;
-    var listOfTemplates;
-    var editor;
+    var schemas;
     var confirmationPromise;
+    var isEdit = false;
 
     $('#edit_selected').on('click', function () {
         $.fn.renderSchema();
@@ -42,203 +38,62 @@
     });
 
     $('#result').on('click', '#addAttr', function () {
-        var totalProperties = Object.keys(selectedSchema.properties).length;
-        selectedSchema.properties['newProperty' + totalProperties] = { 'required' : false};
+        var totalProperties = Object.keys(schema.properties).length;
+        schema.properties['newProperty' + totalProperties] = {'type': 'string', 'required': false};
         $.fn.renderSchema();
     });
 
     $("#result").on('click', '.glyphicon-remove', function () {
         //TODO: need to delete the property object from the selectedSchema variable here.
-        $(this).parents(":eq(1)").parent().remove();
+        delete schema.properties[$(this).attr('name')];
+        $.fn.renderSchema();
     });
 
     $.fn.listSchemas = function () {
         $.get(base_url + '/schema').done(function (data) {
             if (data === "") {
-                $('#schemaHeader').hide();
                 var template = $.templates("#noSchema");
                 template.link('#result', {});
                 $('#result a').click(function () {
                     $.fn.createSchema();
                 });
             } else {
-                $('#schemaHeader').show();
-                listOfCategories = data;
+                schemas = data;
                 var template = $.templates("#listSchema");
-                template.link('#categories', {schema: data});
+                template.link('#result', {schema: data});
+
                 $('#createSchema').click(function () {
                     $.fn.createSchema();
                 });
-                $('#categories .catName').on('click', function () {
-                    $.fn.setSelectedSchema($.view(this).data);
+
+
+                $('#result .glyphicon-trash').on('click', function () {
+                    schema = schemas[$(this).parent().parent().index()];
+                    $("#delete-conf-model").modal('show');
+                    confirmationPromise = $.Deferred();
+                    confirmationPromise.done(function () {
+                        $.fn.deleteSchema();
+                    });
                 });
 
-                if (data.length > 0) {
-                    $.fn.setSelectedSchema(data[0]);
-                }
+                $('#result .glyphicon-edit').on('click', function () {
+                    schema = schemas[$(this).parent().parent().index()];
+                    isEdit = true;
+                    $.fn.renderSchema();
+                });
+
             }
-
-
-
         });
     };
 
-    $.fn.setSelectedSchema = function (selectedSchemaData) {
-
-        $('[data-bind-col="schemaname"]').text(selectedSchemaData.title);
-        selectedSchema = selectedSchemaData;
-
-        $.get(base_url + '/data/' + selectedSchema.id).done(function (data) {
-            $.fn.listTemplates(data);
-        });
-
-    };
-    $.fn.listTemplates = function (listofTemplates) {
-        if (listofTemplates === "") {
-            var template = $.templates("#noTemplate");
-            template.link('#result', {});
-            $('#result a').click(function () {
-                $.fn.createTemplate();
-            });
-        } else {
-            listOfTemplates = {link: listofTemplates};
-            var template = $.templates("#listTemplate");
-            template.link('#result', listOfTemplates);
-            $('#addMoreTemplateBtn').on('click', function () {
-                $.fn.createTemplate();
-            });
-
-            $('#result li a').on('click', function () {
-                $.fn.addParentTemplate($.view(this).data);
-            });
-
-            $('#result .glyphicon-trash').on('click', function () {
-                selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
-                $("#delete-conf-model").modal('show');
-                confirmationPromise = $.Deferred();
-                confirmationPromise.done(function () {
-                    $.fn.deleteTemplate();
-                });
-            });
-
-            $('#result .glyphicon-edit').on('click', function () {
-                selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
-                $.fn.renderTemplate();
-            });
-        }
-
-
-
-
-    };
 
     $.fn.saveSchema = function () {
-       console.log(JSON.stringify(selectedSchema));
-    };
-
-    function setSchemaObject(){
-        //var schemaObj={"id":"hgghg","title":"trtrtr","properties":{"ytytyty":{"type":"string"},"uyuyuy":{"type":"string"},"gjgjgj":{"type":"string"}},"required":["uyuyuy"]};
-        //var schemaObj={"id":"sample","title":"Sample Schem","properties":{"name":{"type":"string","id":"true","required":true},"firstName":{"type":"string"}}};
-        var schemaObj={"id":"sample","title":"Sample Schem","type":"object"};
-       var keys = Object.keys(schemaObj.properties);
-        var j=0;
-
-        $("#schemaId").val(schemaObj.id);
-        $("#title").val(schemaObj.title);
-        $("#type").val(schemaObj.type);
-        var template = $.templates("#attributeTemplate");
-
-        for(var i=0;i<keys.length;i++){
-            $("#schemaLayout").append(template.render({}));
-        }
-        /** v4 Logic **/
-        /*$("#schemaLayout .row input[type='text']").each(function(i,data){
-            var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
-            var $select = $(this).parent().next().find("select");
-            $(this).val(keys[i]);
-            $select.val(schemaObj.properties[keys[i]].type);
-            if(schemaObj.required[j] === keys[i] ){
-                $checkbox.prop("checked",true);
-                j++;
-            }
-
-        });*/
-
-        /** v3 Logic**/
-
-        $('#schemaLayout .form-group input[type="text"]').each(function(i){
-            var $checkbox= $(this).parent().next().next().find('input[type="checkbox"]');
-            var $select = $(this).parent().next().find('select');
-            $(this).val(keys[i]);
-            $select.val(schemaObj.properties[keys[i]].type);
-            if(schemaObj.properties[keys[i]].required){
-                $checkbox.prop('checked',true);
-            }
-
-        });
-
-    }
-
-    $.fn.deleteSchema = function () {
-        $.ajax({
-            method: 'DELETE',
-            url: base_url + '/schema/' + selectedSchema.id,
-            dataType: 'json'
-        }).done(function (data) {
-            listOfCategories = null;
-            $.fn.refreshList();
-        }).error(function (data) {
-            $.fn.onError(data);
-        });
-    };
-    $.fn.renderSchema = function () {
-        if (selectedSchema && selectedSchema.id) {
-            selectedSchema.isEdit = true;
-            selectedSchema.schema = JSON.stringify(selectedSchema);
-        }
-        schema = $.templates('#schemaForm');
-        schema.link('#result', selectedSchema);
-        $('#result form').submit(function (event) {
-            event.preventDefault();
-            $.fn.saveSchema();
-        });
-
-        // setSchemaObject();
-    };
-
-    $.fn.createSchema = function () {
-        selectedSchema = {
-        properties:{
-        'first': {
-          'required': true
-        }
-        }};
-        $.fn.renderSchema();
-    };
-
-    $.fn.refreshList = function () {
-
-        $('#schema-list').show();
-        $('#schemanameLbl').hide();
-        $('#schemaHeader').show();
-        if (!listOfCategories) {
-            $.fn.listSchemas();
-        }
-        else {
-            $.fn.setSelectedSchema(selectedSchema);
-        }
-    };
-
-    $.fn.saveTemplate = function () {
-        selectedTemplate.repositoryName = selectedSchema.name;
-
-        if (selectedTemplate.isEdit) {
-            delete selectedTemplate.isEdit;
+        if (isEdit) {
             $.ajax({
                 method: 'PUT',
-                url: base_url + '/data/' + selectedSchema.id + '/' + selectedTemplate.name,
+                url: base_url + '/schema/' + schema.id,
                 dataType: 'json',
-                data: JSON.stringify(selectedTemplate)
+                data: JSON.stringify(schema)
             }).done(function (data) {
                 $.fn.refreshList();
             }).error(function (data) {
@@ -247,62 +102,47 @@
         } else {
             $.ajax({
                 method: 'POST',
-                url: base_url + '/data/' + selectedSchema.id,
+                url: base_url + '/schema',
                 dataType: 'json',
-                data: JSON.stringify(selectedTemplate)
+                data: JSON.stringify(schema)
             }).done(function (data) {
                 $.fn.refreshList();
             }).error(function (data) {
                 $.fn.onError(data);
             });
         }
-
     };
 
-
-    $.fn.deleteTemplate = function () {
+    $.fn.deleteSchema = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + selectedSchema.id + '/' + selectedTemplate.name,
+            url: base_url + '/schema/' + schema.id,
             dataType: 'json'
         }).done(function (data) {
+            schemas = null;
             $.fn.refreshList();
         }).error(function (data) {
             $.fn.onError(data);
         });
     };
-    $.fn.renderTemplate = function () {
 
-        $.get(base_url + '/schema/' + selectedSchema.id).done(function (data) {
-
-            if (selectedTemplate && selectedTemplate.name) {
-                selectedTemplate.isEdit = true;
-            }
-            template = $.templates("#linkForm");
-            template.link('#result', selectedTemplate);
-            $("#result form").submit(function (event) {
-                event.preventDefault();
-                $.fn.saveTemplate();
-            });
-            $('#schema-list').hide();
-            $('#schemanameLbl').show();
-
-            $("#editor_holder").empty();
-            var element = document.getElementById('editor_holder');
-            editor = new JSONEditor(element, {schema: data, disable_properties: true, disable_collapse: true, disable_edit_json: true});
-            if (selectedTemplate.isEdit) {
-                editor.setValue(selectedTemplate);
-            }
-
+    $.fn.renderSchema = function () {
+        schemaTemplate = $.templates('#schemaForm');
+        schemaTemplate.link('#result', schema);
+        $('#result form').submit(function (event) {
+            event.preventDefault();
+            $.fn.saveSchema();
         });
-
-
-
     };
 
-    $.fn.createTemplate = function () {
-        selectedTemplate = {};
-        $.fn.renderTemplate();
+    $.fn.createSchema = function () {
+        schema = {'type': 'object', properties: {}};
+        isEdit = false;
+        $.fn.renderSchema();
+    };
+
+    $.fn.refreshList = function () {
+        $.fn.listSchemas();
     };
 
     $.fn.onError = function (data) {

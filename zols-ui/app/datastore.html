@@ -30,9 +30,9 @@
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/modal.js"></script>
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
         <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
-        <script src="bower_components/jsviews/jsviews.js"></script>
         <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
+        <script src="scripts/jsviews.min.js"></script>
         <!-- endbuild -->
 
     </head>
@@ -47,29 +47,13 @@
                         <div class="row show-grid">
                             <div class="col-md-8">
                                 <h4>
-                                    Data Store
+                                    Schema
                                     <span class="badge">
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>
                                 </h4>
                             </div>
-                            <div class="pull-right" id="schemaHeader">
-                                <label>Schema</label>
-                                <label data-bind-col="schemaname" id="schemanameLbl">Schema Name</label>
-
-                                <div class="btn-group" id="schema-list">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span data-bind-col="schemaname">Dropdown</span>
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" role="menu" id="categories">
-                                        </ul>
-                                    </div>
-                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
-                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
-                                </div>
-                            </div>
+                            
                         </div>
 
 
@@ -113,8 +97,8 @@
                 <div class="panel panel-primary">
                 <div class="panel-heading">
                     <h3 class="panel-title">
-                        Panel 1</h3>
-                    <span class="pull-right clickable"><i class="glyphicon glyphicon-remove"></i></span>
+                        #{{:#getIndex()+1}}</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-remove" data-link="name{:key}"></i></span>
                 </div>
                 <div class="panel-body">
                     <!-- Text input-->
@@ -150,13 +134,16 @@
             </script>
 
 
-            <script id="listTemplate" type="text/x-jsrender">
-                {{if link.length !==0}}
+            
+
+            <script id="listSchema" type="text/x-jsrender">
+     
+                {{if schema.length !==0}}
 
                 <ul class="list-group">
-                {{for link}}
+                {{for schema}}
                 <li class="list-group-item">
-                <a href="#">{{:name}}</a>
+                <a href="#" data-name="{{:id}}">{{:title}}</a>
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
@@ -164,17 +151,8 @@
                 </ul>
                 {{/if}}
 
-                <a id="addMoreTemplateBtn" href="#">Add More</a>
-            </script>
-
-            <script id="listSchema" type="text/x-jsrender">
-                {{for schema}}
-                <li>
-                <a class="catName" href="#" data-name="{{:id}}">{{:title}}</a>
-                </li>
-                {{/for}}
-                <li class="divider"></li>
-                <li><a id="createSchema">Create New</a></li>
+                <a id="createSchema" href="#">Add More</a>
+                
             </script>
 
             <script id="schemaForm" type="text/x-jsrender">
@@ -210,18 +188,18 @@
                 </div>
                 </div>
 
-            <div class="panel panel-primary">
+                <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Attributes</h3>
-                    <span class="pull-right clickable"><i id="addAttr" class="glyphicon glyphicon-plus"></i></span>
+                <h3 class="panel-title">
+                Attributes</h3>
+                <span class="pull-right clickable"><i id="addAttr" class="glyphicon glyphicon-plus"></i></span>
                 </div>
                 <div class="panel-body" id="schemaLayout">
-                  {^{props properties}}
-                  {^{include tmpl="#attributeTemplate"/}}
-                  {{/props}}
-                 </div>
-            </div>
+                {^{props properties}}
+                {^{include tmpl="#attributeTemplate"/}}
+                {{/props}}
+                </div>
+                </div>
 
                 <!-- Button (Double) -->
                 <div class="form-group">
@@ -231,8 +209,6 @@
                 <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
                 </div>
                 </div>
-
-
 
                 </fieldset>
                 </form>
