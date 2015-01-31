@@ -97,6 +97,8 @@ public class Application extends WebMvcConfigurerAdapter {
                     .failureUrl("/login?error").and().logout()
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and()
                     .exceptionHandling().accessDeniedPage("/access?error");
+        
+        http.csrf().disable();
 			// @formatter:on
 		}
 
