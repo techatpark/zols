@@ -710,7 +710,7 @@ section.wrapper {
   width: 960px;
   margin: 0px auto; }
   section.wrapper section#content {
-    margin: 40px 0px 0px 0px; }
+    margin: 0px 0px 0px 0px; }
     section.wrapper section#content #app-caption {
       float: left;
       width: 480px; }
@@ -836,7 +836,7 @@ and open the template in the editor.
     Author     : Rajesh_ve
 */
 .topicHeader {
-  margin: 40px 0px 0px 0px;
+  margin: 15px 0px 0px 0px;
   border-bottom: solid 1px #e7eaeb;
   padding: 0px 0px 6px 0px; }
   .topicHeader ul.prevTopic {
