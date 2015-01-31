@@ -5,7 +5,6 @@
  */
 package org.zols.datastore.service;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import java.util.List;
 import java.util.Map;
 import org.zols.datastore.DataStore;
@@ -26,11 +25,8 @@ public class DataService {
     @Autowired
     private DataStore dataStore;
     
-    @Autowired
-    private SchemaService schemaService;
-    
     public String getIdField(String schemaName) {
-        return dataStore.getIdField(schemaService.read(schemaName));
+        return dataStore.getIdField(dataStore.read(schemaName));
     }
 
     public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) {

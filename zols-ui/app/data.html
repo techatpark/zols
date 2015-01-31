@@ -2,7 +2,7 @@
 <html class="no-js" >
     <head>
         <meta charset="utf-8"/>
-        <title>Zols - Data Store</title>
+        <title>Zols - Data</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -65,8 +65,13 @@
             <!-- endbuild -->
 
             <script>
-                $("#editor_holder").jsonEditor({schemaName: "54841af344aebc43ee3b12f6"});
+                var jsonEditor = $("#editor_holder").jsonEditor({schemaName: "Sample"});
                 //$.fn.showEditor('54841af344aebc43ee3b12f6');  
+
+                $('#saveBtn').on('click', function () {
+                    console.log(jsonEditor.getValue());
+                });
+
             </script>
 
         </div>

@@ -42,7 +42,7 @@ public class SchemaControler {
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public String read(@PathVariable(value = "id") String id) {
+    public Map<String,Object> read(@PathVariable(value = "id") String id) {
         LOGGER.info("Getting jsonSchema ", id);
         return schemaService.read(id);
     }

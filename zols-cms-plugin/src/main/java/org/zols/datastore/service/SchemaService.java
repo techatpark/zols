@@ -48,9 +48,9 @@ public class SchemaService {
      * @param schemaName String to be Search
      * @return searched JsonSchema
      */
-    public String read(String schemaName) {
+    public Map<String,Object> read(String schemaName) {
         LOGGER.info("Reading JsonSchema  {}", schemaName);
-        return dataStore.read(schemaName);
+        return dataStore.readAsMap(schemaName);
     }
 
     /**

@@ -321,6 +321,15 @@ public abstract class DataStore {
         Schema schema = read(Schema.class, schemaName);
         return schema.getSchema();
     }
+    
+    public Map<String,Object> readAsMap(String schemaName) {
+        try {
+            return tv4.getValueAsMap(read(schemaName));
+        } catch (IOException ex) {
+            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public boolean delete(String schemaName) {
         return delete(Schema.class, schemaName);
