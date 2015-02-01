@@ -14,13 +14,8 @@ gulp.task('thymeleaf',['build'], function () {
     .pipe(replace('.css">', '.css}"/>'))
     .pipe(gulp.dest('dist'));
 });
-gulp.task('css_font_fix', function () {
-  return gulp.src('dist/**/*.css')
-    .pipe(replace('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/', '../fonts/'))
-    .pipe(gulp.dest('dist'));
-});
 
-gulp.task('copystatic',['thymeleaf','css_font_fix'], function () {
+gulp.task('copystatic',['thymeleaf'], function () {
   return gulp.src(
 		['dist/**/*.js'
 		,'dist/**/*.css'
@@ -39,4 +34,4 @@ gulp.task('copytemplates',['thymeleaf'], function () {
   .pipe(gulp.dest('../zols-cms-plugin/src/main/resources/zolstemplates'));
 });
 
-gulp.task('release', ['copystatic', 'copytemplates', 'css_font_fix']);
+gulp.task('release', ['copystatic', 'copytemplates']);
