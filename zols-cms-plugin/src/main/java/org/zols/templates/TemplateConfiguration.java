@@ -36,7 +36,7 @@ public class TemplateConfiguration {
 
     @PostConstruct
     public void intializeTemplates() {
-        addZolsTemplates();
+        
         TemplateResolver resolver;
         File file;
         try {
@@ -63,6 +63,7 @@ public class TemplateConfiguration {
 
         } catch (Exception e) {
         }
+        addZolsTemplates();
     }
 
     private void addZolsTemplates() {
