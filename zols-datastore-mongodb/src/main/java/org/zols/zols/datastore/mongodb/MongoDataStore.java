@@ -5,7 +5,6 @@
  */
 package org.zols.zols.datastore.mongodb;
 
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
@@ -47,50 +46,50 @@ public class MongoDataStore extends DataStore {
     }
 
     @Override
-    protected Map<String, Object> createData(JsonSchema jsonSchema, Map<String, Object> dataObject) {
+    protected Map<String, Object> createData(String jsonSchema, Map<String, Object> dataObject) {
         String idField = getIdField(jsonSchema);
         Object idFieldValue = dataObject.remove(idField);
         if (idFieldValue != null) {
             dataObject.put(ID_FIELD, idFieldValue.toString());
         }
         DBObject dBObject = new BasicDBObject(dataObject);
-        db.getCollection(jsonSchema.getId()).insert(dBObject);
+        db.getCollection(getId(jsonSchema)).insert(dBObject);
         dataObject.remove(ID_FIELD);
         dataObject.put(idField, dBObject.get(ID_FIELD).toString());
         return dataObject;
     }
 
     @Override
-    protected Map<String, Object> readData(JsonSchema jsonSchema, String idValue) {        
+    protected Map<String, Object> readData(String jsonSchema, String idValue) {        
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue;        
         DBObject query = new BasicDBObject(ID_FIELD, idFieldValue);
-        return getDataMap(db.getCollection(jsonSchema.getId()).findOne(query), getIdField(jsonSchema));
+        return getDataMap(db.getCollection(getId(jsonSchema)).findOne(query), getIdField(jsonSchema));
     }
 
     @Override
-    protected boolean deleteData(JsonSchema jsonSchema, String idValue) {
+    protected boolean deleteData(String jsonSchema, String idValue) {
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue;        
         DBObject query = new BasicDBObject(ID_FIELD, idFieldValue);
-        db.getCollection(jsonSchema.getId()).remove(query);
+        db.getCollection(getId(jsonSchema)).remove(query);
         return true;
     }
 
     @Override
-    protected boolean updateData(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    protected boolean updateData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idField = getIdField(jsonSchema);
         String idValue = validatedDataObject.get(idField).toString();
         Object idFieldValue = ObjectId.isValid(idValue) ? new ObjectId(idValue) : idValue; 
         validatedDataObject.remove(idField);
         DBObject query = new BasicDBObject(ID_FIELD, idFieldValue);
         DBObject dBObject = new BasicDBObject(validatedDataObject);
-        db.getCollection(jsonSchema.getId()).findAndModify(query, (dBObject));
+        db.getCollection(getId(jsonSchema)).findAndModify(query, (dBObject));
         return true;
     }
 
     @Override
-    protected List<Map<String, Object>> listData(JsonSchema jsonSchema) {
+    protected List<Map<String, Object>> listData(String jsonSchema) {
         String idField = getIdField(jsonSchema);
-        List<DBObject> dBObjects = db.getCollection(jsonSchema.getId()).find().toArray();
+        List<DBObject> dBObjects = db.getCollection(getId(jsonSchema)).find().toArray();
         if (dBObjects != null) {
             List<Map<String, Object>> listOfMap = new ArrayList<>(dBObjects.size());
             for (DBObject dBObject : dBObjects) {
@@ -102,16 +101,16 @@ public class MongoDataStore extends DataStore {
     }
     
     @Override
-    protected boolean deleteData(JsonSchema jsonSchema, Query query) {
+    protected boolean deleteData(String jsonSchema, Query query) {
         String idField = getIdField(jsonSchema);
-        db.getCollection(jsonSchema.getId()).remove(getQueryObject(idField,query));        
+        db.getCollection(getId(jsonSchema)).remove(getQueryObject(idField,query));        
         return true;
     }
 
     @Override
-    protected List<Map<String, Object>> listData(JsonSchema jsonSchema, Query query) {
+    protected List<Map<String, Object>> listData(String jsonSchema, Query query) {
         String idField = getIdField(jsonSchema);
-        List<DBObject> dBObjects = db.getCollection(jsonSchema.getId()).find(getQueryObject(idField,query)).toArray();
+        List<DBObject> dBObjects = db.getCollection(getId(jsonSchema)).find(getQueryObject(idField,query)).toArray();
         if (dBObjects != null) {
             List<Map<String, Object>> listOfMap = new ArrayList<>(dBObjects.size());
             for (DBObject dBObject : dBObjects) {
