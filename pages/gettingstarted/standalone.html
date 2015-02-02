@@ -16,7 +16,7 @@
                         <li><a href="../features.html">Features</a></li>                        
                     </ul>
                 </nav>
-                
+
                 <div class="forkGit">
                     <a href="https://github.com/sathishk/zols">Fork us @ GitHub</a>
                 </div>
@@ -37,15 +37,17 @@
                 </header>
                 <section class="topicContent" >                    
                     <p>
-                        Zols has two distributions                        
+                        Zols is build as <a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#getting-started-first-application-executable-jar">executable jar</a> using Spring Boot. Once you <a href="../../release/Zols.zip">download</a> and unzip the binary you can run below command                       
                     </p>  
-					<ul>
-						<li>Standalone - This is basic spring booted executable jar</li>
-						<li>Embeddable Jar - This is spring plug-in which we can include inside any Spring MVC application</li>
-					</ul>
+                    
+                    <p class="console">java -jar zols-cms.jar</p>
+                    
                     <p>
-					However to begin with the basic features, it is easy to get started with standalone mode.
-					</p>
+                        This will by default start the application @ http://localhost:8080 which can be customized using <a href="http://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/#boot-features-external-config-command-line-args">command line properties</a>                       
+                    </p>  
+                    
+                    
+                    
                 </section>
             </section>
         </section>
