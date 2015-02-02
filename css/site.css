@@ -776,12 +776,12 @@ section.wrapper {
   float: right; }
   #demo-video #player {
     display: none; }
-  #demo-video #playVideo {
-    background: url(images/playVideoBtn.png);
-    width: 118px;
+  #demo-video a {
+    background: url(images/gettingStartedBtn.png);
+    width: 153px;
     height: 60px;
     display: inline-block;
-    margin: 274px 0px 0px 320px; }
+    margin: 282px 0px 0px 290px; }
 
 #main_features {
   float: left;
@@ -890,3 +890,4 @@ and open the template in the editor.
     font: normal 14px/24px Arial; }
 
 /*# sourceMappingURL=site.css.map */
+ 
