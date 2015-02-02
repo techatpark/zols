@@ -1,3 +1,11 @@
+.console {
+    font-family:Courier;
+    color: #FFFFFF;
+    background: #000000;
+    border: 3px double #CCCCCC;
+    padding: 10px;
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -11,53 +19,53 @@ article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
 time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline; }
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline; }
 
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
-  display: block; }
+    display: block; }
 
 body {
-  line-height: 1;
-  font-family: Arial;
-  background: #f0f3f5; }
+    line-height: 1;
+    font-family: Arial;
+    background: #f0f3f5; }
 
 ol, ul {
-  list-style: none; }
+    list-style: none; }
 
 blockquote, q {
-  quotes: none; }
+    quotes: none; }
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-  content: '';
-  content: none; }
+    content: '';
+    content: none; }
 
 table {
-  border-collapse: collapse;
-  border-spacing: 0; }
+    border-collapse: collapse;
+    border-spacing: 0; }
 
 .clear {
-  clear: both; }
+    clear: both; }
 
 :focus {
-  outline: none; }
+    outline: none; }
 
 .wrapper {
-  width: 960px;
-  margin: 0px auto; }
+    width: 960px;
+    margin: 0px auto; }
 
 body > header {
-  background-color: #3e6baf;
-  height: 70px;
-  color: white; }
-  body > header .logo {
+    background-color: #3e6baf;
+    height: 70px;
+    color: white; }
+body > header .logo {
     background: url("images/logo.png") no-repeat;
     width: 124px;
     height: 70px;
@@ -65,42 +73,42 @@ body > header {
     margin: 0px 108px 0px 0px; }
 
 #content {
-  width: 100%;
-  display: block; }
+    width: 100%;
+    display: block; }
 
 body > footer {
-  background-color: #151617;
-  color: white;
-  height: 14px;
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-  padding: 10px 0px 14px 0px; }
-  body > footer aside {
+    background-color: #151617;
+    color: white;
+    height: 14px;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding: 10px 0px 14px 0px; }
+body > footer aside {
     font: normal 14px/18px arial;
     float: left; }
-  body > footer nav {
+body > footer nav {
     float: right; }
-    body > footer nav ul li {
-      display: inline;
-      padding: 4px 20px 4px 32px;
-      font: normal 14px/24px arial;
-      border-right: solid 1px #313334; }
-      body > footer nav ul li a {
-        text-decoration: none;
-        font: normal 14px/24px arial;
-        color: white;
-        padding: 0px 0px 0px 32px;
-        display: inline-block; }
-      body > footer nav ul li a:hover {
-        opacity: 0.24; }
-      body > footer nav ul li a.api {
-        background: url(../css/images/apiIcon.png) no-repeat left top; }
-      body > footer nav ul li a.feedback {
-        background: url(../css/images/feedbackIcon.png) no-repeat left top; }
-    body > footer nav ul li:last-child {
-      padding: 0px 0px 0px 12px;
-      border-right: none; }
+body > footer nav ul li {
+    display: inline;
+    padding: 4px 20px 4px 32px;
+    font: normal 14px/24px arial;
+    border-right: solid 1px #313334; }
+body > footer nav ul li a {
+    text-decoration: none;
+    font: normal 14px/24px arial;
+    color: white;
+    padding: 0px 0px 0px 32px;
+    display: inline-block; }
+body > footer nav ul li a:hover {
+    opacity: 0.24; }
+body > footer nav ul li a.api {
+    background: url(../css/images/apiIcon.png) no-repeat left top; }
+body > footer nav ul li a.feedback {
+    background: url(../css/images/feedbackIcon.png) no-repeat left top; }
+body > footer nav ul li:last-child {
+    padding: 0px 0px 0px 12px;
+    border-right: none; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -112,42 +120,42 @@ and open the template in the editor.
     Author     : sathish_ku
 */
 body > header {
-  background: url(images/headerBG.png) repeat-x;
-  height: 70px;
-  color: white;
-  position: relative; }
-  body > header .logo {
+    background: url(images/headerBG.png) repeat-x;
+    height: 70px;
+    color: white;
+    position: relative; }
+body > header .logo {
     float: left;
     background: url("images/logo.png") no-repeat;
     width: 124px;
     height: 70px;
     margin: 0px 108px 0px 0px; }
-  body > header nav ul {
+body > header nav ul {
     display: inline;
     border: 0;
     margin: 0px 144px 0px 0px;
     float: left;
     padding: 26px 0px 0px 0px; }
-    body > header nav ul li {
-      float: left;
-      list-style-type: none;
-      border: 0;
-      margin: 0px;
-      padding: 0px; }
-      body > header nav ul li a {
-        color: #feffff;
-        text-decoration: none;
-        padding: 10px 15px; }
-      body > header nav ul li a:hover, body > header nav ul li a.active {
-        color: #feffff;
-        background: #284877;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        -ms-border-radius: 4px;
-        border-radius: 4px;
-        -webkit-box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.24);
-        box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.24); }
-  body > header #search input[type="text"] {
+body > header nav ul li {
+    float: left;
+    list-style-type: none;
+    border: 0;
+    margin: 0px;
+    padding: 0px; }
+body > header nav ul li a {
+    color: #feffff;
+    text-decoration: none;
+    padding: 10px 15px; }
+body > header nav ul li a:hover, body > header nav ul li a.active {
+    color: #feffff;
+    background: #284877;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+    box-shadow: inset 0 2px 2px 0 rgba(0, 0, 0, 0.24); }
+body > header #search input[type="text"] {
     background: url(images/searchIcon.png) no-repeat 6px 6px #fcfcfc;
     border: 1px solid #d1d1d1;
     font: normal 12px Arial,Helvetica,Sans-serif;
@@ -159,17 +167,17 @@ body > header {
     -ms-border-radius: 4px;
     border-radius: 4px;
     margin: 21px 0px 0px 0px; }
-  body > header #search input[type="text"] placeholder {
+body > header #search input[type="text"] placeholder {
     color: #999999; }
-  body > header ::-webkit-input-placeholder {
+body > header ::-webkit-input-placeholder {
     color: #999999; }
-  body > header :-moz-placeholder {
+body > header :-moz-placeholder {
     color: #999999; }
-  body > header ::-moz-placeholder {
+body > header ::-moz-placeholder {
     color: #999999; }
-  body > header :-ms-input-placeholder {
+body > header :-ms-input-placeholder {
     color: #999; }
-  body > header .forkGit {
+body > header .forkGit {
     position: absolute;
     display: block;
     top: 0;
@@ -178,7 +186,7 @@ body > header {
     overflow: hidden;
     height: 200px;
     z-index: 10; }
-  body > header .forkGit a {
+body > header .forkGit a {
     background: #ff8b5d;
     background: -moz-linear-gradient(-45deg, #ff8b5d 0%, #fd2e0c 50%, #ff8b5d 100%);
     background: -webkit-gradient(linear, left top, right bottom, color-stop(0%, #ff8b5d), color-stop(50%, #fd2e0c), color-stop(100%, #ff8b5d));
@@ -199,158 +207,158 @@ body > header {
     right: -108px;
     transform: rotate(45deg);
     -webkit-transform: rotate(45deg); }
-  body > header .forkGit a:hover {
+body > header .forkGit a:hover {
     background: #f73818; }
 
 .breadcrumb {
-  text-align: center; }
+    text-align: center; }
 
 .breadcrumb ul {
-  list-style: none;
-  display: inline-table; }
+    list-style: none;
+    display: inline-table; }
 
 .breadcrumb ul li {
-  display: inline; }
+    display: inline; }
 
 .breadcrumb ul li a {
-  display: block;
-  float: left;
-  height: 50px;
-  background: #3498db;
-  text-align: center;
-  padding: 30px 40px 0 80px;
-  position: relative;
-  margin: 0 10px 0 0;
-  font-size: 20px;
-  text-decoration: none;
-  color: #fff; }
+    display: block;
+    float: left;
+    height: 50px;
+    background: #3498db;
+    text-align: center;
+    padding: 30px 40px 0 80px;
+    position: relative;
+    margin: 0 10px 0 0;
+    font-size: 20px;
+    text-decoration: none;
+    color: #fff; }
 
 .breadcrumb ul li a:after {
-  content: "";
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
-  border-left: 40px solid #3498db;
-  position: absolute;
-  right: -40px;
-  top: 0;
-  z-index: 1; }
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #3498db;
+    position: absolute;
+    right: -40px;
+    top: 0;
+    z-index: 1; }
 
 .breadcrumb ul li a:before {
-  content: "";
-  border-top: 40px solid transparent;
-  border-bottom: 40px solid transparent;
-  border-left: 40px solid #d4f2ff;
-  position: absolute;
-  left: 0;
-  top: 0; }
+    content: "";
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 40px solid #d4f2ff;
+    position: absolute;
+    left: 0;
+    top: 0; }
 
 .breadcrumb ul li:first-child a {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px; }
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px; }
 
 .breadcrumb ul li:first-child a:before {
-  display: none; }
+    display: none; }
 
 .breadcrumb ul li:last-child a {
-  padding-right: 80px;
-  border-top-right-radius: 10px;
-  border-bottom-right-radius: 10px; }
+    padding-right: 80px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px; }
 
 .breadcrumb ul li:last-child a:after {
-  display: none; }
+    display: none; }
 
 .breadcrumb ul li a:hover {
-  background: #fa5ba5; }
+    background: #fa5ba5; }
 
 .breadcrumb ul li a:hover:after {
-  border-left-color: #fa5ba5; }
+    border-left-color: #fa5ba5; }
 
 /*http://thecodeplayer.com/walkthrough/css3-itemlist-navigation*/
 #items {
-  width: 100%;
-  text-align: center;
-  margin: 0px auto;
-  padding: 10px; }
+    width: 100%;
+    text-align: center;
+    margin: 0px auto;
+    padding: 10px; }
 
 .itemlist {
-  /*centering*/
-  display: inline-block;
-  overflow: hidden;
-  border-radius: 5px; }
+    /*centering*/
+    display: inline-block;
+    overflow: hidden;
+    border-radius: 5px; }
 
 .itemlist li {
-  display: block; }
+    display: block; }
 
 .itemlist p {
-  text-decoration: none;
-  outline: none;
-  display: block;
-  font-size: 12px;
-  line-height: 36px;
-  min-width: 200px;
-  color: white;
-  background: linear-gradient(#666666, #333333); }
+    text-decoration: none;
+    outline: none;
+    display: block;
+    font-size: 12px;
+    line-height: 36px;
+    min-width: 200px;
+    color: white;
+    background: linear-gradient(#666666, #333333); }
 
 /*since the first link does not have a triangle before it we can reduce the left padding to make it look consistent with other links*/
 .itemlist p:first-child {
-  padding: 10px;
-  border-radius: 5px 0 0 5px;
-  /*to match with the parent's radius*/ }
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+    /*to match with the parent's radius*/ }
 
 .itemlist p:last-child {
-  border-radius: 0 5px 5px 0;
-  /*this was to prevent glitches on hover*/ }
+    border-radius: 0 5px 5px 0;
+    /*this was to prevent glitches on hover*/ }
 
 .modalDialog {
-  position: fixed;
-  font-family: Arial, Helvetica, sans-serif;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.8);
-  z-index: 99999;
-  opacity: 0;
-  -webkit-transition: opacity 400ms ease-in;
-  -moz-transition: opacity 400ms ease-in;
-  transition: opacity 400ms ease-in;
-  pointer-events: none; }
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    opacity: 0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none; }
 
 .modalDialog:target {
-  opacity: 1;
-  pointer-events: auto; }
+    opacity: 1;
+    pointer-events: auto; }
 
 .modalDialog > div {
-  width: 400px;
-  position: relative;
-  margin: 10% auto;
-  padding: 5px 20px 13px 20px;
-  border-radius: 10px;
-  background: #fff;
-  background: -moz-linear-gradient(white, #999999);
-  background: -webkit-linear-gradient(white, #999999);
-  background: -o-linear-gradient(white, #999999); }
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: #fff;
+    background: -moz-linear-gradient(white, #999999);
+    background: -webkit-linear-gradient(white, #999999);
+    background: -o-linear-gradient(white, #999999); }
 
 .close {
-  background: #606061;
-  color: #FFFFFF;
-  line-height: 25px;
-  position: absolute;
-  right: -12px;
-  text-align: center;
-  top: -10px;
-  width: 24px;
-  text-decoration: none;
-  font-weight: bold;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  border-radius: 12px;
-  -moz-box-shadow: 1px 1px 3px #000;
-  -webkit-box-shadow: 1px 1px 3px #000;
-  box-shadow: 1px 1px 3px #000; }
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000; }
 
 .close:hover {
-  background: #00d9ff; }
+    background: #00d9ff; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -362,141 +370,141 @@ and open the template in the editor.
     Author     : sathish_ku
 */
 #content header.pageTitle {
-  width: 100%;
-  display: block;
-  margin: 40px 0px 0px 0px;
-  border-bottom: solid 1px #e7eaeb;
-  padding: 0px 0px 6px 0px; }
-  #content header.pageTitle section:first-child {
+    width: 100%;
+    display: block;
+    margin: 40px 0px 0px 0px;
+    border-bottom: solid 1px #e7eaeb;
+    padding: 0px 0px 6px 0px; }
+#content header.pageTitle section:first-child {
     float: left; }
-  #content header.pageTitle section:last-child {
+#content header.pageTitle section:last-child {
     float: right; }
-  #content header.pageTitle h4 {
+#content header.pageTitle h4 {
     color: #6c6e70;
     margin: 0px 0px 0px 10px;
     font: normal 20px/24px Arial;
     float: left; }
-  #content header.pageTitle .categorySelector {
+#content header.pageTitle .categorySelector {
     float: right; }
-    #content header.pageTitle .categorySelector label {
-      color: #8d9194;
-      font: normal 14px/18px Arial; }
-    #content header.pageTitle .categorySelector select {
-      -webkit-border-radius: 4px;
-      -moz-border-radius: 4px;
-      -ms-border-radius: 4px;
-      border-radius: 4px;
-      font: bold 14px/17px Arial;
-      color: #8d9194;
-      padding: 7px 0px 8px 0px;
-      border: solid 1px #dddfe1;
-      width: 236px;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      -ms-appearance: none;
-      -o-appearance: none;
-      appearance: none;
-      background: white url("../css/images/dropdownArrow.png") no-repeat right 1px top 1px;
-      text-indent: 0.01px;
-      text-overflow: ''; }
-    #content header.pageTitle .categorySelector select option:last-child {
-      border-top: solid 1px #dddfe1; }
-    #content header.pageTitle .categorySelector a.editBtn {
-      width: 36px;
-      height: 36px;
-      margin: 0px;
-      background: url(../css/images/editIcon.png) left top no-repeat;
-      background-size: 36px 36px;
-      border: none;
-      display: inline-block;
-      padding: 8px 0px 0px 0px;
-      text-indent: -9999px; }
-    #content header.pageTitle .categorySelector a.deleteBtn {
-      width: 36px;
-      height: 36px;
-      margin: 0px;
-      background: url(../css/images/deleteIcon.png) left top no-repeat;
-      background-size: 36px 36px;
-      border: none;
-      display: inline-block;
-      padding: 8px 0px 0px 0px;
-      text-indent: -9999px; }
+#content header.pageTitle .categorySelector label {
+    color: #8d9194;
+    font: normal 14px/18px Arial; }
+#content header.pageTitle .categorySelector select {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    font: bold 14px/17px Arial;
+    color: #8d9194;
+    padding: 7px 0px 8px 0px;
+    border: solid 1px #dddfe1;
+    width: 236px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+    background: white url("../css/images/dropdownArrow.png") no-repeat right 1px top 1px;
+    text-indent: 0.01px;
+    text-overflow: ''; }
+#content header.pageTitle .categorySelector select option:last-child {
+    border-top: solid 1px #dddfe1; }
+#content header.pageTitle .categorySelector a.editBtn {
+    width: 36px;
+    height: 36px;
+    margin: 0px;
+    background: url(../css/images/editIcon.png) left top no-repeat;
+    background-size: 36px 36px;
+    border: none;
+    display: inline-block;
+    padding: 8px 0px 0px 0px;
+    text-indent: -9999px; }
+#content header.pageTitle .categorySelector a.deleteBtn {
+    width: 36px;
+    height: 36px;
+    margin: 0px;
+    background: url(../css/images/deleteIcon.png) left top no-repeat;
+    background-size: 36px 36px;
+    border: none;
+    display: inline-block;
+    padding: 8px 0px 0px 0px;
+    text-indent: -9999px; }
 #content a.toolTip {
-  background: url(images/helpIcon.png) no-repeat left top;
-  width: 26px;
-  height: 32px;
-  float: left;
-  background-size: 26px 32px;
-  margin: 0px 0px 0px 12px;
-  display: inline;
-  position: relative;
-  text-decoration: none;
-  -webkit-transition: all 0.24s ease-in;
-  -moz-transition: all 0.24s ease-in;
-  -ms-transition: all 0.24s ease-in;
-  -o-transition: all 0.24s ease-in;
-  transition: all 0.24s ease-in; }
-  #content a.toolTip:hover {
+    background: url(images/helpIcon.png) no-repeat left top;
+    width: 26px;
+    height: 32px;
+    float: left;
+    background-size: 26px 32px;
+    margin: 0px 0px 0px 12px;
+    display: inline;
+    position: relative;
+    text-decoration: none;
+    -webkit-transition: all 0.24s ease-in;
+    -moz-transition: all 0.24s ease-in;
+    -ms-transition: all 0.24s ease-in;
+    -o-transition: all 0.24s ease-in;
+    transition: all 0.24s ease-in; }
+#content a.toolTip:hover {
     text-decoration: none; }
 #content a.toolTip span {
-  display: none;
-  background: #f6f1dc;
-  border: solid 1px #c6c1a8;
-  width: 160px;
-  padding: 8px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  border-radius: 4px;
-  color: #535759;
-  font: normal 12px/14px Arial;
-  -webkit-transition: all 0.24s ease-in;
-  -moz-transition: all 0.24s ease-in;
-  -ms-transition: all 0.24s ease-in;
-  -o-transition: all 0.24s ease-in;
-  transition: all 0.24s ease-in; }
+    display: none;
+    background: #f6f1dc;
+    border: solid 1px #c6c1a8;
+    width: 160px;
+    padding: 8px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    color: #535759;
+    font: normal 12px/14px Arial;
+    -webkit-transition: all 0.24s ease-in;
+    -moz-transition: all 0.24s ease-in;
+    -ms-transition: all 0.24s ease-in;
+    -o-transition: all 0.24s ease-in;
+    transition: all 0.24s ease-in; }
 #content a.toolTip span:after, #content a.toolTip span:before {
-  bottom: 100%;
-  left: 13%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none; }
+    bottom: 100%;
+    left: 13%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none; }
 #content a.toolTip span:after {
-  border-color: rgba(246, 241, 220, 0);
-  border-bottom-color: #f6f1dc;
-  border-width: 8px;
-  margin-left: -8px; }
+    border-color: rgba(246, 241, 220, 0);
+    border-bottom-color: #f6f1dc;
+    border-width: 8px;
+    margin-left: -8px; }
 #content a.toolTip span:before {
-  border-color: rgba(198, 193, 168, 0);
-  border-bottom-color: #c6c1a8;
-  border-width: 9px;
-  margin-left: -9px; }
+    border-color: rgba(198, 193, 168, 0);
+    border-bottom-color: #c6c1a8;
+    border-width: 9px;
+    margin-left: -9px; }
 #content a.toolTip:hover span {
-  display: inline;
-  position: absolute;
-  left: -14px;
-  top: 38px; }
+    display: inline;
+    position: absolute;
+    left: -14px;
+    top: 38px; }
 #content .info {
-  margin: 200px 0px 0px 0px; }
-  #content .info h1 {
+    margin: 200px 0px 0px 0px; }
+#content .info h1 {
     color: #3d3d3f;
     font: normal 24px/36px georgia;
     text-align: center; }
-    #content .info h1 a {
-      color: #f16d0b;
-      position: relative; }
-    #content .info h1 a:after {
-      position: absolute;
-      background: url(images/hereArrow.png) left top no-repeat;
-      left: 56px;
-      top: -56px;
-      background-size: 44px 80px;
-      content: "";
-      width: 44px;
-      height: 80px; }
+#content .info h1 a {
+    color: #f16d0b;
+    position: relative; }
+#content .info h1 a:after {
+    position: absolute;
+    background: url(images/hereArrow.png) left top no-repeat;
+    left: 56px;
+    top: -56px;
+    background-size: 44px 80px;
+    content: "";
+    width: 44px;
+    height: 80px; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -508,194 +516,194 @@ and open the template in the editor.
     Author     : Rajesh_ve
 */
 .contact_form {
-  width: 560px;
-  margin: 80px auto 0px auto; }
+    width: 560px;
+    margin: 80px auto 0px auto; }
 
 .contact_form h2, .contact_form label {
-  font-family: Georgia, Times, "Times New Roman", serif; }
+    font-family: Georgia, Times, "Times New Roman", serif; }
 
 .contact_form fieldset {
-  margin: 0px !important;
-  padding: 0px !important; }
+    margin: 0px !important;
+    padding: 0px !important; }
 
 .contact_form h2 {
-  margin: 0;
-  display: inline; }
+    margin: 0;
+    display: inline; }
 
 .required_notification {
-  color: #d45252;
-  margin: 5px 0 0 0;
-  display: inline;
-  float: right; }
+    color: #d45252;
+    margin: 5px 0 0 0;
+    display: inline;
+    float: right; }
 
 .contact_form ul {
-  width: auto;
-  list-style-type: none;
-  list-style-position: outside;
-  margin: 0px;
-  padding: 0px; }
+    width: auto;
+    list-style-type: none;
+    list-style-position: outside;
+    margin: 0px;
+    padding: 0px; }
 
 .contact_form li {
-  padding: 0px;
-  position: relative;
-  margin: 0px 0px 10px 0px; }
+    padding: 0px;
+    position: relative;
+    margin: 0px 0px 10px 0px; }
 
 .contact_form li:last-child {
-  text-align: right; }
+    text-align: right; }
 
 .contact_form label {
-  width: 150px;
-  margin-top: 3px;
-  display: inline-block;
-  float: left;
-  padding: 3px 8px 3px 3px;
-  font: normal 14px Arial;
-  color: #6e7173;
-  text-align: right; }
+    width: 150px;
+    margin-top: 3px;
+    display: inline-block;
+    float: left;
+    padding: 3px 8px 3px 3px;
+    font: normal 14px Arial;
+    color: #6e7173;
+    text-align: right; }
 
 .contact_form input {
-  height: 20px;
-  padding: 5px 8px;
-  position: relative; }
+    height: 20px;
+    padding: 5px 8px;
+    position: relative; }
 
 .contact_form textarea {
-  padding: 8px;
-  width: 300px; }
+    padding: 8px;
+    width: 300px; }
 
 .contact_form button {
-  margin-left: 156px; }
+    margin-left: 156px; }
 
 .contact_form input, .contact_form textarea {
-  border: solid 1px #dddfe1;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  border-radius: 4px;
-  width: 346px; }
+    border: solid 1px #dddfe1;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    width: 346px; }
 
 input:required, textarea:required {
-  background: white url(images/inputReqIcon.png) no-repeat top right; }
+    background: white url(images/inputReqIcon.png) no-repeat top right; }
 
 /* Button Style */
 button.submit {
-  background-color: #68b12f;
-  background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
-  background: -webkit-linear-gradient(top, #68b12f, #50911e);
-  background: -moz-linear-gradient(top, #68b12f, #50911e);
-  background: -ms-linear-gradient(top, #68b12f, #50911e);
-  background: -o-linear-gradient(top, #68b12f, #50911e);
-  background: linear-gradient(top, #68b12f, #50911e);
-  border: 1px solid #509111;
-  border-bottom: 1px solid #5b992b;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -ms-border-radius: 3px;
-  -o-border-radius: 3px;
-  box-shadow: inset 0 1px 0 0 #9fd574;
-  -webkit-box-shadow: 0 1px 0 0 #9fd574 inset;
-  -moz-box-shadow: 0 1px 0 0 #9fd574 inset;
-  -ms-box-shadow: 0 1px 0 0 #9fd574 inset;
-  -o-box-shadow: 0 1px 0 0 #9fd574 inset;
-  color: white;
-  font-weight: bold;
-  padding: 6px 20px;
-  text-align: center;
-  text-shadow: 0 -1px 0 #396715; }
+    background-color: #68b12f;
+    background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e));
+    background: -webkit-linear-gradient(top, #68b12f, #50911e);
+    background: -moz-linear-gradient(top, #68b12f, #50911e);
+    background: -ms-linear-gradient(top, #68b12f, #50911e);
+    background: -o-linear-gradient(top, #68b12f, #50911e);
+    background: linear-gradient(top, #68b12f, #50911e);
+    border: 1px solid #509111;
+    border-bottom: 1px solid #5b992b;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    box-shadow: inset 0 1px 0 0 #9fd574;
+    -webkit-box-shadow: 0 1px 0 0 #9fd574 inset;
+    -moz-box-shadow: 0 1px 0 0 #9fd574 inset;
+    -ms-box-shadow: 0 1px 0 0 #9fd574 inset;
+    -o-box-shadow: 0 1px 0 0 #9fd574 inset;
+    color: white;
+    font-weight: bold;
+    padding: 6px 20px;
+    text-align: center;
+    text-shadow: 0 -1px 0 #396715; }
 
 button.submit:hover {
-  opacity: .85;
-  cursor: pointer; }
+    opacity: .85;
+    cursor: pointer; }
 
 button.submit:active {
-  border: 1px solid #20911e;
-  box-shadow: 0 0 10px 5px #356b0b inset;
-  -webkit-box-shadow: 0 0 10px 5px #356b0b inset;
-  -moz-box-shadow: 0 0 10px 5px #356b0b inset;
-  -ms-box-shadow: 0 0 10px 5px #356b0b inset;
-  -o-box-shadow: 0 0 10px 5px #356b0b inset; }
+    border: 1px solid #20911e;
+    box-shadow: 0 0 10px 5px #356b0b inset;
+    -webkit-box-shadow: 0 0 10px 5px #356b0b inset;
+    -moz-box-shadow: 0 0 10px 5px #356b0b inset;
+    -ms-box-shadow: 0 0 10px 5px #356b0b inset;
+    -o-box-shadow: 0 0 10px 5px #356b0b inset; }
 
 .form_hint, .required_notification {
-  font-size: 11px; }
+    font-size: 11px; }
 
 .form_hint {
-  background: #d45252;
-  border-radius: 3px 3px 3px 3px;
-  color: white;
-  margin-left: 8px;
-  padding: 1px 6px;
-  z-index: 999;
-  /* hints stay above all other elements */
-  position: absolute;
-  /* allows proper formatting if hint is two lines */
-  display: none; }
+    background: #d45252;
+    border-radius: 3px 3px 3px 3px;
+    color: white;
+    margin-left: 8px;
+    padding: 1px 6px;
+    z-index: 999;
+    /* hints stay above all other elements */
+    position: absolute;
+    /* allows proper formatting if hint is two lines */
+    display: none; }
 
 .form_hint::before {
-  content: "\25C0";
-  /* left point triangle in escaped unicode */
-  color: #d45252;
-  position: absolute;
-  top: 1px;
-  left: -6px; }
+    content: "\25C0";
+    /* left point triangle in escaped unicode */
+    color: #d45252;
+    position: absolute;
+    top: 1px;
+    left: -6px; }
 
 .contact_form input:focus + .form_hint {
-  display: inline; }
+    display: inline; }
 
 .contact_form input:required:valid + .form_hint {
-  background: #28921f; }
+    background: #28921f; }
 
 /* change form hint color when valid */
 .contact_form input:required:valid + .form_hint::before {
-  color: #28921f; }
+    color: #28921f; }
 
 /* change form hint arrow color when valid */
 .contact_form input:focus, .contact_form textarea:focus {
-  /* add this to the already existing style */ }
+    /* add this to the already existing style */ }
 
 .contact_form input:focus:invalid, .contact_form textarea:focus:invalid {
-  /* when a field is considered invalid by the browser */
-  /*background: #fff url(images/invalid.png) no-repeat 98% center;*/ }
+    /* when a field is considered invalid by the browser */
+    /*background: #fff url(images/invalid.png) no-repeat 98% center;*/ }
 
 .contact_form input:required:valid, .contact_form textarea:required:valid {
-  /* when a field is considered valid by the browser */
-  /*background: #fff url(images/valid.png) no-repeat 98% center;*/ }
+    /* when a field is considered valid by the browser */
+    /*background: #fff url(images/valid.png) no-repeat 98% center;*/ }
 
 *:focus {
-  outline: none; }
+    outline: none; }
 
 :-moz-placeholder {
-  color: blue; }
+    color: blue; }
 
 ::-webkit-input-placeholder {
-  color: #363636; }
+    color: #363636; }
 
 ::-webkit-validation-bubble-message {
-  padding: 1em; }
+    padding: 1em; }
 
 #forkongithub {
-  position: absolute;
-  display: block;
-  top: 0;
-  right: 0;
-  width: 200px;
-  overflow: hidden;
-  height: 200px;
-  z-index: 10; }
+    position: absolute;
+    display: block;
+    top: 0;
+    right: 0;
+    width: 200px;
+    overflow: hidden;
+    height: 200px;
+    z-index: 10; }
 
 #forkongithub a {
-  color: white;
-  background: #000;
-  text-decoration: none;
-  text-align: center;
-  font-weight: bold;
-  padding: 8px 40px;
-  font-size: 16px;
-  width: 260px;
-  position: absolute;
-  top: 40px;
-  right: -108px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg); }
+    color: white;
+    background: #000;
+    text-decoration: none;
+    text-align: center;
+    font-weight: bold;
+    padding: 8px 40px;
+    font-size: 16px;
+    width: 260px;
+    position: absolute;
+    top: 40px;
+    right: -108px;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg); }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -707,76 +715,76 @@ and open the template in the editor.
     Author     : sathish_ku
 */
 section.wrapper {
-  width: 960px;
-  margin: 0px auto; }
-  section.wrapper section#content {
+    width: 960px;
+    margin: 0px auto; }
+section.wrapper section#content {
     margin: 25px 0px 0px 0px; }
-    section.wrapper section#content #app-caption {
-      float: left;
-      width: 480px; }
-      section.wrapper section#content #app-caption h1 {
-        font: normal 44px/52px arial;
-        color: #9c9fa4;
-        position: relative;
-        padding: 0px 0px 0px 48px;
-        z-index: 0;
-        margin: 0px 0px 50px 0px; }
-      section.wrapper section#content #app-caption h1:before {
-        content: '\201C';
-        font: italic 160px arial;
-        position: absolute;
-        left: -16px;
-        top: -40px;
-        color: #dcdee2;
-        text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
-        z-index: 1; }
-      section.wrapper section#content #app-caption h1:after {
-        content: '\201D';
-        font: italic 160px/10px arial;
-        color: #dcdee2;
-        text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
-        bottom: -32px;
-        position: absolute;
-        margin-left: -18px; }
-      section.wrapper section#content #app-caption p {
-        font: normal 22px/26px arial;
-        color: #5a5b5e;
-        margin: 0px 0px 20px 0px; }
-      section.wrapper section#content #app-caption p span {
-        font: bold 22px/22px arial;
-        color: #5a5b5e; }
-      section.wrapper section#content #app-caption a {
-        border: solid 1px #174d09;
-        color: #ffffff;
-        text-decoration: none;
-        background: #499e14;
-        background: -moz-linear-gradient(top, #499e14 0%, #2f7009 100%);
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #499e14), color-stop(100%, #2f7009));
-        background: -webkit-linear-gradient(top, #499e14 0%, #2f7009 100%);
-        background: -o-linear-gradient(top, #499e14 0%, #2f7009 100%);
-        background: -ms-linear-gradient(top, #499e14 0%, #2f7009 100%);
-        background: linear-gradient(to bottom, #499e14 0%, #2f7009 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#499e14', endColorstr='#2f7009',GradientType=0 );
-        padding: 10px 34px;
-        display: inline-block;
-        -webkit-border-radius: 4px;
-        -moz-border-radius: 4px;
-        -ms-border-radius: 4px;
-        border-radius: 4px;
-        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.54);
-        -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
-        box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24); }
-        section.wrapper section#content #app-caption a:hover {
-          background: #2f7009 !important; }
+section.wrapper section#content #app-caption {
+    float: left;
+    width: 480px; }
+section.wrapper section#content #app-caption h1 {
+    font: normal 44px/52px arial;
+    color: #9c9fa4;
+    position: relative;
+    padding: 0px 0px 0px 48px;
+    z-index: 0;
+    margin: 0px 0px 50px 0px; }
+section.wrapper section#content #app-caption h1:before {
+    content: '\201C';
+    font: italic 160px arial;
+    position: absolute;
+    left: -16px;
+    top: -40px;
+    color: #dcdee2;
+    text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
+    z-index: 1; }
+section.wrapper section#content #app-caption h1:after {
+    content: '\201D';
+    font: italic 160px/10px arial;
+    color: #dcdee2;
+    text-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
+    bottom: -32px;
+    position: absolute;
+    margin-left: -18px; }
+section.wrapper section#content #app-caption p {
+    font: normal 22px/26px arial;
+    color: #5a5b5e;
+    margin: 0px 0px 20px 0px; }
+section.wrapper section#content #app-caption p span {
+    font: bold 22px/22px arial;
+    color: #5a5b5e; }
+section.wrapper section#content #app-caption a {
+    border: solid 1px #174d09;
+    color: #ffffff;
+    text-decoration: none;
+    background: #499e14;
+    background: -moz-linear-gradient(top, #499e14 0%, #2f7009 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #499e14), color-stop(100%, #2f7009));
+    background: -webkit-linear-gradient(top, #499e14 0%, #2f7009 100%);
+    background: -o-linear-gradient(top, #499e14 0%, #2f7009 100%);
+    background: -ms-linear-gradient(top, #499e14 0%, #2f7009 100%);
+    background: linear-gradient(to bottom, #499e14 0%, #2f7009 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#499e14', endColorstr='#2f7009',GradientType=0 );
+    padding: 10px 34px;
+    display: inline-block;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.54);
+    -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24); }
+section.wrapper section#content #app-caption a:hover {
+    background: #2f7009 !important; }
 
 #demo-video {
-  background: url(images/codeWindow.png) no-repeat left top;
-  width: 460px;
-  height: 365px;
-  float: right; }
-  #demo-video #player {
+    background: url(images/codeWindow.png) no-repeat left top;
+    width: 460px;
+    height: 365px;
+    float: right; }
+#demo-video #player {
     display: none; }
-  #demo-video a {
+#demo-video a {
     background: url(images/gettingStartedBtn.png);
     width: 153px;
     height: 60px;
@@ -784,23 +792,23 @@ section.wrapper {
     margin: 282px 0px 0px 290px; }
 
 #main_features {
-  float: left;
-  margin: 40px 0px 40px 0px; }
-  #main_features section {
+    float: left;
+    margin: 40px 0px 40px 0px; }
+#main_features section {
     width: 302px;
     float: left;
     padding-right: 26px; }
-    #main_features section h4 {
-      font: normal 24px georgia;
-      color: #3d3d3f;
-      border-bottom: solid #d4d8db 1px;
-      margin: 0px 0px 10px 0px; }
-    #main_features section article {
-      font: normal 14px/18px arial;
-      color: #3d3d3f; }
-  #main_features section:last-of-type {
+#main_features section h4 {
+    font: normal 24px georgia;
+    color: #3d3d3f;
+    border-bottom: solid #d4d8db 1px;
+    margin: 0px 0px 10px 0px; }
+#main_features section article {
+    font: normal 14px/18px arial;
+    color: #3d3d3f; }
+#main_features section:last-of-type {
     padding-right: 0px; }
-  #main_features a {
+#main_features a {
     margin: 20px 0px 0px 0px;
     border: solid 1px #174d09;
     color: #ffffff;
@@ -823,8 +831,8 @@ section.wrapper {
     -webkit-box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
     box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.24);
     float: right; }
-    #main_features a:hover {
-      background: #2f7009 !important; }
+#main_features a:hover {
+    background: #2f7009 !important; }
 
 /*
 To change this license header, choose License Headers in Project Properties.
@@ -836,10 +844,10 @@ and open the template in the editor.
     Author     : Rajesh_ve
 */
 .topicHeader {
-  margin: 15px 0px 0px 0px;
-  border-bottom: solid 1px #e7eaeb;
-  padding: 0px 0px 6px 0px; }
-  .topicHeader ul.prevTopic {
+    margin: 15px 0px 0px 0px;
+    border-bottom: solid 1px #e7eaeb;
+    padding: 0px 0px 6px 0px; }
+.topicHeader ul.prevTopic {
     float: left;
     width: 25%;
     color: #9da3a5;
@@ -850,14 +858,14 @@ and open the template in the editor.
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box; }
-  .topicHeader h3 {
+.topicHeader h3 {
     float: left;
     width: 50%;
     text-align: center;
     color: #575a5c;
     font: bold 18px/24px Arial;
     padding: 0px 0px 0px 0px; }
-  .topicHeader ul.nextTopic {
+.topicHeader ul.nextTopic {
     float: right;
     width: 25%;
     text-align: right;
@@ -871,23 +879,22 @@ and open the template in the editor.
     box-sizing: border-box; }
 
 .topicContent {
-  margin: 40px 0px 40px 0px; }
-  .topicContent p {
+    margin: 40px 0px 40px 0px; }
+.topicContent p {
     color: #707374;
     font: normal 14px/18px Arial;
     padding: 0px 0px 14px 0px; }
-  .topicContent .videotutorial {
+.topicContent .videotutorial {
     float: right;
     padding: 0px 0px 0px 24px; }
-  .topicContent h1 {
+.topicContent h1 {
     color: #575a5c;
     font: bold 18px/24px Arial;
     padding: 0px 0px 10px 0px; }
-  .topicContent ul li {
+.topicContent ul li {
     color: #707374;
     list-style: disc;
     margin: 0px 0px 0px 10px;
     font: normal 14px/24px Arial; }
 
 /*# sourceMappingURL=site.css.map */
- 

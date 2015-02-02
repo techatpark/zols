@@ -14,7 +14,7 @@
                         <li><a href="/">About</a></li>
                         <li><a class="active">Guide</a></li>
                         <li><a href="../features.html">Features</a></li>
-                        
+
                     </ul>
                 </nav>
 
@@ -38,15 +38,29 @@
                 </header>
                 <section class="topicContent" >                    
                     <p>
-                        Zols has two distributions                        
+                        You can include zols to existing Spring application by adding the dependency                    
                     </p>  
-					<ul>
-						<li>Standalone - This is basic spring booted executable jar</li>
-						<li>Embeddable Jar - This is spring plug-in which we can include inside any Spring MVC application</li>
-					</ul>
                     <p>
-					However to begin with the basic features, it is easy to get started with standalone mode.
-					</p>
+                        ![CDATA[
+                    <dependency>
+                        <groupId>org.zols</groupId>
+                        <artifactId>zols-cms-plugin</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    ]]
+                    </p>
+                    
+                    <p>
+                        Once done you can include the CMS by annotation the Application as 
+                        
+                        @EnableAutoConfiguration
+                        @ComponentScan
+                        @EnableCMS
+                        public class Application {
+                            // Your code
+                        }
+
+                    </p>
                 </section>
             </section>
         </section>
