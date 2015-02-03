@@ -39,7 +39,7 @@
 
     $('#result').on('click', '#addAttr', function () {
         var totalProperties = Object.keys(schema.properties).length;
-        schema.properties['newProperty' + totalProperties] = {'type': 'string', 'required': false};
+        schema.properties['newProperty' + totalProperties] = {'type': 'string','format': 'text', 'required': false};
         $.fn.renderSchema();
     });
 

@@ -80,6 +80,25 @@
                 </div>
                 </div>
             </script>
+            
+            <script id="listSchema" type="text/x-jsrender">
+
+                {{if schema.length !==0}}
+
+                <ul class="list-group">
+                {{for schema}}
+                <li class="list-group-item">
+                <a href="#" data-name="{{:id}}">{{:title}}</a>
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="createSchema" href="#">Add More</a>
+
+            </script>
 
             <script id="attributeTemplate" type="text/x-jsrender">
 
@@ -150,24 +169,7 @@
 
 
 
-            <script id="listSchema" type="text/x-jsrender">
-
-                {{if schema.length !==0}}
-
-                <ul class="list-group">
-                {{for schema}}
-                <li class="list-group-item">
-                <a href="#" data-name="{{:id}}">{{:title}}</a>
-                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
-                </li>
-                {{/for}}
-                </ul>
-                {{/if}}
-
-                <a id="createSchema" href="#">Add More</a>
-
-            </script>
+            
 
             <script id="schemaForm" type="text/x-jsrender">
                 <form class="form-horizontal">
@@ -189,10 +191,17 @@
                 <input name="title" id="title" data-link="title" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-
-
+        
                 <!-- Text input-->
                 <div class="form-group">
+                <label class="col-md-4 control-label" for="idField">ID Field</label>
+                <div class="col-md-4">
+                <input name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group" style="display:none;">
                 <label class="col-md-4 control-label" for="type">Type</label>
                 <div class="col-md-4">
                 <input name="type" id="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
