@@ -10,10 +10,11 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
-import org.elasticsearch.action.admin.indices.refresh.RefreshAction;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
@@ -31,6 +32,7 @@ import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import static org.slf4j.LoggerFactory.getLogger;
 
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.IS_NULL;
@@ -38,12 +40,22 @@ import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 @Service
 public class ElasticSearchDataStore extends DataStore {
     
+    private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStore.class);
+    
     private final Node node;
     private final String indexName = "zols";
     
     public ElasticSearchDataStore() {
         node = nodeBuilder().local(true).node();
         createIndexIfNotExists();
+    }
+    
+    private void patchDelayInRefresh() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void createIndexIfNotExists() {
@@ -64,6 +76,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .execute()
                 .actionGet();
         node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
         return (response.isCreated() ? readData(jsonSchema, idValue) : null);
     }
     
@@ -74,6 +87,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .setOperationThreaded(false)
                 .execute()
                 .actionGet();
+        patchDelayInRefresh();
         return getResponse.getSource();
     }
     
@@ -85,6 +99,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .execute()
                 .actionGet();
         node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
         return response.isFound();
     }
     
@@ -96,6 +111,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
         node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
         return true;
     }
     
@@ -108,6 +124,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .execute()
                 .actionGet();
         node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
         return response.isCreated();
     }
     
@@ -123,7 +140,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .prepareSearch()
                 .setIndices(indexName)
                 .setTypes(getId(jsonSchema))
-                .setPostFilter(getFilterBuilder(query))
+                .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
         SearchHits hits = response.getHits();
         if (hits != null) {
@@ -165,6 +182,7 @@ public class ElasticSearchDataStore extends DataStore {
     
     private QueryBuilder getQueryBuilder(Query query) {
         QueryBuilder queryBuilder = QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), getFilterBuilder(query));
+        LOGGER.info("Query Buider {}", queryBuilder);
         return queryBuilder;
     }
     
