@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.zols.templates.service;
 
 import java.util.List;
@@ -12,6 +11,8 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datastore.query.Filter;
+import org.zols.datastore.query.Query;
 import org.zols.templates.domain.Template;
 
 /**
@@ -20,6 +21,7 @@ import org.zols.templates.domain.Template;
  */
 @Service
 public class TemplateService {
+
     private static final Logger LOGGER = getLogger(TemplateService.class);
 
     @Autowired

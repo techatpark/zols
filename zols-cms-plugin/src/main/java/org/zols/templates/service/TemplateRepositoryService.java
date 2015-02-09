@@ -81,7 +81,21 @@ public class TemplateRepositoryService {
      */
     public Boolean delete(String templateRepositoryName) {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
-        return dataStore.delete(TemplateRepository.class, templateRepositoryName);
+        dataStore.delete(TemplateRepository.class, templateRepositoryName);        
+        return deleteTemplatesUnder(templateRepositoryName);
+    }
+
+    /**
+     * Delete a Templates under given repository
+     *
+     * @param templateRepositoryName String to be delete
+     * @return status of the Delete Operation
+     */
+    public Boolean deleteTemplatesUnder(String templateRepositoryName) {
+        LOGGER.info("Deleting Template  under Repository {}", templateRepositoryName);
+        Query query = new Query();
+        query.addFilter(new Filter("repositoryName", Filter.Operator.EQUALS, templateRepositoryName));
+        return dataStore.delete(Template.class, query);
     }
 
     /**
