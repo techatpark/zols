@@ -5,6 +5,9 @@
  */
 package org.zols.templates.service;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
 import java.util.List;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
@@ -90,9 +93,10 @@ public class TemplateRepositoryService {
         LOGGER.info("Getting TemplateRepositories ");
         return dataStore.list(TemplateRepository.class);
     }
-    
+
     /**
      * List templates under given repository
+     *
      * @param repositoryName name of the repository
      * @return list of templates
      */
@@ -101,5 +105,43 @@ public class TemplateRepositoryService {
         Query query = new Query();
         query.addFilter(new Filter<>("repositoryName", EQUALS, repositoryName));
         return dataStore.list(Template.class, query);
+    }
+
+    /**
+     * List templates under given repository
+     *
+     * @param repositoryName name of the repository
+     * @return list of templates
+     */
+    public List<String> listTemplateFiles(String repositoryName) {
+        List<String> templateFiles = null;
+        TemplateRepository repository = read(repositoryName);
+        if (repository != null) {
+            if (repository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
+                templateFiles = new ArrayList<>();
+                File root = new File(repository.getPath());
+                listTemplateFiles(templateFiles, root.getAbsolutePath(), root);
+
+            }
+        }
+        return templateFiles;
+    }
+
+    private void listTemplateFiles(List<String> templateFiles, String rootPath, File folder) {
+        File[] files = folder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.isDirectory() || pathname.getName().endsWith(".html");
+            }
+        });
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                listTemplateFiles(templateFiles, rootPath, file);
+            } else {
+                templateFiles.add(file.getAbsolutePath().substring(rootPath.length()));
+            }
+        }
+
     }
 }

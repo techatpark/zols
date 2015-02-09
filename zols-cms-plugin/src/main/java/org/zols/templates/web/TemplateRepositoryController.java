@@ -70,10 +70,16 @@ public class TemplateRepositoryController {
         LOGGER.info("Getting TemplateRepositories ");
         return templateRepositoryService.list();
     }
-    
-    @RequestMapping(value = "/{name}/first_level_templates", method = GET)    
+
+    @RequestMapping(value = "/{name}/first_level_templates", method = GET)
     public List<Template> listTemplates(@PathVariable(value = "name") String name) {
-        LOGGER.info("Getting templates of repository {} ",name);
+        LOGGER.info("Getting templates of repository {} ", name);
         return templateRepositoryService.listTemplates(name);
+    }
+
+    @RequestMapping(value = "/{name}/valid_templates", method = GET)
+    public List<String> listTemplateFile(@PathVariable(value = "name") String name) {
+        LOGGER.info("Getting valid templates of repository {} ", name);
+        return templateRepositoryService.listTemplateFiles(name);
     }
 }
