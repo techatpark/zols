@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.zols.datatore;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -17,6 +12,7 @@ import javax.script.ScriptException;
 import org.zols.datastore.domain.Schema;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.validator.TV4;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  * Data Store is used to Store static and Dynamic Objects using JSON Schema
@@ -42,19 +38,16 @@ public abstract class DataStore {
      * @param schemaName name of the schema
      * @param jsonData Dynamic Data for the given schema
      * @return created Object
+     * @throws org.zols.datatore.exception.DataStoreException
      */
-    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) {
+    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         Schema schema = read(Schema.class, schemaName);
         try {
             if (tv4.validate(jsonData, schema.getSchema())) {
                 return createData(schema.getSchema(), jsonData);
             }
-        } catch (ScriptException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ScriptException | NoSuchMethodException | JsonProcessingException ex) {
+            throw new DataStoreException("Unable to create " + schemaName, ex);
         }
         return null;
     }
@@ -64,8 +57,9 @@ public abstract class DataStore {
      * @param schemaName name of the schema
      * @param name name of the Schema data
      * @return Object with given name
+     * @throws org.zols.datatore.exception.DataStoreException
      */
-    public Map<String, Object> read(String schemaName, String name) {
+    public Map<String, Object> read(String schemaName, String name) throws DataStoreException {
         return readData(read(schemaName), name);
     }
 
@@ -75,18 +69,14 @@ public abstract class DataStore {
      * @param jsonData Dynamic Data for the given schema
      * @return status of the update operation
      */
-    public boolean update(String schemaName, Map<String, Object> jsonData) {
+    public boolean update(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         Schema schema = read(Schema.class, schemaName);
         try {
             if (tv4.validate(jsonData, schema.getSchema())) {
                 return updateData(schema.getSchema(), jsonData);
             }
-        } catch (ScriptException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JsonProcessingException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ScriptException | NoSuchMethodException | JsonProcessingException ex) {
+            throw new DataStoreException("Unable to update " + schemaName, ex);
         }
         return false;
     }
@@ -97,7 +87,7 @@ public abstract class DataStore {
      * @param name name of the Schema data
      * @return status of the delete operation
      */
-    public boolean delete(String schemaName, String name) {
+    public boolean delete(String schemaName, String name) throws DataStoreException {
         return DataStore.this.deleteData(read(schemaName), name);
     }
 
@@ -106,7 +96,7 @@ public abstract class DataStore {
      * @param schemaName name of the schema
      * @return lis of dynamic objects
      */
-    public List<Map<String, Object>> list(String schemaName) {
+    public List<Map<String, Object>> list(String schemaName) throws DataStoreException {
         return DataStore.this.listData(read(schemaName));
     }
 
@@ -118,7 +108,7 @@ public abstract class DataStore {
      * @param object Object to be created
      * @return created object
      */
-    public <T> T create(Class<T> clazz, Object object) {
+    public <T> T create(Class<T> clazz, Object object) throws DataStoreException {
         Map<String, Object> jsonData = tv4.getValueAsMap(object);
 
         try {
@@ -126,10 +116,8 @@ public abstract class DataStore {
             if (tv4.validate(jsonData, jsonSchema)) {
                 return tv4.getObjectOfType(clazz, createData(jsonSchema, jsonData));
             }
-        } catch (ScriptException | NoSuchMethodException | JsonProcessingException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ScriptException | NoSuchMethodException | IOException ex) {
+            throw new DataStoreException("Unable to create " + clazz.getName(), ex);
         }
         return null;
     }
@@ -142,13 +130,12 @@ public abstract class DataStore {
      * @param name name of the Object
      * @return object with given name
      */
-    public <T> T read(Class<T> clazz, String name) {
+    public <T> T read(Class<T> clazz, String name) throws DataStoreException {
         try {
             return tv4.getObjectOfType(clazz, readData(tv4.getJsonSchema(clazz), name));
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to read " + clazz.getName(), ex);
         }
-        return null;
     }
 
     /**
@@ -158,7 +145,7 @@ public abstract class DataStore {
      * @param clazz Class of the Object to be read
      * @return object with given name
      */
-    public <T> List<T> list(Class<T> clazz) {
+    public <T> List<T> list(Class<T> clazz) throws DataStoreException {
         try {
             List<Map<String, Object>> listOfMap;
 
@@ -172,7 +159,7 @@ public abstract class DataStore {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to list " + clazz.getName(), ex);
         }
         return null;
     }
@@ -185,7 +172,7 @@ public abstract class DataStore {
      * @param query query for the retrival
      * @return object with given name
      */
-    public <T> List<T> list(Class<T> clazz, Query query) {
+    public <T> List<T> list(Class<T> clazz, Query query) throws DataStoreException {
         try {
             List<Map<String, Object>> listOfMap = listData(tv4.getJsonSchema(clazz), query);
             if (listOfMap != null && !listOfMap.isEmpty()) {
@@ -197,7 +184,7 @@ public abstract class DataStore {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to list " + clazz.getName(), ex);
         }
         return null;
     }
@@ -219,15 +206,14 @@ public abstract class DataStore {
      * @param object dataObject
      * @return status of the update
      */
-    public boolean update(Object object) {
+    public boolean update(Object object) throws DataStoreException {
         try {
             Map<String, Object> jsonData = tv4.getValueAsMap(object);
             String jsonSchema = tv4.getJsonSchema(object.getClass());
             return updateData(jsonSchema, jsonData);
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to update " + object, ex);
         }
-        return false;
     }
 
     /**
@@ -237,13 +223,12 @@ public abstract class DataStore {
      * @param name - name of the Object
      * @return successFlag
      */
-    public boolean delete(Class clazz, String name) {
+    public boolean delete(Class clazz, String name) throws DataStoreException {
         try {
             return deleteData(tv4.getJsonSchema(clazz), name);
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to delete " + clazz, ex);
         }
-        return false;
     }
 
     /**
@@ -253,13 +238,12 @@ public abstract class DataStore {
      * @param query - query for the Object
      * @return successFlag
      */
-    public boolean delete(Class clazz, Query query) {
+    public boolean delete(Class clazz, Query query) throws DataStoreException {
         try {
             return deleteData(tv4.getJsonSchema(clazz), query);
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to delete " + clazz, ex);
         }
-        return false;
     }
 
     public String getIdField(String jsonSchema) {
@@ -301,7 +285,7 @@ public abstract class DataStore {
      * @param jsonSchemaObject schema object
      * @return created json schema
      */
-    public String create(Map<String, Object> jsonSchemaObject) {
+    public String create(Map<String, Object> jsonSchemaObject) throws DataStoreException {
         Schema schema = new Schema();
         String jsonSchema;
         try {
@@ -311,40 +295,38 @@ public abstract class DataStore {
             schema = create(Schema.class, schema);
             return schema.getSchema();
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to create schema " , ex);
         }
-        return null;
 
     }
 
-    public String read(String schemaName) {
+    public String read(String schemaName) throws DataStoreException {
         Schema schema = read(Schema.class, schemaName);
         return schema.getSchema();
     }
-    
-    public Map<String,Object> readAsMap(String schemaName) {
+
+    public Map<String, Object> readAsMap(String schemaName) throws DataStoreException {
         try {
             return tv4.getValueAsMap(read(schemaName));
         } catch (IOException ex) {
-            Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DataStoreException("Unable to read as Map ", ex);
         }
-        return null;
     }
 
-    public boolean delete(String schemaName) {
+    public boolean delete(String schemaName) throws DataStoreException {
         return delete(Schema.class, schemaName);
     }
 
-    public boolean update(String jsonSchema) {
+    public boolean update(String jsonSchema) throws DataStoreException {
         Schema schema = read(Schema.class, getId(jsonSchema));
         schema.setSchema(jsonSchema);
         return update(schema);
     }
 
-    public List<Map<String,Object>> list() {
+    public List<Map<String, Object>> list() throws DataStoreException {
         List<Schema> schemas = list(Schema.class);
         if (schemas != null) {
-            List<Map<String,Object>>  jsonSchemas = new ArrayList<>(schemas.size());            
+            List<Map<String, Object>> jsonSchemas = new ArrayList<>(schemas.size());
             for (Schema schema : schemas) {
                 try {
                     jsonSchemas.add(tv4.getValueAsMap(schema.getSchema()));
@@ -365,62 +347,69 @@ public abstract class DataStore {
      * @param validatedDataObject validated object
      * @param jsonSchema schema of dynamic data
      * @return dynamic data as map
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract Map<String, Object> createData(
             String jsonSchema,
-            Map<String, Object> validatedDataObject);
+            Map<String, Object> validatedDataObject) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param idValue dynamic object name
      * @return dynamic data as map
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract Map<String, Object> readData(
             String jsonSchema,
-            String idValue);
+            String idValue) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param idValue dynamic object name
      * @return status of the delete operation
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract boolean deleteData(String jsonSchema,
-            String idValue);
+            String idValue) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param query query to delete
      * @return status of the delete operation
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract boolean deleteData(String jsonSchema,
-            Query query);
+            Query query) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param validatedDataObject validated Object
      * @return status of the update operation
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract boolean updateData(String jsonSchema,
-            Map<String, Object> validatedDataObject);
+            Map<String, Object> validatedDataObject) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract List<Map<String, Object>> listData(String jsonSchema);
+    protected abstract List<Map<String, Object>> listData(String jsonSchema) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param query query to be used
      * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract List<Map<String, Object>> listData(String jsonSchema,
-            Query query);
+            Query query) throws DataStoreException;
 
 }
