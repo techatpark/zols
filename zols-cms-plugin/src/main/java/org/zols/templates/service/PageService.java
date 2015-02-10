@@ -13,6 +13,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.service.DataService;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.service.LinkService;
 import org.zols.templates.domain.PageRequest;
 import org.zols.templates.domain.Page;
@@ -44,7 +45,7 @@ public class PageService {
      * @param pageRequest Object to be Create
      * @return created Page object
      */
-    public Page create(PageRequest pageRequest) {
+    public Page create(PageRequest pageRequest) throws DataStoreException {
         Page createdPage = null;
         if (pageRequest != null) {
             
@@ -70,7 +71,7 @@ public class PageService {
      * @param pageName String to be Search
      * @return searched Page
      */
-    public PageRequest readRequest(String pageName) {
+    public PageRequest readRequest(String pageName) throws DataStoreException {
         LOGGER.info("Reading Page Request {}", pageName);
         PageRequest pageRequest;
         Page page = read(pageName);
@@ -90,7 +91,7 @@ public class PageService {
      * @param pageName String to be Search
      * @return searched Page
      */
-    public Page read(String pageName) {
+    public Page read(String pageName) throws DataStoreException {
         LOGGER.info("Reading Page {}", pageName);
         return dataStore.read(Page.class, pageName);
     }
@@ -101,7 +102,7 @@ public class PageService {
      * @param page Object to be update
      * @return returns the status of the Update Operation
      */
-    public Boolean update(Page page) {
+    public Boolean update(Page page) throws DataStoreException {
         Boolean updated = false;
         if (page != null) {
             LOGGER.info("Updating Page {}", page);
@@ -116,7 +117,7 @@ public class PageService {
      * @param pageName String to be delete
      * @return status of the delete operation
      */
-    public Boolean delete(String pageName) {
+    public Boolean delete(String pageName) throws DataStoreException {
         LOGGER.info("Deleting Page {}", pageName);
         return dataStore.delete(Page.class, pageName);
     }
@@ -126,7 +127,7 @@ public class PageService {
      *
      * @return list of all pages
      */
-    public List<Page> list() {
+    public List<Page> list() throws DataStoreException {
         LOGGER.info("Getting Pages ");
         return dataStore.list(Page.class);
     }

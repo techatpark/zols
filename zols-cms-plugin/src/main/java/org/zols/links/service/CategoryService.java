@@ -19,6 +19,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.Category;
 import org.zols.links.domain.Link;
 import org.zols.links.provider.LinkProvider;
@@ -43,7 +44,7 @@ public class CategoryService {
      * @param category Object to be Create
      * @return created Category object
      */
-    public Category create(@Valid Category category) {
+    public Category create(@Valid Category category) throws DataStoreException {
         Category createdCategory = null;
         if (category != null) {
             createdCategory = dataStore.create(Category.class, category);
@@ -58,7 +59,7 @@ public class CategoryService {
      * @param categoryName String to be Search
      * @return searched Category
      */
-    public Category read(String categoryName) {
+    public Category read(String categoryName) throws DataStoreException {
         LOGGER.info("Reading Category {}", categoryName);
         return dataStore.read(Category.class, categoryName);
     }
@@ -69,7 +70,7 @@ public class CategoryService {
      * @param category Object to be update
      * @return status of the Update
      */
-    public Boolean update(Category category) {
+    public Boolean update(Category category) throws DataStoreException {
         Boolean updated = false;
         if (category != null) {
             LOGGER.info("Updating Category {}", category);
@@ -84,7 +85,7 @@ public class CategoryService {
      * @param categoryName String to be delete
      * @return status of Delete
      */
-    public Boolean delete(String categoryName) {
+    public Boolean delete(String categoryName) throws DataStoreException {
         LOGGER.info("Deleting Category {}", categoryName);
         linkService.deleteLinksUnder(categoryName);        
         return dataStore.delete(Category.class, categoryName);
@@ -94,7 +95,7 @@ public class CategoryService {
      * 
      * @return list all the categories
      */
-    public List<Category> list() {
+    public List<Category> list() throws DataStoreException {
         return dataStore.list(Category.class);
     }
 
@@ -104,7 +105,7 @@ public class CategoryService {
      * @param categoryName Object to be search
      * @return list of links
      */
-    public List<Link> getFirstLevelLinks(String categoryName) {
+    public List<Link> getFirstLevelLinks(String categoryName) throws DataStoreException {
         LOGGER.info("Getting first level links of category {}", categoryName);
         Query query = new Query();
         query.addFilter(new Filter<>("categoryName", EQUALS, categoryName));
@@ -116,7 +117,7 @@ public class CategoryService {
      * 
      * @return all the application links
      */
-    public Map<String, List<Link>> getApplicationLinks() {
+    public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
         Map<String, List<Link>> applicationLinks = new HashMap<>();
         List<Category> categories = list();
         if (categories != null) {
@@ -137,7 +138,7 @@ public class CategoryService {
         return applicationLinks;
     }
 
-    private void walkLinkTree(List<Link> links) {
+    private void walkLinkTree(List<Link> links) throws DataStoreException {
         for (Link link : links) {
             //Assign Default Url
             if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {

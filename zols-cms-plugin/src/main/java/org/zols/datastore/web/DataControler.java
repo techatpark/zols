@@ -21,6 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datastore.service.DataService;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
@@ -37,14 +38,14 @@ public class DataControler {
 
     @RequestMapping(method = POST)
     public Map<String, Object> create(@PathVariable(value = "schemaId") String schemaName,
-            @RequestBody Map<String, Object> jsonData) {
+            @RequestBody Map<String, Object> jsonData) throws DataStoreException {
         LOGGER.info("Creating new instance of {}", schemaName);
         return dataService.create(schemaName, jsonData);
     }
     
     @RequestMapping(value = "/{id}", method = GET)
     public Map<String, Object> read(@PathVariable(value = "schemaId") String schemaName,
-            @PathVariable(value = "id") String id) {
+            @PathVariable(value = "id") String id) throws DataStoreException {
         LOGGER.info("Getting Data ", id);
         return dataService.read(schemaName,id);
     }
@@ -53,7 +54,7 @@ public class DataControler {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "schemaId") String schemaName,
             @PathVariable(value = "id") String id,
-            @RequestBody Map<String, Object> jsonData) {
+            @RequestBody Map<String, Object> jsonData) throws DataStoreException {
             dataService.update(schemaName,jsonData);
         
     }
@@ -61,13 +62,13 @@ public class DataControler {
     @RequestMapping(value = "/{id}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "schemaId") String schemaName,
-            @PathVariable(value = "id") String id) {
+            @PathVariable(value = "id") String id) throws DataStoreException {
         LOGGER.info("Deleting jsonSchemas with id {}", id);
         dataService.delete(schemaName,id);
     }
 
     @RequestMapping(method = GET)
-    public List<Map<String, Object>> list(@PathVariable(value = "schemaId") String schemaName) {
+    public List<Map<String, Object>> list(@PathVariable(value = "schemaId") String schemaName) throws DataStoreException {
         LOGGER.info("Getting Datas ");
         return dataService.list(schemaName);
     }

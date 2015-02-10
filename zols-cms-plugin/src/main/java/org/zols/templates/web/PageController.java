@@ -20,6 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.PageRequest;
 import org.zols.templates.domain.Page;
 import org.zols.templates.service.PageService;
@@ -33,13 +34,13 @@ public class PageController {
     private PageService pageService;
 
     @RequestMapping(method = POST)
-    public Page create(@RequestBody PageRequest createPageRequest) {
+    public Page create(@RequestBody PageRequest createPageRequest) throws DataStoreException {
         LOGGER.info("Creating new pages {}", createPageRequest.getLinkName());
         return pageService.create(createPageRequest);
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Page read(@PathVariable(value = "name") String name) {
+    public Page read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting page ", name);
         return pageService.read(name);
     }
@@ -47,7 +48,7 @@ public class PageController {
     @RequestMapping(value = "/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody Page page) {
+            @RequestBody Page page) throws DataStoreException {
         if (name.equals(page.getName())) {
             LOGGER.info("Updating page with id {} with {}", name, page);
             pageService.update(page);
@@ -56,13 +57,13 @@ public class PageController {
 
     @RequestMapping(value = "/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "name") String name) {
+    public void delete(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Deleting page with id {}", name);
         pageService.delete(name);
     }
 
     @RequestMapping(method = GET)
-    public List<Page> list() {
+    public List<Page> list() throws DataStoreException {
         LOGGER.info("Getting pages ");
         return pageService.list();
     }

@@ -11,8 +11,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.zols.datastore.query.Filter;
-import org.zols.datastore.query.Query;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.Template;
 
 /**
@@ -33,7 +32,7 @@ public class TemplateService {
      * @param template Object to be Create
      * @return created Template object
      */
-    public Template create(Template template) {
+    public Template create(Template template) throws DataStoreException {
         Template createdTemplate = null;
         if (template != null) {
             createdTemplate = dataStore.create(Template.class, template);
@@ -48,7 +47,7 @@ public class TemplateService {
      * @param templateName String to be Search
      * @return searched Template
      */
-    public Template read(String templateName) {
+    public Template read(String templateName) throws DataStoreException {
         LOGGER.info("Reading Template  {}", templateName);
         return dataStore.read(Template.class, templateName);
     }
@@ -59,7 +58,7 @@ public class TemplateService {
      * @param template Object to be update
      * @return status of the update Operation
      */
-    public Boolean update(Template template) {
+    public Boolean update(Template template) throws DataStoreException {
         Boolean updated = false;
         if (template != null) {
             LOGGER.info("Updating Template  {}", template);
@@ -74,7 +73,7 @@ public class TemplateService {
      * @param templateName String to be delete
      * @return status of the Delete Operation
      */
-    public Boolean delete(String templateName) {
+    public Boolean delete(String templateName) throws DataStoreException {
         LOGGER.info("Deleting Template  {}", templateName);
         return dataStore.delete(Template.class, templateName);
     }
@@ -84,7 +83,7 @@ public class TemplateService {
      *
      * @return list of all the Templates
      */
-    public List<Template> list() {
+    public List<Template> list() throws DataStoreException {
         LOGGER.info("Getting Templates ");
         return dataStore.list(Template.class);
     }

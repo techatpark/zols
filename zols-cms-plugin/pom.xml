@@ -34,9 +34,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.elasticsearch</groupId>
-			<artifactId>elasticsearch</artifactId>
-			<version>1.4.2</version>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>zols-datatore</artifactId>
+                        <version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -46,17 +46,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jsonSchema</artifactId>
-			<version>${jackson-module-jsonSchema-version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-		</dependency>
+		
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

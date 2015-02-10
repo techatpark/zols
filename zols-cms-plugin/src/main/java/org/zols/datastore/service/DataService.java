@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
@@ -25,27 +26,27 @@ public class DataService {
     @Autowired
     private DataStore dataStore;
     
-    public String getIdField(String schemaName) {
+    public String getIdField(String schemaName) throws DataStoreException {
         return dataStore.getIdField(dataStore.read(schemaName));
     }
 
-    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) {
+    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         return dataStore.create(schemaName, jsonData);
     }
 
-    public Map<String, Object> read(String schemaName, String name) {
+    public Map<String, Object> read(String schemaName, String name) throws DataStoreException {
         return dataStore.read(schemaName, name);
     }
 
-    public boolean update(String schemaName, Map<String, Object> jsonData) {
+    public boolean update(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         return dataStore.update(schemaName, jsonData);
     }
 
-    public boolean delete(String schemaName, String name) {
+    public boolean delete(String schemaName, String name) throws DataStoreException {
         return dataStore.delete(schemaName, name);
     }
 
-    public List<Map<String, Object>> list(String schemaName) {
+    public List<Map<String, Object>> list(String schemaName) throws DataStoreException {
         return dataStore.list(schemaName);
     }
 

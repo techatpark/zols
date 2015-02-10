@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.domain.Document;
 import org.zols.documents.domain.Upload;
 import org.zols.documents.service.DocumentService;
@@ -27,24 +28,24 @@ public class DocumentController {
     DocumentService documentService;
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.GET)
-    public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
+    public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
         return documentService.list(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/filter/{documentRepositoryName}/**", method = RequestMethod.GET)
-    public List<Document> listAll(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
+    public List<Document> listAll(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
         return documentService.listAll(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) {
+    public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
         documentService.delete(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void upload(@PathVariable(value = "documentRepositoryName") String documentRepositoryName,
-            @ModelAttribute("document") Upload upload, HttpServletRequest request) {
+            @ModelAttribute("document") Upload upload, HttpServletRequest request) throws DataStoreException {
         documentService.upload(documentRepositoryName, upload, getFilePath(documentRepositoryName, request));
     }
 

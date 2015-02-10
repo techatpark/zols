@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datatore.exception.DataStoreException;
 
 
 
@@ -33,7 +34,7 @@ public class SchemaService {
      * @param schema Object to be Create
      * @return created JsonSchema object
      */
-    public String create(Map<String,Object> schema) {
+    public String create(Map<String,Object> schema) throws DataStoreException {
         String createdJsonSchema = null;
         if (schema != null) {
             createdJsonSchema = dataStore.create(schema);
@@ -48,7 +49,7 @@ public class SchemaService {
      * @param schemaName String to be Search
      * @return searched JsonSchema
      */
-    public Map<String,Object> read(String schemaName) {
+    public Map<String,Object> read(String schemaName) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaName);
         return dataStore.readAsMap(schemaName);
     }
@@ -59,7 +60,7 @@ public class SchemaService {
      * @param schema Object to be update
      * @return status of the Update Operation
      */
-    public Boolean update(String schema) {
+    public Boolean update(String schema) throws DataStoreException {
         Boolean updated = false;
         if (schema != null) {
             LOGGER.info("Updating JsonSchema  {}", schema);
@@ -74,7 +75,7 @@ public class SchemaService {
      * @param schemaName String to be delete
      * @return status of the Delete Operation
      */
-    public Boolean delete(String schemaName) {
+    public Boolean delete(String schemaName) throws DataStoreException {
         LOGGER.info("Deleting JsonSchema  {}", schemaName);
         return dataStore.delete(schemaName);
     }
@@ -84,7 +85,7 @@ public class SchemaService {
      *
      * @return list of schema
      */
-    public List<Map<String,Object>> list() {
+    public List<Map<String,Object>> list() throws DataStoreException {
         LOGGER.info("Getting JsonSchemas ");
         return dataStore.list();
     }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.PageRequest;
 import org.zols.templates.service.PageService;
 
@@ -47,7 +48,7 @@ public class CoreController {
     }
 
     @RequestMapping("/pages/{name}")
-    public String pages(@PathVariable(value = "name") String name,Model model) {
+    public String pages(@PathVariable(value = "name") String name,Model model) throws DataStoreException {
         PageRequest pageRequest = pageService.readRequest(name);
         model.addAttribute("data", pageRequest.getData());
         return pageRequest.getTemplate().getName();

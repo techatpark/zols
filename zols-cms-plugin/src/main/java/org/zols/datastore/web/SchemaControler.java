@@ -21,6 +21,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datastore.service.SchemaService;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
@@ -36,13 +37,13 @@ public class SchemaControler {
     private SchemaService schemaService;
 
     @RequestMapping(method = POST)
-    public String create(@RequestBody Map<String,Object> jsonSchema) {
+    public String create(@RequestBody Map<String,Object> jsonSchema) throws DataStoreException {
         LOGGER.info("Creating new jsonSchemas {}", jsonSchema);
         return schemaService.create(jsonSchema);
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public Map<String,Object> read(@PathVariable(value = "id") String id) {
+    public Map<String,Object> read(@PathVariable(value = "id") String id) throws DataStoreException {
         LOGGER.info("Getting jsonSchema ", id);
         return schemaService.read(id);
     }
@@ -50,7 +51,7 @@ public class SchemaControler {
     @RequestMapping(value = "/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "id") String id,
-            @RequestBody String jsonSchema) {
+            @RequestBody String jsonSchema) throws DataStoreException {
 
         LOGGER.info("Updating jsonSchemas with id {} with {}", id, jsonSchema);
         schemaService.update(jsonSchema);
@@ -59,13 +60,13 @@ public class SchemaControler {
 
     @RequestMapping(value = "/{id}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "id") String id) {
+    public void delete(@PathVariable(value = "id") String id) throws DataStoreException {
         LOGGER.info("Deleting jsonSchemas with id {}", id);
         schemaService.delete(id);
     }
 
     @RequestMapping(method = GET)
-    public List<Map<String,Object>>  list() {
+    public List<Map<String,Object>>  list() throws DataStoreException {
         LOGGER.info("Getting JsonSchemas ");
         return schemaService.list();
     }

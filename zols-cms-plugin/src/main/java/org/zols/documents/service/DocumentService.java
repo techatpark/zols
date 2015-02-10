@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.domain.Document;
 import org.zols.documents.domain.DocumentRepository;
 import org.zols.documents.domain.Upload;
@@ -42,7 +43,7 @@ public class DocumentService {
      * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
      */
-    public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) {
+    public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
@@ -74,7 +75,7 @@ public class DocumentService {
      * created
      * @param directoryName the name of the directory to be created
      */
-    public void createDirectory(String documentRepositoryName, String directoryName) {
+    public void createDirectory(String documentRepositoryName, String directoryName) throws DataStoreException {
         createDirectory(documentRepositoryName, null, directoryName);
     }
 
@@ -86,7 +87,7 @@ public class DocumentService {
      * @param rootFolderPath folder where we need to create directory
      * @param directoryName the name of the directory to be created
      */
-    public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) {
+    public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
@@ -96,7 +97,7 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
-    public void delete(String documentRepositoryName, String filePath) {
+    public void delete(String documentRepositoryName, String filePath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
         if (filePath != null && filePath.trim().length() != 0) {
@@ -129,7 +130,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
-    public List<Document> list(String documentRepositoryName, String folderPath) {
+    public List<Document> list(String documentRepositoryName, String folderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {
@@ -158,7 +159,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
-    public List<Document> listAll(String documentRepositoryName, String folderPath) {
+    public List<Document> listAll(String documentRepositoryName, String folderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {

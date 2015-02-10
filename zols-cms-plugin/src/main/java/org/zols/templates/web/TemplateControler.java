@@ -20,6 +20,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.Template;
 import org.zols.templates.service.TemplateService;
 
@@ -36,13 +37,13 @@ public class TemplateControler {
     private TemplateService templateService;
 
     @RequestMapping(method = POST)
-    public Template create(@RequestBody Template template) {
+    public Template create(@RequestBody Template template) throws DataStoreException {
         LOGGER.info("Creating new templates {}", template.getName());
         return templateService.create(template);
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Template read(@PathVariable(value = "name") String name) {
+    public Template read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting template ", name);
         return templateService.read(name);
     }
@@ -50,7 +51,7 @@ public class TemplateControler {
     @RequestMapping(value = "/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody Template template) {
+            @RequestBody Template template) throws DataStoreException {
         if (name.equals(template.getName())) {
             LOGGER.info("Updating templates with id {} with {}", name, template);
             templateService.update(template);
@@ -59,13 +60,13 @@ public class TemplateControler {
 
     @RequestMapping(value = "/{name}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "name") String name) {
+    public void delete(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Deleting templates with id {}", name);
         templateService.delete(name);
     }
 
     @RequestMapping(method = GET)
-    public List<Template> list() {
+    public List<Template> list() throws DataStoreException {
         LOGGER.info("Getting Templates ");
         return templateService.list();
     }

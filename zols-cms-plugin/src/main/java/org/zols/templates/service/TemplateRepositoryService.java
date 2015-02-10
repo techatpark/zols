@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.Template;
 import org.zols.templates.domain.TemplateRepository;
 
@@ -38,7 +39,7 @@ public class TemplateRepositoryService {
      * @param templateRepository Object to be Create
      * @return created TemplateRepository object
      */
-    public TemplateRepository create(TemplateRepository templateRepository) {
+    public TemplateRepository create(TemplateRepository templateRepository) throws DataStoreException {
         TemplateRepository createdTemplateRepository = null;
         if (templateRepository != null) {
             createdTemplateRepository = dataStore.create(TemplateRepository.class, templateRepository);
@@ -53,7 +54,7 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be Search
      * @return searched TemplateRepository
      */
-    public TemplateRepository read(String templateRepositoryName) {
+    public TemplateRepository read(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Reading Template Repository {}", templateRepositoryName);
         return dataStore.read(TemplateRepository.class, templateRepositoryName);
     }
@@ -64,7 +65,7 @@ public class TemplateRepositoryService {
      * @param templateRepository Object to be update
      * @return status of the Update Operation
      */
-    public Boolean update(TemplateRepository templateRepository) {
+    public Boolean update(TemplateRepository templateRepository) throws DataStoreException {
         Boolean updated = false;
         if (templateRepository != null) {
             LOGGER.info("Updating Template Repository {}", templateRepository);
@@ -79,7 +80,7 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be delete
      * @return status of the Delete Operation
      */
-    public Boolean delete(String templateRepositoryName) {
+    public Boolean delete(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
         dataStore.delete(TemplateRepository.class, templateRepositoryName);        
         return deleteTemplatesUnder(templateRepositoryName);
@@ -91,7 +92,7 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be delete
      * @return status of the Delete Operation
      */
-    public Boolean deleteTemplatesUnder(String templateRepositoryName) {
+    public Boolean deleteTemplatesUnder(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template  under Repository {}", templateRepositoryName);
         Query query = new Query();
         query.addFilter(new Filter("repositoryName", Filter.Operator.EQUALS, templateRepositoryName));
@@ -103,7 +104,7 @@ public class TemplateRepositoryService {
      *
      * @return list of all Template Repositories
      */
-    public List<TemplateRepository> list() {
+    public List<TemplateRepository> list() throws DataStoreException {
         LOGGER.info("Getting TemplateRepositories ");
         return dataStore.list(TemplateRepository.class);
     }
@@ -114,7 +115,7 @@ public class TemplateRepositoryService {
      * @param repositoryName name of the repository
      * @return list of templates
      */
-    public List<Template> listTemplates(String repositoryName) {
+    public List<Template> listTemplates(String repositoryName) throws DataStoreException {
         LOGGER.info("Getting templates of repository  {}", repositoryName);
         Query query = new Query();
         query.addFilter(new Filter<>("repositoryName", EQUALS, repositoryName));
@@ -127,7 +128,7 @@ public class TemplateRepositoryService {
      * @param repositoryName name of the repository
      * @return list of templates
      */
-    public List<String> listTemplateFiles(String repositoryName) {
+    public List<String> listTemplateFiles(String repositoryName) throws DataStoreException {
         List<String> templateFiles = null;
         TemplateRepository repository = read(repositoryName);
         if (repository != null) {
