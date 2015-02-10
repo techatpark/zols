@@ -17,12 +17,12 @@
 
         <!-- build:js scripts/zols.js -->
         <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js" th:src="@{/bower_components/jquery/dist/jquery.js}"></script>
+        <script src="bower_components/modernizr/modernizr.js" th:src="@{/bower_components/modernizr/modernizr.js}"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js" th:src="@{/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js}"></script>
+        <script src="bower_components/json-editor/dist/jsoneditor.js"  th:src="@{/bower_components/json-editor/dist/jsoneditor.js}"></script>
         <!-- endbower -->
-        <script src="scripts/jsviews.min.js"></script>
+        <script src="scripts/jsviews.min.js" th:src="@{/scripts/jsviews.min.js}"></script>
         <!-- endbuild -->
     </head>
     <body>
@@ -51,7 +51,7 @@
                         </li>
                         <!--/*-->
                         <li><a href="templates.html">Templates</a></li>
-                        <li><a href="datastore.html">Data Store</a></li>
+                        <li><a href="schema.html">Schema</a></li>
                         <!--*/-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
