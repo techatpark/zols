@@ -5,6 +5,8 @@
  */
 package org.zols.datatore;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -12,6 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
@@ -46,6 +49,16 @@ public class DataStoreTest {
      */
     @Test
     public void testCreate_String_Map() {
+    	try {
+			Pojo newObject = new Pojo();
+			newObject.name= "test";
+			dataStore.create(Pojo.class, newObject);
+			Pojo myobject = dataStore.read(Pojo.class, "test");
+			assertEquals("test", myobject.name);
+		} catch (DataStoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     }
 
