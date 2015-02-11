@@ -8,6 +8,8 @@ package org.zols.templates;
 import java.io.File;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -24,6 +26,8 @@ import org.zols.templates.service.TemplateRepositoryService;
 @Configuration
 @EnableConfigurationProperties(ThymeleafProperties.class)
 public class TemplateConfiguration {
+    
+    private static final Logger LOGGER = getLogger(TemplateConfiguration.class);
 
     @Autowired
     private ThymeleafProperties properties;
@@ -36,7 +40,7 @@ public class TemplateConfiguration {
 
     @PostConstruct
     public void intializeTemplates() {
-        
+        LOGGER.info("intialize Templates");
         TemplateResolver resolver;
         File file;
         try {
@@ -62,6 +66,7 @@ public class TemplateConfiguration {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
         }
         addZolsTemplates();
     }

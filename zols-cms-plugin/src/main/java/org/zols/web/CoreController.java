@@ -51,7 +51,7 @@ public class CoreController {
     public String pages(@PathVariable(value = "name") String name,Model model) throws DataStoreException {
         PageRequest pageRequest = pageService.readRequest(name);
         model.addAttribute("data", pageRequest.getData());
-        return pageRequest.getTemplate().getName();
+        return pageRequest.getTemplate().getPath();
     }
     
     @RequestMapping("/create_page/{linkName}")
