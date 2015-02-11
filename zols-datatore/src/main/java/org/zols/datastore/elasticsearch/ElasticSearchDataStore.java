@@ -16,6 +16,7 @@ import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -50,7 +51,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     private void patchDelayInRefresh() {
         try {
-            Thread.sleep(100);
+            Thread.sleep(300);
         } catch (InterruptedException ex) {
             Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -54,7 +54,6 @@ public class PageService {
             String dataName = createdData.get(dataService.getIdField(pageRequest.getTemplate().getDataType())).toString();
             
             Page page = new Page();
-            page.setName(pageRequest.getTemplate().getName());
             page.setDataName(dataName);
             page.setTemplateName(pageRequest.getTemplate().getName());
             
