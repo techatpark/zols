@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.zols.datastore.service.SchemaService;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.PageRequest;
 import org.zols.templates.service.PageService;
@@ -20,6 +21,9 @@ public class CoreController {
     
     @Autowired
     private PageService pageService;
+    
+    @Autowired
+    private SchemaService schemaService;
 
     @RequestMapping("/")
     public String index() {
@@ -43,7 +47,8 @@ public class CoreController {
     }
 
     @RequestMapping("/templates")
-    public String templates() {
+    public String templates(Model model) throws DataStoreException {
+        model.addAttribute("schemas", schemaService.list());
         return "templates";
     }
 
