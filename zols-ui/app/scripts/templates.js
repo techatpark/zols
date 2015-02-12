@@ -1,6 +1,6 @@
 'use strict';
 
-(function($) {
+(function ($) {
     var base_url = 'http://localhost:8080/api';
 
     $.ajaxSetup({
@@ -18,43 +18,43 @@
 
     var confirmationPromise;
 
-    $('#edit_selected').on('click', function() {
+    $('#edit_selected').on('click', function () {
         $.fn.renderTemplateRepository();
     });
-    $("#del_conf_ok").on('click', function() {
+    $("#del_conf_ok").on('click', function () {
         $("#delete-conf-model").modal('hide');
         confirmationPromise.resolve();
     });
-    $("del_conf_cancel").on('click', function() {
+    $("del_conf_cancel").on('click', function () {
         confirmationPromise.reject();
     });
 
-    $('#delete_selected').on('click', function() {
+    $('#delete_selected').on('click', function () {
         $("#delete-conf-model").modal('show');
         confirmationPromise = $.Deferred();
-        confirmationPromise.done(function() {
+        confirmationPromise.done(function () {
             $.fn.deleteSelectedTemplateRepository();
         });
     });
 
-    $.fn.listTemplateRepositories = function() {
-        $.get(base_url + '/template_repositories').done(function(data) {
+    $.fn.listTemplateRepositories = function () {
+        $.get(base_url + '/template_repositories').done(function (data) {
             if (data === "") {
                 $('#templateRepositoryHeader').hide();
                 var template = $.templates("#noTemplateRepository");
                 template.link('#result', {});
-                $('#result a').click(function() {
+                $('#result a').click(function () {
                     $.fn.createTemplateRepository();
-                });                
+                });
             } else {
                 $('#templateRepositoryHeader').show();
                 listOfCategories = data;
                 var template = $.templates("#listTemplateRepository");
                 template.link('#categories', {templateRepository: data});
-                $('#createTemplateRepository').click(function() {
+                $('#createTemplateRepository').click(function () {
                     $.fn.createTemplateRepository();
                 });
-                $('#categories .catName').on('click', function() {
+                $('#categories .catName').on('click', function () {
                     $.fn.setSelectedTemplateRepository($.view(this).data);
                 });
 
@@ -63,50 +63,48 @@
                 }
             }
 
-
-
         });
     };
 
-    $.fn.setSelectedTemplateRepository = function(selectedTemplateRepositoryData) {
-        
+    $.fn.setSelectedTemplateRepository = function (selectedTemplateRepositoryData) {
+
         $('[data-bind-col="templateRepositoryname"]').text(selectedTemplateRepositoryData.label);
         selectedTemplateRepository = selectedTemplateRepositoryData;
-        
-        $.get(base_url + '/template_repositories/' + selectedTemplateRepository.name + '/first_level_templates').done(function(data) {
+
+        $.get(base_url + '/template_repositories/' + selectedTemplateRepository.name + '/first_level_templates').done(function (data) {
             $.fn.listTemplates(data);
         });
 
     };
-    $.fn.listTemplates = function(listofTemplates) {
+    $.fn.listTemplates = function (listofTemplates) {
         if (listofTemplates === "") {
             var template = $.templates("#noTemplate");
             template.link('#result', {});
-            $('#result a').click(function() {
+            $('#result a').click(function () {
                 $.fn.createTemplate();
             });
         } else {
             listOfTemplates = {link: listofTemplates};
             var template = $.templates("#listTemplate");
             template.link('#result', listOfTemplates);
-            $('#addMoreTemplateBtn').on('click', function() {
+            $('#addMoreTemplateBtn').on('click', function () {
                 $.fn.createTemplate();
             });
 
-            $('#result li a').on('click', function() {
+            $('#result li a').on('click', function () {
                 $.fn.addParentTemplate($.view(this).data);
             });
 
-            $('#result .glyphicon-trash').on('click', function() {
+            $('#result .glyphicon-trash').on('click', function () {
                 selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
                 $("#delete-conf-model").modal('show');
                 confirmationPromise = $.Deferred();
-                confirmationPromise.done(function() {
+                confirmationPromise.done(function () {
                     $.fn.deleteTemplate();
                 });
             });
 
-            $('#result .glyphicon-edit').on('click', function() {
+            $('#result .glyphicon-edit').on('click', function () {
                 selectedTemplate = listOfTemplates.link[$(this).parent().parent().index()];
                 $.fn.renderTemplate();
             });
@@ -119,7 +117,7 @@
 
 
 
-    $.fn.saveTemplateRepository = function() {
+    $.fn.saveTemplateRepository = function () {
         if (selectedTemplateRepository.isEdit) {
             delete selectedTemplateRepository.isEdit;
             $.ajax({
@@ -127,9 +125,9 @@
                 url: base_url + '/template_repositories/' + selectedTemplateRepository.name,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplateRepository)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.listTemplateRepositories();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         }
@@ -139,53 +137,56 @@
                 url: base_url + '/template_repositories',
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplateRepository)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.listTemplateRepositories();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         }
 
     };
-    $.fn.deleteSelectedTemplateRepository = function() {
+    $.fn.deleteSelectedTemplateRepository = function () {
         $.ajax({
             method: 'DELETE',
             url: base_url + '/template_repositories/' + selectedTemplateRepository.name,
             dataType: 'json'
-        }).done(function(data) {
+        }).done(function (data) {
             $.fn.listTemplateRepositories();
-        }).error(function(data) {
+        }).error(function (data) {
             $.fn.onError(data);
         });
     };
-    $.fn.renderTemplateRepository = function() {
+    $.fn.renderTemplateRepository = function () {
         if (selectedTemplateRepository && selectedTemplateRepository.name) {
             selectedTemplateRepository.isEdit = true;
         }
         template = $.templates("#catetoryForm");
         template.link('#result', selectedTemplateRepository);
-        $("#result form").submit(function(event) {
+        $("#result form").submit(function (event) {
             event.preventDefault();
             $.fn.saveTemplateRepository();
         });
         $('#templateRepositoryHeader').hide();
+        $('#pageTitle').text('Template Repository');
+        $.fn.listTemplatePaths();
     };
 
 
-
-    $.fn.createTemplateRepository = function() {
+    $.fn.createTemplateRepository = function () {
+        $('#templateRepositoryHeader').hide();
         selectedTemplateRepository = {};
         template = $.templates("#getTemplateRepositoryType");
-        template.link('#result', selectedTemplateRepository);      
+        template.link('#result', selectedTemplateRepository);
 
-        $('#result a').click(function() {
-            selectedTemplateRepository.type = $(this).attr('data-type');            
+        $('#result a').click(function () {
+            selectedTemplateRepository.type = $(this).attr('data-type');
             $.fn.renderTemplateRepository();
         });
 
+        listOfCategories = null;
     };
 
-    $.fn.refreshList = function() {
+    $.fn.refreshList = function () {
         if (!listOfCategories) {
             $.fn.listTemplateRepositories();
         }
@@ -196,9 +197,10 @@
         $('#templateRepository-list').show();
         $('#templateRepositorynameLbl').hide();
         $('#templateRepositoryHeader').show();
+        $('#pageTitle').text('Templates');
     };
 
-    $.fn.saveTemplate = function() {
+    $.fn.saveTemplate = function () {
         selectedTemplate.repositoryName = selectedTemplateRepository.name;
 
         if (selectedTemplate.isEdit) {
@@ -208,9 +210,9 @@
                 url: base_url + '/templates/' + selectedTemplate.name,
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.refreshList();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         } else {
@@ -219,9 +221,9 @@
                 url: base_url + '/templates',
                 dataType: 'json',
                 data: JSON.stringify(selectedTemplate)
-            }).done(function(data) {
+            }).done(function (data) {
                 $.fn.refreshList();
-            }).error(function(data) {
+            }).error(function (data) {
                 $.fn.onError(data);
             });
         }
@@ -229,38 +231,53 @@
     };
 
 
-    $.fn.deleteTemplate = function() {
+    $.fn.deleteTemplate = function () {
         $.ajax({
             method: 'DELETE',
             url: base_url + '/templates/' + selectedTemplate.name,
             dataType: 'json'
-        }).done(function(data) {
+        }).done(function (data) {
             $.fn.refreshList();
-        }).error(function(data) {
+        }).error(function (data) {
             $.fn.onError(data);
         });
     };
-    $.fn.renderTemplate = function() {
+    $.fn.renderTemplate = function () {
         if (selectedTemplate && selectedTemplate.name) {
             selectedTemplate.isEdit = true;
         }
         template = $.templates("#linkForm");
         template.link('#result', selectedTemplate);
-        $("#result form").submit(function(event) {
+        $("#result form").submit(function (event) {
             event.preventDefault();
             $.fn.saveTemplate();
         });
         $('#templateRepository-list').hide();
         $('#templateRepositorynameLbl').show();
+        $('#pageTitle').text('Template');
+        
+        $.fn.listTemplatePaths();
 
     };
 
-    $.fn.createTemplate = function() {
+
+    $.fn.listTemplatePaths = function () {
+        $.get(base_url + '/template_repositories/'+selectedTemplateRepository.name+'/valid_templates').done(function (data) {
+            $.each(data, function (i, d) {
+                // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
+                $('#path').append('<option value="' + d.value + '">' + d.label + '</option>');
+            });
+            $('#path').val(selectedTemplate.path);
+        });
+        
+    };
+
+    $.fn.createTemplate = function () {
         selectedTemplate = {};
         $.fn.renderTemplate();
     };
 
-    $.fn.onError = function(data) {
+    $.fn.onError = function (data) {
         $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
     };
 

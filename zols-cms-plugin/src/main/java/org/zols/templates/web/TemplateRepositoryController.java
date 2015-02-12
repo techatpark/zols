@@ -6,6 +6,7 @@
 package org.zols.templates.web;
 
 import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class TemplateRepositoryController {
     }
 
     @RequestMapping(value = "/{name}/valid_templates", method = GET)
-    public List<String> listTemplateFile(@PathVariable(value = "name") String name) throws DataStoreException {
+    public List<Map<String,String>> listTemplateFile(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting valid templates of repository {} ", name);
         return templateRepositoryService.listTemplateFiles(name);
     }

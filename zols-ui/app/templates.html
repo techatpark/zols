@@ -34,7 +34,7 @@
                         <div class="row show-grid">
                             <div class="pull-left">
                                 <h4>
-                                    Templates
+                                    <span id="pageTitle">Templates</span>
                                     <span class="badge">                  
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>
@@ -117,7 +117,7 @@
                 <ul class="list-group">                    
                 {{for link}}
                 <li class="list-group-item">
-                <a href="#">{{:name}}</a>
+                {{:label}}
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
@@ -149,7 +149,7 @@
                 {{if isEdit}}
                 <label class="col-md-4 control-label" for="name">{{:name}}</label>  
                 {{else}}
-                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                <input id="name" name="name" data-link="name" type="text" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" placeholder="" class="form-control input-md" required=""/>
                 {{/if}}
                 </div>
                 </div>
@@ -253,7 +253,7 @@
                 {{if isEdit}}
                 <label class="col-md-4 control-label" for="name">{{:name}}</label>  
                 {{else}}
-                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
                 </div>
                 </div>
@@ -272,7 +272,7 @@
                 <label class="col-md-4 control-label" for="dataType">Data Type</label>  
                 <div class="col-md-4">
                 <select id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required="">
-                <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}">Sample Schema</option>
+                <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}" value="Sample">Sample Schema</option>
                 </select>                
                 </div>
                 </div>
@@ -281,7 +281,8 @@
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="path">Path</label>  
                 <div class="col-md-4">
-                <input id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required=""/>
+                <select id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required="">
+                </select>
                 </div>
                 </div>                
                 

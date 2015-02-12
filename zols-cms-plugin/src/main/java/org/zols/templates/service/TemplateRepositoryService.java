@@ -8,7 +8,9 @@ package org.zols.templates.service;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -128,8 +130,8 @@ public class TemplateRepositoryService {
      * @param repositoryName name of the repository
      * @return list of templates
      */
-    public List<String> listTemplateFiles(String repositoryName) throws DataStoreException {
-        List<String> templateFiles = null;
+    public List<Map<String,String>> listTemplateFiles(String repositoryName) throws DataStoreException {
+        List<Map<String,String>> templateFiles = null;        
         TemplateRepository repository = read(repositoryName);
         if (repository != null) {
             if (repository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
@@ -142,7 +144,7 @@ public class TemplateRepositoryService {
         return templateFiles;
     }
 
-    private void listTemplateFiles(List<String> templateFiles, String rootPath, File folder) {
+    private void listTemplateFiles(List<Map<String,String>> templateFiles, String rootPath, File folder) {
         File[] files = folder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -154,7 +156,11 @@ public class TemplateRepositoryService {
             if (file.isDirectory()) {
                 listTemplateFiles(templateFiles, rootPath, file);
             } else {
-                templateFiles.add(file.getAbsolutePath().substring(rootPath.length()));
+                Map<String,String> map = new HashMap<>(1);
+                String filePath = file.getAbsolutePath().substring(rootPath.length());
+                map.put("label", filePath);
+                map.put("value", filePath.replaceAll(".html", ""));                
+                templateFiles.add(map);
             }
         }
 
