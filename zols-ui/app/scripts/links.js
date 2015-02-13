@@ -114,7 +114,7 @@
                 $.fn.renderLink();
             });
         }
-
+        
 
 
 
@@ -195,6 +195,7 @@
             $.fn.saveCategory();
         });
         $('#categoryHeader').hide();
+        $('#pageTitle').text('Link Category');
     };
 
 
@@ -217,6 +218,8 @@
         $('#category-list').show();
         $('#categorynameLbl').hide();
         $('#categoryHeader').show();
+        
+        $('#pageTitle').text('Links');
         
     };
 
@@ -278,6 +281,7 @@
         $('#category-list').hide();
         $('#categorynameLbl').show();
         
+        $('#pageTitle').text('Link');
     };
 
     $.fn.createLink = function() {

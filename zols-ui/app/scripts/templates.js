@@ -160,7 +160,7 @@
         if (selectedTemplateRepository && selectedTemplateRepository.name) {
             selectedTemplateRepository.isEdit = true;
         }
-        template = $.templates("#catetoryForm");
+        template = $.templates("#repositoryForm");
         template.link('#result', selectedTemplateRepository);
         $("#result form").submit(function (event) {
             event.preventDefault();
@@ -246,7 +246,7 @@
         if (selectedTemplate && selectedTemplate.name) {
             selectedTemplate.isEdit = true;
         }
-        template = $.templates("#linkForm");
+        template = $.templates("#templateForm");
         template.link('#result', selectedTemplate);
         $("#result form").submit(function (event) {
             event.preventDefault();

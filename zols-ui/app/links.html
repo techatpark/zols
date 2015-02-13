@@ -36,7 +36,7 @@
                         <div class="row show-grid">
                             <div class="pull-left">
                                 <h4>
-                                    Links
+                                    <span id="pageTitle">Links</span>
                                     <span class="badge">                  
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>
@@ -146,9 +146,6 @@
                 <form class="form-horizontal">
                 <fieldset>
 
-                <!-- Form Name -->
-                <legend>Category</legend>
-
                 <!-- Text input-->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Name</label>  
@@ -156,7 +153,7 @@
                 {{if isEdit}}
                 <label class="col-md-4 control-label" for="name">{{:name}}</label>  
                 {{else}}
-                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
                 </div>
                 </div>
@@ -199,9 +196,6 @@
                 <form class="form-horizontal">
                 <fieldset>
 
-                <!-- Form Name -->
-                <legend>Link</legend>
-
                 <!-- Text input-->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="name">Name</label>  
@@ -209,7 +203,7 @@
                 {{if isEdit}}
                 <label class="col-md-4 control-label" for="name">{{:name}}</label>  
                 {{else}}
-                <input id="name" name="name" data-link="name" type="text" placeholder="" class="form-control input-md" required=""/>
+                <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
                 </div>
                 </div>
