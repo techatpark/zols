@@ -154,7 +154,7 @@
 
                 <!-- checkbox input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="required">Required</label>
+                <label   class="col-md-4 control-label" for="required">Required</label>
                 <div class="col-md-4">
                 <input name="required" type="checkbox"  data-link="prop.required" class="form-control input-md"/>
                 </div>
@@ -162,14 +162,7 @@
 
                 </div>
                 </div>
-
-
             </script>
-
-
-
-
-            
 
             <script id="schemaForm" type="text/x-jsrender">
                 <form class="form-horizontal">
@@ -179,8 +172,11 @@
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="id">Id</label>
                 <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="id">{{:id}}</label>  
+                {{else}}
                 <input name="id" data-link="id" id="schemaId" type="text" placeholder="" class="form-control input-md" required=""/>
-
+                {{/if}}
                 </div>
                 </div>
 

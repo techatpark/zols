@@ -128,7 +128,9 @@
 
     $.fn.renderSchema = function () {
         schemaTemplate = $.templates('#schemaForm');
+        schema.isEdit = isEdit;
         schemaTemplate.link('#result', schema);
+        delete schema.isEdit;
         $('#result form').submit(function (event) {
             event.preventDefault();
             $.fn.saveSchema();
