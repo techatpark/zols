@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -32,19 +33,30 @@ import org.zols.datastore.query.Query;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
  * Elastic Search Implementation of DataStore
+ *
  * @author Raji
  */
 public class ElasticSearchDataStore extends DataStore {
-    
+
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStore.class);
-    
+
     private final Node node;
-    
+
+    private final String indexName;
+
     public ElasticSearchDataStore() {
+        this.indexName = "zols";
+        node = nodeBuilder().local(true).node();
+        createIndexIfNotExists();
+    }
+
+    public ElasticSearchDataStore(String indexName) {
+        this.indexName = indexName;
         node = nodeBuilder().local(true).node();
         createIndexIfNotExists();
     }
@@ -58,12 +70,11 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     private void createIndexIfNotExists() {
-        IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName());
+        IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName);
         if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
-            CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName());
+            CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
             node.client().admin().indices().create(createIndexRequest).actionGet();
         }
-        // node.client().admin().indices().refresh(null);
     }
 
     @Override
@@ -72,9 +83,9 @@ public class ElasticSearchDataStore extends DataStore {
         Object idValue = validatedDataObject.get(idField);
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {
-            indexRequestBuilder = node.client().prepareIndex(indexName(), typeName(jsonSchema));
+            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema));
         } else {
-            indexRequestBuilder = node.client().prepareIndex(indexName(), typeName(jsonSchema), idValue.toString());
+            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue.toString());
         }
 
         IndexResponse response = indexRequestBuilder
@@ -102,7 +113,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected Map<String, Object> readData(String jsonSchema, String idValue) {
         GetResponse getResponse = node.client()
-                .prepareGet(indexName(), typeName(jsonSchema), idValue)
+                .prepareGet(indexName, typeName(jsonSchema), idValue)
                 .setOperationThreaded(false)
                 .execute()
                 .actionGet();
@@ -113,23 +124,23 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean deleteData(String jsonSchema, String idValue) {
         DeleteResponse response = node.client()
-                .prepareDelete(indexName(), typeName(jsonSchema), idValue)
+                .prepareDelete(indexName, typeName(jsonSchema), idValue)
                 .setOperationThreaded(false)
                 .execute()
                 .actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName()));
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isFound();
     }
 
     @Override
     protected boolean deleteData(String jsonSchema, Query query) {
-        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName())
+        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
                 .setListenerThreaded(false)
                 .setTypes(typeName(jsonSchema))
                 .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName()));
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return true;
     }
@@ -137,12 +148,12 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean updateData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex(indexName(), typeName(jsonSchema), idValue)
+        IndexResponse response = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue)
                 .setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName()));
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isCreated();
     }
@@ -157,7 +168,7 @@ public class ElasticSearchDataStore extends DataStore {
         List<Map<String, Object>> list = null;
         SearchResponse response = node.client()
                 .prepareSearch()
-                .setIndices(indexName())
+                .setIndices(indexName)
                 .setTypes(typeName(jsonSchema))
                 .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
@@ -172,6 +183,11 @@ public class ElasticSearchDataStore extends DataStore {
             }
         }
         return list;
+    }
+
+    @Override
+    protected void drop() throws DataStoreException {
+        node.client().admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 
     private FilterBuilder getFilterBuilder(Query query) {
@@ -222,22 +238,15 @@ public class ElasticSearchDataStore extends DataStore {
         }
         return queryBuilder;
     }
-    
-    /**
-     * Get Elastic Search Index Name
-     * @return 
-     */
-    private String indexName() {
-        return "zols";
-    }
-    
+
     /**
      * Get Elastic Search Type Name
+     *
      * @param jsonSchema
-     * @return 
+     * @return
      */
     private String typeName(String jsonSchema) {
         return getId(jsonSchema);
     }
-    
+
 }

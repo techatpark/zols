@@ -413,5 +413,11 @@ public abstract class DataStore {
      */
     protected abstract List<Map<String, Object>> listData(String jsonSchema,
             Query query) throws DataStoreException;
+    
+    /**
+     * Drops the Datastore
+     * @throws DataStoreException 
+     */
+    protected abstract void drop() throws DataStoreException;
 
 }
