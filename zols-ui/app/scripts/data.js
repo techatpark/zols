@@ -11,7 +11,16 @@
         settings = $.extend(settings, options);
 
         var editor;
-        var base_url = 'http://localhost:8080/api';
+        var base_url = baseURL();
+
+        function baseURL() {
+            var url = 'http://localhost:8080/api';
+            if (location.href.indexOf(":3000/") === -1) {
+                var pathArray = location.href.split('/');
+                url = pathArray[0] + '//' + pathArray[2] + '/api';
+            }
+            return url;
+        }
 
         $.ajaxSetup({
             contentType: 'application/json'
@@ -24,11 +33,11 @@
                 editor = new JSONEditor($element[0], $.extend(settings, {schema: data}));
             });
         };
-        
+
         $.fn.getValue = function () {
             return editor.getValue();
         };
-        
+
         $.fn.setSchemaName(options.schemaName);
 
         return this;
