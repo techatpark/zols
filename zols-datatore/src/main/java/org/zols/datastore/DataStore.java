@@ -220,6 +220,21 @@ public abstract class DataStore {
      * deletes the Object with given name
      *
      * @param clazz - Class of the Object
+     * @return successFlag
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    public boolean delete(Class clazz) throws DataStoreException {
+        try {
+            return delete(tv4.getJsonSchema(clazz));
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to delete " + clazz, ex);
+        }
+    }
+    
+    /**
+     * deletes the Object with given name
+     *
+     * @param clazz - Class of the Object
      * @param name - name of the Object
      * @return successFlag
      */
