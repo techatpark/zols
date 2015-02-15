@@ -28,7 +28,6 @@
         <module>zols-cms-plugin</module>
         <module>zols-cms</module>        
         <module>zols-datatore</module>
-        <module>zols-datastore-mongodb</module>
     </modules>
     
     <properties>
