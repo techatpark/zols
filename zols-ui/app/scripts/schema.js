@@ -4,7 +4,7 @@
     var base_url = baseURL();
 
     function baseURL() {
-        var url = 'http://localhost:8080/api';
+        var url = 'http://localhost:8081/api';
         if (location.href.indexOf(":3000/") === -1) {
             var pathArray = location.href.split('/');
             url = pathArray[0] + '//' + pathArray[2] + '/api';
@@ -48,7 +48,7 @@
 
     $('#result').on('click', '#addAttr', function () {
         var totalProperties = Object.keys(schema.properties).length;
-        schema.properties['newProperty' + totalProperties] = {'type': 'string','format': 'text', 'required': false};
+        schema.properties['newProperty' + totalProperties] = {'type': 'string', 'format': 'text', 'required': false};
         $.fn.renderSchema();
     });
 
@@ -140,6 +140,11 @@
         schema.isEdit = isEdit;
         schemaTemplate.link('#result', schema);
         delete schema.isEdit;
+        $.fn.listIdFileds();
+        $("input[name='name']")
+                .focusout(function () {
+                    $.fn.listIdFileds();
+                });
         $('#result form').submit(function (event) {
             event.preventDefault();
             $.fn.saveSchema();
@@ -158,6 +163,16 @@
 
     $.fn.onError = function (data) {
         $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
+    };
+
+    $.fn.listIdFileds = function () {
+        var currentIdField = schema.idField;
+        console.log('currentIdField ' + currentIdField);
+        $.each(Object.keys(schema.properties), function (i, d) {
+            $('#idField').append('<option value="' + d + '">' + d + '</option>');
+        });
+        $('#idField').val(currentIdField);
+        schema.idField = currentIdField;
     };
 
     $.fn.listSchemas();
