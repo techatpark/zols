@@ -4,7 +4,7 @@
     var base_url = baseURL();
 
     function baseURL() {
-        var url = 'http://localhost:8081/api';
+        var url = 'http://localhost:8080/api';
         if (location.href.indexOf(":3000/") === -1) {
             var pathArray = location.href.split('/');
             url = pathArray[0] + '//' + pathArray[2] + '/api';
@@ -168,6 +168,7 @@
     $.fn.listIdFileds = function () {
         var currentIdField = schema.idField;
         console.log('currentIdField ' + currentIdField);
+        $('#idField').find('option').remove();
         $.each(Object.keys(schema.properties), function (i, d) {
             $('#idField').append('<option value="' + d + '">' + d + '</option>');
         });

@@ -272,6 +272,7 @@
 
     $.fn.listTemplatePaths = function () {
         $.get(base_url + '/template_repositories/'+selectedTemplateRepository.name+'/valid_templates').done(function (data) {
+            $('#path').find('option').remove();
             $.each(data, function (i, d) {
                 // You will need to alter the below to get the right values from your json object.  Guessing that d.id / d.modelName are columns in your carModels data
                 $('#path').append('<option value="' + d.value + '">' + d.label + '</option>');
