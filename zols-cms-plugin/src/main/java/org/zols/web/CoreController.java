@@ -37,16 +37,19 @@ public class CoreController {
     }
 
     @RequestMapping("/links")
+    @Secured("ROLE_ADMIN")
     public String links() {
         return "links";
     }
 
     @RequestMapping("/schema")
+    @Secured("ROLE_ADMIN")
     public String schema() {
         return "schema";
     }
 
     @RequestMapping("/templates")
+    @Secured("ROLE_ADMIN")
     public String templates(Model model) throws DataStoreException {
         model.addAttribute("schemas", schemaService.list());
         return "templates";
@@ -60,6 +63,7 @@ public class CoreController {
     }
     
     @RequestMapping("/create_page/{linkName}")
+    @Secured("ROLE_ADMIN")
     public String createPage(@PathVariable(value = "linkName") String linkName,Model model) {
         model.addAttribute("linkName", linkName);
         return "create_page";
