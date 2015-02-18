@@ -135,6 +135,9 @@
                 <label class="col-md-4 control-label" for="type">Format</label>
                 <div class="col-md-4">
                 <select name="format" data-link="prop.format" type="text" placeholder="" class="form-control input-md">
+                <option name="string" value="text">Text</option>
+                <option name="string" value="html">HTML</option>
+                <option name="string" value="textarea">Textarea</option>
                 <option name="string" value="color">Color</option>
                 <option name="string" value="date">Date</option>
                 <option name="string" value="datetime">Date time</option>
@@ -143,8 +146,6 @@
                 <option name="string" value="number">Number</option>
                 <option name="string" value="range">Range</option>
                 <option name="string" value="tel">tel</option>
-                <option name="string" value="text">Text</option>
-                <option name="string" value="textarea">Textarea</option>
                 <option name="string" value="time">Time</option>
                 <option name="string" value="url">Url</option>
                 <option name="string" value="week">Week</option>        
@@ -157,6 +158,14 @@
                 <label   class="col-md-4 control-label" for="required">Required</label>
                 <div class="col-md-4">
                 <input name="required" type="checkbox"  data-link="prop.required" class="form-control input-md"/>
+                </div>
+                </div>
+        
+                <!-- checkbox input-->
+                <div class="form-group" data-link="visible{:prop.format === 'html'}">
+                <label   class="col-md-4 control-label" for="wysiwyg">is wysiwyg?</label>
+                <div class="col-md-4">
+                <input name="wysiwyg" type="checkbox"  data-link="prop.options.wysiwyg" class="form-control input-md"/>
                 </div>
                 </div>
 
