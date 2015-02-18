@@ -5,6 +5,7 @@
 **/data
 **/bin
 **/nbproject
+**/nbactions.xml
 **/bower_components
 **/dist
 **/node_modules
