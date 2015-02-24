@@ -51,7 +51,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     public ElasticSearchDataStore() {
         this.indexName = "zols";
-        node = nodeBuilder().local(true).node();
+        node = nodeBuilder().local(true).data(true).node();
         createIndexIfNotExists();
     }
 
@@ -62,11 +62,11 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     private void patchDelayInRefresh() {
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            Thread.sleep(300);
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     private void createIndexIfNotExists() {
@@ -83,9 +83,9 @@ public class ElasticSearchDataStore extends DataStore {
         Object idValue = validatedDataObject.get(idField);
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {
-            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema));
+            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema)).setRefresh(true);
         } else {
-            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue.toString());
+            indexRequestBuilder = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue.toString()).setRefresh(true);
         }
 
         IndexResponse response = indexRequestBuilder
@@ -124,7 +124,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean deleteData(String jsonSchema, String idValue) {
         DeleteResponse response = node.client()
-                .prepareDelete(indexName, typeName(jsonSchema), idValue)
+                .prepareDelete(indexName, typeName(jsonSchema), idValue).setRefresh(true)
                 .setOperationThreaded(false)
                 .execute()
                 .actionGet();
@@ -148,7 +148,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean updateData(String jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(getIdField(jsonSchema)).toString();
-        IndexResponse response = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue)
+        IndexResponse response = node.client().prepareIndex(indexName, typeName(jsonSchema), idValue).setRefresh(true)
                 .setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()

@@ -40,7 +40,7 @@ public class TemplateConfiguration {
 
     @PostConstruct
     public void intializeTemplates() {
-        LOGGER.info("intialize Templates");
+        LOGGER.debug("intialize Template Repositories");
         TemplateResolver resolver;
         File file;
         try {
@@ -62,13 +62,15 @@ public class TemplateConfiguration {
                             templateEngine.addTemplateResolver(resolver);
                             break;
                     }
+                    LOGGER.info("Added Template Repository {}",templateRepository.getName());
                 }
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error intializing Template Repositories",e);
         }
         addZolsTemplates();
+        LOGGER.debug("intialized Template Repositories");
     }
 
     private void addZolsTemplates() {
