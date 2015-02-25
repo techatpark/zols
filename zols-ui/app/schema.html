@@ -88,7 +88,7 @@
                 <ul class="list-group">
                 {{for schema}}
                 <li class="list-group-item">
-                <a href="#" data-name="{{:id}}">{{:title}}</a>
+                {{:title}}
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
@@ -201,8 +201,13 @@
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="idField">ID Field</label>
                 <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="idField">{{:idField}}</label>  
+                {{else}}
                 <select name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required="">                   
                 </select>
+                {{/if}}
+                
                 </div>
                 </div>
 
