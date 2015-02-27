@@ -47,6 +47,13 @@ public class CoreController {
     public String schema() {
         return "schema";
     }
+    
+    @RequestMapping("/master")
+    @Secured("ROLE_ADMIN")
+    public String master(Model model) throws DataStoreException {
+        model.addAttribute("schemas", schemaService.list());
+        return "master";
+    }
 
     @RequestMapping("/templates")
     @Secured("ROLE_ADMIN")
