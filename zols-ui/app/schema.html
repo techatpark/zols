@@ -206,10 +206,22 @@
                 {{else}}
                 <select name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required="">                   
                 </select>
-                {{/if}}
-                
+                {{/if}}                
                 </div>
                 </div>
+        
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="labelField">Label Field</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="labelField">{{:labelField}}</label>  
+                {{else}}
+                <select name="labelField" id="labelField" data-link="labelField" type="text" placeholder="" class="form-control input-md" required="">                   
+                </select>
+                {{/if}}                
+                </div>
+                </div>       
 
                 <!-- Text input-->
                 <div class="form-group" style="display:none;">

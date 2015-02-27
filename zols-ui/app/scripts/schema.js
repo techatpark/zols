@@ -140,10 +140,10 @@
         schema.isEdit = isEdit;
         schemaTemplate.link('#result', schema);
         delete schema.isEdit;
-        $.fn.listIdFileds();
+        $.fn.listIdAndLabelFileds();
         $("input[name='name']")
                 .focusout(function () {
-                    $.fn.listIdFileds();
+                    $.fn.listIdAndLabelFileds();
                 });
         $('#result form').submit(function (event) {
             event.preventDefault();
@@ -165,7 +165,7 @@
         $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
     };
 
-    $.fn.listIdFileds = function () {
+    $.fn.listIdAndLabelFileds = function () {
         var currentIdField = schema.idField;
         console.log('currentIdField ' + currentIdField);
         $('#idField').find('option').remove();
@@ -174,6 +174,16 @@
         });
         $('#idField').val(currentIdField);
         schema.idField = currentIdField;
+        
+        var currentLabelField = schema.labelField;
+        console.log('currentLabelField ' + currentLabelField);
+        $('#labelField').find('option').remove();
+        $.each(Object.keys(schema.properties), function (i, d) {
+            $('#labelField').append('<option value="' + d + '">' + d + '</option>');
+        });
+        $('#labelField').val(currentLabelField);
+        schema.labelField = currentLabelField;
+        
     };
 
     $.fn.listSchemas();
