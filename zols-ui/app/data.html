@@ -59,7 +59,16 @@
                 //$.fn.showEditor('54841af344aebc43ee3b12f6');  
 
                 $('#saveBtn').on('click', function () {
-                    console.log(jsonEditor.getValue());
+                    var value = jsonEditor.getValue() ;
+                    console.log("Original ");
+                    console.log(value);
+                    
+                    value.name = "Modified";
+                    console.log("Modified ");
+                    console.log(value);
+                    
+                    jsonEditor.setValue(value);
+                    
                 });
 
             </script>

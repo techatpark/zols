@@ -14,6 +14,15 @@
         <!-- build:js scripts/modernizr.js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
+
+        <!-- build:js scripts/zols.js -->
+        <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+        <!-- endbower -->
+        <script src="scripts/jsviews.min.js"></script>
+        <!-- endbuild -->
     </head>
     <body>
         <div class="container-fluid" th:fragment="content">
@@ -24,9 +33,9 @@
                             <div class="pull-left">
                                 <h4>
                                     <span id="pageTitle">Master</span>
-<!--                                    <span class="badge">                  
-                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
-                                    </span>-->
+                                    <!--                                    <span class="badge">                  
+                                                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                                                        </span>-->
                                 </h4>
                             </div>
                             <div class="pull-right" id="schemaHeader">
@@ -39,8 +48,29 @@
                     </div>
                 </div>
                 <div class="container">
-                    <div class="row">
-                        <section id="carousel">    				
+                    <div class="row" id="result">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade bs-example-modal-sm" 
+                 id="delete-conf-model"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        Do you want to delete the content?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <script id="listSchemas" type="text/x-jsrender">
+                {{if schema.length !==0}}
+                   <section id="carousel">    				
                             <div class="container">
                                 <div class="row">
                                     <div class="col-md-8 col-md-offset-2">
@@ -55,16 +85,16 @@
                                             <div class="carousel-inner">
                                                 <div class="active item">
                                                     <div class="row row-centered">
-                                                        <a th:each="schema : ${schemas}" th:name="${schema.id}" name="Schema">
+                                                    {{for schema}}
+                                                        <a data-name="{{:id}}">
                                                             <div class="col-sm-6 col-md-3">
                                                                 <img src="images/modules/documents.svg" alt="Schema" class="img-rounded"/>
-
                                                                 <div class="col-md-offset-1">
-                                                                    <h5 th:text="${schema.title}">Schema</h5>                                                                
+                                                                    <h5>{{:title}}</h5>                                                                
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        
+                                                    {{/for}}    
                                                     </div>
                                                 </div>
 
@@ -73,26 +103,65 @@
                                     </div>							
                                 </div>
                             </div>
-                        </section>							
-                    </div>
+                        </section>
+                {{/if}}                
+            </script>
+
+
+            <script id="noData" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Data to display. click <a>here</a> to create one
                 </div>
-            </div>
+                </div>
+            </script>
+
+
+
+            <script id="listData" type="text/x-jsrender">
+                {{if link.length !==0}}
+
+                <ul class="list-group">                    
+                {{for link}}
+                <li class="list-group-item">
+                {{:name}}
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="addMoreDataBtn" href="#">Add More</a>
+            </script>
+
+            <script id="data_entry" type="text/x-jsrender">
+                <form class="form-horizontal" >
+
+                <div class="form-group" id="editor_holder">
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.listData()">Discard Changes</button>
+                </div>
+                </div>
+                </form>
+
+            </script>
+
+            <!-- build:js({app,.tmp}) scripts/master.js -->
+            <script src="scripts/master.js"></script> 
+            <script src="scripts/data.js"></script>
+            <!-- inject:partials -->
+            <!-- endinject -->
+            <!-- endbuild -->
+
         </div>
 
-        <!-- build:js scripts/zols.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
-        <!-- endbower -->
-        <script src="scripts/jsviews.min.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/master.js"></script>       
-        <!-- inject:partials -->
-        <!-- endinject -->
-        <!-- endbuild -->
 
         <!-- References 
         http://bootsnipp.com/snippets/6GM92

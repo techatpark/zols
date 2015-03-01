@@ -38,6 +38,9 @@
             return editor.getValue();
         };
 
+        $.fn.setValue = function (value) {
+            editor.setValue(value);
+        };
         $.fn.setSchemaName(options.schemaName);
 
         return this;

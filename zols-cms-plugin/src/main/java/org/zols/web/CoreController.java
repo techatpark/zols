@@ -50,8 +50,7 @@ public class CoreController {
     
     @RequestMapping("/master")
     @Secured("ROLE_ADMIN")
-    public String master(Model model) throws DataStoreException {
-        model.addAttribute("schemas", schemaService.list());
+    public String master() throws DataStoreException {
         return "master";
     }
 
