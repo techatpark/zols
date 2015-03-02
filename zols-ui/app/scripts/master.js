@@ -17,6 +17,7 @@
     var data;
     var listofData;
     var confirmationPromise;
+    var isEdit = false;
 
     $.ajaxSetup({
         contentType: 'application/json'
@@ -66,6 +67,8 @@
     };
 
     $.fn.listData = function () {
+        data = null;
+        isEdit = false;
         $.get(base_url + '/data/' + schema.id).done(function (dataList) {
             if (dataList === "") {
                 var template = $.templates("#noData");
@@ -81,10 +84,6 @@
                     $.fn.renderData();
                 });
 
-                $('#result li a').on('click', function () {
-                    $.fn.addParentData($.view(this).data);
-                });
-
                 $('#result .glyphicon-trash').on('click', function () {
 
                     $("#delete-conf-model").modal('show');
@@ -96,6 +95,7 @@
                 });
 
                 $('#result .glyphicon-edit').on('click', function () {
+                    isEdit = true;
                     data = $.view(this).data;
                     $.fn.renderData();
                 });
@@ -108,21 +108,35 @@
     $.fn.renderData = function () {
         var template = $.templates("#data_entry");
         template.link('#result', {});
-        var editor = $("#editor_holder").jsonEditor({schemaName: schema.id});
-        
+        var editor = $("#editor_holder").jsonEditor({schemaName: schema.id, value: data});
 
         $("#result form").submit(function (event) {
             event.preventDefault();
-            $.ajax({
-                method: 'POST',
-                url: base_url + '/data/'+ schema.id,
-                dataType: 'json',
-                data: JSON.stringify(editor.getValue())
-            }).done(function (data) {
-                $.fn.listData();
-            }).error(function (data) {
-                $.fn.onError(data);
-            });
+            if (isEdit) {
+                var value = editor.getValue();
+                $.ajax({
+                    method: 'PUT',
+                    url: base_url + '/data/' + schema.id + "/" + value[schema.idField],
+                    dataType: 'json',
+                    data: JSON.stringify(value)
+                }).done(function (data) {
+                    $.fn.listData();
+                }).error(function (data) {
+                    $.fn.onError(data);
+                });
+            } else {
+                $.ajax({
+                    method: 'POST',
+                    url: base_url + '/data/' + schema.id,
+                    dataType: 'json',
+                    data: JSON.stringify(editor.getValue())
+                }).done(function (data) {
+                    $.fn.listData();
+                }).error(function (data) {
+                    $.fn.onError(data);
+                });
+            }
+
         });
     };
 

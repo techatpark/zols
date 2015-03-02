@@ -55,20 +55,12 @@
             <!-- endbuild -->
 
             <script>
-                var jsonEditor = $("#editor_holder").jsonEditor({schemaName: "Sample"});
+                var value = {"name":"Sathish","description":"description"} ;
+                var jsonEditor = $("#editor_holder").jsonEditor({schemaName: "Sample",value:value});
                 //$.fn.showEditor('54841af344aebc43ee3b12f6');  
 
-                $('#saveBtn').on('click', function () {
-                    var value = jsonEditor.getValue() ;
-                    console.log("Original ");
-                    console.log(value);
-                    
-                    value.name = "Modified";
-                    console.log("Modified ");
-                    console.log(value);
-                    
-                    jsonEditor.setValue(value);
-                    
+                $('#saveBtn').on('click', function () {                    
+                    console.log(jsonEditor.getValue());
                 });
 
             </script>

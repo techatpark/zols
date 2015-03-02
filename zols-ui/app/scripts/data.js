@@ -28,10 +28,26 @@
 
 
         $.fn.setSchemaName = function (schemaName) {
-            $.get(base_url + '/schema/' + schemaName).done(function (data) {
-                $element.empty();
-                editor = new JSONEditor($element[0], $.extend(settings, {schema: data}));
+            $.ajax({
+                url: base_url + '/schema/' + schemaName,
+                type: "get",
+                async: false,
+                success: function (data) {
+                    if(editor) {
+                        editor.destroy();
+                    }                    
+                    $element.empty();
+                    editor = new JSONEditor($element[0], $.extend(settings, {schema: data}));
+                    if(settings.value) {
+                        editor.setValue(settings.value);
+                    }
+                    
+                },
+                error: function () {
+                    connectionError();
+                }
             });
+            
         };
 
         $.fn.getValue = function () {
