@@ -17,7 +17,7 @@ import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.links.domain.Category;
+import org.zols.links.domain.LinkCategory;
 import org.zols.links.domain.Link;
 
 @Service
@@ -26,7 +26,7 @@ public class LinkService {
     private static final Logger LOGGER = getLogger(LinkService.class);
 
     @Autowired
-    private CategoryService categoryService;
+    private LinkCategoryService categoryService;
 
     @Autowired
     private DataStore dataStore;
@@ -130,11 +130,11 @@ public class LinkService {
      * @return list of application links
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
-        List<Category> categories = categoryService.list();
+        List<LinkCategory> categories = categoryService.list();
         if (categories != null) {
             Map<String, List<Link>> applicationLinks = new HashMap<>(categories.size());
             List<Link> firstlevelLinks;
-            for (Category category : categories) {
+            for (LinkCategory category : categories) {
                 firstlevelLinks = categoryService.getFirstLevelLinks(category.getName());
                 if (firstlevelLinks != null) {
                     for (Link link : firstlevelLinks) {

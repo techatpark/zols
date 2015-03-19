@@ -21,27 +21,27 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.links.domain.Category;
+import org.zols.links.domain.LinkCategory;
 import org.zols.links.domain.Link;
-import org.zols.links.service.CategoryService;
+import org.zols.links.service.LinkCategoryService;
 
 @RestController
 @RequestMapping(value="/api/link_categories")
-public class CategoryController {
+public class LinkCategoryController {
 
-    private static final Logger LOGGER = getLogger(CategoryController.class);
+    private static final Logger LOGGER = getLogger(LinkCategoryController.class);
     
     @Autowired
-    private CategoryService categoryService;    
+    private LinkCategoryService categoryService;    
 
     @RequestMapping(method = POST)    
-    public Category create(@RequestBody Category category) throws DataStoreException {
+    public LinkCategory create(@RequestBody LinkCategory category) throws DataStoreException {
         LOGGER.info("Creating new categories {}", category);
         return categoryService.create(category);
     }
 
     @RequestMapping(value = "/{name}", method = GET)    
-    public Category read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public LinkCategory read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting category ", name);
         return categoryService.read(name);
     }
@@ -49,7 +49,7 @@ public class CategoryController {
     @RequestMapping(value = "/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody Category category) throws DataStoreException {        
+            @RequestBody LinkCategory category) throws DataStoreException {        
         if (name.equals(category.getName())) {
             LOGGER.info("Updating categories with id {} with {}", name, category);
             categoryService.update(category);
@@ -64,7 +64,7 @@ public class CategoryController {
     }
     
     @RequestMapping(method = GET)    
-    public List<Category> list() throws DataStoreException {
+    public List<LinkCategory> list() throws DataStoreException {
         LOGGER.info("Getting categories ");
         return categoryService.list();
     }

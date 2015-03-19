@@ -20,14 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.links.domain.Category;
+import org.zols.links.domain.LinkCategory;
 import org.zols.links.domain.Link;
 import org.zols.links.provider.LinkProvider;
 
 @Service
-public class CategoryService {
+public class LinkCategoryService {
 
-    private static final Logger LOGGER = getLogger(CategoryService.class);
+    private static final Logger LOGGER = getLogger(LinkCategoryService.class);
 
     @Autowired
     private DataStore dataStore;
@@ -44,10 +44,10 @@ public class CategoryService {
      * @param category Object to be Create
      * @return created Category object
      */
-    public Category create(@Valid Category category) throws DataStoreException {
-        Category createdCategory = null;
+    public LinkCategory create(@Valid LinkCategory category) throws DataStoreException {
+        LinkCategory createdCategory = null;
         if (category != null) {
-            createdCategory = dataStore.create(Category.class, category);
+            createdCategory = dataStore.create(LinkCategory.class, category);
             LOGGER.info("Created Category {}", createdCategory.getName());
         }
         return createdCategory;
@@ -59,9 +59,9 @@ public class CategoryService {
      * @param categoryName String to be Search
      * @return searched Category
      */
-    public Category read(String categoryName) throws DataStoreException {
+    public LinkCategory read(String categoryName) throws DataStoreException {
         LOGGER.info("Reading Category {}", categoryName);
-        return dataStore.read(Category.class, categoryName);
+        return dataStore.read(LinkCategory.class, categoryName);
     }
 
     /**
@@ -70,7 +70,7 @@ public class CategoryService {
      * @param category Object to be update
      * @return status of the Update
      */
-    public Boolean update(Category category) throws DataStoreException {
+    public Boolean update(LinkCategory category) throws DataStoreException {
         Boolean updated = false;
         if (category != null) {
             LOGGER.info("Updating Category {}", category);
@@ -88,15 +88,15 @@ public class CategoryService {
     public Boolean delete(String categoryName) throws DataStoreException {
         LOGGER.info("Deleting Category {}", categoryName);
         linkService.deleteLinksUnder(categoryName);        
-        return dataStore.delete(Category.class, categoryName);
+        return dataStore.delete(LinkCategory.class, categoryName);
     }
 
     /**
      * 
      * @return list all the categories
      */
-    public List<Category> list() throws DataStoreException {
-        return dataStore.list(Category.class);
+    public List<LinkCategory> list() throws DataStoreException {
+        return dataStore.list(LinkCategory.class);
     }
 
     /**
@@ -119,10 +119,10 @@ public class CategoryService {
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
         Map<String, List<Link>> applicationLinks = new HashMap<>();
-        List<Category> categories = list();
+        List<LinkCategory> categories = list();
         if (categories != null) {
             List<Link> firstlevelLinks;
-            for (Category category : categories) {
+            for (LinkCategory category : categories) {
                 firstlevelLinks = getFirstLevelLinks(category.getName());
                 walkLinkTree(firstlevelLinks);
                 applicationLinks.put(category.getName(), firstlevelLinks);
