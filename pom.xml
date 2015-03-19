@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.0.RELEASE</version>
+        <version>1.2.2.RELEASE</version>
     </parent>
     
     <modules>
@@ -31,8 +31,7 @@
     </modules>
     
     <properties>
-        <swagger-springmvc-version>0.9.1</swagger-springmvc-version>
-        <jackson-module-jsonSchema-version>2.4.3</jackson-module-jsonSchema-version>
+        <swagger-springmvc-version>1.0.0</swagger-springmvc-version>
         <java.version>1.7</java.version>
         <maven-compiler-plugin-version>3.2</maven-compiler-plugin-version>
     </properties>
