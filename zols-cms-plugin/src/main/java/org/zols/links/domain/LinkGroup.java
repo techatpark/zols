@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-public class LinkCategory {
+public class LinkGroup {
 
     @Id
     private String name;

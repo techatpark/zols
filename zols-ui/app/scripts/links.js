@@ -4,7 +4,7 @@
     var base_url = baseURL();
 
     function baseURL() {
-        var url = 'http://localhost:8080/api';
+        var url = 'http://localhost:8081/api';
         if (location.href.indexOf(":3000/") === -1) {
             var pathArray = location.href.split('/');
             url = pathArray[0] + '//' + pathArray[2] + '/api';
@@ -17,10 +17,10 @@
     });
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('#categorynameLbl').hide();
+    $('#groupnameLbl').hide();
 
     var template;
-    var selectedCategory;
+    var selectedGroup;
     var listOfCategories;
     var parentLinks = [];
     var selectedLink;
@@ -29,7 +29,7 @@
     var confirmationPromise;
 
     $('#edit_selected').on('click', function () {
-        $.fn.renderCategory();
+        $.fn.renderGroup();
     });
     $("#del_conf_ok").on('click', function () {
         $("#delete-conf-model").modal('hide');
@@ -43,35 +43,35 @@
         $("#delete-conf-model").modal('show');
         confirmationPromise = $.Deferred();
         confirmationPromise.done(function () {
-            $.fn.deleteSelectedCategory();
+            $.fn.deleteSelectedGroup();
         });
     });
 
     $.fn.listCategories = function () {
-        $.get(base_url + '/link_categories').done(function (data) {
+        $.get(base_url + '/link_groups').done(function (data) {
             if (data === "") {
-                $('#categoryHeader').hide();
-                var template = $.templates("#noCategory");
+                $('#groupHeader').hide();
+                var template = $.templates("#noGroup");
                 template.link('#result', {});
                 $('#result a').click(function () {
-                    $.fn.createCategory();
+                    $.fn.createGroup();
                 });
                 $('#linksBreadcrumb').empty();
                 parentLinks = [];
             } else {
-                $('#categoryHeader').show();
+                $('#groupHeader').show();
                 listOfCategories = data;
-                var template = $.templates("#listCategory");
-                template.link('#categories', {category: data});
-                $('#createCategory').click(function () {
-                    $.fn.createCategory();
+                var template = $.templates("#listGroup");
+                template.link('#categories', {group: data});
+                $('#createGroup').click(function () {
+                    $.fn.createGroup();
                 });
                 $('#categories .catName').on('click', function () {
-                    $.fn.setSelectedCategory($.view(this).data);
+                    $.fn.setSelectedGroup($.view(this).data);
                 });
 
                 if (data.length > 0) {
-                    $.fn.setSelectedCategory(data[0]);
+                    $.fn.setSelectedGroup(data[0]);
                 }
             }
 
@@ -80,12 +80,12 @@
         });
     };
 
-    $.fn.setSelectedCategory = function (selectedCategoryData) {
+    $.fn.setSelectedGroup = function (selectedGroupData) {
         parentLinks = [];
-        $('[data-bind-col="categoryname"]').text(selectedCategoryData.label);
-        selectedCategory = selectedCategoryData;
+        $('[data-bind-col="groupname"]').text(selectedGroupData.label);
+        selectedGroup = selectedGroupData;
         $('#linksBreadcrumb').empty();
-        $.get(base_url + '/link_categories/' + selectedCategory.name + '/first_level_links').done(function (data) {
+        $.get(base_url + '/link_groups/' + selectedGroup.name + '/first_level_links').done(function (data) {
             $.fn.listLinks(data);
         });
 
@@ -154,14 +154,14 @@
         });
     };
 
-    $.fn.saveCategory = function () {
-        if (selectedCategory.isEdit) {
-            delete selectedCategory.isEdit;
+    $.fn.saveGroup = function () {
+        if (selectedGroup.isEdit) {
+            delete selectedGroup.isEdit;
             $.ajax({
                 method: 'PUT',
-                url: base_url + '/link_categories/' + selectedCategory.name,
+                url: base_url + '/link_groups/' + selectedGroup.name,
                 dataType: 'json',
-                data: JSON.stringify(selectedCategory)
+                data: JSON.stringify(selectedGroup)
             }).done(function (data) {
                 $.fn.listCategories();
             }).error(function (data) {
@@ -171,9 +171,9 @@
         else {
             $.ajax({
                 method: 'POST',
-                url: base_url + '/link_categories',
+                url: base_url + '/link_groups',
                 dataType: 'json',
-                data: JSON.stringify(selectedCategory)
+                data: JSON.stringify(selectedGroup)
             }).done(function (data) {
                 $.fn.listCategories();
             }).error(function (data) {
@@ -182,10 +182,10 @@
         }
 
     };
-    $.fn.deleteSelectedCategory = function () {
+    $.fn.deleteSelectedGroup = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/link_categories/' + selectedCategory.name,
+            url: base_url + '/link_groups/' + selectedGroup.name,
             dataType: 'json'
         }).done(function (data) {
             $.fn.listCategories();
@@ -193,24 +193,24 @@
             $.fn.onError(data);
         });
     };
-    $.fn.renderCategory = function () {
-        if (selectedCategory && selectedCategory.name) {
-            selectedCategory.isEdit = true;
+    $.fn.renderGroup = function () {
+        if (selectedGroup && selectedGroup.name) {
+            selectedGroup.isEdit = true;
         }
         template = $.templates("#catetoryForm");
-        template.link('#result', selectedCategory);
+        template.link('#result', selectedGroup);
         $("#result form").submit(function (event) {
             event.preventDefault();
-            $.fn.saveCategory();
+            $.fn.saveGroup();
         });
-        $('#categoryHeader').hide();
-        $('#pageTitle').text('Link Category');
+        $('#groupHeader').hide();
+        $('#pageTitle').text('Link Group');
     };
 
 
-    $.fn.createCategory = function () {
-        selectedCategory = {};
-        $.fn.renderCategory();
+    $.fn.createGroup = function () {
+        selectedGroup = {};
+        $.fn.renderGroup();
     };
 
     $.fn.refreshList = function () {
@@ -221,19 +221,19 @@
             $.fn.listCategories();
         }
         else {
-            $.fn.setSelectedCategory(selectedCategory);
+            $.fn.setSelectedGroup(selectedGroup);
         }
 
-        $('#category-list').show();
-        $('#categorynameLbl').hide();
-        $('#categoryHeader').show();
+        $('#group-list').show();
+        $('#groupnameLbl').hide();
+        $('#groupHeader').show();
 
         $('#pageTitle').text('Links');
 
     };
 
     $.fn.saveLink = function () {
-        selectedLink.categoryName = selectedCategory.name;
+        selectedLink.groupName = selectedGroup.name;
         if (parentLinks.length !== 0) {
             selectedLink.parentLinkName = parentLinks[parentLinks.length - 1].name;
         }
@@ -287,8 +287,8 @@
             event.preventDefault();
             $.fn.saveLink();
         });
-        $('#category-list').hide();
-        $('#categorynameLbl').show();
+        $('#group-list').hide();
+        $('#groupnameLbl').show();
 
         $('#pageTitle').text('Link');
     };

@@ -42,14 +42,14 @@
                                     </span>-->
                                 </h4>
                             </div>
-                            <div class="pull-right" id="categoryHeader">
-                                <label>Category</label>                                    
-                                <label data-bind-col="categoryname" id="categorynameLbl">Category Name</label>
+                            <div class="pull-right" id="groupHeader">
+                                <label>Group</label>                                    
+                                <label data-bind-col="groupname" id="groupnameLbl">Group Name</label>
 
-                                <div class="btn-group" id="category-list">
+                                <div class="btn-group" id="group-list">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span data-bind-col="categoryname">Dropdown</span>
+                                            <span data-bind-col="groupname">Dropdown</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu" id="categories">
@@ -90,10 +90,10 @@
                 </div>
             </div>
 
-            <script id="noCategory" type="text/x-jsrender">
+            <script id="noGroup" type="text/x-jsrender">
                 <div class="jumbotron">
                 <div class="container">
-                There are no Category to display click <a>here</a>
+                There are no Group to display click <a>here</a>
                 </div>
                 </div>
             </script>
@@ -132,14 +132,14 @@
                 <a id="addMoreLinkBtn" href="#">Add More</a>
             </script>
 
-            <script id="listCategory" type="text/x-jsrender">
-                {{for category}}
+            <script id="listGroup" type="text/x-jsrender">
+                {{for group}}
                 <li>
                 <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
                 </li>
                 {{/for}}
                 <li class="divider"></li>
-                <li><a id="createCategory">Create New</a></li>
+                <li><a id="createGroup">Create New</a></li>
             </script>
 
             <script id="catetoryForm" type="text/x-jsrender">

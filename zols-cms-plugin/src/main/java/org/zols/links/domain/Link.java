@@ -50,9 +50,19 @@ public class Link {
     private List<Link> children;
 
     /**
-     * category of the link.
+     * group of the link.
      */
-    private String categoryName;
+    private String groupName;
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+    
+    
 
     public String getName() {
         return name;
@@ -100,14 +110,6 @@ public class Link {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
-    }
-
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     public List<Link> getChildren() {

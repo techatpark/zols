@@ -20,14 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.links.domain.LinkCategory;
+import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
 import org.zols.links.provider.LinkProvider;
 
 @Service
-public class LinkCategoryService {
+public class LinkGroupService {
 
-    private static final Logger LOGGER = getLogger(LinkCategoryService.class);
+    private static final Logger LOGGER = getLogger(LinkGroupService.class);
 
     @Autowired
     private DataStore dataStore;
@@ -39,76 +39,76 @@ public class LinkCategoryService {
     private ApplicationContext applicationContext;
 
     /**
-     * Creates a new Category with given Object
+     * Creates a new Group with given Object
      *
-     * @param category Object to be Create
-     * @return created Category object
+     * @param group Object to be Create
+     * @return created Group object
      */
-    public LinkCategory create(@Valid LinkCategory category) throws DataStoreException {
-        LinkCategory createdCategory = null;
-        if (category != null) {
-            createdCategory = dataStore.create(LinkCategory.class, category);
-            LOGGER.info("Created Category {}", createdCategory.getName());
+    public LinkGroup create(@Valid LinkGroup group) throws DataStoreException {
+        LinkGroup createdGroup = null;
+        if (group != null) {
+            createdGroup = dataStore.create(LinkGroup.class, group);
+            LOGGER.info("Created Group {}", createdGroup.getName());
         }
-        return createdCategory;
+        return createdGroup;
     }
 
     /**
-     * Get the Category with given String
+     * Get the Group with given String
      *
-     * @param categoryName String to be Search
-     * @return searched Category
+     * @param groupName String to be Search
+     * @return searched Group
      */
-    public LinkCategory read(String categoryName) throws DataStoreException {
-        LOGGER.info("Reading Category {}", categoryName);
-        return dataStore.read(LinkCategory.class, categoryName);
+    public LinkGroup read(String groupName) throws DataStoreException {
+        LOGGER.info("Reading Group {}", groupName);
+        return dataStore.read(LinkGroup.class, groupName);
     }
 
     /**
-     * Update a Category with given Object
+     * Update a Group with given Object
      *
-     * @param category Object to be update
+     * @param group Object to be update
      * @return status of the Update
      */
-    public Boolean update(LinkCategory category) throws DataStoreException {
+    public Boolean update(LinkGroup group) throws DataStoreException {
         Boolean updated = false;
-        if (category != null) {
-            LOGGER.info("Updating Category {}", category);
-            updated = dataStore.update(category);
+        if (group != null) {
+            LOGGER.info("Updating Group {}", group);
+            updated = dataStore.update(group);
         }
         return updated;
     }
 
     /**
-     * Delete a Category with given String
+     * Delete a Group with given String
      *
-     * @param categoryName String to be delete
+     * @param groupName String to be delete
      * @return status of Delete
      */
-    public Boolean delete(String categoryName) throws DataStoreException {
-        LOGGER.info("Deleting Category {}", categoryName);
-        linkService.deleteLinksUnder(categoryName);        
-        return dataStore.delete(LinkCategory.class, categoryName);
+    public Boolean delete(String groupName) throws DataStoreException {
+        LOGGER.info("Deleting Group {}", groupName);
+        linkService.deleteLinksUnder(groupName);        
+        return dataStore.delete(LinkGroup.class, groupName);
     }
 
     /**
      * 
      * @return list all the categories
      */
-    public List<LinkCategory> list() throws DataStoreException {
-        return dataStore.list(LinkCategory.class);
+    public List<LinkGroup> list() throws DataStoreException {
+        return dataStore.list(LinkGroup.class);
     }
 
     /**
-     * Get the list of first level links with given category name
+     * Get the list of first level links with given group name
      *
-     * @param categoryName Object to be search
+     * @param groupName Object to be search
      * @return list of links
      */
-    public List<Link> getFirstLevelLinks(String categoryName) throws DataStoreException {
-        LOGGER.info("Getting first level links of category {}", categoryName);
+    public List<Link> getFirstLevelLinks(String groupName) throws DataStoreException {
+        LOGGER.info("Getting first level links of group {}", groupName);
         Query query = new Query();
-        query.addFilter(new Filter<>("categoryName", EQUALS, categoryName));
+        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
         query.addFilter(new Filter<>("parentLinkName", IS_NULL));
         return dataStore.list(Link.class, query);
     }
@@ -119,13 +119,13 @@ public class LinkCategoryService {
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
         Map<String, List<Link>> applicationLinks = new HashMap<>();
-        List<LinkCategory> categories = list();
+        List<LinkGroup> categories = list();
         if (categories != null) {
             List<Link> firstlevelLinks;
-            for (LinkCategory category : categories) {
-                firstlevelLinks = getFirstLevelLinks(category.getName());
+            for (LinkGroup group : categories) {
+                firstlevelLinks = getFirstLevelLinks(group.getName());
                 walkLinkTree(firstlevelLinks);
-                applicationLinks.put(category.getName(), firstlevelLinks);
+                applicationLinks.put(group.getName(), firstlevelLinks);
             }
         }
 

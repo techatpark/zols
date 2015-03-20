@@ -17,7 +17,7 @@ import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.links.domain.LinkCategory;
+import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
 
 @Service
@@ -26,7 +26,7 @@ public class LinkService {
     private static final Logger LOGGER = getLogger(LinkService.class);
 
     @Autowired
-    private LinkCategoryService categoryService;
+    private LinkGroupService linkGroupService;
 
     @Autowired
     private DataStore dataStore;
@@ -40,13 +40,13 @@ public class LinkService {
     public Link create(Link link) throws DataStoreException {
         Link createdLink = null;
         if (link != null) {
-            
+
             createdLink = dataStore.create(Link.class, link);
             LOGGER.info("Created Link {}", createdLink.getName());
-            
-            if(link.getTargetUrl() == null || link.getTargetUrl().trim().length() ==0) {
+
+            if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
                 LOGGER.info("Setting Default Link URL {}", createdLink.getName());
-                createdLink.setTargetUrl("/create_page/"+createdLink.getName());
+                createdLink.setTargetUrl("/create_page/" + createdLink.getName());
                 update(createdLink);
             }
         }
@@ -87,19 +87,25 @@ public class LinkService {
      */
     public Boolean delete(String linkName) throws DataStoreException {
         LOGGER.info("Deleting Link {}", linkName);
+        List<Link> children = listChildren(linkName);
+        if (children != null) {
+            for (Link child : children) {
+                delete(child.getName());
+            }
+        }
         return dataStore.delete(Link.class, linkName);
     }
 
     /**
      * Get the list of link with given Parent name
      *
-     * @param categoryName String to be search
+     * @param groupName String to be search
      * @return list of links
      */
-    public Boolean deleteLinksUnder(String categoryName) throws DataStoreException {
-        LOGGER.info("Deleting links under category {}", categoryName);
+    public Boolean deleteLinksUnder(String groupName) throws DataStoreException {
+        LOGGER.info("Deleting links under group {}", groupName);
         Query query = new Query();
-        query.addFilter(new Filter<>("categoryName", EQUALS, categoryName));
+        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
         return dataStore.delete(Link.class, query);
     }
 
@@ -117,7 +123,7 @@ public class LinkService {
     }
 
     /**
-     * 
+     *
      * @return list of links
      */
     public List<Link> list() throws DataStoreException {
@@ -126,21 +132,21 @@ public class LinkService {
     }
 
     /**
-     * 
+     *
      * @return list of application links
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
-        List<LinkCategory> categories = categoryService.list();
+        List<LinkGroup> categories = linkGroupService.list();
         if (categories != null) {
             Map<String, List<Link>> applicationLinks = new HashMap<>(categories.size());
             List<Link> firstlevelLinks;
-            for (LinkCategory category : categories) {
-                firstlevelLinks = categoryService.getFirstLevelLinks(category.getName());
+            for (LinkGroup group : categories) {
+                firstlevelLinks = linkGroupService.getFirstLevelLinks(group.getName());
                 if (firstlevelLinks != null) {
                     for (Link link : firstlevelLinks) {
                         link.setChildren(listChildren(link.getName()));
                     }
-                    applicationLinks.put(category.getName(), firstlevelLinks);
+                    applicationLinks.put(group.getName(), firstlevelLinks);
                 }
 
             }
@@ -149,7 +155,7 @@ public class LinkService {
 
         return null;
     }
-    
+
     /**
      * Update a Link with given Url
      *
@@ -157,7 +163,7 @@ public class LinkService {
      * @param url URL to be linked
      * @return status of the Update
      */
-    public Boolean linkUrl(String linkName,String url) throws DataStoreException {
+    public Boolean linkUrl(String linkName, String url) throws DataStoreException {
         Boolean updated = false;
         if (linkName != null) {
             LOGGER.info("Updating Link with url {}", linkName);
