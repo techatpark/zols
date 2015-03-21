@@ -63,6 +63,11 @@ public class ElasticSearchDataStore extends DataStore {
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
         node = nodeBuilder().node();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
         createIndexIfNotExists();
     }
 
