@@ -32,7 +32,7 @@ gulp.task('copytemplates',['thymeleaf'], function () {
   return gulp.src(['dist/**/*.html'
 		//,'!dist/index.html'
 		])
-  .pipe(gulp.dest('../zols-cms-plugin/src/main/resources/zolstemplates'));
+  .pipe(gulp.dest('../zols-cms-plugin/src/main/resources/templates'));
 });
 
 gulp.task('release', ['copystatic', 'copytemplates']);

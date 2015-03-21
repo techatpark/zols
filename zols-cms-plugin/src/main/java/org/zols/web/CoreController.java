@@ -33,32 +33,32 @@ public class CoreController {
     @RequestMapping("/controlpanel")
     @Secured("ROLE_ADMIN")
     public String controlpanel() {
-        return "controlpanel";
+        return "zols/controlpanel";
     }
 
     @RequestMapping("/links")
     @Secured("ROLE_ADMIN")
     public String links() {
-        return "links";
+        return "zols/links";
     }
 
     @RequestMapping("/schema")
     @Secured("ROLE_ADMIN")
     public String schema() {
-        return "schema";
+        return "zols/schema";
     }
     
     @RequestMapping("/master")
     @Secured("ROLE_ADMIN")
     public String master() throws DataStoreException {
-        return "master";
+        return "zols/master";
     }
 
     @RequestMapping("/templates")
     @Secured("ROLE_ADMIN")
     public String templates(Model model) throws DataStoreException {
         model.addAttribute("schemas", schemaService.list());
-        return "templates";
+        return "zols/templates";
     }
 
     @RequestMapping("/pages/{name}")
@@ -72,7 +72,7 @@ public class CoreController {
     @Secured("ROLE_ADMIN")
     public String createPage(@PathVariable(value = "linkName") String linkName,Model model) {
         model.addAttribute("linkName", linkName);
-        return "create_page";
+        return "zols/create_page";
     }
 
 }

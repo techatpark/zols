@@ -2,18 +2,28 @@
 <html class="no-js">
     <head>
         <meta charset="utf-8"/>
-        <title>Zols</title>
+        <title>Control Panel</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="styles/zols.css"/>
+        <link rel="stylesheet" href="../styles/zols.css"/>
         <!-- endbuild -->
 
         <!-- build:js scripts/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="../bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
+
+        <!-- build:js scripts/zols.js -->
+        <!-- bower:js -->
+        <script src="../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
+        <!-- endbower -->
+        <script src="../scripts/jsviews.min.js"></script>
+        <!-- endbuild -->
+
     </head>
     <body>
         <div class="container-fluid" th:fragment="content">
@@ -53,62 +63,62 @@
                                             <div class="carousel-inner">
                                                 <div class="active item">
                                                     <div class="row row-centered" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'controlPanel'">
-                                                        <a th:each="link : ${linkentry.value}" href="/schema.html" th:href="@{/schema}">
+                                                        <a th:each="link : ${linkentry.value}" href="schema.html" th:href="${link.targetUrl}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/documents.svg" alt="Schema" class="img-rounded"/>
+                                                                <img src="../images/modules/documents.svg" alt="Schema" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5 th:text="${link.label}">Schema</h5>                                                                
                                                                 </div>
                                                             </div></a>
                                                         <!--/*-->
-                                                        <a href="/master.html" th:href="@{/master}">
+                                                        <a href="master.html" th:href="@{/master}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/documents.svg" alt="Schema" class="img-rounded"/>
+                                                                <img src="../images/modules/documents.svg" alt="Schema" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Master</h5>                                                                
                                                                 </div>
                                                             </div></a>                                                        
-                                                        <a href="/templates.html" th:href="@{/templates}">
+                                                        <a href="templates.html" th:href="@{/templates}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Templates</h5>                                                                
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="/links.html" th:href="@{/links}">
+                                                        <a href="links.html" th:href="@{/links}">
                                                             <div class="col-sm-6 col-md-3">
 
-                                                                <img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/>
+                                                                <img src="../images/modules/documents.svg" alt="Documents" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Links</h5>                                                                
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="/documents.html" th:href="@{/documents}">
+                                                        <a href="documents.html" th:href="@{/documents}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Documents</h5>                                                                
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="/users.html" th:href="@{/users}">
+                                                        <a href="users.html" th:href="@{/users}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/documents.svg" alt="Documents" class="img-rounded"/>
+                                                                <img src="../images/modules/documents.svg" alt="Documents" class="img-rounded"/>
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Users</h5>                                                                
                                                                 </div>
                                                             </div>
                                                         </a>
-                                                        <a href="/setting.html" th:href="@{/setting}">
+                                                        <a href="setting.html" th:href="@{/setting}">
                                                             <div class="col-sm-6 col-md-3">
-                                                                <img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Settings</h5>                                                                
@@ -129,21 +139,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- build:js scripts/zols.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
-        <!-- endbower -->
-        <script src="scripts/jsviews.min.js"></script>
-        <!-- endbuild -->
-
-        <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/zolsUi.js"></script>       
-        <!-- inject:partials -->
-        <!-- endinject -->
-        <!-- endbuild -->
 
         <!-- References 
         http://bootsnipp.com/snippets/6GM92

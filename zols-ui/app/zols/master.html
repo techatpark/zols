@@ -8,20 +8,20 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="styles/zols.css"/>
+        <link rel="stylesheet" href="../styles/zols.css"/>
         <!-- endbuild -->
 
         <!-- build:js scripts/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="../bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
         <!-- build:js scripts/zols.js -->
         <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
-        <script src="scripts/jsviews.min.js"></script>
+        <script src="../scripts/jsviews.min.js"></script>
         <!-- endbuild -->
     </head>
     <body>
@@ -67,6 +67,14 @@
                     </div>
                 </div>
             </div>
+            
+            <script id="noTemplateRepository" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Schema created. click <a>here</a> to create one
+                </div>
+                </div>
+            </script>
 
             <script id="listSchemas" type="text/x-jsrender">
                 {{if schema.length !==0}}
@@ -154,8 +162,8 @@
             </script>
 
             <!-- build:js({app,.tmp}) scripts/master.js -->
-            <script src="scripts/master.js"></script> 
-            <script src="scripts/data.js"></script>
+            <script src="../scripts/master.js"></script> 
+            <script src="../scripts/data.js"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->

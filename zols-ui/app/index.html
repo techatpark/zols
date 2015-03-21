@@ -47,11 +47,11 @@
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
                         <li th:each="link : ${linkentry.value}">
-                            <a th:href="${link.targetUrl}" th:text="${link.label}" href="/links.html">Links</a>                            
+                            <a th:href="${link.targetUrl}" th:text="${link.label}" href="zols/links.html">Links</a>                            
                         </li>
                         <!--/*-->
-                        <li><a href="templates.html">Templates</a></li>
-                        <li><a href="schema.html">Schema</a></li>
+                        <li><a href="zols/templates.html">Templates</a></li>
+                        <li><a href="zols/schema.html">Schema</a></li>
                         <!--*/-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -65,7 +65,7 @@
                             </a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="controlpanel.html" th:href="@{/controlpanel}" >
+                                    <a href="zols/controlpanel.html" th:href="@{/controlpanel}" >
                                         Control Panel
                                     </a>
                                 </li>

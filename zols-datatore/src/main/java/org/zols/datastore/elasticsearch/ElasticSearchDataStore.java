@@ -51,13 +51,18 @@ public class ElasticSearchDataStore extends DataStore {
 
     public ElasticSearchDataStore() {
         this.indexName = "zols";
-        node = nodeBuilder().local(true).data(true).node();
+        node = nodeBuilder().node();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
         createIndexIfNotExists();
     }
 
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
-        node = nodeBuilder().local(true).node();
+        node = nodeBuilder().node();
         createIndexIfNotExists();
     }
 

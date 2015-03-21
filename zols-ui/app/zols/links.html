@@ -2,30 +2,32 @@
 <html class="no-js" >
     <head>
         <meta charset="utf-8"/>
-        <title>Template Manager</title>
+        <title>Zols - Link Manager</title>
         <meta name="description" content=""/>
         <meta name="viewport" content="width=device-width"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="styles/zols.css"/>
+        <link rel="stylesheet" href="../styles/zols.css"/>
         <!-- endbuild -->
 
         <!-- build:js scripts/modernizr.js -->
-        <script src="bower_components/modernizr/modernizr.js"></script>
+        <script src="../bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
         <!-- build:js scripts/zols.js -->
         <!-- bower:js -->
-        <script src="bower_components/jquery/dist/jquery.js"></script>
-        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
-        <script src="scripts/jsviews.min.js"></script>
+        <script src="../scripts/jsviews.min.js"></script>
         <!-- endbuild -->
 
     </head>
     <body>
+
+
 
         <div class="container-fluid" th:fragment="content">
             <div class="row"  >
@@ -34,19 +36,20 @@
                         <div class="row show-grid">
                             <div class="pull-left">
                                 <h4>
-                                    <span id="pageTitle">Templates</span>
+                                    <span id="pageTitle">Links</span>
 <!--                                    <span class="badge">                  
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>-->
                                 </h4>
                             </div>
-                            <div class="pull-right" id="templateRepositoryHeader">
-                                <label>Repository</label>                                    
-                                <label data-bind-col="templateRepositoryname" id="templateRepositorynameLbl">Name</label>
-                                <div class="btn-group" id="templateRepository-list">
+                            <div class="pull-right" id="groupHeader">
+                                <label>Group</label>                                    
+                                <label data-bind-col="groupname" id="groupnameLbl">Group Name</label>
+
+                                <div class="btn-group" id="group-list">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                            <span data-bind-col="templateRepositoryname">Dropdown</span>
+                                            <span data-bind-col="groupname">Dropdown</span>
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu" id="categories">
@@ -57,8 +60,16 @@
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
+
+
+                <div class="row-fluid" id="linksBreadcrumb">
+
+                </div>
+
                 <div class="row-fluid" id="result">
 
                 </div>
@@ -79,45 +90,38 @@
                 </div>
             </div>
 
-
-            <script id="noTemplateRepository" type="text/x-jsrender">
+            <script id="noGroup" type="text/x-jsrender">
                 <div class="jumbotron">
                 <div class="container">
-                There are no Template Repository to display. click <a>here</a> to create one
+                There are no Group to display click <a>here</a>
                 </div>
                 </div>
             </script>
 
-            <script id="getTemplateRepositoryType" type="text/x-jsrender">
+            <script id="noLink" type="text/x-jsrender">
                 <div class="jumbotron">
                 <div class="container">
-                <p>Please select the Repository Type</p>
-                <p>
-                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a> 
-                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="url">URL</a> 
-                <!--<a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> -->
-                </p>
+                There are no Link to display click <a>here</a>
                 </div>
                 </div>
             </script>
 
-            <script id="noTemplate" type="text/x-jsrender">
-                <div class="jumbotron">
-                <div class="container">
-                There are no Template to display. click <a>here</a> to create one
-                </div>
-                </div>
+            <script id="breadcrumb" type="text/x-jsrender">
+                <ol  class="breadcrumb">                    
+                <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
+                {{for parentLink}}
+                <li><a href="#">{{:name}}</a></li>
+                {{/for}}
+                </ol>
             </script>
 
-
-
-            <script id="listTemplate" type="text/x-jsrender">
+            <script id="listLink" type="text/x-jsrender">
                 {{if link.length !==0}}
 
                 <ul class="list-group">                    
                 {{for link}}
                 <li class="list-group-item">
-                {{:label}}
+                <a href="#">{{:label}}</a>
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
@@ -125,20 +129,20 @@
                 </ul>
                 {{/if}}
 
-                <a id="addMoreTemplateBtn" href="#">Add More</a>
+                <a id="addMoreLinkBtn" href="#">Add More</a>
             </script>
 
-            <script id="listTemplateRepository" type="text/x-jsrender">
-                {{for templateRepository}}
+            <script id="listGroup" type="text/x-jsrender">
+                {{for group}}
                 <li>
                 <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
                 </li>
                 {{/for}}
                 <li class="divider"></li>
-                <li><a id="createTemplateRepository">Create New</a></li>
+                <li><a id="createGroup">Create New</a></li>
             </script>
 
-            <script id="repositoryForm" type="text/x-jsrender">
+            <script id="catetoryForm" type="text/x-jsrender">
                 <form class="form-horizontal">
                 <fieldset>
 
@@ -149,7 +153,7 @@
                 {{if isEdit}}
                 <label class="col-md-4 control-label" for="name">{{:name}}</label>  
                 {{else}}
-                <input id="name" name="name" data-link="name" type="text" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" placeholder="" class="form-control input-md" required=""/>
+                <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
                 </div>
                 </div>
@@ -159,63 +163,9 @@
                 <label class="col-md-4 control-label" for="label">Label</label>  
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
 
-                <!-- Text input-->
-                <div class="form-group" style="display:none">
-                <label class="col-md-4 control-label" for="type">Type</label>  
-                <div class="col-md-4">
-                <input id="type" name="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-
-                {{if type === 'file' || type === 'url'}}
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="path">Path</label>  
-                <div class="col-md-4">
-                <input id="path" name="path" data-link="path" path="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-                {{else}}
-
-                {{if type === 'ftp'}}
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="host">Host</label>  
-                <div class="col-md-4">
-                <input id="host" name="host" data-link="host" host="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="userName">User Name</label>  
-                <div class="col-md-4">
-                <input id="userName" name="userName" data-link="userName" userName="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="password">Password</label>  
-                <div class="col-md-4">
-                <input id="password" name="password" data-link="password" password="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-
-                {{else}}
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="rootFolder">Root Folder</label>  
-                <div class="col-md-4">
-                <input id="rootFolder" name="rootFolder" data-link="rootFolder" rootFolder="text" placeholder="" class="form-control input-md" required=""/>
-                </div>
-                </div>
-                {{/if}}
-
-                {{/if}}
 
                 <!-- Textarea -->
                 <div class="form-group">
@@ -242,7 +192,7 @@
             </script>
 
 
-            <script id="templateForm" type="text/x-jsrender">
+            <script id="linkForm" type="text/x-jsrender">
                 <form class="form-horizontal">
                 <fieldset>
 
@@ -266,27 +216,17 @@
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-
+        
+        
                 <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="dataType">Data Type</label>  
+                <div class="form-group" style="display:none">
+                <label class="col-md-4 control-label" for="targetUrl">URL</label>  
                 <div class="col-md-4">
-                <select id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required="">
-                <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}" value="Sample">Sample Schema</option>
-                </select>                
+                <input id="targetUrl" name="targetUrl" data-link="targetUrl" type="text" placeholder="" class="form-control input-md"/>
+
                 </div>
                 </div>
 
-                <!-- Text input-->
-                <div class="form-group">
-                <label class="col-md-4 control-label" for="path">Path</label>  
-                <div class="col-md-4">
-                <select id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required="">
-                </select>
-                </div>
-                </div>                
-                
-                
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
@@ -312,8 +252,8 @@
             </script>
 
 
-            <!-- build:js({app,.tmp}) scripts/templates.js -->
-            <script src="scripts/templates.js"></script>       
+            <!-- build:js({app,.tmp}) scripts/links.js -->
+            <script src="../scripts/links.js" th:src="@{/scripts/links.js}"></script>       
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
@@ -322,7 +262,16 @@
 
 
 
+
+
+
+
+
+
+
         <!-- References        
+        http://bootsnipp.com/snippets/featured/responsive-breadcrumbs
+        http://bootsnipp.com/snippets/featured/triangle-breadcrumbs-arrows
         -->
 
     </body>
