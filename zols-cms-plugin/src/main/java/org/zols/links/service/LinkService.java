@@ -15,15 +15,21 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
+import org.zols.links.provider.LinkProvider;
 
 @Service
 public class LinkService {
 
     private static final Logger LOGGER = getLogger(LinkService.class);
+    
+    
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Autowired
     private LinkGroupService linkGroupService;
@@ -149,6 +155,12 @@ public class LinkService {
                     applicationLinks.put(group.getName(), firstlevelLinks);
                 }
 
+            }
+
+            Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
+
+            for (Map.Entry<String, LinkProvider> entry : beansMap.entrySet()) {
+                applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
             }
             return applicationLinks;
         }

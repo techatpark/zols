@@ -24,12 +24,12 @@
                             <div class="pull-left">
                                 <h4>
                                     <span id="pageTitle">Control Panel</span>
-<!--                                    <span class="badge">                  
-                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
-                                    </span>-->
+                                    <!--                                    <span class="badge">                  
+                                                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                                                        </span>-->
                                 </h4>
                             </div>
-                            
+
                         </div>
 
 
@@ -52,15 +52,16 @@
                                             <!-- Carousel items -->
                                             <div class="carousel-inner">
                                                 <div class="active item">
-                                                    <div class="row row-centered">
-                                                        <a href="/schema.html" th:href="@{/schema}">
+                                                    <div class="row row-centered" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'controlPanel'">
+                                                        <a th:each="link : ${linkentry.value}" href="/schema.html" th:href="@{/schema}">
                                                             <div class="col-sm-6 col-md-3">
                                                                 <img src="images/modules/documents.svg" alt="Schema" class="img-rounded"/>
 
                                                                 <div class="col-md-offset-1">
-                                                                    <h5>Schema</h5>                                                                
+                                                                    <h5 th:text="${link.label}">Schema</h5>                                                                
                                                                 </div>
                                                             </div></a>
+                                                        <!--/*-->
                                                         <a href="/master.html" th:href="@{/master}">
                                                             <div class="col-sm-6 col-md-3">
                                                                 <img src="images/modules/documents.svg" alt="Schema" class="img-rounded"/>
@@ -68,7 +69,8 @@
                                                                 <div class="col-md-offset-1">
                                                                     <h5>Master</h5>                                                                
                                                                 </div>
-                                                            </div></a>                                                        <a href="/templates.html" th:href="@{/templates}">
+                                                            </div></a>                                                        
+                                                        <a href="/templates.html" th:href="@{/templates}">
                                                             <div class="col-sm-6 col-md-3">
                                                                 <img src="images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
 
@@ -113,6 +115,7 @@
                                                                 </div>
                                                             </div>
                                                         </a>
+                                                        <!--*/-->
                                                     </div>
                                                 </div>
 

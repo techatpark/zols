@@ -17,12 +17,10 @@ import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
-import org.zols.links.provider.LinkProvider;
 
 @Service
 public class LinkGroupService {
@@ -35,8 +33,6 @@ public class LinkGroupService {
     @Autowired
     private LinkService linkService;
 
-    @Autowired
-    private ApplicationContext applicationContext;
 
     /**
      * Creates a new Group with given Object
@@ -127,13 +123,7 @@ public class LinkGroupService {
                 walkLinkTree(firstlevelLinks);
                 applicationLinks.put(group.getName(), firstlevelLinks);
             }
-        }
-
-        Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
-
-        for (Map.Entry<String, LinkProvider> entry : beansMap.entrySet()) {
-            applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
-        }
+        }       
 
         return applicationLinks;
     }
