@@ -29,4 +29,4 @@ build
 **/deploy.txt
 /zols-ui/app/nbproject/private/
 /zols-cms-plugin/src/main/resources/static
-/zols-cms-plugin/src/main/resources/zolstemplates
+/zols-cms-plugin/src/main/resources/templates
