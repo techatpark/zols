@@ -42,7 +42,7 @@ gulp.task('html', ['styles', 'scripts', 'partials'], function () {
   var jsFilter = $.filter('**/*.js');
   var cssFilter = $.filter('**/*.css');
 
-  return gulp.src('app/*.html')
+  return gulp.src('app/**/*.html')
     .pipe($.inject(gulp.src('.tmp/partials/**/*.js'), {
       read: false,
       starttag: '<!-- inject:partials -->',
