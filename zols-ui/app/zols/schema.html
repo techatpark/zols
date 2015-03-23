@@ -8,20 +8,20 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="../styles/zols.css"/>
+        <link rel="stylesheet" href="styles/zols.css"/>
         <!-- endbuild -->
 
-        <!-- build:js scripts/modernizr.js -->
-        <script src="../bower_components/modernizr/modernizr.js"></script>
+        <!-- build:js(app) scripts/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
-        <!-- build:js scripts/zols.js -->
+        <!-- build:js(app) scripts/zols.js -->
         <!-- bower:js -->
-        <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
-        <script src="../scripts/jsviews.min.js"></script>
+        <script src="scripts/jsviews.min.js"></script>
         <!-- endbuild -->
 
     </head>
@@ -80,7 +80,7 @@
                 </div>
                 </div>
             </script>
-            
+
             <script id="listSchema" type="text/x-jsrender">
 
                 {{if schema.length !==0}}
@@ -129,7 +129,7 @@
                 </select>
                 </div>
                 </div>
-        
+
                 <!-- Select input-->
                 <div class="form-group" data-link="visible{:prop.type === 'string'}">
                 <label class="col-md-4 control-label" for="type">Format</label>
@@ -148,7 +148,7 @@
                 <option name="string" value="tel">tel</option>
                 <option name="string" value="time">Time</option>
                 <option name="string" value="url">Url</option>
-                <option name="string" value="week">Week</option>        
+                <option name="string" value="week">Week</option>
                 </select>
                 </div>
                 </div>
@@ -160,7 +160,7 @@
                 <input name="required" type="checkbox"  data-link="prop.required" class="form-control input-md"/>
                 </div>
                 </div>
-        
+
                 <!-- checkbox input-->
                 <div class="form-group" data-link="visible{:prop.format === 'html'}">
                 <label   class="col-md-4 control-label" for="wysiwyg">is wysiwyg?</label>
@@ -182,7 +182,7 @@
                 <label class="col-md-4 control-label" for="id">Id</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="id">{{:id}}</label>  
+                <label class="col-md-4 control-label" for="id">{{:id}}</label>
                 {{else}}
                 <input name="id" data-link="id" id="schemaId" type="text" placeholder="" class="form-control input-md" required=""/>
                 {{/if}}
@@ -196,32 +196,32 @@
                 <input name="title" id="title" data-link="title" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-        
+
                 <!-- Text input-->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="idField">ID Field</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="idField">{{:idField}}</label>  
+                <label class="col-md-4 control-label" for="idField">{{:idField}}</label>
                 {{else}}
-                <select name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required="">                   
+                <select name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required="">
                 </select>
-                {{/if}}                
+                {{/if}}
                 </div>
                 </div>
-        
+
                 <!-- Text input-->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="labelField">Label Field</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="labelField">{{:labelField}}</label>  
+                <label class="col-md-4 control-label" for="labelField">{{:labelField}}</label>
                 {{else}}
-                <select name="labelField" id="labelField" data-link="labelField" type="text" placeholder="" class="form-control input-md" required="">                   
+                <select name="labelField" id="labelField" data-link="labelField" type="text" placeholder="" class="form-control input-md" required="">
                 </select>
-                {{/if}}                
+                {{/if}}
                 </div>
-                </div>       
+                </div>
 
                 <!-- Text input-->
                 <div class="form-group" style="display:none;">
@@ -258,7 +258,7 @@
             </script>
 
             <!-- build:js({app,.tmp}) scripts/main.js -->
-            <script src="../scripts/schema.js"></script>
+            <script src="scripts/schema.js"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->

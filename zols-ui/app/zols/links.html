@@ -8,20 +8,20 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="../styles/zols.css"/>
+        <link rel="stylesheet" href="styles/zols.css"/>
         <!-- endbuild -->
 
-        <!-- build:js scripts/modernizr.js -->
-        <script src="../bower_components/modernizr/modernizr.js"></script>
+        <!-- build:js(app) scripts/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
-        <!-- build:js scripts/zols.js -->
+        <!-- build:js(app) scripts/zols.js -->
         <!-- bower:js -->
-        <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
-        <script src="../scripts/jsviews.min.js"></script>
+        <script src="scripts/jsviews.min.js"></script>
         <!-- endbuild -->
 
     </head>
@@ -37,13 +37,13 @@
                             <div class="pull-left">
                                 <h4>
                                     <span id="pageTitle">Links</span>
-<!--                                    <span class="badge">                  
+<!--                                    <span class="badge">
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>-->
                                 </h4>
                             </div>
                             <div class="pull-right" id="groupHeader">
-                                <label>Group</label>                                    
+                                <label>Group</label>
                                 <label data-bind-col="groupname" id="groupnameLbl">Group Name</label>
 
                                 <div class="btn-group" id="group-list">
@@ -76,7 +76,7 @@
 
             </div>
 
-            <div class="modal fade bs-example-modal-sm" 
+            <div class="modal fade bs-example-modal-sm"
                  id="delete-conf-model"
                  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
@@ -107,7 +107,7 @@
             </script>
 
             <script id="breadcrumb" type="text/x-jsrender">
-                <ol  class="breadcrumb">                    
+                <ol  class="breadcrumb">
                 <li><a href="#"><i class="glyphicon glyphicon-home"></i></a></li>
                 {{for parentLink}}
                 <li><a href="#">{{:name}}</a></li>
@@ -118,7 +118,7 @@
             <script id="listLink" type="text/x-jsrender">
                 {{if link.length !==0}}
 
-                <ul class="list-group">                    
+                <ul class="list-group">
                 {{for link}}
                 <li class="list-group-item">
                 <a href="#">{{:label}}</a>
@@ -135,7 +135,7 @@
             <script id="listGroup" type="text/x-jsrender">
                 {{for group}}
                 <li>
-                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
+                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>
                 </li>
                 {{/for}}
                 <li class="divider"></li>
@@ -148,10 +148,10 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Name</label>  
+                <label class="col-md-4 control-label" for="name">Name</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
                 {{else}}
                 <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
@@ -160,7 +160,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="label">Label</label>  
+                <label class="col-md-4 control-label" for="label">Label</label>
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
 
@@ -170,7 +170,7 @@
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
-                <div class="col-md-4">                     
+                <div class="col-md-4">
                 <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
                 </div>
                 </div>
@@ -198,10 +198,10 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Name</label>  
+                <label class="col-md-4 control-label" for="name">Name</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
                 {{else}}
                 <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
@@ -211,16 +211,16 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="label">Label</label>  
+                <label class="col-md-4 control-label" for="label">Label</label>
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
                 </div>
-        
-        
+
+
                 <!-- Text input-->
                 <div class="form-group" style="display:none">
-                <label class="col-md-4 control-label" for="targetUrl">URL</label>  
+                <label class="col-md-4 control-label" for="targetUrl">URL</label>
                 <div class="col-md-4">
                 <input id="targetUrl" name="targetUrl" data-link="targetUrl" type="text" placeholder="" class="form-control input-md"/>
 
@@ -230,7 +230,7 @@
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
-                <div class="col-md-4">                     
+                <div class="col-md-4">
                 <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
                 </div>
                 </div>
@@ -253,7 +253,7 @@
 
 
             <!-- build:js({app,.tmp}) scripts/links.js -->
-            <script src="../scripts/links.js" th:src="@{/scripts/links.js}"></script>       
+            <script src="scripts/links.js" th:src="@{/scripts/links.js}"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
@@ -269,7 +269,7 @@
 
 
 
-        <!-- References        
+        <!-- References
         http://bootsnipp.com/snippets/featured/responsive-breadcrumbs
         http://bootsnipp.com/snippets/featured/triangle-breadcrumbs-arrows
         -->

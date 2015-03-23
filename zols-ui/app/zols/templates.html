@@ -8,20 +8,20 @@
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
         <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="../styles/zols.css"/>
+        <link rel="stylesheet" href="styles/zols.css"/>
         <!-- endbuild -->
 
-        <!-- build:js scripts/modernizr.js -->
-        <script src="../bower_components/modernizr/modernizr.js"></script>
+        <!-- build:js(app) scripts/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
-        <!-- build:js scripts/zols.js -->
+        <!-- build:js(app) scripts/zols.js -->
         <!-- bower:js -->
-        <script src="../bower_components/jquery/dist/jquery.js"></script>
-        <script src="../bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="../bower_components/json-editor/dist/jsoneditor.js"></script>
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+        <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
-        <script src="../scripts/jsviews.min.js"></script>
+        <script src="scripts/jsviews.min.js"></script>
         <!-- endbuild -->
     </head>
     <body>
@@ -34,13 +34,13 @@
                             <div class="pull-left">
                                 <h4>
                                     <span id="pageTitle">Templates</span>
-<!--                                    <span class="badge">                  
+<!--                                    <span class="badge">
                                         <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                     </span>-->
                                 </h4>
                             </div>
                             <div class="pull-right" id="templateRepositoryHeader">
-                                <label>Repository</label>                                    
+                                <label>Repository</label>
                                 <label data-bind-col="templateRepositoryname" id="templateRepositorynameLbl">Name</label>
                                 <div class="btn-group" id="templateRepository-list">
                                     <div class="btn-group">
@@ -64,7 +64,7 @@
 
             </div>
 
-            <div class="modal fade bs-example-modal-sm" 
+            <div class="modal fade bs-example-modal-sm"
                  id="delete-conf-model"
                  tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-sm">
@@ -92,8 +92,8 @@
                 <div class="container">
                 <p>Please select the Repository Type</p>
                 <p>
-                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a> 
-                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="url">URL</a> 
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a>
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="url">URL</a>
                 <!--<a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> -->
                 </p>
                 </div>
@@ -113,7 +113,7 @@
             <script id="listTemplate" type="text/x-jsrender">
                 {{if link.length !==0}}
 
-                <ul class="list-group">                    
+                <ul class="list-group">
                 {{for link}}
                 <li class="list-group-item">
                 {{:label}}
@@ -130,7 +130,7 @@
             <script id="listTemplateRepository" type="text/x-jsrender">
                 {{for templateRepository}}
                 <li>
-                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>                
+                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>
                 </li>
                 {{/for}}
                 <li class="divider"></li>
@@ -143,10 +143,10 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Name</label>  
+                <label class="col-md-4 control-label" for="name">Name</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
                 {{else}}
                 <input id="name" name="name" data-link="name" type="text" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" placeholder="" class="form-control input-md" required=""/>
                 {{/if}}
@@ -155,7 +155,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="label">Label</label>  
+                <label class="col-md-4 control-label" for="label">Label</label>
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -163,7 +163,7 @@
 
                 <!-- Text input-->
                 <div class="form-group" style="display:none">
-                <label class="col-md-4 control-label" for="type">Type</label>  
+                <label class="col-md-4 control-label" for="type">Type</label>
                 <div class="col-md-4">
                 <input id="type" name="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -172,7 +172,7 @@
                 {{if type === 'file' || type === 'url'}}
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="path">Path</label>  
+                <label class="col-md-4 control-label" for="path">Path</label>
                 <div class="col-md-4">
                 <input id="path" name="path" data-link="path" path="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -182,7 +182,7 @@
                 {{if type === 'ftp'}}
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="host">Host</label>  
+                <label class="col-md-4 control-label" for="host">Host</label>
                 <div class="col-md-4">
                 <input id="host" name="host" data-link="host" host="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -190,7 +190,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="userName">User Name</label>  
+                <label class="col-md-4 control-label" for="userName">User Name</label>
                 <div class="col-md-4">
                 <input id="userName" name="userName" data-link="userName" userName="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -198,7 +198,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="password">Password</label>  
+                <label class="col-md-4 control-label" for="password">Password</label>
                 <div class="col-md-4">
                 <input id="password" name="password" data-link="password" password="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -207,7 +207,7 @@
                 {{else}}
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="rootFolder">Root Folder</label>  
+                <label class="col-md-4 control-label" for="rootFolder">Root Folder</label>
                 <div class="col-md-4">
                 <input id="rootFolder" name="rootFolder" data-link="rootFolder" rootFolder="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -219,7 +219,7 @@
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
-                <div class="col-md-4">                     
+                <div class="col-md-4">
                 <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
                 </div>
                 </div>
@@ -247,10 +247,10 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="name">Name</label>  
+                <label class="col-md-4 control-label" for="name">Name</label>
                 <div class="col-md-4">
                 {{if isEdit}}
-                <label class="col-md-4 control-label" for="name">{{:name}}</label>  
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
                 {{else}}
                 <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
                 {{/if}}
@@ -260,7 +260,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="label">Label</label>  
+                <label class="col-md-4 control-label" for="label">Label</label>
                 <div class="col-md-4">
                 <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
                 </div>
@@ -268,28 +268,28 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="dataType">Data Type</label>  
+                <label class="col-md-4 control-label" for="dataType">Data Type</label>
                 <div class="col-md-4">
                 <select id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required="">
                 <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}" value="Sample">Sample Schema</option>
-                </select>                
+                </select>
                 </div>
                 </div>
 
                 <!-- Text input-->
                 <div class="form-group">
-                <label class="col-md-4 control-label" for="path">Path</label>  
+                <label class="col-md-4 control-label" for="path">Path</label>
                 <div class="col-md-4">
                 <select id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required="">
                 </select>
                 </div>
-                </div>                
-                
-                
+                </div>
+
+
                 <!-- Textarea -->
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="description">Description</label>
-                <div class="col-md-4">                     
+                <div class="col-md-4">
                 <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
                 </div>
                 </div>
@@ -312,7 +312,7 @@
 
 
             <!-- build:js({app,.tmp}) scripts/templates.js -->
-            <script src="../scripts/templates.js"></script>       
+            <script src="scripts/templates.js"></script>
             <!-- inject:partials -->
             <!-- endinject -->
             <!-- endbuild -->
@@ -321,7 +321,7 @@
 
 
 
-        <!-- References        
+        <!-- References
         -->
 
     </body>
