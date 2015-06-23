@@ -214,6 +214,9 @@ public class ElasticSearchDataStore extends DataStore {
                         case EQUALS:
                             filterBuilders[index] = FilterBuilders.termFilter(filter.getName(), filter.getValue());
                             break;
+                        case EXISTS_IN:
+                            filterBuilders[index] = FilterBuilders.termsFilter(filter.getName(), filter.getValue());
+                            break;
                         case IS_NULL:
                             filterBuilders[index] = FilterBuilders.notFilter(FilterBuilders.existsFilter(filter.getName()));
                             break;
@@ -238,6 +241,9 @@ public class ElasticSearchDataStore extends DataStore {
                     switch (filter.getOperator()) {
                         case EQUALS:
                             queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
+                            break;
+                        case EXISTS_IN:
+                            queryBuilder.must(QueryBuilders.termsQuery(filter.getName(), filter.getValue()));
                             break;
                         case IS_NULL:
                             queryBuilder.mustNot(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilders.existsFilter(filter.getName())));

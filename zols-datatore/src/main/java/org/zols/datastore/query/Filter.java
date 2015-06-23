@@ -6,7 +6,7 @@
 package org.zols.datastore.query;
 
 /**
- * 
+ *
  * @author sathish_ku
  * @param <T> type of the object for which this filter has to be applied
  */
@@ -20,17 +20,21 @@ public class Filter<T> {
         /**
          * Compare with =
          */
+        EXISTS_IN,
+        /**
+         * Compare with =
+         */
         EQUALS,
         /**
-         * Compare with 
+         * Compare with
          */
         GREATER_THAN,
         /**
-         * Compare with 
+         * Compare with
          */
         GREATER_THAN_EQUALS,
         /**
-         * Compare with 
+         * Compare with
          */
         LESSER_THAN,
         /**
@@ -63,7 +67,7 @@ public class Filter<T> {
         this.operator = operator;
         this.value = value;
     }
-    
+
     /**
      * Intialize the Filter without value
      *

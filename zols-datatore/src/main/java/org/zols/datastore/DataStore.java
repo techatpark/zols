@@ -99,7 +99,26 @@ public abstract class DataStore {
     public List<Map<String, Object>> list(String schemaName) throws DataStoreException {
         return DataStore.this.listData(read(schemaName));
     }
-
+    
+    /**
+     * Creates a new object
+     *
+     * @param <T> Type of the Object
+     * @param clazz Class of the Object to be created
+     * @param itrbl Objects to be created
+     * @return created object
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    public <T> Iterable<T> create(Class<T> clazz, Iterable<T> itrbl) throws DataStoreException {
+        if(itrbl != null) {
+            List<T> savedObjects = new ArrayList<>();
+            for (T object : itrbl) {
+                savedObjects.add(create(clazz, object));
+            }
+            return savedObjects;
+        }
+        return null;
+    }
     /**
      * Creates a new object
      *
