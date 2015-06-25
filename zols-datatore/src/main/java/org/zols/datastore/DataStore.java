@@ -126,8 +126,9 @@ public abstract class DataStore {
      * @param clazz Class of the Object to be created
      * @param object Object to be created
      * @return created object
+     * @throws org.zols.datatore.exception.DataStoreException
      */
-    public <T> T create(Class<T> clazz, Object object) throws DataStoreException {
+    public <T> T create(Class<T> clazz, T object) throws DataStoreException {
         Map<String, Object> jsonData = tv4.getValueAsMap(object);
 
         try {
