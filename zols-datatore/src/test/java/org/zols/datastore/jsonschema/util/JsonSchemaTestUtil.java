@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.jsonschema;
+package org.zols.datastore.jsonschema.util;
 
 import java.io.IOException;
+import static java.lang.ClassLoader.getSystemResource;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
+import static java.nio.file.Files.readAllBytes;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,8 +22,8 @@ public class JsonSchemaTestUtil {
     public static String sampleJsonSchema(String schamaName) {
         String schemaContent = null;
         try {
-            schemaContent = new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/schema/" + schamaName + ".json").toURI())));
+            schemaContent = new String(readAllBytes(Paths
+                    .get(getSystemResource("org/zols/datastore/jsonschema/schema/" + schamaName + ".json").toURI())));
         } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -32,8 +33,8 @@ public class JsonSchemaTestUtil {
     public static String sampleJsonData(String dataName) {
         String schemaContent = null;
         try {
-            schemaContent = new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/jsondata/" + dataName + ".json").toURI())));
+            schemaContent = new String(readAllBytes(Paths
+                    .get(getSystemResource("org/zols/datastore/jsonschema/jsondata/" + dataName + ".json").toURI())));
         } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
