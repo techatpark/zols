@@ -14,11 +14,6 @@ import org.zols.datatore.exception.DataStoreException;
  */
 public abstract class DataStore {
     
-    public Map<String, Object> createSchema(String jsonSchemaTxt,String baseSchemaId) {
-        throw new UnsupportedOperationException("Yet to implemented");
-    }
-    
-    
     public Map<String, Object> createSchema(
             String jsonSchemaTxt)
             throws DataStoreException {

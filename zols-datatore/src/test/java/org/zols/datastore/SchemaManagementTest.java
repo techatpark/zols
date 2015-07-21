@@ -27,17 +27,17 @@ public class SchemaManagementTest {
 
     @Before
     public void beforeTest() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchema("simple"));
+        dataStore.createSchema(sampleJsonSchema("vechicle"));
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.deleteSchema("simple");
+        dataStore.deleteSchema("vechicle");
     }
 
     @Test
     public void testCreateSchema() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Schema", dataStore.getSchema("simple"));
+        Assert.assertNotNull("Creating Simple Schema", dataStore.getSchema("vechicle"));
     }
 
     @Test
@@ -47,8 +47,8 @@ public class SchemaManagementTest {
 
     @Test
     public void testDeleteSchema() throws DataStoreException {
-        dataStore.deleteSchema("simple");
-        Assert.assertNull("Deleted Simple Schema", dataStore.getSchema("simple"));
+        dataStore.deleteSchema("vechicle");
+        Assert.assertNull("Deleted Simple Schema", dataStore.getSchema("vechicle"));
     }
 
 }
