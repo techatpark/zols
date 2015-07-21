@@ -27,8 +27,14 @@ public class JsonSchemaTest {
     
     @Test
     public void testSimpleValidationWithReusableSchema() {
-        assertTrue("Successful Extended JSON Schema validation",
+        assertTrue("Successful Reusable JSON Schema validation",
                 jsonSchema(sampleJsonSchema("reusable")).validate(sampleJsonData("reusable")));
+    }
+    
+    @Test
+    public void testSimpleValidationWithExtendedSchema() {
+        assertTrue("Successful Extended JSON Schema validation",
+                jsonSchema(sampleJsonSchema("car")).validate(sampleJsonData("car")));
     }
     
     

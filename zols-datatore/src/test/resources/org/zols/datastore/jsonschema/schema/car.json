@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$ref": "#/definitions/vechicle",
+    "definitions": {
+        "vechicle": {
+            "type": "object",
+            "properties": {
+                "reg_number": {
+                    "type": "string"
+                }
+            },
+            "required": ["reg_number"]
+        }
+    },
+    "type": "object",
+    "properties": {
+        "four_wheel_drive": {
+            "type": "boolean"
+        }
+    }
+}
