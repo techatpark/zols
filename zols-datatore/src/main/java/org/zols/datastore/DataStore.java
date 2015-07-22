@@ -30,15 +30,25 @@ public abstract class DataStore {
         return readData(jsonSchemaForSchema(), id);
     }
 
-    public Map<String, Object> getSchema(String id, boolean withDefinisions)
+    public Map<String, Object> getSchemaWithDefinisions(String id)
             throws DataStoreException {
         Map<String, Object> schema = getSchema(id);
-        if (withDefinisions && schema != null) {
+        if (schema != null) {
             Map<String, Object> definitions = new HashMap<>();
             walkSchemaTree(schema, definitions);
             if (definitions.size() > 0) {
                 schema.put("definitions", definitions);
             }
+            schema = getOrderedSchema(schema);
+        }
+        return schema;
+    }
+    
+    private Map<String, Object> getSchemaWithDefinisions(String id,Map<String, Object> definitions)
+            throws DataStoreException {
+        Map<String, Object> schema = getSchema(id);
+        if (schema != null) {            
+            walkSchemaTree(schema, definitions); 
             schema = getOrderedSchema(schema);
         }
         return schema;
@@ -63,7 +73,7 @@ public abstract class DataStore {
         for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
             if (schemaEntry.getKey().equals("$ref")) {
                 schemaId = schemaEntry.getValue().toString();
-                definitions.put(schemaId, getSchema(schemaEntry.getValue().toString(), true));
+                definitions.put(schemaId, getSchemaWithDefinisions(schemaEntry.getValue().toString(),definitions));
                 schemaEntry.setValue("#/definitions/" + schemaId);
             } else if (schemaEntry.getValue() instanceof Map) {
                 walkSchemaTree((Map<String, Object>) schemaEntry.getValue(), definitions);
