@@ -19,7 +19,7 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(
             String jsonSchemaTxt)
             throws DataStoreException {
-        if (jsonSchemaForSchema().validate(jsonSchemaTxt)) {
+        if (jsonSchemaForSchema().validate(jsonSchemaTxt) == null) {
             return createData(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
         return null;

@@ -9,13 +9,18 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.validation.ConstraintViolation;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
 
@@ -31,8 +36,8 @@ public class JSONSchema {
     public static JSONSchema jsonSchema(String jsonSchema) {
         return new JSONSchema(jsonSchema);
     }
-    
-    public static JSONSchema jsonSchema(Map<String,Object> jsonSchema) {
+
+    public static JSONSchema jsonSchema(Map<String, Object> jsonSchema) {
         return new JSONSchema(asString(jsonSchema));
     }
 
@@ -69,12 +74,17 @@ public class JSONSchema {
     }
 
     // Validate the Data against Schema
-    public boolean validate(Map<String, Object> jsonData) {
+    public Set<ConstraintViolation> validate(Map<String, Object> jsonData) {
         return validate(asString(jsonData));
-
     }
-
-    public boolean validate(String jsonData) {
+    
+    /**
+     * validates using JSON Schema
+     * @param jsonData
+     * @return null if valid
+     */
+    public Set<ConstraintViolation> validate(String jsonData) {
+        Set<ConstraintViolation> constraintViolations = null;
         try {
             ScriptEngine scriptEngine = scriptEngine();
             Object TV4 = scriptEngine.eval("tv4");
@@ -83,15 +93,26 @@ public class JSONSchema {
                     = inv.invokeMethod(JSON, "parse", jsonSchemaAsTxt);
             Object dataToJavaScript
                     = inv.invokeMethod(JSON, "parse", jsonData);
-            Object validation = inv.invokeMethod(TV4, "validateResult", dataToJavaScript, schemaToJavaScript);
+            Object validation = inv.invokeMethod(TV4, "validateMultiple", dataToJavaScript, schemaToJavaScript);
 
             Map<String, Object> validationResult = asMap(inv.invokeMethod(JSON, "stringify", validation).toString());
 
-            return Boolean.valueOf(validationResult.get("valid").toString());
+            if (!(boolean) validationResult.get("valid")) {
+                Collection errors = (Collection) validationResult.get("errors");
+                constraintViolations = new HashSet<>(errors.size());
+                for (Object error : errors) {
+                    constraintViolations.add(new JsonSchemaConstraintViolation((Map<String, Object>) error));
+                }
+
+            }
+
         } catch (ScriptException | IOException | URISyntaxException | NoSuchMethodException e) {
-            e.printStackTrace();
+            constraintViolations = new HashSet<>(1);
+            Map<String, Object> error = new HashMap<>(1);
+            error.put("message", "unknown error");
+            constraintViolations.add(new JsonSchemaConstraintViolation((Map<String, Object>) error));
         }
-        return false;
+        return constraintViolations;
     }
 
     /**

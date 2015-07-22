@@ -14,7 +14,6 @@ import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonData;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
-import org.zols.datastore.util.JsonUtil;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -60,7 +59,7 @@ public class SchemaManagementTest {
     public void testGetSchemaWithDefinitions() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         Map<String, Object> carSchemaWithDefinitions = dataStore.getSchema("car", true);
-        Assert.assertTrue("Getting Schema with Defenisions", 
+        Assert.assertNull("Getting Schema with Defenisions", 
                 jsonSchema(carSchemaWithDefinitions)
                 .validate(sampleJsonData("car")));
     }
