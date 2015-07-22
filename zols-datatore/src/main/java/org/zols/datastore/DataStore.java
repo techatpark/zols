@@ -1,5 +1,7 @@
 package org.zols.datastore;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.zols.datastore.jsonschema.JSONSchema;
@@ -13,7 +15,7 @@ import org.zols.datatore.exception.DataStoreException;
  * @author Sathish Kumar Thiyagarajan
  */
 public abstract class DataStore {
-    
+
     public Map<String, Object> createSchema(
             String jsonSchemaTxt)
             throws DataStoreException {
@@ -22,16 +24,57 @@ public abstract class DataStore {
         }
         return null;
     }
-    
+
     public Map<String, Object> getSchema(String id)
             throws DataStoreException {
         return readData(jsonSchemaForSchema(), id);
     }
-    
+
+    public Map<String, Object> getSchema(String id, boolean withDefinisions)
+            throws DataStoreException {
+        Map<String, Object> schema = getSchema(id);
+        if (withDefinisions && schema != null) {
+            Map<String, Object> definitions = new HashMap<>();
+            walkSchemaTree(schema, definitions);
+            if (definitions.size() > 0) {
+                schema.put("definitions", definitions);
+            }
+            schema = getOrderedSchema(schema);
+        }
+        return schema;
+    }
+
+    private LinkedHashMap<String, Object> getOrderedSchema(Map<String, Object> schema) {
+        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(schema.size());
+        schema.remove("id");
+        linkedHashMap.put("$schema", schema.get("$schema"));
+        if (schema.get("definitions") != null) {
+            linkedHashMap.put("definitions", schema.get("definitions"));
+        }
+        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
+            linkedHashMap.putIfAbsent(schemaEntry.getKey(), schemaEntry.getValue());
+        }
+        return linkedHashMap;
+    }
+
+    private void walkSchemaTree(Map<String, Object> schema,
+            Map<String, Object> definitions) throws DataStoreException {
+        String schemaId;
+        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
+            if (schemaEntry.getKey().equals("$ref")) {
+                schemaId = schemaEntry.getValue().toString();
+                definitions.put(schemaId, getSchema(schemaEntry.getValue().toString(), true));
+                schemaEntry.setValue("#/definitions/" + schemaId);
+            } else if (schemaEntry.getValue() instanceof Map) {
+                walkSchemaTree((Map<String, Object>) schemaEntry.getValue(), definitions);
+            }
+        }
+    }
+
     public Boolean deleteSchema(String id) throws DataStoreException {
         return deleteData(jsonSchemaForSchema(), id);
     }
-    
+
     public List<Map<String, Object>> listSchema() throws DataStoreException {
         return listData(jsonSchemaForSchema());
     }
@@ -75,12 +118,12 @@ public abstract class DataStore {
     /**
      *
      * @param jsonSchema schema of dynamic data
-     * @param validatedDataObject validated Object
+     * @param validatedData validated Object
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract boolean updateData(JSONSchema jsonSchema,
-            Map<String, Object> validatedDataObject)
+            Map<String, Object> validatedData)
             throws DataStoreException;
 
     /**
@@ -98,5 +141,5 @@ public abstract class DataStore {
      * @throws DataStoreException
      */
     protected abstract void drop() throws DataStoreException;
-    
+
 }

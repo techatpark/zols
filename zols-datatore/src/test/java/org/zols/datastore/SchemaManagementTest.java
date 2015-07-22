@@ -5,12 +5,16 @@
  */
 package org.zols.datastore;
 
+import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
+import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonData;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
+import org.zols.datastore.util.JsonUtil;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -33,6 +37,7 @@ public class SchemaManagementTest {
     @After
     public void afterTest() throws DataStoreException {
         dataStore.deleteSchema("vechicle");
+        dataStore.deleteSchema("car");
     }
 
     @Test
@@ -49,6 +54,15 @@ public class SchemaManagementTest {
     public void testDeleteSchema() throws DataStoreException {
         dataStore.deleteSchema("vechicle");
         Assert.assertNull("Deleted Simple Schema", dataStore.getSchema("vechicle"));
+    }
+
+    @Test
+    public void testGetSchemaWithDefinitions() throws DataStoreException {
+        dataStore.createSchema(sampleJsonSchema("car"));
+        Map<String, Object> carSchemaWithDefinitions = dataStore.getSchema("car", true);
+        Assert.assertTrue("Getting Schema with Defenisions", 
+                jsonSchema(carSchemaWithDefinitions)
+                .validate(sampleJsonData("car")));
     }
 
 }

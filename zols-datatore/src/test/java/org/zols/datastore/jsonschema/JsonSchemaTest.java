@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.jsonschema;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -20,8 +21,21 @@ public class JsonSchemaTest {
 
     @Test
     public void testSimpleValidation() {
-        assertTrue("Successful Simple JSON Schema validation",
+        assertTrue("Simple JSON Schema validation",
                 jsonSchema(sampleJsonSchema("vechicle")).validate(sampleJsonData("vechicle")));
     }
-    
+
+    @Test
+    public void testSchemaWithDefenitionValidation() {
+        assertTrue("JSON Schema with Defenition validation",
+                jsonSchema(sampleJsonSchema("car_with_defenitions")).validate(sampleJsonData("car")));
+    }
+
+    @Test
+    public void testInvalidSchemaWithDefenitionValidation() {
+
+        assertFalse("Invalid JSON Schema with Defenition validation",
+                jsonSchema(sampleJsonSchema("car_with_defenitions")).validate(sampleJsonData("car_invalid")));
+    }
+
 }

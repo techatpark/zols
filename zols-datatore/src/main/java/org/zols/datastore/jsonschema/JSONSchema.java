@@ -31,6 +31,10 @@ public class JSONSchema {
     public static JSONSchema jsonSchema(String jsonSchema) {
         return new JSONSchema(jsonSchema);
     }
+    
+    public static JSONSchema jsonSchema(Map<String,Object> jsonSchema) {
+        return new JSONSchema(asString(jsonSchema));
+    }
 
     public static JSONSchema jsonSchemaForSchema() {
         if (_JSONSCHEMA_FOR_SCHEMA == null) {
