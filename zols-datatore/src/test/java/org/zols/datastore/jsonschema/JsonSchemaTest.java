@@ -9,7 +9,7 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonData;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 
 /**
@@ -21,7 +21,7 @@ public class JsonSchemaTest {
     @Test
     public void testSimpleValidation() {
         assertNull("Simple JSON Schema validation",
-                jsonSchema(sampleJsonSchema("vechicle")).validate(sampleJsonData("vechicle")));
+                jsonSchema(sampleJsonSchema("vechicle")).validate(sampleJsonText("vechicle")));
     }
 
 }
