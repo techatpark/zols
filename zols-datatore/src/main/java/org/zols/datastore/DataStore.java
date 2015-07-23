@@ -4,11 +4,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
 import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
-import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -23,25 +20,19 @@ public abstract class DataStore {
             String jsonSchemaTxt)
             throws DataStoreException {
         if (jsonSchemaForSchema().validate(jsonSchemaTxt) == null) {
-            return create(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
+            return createData(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
         return null;
     }
 
-    public Map<String, Object> getSchema(String schemaId)
+    public Map<String, Object> getSchema(String id)
             throws DataStoreException {
-        return read(jsonSchemaForSchema(), schemaId);
+        return readData(jsonSchemaForSchema(), id);
     }
 
-    public Set<ConstraintViolation> validate(String schemaId, 
-            Map<String, Object> jsonData) 
+    public Map<String, Object> getSchemaWithDefinisions(String id)
             throws DataStoreException {
-        return jsonSchema(getEnlargedSchema(schemaId)).validate(jsonData);
-    }
-
-    private Map<String, Object> getEnlargedSchema(String schemaId)
-            throws DataStoreException {
-        Map<String, Object> schema = getSchema(schemaId);
+        Map<String, Object> schema = getSchema(id);
         if (schema != null) {
             Map<String, Object> definitions = new HashMap<>();
             walkSchemaTree(schema, definitions);
@@ -52,12 +43,12 @@ public abstract class DataStore {
         }
         return schema;
     }
-
-    private Map<String, Object> fillDefinitions(String schemaId, Map<String, Object> definitions)
+    
+    private Map<String, Object> getSchemaWithDefinisions(String id,Map<String, Object> definitions)
             throws DataStoreException {
-        Map<String, Object> schema = getSchema(schemaId);
-        if (schema != null) {
-            walkSchemaTree(schema, definitions);
+        Map<String, Object> schema = getSchema(id);
+        if (schema != null) {            
+            walkSchemaTree(schema, definitions); 
             schema = getOrderedSchema(schema);
         }
         return schema;
@@ -82,7 +73,7 @@ public abstract class DataStore {
         for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
             if (schemaEntry.getKey().equals("$ref")) {
                 schemaId = schemaEntry.getValue().toString();
-                definitions.put(schemaId, fillDefinitions(schemaEntry.getValue().toString(), definitions));
+                definitions.put(schemaId, getSchemaWithDefinisions(schemaEntry.getValue().toString(),definitions));
                 schemaEntry.setValue("#/definitions/" + schemaId);
             } else if (schemaEntry.getValue() instanceof Map) {
                 walkSchemaTree((Map<String, Object>) schemaEntry.getValue(), definitions);
@@ -90,12 +81,12 @@ public abstract class DataStore {
         }
     }
 
-    public Boolean deleteSchema(String schemaId) throws DataStoreException {
-        return delete(jsonSchemaForSchema(), schemaId);
+    public Boolean deleteSchema(String id) throws DataStoreException {
+        return deleteData(jsonSchemaForSchema(), id);
     }
 
     public List<Map<String, Object>> listSchema() throws DataStoreException {
-        return list(jsonSchemaForSchema());
+        return listData(jsonSchemaForSchema());
     }
 
     /**
@@ -108,7 +99,7 @@ public abstract class DataStore {
      * @return dynamic data as map
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract Map<String, Object> create(
+    protected abstract Map<String, Object> createData(
             JSONSchema jsonSchema,
             Map<String, Object> validatedDataObject)
             throws DataStoreException;
@@ -120,7 +111,7 @@ public abstract class DataStore {
      * @return dynamic data as map
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract Map<String, Object> read(
+    protected abstract Map<String, Object> readData(
             JSONSchema jsonSchema,
             String idValue) throws DataStoreException;
 
@@ -131,7 +122,7 @@ public abstract class DataStore {
      * @return status of the delete operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract boolean delete(JSONSchema jsonSchema,
+    protected abstract boolean deleteData(JSONSchema jsonSchema,
             String idValue) throws DataStoreException;
 
     /**
@@ -141,7 +132,7 @@ public abstract class DataStore {
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract boolean update(JSONSchema jsonSchema,
+    protected abstract boolean updateData(JSONSchema jsonSchema,
             Map<String, Object> validatedData)
             throws DataStoreException;
 
@@ -151,7 +142,7 @@ public abstract class DataStore {
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract List<Map<String, Object>> list(JSONSchema jsonSchema)
+    protected abstract List<Map<String, Object>> listData(JSONSchema jsonSchema)
             throws DataStoreException;
 
     /**

@@ -10,10 +10,8 @@ import static java.lang.ClassLoader.getSystemResource;
 import java.net.URISyntaxException;
 import static java.nio.file.Files.readAllBytes;
 import java.nio.file.Paths;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.zols.datastore.util.JsonUtil.asMap;
 
 /**
  *
@@ -32,7 +30,7 @@ public class JsonSchemaTestUtil {
         return schemaContent;
     }
     
-    public static String sampleJsonString(String dataName) {
+    public static String sampleJsonData(String dataName) {
         String schemaContent = null;
         try {
             schemaContent = new String(readAllBytes(Paths
@@ -42,10 +40,4 @@ public class JsonSchemaTestUtil {
         }
         return schemaContent;
     }
-    
-    public static Map<String, Object> sampleJson(String dataName) {        
-        return asMap(sampleJsonString(dataName));
-    }
-    
-    
 }
