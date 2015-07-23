@@ -5,14 +5,12 @@
  */
 package org.zols.datastore;
 
-import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
-import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonData;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -47,7 +45,8 @@ public class SchemaManagementTest {
 
     @Test
     public void testCreateSchema() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Schema", dataStore.getSchema("vechicle"));
+        Assert.assertNull("Created Simple Schema",
+                dataStore.validate("vechicle", sampleJson("vechicle")));
     }
 
     @Test
@@ -65,30 +64,25 @@ public class SchemaManagementTest {
     public void testGetSchemaWithDefinitions() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("insurance"));
-        Map<String, Object> carSchemaWithDefinitions = dataStore.getSchemaWithDefinisions("car");
+
         Assert.assertNull("Getting Schema with Defenisions",
-                jsonSchema(carSchemaWithDefinitions)
-                .validate(sampleJsonData("car")));
+                dataStore.validate("car", sampleJson("car")));
     }
 
     @Test
     public void testGetSchemaWithMultiLevelInheritance() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("sportscar"));
-        Map<String, Object> sportscarSchemaWithDefinitions = dataStore.getSchemaWithDefinisions("sportscar");
-        Assert.assertNull("Getting Schema with Multilevel Inheritance",
-                jsonSchema(sportscarSchemaWithDefinitions)
-                .validate(sampleJsonData("sportscar")));
+        Assert.assertNull("Getting Schema with Multi Level Inheritance",
+                dataStore.validate("sportscar", sampleJson("sportscar")));
     }
 
     @Test
     public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("sportscar"));
-        Map<String, Object> sportscarSchemaWithDefinitions = dataStore.getSchemaWithDefinisions("sportscar");
-        Assert.assertNotNull("Getting Schema with Multilevel Inheritance",
-                jsonSchema(sportscarSchemaWithDefinitions)
-                .validate(sampleJsonData("sportscar_invalid")));
+        Assert.assertNotNull("Getting Schema with Multi Level Inheritance",
+                dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
     }
 
 }
