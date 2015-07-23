@@ -30,6 +30,10 @@ public class SchemaManagementTest {
 
     @Before
     public void beforeTest() throws DataStoreException {
+        dataStore.deleteSchema("vechicle");
+        dataStore.deleteSchema("car");
+        dataStore.deleteSchema("sportscar");
+        dataStore.deleteSchema("insurance");
         dataStore.createSchema(sampleJsonSchema("vechicle"));
     }
 
@@ -38,6 +42,7 @@ public class SchemaManagementTest {
         dataStore.deleteSchema("vechicle");
         dataStore.deleteSchema("car");
         dataStore.deleteSchema("sportscar");
+        dataStore.deleteSchema("insurance");
     }
 
     @Test
@@ -47,7 +52,7 @@ public class SchemaManagementTest {
 
     @Test
     public void testListSchema() throws DataStoreException {
-        Assert.assertEquals("Creating Simple Schema", 1, dataStore.listSchema().size());
+        Assert.assertEquals("Listing Schema", 1, dataStore.listSchema().size());
     }
 
     @Test
@@ -59,6 +64,7 @@ public class SchemaManagementTest {
     @Test
     public void testGetSchemaWithDefinitions() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
+        dataStore.createSchema(sampleJsonSchema("insurance"));
         Map<String, Object> carSchemaWithDefinitions = dataStore.getSchemaWithDefinisions("car");
         Assert.assertNull("Getting Schema with Defenisions",
                 jsonSchema(carSchemaWithDefinitions)
@@ -75,6 +81,7 @@ public class SchemaManagementTest {
                 .validate(sampleJsonData("sportscar")));
     }
 
+    @Test
     public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("sportscar"));

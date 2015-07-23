@@ -19,6 +19,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.common.settings.ImmutableSettings;
+import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.node.Node;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -45,23 +47,15 @@ public class ElasticSearchDataStore extends DataStore {
 
     public ElasticSearchDataStore() {
         this.indexName = "zols";
-        node = nodeBuilder().node();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
+        node = nodeBuilder().settings(settings).local(true).build().start();        
         createIndexIfNotExists();
     }
 
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
-        node = nodeBuilder().node();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
+        node = nodeBuilder().settings(settings).local(true).build().start();        
         createIndexIfNotExists();
     }
 
@@ -78,11 +72,13 @@ public class ElasticSearchDataStore extends DataStore {
         if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
             CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
             node.client().admin().indices().create(createIndexRequest).actionGet();
+            LOGGER.debug("New index [{}] created",indexName);
         }
     }
 
     @Override
     protected Map<String, Object> createData(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
+        LOGGER.debug("Create Data for ",jsonSchema);
         Object idValue = validatedDataObject.get(jsonSchema.idField());
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {

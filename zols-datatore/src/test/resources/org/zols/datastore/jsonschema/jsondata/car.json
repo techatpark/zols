@@ -1,4 +1,7 @@
 {
     "reg_number": "KL01",
-    "four_wheel_drive": true
+    "four_wheel_drive": true,
+    "insurance": {
+        "company": "AIG"
+    }
 }
