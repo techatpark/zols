@@ -5,15 +5,12 @@
  */
 package org.zols.datastore;
 
-import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
-import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -74,6 +71,7 @@ public class SchemaManagementTest {
     public void testGetSchemaWithMultiLevelInheritance() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("sportscar"));
+        dataStore.createSchema(sampleJsonSchema("insurance"));
         Assert.assertNull("Getting Schema with Multi Level Inheritance",
                 dataStore.validate("sportscar", sampleJson("sportscar")));
     }
@@ -82,6 +80,7 @@ public class SchemaManagementTest {
     public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchema("car"));
         dataStore.createSchema(sampleJsonSchema("sportscar"));
+        dataStore.createSchema(sampleJsonSchema("insurance"));
         
         Assert.assertNotNull("Invalid Schema with Multi Level Inheritance",
                 dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
