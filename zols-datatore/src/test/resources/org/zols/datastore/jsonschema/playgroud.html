@@ -1,0 +1,96 @@
+<html>
+    <head>
+        <title>JSON Playground</title>
+    </head>
+    <body>
+        <table style="width:100%">
+            <tr>
+                <td><h1>JSON Playground</h1></td>
+                <td><h4 style="color: red" id="validity"></h4><button id="validateBtn" onclick="validateJson()">Validate</button></td>
+            </tr>
+
+            <tr>
+                <td style="width: 50%"><textarea id="schemaTxt" style="width: 100%;height: 500px">
+{
+                            "$schema": "http://json-schema.org/draft-04/schema#",
+                            "definitions": {
+                              "insurance": {
+                                "$schema": "http://json-schema.org/draft-04/schema#",
+                                "title": "Insurance Schema",
+                                "type": "object",
+                                "properties": {
+                                  "company": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "company"
+                                ]
+                              },
+                              "car": {
+                                "$schema": "http://json-schema.org/draft-04/schema#",
+                                "title": "Car Schema",
+                                "type": "object",
+                                "$ref": "#/definitions/vechicle",
+                                "properties": {
+                                  "insurance": {
+                                    "$ref": "#/definitions/insurance"
+                                  },
+                                  "four_wheel_drive": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "vechicle": {
+                                "$schema": "http://json-schema.org/draft-04/schema#",
+                                "title": "Vechicle Schema",
+                                "type": "object",
+                                "properties": {
+                                  "reg_number": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "reg_number"
+                                ]
+                              }
+                            },
+                            "title": "Sports Car Schema",
+                            "type": "object",
+                            "$ref": "#/definitions/car",
+                            "properties": {
+                              "track": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                    </textarea></td>
+                <td><textarea id="dataTxt" style="width: 100%;height: 500px">
+                        {"insurance":{"company":true},"reg_number":"KL01","track":"F1","four_wheel_drive":true}
+                    </textarea></td>
+            </tr>
+        </table>   
+        <script src="../../../../../../main/resources/org/zols/datastore/jsonschema/jsen.js" type="text/javascript"></script>
+        <script src="../../../../../../main/resources/org/zols/datastore/jsonschema/validator.js" type="text/javascript"></script>
+        <script>
+                    function validateJson() {
+                        var jsonSchema = JSON.parse(document.getElementById("schemaTxt").value);
+                        var jsonData = JSON.parse(document.getElementById("dataTxt").value);
+                        document.getElementById("schemaTxt").value = JSON.stringify(jsonSchema, null, "\t");
+                        document.getElementById("dataTxt").value = JSON.stringify(jsonData, null, "\t");
+
+                        var validate = validateJsonSchema(jsonSchema, jsonData);    // under window.jsen
+                        if (validate) {
+                            document.getElementById("validity").innerHTML = JSON.stringify(validate) + "";
+                        }
+                        else {
+                            document.getElementById("validity").innerHTML = "VALID JSON";
+                        }
+
+                    }
+                    (function () {
+                        validateJson();
+                    })();
+        </script>
+    </body>
+</html>
