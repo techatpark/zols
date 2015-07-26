@@ -5,12 +5,19 @@
  */
 package org.zols.datastore.jsonschema;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.Map;
+import javax.script.ScriptException;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
+import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 
 /**
  *
@@ -19,9 +26,30 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSc
 public class JsonSchemaTest {
 
     @Test
-    public void testSimpleValidation() {
-        assertNull("Simple JSON Schema validation",
-                jsonSchema(sampleJsonSchema("vechicle")).validate(sampleJsonText("vechicle")));
+    public void testSimpleSchemaValidation() {
+        Map<String, Object> jsonSchema = sampleJsonSchema("vechicle");
+        jsonSchema.remove("id");
+        assertNull("JSON Schema validation",
+                jsonSchemaForSchema().validate(jsonSchema));
+    }
+
+    @Test
+    public void testSimpleInvalidSchemaValidation() {
+        assertNotNull("Invalid JSON Schema validation",
+                jsonSchemaForSchema().validate(sampleJsonSchemaText("vechicle")));
+    }
+
+    @Test
+    public void testDataValidation() {
+        assertNull("JSON Schema Data validation",
+                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("vechicle")));
+    }
+
+    @Test
+    public void testSimpleInvalidDataValidation() throws ScriptException, IOException, URISyntaxException, NoSuchMethodException {
+        assertNotNull("JSON Schema Invalid Data validation",
+                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("car_invalid")));
+
     }
 
 }

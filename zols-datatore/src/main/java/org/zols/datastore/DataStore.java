@@ -22,7 +22,7 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(
             String jsonSchemaTxt)
             throws DataStoreException {
-        if (jsonSchemaForSchema().validate(jsonSchemaTxt) == null) {
+        if (jsonSchemaForSchema().validate(getEnlargedSchema(asMap(jsonSchemaTxt))) == null) {
             return create(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
         return null;
@@ -33,15 +33,14 @@ public abstract class DataStore {
         return read(jsonSchemaForSchema(), schemaId);
     }
 
-    public Set<ConstraintViolation> validate(String schemaId, 
-            Map<String, Object> jsonData) 
+    public Set<ConstraintViolation> validate(String schemaId,
+            Map<String, Object> jsonData)
             throws DataStoreException {
-        return jsonSchema(getEnlargedSchema(schemaId)).validate(jsonData);
+        return jsonSchema(getEnlargedSchema(getSchema(schemaId))).validate(jsonData);
     }
 
-    private Map<String, Object> getEnlargedSchema(String schemaId)
+    private Map<String, Object> getEnlargedSchema(Map<String, Object> schema)
             throws DataStoreException {
-        Map<String, Object> schema = getSchema(schemaId);
         if (schema != null) {
             Map<String, Object> definitions = new HashMap<>();
             walkSchemaTree(schema, definitions);
