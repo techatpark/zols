@@ -21,7 +21,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.validation.ConstraintViolation;
-import static org.zols.datastore.util.JsonUtil.asList;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
 
@@ -68,9 +67,7 @@ public class JSONSchema {
         if (_scriptEngine == null) {
             _scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
             _scriptEngine.eval(new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/jsen.js").toURI()))));
-            _scriptEngine.eval(new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/validator.js").toURI()))));
+                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/tv4.js").toURI()))));
             JSON = _scriptEngine.eval("JSON");
         }
         return _scriptEngine;
@@ -80,10 +77,9 @@ public class JSONSchema {
     public Set<ConstraintViolation> validate(Map<String, Object> jsonData) {
         return validate(asString(jsonData));
     }
-
+    
     /**
      * validates using JSON Schema
-     *
      * @param jsonData
      * @return null if valid
      */
@@ -91,18 +87,20 @@ public class JSONSchema {
         Set<ConstraintViolation> constraintViolations = null;
         try {
             ScriptEngine scriptEngine = scriptEngine();
+            Object TV4 = scriptEngine.eval("tv4");
             Invocable inv = (Invocable) scriptEngine;
-            Object schema
+            Object schemaToJavaScript
                     = inv.invokeMethod(JSON, "parse", jsonSchemaAsTxt);
-            Object data
+            Object dataToJavaScript
                     = inv.invokeMethod(JSON, "parse", jsonData);
+            Object validation = inv.invokeMethod(TV4, "validateMultiple", dataToJavaScript, schemaToJavaScript);
 
-            Object errors = inv.invokeFunction("validateJsonSchema", schema, data);
+            Map<String, Object> validationResult = asMap(inv.invokeMethod(JSON, "stringify", validation).toString());
 
-            if (errors != null) {
-                Collection errorsAsList = asList(inv.invokeMethod(JSON, "stringify", errors).toString());
-                constraintViolations = new HashSet<>(errorsAsList.size());
-                for (Object error : errorsAsList) {
+            if (!(boolean) validationResult.get("valid")) {
+                Collection errors = (Collection) validationResult.get("errors");
+                constraintViolations = new HashSet<>(errors.size());
+                for (Object error : errors) {
                     constraintViolations.add(new JsonSchemaConstraintViolation((Map<String, Object>) error));
                 }
 
@@ -120,6 +118,7 @@ public class JSONSchema {
     /**
      * gets Idfield from given JSON schema
      *
+     * @param jsonSchema
      * @return
      */
     public String idField() {

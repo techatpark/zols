@@ -13,19 +13,15 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static org.zols.datastore.util.JsonUtil.asMap;
+import org.zols.datastore.util.JsonUtil;
 
 /**
  *
  * @author WZ07
  */
 public class JsonSchemaTestUtil {
-    
-    public static Map<String, Object> sampleJsonSchema(String dataName) {
-        return asMap(sampleJsonSchemaText(dataName));
-    }
 
-    public static String sampleJsonSchemaText(String schamaName) {
+    public static String sampleJsonSchema(String schamaName) {
         String schemaContent = null;
         try {
             schemaContent = new String(readAllBytes(Paths
@@ -48,6 +44,6 @@ public class JsonSchemaTestUtil {
     }
 
     public static Map<String, Object> sampleJson(String dataName) {
-        return asMap(sampleJsonText(dataName));
+        return JsonUtil.asMap(sampleJsonText(dataName));
     }
 }

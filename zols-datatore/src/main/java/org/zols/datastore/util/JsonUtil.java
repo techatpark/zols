@@ -10,7 +10,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,9 +33,9 @@ public class JsonUtil {
         }
         return null;
     }
-
+    
     public static String asString(Map<String, Object> jsonData) {
-        String jsonAsStr = null;
+        String jsonAsStr = null ;
         try {
             jsonAsStr = MAPPER.writeValueAsString(jsonData);
         } catch (JsonProcessingException ex) {
@@ -44,18 +43,8 @@ public class JsonUtil {
         }
         return jsonAsStr;
     }
-
+    
     public static Map<String, Object> asMap(Object object) {
         return MAPPER.convertValue(object, Map.class);
-    }
-
-    public static List<Object> asList(String jsonArrayData) {
-        try {
-            return MAPPER.readValue(jsonArrayData, new TypeReference<List< Object>>() {
-            });
-        } catch (IOException ex) {
-            Logger.getLogger(JsonUtil.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
 }
