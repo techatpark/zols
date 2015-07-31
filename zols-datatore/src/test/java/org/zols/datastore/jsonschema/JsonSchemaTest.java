@@ -51,5 +51,11 @@ public class JsonSchemaTest {
                 jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("car_invalid")));
 
     }
+    
+    @Test
+    public void testCompositeSchemaWithMultiLevelInheritance()  {
+        assertNotNull("Composite JSON Schema Invalid Data validation",
+                jsonSchema(sampleJsonSchemaText("sportscar_composite")).validate(sampleJsonText("sportscar_invalid")));
+    }
 
 }

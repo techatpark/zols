@@ -91,14 +91,14 @@ public class SchemaManagementTest {
                 dataStore.validate("sportscar", sampleJson("sportscar")));
     }
 
-    @Test
-    public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        dataStore.createSchema(sampleJsonSchemaText("sportscar"));
-
-        Assert.assertNotNull("Invalid Schema with Multi Level Inheritance",
-                dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
-    }
+//    @Test
+//    public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
+//        dataStore.createSchema(sampleJsonSchemaText("insurance"));
+//        dataStore.createSchema(sampleJsonSchemaText("car"));
+//        dataStore.createSchema(sampleJsonSchemaText("sportscar"));
+//
+//        Assert.assertNotNull("Invalid Schema with Multi Level Inheritance",
+//                dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
+//    }
 
 }
