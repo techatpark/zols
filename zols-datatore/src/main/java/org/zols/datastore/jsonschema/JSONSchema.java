@@ -5,6 +5,10 @@
  */
 package org.zols.datastore.jsonschema;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
+import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -21,6 +25,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.validation.ConstraintViolation;
+import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asList;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
@@ -33,6 +38,19 @@ public class JSONSchema {
 
     private static final String ID_FIELD = "idField";
     private static JSONSchema _JSONSCHEMA_FOR_SCHEMA = null;
+
+    public static JSONSchema jsonSchema(Class clazz) {
+        ObjectMapper m = new ObjectMapper();
+        SchemaFactoryWrapper visitor = new SchemaFactoryWrapper();
+        try {
+            m.acceptJsonFormatVisitor(m.constructType(clazz), visitor);
+        } catch (JsonMappingException ex) {
+            Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JsonSchema jsonSchema = visitor.finalSchema();
+        String jsonSchemaAsString = JsonUtil.asString(jsonSchema);        
+        return new JSONSchema(jsonSchemaAsString);
+    }
 
     public static JSONSchema jsonSchema(String jsonSchema) {
         return new JSONSchema(jsonSchema);

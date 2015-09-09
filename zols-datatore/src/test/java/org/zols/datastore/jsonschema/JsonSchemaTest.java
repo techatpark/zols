@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
+import org.zols.datastore.jsonschema.pojo.Employee;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
@@ -24,6 +25,20 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSc
  * @author wz07
  */
 public class JsonSchemaTest {
+
+    @Test
+    public void testJSONSchemaFromClassWithValidData() {
+        JSONSchema jSONSchema = jsonSchema(Employee.class);
+        assertNull("JSON Schema Generation from Class with Valid Data",
+                jSONSchema.validate(sampleJsonText("employee")));
+    }
+
+    @Test
+    public void testJSONSchemaFromClassWithInvalidData() {
+        JSONSchema jSONSchema = jsonSchema(Employee.class);
+        assertNotNull("JSON Schema Generation from Class with Valid Data",
+                jSONSchema.validate(sampleJsonText("employee_invalid")));
+    }
 
     @Test
     public void testSimpleSchemaValidation() {
@@ -51,9 +66,9 @@ public class JsonSchemaTest {
                 jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("car_invalid")));
 
     }
-    
+
     @Test
-    public void testCompositeSchemaWithMultiLevelInheritance()  {
+    public void testCompositeSchemaWithMultiLevelInheritance() {
         assertNotNull("Composite JSON Schema Invalid Data validation",
                 jsonSchema(sampleJsonSchemaText("sportscar_composite")).validate(sampleJsonText("sportscar_invalid")));
     }

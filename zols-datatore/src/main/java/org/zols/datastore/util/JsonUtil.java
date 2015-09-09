@@ -35,7 +35,7 @@ public class JsonUtil {
         return null;
     }
 
-    public static String asString(Map<String, Object> jsonData) {
+    public static String asString(Object jsonData) {
         String jsonAsStr = null;
         try {
             jsonAsStr = MAPPER.writeValueAsString(jsonData);
