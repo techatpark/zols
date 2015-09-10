@@ -8,8 +8,6 @@ package org.zols.datastore.elasticsearch;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
@@ -21,6 +19,11 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.FilterBuilder;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -29,6 +32,10 @@ import org.elasticsearch.search.SearchHits;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.jsonschema.JSONSchema;
+import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import static org.zols.datastore.query.Filter.Operator.IS_NULL;
+import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -165,10 +172,82 @@ public class ElasticSearchDataStore extends DataStore {
         }
         return list;
     }
+    
+    @Override
+    protected List<Map<String, Object>> listData(JSONSchema jsonSchema, Query query) {
+        List<Map<String, Object>> list = null;
+        SearchResponse response = node.client()
+                .prepareSearch()
+                .setIndices(indexName)
+                .setTypes(jsonSchema.id())
+                .setQuery(getQueryBuilder(query))
+                .execute().actionGet();
+        SearchHits hits = response.getHits();
+        if (hits != null) {
+            SearchHit[] searchHits = hits.getHits();
+            if (searchHits != null) {
+                list = new ArrayList<>(searchHits.length);
+                for (SearchHit searchHit : searchHits) {
+                    list.add(searchHit.getSource());
+                }
+            }
+        }
+        return list;
+    }
 
     @Override
     protected void drop() throws DataStoreException {
         node.client().admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 
+    
+    private FilterBuilder getFilterBuilder(Query query) {
+        FilterBuilder filterBuilder = null;
+        if (query != null) {
+            List<Filter> filters = query.getFilters();
+            if (filters != null) {
+                int size = filters.size();
+                FilterBuilder[] filterBuilders = new FilterBuilder[size];
+                Filter filter;
+                for (int index = 0; index < size; index++) {
+                    filter = filters.get(index);
+                    switch (filter.getOperator()) {
+                        case EQUALS:
+                            filterBuilders[index] = FilterBuilders.termFilter(filter.getName(), filter.getValue());
+                            break;
+                        case IS_NULL:
+                            filterBuilders[index] = FilterBuilders.notFilter(FilterBuilders.existsFilter(filter.getName()));
+                            break;
+                    }
+                }
+                filterBuilder = FilterBuilders.andFilter(filterBuilders);
+            }
+        }
+        return filterBuilder;
+    }
+
+    private QueryBuilder getQueryBuilder(Query query) {
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if (query != null) {
+            List<Filter> queries = query.getFilters();
+            if (queries != null) {
+                int size = queries.size();
+                QueryBuilder[] queryBuilders = new QueryBuilder[size];
+                Filter filter;
+                for (int index = 0; index < size; index++) {
+                    filter = queries.get(index);
+                    switch (filter.getOperator()) {
+                        case EQUALS:
+                            queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
+                            break;
+                        case IS_NULL:
+                            queryBuilder.mustNot(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilders.existsFilter(filter.getName())));
+                            break;
+                    }
+                }
+            }
+        }
+        return queryBuilder;
+    }
+    
 }

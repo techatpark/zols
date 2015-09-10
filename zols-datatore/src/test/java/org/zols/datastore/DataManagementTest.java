@@ -5,11 +5,14 @@
  */
 package org.zols.datastore;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.model.Employee;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -23,40 +26,42 @@ public class DataManagementTest {
 
     @Before
     public void beforeTest() throws DataStoreException {
-        Employee employee = new Employee();
-        employee.setName("Sathish");
-        employee.setSalary(10000);
-        employee.setIsContractor(Boolean.TRUE);
-        dataStore.create(employee);
+        dataStore.createSchema(sampleJsonSchemaText("employee"));
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "Sathish");
+        map.put("salary", 1000);
+        map.put("isContractor", true);
+        dataStore.create("employee", map);
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.delete(Employee.class, "Sathish");
+        dataStore.delete("employee", "Sathish");
+        dataStore.deleteSchema("employee");
     }
 
     @Test
     public void testCreateData() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Object", dataStore.read(Employee.class, "Sathish"));
+        Assert.assertNotNull("Creating Simple Data", dataStore.read("employee", "Sathish"));
     }
 
     @Test
     public void testUpdateData() throws DataStoreException {
-        Employee employee = dataStore.read(Employee.class, "Sathish");
-        employee.setSalary(2000);
-        dataStore.update(employee, "Sathish");
-        employee = dataStore.read(Employee.class, "Sathish");
-        Assert.assertEquals("Updating Simple Object", 2000, employee.getSalary());
+        Map<String, Object> map = dataStore.read("employee", "Sathish");
+        map.put("salary", 2000);
+        dataStore.update("employee", map);
+        map = dataStore.read("employee", "Sathish");
+        Assert.assertEquals("Updating Simple Data", 2000, (int) map.get("salary"));
     }
-    
+
     @Test
     public void testDeleteData() throws DataStoreException {
-        dataStore.delete(Employee.class, "Sathish");
-        Assert.assertNull("Deleting Simple Object", dataStore.read(Employee.class, "Sathish"));
+        dataStore.delete("employee", "Sathish");
+        Assert.assertNull("Deleting Simple Data", dataStore.read("employee", "Sathish"));
     }
-    
+
     @Test
-    public void testListData() throws DataStoreException {        
-        Assert.assertEquals("Listing Simple Object", 1, dataStore.list(Employee.class).size());
+    public void testListData() throws DataStoreException {
+        Assert.assertEquals("Listing Simple Data", 1, dataStore.list("employee").size());
     }
 }
