@@ -78,7 +78,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected Map<String, Object> create(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        LOGGER.debug("Create Data for ",jsonSchema);
+        LOGGER.debug("Create Data for ",jsonSchema.id());
         Object idValue = validatedDataObject.get(jsonSchema.idField());
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {

@@ -5,11 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import static java.util.stream.Collectors.toList;
 import javax.validation.ConstraintViolation;
 import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.util.JsonUtil.asMap;
+import static org.zols.datastore.util.JsonUtil.asObject;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -18,6 +20,43 @@ import org.zols.datatore.exception.DataStoreException;
  * @author Sathish Kumar Thiyagarajan
  */
 public abstract class DataStore {
+
+    public <T> T create(T object) throws DataStoreException {
+        T createdObject = null;
+        if (object != null) {
+            createdObject = (T) asObject(object.getClass(),
+                    create(jsonSchema(object.getClass()), asMap(object)));
+        }
+        return createdObject;
+    }
+
+    public <T> T read(Class<T> clazz, String idValue) throws DataStoreException {
+        return (T) asObject(clazz, read(jsonSchema(clazz), idValue));
+    }
+
+    public <T> T update(T object, String idValue) throws DataStoreException {
+        T updatedObject = null;
+        if (object != null) {
+            boolean updated = update(jsonSchema(object.getClass()), asMap(object));
+            if (updated) {
+                updatedObject = (T) read(object.getClass(), idValue);
+            }
+        }
+        return updatedObject;
+    }
+
+    public boolean delete(Class clazz, String idValue) throws DataStoreException {
+        return delete(jsonSchema(clazz), idValue);
+    }
+
+    public <T> List<T> list(Class<T> clazz) throws DataStoreException {
+        List<T> objects = null;
+        List<Map<String, Object>> maps = list(jsonSchema(clazz));
+        if (maps != null) {
+            objects = maps.stream().map( map->asObject(clazz, map) ).collect(toList());
+        }
+        return objects;
+    }
 
     public Map<String, Object> createSchema(
             String jsonSchemaTxt)

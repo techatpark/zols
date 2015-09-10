@@ -7,9 +7,9 @@ package org.zols.datastore.jsonschema;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.jsonSchema.JsonSchema;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -20,12 +20,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Id;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import javax.validation.ConstraintViolation;
-import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asList;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
@@ -47,9 +47,15 @@ public class JSONSchema {
         } catch (JsonMappingException ex) {
             Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JsonSchema jsonSchema = visitor.finalSchema();
-        String jsonSchemaAsString = JsonUtil.asString(jsonSchema);        
-        return new JSONSchema(jsonSchemaAsString);
+
+        Map<String, Object> jsonSchemaAsMap = asMap(visitor.finalSchema());
+
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(Id.class)) {
+                jsonSchemaAsMap.put(ID_FIELD, field.getName());
+            }
+        }
+        return new JSONSchema(asString(jsonSchemaAsMap));
     }
 
     public static JSONSchema jsonSchema(String jsonSchema) {
@@ -136,7 +142,7 @@ public class JSONSchema {
     }
 
     /**
-     * gets Idfield from given JSON schema
+     * gets Id Field from given JSON schema
      *
      * @return
      */

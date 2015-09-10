@@ -15,10 +15,10 @@ import org.junit.Test;
 
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
-import org.zols.datastore.jsonschema.pojo.Employee;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
+import org.zols.datastore.model.Employee;
 
 /**
  *

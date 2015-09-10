@@ -49,6 +49,10 @@ public class JsonUtil {
         return MAPPER.convertValue(object, Map.class);
     }
 
+    public static <T> T asObject(Class<T> clazz, Map<String, Object> map) {
+        return MAPPER.convertValue(map, clazz);
+    }
+
     public static List<Object> asList(String jsonArrayData) {
         try {
             return MAPPER.readValue(jsonArrayData, new TypeReference<List< Object>>() {

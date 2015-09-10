@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.jsonschema.pojo;
+package org.zols.datastore.model;
+
+import javax.persistence.Id;
 
 public class Employee {
 
+    @Id
     private String name;
     private Boolean isContractor;
     private int salary;
