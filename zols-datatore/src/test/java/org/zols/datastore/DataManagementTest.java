@@ -14,6 +14,8 @@ import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.model.Employee;
+import org.zols.datastore.query.Filter;
+import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 
 public class DataManagementTest {
@@ -59,9 +61,29 @@ public class DataManagementTest {
         dataStore.delete("employee", "Sathish");
         Assert.assertNull("Deleting Simple Data", dataStore.read("employee", "Sathish"));
     }
+    
+    @Test
+    public void testDeleteAllData() throws DataStoreException {
+        dataStore.delete("employee");
+        Assert.assertNull("Deleting Simple Data", dataStore.read("employee", "Sathish"));
+    }
 
     @Test
     public void testListData() throws DataStoreException {
         Assert.assertEquals("Listing Simple Data", 1, dataStore.list("employee").size());
+    }
+    
+    @Test
+    public void testListDataWithQuery() throws DataStoreException {
+        Query query = new Query();
+        query.addFilter(new Filter("name", Filter.Operator.EQUALS,"Sathish"));
+        Assert.assertEquals("Listing Simple Data with valid query", 1, dataStore.list("employee",query).size());
+    }
+    
+    @Test
+    public void testListDataWithInvalidQuery() throws DataStoreException {
+        Query query = new Query();
+        query.addFilter(new Filter("name", Filter.Operator.EQUALS,"Saravana"));
+        Assert.assertEquals("Listing Simple Data with valid query", 0, dataStore.list("employee",query).size());
     }
 }

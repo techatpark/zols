@@ -127,7 +127,12 @@ public abstract class DataStore {
 
     public List<Map<String, Object>> list(String schemaId)
             throws DataStoreException {
-        return DataStore.this.list(jsonSchema(getSchema(schemaId)));
+        return list(jsonSchema(getSchema(schemaId)));
+    }
+    
+    public List<Map<String, Object>> list(String schemaId, Query query)
+            throws DataStoreException {
+        return list(jsonSchema(getSchema(schemaId)),query);
     }
 
     /**

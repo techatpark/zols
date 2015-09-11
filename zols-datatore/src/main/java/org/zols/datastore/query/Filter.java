@@ -44,7 +44,11 @@ public class Filter<T> {
         /**
          * Check not Null
          */
-        IS_NOTNULL
+        IS_NOTNULL,
+        /**
+         * Exists in given values
+         */
+        EXISTS_IN
     }
 
     private final String name;
