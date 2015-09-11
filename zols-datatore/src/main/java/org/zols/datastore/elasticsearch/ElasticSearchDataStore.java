@@ -11,6 +11,7 @@ import java.util.Map;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
+import org.elasticsearch.action.admin.indices.mapping.delete.DeleteMappingResponse;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
@@ -56,14 +57,14 @@ public class ElasticSearchDataStore extends DataStore {
     public ElasticSearchDataStore() {
         this.indexName = "zols";
         Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
-        node = nodeBuilder().settings(settings).local(true).build().start();        
+        node = nodeBuilder().settings(settings).local(true).build().start();
         createIndexIfNotExists();
     }
 
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
         Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
-        node = nodeBuilder().settings(settings).local(true).build().start();        
+        node = nodeBuilder().settings(settings).local(true).build().start();
         createIndexIfNotExists();
     }
 
@@ -80,13 +81,13 @@ public class ElasticSearchDataStore extends DataStore {
         if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
             CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
             node.client().admin().indices().create(createIndexRequest).actionGet();
-            LOGGER.debug("New index [{}] created",indexName);
+            LOGGER.debug("New index [{}] created", indexName);
         }
     }
 
     @Override
     protected Map<String, Object> create(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        LOGGER.debug("Create Data for ",jsonSchema.id());
+        LOGGER.debug("Create Data for ", jsonSchema.id());
         Object idValue = validatedDataObject.get(jsonSchema.idField());
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {
@@ -129,6 +130,20 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
+    protected boolean delete(JSONSchema jsonSchema) {
+        DeleteMappingResponse response = node.client()
+                .admin()
+                .indices()
+                .prepareDeleteMapping(indexName)
+                .setType(jsonSchema.id())
+                .execute()
+                .actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
+        return response.isAcknowledged();
+    }
+
+    @Override
     protected boolean delete(JSONSchema jsonSchema, String idValue) {
         DeleteResponse response = node.client()
                 .prepareDelete(indexName, jsonSchema.id(), idValue).setRefresh(true)
@@ -138,6 +153,18 @@ public class ElasticSearchDataStore extends DataStore {
         node.client().admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isFound();
+    }
+
+    @Override
+    protected boolean delete(JSONSchema jsonSchema, Query query) {
+        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
+                .setListenerThreaded(false)
+                .setTypes(jsonSchema.id())
+                .setQuery(getQueryBuilder(query))
+                .execute().actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
+        return true;
     }
     
     @Override
@@ -185,7 +212,7 @@ public class ElasticSearchDataStore extends DataStore {
         }
         return list;
     }
-    
+
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
@@ -213,7 +240,6 @@ public class ElasticSearchDataStore extends DataStore {
         node.client().admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 
-    
     private FilterBuilder getFilterBuilder(Query query) {
         FilterBuilder filterBuilder = null;
         if (query != null) {
@@ -262,5 +288,5 @@ public class ElasticSearchDataStore extends DataStore {
         }
         return queryBuilder;
     }
-    
+
 }

@@ -56,6 +56,12 @@ public class ObjectManagementTest {
     }
     
     @Test
+    public void testDeleteAllObject() throws DataStoreException {
+        dataStore.delete(Employee.class);
+        Assert.assertNull("Deleting Simple Objects", dataStore.read(Employee.class, "Sathish"));
+    }
+    
+    @Test
     public void testListObject() throws DataStoreException {        
         Assert.assertEquals("Listing Simple Object", 1, dataStore.list(Employee.class).size());
     }

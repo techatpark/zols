@@ -46,6 +46,10 @@ public abstract class DataStore {
         return updatedObject;
     }
 
+    public boolean delete(Class clazz) throws DataStoreException {
+        return delete(jsonSchema(clazz));
+    }
+
     public boolean delete(Class clazz, String idValue) throws DataStoreException {
         return delete(jsonSchema(clazz), idValue);
     }
@@ -104,6 +108,11 @@ public abstract class DataStore {
             return update(jSONSchema, jsonData);
         }
         return false;
+    }
+
+    public boolean delete(String schemaId)
+            throws DataStoreException {
+        return delete(jsonSchema(getSchema(schemaId)));
     }
 
     public boolean delete(String schemaId, String name)
@@ -252,12 +261,31 @@ public abstract class DataStore {
     /**
      *
      * @param jsonSchema schema of dynamic data
+     * @return status of the delete operation
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    protected abstract boolean delete(JSONSchema jsonSchema)
+            throws DataStoreException;
+
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
      * @param idValue dynamic object name
      * @return status of the delete operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
     protected abstract boolean delete(JSONSchema jsonSchema,
             String idValue) throws DataStoreException;
+
+    /**
+     *
+     * @param jsonSchema
+     * @param query
+     * @return
+     * @throws DataStoreException
+     */
+    protected abstract boolean delete(JSONSchema jsonSchema, Query query)
+            throws DataStoreException;
 
     /**
      *
