@@ -287,15 +287,7 @@ public abstract class DataStore {
     protected abstract boolean delete(JSONSchema jsonSchema, Query query)
             throws DataStoreException;
 
-    /**
-     *
-     * @param jsonSchema
-     * @param query
-     * @return
-     * @throws DataStoreException
-     */
-    protected abstract boolean delete(JSONSchema jsonSchema, Query query)
-            throws DataStoreException;
+
 
     /**
      *

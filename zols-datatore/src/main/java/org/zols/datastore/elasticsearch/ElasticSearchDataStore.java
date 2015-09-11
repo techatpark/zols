@@ -166,18 +166,6 @@ public class ElasticSearchDataStore extends DataStore {
         patchDelayInRefresh();
         return true;
     }
-    
-    @Override
-    protected boolean delete(JSONSchema jsonSchema, Query query) {
-        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
-                .setListenerThreaded(false)
-                .setTypes(jsonSchema.id())
-                .setQuery(getQueryBuilder(query))
-                .execute().actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName));
-        patchDelayInRefresh();
-        return true;
-    }
 
     @Override
     protected boolean update(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
