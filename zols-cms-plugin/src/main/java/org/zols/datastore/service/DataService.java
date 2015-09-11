@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datastore.jsonschema.JSONSchema;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -21,13 +22,11 @@ import org.zols.datatore.exception.DataStoreException;
 @Service
 public class DataService {
 
-    private static final Logger LOGGER = getLogger(DataService.class);
-
     @Autowired
     private DataStore dataStore;
-    
+
     public String getIdField(String schemaName) throws DataStoreException {
-        return dataStore.getIdField(dataStore.read(schemaName));
+        return JSONSchema.jsonSchema(dataStore.getSchema(schemaName)).idField();
     }
 
     public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) throws DataStoreException {

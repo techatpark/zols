@@ -47,7 +47,7 @@ public class LinkService {
         Link createdLink = null;
         if (link != null) {
 
-            createdLink = dataStore.create(Link.class, link);
+            createdLink = dataStore.create(link);
             LOGGER.info("Created Link {}", createdLink.getName());
 
             if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
@@ -76,11 +76,11 @@ public class LinkService {
      * @param link Object to be update
      * @return status of the Update operation
      */
-    public Boolean update(Link link) throws DataStoreException {
-        Boolean updated = false;
+    public Link update(Link link) throws DataStoreException {
+        Link updated = null;
         if (link != null) {
             LOGGER.info("Updating Link {}", link);
-            updated = dataStore.update(link);
+            updated = dataStore.update(link,link.getName());
         }
         return updated;
     }
@@ -175,8 +175,8 @@ public class LinkService {
      * @param url URL to be linked
      * @return status of the Update
      */
-    public Boolean linkUrl(String linkName, String url) throws DataStoreException {
-        Boolean updated = false;
+    public Link linkUrl(String linkName, String url) throws DataStoreException {
+        Link updated = null;
         if (linkName != null) {
             LOGGER.info("Updating Link with url {}", linkName);
             Link link = read(linkName);

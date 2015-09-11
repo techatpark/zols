@@ -50,9 +50,23 @@ public abstract class DataStore {
         return delete(jsonSchema(clazz), idValue);
     }
 
+    public boolean delete(Class clazz, Query query)
+            throws DataStoreException {
+        return delete(jsonSchema(clazz), query);
+    }
+
     public <T> List<T> list(Class<T> clazz) throws DataStoreException {
         List<T> objects = null;
-        List<Map<String, Object>> maps = list(jsonSchema(clazz));
+        List<Map<String, Object>> maps = DataStore.this.list(jsonSchema(clazz));
+        if (maps != null) {
+            objects = maps.stream().map(map -> asObject(clazz, map)).collect(toList());
+        }
+        return objects;
+    }
+
+    public <T> List<T> list(Class<T> clazz, Query query) throws DataStoreException {
+        List<T> objects = null;
+        List<Map<String, Object>> maps = list(jsonSchema(clazz), query);
         if (maps != null) {
             objects = maps.stream().map(map -> asObject(clazz, map)).collect(toList());
         }
@@ -97,9 +111,14 @@ public abstract class DataStore {
         return delete(jsonSchema(getSchema(schemaId)), name);
     }
 
+    public boolean delete(String schemaId, Query query)
+            throws DataStoreException {
+        return delete(jsonSchema(getSchema(schemaId)), query);
+    }
+
     public List<Map<String, Object>> list(String schemaId)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)));
+        return DataStore.this.list(jsonSchema(getSchema(schemaId)));
     }
 
     /**
@@ -112,15 +131,24 @@ public abstract class DataStore {
      * @return
      * @throws DataStoreException
      */
-    public Map<String, Object> createSchema(
-            String jsonSchemaTxt)
+    public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
-        Map<String,Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
+        Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
         Object idField = enlargedSchema.remove("idField");
         if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
             return create(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
         return null;
+    }
+
+    public boolean updateSchema(String jsonSchemaTxt)
+            throws DataStoreException {
+        Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
+        Object idField = enlargedSchema.remove("idField");
+        if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
+            return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
+        }
+        return false;
     }
 
     public Map<String, Object> getSchema(String schemaId)
@@ -160,15 +188,15 @@ public abstract class DataStore {
     private LinkedHashMap<String, Object> getOrderedSchema(Map<String, Object> schema) {
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(schema.size());
         Object id = schema.remove("id");
-        if(schema.get("$schema") != null) {
+        if (schema.get("$schema") != null) {
             linkedHashMap.put("$schema", schema.get("$schema"));
-        }        
+        }
         if (schema.get("definitions") != null) {
             linkedHashMap.put("definitions", schema.get("definitions"));
         }
-        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
+        schema.entrySet().stream().forEach((schemaEntry) -> {
             linkedHashMap.putIfAbsent(schemaEntry.getKey(), schemaEntry.getValue());
-        }
+        });
         //linkedHashMap.put("id", id);
         return linkedHashMap;
     }
@@ -192,7 +220,7 @@ public abstract class DataStore {
     }
 
     public List<Map<String, Object>> listSchema() throws DataStoreException {
-        return list(jsonSchemaForSchema());
+        return DataStore.this.list(jsonSchemaForSchema());
     }
 
     /**
@@ -233,6 +261,16 @@ public abstract class DataStore {
 
     /**
      *
+     * @param jsonSchema
+     * @param query
+     * @return
+     * @throws DataStoreException
+     */
+    protected abstract boolean delete(JSONSchema jsonSchema, Query query)
+            throws DataStoreException;
+
+    /**
+     *
      * @param jsonSchema schema of dynamic data
      * @param validatedData validated Object
      * @return status of the update operation
@@ -258,7 +296,7 @@ public abstract class DataStore {
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract List<Map<String, Object>> listData(JSONSchema jsonSchema, Query query)
+    protected abstract List<Map<String, Object>> list(JSONSchema jsonSchema, Query query)
             throws DataStoreException;
 
     /**

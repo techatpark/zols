@@ -13,6 +13,7 @@ import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.deletebyquery.DeleteByQueryResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
@@ -138,6 +139,18 @@ public class ElasticSearchDataStore extends DataStore {
         patchDelayInRefresh();
         return response.isFound();
     }
+    
+    @Override
+    protected boolean delete(JSONSchema jsonSchema, Query query) {
+        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
+                .setListenerThreaded(false)
+                .setTypes(jsonSchema.id())
+                .setQuery(getQueryBuilder(query))
+                .execute().actionGet();
+        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        patchDelayInRefresh();
+        return true;
+    }
 
     @Override
     protected boolean update(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
@@ -174,7 +187,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
     
     @Override
-    protected List<Map<String, Object>> listData(JSONSchema jsonSchema, Query query) {
+    protected List<Map<String, Object>> list(JSONSchema jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
         SearchResponse response = node.client()
                 .prepareSearch()

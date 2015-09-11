@@ -57,7 +57,7 @@ public class PageService {
             page.setDataName(dataName);
             page.setTemplateName(pageRequest.getTemplate().getName());
             
-            createdPage = dataStore.create(Page.class, page);
+            createdPage = dataStore.create(page);
             LOGGER.info("Created Page {}", createdPage.getName());
             
             linkService.linkUrl(pageRequest.getLinkName(), "/pages/"+createdPage.getName());
@@ -102,11 +102,11 @@ public class PageService {
      * @param page Object to be update
      * @return returns the status of the Update Operation
      */
-    public Boolean update(Page page) throws DataStoreException {
-        Boolean updated = false;
+    public Page update(Page page) throws DataStoreException {
+        Page updated = null;
         if (page != null) {
             LOGGER.info("Updating Page {}", page);
-            updated = dataStore.update(page);
+            updated = dataStore.update(page,page.getName());
         }
         return updated;
     }

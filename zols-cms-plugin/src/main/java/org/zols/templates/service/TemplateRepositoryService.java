@@ -44,7 +44,7 @@ public class TemplateRepositoryService {
     public TemplateRepository create(TemplateRepository templateRepository) throws DataStoreException {
         TemplateRepository createdTemplateRepository = null;
         if (templateRepository != null) {
-            createdTemplateRepository = dataStore.create(TemplateRepository.class, templateRepository);
+            createdTemplateRepository = dataStore.create(templateRepository);
             LOGGER.info("Created Template Repository {}", createdTemplateRepository.getName());
         }
         return createdTemplateRepository;
@@ -67,11 +67,11 @@ public class TemplateRepositoryService {
      * @param templateRepository Object to be update
      * @return status of the Update Operation
      */
-    public Boolean update(TemplateRepository templateRepository) throws DataStoreException {
-        Boolean updated = false;
+    public TemplateRepository update(TemplateRepository templateRepository) throws DataStoreException {
+        TemplateRepository updated = null;
         if (templateRepository != null) {
             LOGGER.info("Updating Template Repository {}", templateRepository);
-            updated = dataStore.update(templateRepository);
+            updated = dataStore.update(templateRepository, templateRepository.getName());
         }
         return updated;
     }
@@ -84,7 +84,7 @@ public class TemplateRepositoryService {
      */
     public Boolean delete(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
-        dataStore.delete(TemplateRepository.class, templateRepositoryName);        
+        dataStore.delete(TemplateRepository.class, templateRepositoryName);
         return deleteTemplatesUnder(templateRepositoryName);
     }
 
@@ -130,8 +130,8 @@ public class TemplateRepositoryService {
      * @param repositoryName name of the repository
      * @return list of templates
      */
-    public List<Map<String,String>> listTemplateFiles(String repositoryName) throws DataStoreException {
-        List<Map<String,String>> templateFiles = null;        
+    public List<Map<String, String>> listTemplateFiles(String repositoryName) throws DataStoreException {
+        List<Map<String, String>> templateFiles = null;
         TemplateRepository repository = read(repositoryName);
         if (repository != null) {
             if (repository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
@@ -144,7 +144,7 @@ public class TemplateRepositoryService {
         return templateFiles;
     }
 
-    private void listTemplateFiles(List<Map<String,String>> templateFiles, String rootPath, File folder) {
+    private void listTemplateFiles(List<Map<String, String>> templateFiles, String rootPath, File folder) {
         File[] files = folder.listFiles(new FileFilter() {
             @Override
             public boolean accept(File pathname) {
@@ -156,10 +156,10 @@ public class TemplateRepositoryService {
             if (file.isDirectory()) {
                 listTemplateFiles(templateFiles, rootPath, file);
             } else {
-                Map<String,String> map = new HashMap<>(1);
+                Map<String, String> map = new HashMap<>(1);
                 String filePath = file.getAbsolutePath().substring(rootPath.length());
                 map.put("label", filePath);
-                map.put("value", filePath.replaceAll(".html", ""));                
+                map.put("value", filePath.replaceAll(".html", ""));
                 templateFiles.add(map);
             }
         }

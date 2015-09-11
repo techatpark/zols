@@ -37,7 +37,7 @@ public class SchemaControler {
     private SchemaService schemaService;
 
     @RequestMapping(method = POST)
-    public String create(@RequestBody Map<String,Object> jsonSchema) throws DataStoreException {
+    public Map<String,Object> create(@RequestBody Map<String,Object> jsonSchema) throws DataStoreException {
         LOGGER.info("Creating new jsonSchemas {}", jsonSchema);
         return schemaService.create(jsonSchema);
     }

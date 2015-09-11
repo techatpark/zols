@@ -35,7 +35,7 @@ public class DocumentRepositoryService {
     public DocumentRepository create(DocumentRepository documentRepository) throws DataStoreException {
         DocumentRepository createdDocumentRepository = null;
         if (documentRepository != null) {
-            createdDocumentRepository = dataStore.create(DocumentRepository.class, documentRepository);
+            createdDocumentRepository = dataStore.create(documentRepository);
             LOGGER.info("Created Document Repository {}", createdDocumentRepository.getName());
         }
         return createdDocumentRepository;
@@ -58,11 +58,11 @@ public class DocumentRepositoryService {
      * @param documentRepository Object to be update
      * @return status of the update operation
      */
-    public Boolean update(DocumentRepository documentRepository) throws DataStoreException {
-        Boolean updated = false;
+    public DocumentRepository update(DocumentRepository documentRepository) throws DataStoreException {
+        DocumentRepository updated = null;
         if (documentRepository != null) {
             LOGGER.info("Updating Document Repository {}", documentRepository);
-            updated = dataStore.update(documentRepository);
+            updated = dataStore.update(documentRepository, documentRepository.getName());
         }
         return updated;
     }

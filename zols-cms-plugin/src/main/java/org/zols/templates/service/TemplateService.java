@@ -35,7 +35,7 @@ public class TemplateService {
     public Template create(Template template) throws DataStoreException {
         Template createdTemplate = null;
         if (template != null) {
-            createdTemplate = dataStore.create(Template.class, template);
+            createdTemplate = dataStore.create(template);
             LOGGER.info("Created Template  {}", createdTemplate.getName());
         }
         return createdTemplate;
@@ -58,11 +58,11 @@ public class TemplateService {
      * @param template Object to be update
      * @return status of the update Operation
      */
-    public Boolean update(Template template) throws DataStoreException {
-        Boolean updated = false;
+    public Template update(Template template) throws DataStoreException {
+        Template updated = null;
         if (template != null) {
             LOGGER.info("Updating Template  {}", template);
-            updated = dataStore.update(template);
+            updated = dataStore.update(template,template.getName());
         }
         return updated;
     }

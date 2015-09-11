@@ -33,7 +33,6 @@ public class LinkGroupService {
     @Autowired
     private LinkService linkService;
 
-
     /**
      * Creates a new Group with given Object
      *
@@ -43,7 +42,7 @@ public class LinkGroupService {
     public LinkGroup create(@Valid LinkGroup group) throws DataStoreException {
         LinkGroup createdGroup = null;
         if (group != null) {
-            createdGroup = dataStore.create(LinkGroup.class, group);
+            createdGroup = dataStore.create(group);
             LOGGER.info("Created Group {}", createdGroup.getName());
         }
         return createdGroup;
@@ -66,11 +65,11 @@ public class LinkGroupService {
      * @param group Object to be update
      * @return status of the Update
      */
-    public Boolean update(LinkGroup group) throws DataStoreException {
-        Boolean updated = false;
+    public LinkGroup update(LinkGroup group) throws DataStoreException {
+        LinkGroup updated = null;
         if (group != null) {
             LOGGER.info("Updating Group {}", group);
-            updated = dataStore.update(group);
+            updated = dataStore.update(group, group.getName());
         }
         return updated;
     }
@@ -83,12 +82,12 @@ public class LinkGroupService {
      */
     public Boolean delete(String groupName) throws DataStoreException {
         LOGGER.info("Deleting Group {}", groupName);
-        linkService.deleteLinksUnder(groupName);        
+        linkService.deleteLinksUnder(groupName);
         return dataStore.delete(LinkGroup.class, groupName);
     }
 
     /**
-     * 
+     *
      * @return list all the categories
      */
     public List<LinkGroup> list() throws DataStoreException {
@@ -110,7 +109,7 @@ public class LinkGroupService {
     }
 
     /**
-     * 
+     *
      * @return all the application links
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
@@ -123,7 +122,7 @@ public class LinkGroupService {
                 walkLinkTree(firstlevelLinks);
                 applicationLinks.put(group.getName(), firstlevelLinks);
             }
-        }       
+        }
 
         return applicationLinks;
     }

@@ -12,9 +12,8 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.zols.datastore.util.JsonUtil;
 import org.zols.datatore.exception.DataStoreException;
-
-
 
 /**
  *
@@ -34,10 +33,10 @@ public class SchemaService {
      * @param schema Object to be Create
      * @return created JsonSchema object
      */
-    public String create(Map<String,Object> schema) throws DataStoreException {
-        String createdJsonSchema = null;
+    public Map<String, Object> create(Map<String, Object> schema) throws DataStoreException {
+        Map<String, Object> createdJsonSchema = null;
         if (schema != null) {
-            createdJsonSchema = dataStore.create(schema);
+            createdJsonSchema = dataStore.createSchema(JsonUtil.asString(schema));
             LOGGER.info("Created JsonSchema  {}", createdJsonSchema);
         }
         return createdJsonSchema;
@@ -46,12 +45,13 @@ public class SchemaService {
     /**
      * Get the JsonSchema with given String
      *
-     * @param schemaName String to be Search
+     * @param schemaId String to be Search
      * @return searched JsonSchema
+     * @throws org.zols.datatore.exception.DataStoreException
      */
-    public Map<String,Object> read(String schemaName) throws DataStoreException {
-        LOGGER.info("Reading JsonSchema  {}", schemaName);
-        return dataStore.readAsMap(schemaName);
+    public Map<String, Object> read(String schemaId) throws DataStoreException {
+        LOGGER.info("Reading JsonSchema  {}", schemaId);
+        return dataStore.getSchema(schemaId);
     }
 
     /**
@@ -64,7 +64,7 @@ public class SchemaService {
         Boolean updated = false;
         if (schema != null) {
             LOGGER.info("Updating JsonSchema  {}", schema);
-            updated = dataStore.update(schema);
+            updated = dataStore.updateSchema(schema);
         }
         return updated;
     }
@@ -72,12 +72,12 @@ public class SchemaService {
     /**
      * Delete a JsonSchema with given String
      *
-     * @param schemaName String to be delete
+     * @param schemaId String to be delete
      * @return status of the Delete Operation
      */
-    public Boolean delete(String schemaName) throws DataStoreException {
-        LOGGER.info("Deleting JsonSchema  {}", schemaName);
-        return dataStore.delete(schemaName);
+    public Boolean delete(String schemaId) throws DataStoreException {
+        LOGGER.info("Deleting JsonSchema  {}", schemaId);
+        return dataStore.deleteSchema(schemaId);
     }
 
     /**
@@ -85,8 +85,8 @@ public class SchemaService {
      *
      * @return list of schema
      */
-    public List<Map<String,Object>> list() throws DataStoreException {
+    public List<Map<String, Object>> list() throws DataStoreException {
         LOGGER.info("Getting JsonSchemas ");
-        return dataStore.list();
+        return dataStore.listSchema();
     }
 }
