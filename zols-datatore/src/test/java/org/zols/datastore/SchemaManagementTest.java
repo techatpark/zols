@@ -80,6 +80,14 @@ public class SchemaManagementTest {
         Assert.assertNull("Getting Schema with Defenisions",
                 dataStore.validate("car", sampleJson("car")));
     }
+    
+    @Test
+    public void testGetEnlargedSchema() throws DataStoreException {
+        dataStore.createSchema(sampleJsonSchemaText("insurance"));
+        dataStore.createSchema(sampleJsonSchemaText("car"));
+        Assert.assertNotNull("Getting Enlarged Schema with Defenisions",
+                dataStore.getEnlargedSchema("car"));
+    }
 
     @Test
     public void testGetSchemaWithMultiLevelInheritance() throws DataStoreException {

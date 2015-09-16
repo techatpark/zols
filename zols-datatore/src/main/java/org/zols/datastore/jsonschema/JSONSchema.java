@@ -156,10 +156,13 @@ public class JSONSchema {
     }
 
     public String id() {
-        Object id = null;
+        Object id ;
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
-        if (jsonSchemaAsMap != null && (id = jsonSchemaAsMap.get("id")) != null) {
-            return id.toString();
+        if (jsonSchemaAsMap != null) {
+            if ((id = jsonSchemaAsMap.get("base")) != null
+                    || (id = jsonSchemaAsMap.get("id")) != null) {
+                return id.toString();
+            }
         }
         return null;
     }

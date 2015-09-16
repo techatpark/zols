@@ -1,5 +1,6 @@
 package org.zols.datastore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -129,10 +130,10 @@ public abstract class DataStore {
             throws DataStoreException {
         return list(jsonSchema(getSchema(schemaId)));
     }
-    
+
     public List<Map<String, Object>> list(String schemaId, Query query)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)),query);
+        return list(jsonSchema(getSchema(schemaId)), query);
     }
 
     /**
@@ -165,6 +166,11 @@ public abstract class DataStore {
         return false;
     }
 
+    public Map<String, Object> getEnlargedSchema(String schemaId)
+            throws DataStoreException {
+        return getEnlargedSchema(read(jsonSchemaForSchema(), schemaId));
+    }
+
     public Map<String, Object> getSchema(String schemaId)
             throws DataStoreException {
         return read(jsonSchemaForSchema(), schemaId);
@@ -181,12 +187,33 @@ public abstract class DataStore {
         if (schema != null) {
             Map<String, Object> definitions = new HashMap<>();
             walkSchemaTree(schema, definitions);
+
             if (definitions.size() > 0) {
                 schema.put("definitions", definitions);
             }
+
+            List<Map<String, Object>> idFieldSchemas = new ArrayList<>();
+            fillIdFields(idFieldSchemas, schema);
+
+            for (Map<String, Object> idFieldSchema : idFieldSchemas) {
+                schema.put("idField", idFieldSchema.remove("idField"));
+                schema.put("base", idFieldSchema.get("id"));
+            }
             schema = getOrderedSchema(schema);
+
         }
         return schema;
+    }
+
+    private void fillIdFields(List<Map<String, Object>> idFieldSchemas,
+            Map<String, Object> schema) {
+        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
+            if (schemaEntry.getKey().equals("idField")) {
+                idFieldSchemas.add(schema);
+            } else if (schemaEntry.getValue() instanceof Map) {
+                fillIdFields(idFieldSchemas, (Map) schemaEntry.getValue());
+            }
+        }
     }
 
     private Map<String, Object> fillDefinitions(String schemaId, Map<String, Object> definitions)
@@ -223,7 +250,11 @@ public abstract class DataStore {
                 schemaId = schemaEntry.getValue().toString();
                 definitions.put(schemaId, fillDefinitions(schemaEntry.getValue().toString(), definitions));
                 schemaEntry.setValue("#/definitions/" + schemaId);
-            } else if (schemaEntry.getValue() instanceof Map) {
+            } //            else if (schemaEntry.getKey().equals("idField")) {
+            //                definitions.put("idField", schemaEntry.getValue());
+            //                
+            //            } 
+            else if (schemaEntry.getValue() instanceof Map) {
                 walkSchemaTree((Map<String, Object>) schemaEntry.getValue(), definitions);
             }
         }
@@ -291,8 +322,6 @@ public abstract class DataStore {
      */
     protected abstract boolean delete(JSONSchema jsonSchema, Query query)
             throws DataStoreException;
-
-
 
     /**
      *
