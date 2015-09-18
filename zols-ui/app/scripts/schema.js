@@ -95,14 +95,37 @@
         });
     };
 
+    $.fn.v4Schema = function() {
+        var patchedSchema = jQuery.extend(true, {}, schema);
+
+        var properties = patchedSchema.properties;
+
+        var required = [];
+
+        for (var key in properties) {
+          if (properties[key].required) {
+            required.push(key);
+          }
+          delete properties[key].required;
+        }
+
+        if(required.length != 0) {
+            patchedSchema.required = required;
+        }
+        return patchedSchema;
+    };
 
     $.fn.saveSchema = function () {
+
+        var v4Schema = $.fn.v4Schema(schema);
+
+
         if (isEdit) {
             $.ajax({
                 method: 'PUT',
-                url: base_url + '/schema/' + schema.id,
+                url: base_url + '/schema/' + v4Schema.id,
                 dataType: 'json',
-                data: JSON.stringify(schema)
+                data: JSON.stringify(v4Schema)
             }).done(function (data) {
                 $.fn.refreshList();
             }).error(function (data) {
@@ -113,7 +136,7 @@
                 method: 'POST',
                 url: base_url + '/schema',
                 dataType: 'json',
-                data: JSON.stringify(schema)
+                data: JSON.stringify(v4Schema)
             }).done(function (data) {
                 $.fn.refreshList();
             }).error(function (data) {
