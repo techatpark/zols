@@ -55,6 +55,18 @@ public class SchemaService {
     }
 
     /**
+     * Get the Enlarged JsonSchema with given String
+     *
+     * @param schemaId String to be Search
+     * @return searched JsonSchema
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    public Map<String, Object> readEnlargedSchema(String schemaId) throws DataStoreException {
+        LOGGER.info("Reading JsonSchema  {}", schemaId);
+        return dataStore.getEnlargedSchema(schemaId);
+    }
+
+    /**
      * Update a JsonSchema with given Object
      *
      * @param schema Object to be update

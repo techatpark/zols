@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -68,12 +69,16 @@ public class JSONSchema {
 
     public static JSONSchema jsonSchemaForSchema() {
         if (_JSONSCHEMA_FOR_SCHEMA == null) {
-            try {
-                _JSONSCHEMA_FOR_SCHEMA = jsonSchema(new String(Files.readAllBytes(Paths
-                        .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/schema.json").toURI()))));
-            } catch (IOException | URISyntaxException ex) {
-                Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
-            }
+
+            InputStream inputStream = JSONSchema.class.getResourceAsStream("/org/zols/datastore/jsonschema/schema.json");
+
+            java.util.Scanner scanner = new java.util.Scanner(inputStream, "UTF-8").useDelimiter("\\A");
+            String theString = scanner.hasNext() ? scanner.next() : "";
+            
+            scanner.close();
+
+            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(theString);
+
         }
 
         return _JSONSCHEMA_FOR_SCHEMA;
@@ -156,7 +161,7 @@ public class JSONSchema {
     }
 
     public String id() {
-        Object id ;
+        Object id;
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
         if (jsonSchemaAsMap != null) {
             if ((id = jsonSchemaAsMap.get("base")) != null

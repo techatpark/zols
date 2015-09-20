@@ -62,7 +62,7 @@ public abstract class DataStore {
 
     public <T> List<T> list(Class<T> clazz) throws DataStoreException {
         List<T> objects = null;
-        List<Map<String, Object>> maps = DataStore.this.list(jsonSchema(clazz));
+        List<Map<String, Object>> maps = list(jsonSchema(clazz));
         if (maps != null) {
             objects = maps.stream().map(map -> asObject(clazz, map)).collect(toList());
         }
@@ -266,7 +266,7 @@ public abstract class DataStore {
     }
 
     public List<Map<String, Object>> listSchema() throws DataStoreException {
-        return DataStore.this.list(jsonSchemaForSchema());
+        return list(jsonSchemaForSchema());
     }
 
     /**

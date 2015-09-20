@@ -121,12 +121,12 @@
                 <div class="form-group">
                 <label class="col-md-4 control-label" for="type">Type</label>
                 <div class="col-md-4">
-                <select name="type" data-link="prop.type" type="text" placeholder="" class="form-control input-md">
-                <option name="string" value="string">String</option>
-                <option name="string" value="integer">Integer</option>
-                <option name="string" value="number">Number</option>
-                <option name="string" value="boolean">Boolean</option>
-                <option name="string" value="array">Array</option>
+                <select name="type" data-name="{{:prop.type}}" data-link="prop.type" type="text" placeholder="" class="form-control input-md">
+                <option value="string">String</option>
+                <option value="integer">Integer</option>
+                <option value="number">Number</option>
+                <option value="boolean">Boolean</option>
+                <option value="array">Array</option>
                 </select>
                 </div>
                 </div>
@@ -138,20 +138,20 @@
                 <label class="col-md-4 control-label" for="type">Format</label>
                 <div class="col-md-4">
                 <select name="format" data-link="prop.format" type="text" placeholder="" class="form-control input-md">
-                <option name="string" value="text">Text</option>
-                <option name="string" value="html">HTML</option>
-                <option name="string" value="textarea">Textarea</option>
-                <option name="string" value="color">Color</option>
-                <option name="string" value="date">Date</option>
-                <option name="string" value="datetime">Date time</option>
-                <option name="string" value="datetime-local">Datetime Local</option>
-                <option name="string" value="email">Email</option>
-                <option name="string" value="number">Number</option>
-                <option name="string" value="range">Range</option>
-                <option name="string" value="tel">tel</option>
-                <option name="string" value="time">Time</option>
-                <option name="string" value="url">Url</option>
-                <option name="string" value="week">Week</option>
+                <option value="text">Text</option>
+                <option value="html">HTML</option>
+                <option value="textarea">Textarea</option>
+                <option value="color">Color</option>
+                <option value="date">Date</option>
+                <option value="datetime">Date time</option>
+                <option value="datetime-local">Datetime Local</option>
+                <option value="email">Email</option>
+                <option value="number">Number</option>
+                <option value="range">Range</option>
+                <option value="tel">tel</option>
+                <option value="time">Time</option>
+                <option value="url">Url</option>
+                <option value="week">Week</option>
                 </select>
                 </div>
                 </div>
@@ -160,11 +160,11 @@
                 <div class="form-group" data-link="visible{:prop.type === 'array'}">
                 <label class="col-md-4 control-label" for="type">Array Type</label>
                 <div class="col-md-4">
-                <select name="arraytypes" data-link="prop.items.type" type="text" placeholder="" class="form-control input-md">
-                    <option name="string" value="string">String</option>
-	                <option name="string" value="integer">Integer</option>
-	                <option name="string" value="number">Number</option>
-	                <option name="string" value="boolean">Boolean</option>
+                <select name="arraytypes" data-name="{{:prop.items.type}}" data-link="prop.items.type" type="text" placeholder="" class="form-control input-md">
+                    <option value="string">String</option>
+	                <option value="integer">Integer</option>
+	                <option value="number">Number</option>
+	                <option value="boolean">Boolean</option>
                 </select>                
                 </div>
                 </div>

@@ -5,6 +5,7 @@
  */
 package org.zols.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -16,22 +17,24 @@ import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
 @ComponentScan("org.zols")
-public class ZolsConfiguration extends WebMvcConfigurerAdapter{
+public class ZolsConfiguration extends WebMvcConfigurerAdapter {
+
+    @Value("${spring.application.name}")
+    private String indexName;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(pagePopulationInterceptor());
     }
-    
+
     @Bean
     public PagePopulationInterceptor pagePopulationInterceptor() {
         return new PagePopulationInterceptor();
     }
-    
+
     @Bean
     public DataStore dataStore() {
-        return new ElasticSearchDataStore();
+        return new ElasticSearchDataStore(indexName);
     }
-    
 
 }

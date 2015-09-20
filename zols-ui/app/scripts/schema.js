@@ -27,6 +27,8 @@
     var confirmationPromise;
     var isEdit = false;
 
+    var JSON_TYPES = ['array', 'string', 'integer', 'number', 'boolean'];
+
     $('#edit_selected').on('click', function () {
         $.fn.renderSchema();
     });
@@ -122,10 +124,19 @@
 
             if (properties[key].type) {
                 if (properties[key].type === 'array') {
+                    if (JSON_TYPES.indexOf(properties[key].items.type) === -1) {
+                        properties[key].items['$ref'] = properties[key].items.type;
+                        delete properties[key].items.type;
+                    }
                     delete properties[key].options;
                 }
                 else {
                     delete properties[key].items;
+                }
+
+                if (JSON_TYPES.indexOf(properties[key].type) === -1) {
+                    properties[key]['$ref'] = properties[key].type;
+                    delete properties[key].type;
                 }
 
             }
@@ -142,6 +153,7 @@
         var v4Schema = $.fn.v4Schema(schema);
 
 
+        console.log(v4Schema);
         if (isEdit) {
             $.ajax({
                 method: 'PUT',
@@ -188,15 +200,25 @@
         var required = patchedSchema.required;
 
         for (var key in properties) {
-            properties[key] = $.fn.patchedProperty(properties[key]);            
+            properties[key] = $.fn.patchedProperty(properties[key]);
             if (required) {
                 if (required.indexOf(key) > -1) {
                     properties[key].required = true;
                 }
             }
+            if (properties[key]['$ref']) {
+                properties[key].type = properties[key]['$ref'];
+                delete properties[key]['$ref'];
+            }
+
+            if (properties[key].type === 'array') {
+                properties[key].items.type = properties[key].items['$ref'];
+                delete properties[key].items['$ref'];
+            }
+
         }
 
-
+        console.log(patchedSchema);
         return patchedSchema;
     };
 
@@ -207,6 +229,26 @@
         schema = $.fn.v3Schema();
         schemaTemplate.link('#result', schema);
         delete schema.isEdit;
+
+        var options = '';
+        for (var index in schemas) {
+            var schemaElement = schemas[index];
+            if (schemaElement.id !== schema.id) {
+                options += "<option value='" + schemaElement.id + "'>" + schemaElement.title + "</option>";
+            }
+        }
+
+        $("select[name='type']").each(function (i, obj) {
+            $(obj).append(options);
+            $(obj).val($(obj).attr('data-name'));
+        });
+
+        $("select[name='arraytypes']").each(function (i, obj) {
+            $(obj).append(options);
+            $(obj).val($(obj).attr('data-name'));
+        });
+
+
         $.fn.listIdAndLabelFileds();
         $("input[name='name']")
                 .focusout(function () {

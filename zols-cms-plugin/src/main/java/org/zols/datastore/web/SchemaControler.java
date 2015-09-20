@@ -18,6 +18,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datastore.service.SchemaService;
@@ -37,15 +38,15 @@ public class SchemaControler {
     private SchemaService schemaService;
 
     @RequestMapping(method = POST)
-    public Map<String,Object> create(@RequestBody Map<String,Object> jsonSchema) throws DataStoreException {
+    public Map<String, Object> create(@RequestBody Map<String, Object> jsonSchema) throws DataStoreException {
         LOGGER.info("Creating new jsonSchemas {}", jsonSchema);
         return schemaService.create(jsonSchema);
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public Map<String,Object> read(@PathVariable(value = "id") String id) throws DataStoreException {
+    public Map<String, Object> read(@PathVariable(value = "id") String id, @RequestParam(value = "enlarged",required = false) String enlarged) throws DataStoreException {
         LOGGER.info("Getting jsonSchema ", id);
-        return schemaService.read(id);
+        return (enlarged == null ) ? schemaService.read(id) : schemaService.readEnlargedSchema(id);
     }
 
     @RequestMapping(value = "/{id}", method = PUT)
@@ -66,7 +67,7 @@ public class SchemaControler {
     }
 
     @RequestMapping(method = GET)
-    public List<Map<String,Object>>  list() throws DataStoreException {
+    public List<Map<String, Object>> list() throws DataStoreException {
         LOGGER.info("Getting JsonSchemas ");
         return schemaService.list();
     }
