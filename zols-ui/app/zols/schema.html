@@ -126,9 +126,12 @@
                 <option name="string" value="integer">Integer</option>
                 <option name="string" value="number">Number</option>
                 <option name="string" value="boolean">Boolean</option>
+                <option name="string" value="array">Array</option>
                 </select>
                 </div>
                 </div>
+
+
 
                 <!-- Select input-->
                 <div class="form-group" data-link="visible{:prop.type === 'string'}">
@@ -150,6 +153,19 @@
                 <option name="string" value="url">Url</option>
                 <option name="string" value="week">Week</option>
                 </select>
+                </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group" data-link="visible{:prop.type === 'array'}">
+                <label class="col-md-4 control-label" for="type">Array Type</label>
+                <div class="col-md-4">
+                <select name="arraytypes" data-link="prop.items.type" type="text" placeholder="" class="form-control input-md">
+                    <option name="string" value="string">String</option>
+	                <option name="string" value="integer">Integer</option>
+	                <option name="string" value="number">Number</option>
+	                <option name="string" value="boolean">Boolean</option>
+                </select>                
                 </div>
                 </div>
 

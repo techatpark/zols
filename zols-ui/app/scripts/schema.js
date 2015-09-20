@@ -48,7 +48,7 @@
 
     $('#result').on('click', '#addAttr', function () {
         var totalProperties = Object.keys(schema.properties).length;
-        schema.properties['newProperty' + totalProperties] = {'type': 'string', 'format': 'text', 'required': false,'options':{'wysiwyg':false}};
+        schema.properties['newProperty' + totalProperties] = $.fn.patchedProperty({});
         $.fn.renderSchema();
     });
 
@@ -57,6 +57,10 @@
         delete schema.properties[$(this).attr('name')];
         $.fn.renderSchema();
     });
+
+    $.fn.patchedProperty = function (property) {
+        return jQuery.extend(true, {'type': 'string', 'format': 'text', 'items': {'type': "string"}, 'required': false, 'options': {'wysiwyg': false}}, property);
+    };
 
     $.fn.listSchemas = function () {
         $.get(base_url + '/schema').done(function (data) {
@@ -95,7 +99,8 @@
         });
     };
 
-    $.fn.v4Schema = function() {
+
+    $.fn.v4Schema = function () {
         var patchedSchema = jQuery.extend(true, {}, schema);
 
         var properties = patchedSchema.properties;
@@ -103,13 +108,30 @@
         var required = [];
 
         for (var key in properties) {
-          if (properties[key].required) {
-            required.push(key);
-          }
-          delete properties[key].required;
+            //repair required
+            if (properties[key].required) {
+                required.push(key);
+            }
+            delete properties[key].required;
+
+            //trim unused
+            if (properties[key].format && properties[key].format === 'text') {
+                delete properties[key].format;
+                delete properties[key].options;
+            }
+
+            if (properties[key].type) {
+                if (properties[key].type === 'array') {
+                    delete properties[key].options;
+                }
+                else {
+                    delete properties[key].items;
+                }
+
+            }
         }
 
-        if(required.length != 0) {
+        if (required.length !== 0) {
             patchedSchema.required = required;
         }
         return patchedSchema;
@@ -158,9 +180,31 @@
         });
     };
 
+    $.fn.v3Schema = function () {
+        var patchedSchema = jQuery.extend(true, {}, schema);
+
+        var properties = patchedSchema.properties;
+
+        var required = patchedSchema.required;
+
+        for (var key in properties) {
+            properties[key] = $.fn.patchedProperty(properties[key]);            
+            if (required) {
+                if (required.indexOf(key) > -1) {
+                    properties[key].required = true;
+                }
+            }
+        }
+
+
+        return patchedSchema;
+    };
+
+
     $.fn.renderSchema = function () {
         schemaTemplate = $.templates('#schemaForm');
         schema.isEdit = isEdit;
+        schema = $.fn.v3Schema();
         schemaTemplate.link('#result', schema);
         delete schema.isEdit;
         $.fn.listIdAndLabelFileds();
@@ -197,7 +241,7 @@
         });
         $('#idField').val(currentIdField);
         schema.idField = currentIdField;
-        
+
         var currentLabelField = schema.labelField;
         console.log('currentLabelField ' + currentLabelField);
         $('#labelField').find('option').remove();
@@ -206,7 +250,7 @@
         });
         $('#labelField').val(currentLabelField);
         schema.labelField = currentLabelField;
-        
+
     };
 
     $.fn.listSchemas();
