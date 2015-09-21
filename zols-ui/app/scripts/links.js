@@ -49,7 +49,7 @@
 
     $.fn.listCategories = function () {
         $.get(base_url + '/link_groups').done(function (data) {
-            if (data === "") {
+            if (data.length === 0) {
                 $('#groupHeader').hide();
                 var template = $.templates("#noGroup");
                 template.link('#result', {});
@@ -91,7 +91,7 @@
 
     };
     $.fn.listLinks = function (listofLinks) {
-        if (listofLinks === "") {
+        if (listofLinks.length === 0) {
             var template = $.templates("#noLink");
             template.link('#result', {});
             $('#result a').click(function () {

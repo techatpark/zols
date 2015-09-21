@@ -67,18 +67,17 @@ public class JSONSchema {
         return new JSONSchema(asString(jsonSchema));
     }
 
+    private static String getContentFromClasspath(String resourcePath) {
+        InputStream inputStream = JSONSchema.class.getResourceAsStream(resourcePath);
+        java.util.Scanner scanner = new java.util.Scanner(inputStream, "UTF-8").useDelimiter("\\A");
+        String theString = scanner.hasNext() ? scanner.next() : "";
+        scanner.close();
+        return theString;
+    }
+
     public static JSONSchema jsonSchemaForSchema() {
         if (_JSONSCHEMA_FOR_SCHEMA == null) {
-
-            InputStream inputStream = JSONSchema.class.getResourceAsStream("/org/zols/datastore/jsonschema/schema.json");
-
-            java.util.Scanner scanner = new java.util.Scanner(inputStream, "UTF-8").useDelimiter("\\A");
-            String theString = scanner.hasNext() ? scanner.next() : "";
-            
-            scanner.close();
-
-            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(theString);
-
+            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(getContentFromClasspath("/org/zols/datastore/jsonschema/schema.json"));
         }
 
         return _JSONSCHEMA_FOR_SCHEMA;
@@ -96,10 +95,8 @@ public class JSONSchema {
     private ScriptEngine scriptEngine() throws ScriptException, IOException, URISyntaxException {
         if (_scriptEngine == null) {
             _scriptEngine = new ScriptEngineManager().getEngineByName("nashorn");
-            _scriptEngine.eval(new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/jsen.js").toURI()))));
-            _scriptEngine.eval(new String(Files.readAllBytes(Paths
-                    .get(ClassLoader.getSystemResource("org/zols/datastore/jsonschema/validator.js").toURI()))));
+            _scriptEngine.eval(getContentFromClasspath("/org/zols/datastore/jsonschema/jsen.js"));
+            _scriptEngine.eval(getContentFromClasspath("/org/zols/datastore/jsonschema/validator.js"));
             JSON = _scriptEngine.eval("JSON");
         }
         return _scriptEngine;

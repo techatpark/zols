@@ -48,7 +48,7 @@
 
     $.fn.listTemplateRepositories = function () {
         $.get(base_url + '/template_repositories').done(function (data) {
-            if (data === "") {
+            if (data.length === 0) {
                 $('#templateRepositoryHeader').hide();
                 var template = $.templates("#noTemplateRepository");
                 template.link('#result', {});
@@ -86,7 +86,7 @@
 
     };
     $.fn.listTemplates = function (listofTemplates) {
-        if (listofTemplates === "") {
+        if (listofTemplates.length === 0) {
             var template = $.templates("#noTemplate");
             template.link('#result', {});
             $('#result a').click(function () {

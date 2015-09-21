@@ -66,7 +66,7 @@
 
     $.fn.listSchemas = function () {
         $.get(base_url + '/schema').done(function (data) {
-            if (data === "") {
+            if (data.length === 0) {
                 var template = $.templates("#noSchema");
                 template.link('#result', {});
                 $('#result a').click(function () {
