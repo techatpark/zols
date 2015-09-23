@@ -19,6 +19,7 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -26,7 +27,6 @@ import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.node.Node;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -50,21 +50,27 @@ public class ElasticSearchDataStore extends DataStore {
 
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStore.class);
 
-    private final Node node;
+    private final Client client;
 
     private final String indexName;
 
     public ElasticSearchDataStore() {
         this.indexName = "zols";
         Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
-        node = nodeBuilder().settings(settings).local(true).build().start();
+        client = nodeBuilder().settings(settings).local(true).build().start().client();
         createIndexIfNotExists();
     }
 
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
         Settings settings = ImmutableSettings.settingsBuilder().put("index.number_of_shards", 1).put("index.number_of_replicas", 0).build();
-        node = nodeBuilder().settings(settings).local(true).build().start();
+        client = nodeBuilder().settings(settings).local(true).build().start().client();
+        createIndexIfNotExists();
+    }
+
+    public ElasticSearchDataStore(String indexName, Client client) {
+        this.indexName = indexName;
+        this.client = client;
         createIndexIfNotExists();
     }
 
@@ -78,9 +84,9 @@ public class ElasticSearchDataStore extends DataStore {
 
     private void createIndexIfNotExists() {
         IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName);
-        if (!node.client().admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
+        if (!client.admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
             CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
-            node.client().admin().indices().create(createIndexRequest).actionGet();
+            client.admin().indices().create(createIndexRequest).actionGet();
             LOGGER.debug("New index [{}] created", indexName);
         }
     }
@@ -91,9 +97,9 @@ public class ElasticSearchDataStore extends DataStore {
         Object idValue = validatedDataObject.get(jsonSchema.idField());
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {
-            indexRequestBuilder = node.client().prepareIndex(indexName, jsonSchema.id()).setRefresh(true);
+            indexRequestBuilder = client.prepareIndex(indexName, jsonSchema.id()).setRefresh(true);
         } else {
-            indexRequestBuilder = node.client().prepareIndex(indexName, jsonSchema.id(), idValue.toString()).setRefresh(true);
+            indexRequestBuilder = client.prepareIndex(indexName, jsonSchema.id(), idValue.toString()).setRefresh(true);
         }
 
         IndexResponse response = indexRequestBuilder
@@ -120,7 +126,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected Map<String, Object> read(JSONSchema jsonSchema, String idValue) {
-        GetResponse getResponse = node.client()
+        GetResponse getResponse = client
                 .prepareGet(indexName, jsonSchema.id(), idValue)
                 .setOperationThreaded(false)
                 .execute()
@@ -131,38 +137,38 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected boolean delete(JSONSchema jsonSchema) {
-        DeleteMappingResponse response = node.client()
+        DeleteMappingResponse response = client
                 .admin()
                 .indices()
                 .prepareDeleteMapping(indexName)
                 .setType(jsonSchema.id())
                 .execute()
                 .actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        client.admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isAcknowledged();
     }
 
     @Override
     protected boolean delete(JSONSchema jsonSchema, String idValue) {
-        DeleteResponse response = node.client()
+        DeleteResponse response = client
                 .prepareDelete(indexName, jsonSchema.id(), idValue).setRefresh(true)
                 .setOperationThreaded(false)
                 .execute()
                 .actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        client.admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isFound();
     }
 
     @Override
     protected boolean delete(JSONSchema jsonSchema, Query query) {
-        DeleteByQueryResponse actionGet = node.client().prepareDeleteByQuery(indexName)
+        DeleteByQueryResponse actionGet = client.prepareDeleteByQuery(indexName)
                 .setListenerThreaded(false)
                 .setTypes(jsonSchema.id())
                 .setQuery(getQueryBuilder(query))
                 .execute().actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        client.admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return true;
     }
@@ -170,12 +176,12 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean update(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(jsonSchema.idField()).toString();
-        IndexResponse response = node.client().prepareIndex(indexName, jsonSchema.id(), idValue).setRefresh(true)
+        IndexResponse response = client.prepareIndex(indexName, jsonSchema.id(), idValue).setRefresh(true)
                 .setOperationThreaded(false)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
-        node.client().admin().indices().refresh(new RefreshRequest(indexName));
+        client.admin().indices().refresh(new RefreshRequest(indexName));
         patchDelayInRefresh();
         return response.isCreated();
     }
@@ -183,7 +189,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema) {
         List<Map<String, Object>> list = null;
-        SearchResponse response = node.client()
+        SearchResponse response = client
                 .prepareSearch()
                 .setIndices(indexName)
                 .setTypes(jsonSchema.id())
@@ -204,7 +210,7 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
-        SearchResponse response = node.client()
+        SearchResponse response = client
                 .prepareSearch()
                 .setIndices(indexName)
                 .setTypes(jsonSchema.id())
@@ -225,7 +231,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected void drop() throws DataStoreException {
-        node.client().admin().indices().delete(new DeleteIndexRequest(indexName));
+        client.admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 
     private FilterBuilder getFilterBuilder(Query query) {

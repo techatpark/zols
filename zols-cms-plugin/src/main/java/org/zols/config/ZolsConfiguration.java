@@ -5,6 +5,8 @@
  */
 package org.zols.config;
 
+import org.elasticsearch.client.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,6 +23,9 @@ public class ZolsConfiguration extends WebMvcConfigurerAdapter {
 
     @Value("${spring.application.name}")
     private String indexName;
+    
+    @Autowired
+    private Client client;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -34,7 +39,10 @@ public class ZolsConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public DataStore dataStore() {
-        return new ElasticSearchDataStore(indexName);
+        if(client == null) {
+            return new ElasticSearchDataStore(indexName);
+        }
+        return new ElasticSearchDataStore(indexName,client);
     }
 
 }
