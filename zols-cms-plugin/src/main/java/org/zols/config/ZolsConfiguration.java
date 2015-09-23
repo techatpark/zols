@@ -24,7 +24,7 @@ public class ZolsConfiguration extends WebMvcConfigurerAdapter {
     @Value("${spring.application.name}")
     private String indexName;
     
-    @Autowired
+    @Autowired(required=false)
     private Client client;
 
     @Override
