@@ -10,6 +10,9 @@
         "salary": {
             "type": "integer"
         },
+        "department": {
+            "type": "string"
+        },
         "isContractor": {
             "type": "boolean"
         }

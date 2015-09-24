@@ -13,8 +13,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
-import org.zols.datastore.model.Employee;
 import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -32,13 +33,14 @@ public class DataManagementTest {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Sathish");
         map.put("salary", 1000);
+        map.put("department", "IT");
         map.put("isContractor", true);
         dataStore.create("employee", map);
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.delete("employee", "Sathish");
+        dataStore.delete("employee");
         dataStore.deleteSchema("employee");
     }
 
@@ -76,21 +78,27 @@ public class DataManagementTest {
     @Test
     public void testListDataWithQuery() throws DataStoreException {
         Query query = new Query();
-        query.addFilter(new Filter("name", Filter.Operator.EQUALS, "Sathish"));
+        query.addFilter(new Filter("name", EQUALS, "Sathish"));
         Assert.assertEquals("Listing Simple Data with valid query", 1, dataStore.list("employee", query).size());
     }
 
-//    @Test
-//    public void testListDataWithExistsInQuery() throws DataStoreException {
-//        Query query = new Query();
-//        query.addFilter(new Filter("name", Filter.Operator.EXISTS_IN, "Sathish"));
-//        Assert.assertEquals("Listing Simple Data with valid Exists In query", 1, dataStore.list("employee", query).size());
-//    }
+    //@Test
+    public void testListDataWithExistsInQuery() throws DataStoreException {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "Rajan");
+        map.put("salary", 2000);
+        map.put("isContractor", false);
+        map.put("department", "CSE");
+        dataStore.create("employee", map);
+        Query query = new Query();
+        query.addFilter(new Filter("name", EXISTS_IN, new String[]{"IT","CSE"}));
+        Assert.assertEquals("Listing Simple Data with valid Exists In query", 2, dataStore.list("employee", query).size());
+    }
 
     @Test
     public void testListDataWithInvalidQuery() throws DataStoreException {
         Query query = new Query();
-        query.addFilter(new Filter("name", Filter.Operator.EQUALS, "Saravana"));
+        query.addFilter(new Filter("name", EQUALS, "Saravana"));
         Assert.assertEquals("Listing Simple Data with valid query", 0, dataStore.list("employee", query).size());
     }
 }
