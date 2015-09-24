@@ -233,39 +233,13 @@ public class ElasticSearchDataStore extends DataStore {
     protected void drop() throws DataStoreException {
         client.admin().indices().delete(new DeleteIndexRequest(indexName));
     }
-
-    private FilterBuilder getFilterBuilder(Query query) {
-        FilterBuilder filterBuilder = null;
-        if (query != null) {
-            List<Filter> filters = query.getFilters();
-            if (filters != null) {
-                int size = filters.size();
-                FilterBuilder[] filterBuilders = new FilterBuilder[size];
-                Filter filter;
-                for (int index = 0; index < size; index++) {
-                    filter = filters.get(index);
-                    switch (filter.getOperator()) {
-                        case EQUALS:
-                            filterBuilders[index] = FilterBuilders.termFilter(filter.getName(), filter.getValue());
-                            break;
-                        case IS_NULL:
-                            filterBuilders[index] = FilterBuilders.notFilter(FilterBuilders.existsFilter(filter.getName()));
-                            break;
-                    }
-                }
-                filterBuilder = FilterBuilders.andFilter(filterBuilders);
-            }
-        }
-        return filterBuilder;
-    }
-
+    
     private QueryBuilder getQueryBuilder(Query query) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         if (query != null) {
             List<Filter> queries = query.getFilters();
             if (queries != null) {
-                int size = queries.size();
-                QueryBuilder[] queryBuilders = new QueryBuilder[size];
+                int size = queries.size();                
                 Filter filter;
                 for (int index = 0; index < size; index++) {
                     filter = queries.get(index);
@@ -276,11 +250,14 @@ public class ElasticSearchDataStore extends DataStore {
                         case IS_NULL:
                             queryBuilder.mustNot(QueryBuilders.filteredQuery(QueryBuilders.matchAllQuery(), FilterBuilders.existsFilter(filter.getName())));
                             break;
+                        case EXISTS_IN:
+                            queryBuilder.must(QueryBuilders.termsQuery(filter.getName(), filter.getValue()));
+                            break;
                     }
                 }
             }
         }
-        return queryBuilder;
+       return queryBuilder;
     }
 
 }
