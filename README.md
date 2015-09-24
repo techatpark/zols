@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/sathishk/zols.svg?branch=master)](https://travis-ci.org/sathishk/zols) [ ![Codeship Status for sathishk/zols](https://codeship.com/projects/b65c6c40-440e-0133-338f-16d04af5f66c/status?branch=master)](https://codeship.com/projects/104241)
+ 
 Zols
 ====
 
