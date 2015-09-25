@@ -5,7 +5,9 @@
  */
 package org.zols.datastore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
@@ -82,7 +84,7 @@ public class DataManagementTest {
         Assert.assertEquals("Listing Simple Data with valid query", 1, dataStore.list("employee", query).size());
     }
 
-    //@Test
+    @Test
     public void testListDataWithExistsInQuery() throws DataStoreException {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "Rajan");
@@ -90,8 +92,11 @@ public class DataManagementTest {
         map.put("isContractor", false);
         map.put("department", "CSE");
         dataStore.create("employee", map);
+        List<String> departments = new ArrayList<>();
+        departments.add("IT");
+        departments.add("CSE");
         Query query = new Query();
-        query.addFilter(new Filter("name", EXISTS_IN, new String[]{"IT","CSE"}));
+        query.addFilter(new Filter("department", EXISTS_IN, departments));
         Assert.assertEquals("Listing Simple Data with valid Exists In query", 2, dataStore.list("employee", query).size());
     }
 

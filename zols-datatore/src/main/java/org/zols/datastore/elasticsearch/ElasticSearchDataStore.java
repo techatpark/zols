@@ -6,6 +6,7 @@
 package org.zols.datastore.elasticsearch;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
@@ -51,14 +52,20 @@ public class ElasticSearchDataStore extends DataStore {
 
     public ElasticSearchDataStore() {
         this.indexName = "zols";
-        Settings settings = settingsBuilder().put("index.number_of_shards", 1).put("path.home", "/").put("index.number_of_replicas", 0).build();
+        Settings settings = settingsBuilder().put("index.number_of_shards", 1)
+                .put("path.home", "/")
+                .put("path.data", "data")
+                .put("index.number_of_replicas", 0).build();
         client = nodeBuilder().settings(settings).local(true).build().start().client();
         createIndexIfNotExists();
     }
 
     public ElasticSearchDataStore(String indexName) {
         this.indexName = indexName;
-        Settings settings = settingsBuilder().put("index.number_of_shards", 1).put("path.home", "/").put("index.number_of_replicas", 0).build();
+        Settings settings = settingsBuilder().put("index.number_of_shards", 1)
+                .put("path.home", "/")
+                .put("path.data", "data")
+                .put("index.number_of_replicas", 0).build();
         client = nodeBuilder().settings(settings).local(true).build().start().client();
         createIndexIfNotExists();
     }
@@ -236,8 +243,12 @@ public class ElasticSearchDataStore extends DataStore {
                         case IS_NOTNULL:
                             queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
                             break;
-                        case EXISTS_IN:                            
-                            queryBuilder.must(QueryBuilders.termsQuery(filter.getName(), filter.getValue()));
+                        case EXISTS_IN:         
+                            Collection collection = (Collection) filter.getValue();
+                            for (Object object : collection) {
+                                queryBuilder.should(QueryBuilders.matchQuery(filter.getName(), object));
+                            }
+                            
                             break;
                     }
                 }
