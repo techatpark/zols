@@ -13,12 +13,12 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
 import org.zols.datastore.query.Query;
+import static org.zols.datastore.util.TestUtil.testDataStore;
 import org.zols.datatore.exception.DataStoreException;
 
 public class DataManagementTest {
@@ -26,7 +26,7 @@ public class DataManagementTest {
     private final DataStore dataStore;
 
     public DataManagementTest() {
-        dataStore = new ElasticSearchDataStore();
+        dataStore = testDataStore();
     }
 
     @Before

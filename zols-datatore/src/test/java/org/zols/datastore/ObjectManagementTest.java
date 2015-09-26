@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
 import org.zols.datastore.model.Employee;
+import static org.zols.datastore.util.TestUtil.testDataStore;
 import org.zols.datatore.exception.DataStoreException;
 
 public class ObjectManagementTest {
@@ -18,7 +18,7 @@ public class ObjectManagementTest {
     private final DataStore dataStore;
 
     public ObjectManagementTest() {
-        dataStore = new ElasticSearchDataStore();
+        dataStore = testDataStore();
     }
 
     @Before

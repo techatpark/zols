@@ -253,8 +253,7 @@ public class ElasticSearchDataStore extends DataStore {
                     }
                 }
             }
-        }
-        LOGGER.info("Elastic Searcg Query\n", queryBuilder.toString());
+        }        
         return queryBuilder;
     }
 
