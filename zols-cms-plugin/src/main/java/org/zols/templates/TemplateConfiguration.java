@@ -26,7 +26,7 @@ import org.zols.templates.service.TemplateRepositoryService;
 @Configuration
 @EnableConfigurationProperties(ThymeleafProperties.class)
 public class TemplateConfiguration {
-    
+
     private static final Logger LOGGER = getLogger(TemplateConfiguration.class);
 
     @Autowired
@@ -40,6 +40,7 @@ public class TemplateConfiguration {
 
     @PostConstruct
     public void intializeTemplates() {
+        int retry = 0;
         LOGGER.debug("intialize Template Repositories");
         TemplateResolver resolver;
         File file;
@@ -62,12 +63,22 @@ public class TemplateConfiguration {
                             templateEngine.addTemplateResolver(resolver);
                             break;
                     }
-                    LOGGER.info("Added Template Repository {}",templateRepository.getName());
+                    LOGGER.info("Added Template Repository {}", templateRepository.getName());
                 }
             }
 
         } catch (Exception e) {
-            LOGGER.error("Error intializing Template Repositories",e);
+            LOGGER.error("Error intializing Template Repositories", e);
+            retry++;
+            if (retry < 2) {
+                LOGGER.debug("Retring intializing Template Repositories {}", retry);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                }
+                intializeTemplates();
+            }
+
         }
         addZolsTemplates();
         LOGGER.debug("intialized Template Repositories");

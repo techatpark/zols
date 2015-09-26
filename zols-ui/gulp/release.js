@@ -8,9 +8,9 @@ var replace = require('gulp-replace');
 
 gulp.task('thymeleaf',['build'], function () {
   return gulp.src(['dist/**/*.html','dist/**/*.css'])
-    .pipe(replace('src="scripts/', 'th:src="@{scripts/'))
+    .pipe(replace('src="scripts/', 'th:src="@{/scripts/'))
     .pipe(replace('.js">', '.js}">'))
-    .pipe(replace('href="styles/', 'th:href="@{styles/'))
+    .pipe(replace('href="styles/', 'th:href="@{/styles/'))
     .pipe(replace('.css">', '.css}"/>'))
     .pipe(replace('../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/', '../fonts/'))
     .pipe(gulp.dest('dist'));
