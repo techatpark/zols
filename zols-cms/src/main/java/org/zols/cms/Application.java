@@ -33,11 +33,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-//import org.zols.plugin.EnableCMS;
+import org.zols.plugin.EnableCMS;
 
 @EnableAutoConfiguration
 @ComponentScan
-//@EnableCMS
+@EnableCMS
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class Application extends WebMvcConfigurerAdapter {
 	
