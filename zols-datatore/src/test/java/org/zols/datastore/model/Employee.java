@@ -5,8 +5,10 @@
  */
 package org.zols.datastore.model;
 
+import javax.persistence.Entity;
 import javax.persistence.Id;
 
+@Entity(name="employee")
 public class Employee {
 
     @Id

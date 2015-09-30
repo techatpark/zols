@@ -5,8 +5,10 @@
  */
 package org.zols.datastore;
 
+import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
@@ -80,13 +82,13 @@ public class SchemaManagementTest {
         Assert.assertNull("Getting Schema with Defenisions",
                 dataStore.validate("car", sampleJson("car")));
     }
-    
+
     @Test
     public void testGetEnlargedSchema() throws DataStoreException {
         dataStore.createSchema(sampleJsonSchemaText("insurance"));
         dataStore.createSchema(sampleJsonSchemaText("car"));
-        Assert.assertNotNull("Getting Enlarged Schema with Defenisions",
-                dataStore.getEnlargedSchema("car"));
+        Map<String, Object> carSchema = dataStore.getEnlargedSchema("car");
+        Assert.assertEquals("Getting Enlarged Schema with Defenisions", "vechicle", carSchema.get("base"));
     }
 
     @Test
@@ -108,5 +110,4 @@ public class SchemaManagementTest {
 //        Assert.assertNotNull("Invalid Schema with Multi Level Inheritance",
 //                dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
 //    }
-
 }

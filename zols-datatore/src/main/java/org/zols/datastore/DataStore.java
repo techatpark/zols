@@ -90,9 +90,13 @@ public abstract class DataStore {
      */
     public Map<String, Object> create(String schemaId, Map<String, Object> jsonData)
             throws DataStoreException {
-        JSONSchema jSONSchema = jsonSchema(getSchema(schemaId));
-        if (jSONSchema.validate(jsonData) == null) {
-            return create(jSONSchema, jsonData);
+
+        Map<String, Object> enlargedSchema = getEnlargedSchema(schemaId);
+        enlargedSchema.put("id", schemaId);
+        JSONSchema enlargedJsonSchema = jsonSchema(enlargedSchema);
+
+        if (enlargedJsonSchema.validate(jsonData) == null) {
+            return create(enlargedJsonSchema, jsonData);
         }
         return null;
     }
@@ -198,9 +202,13 @@ public abstract class DataStore {
 
             for (Map<String, Object> idFieldSchema : idFieldSchemas) {
                 schema.put("idField", idFieldSchema.remove("idField"));
-                schema.put("base", idFieldSchema.get("id"));
             }
             schema = getOrderedSchema(schema);
+
+            if (schema.get("$ref") != null) {
+                String reference = schema.get("$ref").toString();
+                schema.put("base", reference.substring(reference.lastIndexOf("/") + 1));
+            }
 
         }
         return schema;

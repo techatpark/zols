@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
@@ -37,6 +38,7 @@ import static org.zols.datastore.util.JsonUtil.asString;
  */
 public class JSONSchema {
 
+    private static final String ID = "id";
     private static final String ID_FIELD = "idField";
     private static JSONSchema _JSONSCHEMA_FOR_SCHEMA = null;
 
@@ -50,6 +52,11 @@ public class JSONSchema {
         }
 
         Map<String, Object> jsonSchemaAsMap = asMap(visitor.finalSchema());
+
+        if (clazz.isAnnotationPresent(Entity.class)) {
+            Entity entity = (Entity) clazz.getAnnotation(Entity.class);
+            jsonSchemaAsMap.put(ID, entity.name());
+        }
 
         for (Field field : clazz.getDeclaredFields()) {
             if (field.isAnnotationPresent(Id.class)) {
@@ -157,13 +164,13 @@ public class JSONSchema {
         return "id";
     }
 
-    public String id() {
-        Object id;
+    public String baseType() {
+        Object baseType;
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
         if (jsonSchemaAsMap != null) {
-            if ((id = jsonSchemaAsMap.get("base")) != null
-                    || (id = jsonSchemaAsMap.get("id")) != null) {
-                return id.toString();
+            if ((baseType = jsonSchemaAsMap.get("base")) != null
+                    || (baseType = jsonSchemaAsMap.get("id")) != null) {
+                return baseType.toString();
             }
         }
         return null;
