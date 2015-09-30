@@ -1,0 +1,59 @@
+<!doctype html>
+<html class="no-js" >
+    <head>
+        <meta charset="utf-8"/>
+        <title>Zols - Data</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" th:href="@{/styles/zols.css}"/>
+
+        <script th:src="@{/scripts/modernizr.js}"></script>
+
+        <script th:src="@{/scripts/zols.js}"></script>
+
+    </head>
+    <body>
+
+
+
+        <div class="container-fluid" th:fragment="content">
+
+            <div class="form-group">
+
+                <div class="form-group" id="editor_holder">
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                        <button id="saveBtn" class="btn btn-success" type="submit">Save</button>
+                        <button name="discardBtn" class="btn btn-danger" type="button">Discard Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <script th:src="@{/scripts/data.js}"></script>
+
+            <script>
+                var value = {"name":"Sathish","description":"description"} ;
+                var jsonEditor = $("#editor_holder").jsonEditor({schemaName: "Sample",value:value});
+                //$.fn.showEditor('54841af344aebc43ee3b12f6');
+
+                $('#saveBtn').on('click', function () {
+                    console.log(jsonEditor.getValue());
+                });
+
+            </script>
+
+        </div>
+
+
+
+        <!-- References
+        -->
+
+    </body>
+</html>

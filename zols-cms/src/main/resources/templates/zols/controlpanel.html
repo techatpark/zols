@@ -1,0 +1,141 @@
+<!doctype html>
+<html class="no-js">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Control Panel</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" th:href="@{/styles/zols.css}"/>
+
+        <script src="/scripts/modernizr.js}"></script>
+
+        <script src="/scripts/zols.js}"></script>
+
+    </head>
+    <body>
+        <div class="container-fluid" th:fragment="content">
+            <div class="row" >
+                <div class="page-header">
+                    <div class="container-fluid">
+                        <div class="row show-grid">
+                            <div class="pull-left">
+                                <h4>
+                                    <span id="pageTitle">Control Panel</span>
+                                    <!--                                    <span class="badge">
+                                                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                                                        </span>-->
+                                </h4>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <div class="container">
+                    <div class="row">
+                        <section id="carousel">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-md-8 col-md-offset-2">
+                                        <div class="quote"><i class="fa fa-quote-left fa-4x"></i></div>
+                                        <div class="carousel slide" id="fade-quote-carousel" data-ride="carousel" >
+                                            <!-- Carousel indicators -->
+                                            <ol class="carousel-indicators">
+                                                <li data-target="#fade-quote-carousel" data-slide-to="0" class="active"></li>
+
+                                            </ol>
+                                            <!-- Carousel items -->
+                                            <div class="carousel-inner">
+                                                <div class="active item">
+                                                    <div class="row row-centered" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'controlPanel'">
+                                                        <a th:each="link : ${linkentry.value}" href="schema.html" th:href="${link.targetUrl}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/documents.svg" alt="Schema" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5 th:text="${link.label}">Schema</h5>
+                                                                </div>
+                                                            </div></a>
+                                                        <!--/*-->
+                                                        <a href="master.html" th:href="@{/master}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/documents.svg" alt="Schema" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Master</h5>
+                                                                </div>
+                                                            </div></a>
+                                                        <a href="templates.html" th:href="@{/templates}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Templates</h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="links.html" th:href="@{/links}">
+                                                            <div class="col-sm-6 col-md-3">
+
+                                                                <img src="../images/modules/documents.svg" alt="Documents" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Links</h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="documents.html" th:href="@{/documents}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Documents</h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="users.html" th:href="@{/users}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/documents.svg" alt="Documents" class="img-rounded"/>
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Users</h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="setting.html" th:href="@{/setting}">
+                                                            <div class="col-sm-6 col-md-3">
+                                                                <img src="../images/modules/datastore.svg" alt="Documents" class="img-rounded"/>
+
+                                                                <div class="col-md-offset-1">
+                                                                    <h5>Settings</h5>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <!--*/-->
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- References
+        http://bootsnipp.com/snippets/6GM92
+        http://bootsnipp.com/snippets/featured/fade-quote-carousel
+        http://bootsnipp.com/snippets/featured/smooth-animated-thumbnails
+        http://bootsnipp.com/snippets/featured/fat-and-flat-blue-button
+
+        -->
+
+    </body>
+</html>

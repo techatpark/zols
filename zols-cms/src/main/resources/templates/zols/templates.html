@@ -1,0 +1,313 @@
+<!doctype html>
+<html class="no-js" >
+    <head>
+        <meta charset="utf-8"/>
+        <title>Template Manager</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" th:href="@{/styles/zols.css}"/>
+
+        <script th:src="@{/scripts/modernizr.js}"></script>
+
+        <script th:src="@{/scripts/zols.js}"></script>
+    </head>
+    <body>
+
+        <div class="container-fluid" th:fragment="content">
+            <div class="row"  >
+                <div class="page-header">
+                    <div class="container-fluid">
+                        <div class="row show-grid">
+                            <div class="pull-left">
+                                <h4>
+                                    <span id="pageTitle">Templates</span>
+<!--                                    <span class="badge">
+                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                    </span>-->
+                                </h4>
+                            </div>
+                            <div class="pull-right" id="templateRepositoryHeader">
+                                <label>Repository</label>
+                                <label data-bind-col="templateRepositoryname" id="templateRepositorynameLbl">Name</label>
+                                <div class="btn-group" id="templateRepository-list">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                            <span data-bind-col="templateRepositoryname">Dropdown</span>
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu" id="categories">
+                                        </ul>
+                                    </div>
+                                    <button type="button" id="edit_selected" class="btn btn-default" ><i class="glyphicon glyphicon-edit"></i></button>
+                                    <button type="button" id="delete_selected" class="btn btn-default"><i class="glyphicon glyphicon-trash"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid" id="result">
+
+                </div>
+
+            </div>
+
+            <div class="modal fade bs-example-modal-sm"
+                 id="delete-conf-model"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        Do you want to delete the content?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <script id="noTemplateRepository" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Template Repository to display. click <a>here</a> to create one
+                </div>
+                </div>
+            </script>
+
+            <script id="getTemplateRepositoryType" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                <p>Please select the Repository Type</p>
+                <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="file">File System</a>
+                <a class="btn btn-primary btn-lg" href="#" role="button" data-type="url">URL</a>
+                <!--<a class="btn btn-primary btn-lg" href="#" role="button" data-type="ftp">FTP</a> -->
+                </p>
+                </div>
+                </div>
+            </script>
+
+            <script id="noTemplate" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Template to display. click <a>here</a> to create one
+                </div>
+                </div>
+            </script>
+
+
+
+            <script id="listTemplate" type="text/x-jsrender">
+                {{if link.length !==0}}
+
+                <ul class="list-group">
+                {{for link}}
+                <li class="list-group-item">
+                {{:label}}
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="addMoreTemplateBtn" href="#">Add More</a>
+            </script>
+
+            <script id="listTemplateRepository" type="text/x-jsrender">
+                {{for templateRepository}}
+                <li>
+                <a class="catName" href="#" data-name="{{:name}}">{{:label}}</a>
+                </li>
+                {{/for}}
+                <li class="divider"></li>
+                <li><a id="createTemplateRepository">Create New</a></li>
+            </script>
+
+            <script id="repositoryForm" type="text/x-jsrender">
+                <form class="form-horizontal">
+                <fieldset>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
+                {{else}}
+                <input id="name" name="name" data-link="name" type="text" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" placeholder="" class="form-control input-md" required=""/>
+                {{/if}}
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="label">Label</label>
+                <div class="col-md-4">
+                <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group" style="display:none">
+                <label class="col-md-4 control-label" for="type">Type</label>
+                <div class="col-md-4">
+                <input id="type" name="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                {{if type === 'file' || type === 'url'}}
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="path">Path</label>
+                <div class="col-md-4">
+                <input id="path" name="path" data-link="path" path="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+                {{else}}
+
+                {{if type === 'ftp'}}
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="host">Host</label>
+                <div class="col-md-4">
+                <input id="host" name="host" data-link="host" host="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="userName">User Name</label>
+                <div class="col-md-4">
+                <input id="userName" name="userName" data-link="userName" userName="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="password">Password</label>
+                <div class="col-md-4">
+                <input id="password" name="password" data-link="password" password="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                {{else}}
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="rootFolder">Root Folder</label>
+                <div class="col-md-4">
+                <input id="rootFolder" name="rootFolder" data-link="rootFolder" rootFolder="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+                {{/if}}
+
+                {{/if}}
+
+                <!-- Textarea -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="description">Description</label>
+                <div class="col-md-4">
+                <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+
+                </fieldset>
+                </form>
+
+
+
+            </script>
+
+
+            <script id="templateForm" type="text/x-jsrender">
+                <form class="form-horizontal">
+                <fieldset>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="name">{{:name}}</label>
+                {{else}}
+                <input id="name" name="name" data-link="name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required=""/>
+                {{/if}}
+                </div>
+                </div>
+
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="label">Label</label>
+                <div class="col-md-4">
+                <input id="label" name="label" data-link="label" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="dataType">Data Type</label>
+                <div class="col-md-4">
+                <select id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required="">
+                <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}" value="Sample">Sample Schema</option>
+                </select>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="path">Path</label>
+                <div class="col-md-4">
+                <select id="path" name="path" data-link="path" type="text" placeholder="" class="form-control input-md" required="">
+                </select>
+                </div>
+                </div>
+
+
+                <!-- Textarea -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="description">Description</label>
+                <div class="col-md-4">
+                <textarea class="form-control" id="description" name="description" data-link="description"></textarea>
+                </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit">Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+
+                </fieldset>
+                </form>
+
+
+
+            </script>
+
+
+            <script th:src="@{/scripts/templates.js}"></script>
+
+        </div>
+
+
+
+        <!-- References
+        -->
+
+    </body>
+</html>

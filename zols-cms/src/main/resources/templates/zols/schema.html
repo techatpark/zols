@@ -1,0 +1,274 @@
+<!doctype html>
+<html class="no-js" >
+    <head>
+        <meta charset="utf-8"/>
+        <title>Zols - Schema</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" th:href="@{/styles/zols.css}"/>
+
+        <script th:src="@{/scripts/modernizr.js}"></script>
+
+        <script th:src="@{/scripts/zols.js}"></script>
+
+    </head>
+    <body>
+
+
+
+        <div class="container-fluid" th:fragment="content">
+            <div class="row"  >
+                <div class="page-header">
+                    <div class="container-fluid">
+                        <div class="row show-grid">
+                            <div class="pull-left">
+                                <h4>
+                                    Schema
+<!--                                    <span class="badge">
+                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                    </span>-->
+                                </h4>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+
+                <div class="row-fluid" id="result">
+
+                </div>
+
+            </div>
+
+
+            <div class="modal fade bs-example-modal-sm"
+                 id="delete-conf-model"
+                 tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        Do you want to delete the content?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="del_conf_cancel" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" id="del_conf_ok" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <script id="noSchema" type="text/x-jsrender">
+                <div class="jumbotron">
+                <div class="container">
+                There are no Schema to display click <a>here</a> to create one
+                </div>
+                </div>
+            </script>
+
+            <script id="listSchema" type="text/x-jsrender">
+
+                {{if schema.length !==0}}
+
+                <ul class="list-group">
+                {{for schema}}
+                <li class="list-group-item">
+                {{:title}}
+                <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
+                </li>
+                {{/for}}
+                </ul>
+                {{/if}}
+
+                <a id="createSchema" href="#">Add More</a>
+
+            </script>
+
+            <script id="attributeTemplate" type="text/x-jsrender">
+
+                <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        #{{:#getIndex()+1}}</h3>
+                    <span class="pull-right clickable"><i class="glyphicon glyphicon-remove" data-link="name{:key}"></i></span>
+                </div>
+                <div class="panel-body">
+                    <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="name">Name</label>
+                <div class="col-md-4">
+                <input name="name" data-link="key" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="type">Type</label>
+                <div class="col-md-4">
+                <select name="type" data-name="{{:prop.type}}" data-link="prop.type" type="text" placeholder="" class="form-control input-md">
+                <option value="string">String</option>
+                <option value="integer">Integer</option>
+                <option value="number">Number</option>
+                <option value="boolean">Boolean</option>
+                <option value="array">Array</option>
+                </select>
+                </div>
+                </div>
+
+
+
+                <!-- Select input-->
+                <div class="form-group" data-link="visible{:prop.type === 'string'}">
+                <label class="col-md-4 control-label" for="type">Format</label>
+                <div class="col-md-4">
+                <select name="format" data-link="prop.format" type="text" placeholder="" class="form-control input-md">
+                <option value="text">Text</option>
+                <option value="html">HTML</option>
+                <option value="textarea">Textarea</option>
+                <option value="color">Color</option>
+                <option value="date">Date</option>
+                <option value="datetime">Date time</option>
+                <option value="datetime-local">Datetime Local</option>
+                <option value="email">Email</option>
+                <option value="number">Number</option>
+                <option value="range">Range</option>
+                <option value="tel">tel</option>
+                <option value="time">Time</option>
+                <option value="url">Url</option>
+                <option value="week">Week</option>
+                </select>
+                </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group" data-link="visible{:prop.type === 'array'}">
+                <label class="col-md-4 control-label" for="type">Array Type</label>
+                <div class="col-md-4">
+                <select name="arraytypes" data-name="{{:prop.items.type}}" data-link="prop.items.type" type="text" placeholder="" class="form-control input-md">
+                    <option value="string">String</option>
+	                <option value="integer">Integer</option>
+	                <option value="number">Number</option>
+	                <option value="boolean">Boolean</option>
+                </select>                
+                </div>
+                </div>
+
+                <!-- checkbox input-->
+                <div class="form-group">
+                <label   class="col-md-4 control-label" for="required">Required</label>
+                <div class="col-md-4">
+                <input name="required" type="checkbox"  data-link="prop.required" class="form-control input-md"/>
+                </div>
+                </div>
+
+                <!-- checkbox input-->
+                <div class="form-group" data-link="visible{:prop.format === 'html'}">
+                <label   class="col-md-4 control-label" for="wysiwyg">is wysiwyg?</label>
+                <div class="col-md-4">
+                <input name="wysiwyg" type="checkbox"  data-link="prop.options.wysiwyg" class="form-control input-md"/>
+                </div>
+                </div>
+
+                </div>
+                </div>
+            </script>
+
+            <script id="schemaForm" type="text/x-jsrender">
+                <form class="form-horizontal">
+                <fieldset>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="id">Id</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="id">{{:id}}</label>
+                {{else}}
+                <input name="id" data-link="id" id="schemaId" type="text" placeholder="" class="form-control input-md" required=""/>
+                {{/if}}
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="title">Title</label>
+                <div class="col-md-4">
+                <input name="title" id="title" data-link="title" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="idField">ID Field</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="idField">{{:idField}}</label>
+                {{else}}
+                <select name="idField" id="idField" data-link="idField" type="text" placeholder="" class="form-control input-md" required="">
+                </select>
+                {{/if}}
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="labelField">Label Field</label>
+                <div class="col-md-4">
+                {{if isEdit}}
+                <label class="col-md-4 control-label" for="labelField">{{:labelField}}</label>
+                {{else}}
+                <select name="labelField" id="labelField" data-link="labelField" type="text" placeholder="" class="form-control input-md" required="">
+                </select>
+                {{/if}}
+                </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group" style="display:none;">
+                <label class="col-md-4 control-label" for="type">Type</label>
+                <div class="col-md-4">
+                <input name="type" id="type" data-link="type" type="text" placeholder="" class="form-control input-md" required=""/>
+                </div>
+                </div>
+
+                <div class="panel panel-primary">
+                <div class="panel-heading">
+                <h3 class="panel-title">
+                Properties</h3>
+                <span class="pull-right clickable"><i id="addAttr" class="glyphicon glyphicon-plus"></i></span>
+                </div>
+                <div class="panel-body" id="schemaLayout">
+                {^{props properties}}
+                {^{include tmpl="#attributeTemplate"/}}
+                {{/props}}
+                </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                <label class="col-md-4 control-label" for="saveBtn"></label>
+                <div class="col-md-8">
+                <button name="saveBtn" class="btn btn-success" type="submit" >Save</button>
+                <button name="discardBtn" class="btn btn-danger" type="button" onclick="$.fn.refreshList()">Discard Changes</button>
+                </div>
+                </div>
+
+                </fieldset>
+                </form>
+            </script>
+
+            <script th:src="@{/scripts/main.js}"></script>
+
+
+        </div>
+
+        <!-- References
+        -->
+
+    </body>
+</html>
