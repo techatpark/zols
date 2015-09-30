@@ -30,7 +30,7 @@
     "wiredep": "1.4.3",
     "require-dir": "0.1",
     "browser-sync": "2.7.1",
-    "http-proxy": "1.1",
+    "http-proxy": "1.11.0",
     "gulp-protractor": "0.0.7",
     "gulp-plumber": "0.6.3",
     "protractor": "1.0.0",
