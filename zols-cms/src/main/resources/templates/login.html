@@ -1,34 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<title>Login</title>
-<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"
-	href="../../css/bootstrap.min.css" />
-</head>
-<body onload="document.f.username.focus();" th:fragment="content">
-	<div class="container">
-		<div class="navbar">
-			<div class="navbar-inner">
-				<a class="brand" href="http://www.thymeleaf.org"> Thymeleaf -
-					Plain </a>
-				<ul class="nav">
-					<li><a th:href="@{/}" href="home.html"> Home </a></li>
-				</ul>
-			</div>
-		</div>
-		<div class="content">
-			<p th:if="${param.logout}" class="alert">You have been logged out</p>
-			<p th:if="${param.error}" class="alert alert-error">There was an error, please try again</p>
-			<h2>Login with Username and Password</h2>
-			<form name="form" th:action="@{/login}" action="/login" method="POST">
-				<fieldset>
-					<input type="text" name="username" value="" placeholder="Username" />
-					<input type="password" name="password" placeholder="Password" />
-				</fieldset>
-				<input type="submit" id="login" value="Login"
-					class="btn btn-primary" />
-			</form>
-		</div>
-	</div>
-</body>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Login</title>
+        <meta name="description" content=""/>
+        <meta name="viewport" content="width=device-width"/>
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" th:href="@{/styles/zols.css}"/>
+
+        <script th:src="@{/scripts/modernizr.js}"></script>
+    </head>
+    <body onload="document.f.username.focus();" th:fragment="content">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-6 col-md-4 col-md-offset-4">
+                    <h1 class="text-center login-title">Sign in to continue</h1>
+                    <div class="alert alert-danger" th:if="${param.logout}">
+                        You have been logged out 
+                    </div>
+                    <div class="alert alert-danger" th:if="${param.error}">
+                        There was an error, please try again
+                    </div>                    
+                    <div class="account-wall">
+                        <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                             alt=""/>
+                        <form class="form-signin" th:action="@{/login}"  method="POST">
+                            <input type="text" name="username" class="form-control" placeholder="Email" required="" autofocus=""/>
+                            <input type="password" name="password" class="form-control" placeholder="Password" required=""/>
+                            <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                Sign in</button>
+                            <label class="checkbox pull-left">
+                                <input type="checkbox" value="remember-me"/>
+                                Remember me
+                            </label>
+                            <a href="#" class="pull-right need-help">Need help? </a><span class="clearfix"></span>
+                        </form>
+                    </div>
+                    <a href="#" class="text-center new-account">Create an account </a>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
