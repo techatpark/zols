@@ -1,11 +1,11 @@
 {
-  "name": "zolsUi",
-  "version": "0.0.0",
-  "dependencies": {
-    "modernizr": "2.8.x",
-    "bootstrap-sass-official": "3.x.x",
-    "jquery": "2.x.x",
-    "json-editor":"0.7.13"
-  },
-  "devDependencies": {}
+    "name": "Zols",
+    "private": true,
+    "dependencies": {
+        "bootstrap-sass-official": "~3.1.1",
+        "modernizr": "~2.6.2",
+        "jquery": "~1.11.0",
+        "json-editor":"0.7.23"
+    },
+    "devDependencies": {}
 }

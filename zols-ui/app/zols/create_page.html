@@ -2,31 +2,55 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="utf-8"/>
-        <title>Create Page</title>
+        <title>Zols - Create Page</title>
         <meta name="description" content=""/>
-        <meta name="viewport" content="width=device-width"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <!-- build:css({.tmp,app}) styles/zols.css -->
-        <link rel="stylesheet" href="/styles/zols.css"/>
+        <!-- build:css styles/vendor.css -->
+        <!-- bower:css -->
+        <!-- endbower -->
         <!-- endbuild -->
 
-        <!-- build:js(app) scripts/modernizr.js -->
+        <!-- build:js scripts/vendor/modernizr.js -->
         <script src="/bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
 
-        <!-- build:js(app) scripts/zols.js -->
+        <!-- build:css({.tmp,app}) styles/main.css -->
+        <link rel="stylesheet" href="/styles/main.css"/>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="/bower_components/jquery/dist/jquery.js"></script>
-        <script src="/bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
-        <script src="/bower_components/json-editor/dist/jsoneditor.js"></script>
         <!-- endbower -->
+        <!-- endbuild -->
+
+        <!-- build:js scripts/plugins.js -->
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/affix.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/alert.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/dropdown.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/modal.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/transition.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/button.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/carousel.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/scrollspy.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/collapse.js"></script>
+        <script src="/bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tab.js"></script>
+        <!-- endbuild -->
+
+        <!-- build:js scripts/main.js -->
+        <script src="/scripts/main.js"></script>
         <script src="/scripts/jsviews.min.js"></script>
+        <script src="/scripts/sceeditor/jquery.sceditor.bbcode.min.js"></script>
         <!-- endbuild -->
 
     </head>
     <body>
         <div class="container" th:fragment="content">
+            <link rel="stylesheet" href="/scripts/sceeditor/themes/default.min.css"/>
             <div class="row"  >
                 <div class="page-header">
                     <div class="container-fluid">
@@ -34,9 +58,9 @@
                             <div class="col-md-8">
                                 <h4>
                                     Empty Link
-<!--                                    <span class="badge">
-                                        <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
-                                    </span>-->
+                                    <!--                                    <span class="badge">
+                                                                            <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
+                                                                        </span>-->
                                 </h4>
                             </div>
 
@@ -123,14 +147,27 @@
                 </fieldset>
                 </form>
 
-
-
             </script>
 
+            <!-- build:js({app,.tmp}) scripts/jsoneditor.min.js -->
+            <script src="/scripts/jsoneditor.min.js"></script>
+            <!-- endbuild -->
+            
+            <!-- build:js({app,.tmp}) scripts/jquery.sceditor.bbcode.min.js" -->
+            <script src="/scripts/sceeditor/jquery.sceditor.bbcode.min.js"></script>
+            <!-- endbuild -->
 
+            <!-- build:js({app,.tmp}) scripts/jsviews.min.js -->
+            <script src="/scripts/jsviews.min.js"></script>
+            <!-- endbuild -->
 
-            <script src="/scripts/create_page.js" th:src="@{/scripts/create_page.js}"></script>
-            <script src="/scripts/data.js" th:src="@{/scripts/data.js}"></script>
+            <!-- build:js({app,.tmp}) scripts/data.js -->
+            <script src="/scripts/data.js"></script>
+            <!-- endbuild -->
+
+            <!-- build:js({app,.tmp}) /scripts/create_page.js -->
+            <script src="/scripts/create_page.js"></script>
+            <!-- endbuild -->
 
         </div>
     </body>
