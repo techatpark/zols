@@ -29,7 +29,7 @@
 
         $.fn.setSchemaName = function (schemaName) {
             $.ajax({
-                url: base_url + '/schema/' + schemaName,
+                url: base_url + '/schema/' + schemaName + '?enlarged',
                 type: "get",
                 async: false,
                 success: function (data) {

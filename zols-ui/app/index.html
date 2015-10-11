@@ -15,7 +15,7 @@
         <!-- build:css({.tmp,app}) styles/main.css -->
         <link rel="stylesheet" href="/styles/main.css"/>
         <!-- endbuild -->
-        
+
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="/bower_components/jquery/dist/jquery.js"></script>        
@@ -44,95 +44,97 @@
         <!-- build:js scripts/vendor/modernizr.js -->
         <script src="/bower_components/modernizr/modernizr.js"></script>
         <!-- endbuild -->
+
     </head>
     <body>
         <!--[if lt IE 10]>
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- Fixed navbar -->
+        <div class="container">
 
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <!-- Fixed navbar -->
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">
+                            <img class="hidden-xs" src="images/logo_150x50.png" th:src="@{/images/logo_150x50.png}" alt=""/>
+                            <img class="visible-xs" src="images/logo_120x40.png" th:src="@{/images/logo_120x40.png}" alt=""/>    
+                        </a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
+                            <li th:each="link : ${linkentry.value}">
+                                <a th:href="${link.targetUrl}" th:text="${link.label}" href="zols/links.html">Links</a>                            
+                            </li>
+                            <!--/*-->
+                            <li><a href="zols/templates.html">Templates</a></li>
+                            <li><a href="zols/schema.html">Schema</a></li>
+                            <!--*/-->
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
+
+                            <li class="dropdown" sec:authorize="isAuthenticated()">
+                                <a  href="javascript://" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                    <span sec:authentication="name">User</span> <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="zols/controlpanel.html" th:href="@{/controlpanel}" >
+                                            Control Panel
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="login.html" th:href="@{/logout}">
+                                            Logout
+                                        </a>
+                                    </li>                                
+                                </ul>                  
+
+                            </li>
+
+
+                        </ul>
+                    </div><!--/.nav-collapse -->
+                </div>
+            </nav>
+
             <div class="container">
 
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse"
-                            data-target="#bs-example-navbar-collapse-1">
-
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-
-                    </button>
-                    <a class="navbar-brand" href="#">
-                        <img class="hidden-xs" src="images/logo_150x50.png" th:src="@{/images/logo_150x50.png}" alt=""/>
-                        <img class="visible-xs" src="images/logo_120x40.png" th:src="@{/images/logo_120x40.png}" alt=""/>    
-                    </a>
+                <div class="jumbotron" th:include="${viewName}::content" th:fragment="content">
+                    <div class="page-header">
+                        <h1>Welcome to Zols</h1>
+                    </div>
+                    <p class="lead">Thanks for installing Zols.</p>
+                    <p>Please get started and configure your content from <a href="/controlpanel.html" th:href="@{/controlpanel}">here</a>.</p>
                 </div>
 
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav" th:each="linkentry : ${links}" th:switch="${linkentry.key}"  th:case="'header'">
-                        <li th:each="link : ${linkentry.value}">
-                            <a th:href="${link.targetUrl}" th:text="${link.label}" href="zols/links.html">Links</a>                            
-                        </li>
-                        <!--/*-->
-                        <li><a href="zols/templates.html">Templates</a></li>
-                        <li><a href="zols/schema.html">Schema</a></li>
-                        <!--*/-->
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
+                <footer class="footer">
+                    <div class="container">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License V2</a>
+                            </li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="https://github.com/sathishk/zols/issues">Feedback</a></li>                    
+                        </ul>
+                    </div>
+                </footer>
+
+            </div> <!-- /container -->
+
+
+        </div>   
 
 
 
-                        <li class="dropdown" sec:authorize="isAuthenticated()">
-                            <a  href="javascript://" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                <span sec:authentication="name">User</span> <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="zols/controlpanel.html" th:href="@{/controlpanel}" >
-                                        Control Panel
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="login.html" th:href="@{/logout}">
-                                        Logout
-                                    </a>
-                                </li>                                
-                            </ul>                  
-
-                        </li>
-
-
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Begin page content -->
-        <div class="container" th:include="${viewName}::content" th:fragment="content">
-            <div class="page-header">
-                <h1>Welcome to Zols</h1>
-            </div>
-            <p class="lead">Thanks for installing Zols.</p>
-            <p>Please get started and configure your content from <a href="/controlpanel.html" th:href="@{/controlpanel}">here</a>.</p>
-        </div>
-
-        <footer class="footer">
-            <div class="container">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License V2</a>
-                    </li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="https://github.com/sathishk/zols/issues">Feedback</a></li>                    
-                </ul>
-            </div>
-        </footer>
-
-        
     </body>
 </html>

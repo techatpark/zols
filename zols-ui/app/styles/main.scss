@@ -1,10 +1,19 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 
+$body-bg:#EFF3F6 ;
+$navbar-default-bg : #3d68ac;
+$navbar-default-link-color: #ffffff;
+$navbar-default-link-hover-color: #ffffff;
+$navbar-default-link-active-color: #ffffff;
+$navbar-default-link-active-bg:#264571;
+
 // bower:scss
 @import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
 
-
+body {
+    margin-top: 50px;
+}
 
 .browsehappy {
     margin: 0.2em 0;
@@ -13,9 +22,28 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
     padding: 0.2em 0;
 }
 
-body {
-    margin-top: 50px;
+// Login Page - Start
+
+.panel-heading {
+    padding: 5px 15px;
 }
+
+.panel-footer {
+	padding: 1px 15px;
+	color: #A0A0A0;
+}
+
+.profile-img {
+	width: 96px;
+	height: 96px;
+	margin: 0 auto 10px;
+	display: block;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+}
+
+// Login Page - End
 
 .navbar-fixed-top .nav {
     padding: 15px 0;
