@@ -224,7 +224,7 @@ public class ElasticSearchDataStore extends DataStore {
         client.admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 
-    private QueryBuilder getQueryBuilder(Query query) {
+    public static QueryBuilder getQueryBuilder(Query query) {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         if (query != null) {
             List<Filter> queries = query.getFilters();
