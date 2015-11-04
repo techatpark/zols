@@ -243,17 +243,22 @@ public class ElasticSearchDataStore extends DataStore {
                         case IS_NOTNULL:
                             queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
                             break;
-                        case EXISTS_IN:         
+                        case EXISTS_IN:
                             Collection collection = (Collection) filter.getValue();
                             for (Object object : collection) {
                                 queryBuilder.should(QueryBuilders.matchQuery(filter.getName(), object));
                             }
-                            
+                            break;
+                        case IN_BETWEEN:
+                            Object[] rangeValues = (Object[]) filter.getValue();
+                            queryBuilder.must(QueryBuilders.rangeQuery(filter.getName())
+                                    .from(rangeValues[0])
+                                    .to(rangeValues[1]));
                             break;
                     }
                 }
             }
-        }        
+        }
         return queryBuilder;
     }
 

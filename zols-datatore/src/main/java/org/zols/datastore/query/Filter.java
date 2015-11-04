@@ -48,12 +48,17 @@ public class Filter<T> {
         /**
          * Exists in given values
          */
-        EXISTS_IN
+        EXISTS_IN,
+        /**
+         * Checks value in between
+         */
+        IN_BETWEEN
     }
 
     private final String name;
     private final Operator operator;
-    private final T value;
+    private final Object value;
+
 
     /**
      * Intialize the Filter
@@ -63,6 +68,19 @@ public class Filter<T> {
      * @param value value of the filter
      */
     public Filter(String name, Operator operator, T value) {
+        this.name = name;
+        this.operator = operator;
+        this.value = value;
+    }
+    
+    /**
+     * Intialize the Filter
+     *
+     * @param name name of the filter
+     * @param operator operator of the filter
+     * @param value
+       */
+    public Filter(String name, Operator operator, T... value) {
         this.name = name;
         this.operator = operator;
         this.value = value;
@@ -103,7 +121,7 @@ public class Filter<T> {
      *
      * @return value object
      */
-    public T getValue() {
+    public Object getValue() {
         return value;
     }
 
