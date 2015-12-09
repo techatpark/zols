@@ -11,6 +11,7 @@ import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.util.JsonUtil;
 import org.zols.datatore.exception.DataStoreException;
@@ -33,6 +34,7 @@ public class SchemaService {
      * @param schema Object to be Create
      * @return created JsonSchema object
      */
+    @Secured("ROLE_ADMIN")
     public Map<String, Object> create(Map<String, Object> schema) throws DataStoreException {
         Map<String, Object> createdJsonSchema = null;
         if (schema != null) {
@@ -72,6 +74,7 @@ public class SchemaService {
      * @param schema Object to be update
      * @return status of the Update Operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean update(String schema) throws DataStoreException {
         Boolean updated = false;
         if (schema != null) {
@@ -87,6 +90,7 @@ public class SchemaService {
      * @param schemaId String to be delete
      * @return status of the Delete Operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String schemaId) throws DataStoreException {
         LOGGER.info("Deleting JsonSchema  {}", schemaId);
         return dataStore.deleteSchema(schemaId);

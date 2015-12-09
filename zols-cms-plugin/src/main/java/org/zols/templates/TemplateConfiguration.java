@@ -102,7 +102,7 @@ public class TemplateConfiguration {
 //        resolver.setPrefix(this.properties.getPrefix());
         resolver.setSuffix(this.properties.getSuffix());
         resolver.setTemplateMode(this.properties.getMode());
-        resolver.setCharacterEncoding(this.properties.getEncoding());
+        resolver.setCharacterEncoding(this.properties.getEncoding().toString());
         resolver.setCacheable(this.properties.isCache());
     }
 

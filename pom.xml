@@ -21,19 +21,21 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.2.3.RELEASE</version>
+        <version>1.3.0.RELEASE</version>
     </parent>
     
     <modules>
+        <module>zols-datatore</module>
         <module>zols-cms-plugin</module>
         <module>zols-cms</module>        
-        <module>zols-datatore</module>
+        
     </modules>
     
     <properties>
         <swagger-springmvc-version>1.0.0</swagger-springmvc-version>
         <java.version>1.8</java.version>
+        <elasticsearch.version>2.0.0</elasticsearch.version>
         <maven-compiler-plugin-version>3.2</maven-compiler-plugin-version>
-    </properties>
-  
+    </properties>    
+    
 </project>

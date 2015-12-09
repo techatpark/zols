@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,17 @@ import org.zols.datastore.jsonschema.JSONSchema;
 public class JsonUtil {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    
+    public static Map<String, Object> asMap(InputStream inputStream) {
+        try {
+            return MAPPER.readValue(inputStream,
+                    new TypeReference<HashMap<String, Object>>() {
+                    });
+        } catch (IOException ex) {
+            Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     public static Map<String, Object> asMap(String jsonData) {
         try {

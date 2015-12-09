@@ -10,6 +10,7 @@ import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.domain.DocumentRepository;
@@ -32,6 +33,7 @@ public class DocumentRepositoryService {
      * @param documentRepository Object to be Create
      * @return created DocumentRepository object
      */
+    @Secured("ROLE_ADMIN")
     public DocumentRepository create(DocumentRepository documentRepository) throws DataStoreException {
         DocumentRepository createdDocumentRepository = null;
         if (documentRepository != null) {
@@ -47,6 +49,7 @@ public class DocumentRepositoryService {
      * @param documentRepositoryName String to be Search
      * @return searched DocumentRepository
      */
+    @Secured("ROLE_ADMIN")
     public DocumentRepository read(String documentRepositoryName) throws DataStoreException {
         LOGGER.info("Reading Document Repository {}", documentRepositoryName);
         return dataStore.read(DocumentRepository.class, documentRepositoryName);
@@ -58,6 +61,7 @@ public class DocumentRepositoryService {
      * @param documentRepository Object to be update
      * @return status of the update operation
      */
+    @Secured("ROLE_ADMIN")
     public DocumentRepository update(DocumentRepository documentRepository) throws DataStoreException {
         DocumentRepository updated = null;
         if (documentRepository != null) {
@@ -73,6 +77,7 @@ public class DocumentRepositoryService {
      * @param documentRepositoryName String to be delete
      * @return status of the delete operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String documentRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Document Repository {}", documentRepositoryName);
         return dataStore.delete(DocumentRepository.class, documentRepositoryName);
@@ -83,6 +88,7 @@ public class DocumentRepositoryService {
      *
      * @return list of Document Repositories
      */
+    @Secured("ROLE_ADMIN")
     public List<DocumentRepository> list() throws DataStoreException {
         LOGGER.info("Getting DocumentRepositories ");
         return dataStore.list(DocumentRepository.class);

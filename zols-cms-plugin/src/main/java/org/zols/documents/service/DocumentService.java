@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.zols.datatore.exception.DataStoreException;
@@ -43,6 +44,7 @@ public class DocumentService {
      * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
      */
+    @Secured("ROLE_ADMIN")
     public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.getPath();
@@ -75,6 +77,7 @@ public class DocumentService {
      * created
      * @param directoryName the name of the directory to be created
      */
+    @Secured("ROLE_ADMIN")
     public void createDirectory(String documentRepositoryName, String directoryName) throws DataStoreException {
         createDirectory(documentRepositoryName, null, directoryName);
     }
@@ -87,6 +90,7 @@ public class DocumentService {
      * @param rootFolderPath folder where we need to create directory
      * @param directoryName the name of the directory to be created
      */
+    @Secured("ROLE_ADMIN")
     public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.getPath();
@@ -97,6 +101,7 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
+    @Secured("ROLE_ADMIN")
     public void delete(String documentRepositoryName, String filePath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
@@ -130,6 +135,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
+    @Secured("ROLE_ADMIN")
     public List<Document> list(String documentRepositoryName, String folderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
@@ -159,6 +165,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
+    @Secured("ROLE_ADMIN")
     public List<Document> listAll(String documentRepositoryName, String folderPath) throws DataStoreException {
         DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.getPath();
@@ -173,7 +180,7 @@ public class DocumentService {
 
     private List<Document> getFiles(String path, String documentRepositoryName, File folder) {
         Document document;
-        String filePath ;
+        String filePath;
         List<Document> documents = new ArrayList<>();
         if (folder.isDirectory()) {
             for (File innerFile : folder.listFiles()) {

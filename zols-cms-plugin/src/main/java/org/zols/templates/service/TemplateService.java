@@ -10,6 +10,7 @@ import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.Template;
@@ -32,6 +33,7 @@ public class TemplateService {
      * @param template Object to be Create
      * @return created Template object
      */
+    @Secured("ROLE_ADMIN")
     public Template create(Template template) throws DataStoreException {
         Template createdTemplate = null;
         if (template != null) {
@@ -58,6 +60,7 @@ public class TemplateService {
      * @param template Object to be update
      * @return status of the update Operation
      */
+    @Secured("ROLE_ADMIN")
     public Template update(Template template) throws DataStoreException {
         Template updated = null;
         if (template != null) {
@@ -73,6 +76,7 @@ public class TemplateService {
      * @param templateName String to be delete
      * @return status of the Delete Operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String templateName) throws DataStoreException {
         LOGGER.info("Deleting Template  {}", templateName);
         return dataStore.delete(Template.class, templateName);

@@ -16,6 +16,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.zols.datastore.query.Filter.Operator.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
@@ -43,6 +44,7 @@ public class LinkService {
      * @param link Object to be Create
      * @return created Link object
      */
+    @Secured("ROLE_ADMIN")
     public Link create(Link link) throws DataStoreException {
         Link createdLink = null;
         if (link != null) {
@@ -76,6 +78,7 @@ public class LinkService {
      * @param link Object to be update
      * @return status of the Update operation
      */
+    @Secured("ROLE_ADMIN")
     public Link update(Link link) throws DataStoreException {
         Link updated = null;
         if (link != null) {
@@ -91,6 +94,7 @@ public class LinkService {
      * @param linkName String to be delete
      * @return status of the Delete operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String linkName) throws DataStoreException {
         LOGGER.info("Deleting Link {}", linkName);
         List<Link> children = listChildren(linkName);
@@ -108,6 +112,7 @@ public class LinkService {
      * @param groupName String to be search
      * @return list of links
      */
+    @Secured("ROLE_ADMIN")
     public Boolean deleteLinksUnder(String groupName) throws DataStoreException {
         LOGGER.info("Deleting links under group {}", groupName);
         Query query = new Query();
@@ -175,6 +180,7 @@ public class LinkService {
      * @param url URL to be linked
      * @return status of the Update
      */
+    @Secured("ROLE_ADMIN")
     public Link linkUrl(String linkName, String url) throws DataStoreException {
         Link updated = null;
         if (linkName != null) {

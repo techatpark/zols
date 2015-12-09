@@ -17,6 +17,7 @@ import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
@@ -39,6 +40,7 @@ public class LinkGroupService {
      * @param group Object to be Create
      * @return created Group object
      */
+    @Secured("ROLE_ADMIN")
     public LinkGroup create(@Valid LinkGroup group) throws DataStoreException {
         LinkGroup createdGroup = null;
         if (group != null) {
@@ -65,6 +67,7 @@ public class LinkGroupService {
      * @param group Object to be update
      * @return status of the Update
      */
+    @Secured("ROLE_ADMIN")
     public LinkGroup update(LinkGroup group) throws DataStoreException {
         LinkGroup updated = null;
         if (group != null) {
@@ -80,6 +83,7 @@ public class LinkGroupService {
      * @param groupName String to be delete
      * @return status of Delete
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String groupName) throws DataStoreException {
         LOGGER.info("Deleting Group {}", groupName);
         linkService.deleteLinksUnder(groupName);

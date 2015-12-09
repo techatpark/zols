@@ -32,17 +32,24 @@
             <artifactId>spring-boot-starter-security</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>zols-datatore</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+        
         <dependency>
             <groupId>com.mangofactory</groupId>
             <artifactId>swagger-springmvc</artifactId>
             <version>${swagger-springmvc-version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>zols-datatore</artifactId>
+            <version>${project.version}</version>
         </dependency>		
 
         <dependency>

@@ -11,6 +11,7 @@ import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.jsonschema.JSONSchema;
 import org.zols.datatore.exception.DataStoreException;
@@ -29,6 +30,7 @@ public class DataService {
         return JSONSchema.jsonSchema(dataStore.getSchema(schemaName)).idField();
     }
 
+    @Secured("ROLE_ADMIN")
     public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         return dataStore.create(schemaName, jsonData);
     }
@@ -37,10 +39,12 @@ public class DataService {
         return dataStore.read(schemaName, name);
     }
 
+    @Secured("ROLE_ADMIN")
     public boolean update(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
         return dataStore.update(schemaName, jsonData);
     }
 
+    @Secured("ROLE_ADMIN")
     public boolean delete(String schemaName, String name) throws DataStoreException {
         return dataStore.delete(schemaName, name);
     }

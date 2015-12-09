@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.elasticsearch;
 
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +19,11 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import static org.elasticsearch.common.settings.Settings.settingsBuilder;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -40,7 +43,6 @@ import org.zols.datatore.exception.DataStoreException;
  *
  * Elastic Search Implementation of DataStore
  *
- * @author Raji
  */
 public class ElasticSearchDataStore extends DataStore {
 
@@ -51,37 +53,26 @@ public class ElasticSearchDataStore extends DataStore {
     private final String indexName;
 
     public ElasticSearchDataStore() {
-        this.indexName = "zols";
-        Settings settings = settingsBuilder().put("index.number_of_shards", 1)
-                .put("path.home", "/")
-                .put("path.data", "data")
-                .put("index.number_of_replicas", 0).build();
-        client = nodeBuilder().settings(settings).local(true).build().start().client();
-        createIndexIfNotExists();
+        this("zols", null);
     }
 
     public ElasticSearchDataStore(String indexName) {
-        this.indexName = indexName;
-        Settings settings = settingsBuilder().put("index.number_of_shards", 1)
-                .put("path.home", "/")
-                .put("path.data", "data")
-                .put("index.number_of_replicas", 0).build();
-        client = nodeBuilder().settings(settings).local(true).build().start().client();
-        createIndexIfNotExists();
+        this(indexName, null);
     }
 
     public ElasticSearchDataStore(String indexName, Client client) {
         this.indexName = indexName;
-        this.client = client;
-        createIndexIfNotExists();
-    }
+        if (client == null) {
+            Settings settings = settingsBuilder()
+                    .put("path.home", "/")
+                    .put("path.data", "data")
+                    .put("index.number_of_replicas", 0).build();
+            this.client = nodeBuilder().settings(settings).local(true).build().start().client();
+        } else {
+            this.client = client;
+        }
 
-    private void patchDelayInRefresh() {
-//        try {
-//            Thread.sleep(300);
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        createIndexIfNotExists();
     }
 
     private void createIndexIfNotExists() {
@@ -120,7 +111,6 @@ public class ElasticSearchDataStore extends DataStore {
             }
         }
 
-        patchDelayInRefresh();
         return createdData;
 
     }
@@ -131,16 +121,36 @@ public class ElasticSearchDataStore extends DataStore {
                 .prepareGet(indexName, jsonSchema.baseType(), idValue)
                 .execute()
                 .actionGet();
-        patchDelayInRefresh();
+
         return getResponse.getSource();
     }
 
     @Override
     protected boolean delete(JSONSchema jsonSchema) {
-        List<Map<String, Object>> list = list(jsonSchema);
-        list.stream().forEach(dataMap -> delete(jsonSchema, dataMap.get(jsonSchema.idField()).toString()));
-        client.admin().indices().refresh(new RefreshRequest(indexName));
-        patchDelayInRefresh();
+        SearchResponse response = client
+                .prepareSearch()
+                .setSearchType(SearchType.SCAN)
+                .setIndices(indexName)
+                .setTypes(jsonSchema.baseType())
+                .setScroll(new TimeValue(60000))
+                .setSize(100)
+                .execute()
+                .actionGet();
+        while (true) {
+            response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
+            boolean hitsRead = false;
+            for (SearchHit hit : response.getHits()) {
+                hitsRead = true;
+                client
+                        .prepareDelete(indexName, hit.getType(), hit.getId()).setRefresh(true)
+                        .execute()
+                        .actionGet();
+            }
+            //Break condition: No hits are returned
+            if (!hitsRead) {
+                break;
+            }
+        }
         return true;
     }
 
@@ -151,16 +161,37 @@ public class ElasticSearchDataStore extends DataStore {
                 .execute()
                 .actionGet();
         client.admin().indices().refresh(new RefreshRequest(indexName));
-        patchDelayInRefresh();
+
         return response.isFound();
     }
 
     @Override
     protected boolean delete(JSONSchema jsonSchema, Query query) {
-        List<Map<String, Object>> list = list(jsonSchema, query);
-        list.stream().forEach(dataMap -> delete(jsonSchema, dataMap.get(jsonSchema.idField()).toString()));
-        client.admin().indices().refresh(new RefreshRequest(indexName));
-        patchDelayInRefresh();
+        SearchResponse response = client
+                .prepareSearch()
+                .setSearchType(SearchType.SCAN)
+                .setIndices(indexName)
+                .setTypes(jsonSchema.baseType())
+                .setQuery(getQueryBuilder(query))
+                .setScroll(new TimeValue(60000))
+                .setSize(100)
+                .execute()
+                .actionGet();
+        while (true) {
+            response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
+            boolean hitsRead = false;
+            for (SearchHit hit : response.getHits()) {
+                hitsRead = true;
+                client
+                        .prepareDelete(indexName, hit.getType(), hit.getId()).setRefresh(true)
+                        .execute()
+                        .actionGet();
+            }
+            //Break condition: No hits are returned
+            if (!hitsRead) {
+                break;
+            }
+        }
         return true;
     }
 
@@ -172,7 +203,7 @@ public class ElasticSearchDataStore extends DataStore {
                 .execute()
                 .actionGet();
         client.admin().indices().refresh(new RefreshRequest(indexName));
-        patchDelayInRefresh();
+
         return response.isCreated();
     }
 
@@ -205,7 +236,8 @@ public class ElasticSearchDataStore extends DataStore {
                 .setIndices(indexName)
                 .setTypes(jsonSchema.baseType())
                 .setQuery(getQueryBuilder(query))
-                .execute().actionGet();
+                .execute()
+                .actionGet();
         SearchHits hits = response.getHits();
         if (hits != null) {
             SearchHit[] searchHits = hits.getHits();
@@ -238,7 +270,7 @@ public class ElasticSearchDataStore extends DataStore {
                             queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
                             break;
                         case IS_NULL:
-                            queryBuilder.mustNot(QueryBuilders.existsQuery(filter.getName()));
+                            queryBuilder.must(QueryBuilders.missingQuery(filter.getName()));
                             break;
                         case IS_NOTNULL:
                             queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
@@ -259,6 +291,7 @@ public class ElasticSearchDataStore extends DataStore {
                 }
             }
         }
+        LOGGER.debug("Executing elastic search query {}", queryBuilder.toString());
         return queryBuilder;
     }
 

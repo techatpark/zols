@@ -11,6 +11,7 @@ import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.zols.datastore.service.DataService;
 import org.zols.datatore.exception.DataStoreException;
@@ -45,6 +46,7 @@ public class PageService {
      * @param pageRequest Object to be Create
      * @return created Page object
      */
+    @Secured("ROLE_ADMIN")
     public Page create(PageRequest pageRequest) throws DataStoreException {
         Page createdPage = null;
         if (pageRequest != null) {
@@ -102,6 +104,7 @@ public class PageService {
      * @param page Object to be update
      * @return returns the status of the Update Operation
      */
+    @Secured("ROLE_ADMIN")
     public Page update(Page page) throws DataStoreException {
         Page updated = null;
         if (page != null) {
@@ -117,6 +120,7 @@ public class PageService {
      * @param pageName String to be delete
      * @return status of the delete operation
      */
+    @Secured("ROLE_ADMIN")
     public Boolean delete(String pageName) throws DataStoreException {
         LOGGER.info("Deleting Page {}", pageName);
         return dataStore.delete(Page.class, pageName);
