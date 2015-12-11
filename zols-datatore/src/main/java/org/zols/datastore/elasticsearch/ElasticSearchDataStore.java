@@ -126,35 +126,6 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected boolean delete(JSONSchema jsonSchema) {
-        SearchResponse response = client
-                .prepareSearch()
-                .setSearchType(SearchType.SCAN)
-                .setIndices(indexName)
-                .setTypes(jsonSchema.baseType())
-                .setScroll(new TimeValue(60000))
-                .setSize(100)
-                .execute()
-                .actionGet();
-        while (true) {
-            response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
-            boolean hitsRead = false;
-            for (SearchHit hit : response.getHits()) {
-                hitsRead = true;
-                client
-                        .prepareDelete(indexName, hit.getType(), hit.getId()).setRefresh(true)
-                        .execute()
-                        .actionGet();
-            }
-            //Break condition: No hits are returned
-            if (!hitsRead) {
-                break;
-            }
-        }
-        return true;
-    }
-
-    @Override
     protected boolean delete(JSONSchema jsonSchema, String idValue) {
         DeleteResponse response = client
                 .prepareDelete(indexName, jsonSchema.baseType(), idValue).setRefresh(true)
@@ -163,6 +134,11 @@ public class ElasticSearchDataStore extends DataStore {
         client.admin().indices().refresh(new RefreshRequest(indexName));
 
         return response.isFound();
+    }
+
+    @Override
+    protected boolean delete(JSONSchema jsonSchema) {
+        return delete(jsonSchema, (Query) null);
     }
 
     @Override
@@ -209,23 +185,7 @@ public class ElasticSearchDataStore extends DataStore {
 
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema) {
-        List<Map<String, Object>> list = null;
-        SearchResponse response = client
-                .prepareSearch()
-                .setIndices(indexName)
-                .setTypes(jsonSchema.baseType())
-                .execute().actionGet();
-        SearchHits hits = response.getHits();
-        if (hits != null) {
-            SearchHit[] searchHits = hits.getHits();
-            if (searchHits != null) {
-                list = new ArrayList<>(searchHits.length);
-                for (SearchHit searchHit : searchHits) {
-                    list.add(searchHit.getSource());
-                }
-            }
-        }
-        return list;
+        return list(jsonSchema, (Query) null);
     }
 
     @Override
@@ -233,18 +193,27 @@ public class ElasticSearchDataStore extends DataStore {
         List<Map<String, Object>> list = null;
         SearchResponse response = client
                 .prepareSearch()
+                .setSearchType(SearchType.SCAN)
                 .setIndices(indexName)
                 .setTypes(jsonSchema.baseType())
                 .setQuery(getQueryBuilder(query))
+                .setScroll(new TimeValue(60000))
+                .setSize(100)
                 .execute()
                 .actionGet();
-        SearchHits hits = response.getHits();
-        if (hits != null) {
-            SearchHit[] searchHits = hits.getHits();
-            if (searchHits != null) {
-                list = new ArrayList<>(searchHits.length);
-                for (SearchHit searchHit : searchHits) {
-                    list.add(searchHit.getSource());
+        long totalHits = response.getHits().getTotalHits();
+        if (totalHits != 0) {
+            list = new ArrayList<>((int) totalHits);
+            while (true) {
+                response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
+                boolean hitsRead = false;
+                for (SearchHit hit : response.getHits()) {
+                    hitsRead = true;
+                    list.add(hit.getSource());
+                }
+                //Break condition: No hits are returned
+                if (!hitsRead) {
+                    break;
                 }
             }
         }
@@ -257,8 +226,9 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     public static QueryBuilder getQueryBuilder(Query query) {
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        BoolQueryBuilder queryBuilder = null;
         if (query != null) {
+            queryBuilder = QueryBuilders.boolQuery();
             List<Filter> queries = query.getFilters();
             if (queries != null) {
                 int size = queries.size();
@@ -290,8 +260,9 @@ public class ElasticSearchDataStore extends DataStore {
                     }
                 }
             }
+            LOGGER.debug("Executing elastic search query {}", queryBuilder.toString());
         }
-        LOGGER.debug("Executing elastic search query {}", queryBuilder.toString());
+
         return queryBuilder;
     }
 

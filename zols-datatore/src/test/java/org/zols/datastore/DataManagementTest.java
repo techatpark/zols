@@ -104,6 +104,6 @@ public class DataManagementTest {
     public void testListDataWithInvalidQuery() throws DataStoreException {
         Query query = new Query();
         query.addFilter(new Filter("name", EQUALS, "Saravana"));
-        Assert.assertEquals("Listing Simple Data with valid query", 0, dataStore.list("employee", query).size());
+        Assert.assertEquals("Listing Simple Data with valid query", null, dataStore.list("employee", query));
     }
 }
