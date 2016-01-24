@@ -15,7 +15,7 @@
     var schemas;
     var schema;
     var data;
-    var listofData;
+    var dataPage;
     var confirmationPromise;
     var isEdit = false;
 
@@ -59,45 +59,77 @@
                     schema = $.view(this).data;
                     $('#categorynameLbl').text(schema.title);
 
-                    $.fn.listData();
+                    $.fn.listData(0);
                 });
             }
 
         });
     };
 
-    $.fn.listData = function () {
+    $.fn.listData = function (pageNumber) {
         data = null;
         isEdit = false;
-        $.get(base_url + '/data/' + schema.id).done(function (dataList) {
+        var listUrl = base_url + '/data/' + schema.id + '?page='+pageNumber;
+        var searchBox = $('#schemaHeader .input-group .form-control');
+        if(searchBox && searchBox.val()) {
+            listUrl = listUrl + "&q=" + searchBox.val();
+        }        
+        $.get(listUrl).done(function (dataList) {
             if (dataList === "") {
                 var template = $.templates("#noData");
                 template.link('#result', {});
                 $('#result a').click(function () {
-                    $.fn.createData();
+                    $.fn.renderData();
                 });
             } else {
-                listofData = {link: dataList};
+                $("#schemaHeader").show();
+                
+                var displayContent = dataList.content.map(function(item){ 
+                   var displayItem = {};
+                   displayItem.labelField = item[schema.labelField];
+                   displayItem.idField = item[schema.idField];
+                   return displayItem;
+                });
+                dataList.displayContent = displayContent;
+
+
+                dataPage = {page: dataList};
+
+
                 var template = $.templates("#listData");
-                template.link('#result', listofData);
+                template.link('#result', dataPage);
                 $('#addMoreDataBtn').on('click', function () {
                     $.fn.renderData();
                 });
-
                 $('#result .glyphicon-trash').on('click', function () {
-
                     $("#delete-conf-model").modal('show');
                     confirmationPromise = $.Deferred();
                     confirmationPromise.done(function () {
                         $.fn.deleteData();
                     });
-                    data = $.view(this).data;
-                });
 
+                   data = $.view(this).data;
+                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    data = result[0];
+                });
                 $('#result .glyphicon-edit').on('click', function () {
                     isEdit = true;
+
                     data = $.view(this).data;
+
+                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    data = result[0];
                     $.fn.renderData();
+                });
+                $('#result .pager li').not(".disabled").on('click', function () {
+                    if($(this).index() === 0) {
+                        $.fn.listData(dataPage.page.number-1);
+                    }else {
+                        $.fn.listData(dataPage.page.number+1);
+                    }
+                });
+                $('#schemaHeader .input-group .btn-default').on('click', function () {
+                    $.fn.listData(0);
                 });
             }
         });
@@ -106,6 +138,7 @@
     };
 
     $.fn.renderData = function () {
+        $("#schemaHeader").hide();
         var template = $.templates("#data_entry");
         template.link('#result', {});
         var editor = $("#editor_holder").jsonEditor({schemaName: schema.id, value: data});
@@ -120,7 +153,7 @@
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function (data) {
-                    $.fn.listData();
+                    $.fn.listData(0);
                 }).error(function (data) {
                     $.fn.onError(data);
                 });
@@ -131,7 +164,7 @@
                     dataType: 'json',
                     data: JSON.stringify(editor.getValue())
                 }).done(function (data) {
-                    $.fn.listData();
+                    $.fn.listData(0);
                 }).error(function (data) {
                     $.fn.onError(data);
                 });
@@ -146,7 +179,7 @@
             url: base_url + '/data/' + schema.id + '/' + data[schema.idField],
             dataType: 'json'
         }).done(function (data) {
-            $.fn.listData();
+            $.fn.listData(0);
         }).error(function (data) {
             $.fn.onError(data);
         });
@@ -155,7 +188,6 @@
     $.fn.onError = function (data) {
         $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
     };
-
 
     $.fn.listSchemas();
 

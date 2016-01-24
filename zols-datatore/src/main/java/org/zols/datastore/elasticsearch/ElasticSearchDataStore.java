@@ -5,7 +5,6 @@
  */
 package org.zols.datastore.elasticsearch;
 
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
@@ -29,10 +29,10 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.Page;
 import org.zols.datastore.jsonschema.JSONSchema;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
@@ -184,6 +184,39 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
+    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
+            Integer pageNumber, Integer pageSize) {
+        return list(jsonSchema, null, pageNumber, pageSize);
+    }
+
+    @Override
+    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
+            Query query, Integer pageNumber, Integer pageSize) {
+        Page<Map<String, Object>> page = null;
+        SearchRequestBuilder builder = client
+                .prepareSearch()
+                .setIndices(indexName)
+                .setTypes(jsonSchema.baseType())
+                .setQuery(getQueryBuilder(query));
+        if (pageNumber != null) {
+            builder.setSize(pageSize)
+                    .setFrom(pageNumber * pageSize);
+        }
+        SearchResponse response = builder
+                .execute()
+                .actionGet();
+        long totalHits = response.getHits().getTotalHits();
+        if (totalHits != 0) {
+            List<Map<String, Object>> list = new ArrayList<>((int) totalHits);
+            for (SearchHit hit : response.getHits()) {
+                list.add(hit.getSource());
+            }
+            page = new Page(pageNumber, pageSize, totalHits, list);
+        }
+        return page;
+    }
+
+    @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema) {
         return list(jsonSchema, (Query) null);
     }
@@ -236,6 +269,9 @@ public class ElasticSearchDataStore extends DataStore {
                 for (int index = 0; index < size; index++) {
                     filter = queries.get(index);
                     switch (filter.getOperator()) {
+                        case FULL_TEXT_SEARCH:
+                            queryBuilder.must(QueryBuilders.queryStringQuery(filter.getValue().toString()));
+                            break;
                         case EQUALS:
                             queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
                             break;

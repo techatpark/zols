@@ -27,8 +27,7 @@ import org.zols.links.provider.LinkProvider;
 public class LinkService {
 
     private static final Logger LOGGER = getLogger(LinkService.class);
-    
-    
+
     @Autowired
     private ApplicationContext applicationContext;
 
@@ -83,7 +82,7 @@ public class LinkService {
         Link updated = null;
         if (link != null) {
             LOGGER.info("Updating Link {}", link);
-            updated = dataStore.update(link,link.getName());
+            updated = dataStore.update(link, link.getName());
         }
         return updated;
     }
@@ -147,9 +146,9 @@ public class LinkService {
      * @return list of application links
      */
     public Map<String, List<Link>> getApplicationLinks() throws DataStoreException {
+        Map<String, List<Link>> applicationLinks = new HashMap<>();
         List<LinkGroup> categories = linkGroupService.list();
         if (categories != null) {
-            Map<String, List<Link>> applicationLinks = new HashMap<>(categories.size());
             List<Link> firstlevelLinks;
             for (LinkGroup group : categories) {
                 firstlevelLinks = linkGroupService.getFirstLevelLinks(group.getName());
@@ -159,18 +158,15 @@ public class LinkService {
                     }
                     applicationLinks.put(group.getName(), firstlevelLinks);
                 }
-
             }
-
-            Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
-
-            for (Map.Entry<String, LinkProvider> entry : beansMap.entrySet()) {
-                applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
-            }
-            return applicationLinks;
         }
 
-        return null;
+        Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
+        beansMap.entrySet().stream().forEach((entry) -> {
+            applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
+        });
+
+        return applicationLinks;
     }
 
     /**

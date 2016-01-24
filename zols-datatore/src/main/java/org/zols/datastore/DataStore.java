@@ -78,6 +78,22 @@ public abstract class DataStore {
         return objects;
     }
 
+    public <T> Page<T> list(Class<T> clazz, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        Page<Map<String, Object>> page = list(jsonSchema(clazz), pageNumber, pageSize);
+        if (page != null) {
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asObject(clazz, map)).collect(toList()));
+        }
+        return null;
+    }
+
+    public <T> Page<T> list(Class<T> clazz, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        Page<Map<String, Object>> page = list(jsonSchema(clazz), query, pageNumber, pageSize);
+        if (page != null) {
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asObject(clazz, map)).collect(toList()));
+        }
+        return null;
+    }
+
     /**
      * Data Related
      */
@@ -138,6 +154,16 @@ public abstract class DataStore {
     public List<Map<String, Object>> list(String schemaId, Query query)
             throws DataStoreException {
         return list(jsonSchema(getSchema(schemaId)), query);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
+            throws DataStoreException {
+        return list(jsonSchema(getSchema(schemaId)), pageNumber, pageSize);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
+            throws DataStoreException {
+        return list(jsonSchema(getSchema(schemaId)), query, pageNumber, pageSize);
     }
 
     /**
@@ -355,11 +381,38 @@ public abstract class DataStore {
     /**
      *
      * @param jsonSchema schema of dynamic data
+     * @param pageNumber
+     * @param pageSize
+     * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    protected abstract Page<Map<String, Object>> list(JSONSchema jsonSchema,
+            Integer pageNumber,
+            Integer pageSize)
+            throws DataStoreException;
+
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
      * @param query query to consider
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract List<Map<String, Object>> list(JSONSchema jsonSchema, Query query)
+    protected abstract List<Map<String, Object>> list(JSONSchema jsonSchema,
+            Query query)
+            throws DataStoreException;
+
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
+     * @param query query to consider
+     * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    protected abstract Page<Map<String, Object>> list(JSONSchema jsonSchema,
+            Query query,
+            Integer pageNumber,
+            Integer pageSize)
             throws DataStoreException;
 
     /**

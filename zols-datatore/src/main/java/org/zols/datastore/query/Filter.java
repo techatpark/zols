@@ -6,7 +6,7 @@
 package org.zols.datastore.query;
 
 /**
- * 
+ *
  * @author sathish_ku
  * @param <T> type of the object for which this filter has to be applied
  */
@@ -18,19 +18,23 @@ public class Filter<T> {
     public enum Operator {
 
         /**
+         * Search Text in Full content of Document
+         */
+        FULL_TEXT_SEARCH,
+        /**
          * Compare with =
          */
         EQUALS,
         /**
-         * Compare with 
+         * Compare with
          */
         GREATER_THAN,
         /**
-         * Compare with 
+         * Compare with
          */
         GREATER_THAN_EQUALS,
         /**
-         * Compare with 
+         * Compare with
          */
         LESSER_THAN,
         /**
@@ -59,7 +63,6 @@ public class Filter<T> {
     private final Operator operator;
     private final Object value;
 
-
     /**
      * Intialize the Filter
      *
@@ -72,20 +75,32 @@ public class Filter<T> {
         this.operator = operator;
         this.value = value;
     }
-    
+
+    /**
+     * Intialize the Filter
+     *
+     * @param operator operator of the filter
+     * @param value value of the filter
+     */
+    public Filter(Operator operator, T value) {
+        this.name = null;
+        this.operator = operator;
+        this.value = value;
+    }
+
     /**
      * Intialize the Filter
      *
      * @param name name of the filter
      * @param operator operator of the filter
      * @param value
-       */
+     */
     public Filter(String name, Operator operator, T... value) {
         this.name = name;
         this.operator = operator;
         this.value = value;
     }
-    
+
     /**
      * Intialize the Filter without value
      *

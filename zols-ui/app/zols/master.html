@@ -54,16 +54,24 @@
                         <div class="row show-grid">
                             <div class="pull-left">
                                 <h4>
-                                    <span id="pageTitle">Master</span>
+                                    <span id="categorynameLbl">Master</span>
                                     <!--                                    <span class="badge">
                                                                             <i data-toggle="tooltip" data-placement="right" title="Tooltip on right" class="glyphicon glyphicon-question-sign"></i>
                                                                         </span>-->
                                 </h4>
                             </div>
-                            <div class="pull-right" id="schemaHeader">
-                                <label>Schema</label>
-                                <label id="categorynameLbl">Schema Name</label>
-                            </div>
+
+
+
+                                <div class="col-lg-3 pull-right" id="schemaHeader">
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Search for..."/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+    </div>
+  </div>
+                           
                         </div>
 
 
@@ -149,20 +157,34 @@
 
 
             <script id="listData" type="text/x-jsrender">
-                {{if link.length !==0}}
 
+        
+            <nav class="row">
+            
+  {{if page.totalPages > 1}}
+                      <ul class="pager pull-right">
+                        {{if page.first}}<li class="disabled"><a href="#">Previous</a></li>{{else}}<li><a href="#">Previous</a></li>{{/if}}
+                        {{if page.last}}<li class="disabled"><a href="#">Next</a></li>{{else}}<li><a href="#">Next</a></li>{{/if}}
+                      </ul>
+                      {{/if}}
+                    
+            </nav>
+        
+
+                {{if page.displayContent.length !== 0}}
                 <ul class="list-group">
-                {{for link}}
+                {{for page.displayContent}}
                 <li class="list-group-item">
-                {{:title}}
+                {{:labelField}}
                 <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge"><i class="glyphicon glyphicon-edit"></i></span>
                 </li>
                 {{/for}}
                 </ul>
                 {{/if}}
-
-                <a id="addMoreDataBtn" href="#">Add More</a>
+                <nav>
+                    <a id="addMoreDataBtn" href="#" >Add More</a>                    
+                </nav>                
             </script>
 
             <script id="data_entry" type="text/x-jsrender">
