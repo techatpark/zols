@@ -18,5 +18,4 @@ Content is no longer just a text. Any data we enter here is stored in it's nativ
 Zols is released under version 2.0 of the [Apache License][].
 
 [here]:https://github.com/sathishk/zols-sample
-[mongo website]: https://www.mongodb.org/
 [Apache License]: http://www.apache.org/licenses/LICENSE-2.0
