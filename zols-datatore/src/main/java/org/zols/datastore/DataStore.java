@@ -130,6 +130,17 @@ public abstract class DataStore {
         }
         return false;
     }
+    
+    public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
+            throws DataStoreException {
+        JSONSchema jSONSchema = jsonSchema(getSchema(schemaId));
+        Map<String,Object> jsonData = read(jSONSchema, idValue);
+        jsonData.putAll(partialJsonData);
+        if (jSONSchema.validate(jsonData) == null) {
+            return update(jSONSchema, jsonData);
+        }
+        return false;
+    }
 
     public boolean delete(String schemaId)
             throws DataStoreException {

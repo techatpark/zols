@@ -47,33 +47,42 @@ public class DataManagementTest {
     }
 
     @Test
-    public void testCreateData() throws DataStoreException {
+    public void testCreate() throws DataStoreException {
         Assert.assertNotNull("Creating Simple Data", dataStore.read("employee", "Sathish"));
     }
 
     @Test
-    public void testUpdateData() throws DataStoreException {
+    public void testUpdate() throws DataStoreException {
         Map<String, Object> map = dataStore.read("employee", "Sathish");
         map.put("salary", 2000);
         dataStore.update("employee", map);
         map = dataStore.read("employee", "Sathish");
         Assert.assertEquals("Updating Simple Data", 2000, (int) map.get("salary"));
     }
+    
+    @Test
+    public void testPartialUpdate() throws DataStoreException {
+        Map<String, Object> partialMap = new HashMap<>();
+        partialMap.put("salary", 2000);
+        dataStore.updatePartial("employee", "Sathish", partialMap);
+        Map<String, Object> map = dataStore.read("employee", "Sathish");
+        Assert.assertEquals("Updating Simple Data", "IT", map.get("department"));
+    }
 
     @Test
-    public void testDeleteData() throws DataStoreException {
+    public void testDelete() throws DataStoreException {
         dataStore.delete("employee", "Sathish");
         Assert.assertNull("Deleting Simple Data", dataStore.read("employee", "Sathish"));
     }
 
     @Test
-    public void testDeleteAllData() throws DataStoreException {
+    public void testDeleteAll() throws DataStoreException {
         dataStore.delete("employee");
         Assert.assertNull("Deleting Simple Data", dataStore.read("employee", "Sathish"));
     }
 
     @Test
-    public void testListData() throws DataStoreException {
+    public void testList() throws DataStoreException {
         Assert.assertEquals("Listing Simple Data", 1, dataStore.list("employee").size());
     }
 
