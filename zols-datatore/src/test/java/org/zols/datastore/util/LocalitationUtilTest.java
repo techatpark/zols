@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.util;
 
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import org.junit.Assert;
@@ -37,7 +38,8 @@ public class LocalitationUtilTest {
         Assert.assertTrue("Locale Specific Field stripped", localizedJsonData.get("four_wheel_drive$it")==null);
         
         Assert.assertTrue("Locale Specific nested Field stripped", ((Map<String,Object>) localizedJsonData.get("insurance")).get("company")!=null);
-        
+  
+        Assert.assertTrue("Locale Specific Array nested Field stripped", ((Map<String,Object>)((Collection) localizedJsonData.get("owners")).toArray()[0]).get("city") !=null);     
     }
     
     

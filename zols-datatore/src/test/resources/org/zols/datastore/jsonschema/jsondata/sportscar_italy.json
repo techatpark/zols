@@ -4,5 +4,11 @@
     "track": "F1",
     "insurance": {
         "company$it": "AIG"
-    }
+    },
+    "owners":[
+        {"name":"sathish",
+         "city$it":"Madurai"},
+        {"name":"krishna",
+         "city$it":"Erode"}
+    ]
 }

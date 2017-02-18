@@ -1,6 +1,7 @@
 package org.zols.datastore.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -41,10 +42,14 @@ public class LocalitationUtil {
         jsonData.keySet().forEach(fieldName -> {
             if (fieldName.endsWith("$" + localeCode)) {
                 localeFileds.add(fieldName);
-            } else {
-                if(jsonData.get(fieldName) instanceof Map) {
-                    readJSON((Map<String, Object>) jsonData.get(fieldName),locale);
-                }
+            } else if (jsonData.get(fieldName) instanceof Map) {
+                readJSON((Map<String, Object>) jsonData.get(fieldName), locale);
+            } else if (jsonData.get(fieldName) instanceof Collection) {
+                    ((Collection) jsonData.get(fieldName)).forEach(collectionData-> {
+                        if(collectionData instanceof Map) {
+                            readJSON((Map<String, Object>) collectionData, locale);
+                        }
+                    });
             }
 
         });
