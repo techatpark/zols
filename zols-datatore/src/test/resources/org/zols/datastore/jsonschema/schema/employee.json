@@ -11,7 +11,8 @@
             "type": "integer"
         },
         "department": {
-            "type": "string","localized":true
+            "type": "string",
+            "localized": true
         },
         "isContractor": {
             "type": "boolean"

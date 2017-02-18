@@ -1,0 +1,8 @@
+{
+    "reg_number": "KL01",
+    "four_wheel_drive$it": true,
+    "track": "F1",
+    "insurance": {
+        "company$it": "AIG"
+    }
+}
