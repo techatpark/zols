@@ -7,7 +7,8 @@
             "type": "object",
             "properties": {
                 "company": {
-                    "type": "string"
+                    "type": "string",
+                    "localized":true
                 }
             },
             "required": [
@@ -21,10 +22,11 @@
             "$ref": "#/definitions/vechicle",
             "properties": {
                 "insurance": {
+                    "type": "object",
                     "$ref": "#/definitions/insurance"
                 },
                 "four_wheel_drive": {
-                    "type": "boolean"
+                    "type": "boolean","localized":true
                 }
             }
         },
