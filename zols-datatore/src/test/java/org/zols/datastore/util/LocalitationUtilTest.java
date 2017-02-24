@@ -22,14 +22,13 @@ public class LocalitationUtilTest {
     
 
     @Test
-    @Ignore
     public void testPrepareJSONMethod() {
         Map<String,Object> localizedJsonData = 
                 LocalitationUtil.prepareJSON(sampleJsonSchema("sportscar_composite"), 
                         sampleJson("sportscar_composite"),
                         Locale.ITALY);
-        Assert.assertTrue("Locale Specific nested Field removed", 
-                ((Map<String,Object>) localizedJsonData.get("insurance")).get("company")==null);
+        Assert.assertTrue("Locale Specific super type Field removed", 
+                localizedJsonData.get("four_wheel_drive")==null);
         
     }
     

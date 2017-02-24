@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author sathish
@@ -23,33 +18,50 @@ public class LocalitationUtil {
             Locale locale) {
         String localeCode = locale.getLanguage();
         Map<String, Object> propertiesMap = new HashMap<>();
-        preparePropertiedMap(jsonSchema, jsonSchema,propertiesMap);
+        preparePropertiedMap(jsonSchema, jsonSchema, propertiesMap);
         propertiesMap.keySet().forEach(fieldName -> {
-            Boolean isLocalized = (Boolean) ((Map<String, Object>) propertiesMap.get(fieldName)).get("localized");
-            if (isLocalized != null && isLocalized) {
-                Object obj = jsonData.remove(fieldName);
-                jsonData.put(fieldName + "$" + localeCode, obj);
-
+            Map<String, Object> propertyMap = ((Map<String, Object>) propertiesMap.get(fieldName));
+            Object reference = propertiesMap.get("$ref");
+            if (reference == null) {
+                Boolean isLocalized = (Boolean) propertyMap.get("localized");
+                if (isLocalized != null && isLocalized) {
+                    Object obj = jsonData.remove(fieldName);
+                    jsonData.put(fieldName + "$" + localeCode, obj);
+                }
+            } else {
+                
             }
+
         });
         return jsonData;
     }
 
+    /**
+     * Load Properties from Super Types (Car is Base Type, Vehicle is super
+     * type)
+     *
+     * @param jsonSchema
+     * @param currentSchema
+     * @param propertiesMap
+     */
     private static void preparePropertiedMap(Map<String, Object> jsonSchema, Map<String, Object> currentSchema, Map<String, Object> propertiesMap) {
         if (jsonSchema != null) {
             propertiesMap.putAll((Map<String, Object>) currentSchema.get("properties"));
             Object reference = currentSchema.get("$ref");
             if (reference != null) {
-                Map<String, Object> refSchema = jsonSchema;
-                String[] paths = reference.toString().split("/");
-                for (int i = 1; i < paths.length; i++) {
-                    refSchema = (Map<String, Object>) refSchema.get(paths[i]);
-                }
-
-                preparePropertiedMap(jsonSchema,refSchema, propertiesMap);
+                preparePropertiedMap(jsonSchema, getReferencedSchema(jsonSchema,reference), propertiesMap);
             }
         }
 
+    }
+
+    private static Map<String, Object> getReferencedSchema(Map<String, Object> jsonSchema, Object refValue) {
+        Map<String, Object> refSchema = jsonSchema;
+        String[] paths = refValue.toString().split("/");
+        for (int i = 1; i < paths.length; i++) {
+            refSchema = (Map<String, Object>) refSchema.get(paths[i]);
+        }
+        return refSchema;
     }
 
     public static Map<String, Object> readJSON(

@@ -66,7 +66,7 @@ public class DataManagementTest {
         partialMap.put("salary", 2000);
         dataStore.updatePartial("employee", "Sathish", partialMap);
         Map<String, Object> map = dataStore.read("employee", "Sathish");
-        Assert.assertEquals("Updating Simple Data", "IT", map.get("department"));
+        Assert.assertEquals("Partially Updating Simple Data", "IT", map.get("department"));
     }
 
     @Test

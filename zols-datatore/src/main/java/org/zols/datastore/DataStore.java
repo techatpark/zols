@@ -417,6 +417,8 @@ public abstract class DataStore {
      *
      * @param jsonSchema schema of dynamic data
      * @param query query to consider
+     * @param pageNumber
+     * @param pageSize
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
