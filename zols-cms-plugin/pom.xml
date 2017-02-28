@@ -37,18 +37,20 @@
             <scope>provided</scope>
         </dependency>
         
-        <dependency>
-            <groupId>com.mangofactory</groupId>
-            <artifactId>swagger-springmvc</artifactId>
-            <version>${swagger-springmvc-version}</version>
-            <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                </exclusion>
-            </exclusions>
+         <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.1</version>
+            <scope>compile</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.1</version>
+            <scope>compile</scope>
+        </dependency>
+        
         
         <dependency>
             <groupId>${project.groupId}</groupId>

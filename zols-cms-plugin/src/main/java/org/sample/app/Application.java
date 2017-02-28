@@ -1,6 +1,5 @@
 package org.sample.app;
 
-import com.mangofactory.swagger.plugin.EnableSwagger;
 import java.util.Arrays;
 import static org.springframework.boot.SpringApplication.run;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,7 +10,6 @@ import org.zols.plugin.EnableCMS;
 @ComponentScan
 @EnableAutoConfiguration
 @EnableCMS
-@EnableSwagger
 public class Application {    
     
    
