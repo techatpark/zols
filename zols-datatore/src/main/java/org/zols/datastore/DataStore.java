@@ -124,7 +124,7 @@ public abstract class DataStore {
 
     public boolean update(String schemaId, Map<String, Object> jsonData)
             throws DataStoreException {
-        JSONSchema jSONSchema = jsonSchema(getSchema(schemaId));
+        JSONSchema jSONSchema = jsonSchema(getEnlargedSchema(schemaId));
         if (jSONSchema.validate(jsonData) == null) {
             return update(jSONSchema, jsonData);
         }
@@ -133,7 +133,7 @@ public abstract class DataStore {
     
     public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
             throws DataStoreException {
-        JSONSchema jSONSchema = jsonSchema(getSchema(schemaId));
+        JSONSchema jSONSchema = jsonSchema(getEnlargedSchema(schemaId));
         Map<String,Object> jsonData = read(jSONSchema, idValue);
         jsonData.putAll(partialJsonData);
         if (jSONSchema.validate(jsonData) == null) {
@@ -284,7 +284,7 @@ public abstract class DataStore {
         schema.entrySet().stream().forEach((schemaEntry) -> {
             linkedHashMap.putIfAbsent(schemaEntry.getKey(), schemaEntry.getValue());
         });
-        //linkedHashMap.put("id", id);
+        linkedHashMap.put("id", id);
         return linkedHashMap;
     }
 
