@@ -10,8 +10,8 @@
     "watch:js": "cpx 'src/js/**' 'dist/js' --watch",
     "watch:css": "onchange 'src/scss' -- npm run build:css",
     "watch:images": "cpx 'src/**/*.{png,jpg,svg,ico}' dist --watch",
-    "build": "npm run clean && mkdir dist && npm run copy:vendorjs && npm run copy:vendorfonts && npm run build:js && npm run build:css && cp -R src/scss/sceeditor dist/css && npm run build:html",
-    "copy:vendorjs": "mkdir dist/js && uglifyjs node_modules/jquery/dist/jquery.js node_modules/bootstrap-sass/assets/javascripts/bootstrap.js -m -c -o dist/js/vendor.min.js",
+    "build": "npm run clean && mkdir dist && npm run copy:vendorjs && npm run copy:vendorfonts && npm run build:js && npm run build:css && npm run build:html",
+    "copy:vendorjs": "mkdir dist/js && cp node_modules/jsviews/jsviews.min.js dist/js && cp node_modules/json-editor/dist/jsoneditor.min.js dist/js && mkdir dist/js/sceditor && cp -R node_modules/sceditor/minified/ dist/js/sceditor && uglifyjs node_modules/jquery/dist/jquery.js node_modules/bootstrap-sass/assets/javascripts/bootstrap.js -m -c -o dist/js/vendor.min.js",
     "copy:vendorfonts": "cp -R node_modules/bootstrap-sass/assets/fonts dist/",
     "build:html": "cpx 'src/**/*.{html,htm}' dist",
     "build:js": "cp -R 'src/js' dist",
@@ -27,5 +27,9 @@
     "jquery": "^2.2.0",
     "node-sass": "^3.8.0",
     "onchange": "^2.5.0"
+  },
+  "dependencies": {
+    "json-editor": "^0.7.28",
+    "jsviews": "^0.9.83"
   }
 }
