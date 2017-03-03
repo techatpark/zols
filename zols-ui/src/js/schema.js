@@ -279,11 +279,10 @@
         console.log('currentIdField ' + currentIdField);
         $('#idField').find('option').remove();
         $.each(Object.keys(schema.properties), function (i, d) {
-            // Ignore jQuery Property
-            if(i !== 0) {
+
                 $('#idField').append('<option value="' + d + '">' + d + '</option>');
-            }
-            
+
+
         });
         $('#idField').val(currentIdField);
         schema.idField = currentIdField;
@@ -292,10 +291,9 @@
         console.log('currentLabelField ' + currentLabelField);
         $('#labelField').find('option').remove();
         $.each(Object.keys(schema.properties), function (i, d) {
-            // Ignore jQuery Property
-            if(i !== 0) {
+
                 $('#labelField').append('<option value="' + d + '">' + d + '</option>');
-            }
+            
         });
         $('#labelField').val(currentLabelField);
         schema.labelField = currentLabelField;

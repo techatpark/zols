@@ -202,6 +202,7 @@ public abstract class DataStore {
             throws DataStoreException {
         Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
         Object idField = enlargedSchema.remove("idField");
+        enlargedSchema.remove("id");
         if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
             return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
