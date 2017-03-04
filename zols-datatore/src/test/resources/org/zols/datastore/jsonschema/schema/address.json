@@ -1,0 +1,28 @@
+{
+    "id": "address",
+    "title": "Address",
+    "idField": "id",
+    "labelField": "street_address",
+    "type": "object",
+    "properties": {
+        "street_address": {
+            "type": "string"
+        },
+        "city": {
+            "type": "string"
+        },
+        "id": {
+            "type": "integer"
+        },
+        "state": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "id",
+        "street_address",
+        "city",
+        "state"
+    ]
+    
+}

@@ -1,5 +1,5 @@
 {
-  "name": "bootjs",
+  "name": "zols",
   "version": "1.0.0",
   "scripts": {
     "clean": "rm -rf dist",
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "json-editor": "^0.7.28",
-    "jsviews": "^0.9.83"
+    "jsviews": "^0.9.83",
+    "sceditor": "^1.5.2"
   }
 }

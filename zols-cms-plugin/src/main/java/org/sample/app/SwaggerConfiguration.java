@@ -66,14 +66,6 @@ public class SwaggerConfiguration {
         .securitySchemes(newArrayList(apiKey()))
         .securityContexts(newArrayList(securityContext()))
         .enableUrlTemplating(true)
-        .globalOperationParameters(
-            newArrayList(new ParameterBuilder()
-                .name("someGlobalParameter")
-                .description("Description of someGlobalParameter")
-                .modelRef(new ModelRef("string"))
-                .parameterType("query")
-                .required(true)
-                .build()))
         .tags(new Tag("Pet Service", "All apis relating to pets")) 
         
         ;

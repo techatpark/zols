@@ -8,7 +8,6 @@ package org.zols.datastore;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Before;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
@@ -30,84 +29,17 @@ public class SchemaManagementTest {
 
     @Before
     public void beforeTest() throws DataStoreException {
-        dataStore.deleteSchema("vechicle");
-        dataStore.deleteSchema("car");
-        dataStore.deleteSchema("sportscar");
-        dataStore.deleteSchema("insurance");
-        dataStore.createSchema(sampleJsonSchemaText("vechicle"));
+
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.deleteSchema("vechicle");
-        dataStore.deleteSchema("car");
-        dataStore.deleteSchema("sportscar");
-        dataStore.deleteSchema("insurance");
+
     }
 
     @Test
     public void testCreateSchema() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Schema", dataStore.getSchema("vechicle"));
+
     }
 
-    @Test
-    public void testCreateChildSchema() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        Assert.assertNotNull("Creating Simple Schema", dataStore.getSchema("car"));
-    }
-
-    @Test
-    public void testCreateInvalidChildSchema() throws DataStoreException {
-        // No Insurance. So car can not be created
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        Assert.assertNull("Creating Simple Schema", dataStore.getSchema("car"));
-    }
-
-    @Test
-    public void testListSchema() throws DataStoreException {
-        Assert.assertEquals("Listing Schema", 1, dataStore.listSchema().size());
-    }
-
-    @Test
-    public void testDeleteSchema() throws DataStoreException {
-        dataStore.deleteSchema("vechicle");
-        Assert.assertNull("Deleted Simple Schema", dataStore.getSchema("vechicle"));
-    }
-
-    @Test
-    public void testGetSchemaWithDefinitions() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        Assert.assertNull("Getting Schema with Defenisions",
-                dataStore.validate("car", sampleJson("car")));
-    }
-
-    @Test
-    public void testGetEnlargedSchema() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        Map<String, Object> carSchema = dataStore.getEnlargedSchema("car");
-        Assert.assertEquals("Getting Enlarged Schema with Defenisions", "vechicle", carSchema.get("base"));
-    }
-
-    @Test
-    public void testGetSchemaWithMultiLevelInheritance() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-        dataStore.createSchema(sampleJsonSchemaText("car"));
-        dataStore.createSchema(sampleJsonSchemaText("sportscar"));
-
-        Assert.assertNull("Getting Schema with Multi Level Inheritance",
-                dataStore.validate("sportscar", sampleJson("sportscar")));
-    }
-
-//    @Test
-//    public void testGetSchemaWithInvalidMultiLevelInheritance() throws DataStoreException {
-//        dataStore.createSchema(sampleJsonSchemaText("insurance"));
-//        dataStore.createSchema(sampleJsonSchemaText("car"));
-//        dataStore.createSchema(sampleJsonSchemaText("sportscar"));
-//
-//        Assert.assertNotNull("Invalid Schema with Multi Level Inheritance",
-//                dataStore.validate("sportscar", sampleJson("sportscar_invalid")));
-//    }
 }
