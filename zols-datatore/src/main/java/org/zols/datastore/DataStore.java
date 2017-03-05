@@ -14,6 +14,7 @@ import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asObject;
+import static org.zols.datastore.util.MapUtil.removeNestedElements;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -190,8 +191,7 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
-        Object idField = enlargedSchema.remove("idField");
-        Object id = enlargedSchema.remove("id");
+        removeNestedElements(enlargedSchema,"id","idField");
         if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
             return create(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
@@ -201,8 +201,7 @@ public abstract class DataStore {
     public boolean updateSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
-        Object idField = enlargedSchema.remove("idField");
-        enlargedSchema.remove("id");
+        removeNestedElements(enlargedSchema,"id","idField");
         if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
             return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
         }
