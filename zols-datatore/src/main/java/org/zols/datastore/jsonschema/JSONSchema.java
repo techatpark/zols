@@ -108,7 +108,7 @@ public class JSONSchema {
     }
 
     // Validate the Data against Schema
-    public Set<ConstraintViolation> validate(Map<String, Object> jsonData) {
+    public Set<ConstraintViolation<Object>> validate(Map<String, Object> jsonData) {
         return validate(asString(jsonData));
     }
 
@@ -118,8 +118,8 @@ public class JSONSchema {
      * @param jsonData
      * @return null if valid
      */
-    public Set<ConstraintViolation> validate(String jsonData) {
-        Set<ConstraintViolation> constraintViolations = null;
+    public Set<ConstraintViolation<Object>> validate(String jsonData) {
+        Set<ConstraintViolation<Object>> constraintViolations = null;
         try {
             ScriptEngine scriptEngine = scriptEngine();
             Invocable inv = (Invocable) scriptEngine;

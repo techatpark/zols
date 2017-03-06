@@ -25,6 +25,7 @@ public class ObjectManagementTest {
     public void beforeTest() throws DataStoreException {
         Employee employee = new Employee();
         employee.setName("Sathish");
+        employee.setCity("Madurai");
         employee.setSalary(10000);
         employee.setIsContractor(Boolean.TRUE);
         dataStore.create(employee);

@@ -7,14 +7,29 @@ package org.zols.datastore.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 @Entity(name="employee")
 public class Employee {
 
     @Id
     private String name;
+    
+    @NotNull
+    private String city;
+    
     private Boolean isContractor;
     private int salary;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+    
+    
 
     public String getName() {
         return name;
