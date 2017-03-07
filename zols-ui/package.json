@@ -16,7 +16,8 @@
     "build:html": "cpx 'src/**/*.{html,htm}' dist",
     "build:js": "cp -R 'src/js' dist",
     "build:css": "node-sass --output-style compressed -o dist/css src/scss",
-    "build:images": "cpx 'src/**/*.{png,jpg,svg,ico}' dist"
+    "build:images": "cpx 'src/**/*.{png,jpg,svg,ico}' dist",
+    "swagger:docs": "mkdir dist/swagger && cpx 'node_modules/swagger-ui/dist/**/*.*' dist/swagger && replace-in-file 'http://petstore.swagger.io/v2/swagger.json' 'http://localhost:8080/v2/api-docs' dist/swagger/index.html"
   },
   "devDependencies": {
     "cpx": "^1.3.2",
@@ -31,6 +32,8 @@
   "dependencies": {
     "json-editor": "^0.7.28",
     "jsviews": "^0.9.83",
-    "sceditor": "^1.5.2"
+    "replace-in-file": "^2.4.1",
+    "sceditor": "^1.5.2",
+    "swagger-ui": "^2.2.10"
   }
 }
