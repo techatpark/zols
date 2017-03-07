@@ -1,6 +1,7 @@
 package org.zols.documents.domain;
 
 import javax.persistence.Id;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Document Storage contains storage information of Documents
@@ -15,6 +16,8 @@ public class DocumentRepository {
 
     @Id
     private String name;
+    
+    @NotEmpty
     private String label;
     private String description;
     private String type;

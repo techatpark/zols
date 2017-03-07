@@ -6,6 +6,7 @@
 package org.zols.documents.web;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class DocumentRepositoryController {
     private DocumentRepositoryService documentRepositoryService;
 
     @RequestMapping(method = POST)
-    public DocumentRepository create(@RequestBody DocumentRepository documentRepository) throws DataStoreException {
+    public DocumentRepository create(@RequestBody @Valid DocumentRepository documentRepository) throws DataStoreException {
         LOGGER.info("Creating new documentRepositories {}", documentRepository.getName());
         return documentRepositoryService.create(documentRepository);
     }
@@ -52,7 +53,7 @@ public class DocumentRepositoryController {
     @RequestMapping(value = "/{name}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "name") String name,
-            @RequestBody DocumentRepository documentRepository) throws DataStoreException {
+            @RequestBody @Valid DocumentRepository documentRepository) throws DataStoreException {
         if (name.equals(documentRepository.getName())) {
             LOGGER.info("Updating documentRepositories with id {} with {}", name, documentRepository);
             documentRepositoryService.update(documentRepository);

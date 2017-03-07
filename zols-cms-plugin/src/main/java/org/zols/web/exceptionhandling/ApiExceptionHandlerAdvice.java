@@ -5,12 +5,12 @@
  */
 package org.zols.web.exceptionhandling;
 
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpStatus;
+import java.util.List;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  *
@@ -18,18 +18,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ControllerAdvice(basePackages = "org.zols")
 public class ApiExceptionHandlerAdvice {
-
-    /**
-     * Handle exceptions thrown by handlers.
-     *
-     * @param exception
-     * @param request
-     * @return
-     */
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(Exception.class)
+    
+    @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    ErrorInfo handleBadRequest(HttpServletRequest req, Exception ex) {
-        return new ErrorInfo(req.getRequestURI(), ex);
+    public ErrorInfo handleValidationException(MethodArgumentNotValidException e) {
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+
+        ErrorInfo webServiceError = ErrorInfo.build(ErrorInfo.Type.VALIDATION_ERROR, errors.get(0).getObjectName() + " " + errors.get(0).getDefaultMessage());
+
+        return webServiceError;
     }
+
 }
