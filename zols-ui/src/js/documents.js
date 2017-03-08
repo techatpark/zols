@@ -14,11 +14,12 @@
 
     $.ajaxSetup({
         contentType: 'application/json'
-    }); 
+    });
 
     var documents_screen = {
             document_repositories: [],
             document_repository: [],
+            messages:[],
             is_edit: false,
             listRepositories: function() {
                 var screen_obj = this;
@@ -29,6 +30,18 @@
                     });
             },
 
+            showMessages:function(messages) {
+              $.observable(this).setProperty("messages", messages);
+              $.templates("#alert_template").link("#alerts", documents_screen);
+            },
+            getErrors:function(errResponse) {
+
+              var messages = [];
+              errResponse.responseJSON.errors.forEach((item, index, arr)=>{
+                messages.push({type:"warning","message": '[' + item.field + '] - ' + item.defaultMessage});
+              });
+              return messages;
+            },
             addRepository: function() {
                 var screen_obj = this;
                 screen_obj.is_edit = false;
@@ -49,6 +62,7 @@
                             url: base_url + '/document_repositories/' + document_repository.name,
                             dataType: 'json'
                         }).done(function(data) {
+                            screen_obj.showMessages([{type:"success","message":"repository deleted successfully"}]);
                             screen_obj.listRepositories();
                         });
                     });
@@ -77,8 +91,11 @@
                         dataType: 'json',
                         data: JSON.stringify(document_repository)
                     }).done(function(data) {
+                        screen_obj.showMessages([{type:"info","message":"repository updated  successfully"}]);
                         screen_obj.listRepositories();
-                    })
+                    }).error(function(errorResponse) {
+                      screen_obj.showMessages(screen_obj.getErrors(errorResponse));
+                    });
                 } else {
                     $.ajax({
                         method: 'POST',
@@ -86,8 +103,11 @@
                         dataType: 'json',
                         data: JSON.stringify(document_repository)
                     }).done(function(data) {
+                        screen_obj.showMessages([{type:"info","message":"repository created successfully"}]);
                         screen_obj.listRepositories();
-                    })
+                    }).error(function(errorResponse) {
+                      screen_obj.showMessages(screen_obj.getErrors(errorResponse));
+                    });
                 }
 
 
