@@ -2,6 +2,7 @@ package org.zols.documents.domain;
 
 import javax.persistence.Id;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.URL;
 
 /**
  * Document Storage contains storage information of Documents
@@ -26,6 +27,8 @@ public class DocumentRepository {
     private String userName;
     private String password;
     private String rootFolder;
+    
+    @URL
     private String baseUrl;
 
     public String getLabel() {

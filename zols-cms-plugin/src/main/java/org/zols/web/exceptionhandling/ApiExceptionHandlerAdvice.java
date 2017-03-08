@@ -18,15 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @ControllerAdvice(basePackages = "org.zols")
 public class ApiExceptionHandlerAdvice {
-    
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ErrorInfo handleValidationException(MethodArgumentNotValidException e) {
-        List<ObjectError> errors = e.getBindingResult().getAllErrors();
-
-        ErrorInfo webServiceError = ErrorInfo.build(ErrorInfo.Type.VALIDATION_ERROR, errors.get(0).getObjectName() + " " + errors.get(0).getDefaultMessage());
-
-        return webServiceError;
+    public List<ObjectError> handleValidationException(MethodArgumentNotValidException e) {
+        return e.getBindingResult().getAllErrors();
     }
 
 }
