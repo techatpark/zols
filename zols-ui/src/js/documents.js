@@ -25,17 +25,29 @@
                 var screen_obj = this;
                 $.get(base_url + '/document_repositories')
                     .done(function(data) {
-                      $.observable(screen_obj).setProperty("document_repositories", data);
-                      $.templates("#document_repositories_template").link("#result", documents_screen);
+
+                      if(data.length === 0) {
+                        $.templates("#empty_document_repositories_template").link("#result", documents_screen);
+                      }else {
+                        $.observable(screen_obj).setProperty("document_repositories", data);
+                        $.templates("#document_repositories_template").link("#panel-aside", documents_screen);
+                        if(data && data.length != 0) {
+                          screen_obj.setSelectedRepository(data[0]);
+                        }
+                      }
+
+
                     });
             },
-
+            setSelectedRepository:function(data) {
+              $.observable(this).setProperty("document_repository",data);
+              $.templates("#document_repositories_template").link("#panel-aside", documents_screen);
+            },
             showMessages:function(messages) {
               $.observable(this).setProperty("messages", messages);
               $.templates("#alert_template").link("#alerts", documents_screen);
             },
             getErrors:function(errResponse) {
-
               var messages = [];
               errResponse.responseJSON.errors.forEach((item, index, arr)=>{
                 messages.push({type:"warning","message": '[' + item.field + '] - ' + item.defaultMessage});
@@ -52,7 +64,6 @@
             removeRepository: function(document_repository) {
                 var screen_obj = this;
 
-
                 $("#confirmationModal .btn-primary")
                     .unbind("click")
                     .bind("click", function() {
@@ -64,6 +75,7 @@
                         }).done(function(data) {
                             screen_obj.showMessages([{type:"success","message":"repository deleted successfully"}]);
                             screen_obj.listRepositories();
+
                         });
                     });
 

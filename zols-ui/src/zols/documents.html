@@ -22,12 +22,29 @@
 
 <body>
     <div class="container-fluid">
+
+
         <div class="row-fluid" id="alerts">
         </div>
 
-        <div class="row-fluid" id="result">
+        <div class="panel panel-default">
+    <div class="panel-heading">
+         <h3 class="panel-title pull-left">
+            Documets
+            </h3>
 
-        </div>
+        <div class="pull-right" id="panel-aside"></div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="panel-body">
+      <div class="row-fluid" id="result">
+
+      </div>
+    </div>
+</div>
+
+
+
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -57,33 +74,38 @@
             {{/for}}
             {{/if}}
         </script>
+        <script id="empty_document_repositories_template" type="text/x-jsrender">
+        <div class="jumbotron">
+          <div class="container">
+              There are no Group to display click <a href="#" data-link="{on addRepository}">here</a>
+          </div>
+        </div>
+        </script>
 
         <script id="document_repositories_template" type="text/x-jsrender">
-            {^{if document_repositories.length != 0}}
-            <ul class="list-group">
-                {^{for document_repositories}}
-                <li class="list-group-item">
-                    <a href="#">{{:label}}</a>
-                    <span class="badge"><i class="glyphicon glyphicon-trash" data-link="{on ~root.removeRepository #data}"  data-toggle="modal" data-target="#confirmationModal"></i></span>
-                    <span class="badge"><i class="glyphicon glyphicon-edit" data-link="{on ~root.editRepositories #data}"></i></span>
-                </li>
 
+            <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              {{:document_repository.label}}
+              <span class="caret"></span>
+            </button>
+            <button type="button" class="btn btn-default"  data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-edit"></i></button>
+            <button type="button" class="btn btn-default" data-link="{on ~root.removeRepository #data.document_repository}"  data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash" ></i></button>
 
-                {{/for}}
-
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+              {^{for document_repositories}}
+              <li><a href="#" data-link="{on ~root.setSelectedRepository #data}">{{:label}}</a></li>
+              {{/for}}
+              <li role="separator" class="divider"></li>
+              <li><a href="#" data-link="{on addRepository}">Create New</a></li>
             </ul>
-
-
-            <a href="#" data-link="{on addRepository}">Add More</a> {{else}}
-            <div class="jumbotron">
-                <div class="container">
-                    There are no Group to display click <a href="#" data-link="{on addRepository}">here</a>
-                </div>
             </div>
-            {{/if}}
+
 
 
         </script>
+
+
 
 
 
