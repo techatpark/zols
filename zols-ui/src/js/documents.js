@@ -18,6 +18,7 @@
 
     var documents_screen = {
             document_repositories: [],
+            documents: [],
             document_repository: [],
             messages:[],
             is_edit: false,
@@ -39,9 +40,24 @@
 
                     });
             },
+            listDocuments: function(document_repository) {
+              var screen_obj = this;
+              $.get(base_url + '/documents/'+document_repository.name)
+                  .done(function(data) {
+
+                    if(data.length === 0) {
+                      $.templates("#empty_documents_template").link("#result", documents_screen);
+                    }else {
+                      $.observable(screen_obj).setProperty("documents", data);
+                      $.templates("#documents_template").link("#result", documents_screen);
+                    }
+                  });
+
+            },
             setSelectedRepository:function(data) {
               $.observable(this).setProperty("document_repository",data);
               $.templates("#document_repositories_template").link("#panel-aside", documents_screen);
+              this.listDocuments(data);
             },
             showMessages:function(messages) {
               $.observable(this).setProperty("messages", messages);

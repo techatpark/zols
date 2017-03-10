@@ -16,6 +16,7 @@ public class DocumentRepository {
     public static final String FTP = "ftp";
 
     @Id
+    @NotEmpty
     private String name;
     
     @NotEmpty

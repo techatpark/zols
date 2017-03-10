@@ -2,6 +2,7 @@ package org.zols.links.domain;
 
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -11,9 +12,10 @@ import javax.validation.constraints.Size;
 public class LinkGroup {
 
     @Id
+    @NotEmpty
     private String name;
     
-    @Size(max = 5)
+    @NotEmpty
     private String label;
 
     private String description;

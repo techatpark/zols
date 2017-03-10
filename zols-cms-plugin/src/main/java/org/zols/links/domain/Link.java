@@ -8,6 +8,7 @@ package org.zols.links.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
 import javax.persistence.Id;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -17,11 +18,13 @@ import javax.persistence.Id;
 public class Link {
 
     @Id
+    @NotEmpty
     private String name;
 
     /**
      * Label of the link.
      */
+    @NotEmpty
     private String label;
 
     /**
