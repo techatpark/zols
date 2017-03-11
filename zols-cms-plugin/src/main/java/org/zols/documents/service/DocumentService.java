@@ -147,12 +147,12 @@ public class DocumentService {
 
         List<Document> documents = new ArrayList<>();
         Document document;
-        for (File innerFile : new File(path).listFiles()) {
+            for (File innerFile : new File(path).listFiles()) {
             document = new Document();
             document.setRepositoryName(documentRepositoryName);
             document.setFileName(innerFile.getName());
             document.setIsDir(innerFile.isDirectory());
-            document.setPath(innerFile.getPath().replaceAll(new File(path).getPath(), ""));
+            document.setPath(innerFile.getPath().replaceAll(documentRepository.getPath(), ""));
             documents.add(document);
         }
         return documents;

@@ -18,6 +18,7 @@
     var documents_screen = {
             document_repositories: [],
             documents: [],
+            document_paths: [],
             document_repository: [],
             messages: [],
             is_edit: false,
@@ -35,7 +36,6 @@
                                 screen_obj.setSelectedRepository(data[0]);
                             }
                         }
-
                     });
             },
             listDocuments: function(document_repository,document) {
@@ -47,7 +47,12 @@
                   url =  base_url + '/documents/' +document.repositoryName + document.path;
                 }
                 $.get(url)
-                    .done(function(data) {
+                    .done(function(data) { 
+                      if(document != undefined) {
+                        screen_obj.document_paths.push(document);
+                        $.observable(screen_obj).setProperty("document_paths", screen_obj.document_paths);
+                        $.templates("#breadcrumb_template").link("#breadcrumb", documents_screen);
+                      }
                         if (data.length === 0) {
                             $.templates("#empty_documents_template").link("#result", documents_screen);
                         } else {
@@ -172,5 +177,7 @@
 
 
     documents_screen.listRepositories();
+
+
 
 }(jQuery));
