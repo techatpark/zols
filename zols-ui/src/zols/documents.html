@@ -26,25 +26,17 @@
 
         <div class="row-fluid" id="alerts">
         </div>
-
-        <div class="panel panel-default">
+        <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title pull-left">
-            Documents
-            </h3>
-
+                <h3 class="panel-title pull-left">Documents</h3>
                 <div class="pull-right" id="panel-aside"></div>
                 <div class="clearfix"></div>
             </div>
             <div class="panel-body">
                 <div class="row-fluid" id="result">
-
                 </div>
             </div>
         </div>
-
-
-
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document">
@@ -104,24 +96,14 @@
         </script>
 
         <script id="documents_template" type="text/x-jsrender">
-
-
             <ul class="list-group">
-            {^{for documents}}
-            <li class="list-group-item">
-              <span class="badge"><i class="glyphicon glyphicon-trash"></i></span>
-              {{:fileName}}
-            </li>
-            {{/for}}
+                {^{for documents}}
+                <li class="list-group-item">
+                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span> {{:fileName}}
+                </li>
+                {{/for}}
             </ul>
-
-
         </script>
-
-
-
-
-
 
         <script id="document_repository_template" type="text/x-jsrender">
             <form class="form-horizontal" onsubmit="return false;">
