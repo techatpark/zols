@@ -60,13 +60,15 @@
         </div>
 
         <script id="breadcrumb_template" type="text/x-jsrender">
+        {^{if document_paths.length !=0 }}
             <ol class="breadcrumb">
-              <li><a href="#">Home</a></li>
+              <li><a data-link="{on ~root.setSelectedRepository #data.document_repository}">Home</a></li>
               {^{for document_paths}}
-                <li><a href="#">{{:fileName}}</a></li>
+                <li><a data-link="{on ~root.listDocuments undeined #data}">{{:fileName}}</a></li>
               {{/for}}
           </ol>
-        </script> 
+        {{/if}}
+        </script>
         <script id="alert_template" type="text/x-jsrender">
             {^{if messages.length != 0}} {^{for messages}}
             <div class="alert alert-{{:type}} alert-dismissible" role="alert">

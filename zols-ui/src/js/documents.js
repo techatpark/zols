@@ -47,7 +47,7 @@
                   url =  base_url + '/documents/' +document.repositoryName + document.path;
                 }
                 $.get(url)
-                    .done(function(data) { 
+                    .done(function(data) {
                       if(document != undefined) {
                         screen_obj.document_paths.push(document);
                         $.observable(screen_obj).setProperty("document_paths", screen_obj.document_paths);
@@ -63,6 +63,8 @@
             },
             setSelectedRepository: function(data) {
                 $.observable(this).setProperty("document_repository", data);
+                $.observable(this).setProperty("document_paths", []);
+                $.templates("#breadcrumb_template").link("#breadcrumb", documents_screen);
                 $.templates("#document_repositories_template").link("#panel-aside", documents_screen);
                 this.listDocuments(data);
             },
