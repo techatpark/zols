@@ -36,12 +36,17 @@
                             }
                         }
 
-
                     });
             },
-            listDocuments: function(document_repository) {
+            listDocuments: function(document_repository,document) {
                 var screen_obj = this;
-                $.get(base_url + '/documents/' + document_repository.name)
+                var url;
+                if(document === undefined) {
+                  url =  base_url + '/documents/' +document_repository.name;
+                } else {
+                  url =  base_url + '/documents/' +document.repositoryName + document.path;
+                }
+                $.get(url)
                     .done(function(data) {
                         if (data.length === 0) {
                             $.templates("#empty_documents_template").link("#result", documents_screen);
@@ -107,10 +112,9 @@
                           dataType: 'json'
                       }).done(function(data) {
                           screen_obj.showMessages([{
-                              type: "success", 
+                              type: "success",
                               "message": "document deleted successfully"
                           }]);
-                          screen_obj.listDocuments();
                       });
                   });
             },

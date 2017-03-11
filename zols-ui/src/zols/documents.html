@@ -99,7 +99,12 @@
             <ul class="list-group">
                 {^{for documents}}
                 <li class="list-group-item">
-                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span> {{:fileName}}
+                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
+                    {^{if isDir}}
+                    <a data-link="{on ~root.listDocuments undeined #data}">{{:fileName}}</a>
+                    {{else}}
+                      {{:fileName}}
+                    {{/if}}
                 </li>
                 {{/for}}
             </ul>
