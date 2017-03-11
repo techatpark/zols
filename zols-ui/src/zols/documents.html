@@ -64,7 +64,7 @@
             <ol class="breadcrumb">
               <li><a data-link="{on ~root.setSelectedRepository #data.document_repository}">Home</a></li>
               {^{for document_paths}}
-                <li><a data-link="{on ~root.listDocuments undeined #data}">{{:fileName}}</a></li>
+                <li><a data-link="{on ~root.navigateTo #data}">{{:fileName}}</a></li>
               {{/for}}
           </ol>
         {{/if}}

@@ -45,10 +45,10 @@
                   url =  base_url + '/documents/' +document_repository.name;
                 } else {
                   url =  base_url + '/documents/' +document.repositoryName + document.path;
-                }
+                } 
                 $.get(url)
                     .done(function(data) {
-                      if(document != undefined) {
+                      if(document != undefined && screen_obj.document_paths.indexOf(document) == -1) {
                         screen_obj.document_paths.push(document);
                         $.observable(screen_obj).setProperty("document_paths", screen_obj.document_paths);
                         $.templates("#breadcrumb_template").link("#breadcrumb", documents_screen);
@@ -67,6 +67,14 @@
                 $.templates("#breadcrumb_template").link("#breadcrumb", documents_screen);
                 $.templates("#document_repositories_template").link("#panel-aside", documents_screen);
                 this.listDocuments(data);
+            },
+            navigateTo: function(folder_document){
+              var indexOfFolder = this.document_paths.indexOf(folder_document);
+              this.document_paths = this.document_paths.slice(0,indexOfFolder+1);
+              $.observable(this).setProperty("document_paths", this.document_paths);
+              $.templates("#breadcrumb_template").link("#breadcrumb", documents_screen);
+              this.listDocuments(undefined,folder_document);
+
             },
             showMessages: function(messages) {
                 $.observable(this).setProperty("messages", messages);
