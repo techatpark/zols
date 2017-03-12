@@ -29,11 +29,15 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title pull-left">Documents</h3>
-                <div class="pull-right" id="panel-aside"></div>
+                <div class="pull-right" id="panel-aside">
+
+                </div>
                 <div class="clearfix"></div>
             </div>
             <div class="panel-body">
-                <div class="row-fluid" id="breadcrumb"></div>
+                <div class="row-fluid" id="breadcrumb">
+
+                </div>
                 <div class="row-fluid" id="result">
                 </div>
             </div>
@@ -60,15 +64,16 @@
         </div>
 
         <script id="breadcrumb_template" type="text/x-jsrender">
-        {^{if document_paths.length !=0 }}
+            {^{if document_paths.length !=0 }}
             <ol class="breadcrumb">
-              <li><a data-link="{on ~root.setSelectedRepository #data.document_repository}">Home</a></li>
-              {^{for document_paths}}
+                <li><a data-link="{on ~root.setSelectedRepository #data.document_repository}">Home</a></li>
+                {^{for document_paths}}
                 <li><a data-link="{on ~root.navigateTo #data}">{{:fileName}}</a></li>
-              {{/for}}
-          </ol>
-        {{/if}}
+                {{/for}}
+            </ol>
+            {{/if}}
         </script>
+
         <script id="alert_template" type="text/x-jsrender">
             {^{if messages.length != 0}} {^{for messages}}
             <div class="alert alert-{{:type}} alert-dismissible" role="alert">
@@ -77,6 +82,8 @@
             </div>
             {{/for}} {{/if}}
         </script>
+
+
         <script id="empty_document_repositories_template" type="text/x-jsrender">
             <div class="jumbotron">
                 <div class="container">
@@ -86,15 +93,16 @@
         </script>
 
         <script id="document_repositories_template" type="text/x-jsrender">
-
             <div class="dropdown">
+            <b>Repository</b>
                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                     {{:document_repository.label}}
                     <span class="caret"></span>
                 </button>
-                <button type="button" class="btn btn-default" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-edit"></i></button>
-                <button type="button" class="btn btn-default" data-link="{on ~root.removeRepository #data.document_repository}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></button>
-
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Edit" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-edit"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete" data-link="{on ~root.removeRepository #data.document_repository}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="CreateNew" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-plus"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Upload" data-link="{on ~root.removeRepository #data.document_repository}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-upload"></i></button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                     {^{for document_repositories}}
                     <li><a href="#" data-link="{on ~root.setSelectedRepository #data}">{{:label}}</a></li>
@@ -103,21 +111,15 @@
                     <li><a href="#" data-link="{on addRepository}">Create New</a></li>
                 </ul>
             </div>
-
-
-
         </script>
 
         <script id="documents_template" type="text/x-jsrender">
             <ul class="list-group">
                 {^{for documents}}
                 <li class="list-group-item">
-                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
-                    {^{if isDir}}
-                    <a data-link="{on ~root.listDocuments undeined #data}">{{:fileName}}</a>
-                    {{else}}
-                      {{:fileName}}
-                    {{/if}}
+                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-download"></i></span>
+                    <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span> {^{if isDir}}
+                    <a data-link="{on ~root.listDocuments undeined #data}">{{:fileName}}</a> {{else}} {{:fileName}} {{/if}}
                 </li>
                 {{/for}}
             </ul>
@@ -131,7 +133,6 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="name">Name</label>
                         <div class="col-md-4">
-
                             <input name="name" data-link="document_repository.name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required="" />
                         </div>
                     </div>
