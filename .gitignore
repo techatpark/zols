@@ -26,6 +26,7 @@
 .DS_Store
 build
 **/**.log
+**.log
 **/deploy.txt
 /zols-ui/app/nbproject/private/
 /zols-cms-plugin/src/main/resources/static
