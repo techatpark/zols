@@ -157,7 +157,7 @@
 
                         </div>
                     </div>
-
+                    {{if document_repository.type === 'file'}}
                     <div class="form-group">
                         <label class="col-md-4 control-label" for="label">Path</label>
                         <div class="col-md-4">
@@ -165,14 +165,8 @@
 
                         </div>
                     </div>
-                    <!-- Text input-->
-                    <div class="form-group">
-                        <label class="col-md-4 control-label" for="label">Type</label>
-                        <div class="col-md-4">
-                            <input name="label" data-link="document_repository.type" type="text" placeholder="" class="form-control input-md" required="" />
+                    {{/if}}
 
-                        </div>
-                    </div>
 
                     <!-- Textarea -->
                     <div class="form-group">
