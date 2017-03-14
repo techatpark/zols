@@ -36,7 +36,7 @@ import static org.zols.datastore.util.JsonUtil.asString;
  */
 public class JSONSchema {
 
-    private static final String ID = "id";
+    private static final String NAME = "name";
     private static final String ID_FIELD = "idField";
     private static JSONSchema _JSONSCHEMA_FOR_SCHEMA = null;
 
@@ -53,7 +53,7 @@ public class JSONSchema {
 
         if (clazz.isAnnotationPresent(Entity.class)) {
             Entity entity = (Entity) clazz.getAnnotation(Entity.class);
-            jsonSchemaAsMap.put(ID, entity.name());
+            jsonSchemaAsMap.put(NAME, entity.name());
         }
 
         for (Field field : clazz.getDeclaredFields()) {
@@ -82,7 +82,9 @@ public class JSONSchema {
 
     public static JSONSchema jsonSchemaForSchema() {
         if (_JSONSCHEMA_FOR_SCHEMA == null) {
-            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(getContentFromClasspath("/org/zols/datastore/jsonschema/schema.json"));
+            Map<String,Object> schema = asMap(getContentFromClasspath("/org/zols/datastore/jsonschema/schema.json"));
+            schema.put(NAME, "schema");
+            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(schema);    
         }
 
         return _JSONSCHEMA_FOR_SCHEMA;
@@ -159,7 +161,7 @@ public class JSONSchema {
         if (jsonSchemaAsMap != null && (idField = jsonSchemaAsMap.get(ID_FIELD)) != null) {
             return idField.toString();
         }
-        return "id";
+        return "name";
     }
 
     public String baseType() {
@@ -167,7 +169,7 @@ public class JSONSchema {
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
         if (jsonSchemaAsMap != null) {
             if ((baseType = jsonSchemaAsMap.get("base")) != null
-                    || (baseType = jsonSchemaAsMap.get("id")) != null) {
+                    || (baseType = jsonSchemaAsMap.get(NAME)) != null) {
                 return baseType.toString();
             }
         }

@@ -16,7 +16,6 @@ import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asObject;
-import static org.zols.datastore.util.MapUtil.removeNestedElements;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -128,8 +127,8 @@ public abstract class DataStore {
     public Map<String, Object> create(String schemaId, Map<String, Object> jsonData)
             throws DataStoreException {
 
-        Map<String, Object> enlargedSchema = getEnlargedSchema(schemaId);
-        enlargedSchema.put("id", schemaId);
+        Map<String, Object> enlargedSchema = getRawJsonSchema(schemaId);
+        
         JSONSchema enlargedJsonSchema = jsonSchema(enlargedSchema);
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
@@ -146,7 +145,7 @@ public abstract class DataStore {
 
     public boolean update(String schemaId, Map<String, Object> jsonData)
             throws DataStoreException {
-        JSONSchema enlargedJsonSchema = jsonSchema(getEnlargedSchema(schemaId));
+        JSONSchema enlargedJsonSchema = jsonSchema(getRawJsonSchema(schemaId));
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
             return update(enlargedJsonSchema, jsonData);
@@ -157,7 +156,7 @@ public abstract class DataStore {
 
     public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
             throws DataStoreException {
-        JSONSchema enlargedJsonSchema = jsonSchema(getEnlargedSchema(schemaId));
+        JSONSchema enlargedJsonSchema = jsonSchema(getRawJsonSchema(schemaId));
         Map<String, Object> jsonData = read(enlargedJsonSchema, idValue);
         jsonData.putAll(partialJsonData);
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
@@ -215,27 +214,32 @@ public abstract class DataStore {
      */
     public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
-        Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
-        removeNestedElements(enlargedSchema, "id", "idField");
-        if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
-            return create(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
+        Map<String, Object> schema = asMap(jsonSchemaTxt);
+        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(schema);
+        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
+        if ( violations == null) {
+            return create(jsonSchemaForSchema(), schema);
+        }else {
+            throw new ConstraintViolationException(schema, violations);
         }
-        return null;
     }
 
     public boolean updateSchema(String jsonSchemaTxt)
             throws DataStoreException {
-        Map<String, Object> enlargedSchema = getEnlargedSchema(asMap(jsonSchemaTxt));
-        removeNestedElements(enlargedSchema, "id", "idField");
-        if (jsonSchemaForSchema().validate(enlargedSchema) == null) {
+        Map<String, Object> schema = asMap(jsonSchemaTxt);
+        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(schema);
+        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
+        
+        if (violations == null) {
             return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
+        }else {
+            throw new ConstraintViolationException(schema, violations);
         }
-        return false;
     }
 
-    public Map<String, Object> getEnlargedSchema(String schemaId)
+    public Map<String, Object> getRawJsonSchema(String schemaId)
             throws DataStoreException {
-        return getEnlargedSchema(read(jsonSchemaForSchema(), schemaId));
+        return DataStore.this.getRawJsonSchema(read(jsonSchemaForSchema(), schemaId));
     }
 
     public Map<String, Object> getSchema(String schemaId)
@@ -246,18 +250,19 @@ public abstract class DataStore {
     public Set<ConstraintViolation<Object>> validate(String schemaId,
             Map<String, Object> jsonData)
             throws DataStoreException {
-        return jsonSchema(getEnlargedSchema(getSchema(schemaId))).validate(jsonData);
+        return jsonSchema(DataStore.this.getRawJsonSchema(getSchema(schemaId))).validate(jsonData);
     }
 
-    public Map<String, Object> getEnlargedSchema(Map<String, Object> schema)
+    public Map<String, Object> getRawJsonSchema(Map<String, Object> schema)
             throws DataStoreException {
         if (schema != null) {
+            
             Map<String, Object> definitions = getDefinitions(schema);
 
             if (!definitions.isEmpty()) {
                 definitions.entrySet().forEach((definition) -> {
                     try {
-                        definition.setValue(getEnlargedSchema(definition.getKey()));
+                        definition.setValue(getRawJsonSchema(definition.getKey()));
                     } catch (DataStoreException ex) {
                         Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
                     }

@@ -20,10 +20,6 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonTe
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.model.Employee;
 
-/**
- *
- * @author wz07
- */
 public class JsonSchemaTest {
 
     @Test
@@ -43,7 +39,7 @@ public class JsonSchemaTest {
     @Test
     public void testSimpleSchemaValidation() {
         Map<String, Object> jsonSchema = sampleJsonSchema("vechicle");
-        jsonSchema.remove("id");
+
         assertNull("JSON Schema validation",
                 jsonSchemaForSchema().validate(jsonSchema));
     }
@@ -51,7 +47,7 @@ public class JsonSchemaTest {
     @Test
     public void testSimpleInvalidSchemaValidation() {
         assertNotNull("Invalid JSON Schema validation",
-                jsonSchemaForSchema().validate(sampleJsonSchemaText("vechicle")));
+                jsonSchemaForSchema().validate(sampleJsonSchemaText("vechicle_invalid")));
     }
 
     @Test
@@ -69,7 +65,7 @@ public class JsonSchemaTest {
 
     @Test
     public void testCompositeSchemaWithMultiLevelInheritance() {
-//        assertNotNull("Composite JSON Schema Invalid Data validation",
+//       assertNotNull("Composite JSON Schema Invalid Data validation",
 //                jsonSchema(sampleJsonSchemaText("sportscar_composite")).validate(sampleJsonText("sportscar_invalid")));
     }
 

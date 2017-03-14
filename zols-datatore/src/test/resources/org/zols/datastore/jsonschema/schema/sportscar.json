@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$ref": "car",
-    "id": "sportscar",
+    "name": "sportscar",
     "title": "Sports Car Schema",
     "type": "object",
     "properties": {

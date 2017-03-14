@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class MapUtil {
 
-    public static void removeNestedElements(Map<String, Object> sourceMap, String... elements) {
+    public static void deepRemove(Map<String, Object> sourceMap, String... elements) {
         if (elements != null && sourceMap != null) {
             List<String> elemenstList = Arrays.asList(elements);
             List<String> elemenstToBeRemoved = new ArrayList<>();
@@ -25,16 +25,16 @@ public class MapUtil {
                 if (elemenstList.contains(fieldName)) {
                     elemenstToBeRemoved.add(fieldName);
                 } else if (sourceMap.get(fieldName) instanceof Map) {
-                    removeNestedElements((Map<String, Object>) sourceMap.get(fieldName), elements);
+                    deepRemove((Map<String, Object>) sourceMap.get(fieldName), elements);
                 } else if (sourceMap.get(fieldName) instanceof Collection) {
                     ((Collection) sourceMap.get(fieldName)).forEach(collectionData -> {
                         if (collectionData instanceof Map) {
-                            removeNestedElements((Map<String, Object>) collectionData, elements);
+                            deepRemove((Map<String, Object>) collectionData, elements);
                         }
                     });
                 }
             });
-            elemenstToBeRemoved.forEach(element -> sourceMap.remove(element));
+            elemenstToBeRemoved.forEach(sourceMap::remove);
         }
 
     }

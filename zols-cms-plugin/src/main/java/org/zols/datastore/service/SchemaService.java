@@ -65,7 +65,7 @@ public class SchemaService {
      */
     public Map<String, Object> readEnlargedSchema(String schemaId) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaId);
-        return dataStore.getEnlargedSchema(schemaId);
+        return dataStore.getRawJsonSchema(schemaId);
     }
 
     /**

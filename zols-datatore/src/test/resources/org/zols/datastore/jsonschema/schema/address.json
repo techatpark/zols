@@ -1,7 +1,7 @@
 {
-    "id": "address",
+    "name": "address",
     "title": "Address",
-    "idField": "id",
+    "idField": "name",
     "labelField": "street_address",
     "type": "object",
     "properties": {
@@ -11,7 +11,7 @@
         "city": {
             "type": "string"
         },
-        "id": {
+        "name": {
             "type": "integer"
         },
         "state": {
@@ -19,7 +19,7 @@
         }
     },
     "required": [
-        "id",
+        "name",
         "street_address",
         "city",
         "state"

@@ -1,5 +1,5 @@
 {
-    "id": "employee",
+    "name": "employee",
     "title": "Employee Schema",
     "type": "object",
     "idField": "name",    

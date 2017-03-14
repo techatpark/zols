@@ -1,7 +1,7 @@
 {
-    "id": "person",
+    "name": "person",
     "title": "Person",
-    "idField": "id",
+    "idField": "name",
     "labelField": "name",
     "type": "object",
     "properties": {
@@ -15,7 +15,7 @@
                 "wysiwyg": true
             }
         },
-        "id": {
+        "name": {
             "type": "string"
         },
         "age": {
@@ -25,5 +25,5 @@
             "$ref": "address"
         }
     },
-    "required": ["name", "id", "age", "address"]
+    "required": ["name", "age", "address"]
 }
