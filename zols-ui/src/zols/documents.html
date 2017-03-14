@@ -87,7 +87,7 @@
         <script id="empty_document_repositories_template" type="text/x-jsrender">
             <div class="jumbotron">
                 <div class="container">
-                    There are no Group to display click <a href="#" data-link="{on addRepository}">here</a>
+                    There are no Group to display click <a href="#" data-link="{on selectRepository}">here</a>
                 </div>
             </div>
         </script>
@@ -101,17 +101,19 @@
                 </button>
                 <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Edit" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-edit"></i></button>
                 <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete" data-link="{on ~root.removeRepository #data.document_repository}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></button>
-                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="CreateNew" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-plus"></i></button>
+                <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="CreateNew" data-link="{on ~root.editRepositories #data.document_repository}"><i class="glyphicon glyphicon-folder-open"></i></button>
                 <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Upload" data-link="{on ~root.removeRepository #data.document_repository}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-upload"></i></button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                     {^{for document_repositories}}
                     <li><a href="#" data-link="{on ~root.setSelectedRepository #data}">{{:label}}</a></li>
                     {{/for}}
                     <li role="separator" class="divider"></li>
-                    <li><a href="#" data-link="{on addRepository}">Create New</a></li>
+                    <li><a href="#" data-link="{on selectRepository}">Create New</a></li>
                 </ul>
             </div>
         </script>
+
+
 
         <script id="documents_template" type="text/x-jsrender">
             <ul class="list-group">
@@ -124,7 +126,17 @@
                 {{/for}}
             </ul>
         </script>
-
+        <script id="select_document_repository_type_template" type="text/x-jsrender">
+        <div class="jumbotron">
+            <div class="container">
+                <p>Please select the Repository Type</p>
+                <p>
+                    <a class="btn btn-primary btn-lg" href="#" role="button"  data-link="{on addRepository 'file'}">File System</a>
+                    <a class="btn btn-primary btn-lg" href="#" role="button"  data-link="{on addRepository 'ftp'}">FTP</a>
+                </p>
+            </div>
+        </div>
+        </script>
         <script id="document_repository_template" type="text/x-jsrender">
             <form class="form-horizontal" onsubmit="return false;">
                 <fieldset>
@@ -183,6 +195,10 @@
                 </fieldset>
             </form>
         </script>
+
+
+
+
 
         <!-- build:js({app,.tmp}) scripts/jsviews.min.js -->
         <script src="/js/jsviews.min.js"></script>

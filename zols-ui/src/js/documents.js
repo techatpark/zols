@@ -45,7 +45,7 @@
                   url =  base_url + '/documents/' +document_repository.name;
                 } else {
                   url =  base_url + '/documents/' +document.repositoryName + document.path;
-                } 
+                }
                 $.get(url)
                     .done(function(data) {
                       if(document != undefined && screen_obj.document_paths.indexOf(document) == -1) {
@@ -90,10 +90,14 @@
                 });
                 return messages;
             },
-            addRepository: function() {
+            selectRepository: function() {
+                $.observable(this).setProperty("document_repository", {});
+                $.templates("#select_document_repository_type_template").link("#result", documents_screen);
+            },
+            addRepository: function(type) {
                 var screen_obj = this;
                 screen_obj.is_edit = false;
-                $.observable(screen_obj).setProperty("document_repository", {});
+                $.observable(screen_obj).setProperty("document_repository", {type:type});
                 $.templates("#document_repository_template").link("#result", documents_screen);
             },
             removeRepository: function(document_repository) {
