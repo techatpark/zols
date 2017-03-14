@@ -1,11 +1,11 @@
 package org.zols.datastore;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static java.util.stream.Collectors.toList;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -249,86 +249,46 @@ public abstract class DataStore {
         return jsonSchema(getEnlargedSchema(getSchema(schemaId))).validate(jsonData);
     }
 
-    private Map<String, Object> getEnlargedSchema(Map<String, Object> schema)
+    public Map<String, Object> getEnlargedSchema(Map<String, Object> schema)
             throws DataStoreException {
         if (schema != null) {
-            Map<String, Object> definitions = new HashMap<>();
-            walkSchemaTree(schema, definitions);
+            Map<String, Object> definitions = getDefinitions(schema);
 
-            if (definitions.size() > 0) {
+            if (!definitions.isEmpty()) {
+                definitions.entrySet().forEach((definition) -> {
+                    try {
+                        definition.setValue(getEnlargedSchema(definition.getKey()));
+                    } catch (DataStoreException ex) {
+                        Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
                 schema.put("definitions", definitions);
             }
-
-            List<Map<String, Object>> idFieldSchemas = new ArrayList<>();
-            fillIdFields(idFieldSchemas, schema);
-
-            for (Map<String, Object> idFieldSchema : idFieldSchemas) {
-                schema.put("idField", idFieldSchema.remove("idField"));
-            }
-            schema = getOrderedSchema(schema);
-
-            if (schema.get("$ref") != null) {
-                String reference = schema.get("$ref").toString();
-                schema.put("base", reference.substring(reference.lastIndexOf("/") + 1));
-            }
-
         }
         return schema;
     }
 
-    private void fillIdFields(List<Map<String, Object>> idFieldSchemas,
-            Map<String, Object> schema) {
-        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
-            if (schemaEntry.getKey().equals("idField")) {
-                idFieldSchemas.add(schema);
-            } else if (schemaEntry.getValue() instanceof Map) {
-                fillIdFields(idFieldSchemas, (Map) schemaEntry.getValue());
-            }
-        }
-    }
-
-    private Map<String, Object> fillDefinitions(String schemaId, Map<String, Object> definitions)
-            throws DataStoreException {
-        Map<String, Object> schema = getSchema(schemaId);
-        if (schema != null) {
-            walkSchemaTree(schema, definitions);
-            schema = getOrderedSchema(schema);
-        }
-        return schema;
-    }
-
-    private LinkedHashMap<String, Object> getOrderedSchema(Map<String, Object> schema) {
-        LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>(schema.size());
-        Object id = schema.remove("id");
-        if (schema.get("$schema") != null) {
-            linkedHashMap.put("$schema", schema.get("$schema"));
-        }
-        if (schema.get("definitions") != null) {
-            linkedHashMap.put("definitions", schema.get("definitions"));
-        }
-        schema.entrySet().stream().forEach((schemaEntry) -> {
-            linkedHashMap.putIfAbsent(schemaEntry.getKey(), schemaEntry.getValue());
-        });
-        linkedHashMap.put("id", id);
-        return linkedHashMap;
-    }
-
-    private void walkSchemaTree(Map<String, Object> schema,
-            Map<String, Object> definitions) throws DataStoreException {
-        String schemaId;
-        for (Map.Entry<String, Object> schemaEntry : schema.entrySet()) {
+    private Map<String, Object> getDefinitions(Map<String, Object> schema) {
+        Map<String, Object> definitions = new HashMap();
+        schema.entrySet().forEach((schemaEntry) -> {
             if (schemaEntry.getKey().equals("$ref")) {
-                schemaId = schemaEntry.getValue().toString();
-                definitions.put(schemaId, fillDefinitions(schemaEntry.getValue().toString(), definitions));
-                schemaEntry.setValue("#/definitions/" + schemaId);
-            } //            else if (schemaEntry.getKey().equals("idField")) {
-            //                definitions.put("idField", schemaEntry.getValue());
-            //                
-            //            } 
-            else if (schemaEntry.getValue() instanceof Map) {
-                walkSchemaTree((Map<String, Object>) schemaEntry.getValue(), definitions);
+                definitions.put(schemaEntry.getValue().toString(), null);
+                schemaEntry.setValue("#/definitions/" + schemaEntry.getValue());
+
+            } else if (schemaEntry.getKey().equals("properties")) {
+                Map<String, Map<String, Object>> properties = (Map<String, Map<String, Object>>) schemaEntry.getValue();
+
+                properties.entrySet().forEach(propertyEntry -> {
+                    Object refValue ;
+                    if ( ( refValue = propertyEntry.getValue().get("$ref")) != null) {
+                        definitions.put(refValue.toString(), null);
+                        propertyEntry.getValue().put("$ref","#/definitions/" + refValue.toString());
+                    }
+                });
+
             }
-        }
+        });
+        return definitions;
     }
 
     public Boolean deleteSchema(String schemaId) throws DataStoreException {
