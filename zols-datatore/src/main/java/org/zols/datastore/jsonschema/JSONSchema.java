@@ -54,6 +54,8 @@ public class JSONSchema {
         if (clazz.isAnnotationPresent(Entity.class)) {
             Entity entity = (Entity) clazz.getAnnotation(Entity.class);
             jsonSchemaAsMap.put(NAME, entity.name());
+        }else {
+            jsonSchemaAsMap.put(NAME, jsonSchemaAsMap.get("id"));
         }
 
         for (Field field : clazz.getDeclaredFields()) {
