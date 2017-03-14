@@ -1,5 +1,7 @@
 package org.zols.documents.web;
 
+import java.io.UnsupportedEncodingException;
+import static java.net.URLDecoder.decode;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -28,24 +30,24 @@ public class DocumentController {
     DocumentService documentService;
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.GET)
-    public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
+    public List<Document> list(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException, UnsupportedEncodingException {
         return documentService.list(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/filter/{documentRepositoryName}/**", method = RequestMethod.GET)
-    public List<Document> listAll(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
+    public List<Document> listAll(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException, UnsupportedEncodingException {
         return documentService.listAll(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.DELETE)
-    public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException {
+    public void delete(@PathVariable(value = "documentRepositoryName") String documentRepositoryName, HttpServletRequest request) throws DataStoreException, UnsupportedEncodingException {
         documentService.delete(documentRepositoryName, getFilePath(documentRepositoryName, request));
     }
 
     @RequestMapping(value = "/{documentRepositoryName}/**", method = RequestMethod.POST)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void upload(@PathVariable(value = "documentRepositoryName") String documentRepositoryName,
-            @ModelAttribute("document") Upload upload, HttpServletRequest request) throws DataStoreException {
+            @ModelAttribute("document") Upload upload, HttpServletRequest request) throws DataStoreException, UnsupportedEncodingException {
         documentService.upload(documentRepositoryName, upload, getFilePath(documentRepositoryName, request));
     }
 
@@ -56,8 +58,8 @@ public class DocumentController {
      * @param request
      * @return null - if no folder path found
      */
-    private String getFilePath(String documentRepositoryName, HttpServletRequest request) {
-        String folderPath = request.getRequestURL().toString();
+    private String getFilePath(String documentRepositoryName, HttpServletRequest request) throws UnsupportedEncodingException {
+        String folderPath = decode(request.getRequestURL().toString(),request.getCharacterEncoding());
         String textToMatch = "/api/documents/" + documentRepositoryName + "/";
         int startPointOdFolderPath = folderPath.indexOf(textToMatch);
         if (startPointOdFolderPath != -1) {
