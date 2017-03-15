@@ -23,6 +23,6 @@
         "street_address",
         "city",
         "state"
-    ]
+    ],"localized": ["city"]
     
 }

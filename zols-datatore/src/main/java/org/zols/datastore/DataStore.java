@@ -27,7 +27,7 @@ import org.zols.datatore.exception.DataStoreException;
  */
 public abstract class DataStore {
 
-    private Validator validator;
+    private final Validator validator;
 
     public DataStore() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -128,9 +128,9 @@ public abstract class DataStore {
     public Map<String, Object> create(String schemaId, Map<String, Object> jsonData)
             throws DataStoreException {
 
-        Map<String, Object> enlargedSchema = getRawJsonSchema(schemaId);
+        Map<String, Object> rawJsonSchema = getRawJsonSchema(schemaId);
         
-        JSONSchema enlargedJsonSchema = jsonSchema(enlargedSchema);
+        JSONSchema enlargedJsonSchema = jsonSchema(rawJsonSchema);
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
             return create(enlargedJsonSchema, jsonData);
@@ -216,8 +216,8 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = getRawJsonSchema(schema);
-        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
+        Map<String, Object> rawJsonSchema = getRawJsonSchema(schema);
+        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(rawJsonSchema);
         if ( violations == null) {
             return create(jsonSchemaForSchema(), schema);
         }else {
@@ -228,8 +228,8 @@ public abstract class DataStore {
     public boolean updateSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = getRawJsonSchema(asMap(jsonSchemaTxt));
-        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
+        Map<String, Object> rawJsonSchema = getRawJsonSchema(asMap(jsonSchemaTxt));
+        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(rawJsonSchema);
         
         if (violations == null) {
             return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));

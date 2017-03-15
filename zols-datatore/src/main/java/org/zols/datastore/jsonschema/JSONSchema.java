@@ -15,8 +15,7 @@ import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Entity;
@@ -165,12 +164,34 @@ public class JSONSchema {
         }
         return "name";
     }
+    
+    public List<String> hierarchy() {
+        List<String> hierarchy = new ArrayList();
+        Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
+        hierarchy.add(jsonSchemaAsMap.get(NAME).toString());
+        
+        Object baseType;
+        if ((baseType = jsonSchemaAsMap.get("$ref")) != null) {
+                // This is super type. look is there anything higher
+                baseType = baseType.toString().replaceAll("#/definitions/", "");
+                Map<String,Object> difinitions = (Map<String,Object>) jsonSchemaAsMap.get("definitions");
+                if(difinitions!= null) {
+                    hierarchy.addAll(jsonSchema((Map<String, Object>) difinitions.get(baseType)).hierarchy());
+                }
+                
+            }
+        return hierarchy;
+    }
 
     public String baseType() {
         Object baseType;
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
         if (jsonSchemaAsMap != null) {
-            if ((baseType = jsonSchemaAsMap.get("base")) != null
+            
+            if ((baseType = jsonSchemaAsMap.get("$ref")) != null) {
+                // This is super type. look is there anything higher
+                return baseType.toString().replaceAll("#/definitions/", "");
+            }else if ((baseType = jsonSchemaAsMap.get("base")) != null
                     || (baseType = jsonSchemaAsMap.get(NAME)) != null) {
                 return baseType.toString();
             }

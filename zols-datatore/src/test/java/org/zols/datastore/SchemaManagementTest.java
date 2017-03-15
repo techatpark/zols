@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import static org.zols.datastore.util.TestUtil.testDataStore;
 import org.zols.datatore.exception.DataStoreException;
@@ -46,7 +47,9 @@ public class SchemaManagementTest {
     @Test
     public void testGetRawJsonSchema() throws DataStoreException {
         Map<String,Object> rawJsonSchema = dataStore.getRawJsonSchema("teacher");
-        Assert.assertEquals("Getting Raw Schema for Complex Type",7, rawJsonSchema.size());
+        
+
+        Assert.assertEquals("Getting Raw Schema for Complex Type",sampleJsonSchema("raw/teacher"), rawJsonSchema);
     }
 
 }

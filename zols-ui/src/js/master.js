@@ -69,11 +69,11 @@
     $.fn.listData = function (pageNumber) {
         data = null;
         isEdit = false;
-        var listUrl = base_url + '/data/' + schema.id + '?page='+pageNumber;
+        var listUrl = base_url + '/data/' + schema.name + '?page='+pageNumber;
         var searchBox = $('#schemaHeader .input-group .form-control');
         if(searchBox && searchBox.val()) {
             listUrl = listUrl + "&q=" + searchBox.val();
-        }        
+        }
         $.get(listUrl).done(function (dataList) {
             if (dataList === "") {
                 var template = $.templates("#noData");
@@ -83,11 +83,11 @@
                 });
             } else {
                 $("#schemaHeader").show();
-                
-                var displayContent = dataList.content.map(function(item){ 
+
+                var displayContent = dataList.content.map(function(item){
                    var displayItem = {};
                    displayItem.labelField = item[schema.labelField];
-                   displayItem.idField = item[schema.idField];
+                   displayItem.idField = item[schema.nameField];
                    return displayItem;
                 });
                 dataList.displayContent = displayContent;
@@ -109,7 +109,7 @@
                     });
 
                    data = $.view(this).data;
-                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    var result = $.grep(dataList.content, function(item){ return item[schema.nameField] == data.idField; });
                     data = result[0];
                 });
                 $('#result .glyphicon-edit').on('click', function () {
@@ -117,7 +117,7 @@
 
                     data = $.view(this).data;
 
-                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    var result = $.grep(dataList.content, function(item){ return item[schema.nameField] == data.idField; });
                     data = result[0];
                     $.fn.renderData();
                 });
@@ -141,7 +141,7 @@
         $("#schemaHeader").hide();
         var template = $.templates("#data_entry");
         template.link('#result', {});
-        var editor = $("#editor_holder").jsonEditor({schemaName: schema.id, value: data});
+        var editor = $("#editor_holder").jsonEditor({schemaName: schema.name, value: data});
 
         $("#result form").submit(function (event) {
             event.preventDefault();
@@ -149,7 +149,7 @@
                 var value = editor.getValue();
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/data/' + schema.id + "/" + value[schema.idField],
+                    url: base_url + '/data/' + schema.name + "/" + value[schema.nameField],
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function (data) {
@@ -160,7 +160,7 @@
             } else {
                 $.ajax({
                     method: 'POST',
-                    url: base_url + '/data/' + schema.id,
+                    url: base_url + '/data/' + schema.name,
                     dataType: 'json',
                     data: JSON.stringify(editor.getValue())
                 }).done(function (data) {
@@ -176,7 +176,7 @@
     $.fn.deleteData = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + schema.id + '/' + data[schema.idField],
+            url: base_url + '/data/' + schema.name + '/' + data[schema.nameField],
             dataType: 'json'
         }).done(function (data) {
             $.fn.listData(0);

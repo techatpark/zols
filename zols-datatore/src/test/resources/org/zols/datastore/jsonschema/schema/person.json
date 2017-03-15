@@ -15,7 +15,7 @@
                 "wysiwyg": true
             }
         },
-        "name": {
+        "first_name": {
             "type": "string"
         },
         "age": {
@@ -25,5 +25,6 @@
             "$ref": "address"
         }
     },
-    "required": ["name", "age", "address"]
+    "required": ["name", "age", "address"],
+    "localized": ["first_name"]
 }

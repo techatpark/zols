@@ -7,8 +7,10 @@ package org.zols.datastore.jsonschema;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import javax.script.ScriptException;
+import org.junit.Assert;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import org.junit.Test;
@@ -61,6 +63,23 @@ public class JsonSchemaTest {
         assertNotNull("JSON Schema Invalid Data validation",
                 jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("car_invalid")));
 
+    }
+    
+    @Test
+    public void testJSONSchemaBaseType() {
+        JSONSchema jSONSchema = jsonSchema(sampleJsonSchemaText("raw/teacher"));
+        Assert.assertEquals("JSON Schema Base Type","person",
+                jSONSchema.baseType());
+        System.out.println("I am ");
+    }
+    
+    @Test
+    public void testJSONSchemaHierarchy() {
+        JSONSchema jSONSchema = jsonSchema(sampleJsonSchemaText("raw/teacher"));
+        List<String> hierarchy;
+        hierarchy = jSONSchema.hierarchy();
+        
+        System.out.println("I am ");
     }
 
     @Test
