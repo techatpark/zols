@@ -53,7 +53,7 @@ public class JSONSchema {
         if (clazz.isAnnotationPresent(Entity.class)) {
             Entity entity = (Entity) clazz.getAnnotation(Entity.class);
             jsonSchemaAsMap.put(NAME, entity.name());
-        }else {
+        } else {
             jsonSchemaAsMap.put(NAME, jsonSchemaAsMap.get("id"));
         }
 
@@ -83,18 +83,24 @@ public class JSONSchema {
 
     public static JSONSchema jsonSchemaForSchema() {
         if (_JSONSCHEMA_FOR_SCHEMA == null) {
-            Map<String,Object> schema = asMap(getContentFromClasspath("/org/zols/datastore/jsonschema/schema.json"));
+            Map<String, Object> schema = asMap(getContentFromClasspath("/org/zols/datastore/jsonschema/schema.json"));
             schema.put(NAME, "schema");
-            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(schema);    
+            _JSONSCHEMA_FOR_SCHEMA = jsonSchema(schema);
         }
 
         return _JSONSCHEMA_FOR_SCHEMA;
     }
 
     private final String jsonSchemaAsTxt;
+    private final String idField;
+    private final String baseType;
+    private final List<String> hierarchy;
 
     private JSONSchema(String jsonSchema) {
         this.jsonSchemaAsTxt = jsonSchema;
+        this.idField = getIdField();
+        this.hierarchy = getHierarchy();
+        this.baseType = this.hierarchy.get(this.hierarchy.size()-1);
     }
 
     private static ScriptEngine _scriptEngine;
@@ -156,47 +162,43 @@ public class JSONSchema {
      *
      * @return
      */
-    public String idField() {
-        Object idField;
+    private String getIdField() {
+        Object Object;
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
-        if (jsonSchemaAsMap != null && (idField = jsonSchemaAsMap.get(ID_FIELD)) != null) {
-            return idField.toString();
+        if (jsonSchemaAsMap != null && (Object = jsonSchemaAsMap.get(ID_FIELD)) != null) {
+            return Object.toString();
         }
         return "name";
     }
-    
-    public List<String> hierarchy() {
-        List<String> hierarchy = new ArrayList();
+
+    private List<String> getHierarchy() {
+        List<String> hierarchyList = new ArrayList();
         Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
-        hierarchy.add(jsonSchemaAsMap.get(NAME).toString());
-        
-        Object baseType;
-        if ((baseType = jsonSchemaAsMap.get("$ref")) != null) {
-                // This is super type. look is there anything higher
-                baseType = baseType.toString().replaceAll("#/definitions/", "");
-                Map<String,Object> difinitions = (Map<String,Object>) jsonSchemaAsMap.get("definitions");
-                if(difinitions!= null) {
-                    hierarchy.addAll(jsonSchema((Map<String, Object>) difinitions.get(baseType)).hierarchy());
-                }
-                
+        hierarchyList.add(jsonSchemaAsMap.get(NAME).toString());
+
+        Object baseTypeObject;
+        if ((baseTypeObject = jsonSchemaAsMap.get("$ref")) != null) {
+            // This is super type. look is there anything higher
+            baseTypeObject = baseTypeObject.toString().replaceAll("#/definitions/", "");
+            Map<String, Object> difinitions = (Map<String, Object>) jsonSchemaAsMap.get("definitions");
+            if (difinitions != null) {
+                hierarchyList.addAll(jsonSchema((Map<String, Object>) difinitions.get(baseTypeObject)).hierarchy());
             }
-        return hierarchy;
+
+        }
+        return hierarchyList;
     }
 
     public String baseType() {
-        Object baseType;
-        Map<String, Object> jsonSchemaAsMap = asMap(jsonSchemaAsTxt);
-        if (jsonSchemaAsMap != null) {
-            
-            if ((baseType = jsonSchemaAsMap.get("$ref")) != null) {
-                // This is super type. look is there anything higher
-                return baseType.toString().replaceAll("#/definitions/", "");
-            }else if ((baseType = jsonSchemaAsMap.get("base")) != null
-                    || (baseType = jsonSchemaAsMap.get(NAME)) != null) {
-                return baseType.toString();
-            }
-        }
-        return null;
+        return baseType;
+    }
+
+    List<String> hierarchy() {
+        return hierarchy;
+    }
+
+    public String idField() {
+        return idField;
     }
 
 }

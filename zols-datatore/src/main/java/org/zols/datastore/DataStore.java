@@ -141,7 +141,7 @@ public abstract class DataStore {
 
     public Map<String, Object> read(String schemaId, String name)
             throws DataStoreException {
-        return read(jsonSchema(getSchema(schemaId)), name);
+        return read(jsonSchema(getRawJsonSchema(schemaId)), name);
     }
 
     public boolean update(String schemaId, Map<String, Object> jsonData)
@@ -170,37 +170,37 @@ public abstract class DataStore {
 
     public boolean delete(String schemaId)
             throws DataStoreException {
-        return delete(jsonSchema(getSchema(schemaId)));
+        return delete(jsonSchema(getRawJsonSchema(schemaId)));
     }
 
     public boolean delete(String schemaId, String name)
             throws DataStoreException {
-        return delete(jsonSchema(getSchema(schemaId)), name);
+        return delete(jsonSchema(getRawJsonSchema(schemaId)), name);
     }
 
     public boolean delete(String schemaId, Query query)
             throws DataStoreException {
-        return delete(jsonSchema(getSchema(schemaId)), query);
+        return delete(jsonSchema(getRawJsonSchema(schemaId)), query);
     }
 
     public List<Map<String, Object>> list(String schemaId)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)));
+        return list(jsonSchema(getRawJsonSchema(schemaId)));
     }
 
     public List<Map<String, Object>> list(String schemaId, Query query)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)), query);
+        return list(jsonSchema(getRawJsonSchema(schemaId)), query);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)), pageNumber, pageSize);
+        return list(jsonSchema(getRawJsonSchema(schemaId)), pageNumber, pageSize);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
             throws DataStoreException {
-        return list(jsonSchema(getSchema(schemaId)), query, pageNumber, pageSize);
+        return list(jsonSchema(getRawJsonSchema(schemaId)), query, pageNumber, pageSize);
     }
 
     /**
@@ -251,7 +251,7 @@ public abstract class DataStore {
     public Set<ConstraintViolation<Object>> validate(String schemaId,
             Map<String, Object> jsonData)
             throws DataStoreException {
-        return jsonSchema(DataStore.this.getRawJsonSchema(getSchema(schemaId))).validate(jsonData);
+        return jsonSchema(getRawJsonSchema(getSchema(schemaId))).validate(jsonData);
     }
 
     public Map<String, Object> getRawJsonSchema(final Map<String, Object> schema)

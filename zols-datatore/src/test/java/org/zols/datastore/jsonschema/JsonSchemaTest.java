@@ -7,7 +7,6 @@ package org.zols.datastore.jsonschema;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import javax.script.ScriptException;
 import org.junit.Assert;
