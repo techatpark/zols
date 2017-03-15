@@ -70,16 +70,13 @@ public class JsonSchemaTest {
         JSONSchema jSONSchema = jsonSchema(sampleJsonSchemaText("raw/teacher"));
         Assert.assertEquals("JSON Schema Base Type","person",
                 jSONSchema.baseType());
-        System.out.println("I am ");
     }
     
     @Test
     public void testJSONSchemaHierarchy() {
-        JSONSchema jSONSchema = jsonSchema(sampleJsonSchemaText("raw/teacher"));
-        List<String> hierarchy;
-        hierarchy = jSONSchema.hierarchy();
-        
-        System.out.println("I am ");
+        JSONSchema jSONSchema = jsonSchema(sampleJsonSchemaText("raw/headmaster"));
+        Assert.assertEquals("JSON Schema Hierarchy",3,
+                jSONSchema.hierarchy().size());
     }
 
     @Test

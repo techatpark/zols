@@ -1,0 +1,12 @@
+{
+    "name": "headmaster",
+    "title": "Headmaster",
+    "$ref": "teacher",
+    "type": "object",
+    "properties": {
+        "school": {
+            "type": "string"
+        }
+    },
+    "required": ["school"]
+}
