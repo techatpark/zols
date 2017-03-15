@@ -1,0 +1,12 @@
+{
+    "name": "teacher",
+    "title": "Teacher",
+    "$ref": "person",
+    "type": "object",
+    "properties": {
+        "subject": {
+            "type": "string"
+        }
+    },
+    "required": ["subject"]
+}

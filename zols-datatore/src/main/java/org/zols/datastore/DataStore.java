@@ -215,7 +215,7 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(schema);
+        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(asMap(jsonSchemaTxt));
         Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
         if ( violations == null) {
             return create(jsonSchemaForSchema(), schema);
@@ -227,7 +227,7 @@ public abstract class DataStore {
     public boolean updateSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(schema);
+        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(asMap(jsonSchemaTxt));
         Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
         
         if (violations == null) {
@@ -253,7 +253,7 @@ public abstract class DataStore {
         return jsonSchema(DataStore.this.getRawJsonSchema(getSchema(schemaId))).validate(jsonData);
     }
 
-    public Map<String, Object> getRawJsonSchema(Map<String, Object> schema)
+    public Map<String, Object> getRawJsonSchema(final Map<String, Object> schema)
             throws DataStoreException {
         if (schema != null) {
             
@@ -262,7 +262,7 @@ public abstract class DataStore {
             if (!definitions.isEmpty()) {
                 definitions.entrySet().forEach((definition) -> {
                     try {
-                        definition.setValue(getRawJsonSchema(definition.getKey()));
+                        definition.setValue(getRawJsonSchema(getSchema(definition.getKey())));
                     } catch (DataStoreException ex) {
                         Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
                     }
