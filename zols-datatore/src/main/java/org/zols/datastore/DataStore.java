@@ -16,6 +16,7 @@ import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asObject;
+import static org.zols.datastore.util.JsonUtil.asString;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -215,7 +216,7 @@ public abstract class DataStore {
     public Map<String, Object> createSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(asMap(jsonSchemaTxt));
+        Map<String, Object> enlargedSchema = getRawJsonSchema(schema);
         Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
         if ( violations == null) {
             return create(jsonSchemaForSchema(), schema);
@@ -227,7 +228,7 @@ public abstract class DataStore {
     public boolean updateSchema(String jsonSchemaTxt)
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
-        Map<String, Object> enlargedSchema = DataStore.this.getRawJsonSchema(asMap(jsonSchemaTxt));
+        Map<String, Object> enlargedSchema = getRawJsonSchema(asMap(jsonSchemaTxt));
         Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(enlargedSchema);
         
         if (violations == null) {
@@ -255,9 +256,10 @@ public abstract class DataStore {
 
     public Map<String, Object> getRawJsonSchema(final Map<String, Object> schema)
             throws DataStoreException {
-        if (schema != null) {
+        Map<String, Object> clonedSchema = asMap(asString(schema));
+        if (clonedSchema != null) {
             
-            Map<String, Object> definitions = getDefinitions(schema);
+            Map<String, Object> definitions = getDefinitions(clonedSchema);
 
             if (!definitions.isEmpty()) {
                 definitions.entrySet().forEach((definition) -> {
@@ -267,10 +269,10 @@ public abstract class DataStore {
                         Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                schema.put("definitions", definitions);
+                clonedSchema.put("definitions", definitions);
             }
         }
-        return schema;
+        return clonedSchema;
     }
 
     private Map<String, Object> getDefinitions(Map<String, Object> schema) {
