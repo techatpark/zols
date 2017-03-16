@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
+import static org.zols.datastore.util.JsonUtil.asString;
 
 /**
  *
@@ -24,11 +24,12 @@ public class LocalitationUtilTest {
     @Test
     public void testPrepareJSONMethod() {
         Map<String,Object> localizedJsonData = 
-                LocalitationUtil.prepareJSON(sampleJsonSchema("sportscar_composite"), 
-                        sampleJson("sportscar_composite"),
+                LocalitationUtil.prepareJSON(sampleJsonSchema("raw/teacher"), 
+                        sampleJson("teacher"),
                         Locale.ITALY);
-        Assert.assertTrue("Locale Specific super type Field removed", 
-                localizedJsonData.get("four_wheel_drive")==null);
+        
+        Assert.assertEquals("Preparation of Locale Specific Data", sampleJson("teacher$it"), localizedJsonData);
+        
         
     }
     

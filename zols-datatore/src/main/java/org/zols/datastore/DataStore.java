@@ -240,7 +240,7 @@ public abstract class DataStore {
 
     public Map<String, Object> getRawJsonSchema(String schemaId)
             throws DataStoreException {
-        return DataStore.this.getRawJsonSchema(read(jsonSchemaForSchema(), schemaId));
+        return getRawJsonSchema(read(jsonSchemaForSchema(), schemaId));
     }
 
     public Map<String, Object> getSchema(String schemaId)

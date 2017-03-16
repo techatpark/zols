@@ -2,10 +2,11 @@ package org.zols.datastore.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.zols.datastore.jsonschema.JSONSchema;
+import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 
 /**
  *
@@ -13,56 +14,35 @@ import java.util.Map;
  */
 public class LocalitationUtil {
 
-    public static Map<String, Object> prepareJSON(Map<String, Object> jsonSchema,
+    public static Map<String, Object> prepareJSON(Map<String, Object> jsonSchemaAsMap,
             Map<String, Object> jsonData,
             Locale locale) {
         String localeCode = locale.getLanguage();
-        Map<String, Object> propertiesMap = new HashMap<>();
-        preparePropertiedMap(jsonSchema, jsonSchema, propertiesMap);
-        propertiesMap.keySet().forEach(fieldName -> {
-            Map<String, Object> propertyMap = ((Map<String, Object>) propertiesMap.get(fieldName));
-            Object reference = propertiesMap.get("$ref");
-            if (reference == null) {
-                Boolean isLocalized = (Boolean) propertyMap.get("localized");
-                if (isLocalized != null && isLocalized) {
-                    Object obj = jsonData.remove(fieldName);
-                    jsonData.put(fieldName + "$" + localeCode, obj);
+        JSONSchema jSONSchema = jsonSchema(jsonSchemaAsMap);
+        Map<String, Object> localizedProperties = jSONSchema.getLocalizedProperties();
+        localizedProperties.entrySet().stream().forEach((localizedPropertiesEntry) -> {
+            jsonData.put(localizedPropertiesEntry.getKey() + "$" + localeCode, jsonData.remove(localizedPropertiesEntry.getKey()));
+        });
+
+        Map<String, Object> consolidatedProperties = jSONSchema.getConsolidatedProperties();
+        jsonData.entrySet().forEach(property -> {
+            String fieldName = property.getKey();
+            Object fieldValue = property.getValue();
+            if (fieldValue instanceof Map) {
+                Map<String, Object> propertySchema = (Map<String, Object>) consolidatedProperties.get(fieldName);
+                Object reference = propertySchema.get("$ref");
+                if (reference != null) {
+                    String schemaName = reference.toString().replaceAll("#/definitions/", "");
+                    prepareJSON(jSONSchema.getJsonSchema(schemaName), (Map<String, Object>) fieldValue, locale);
                 }
-            } else {
-                
             }
 
         });
+
         return jsonData;
     }
 
-    /**
-     * Load Properties from Super Types (Car is Base Type, Vehicle is super
-     * type)
-     *
-     * @param jsonSchema
-     * @param currentSchema
-     * @param propertiesMap
-     */
-    private static void preparePropertiedMap(Map<String, Object> jsonSchema, Map<String, Object> currentSchema, Map<String, Object> propertiesMap) {
-        if (jsonSchema != null) {
-            propertiesMap.putAll((Map<String, Object>) currentSchema.get("properties"));
-            Object reference = currentSchema.get("$ref");
-            if (reference != null) {
-                preparePropertiedMap(jsonSchema, getReferencedSchema(jsonSchema,reference), propertiesMap);
-            }
-        }
-
-    }
-
-    private static Map<String, Object> getReferencedSchema(Map<String, Object> jsonSchema, Object refValue) {
-        Map<String, Object> refSchema = jsonSchema;
-        String[] paths = refValue.toString().split("/");
-        for (int i = 1; i < paths.length; i++) {
-            refSchema = (Map<String, Object>) refSchema.get(paths[i]);
-        }
-        return refSchema;
-    }
+    
 
     public static Map<String, Object> readJSON(
             Map<String, Object> jsonData,
@@ -70,13 +50,14 @@ public class LocalitationUtil {
         String localeCode = locale.getLanguage();
 
         List<String> localeFileds = new ArrayList();
-        jsonData.keySet().forEach(fieldName -> {
+        jsonData.entrySet().forEach(property -> {
+            String fieldName = property.getKey();
             if (fieldName.endsWith("$" + localeCode)) {
                 localeFileds.add(fieldName);
-            } else if (jsonData.get(fieldName) instanceof Map) {
-                readJSON((Map<String, Object>) jsonData.get(fieldName), locale);
-            } else if (jsonData.get(fieldName) instanceof Collection) {
-                ((Collection) jsonData.get(fieldName)).forEach(collectionData -> {
+            } else if (property.getValue() instanceof Map) {
+                readJSON((Map<String, Object>) property.getValue(), locale);
+            } else if (property.getValue() instanceof Collection) {
+                ((Collection) property.getValue()).forEach(collectionData -> {
                     if (collectionData instanceof Map) {
                         readJSON((Map<String, Object>) collectionData, locale);
                     }

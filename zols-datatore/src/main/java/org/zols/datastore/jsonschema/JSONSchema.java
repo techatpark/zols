@@ -92,12 +92,14 @@ public class JSONSchema {
     }
 
     private final String jsonSchemaAsTxt;
+    private final Map<String, Object> jsonSchema;
     private final String idField;
     private final String baseType;
     private final List<String> hierarchy;
 
     private JSONSchema(String jsonSchema) {
         this.jsonSchemaAsTxt = jsonSchema;
+        this.jsonSchema = asMap(jsonSchema);
         this.idField = getIdField();
         this.hierarchy = getHierarchy();
         this.baseType = this.hierarchy.get(this.hierarchy.size()-1);
@@ -199,6 +201,68 @@ public class JSONSchema {
 
     public String idField() {
         return idField;
+    }
+    
+    public Map<String, Object> getJsonSchema(String typeName) {
+        Map<String, Map<String, Object>> consolidatedDefinitions = getConsolidatedDefinitions();
+
+        return consolidatedDefinitions.get(typeName);
+    }
+    public Map<String, Map<String, Object>> getConsolidatedDefinitions() {
+        return getConsolidatedDefinitions(this.jsonSchema);
+    }
+    private Map<String, Map<String, Object>> getConsolidatedDefinitions(Map<String, Object> jsonSchema) {
+        final Map<String, Map<String, Object>> consolidatedDefinitions =  (Map<String, Map<String, Object>>) jsonSchema.get("definitions");
+        if(consolidatedDefinitions!= null) {
+            consolidatedDefinitions
+                    .values()
+                    .stream()
+                    .filter(schema->schema.get("definitions")!=null)
+                    .forEach(schema->consolidatedDefinitions.putAll(getConsolidatedDefinitions(schema)));
+        }
+        return consolidatedDefinitions;
+    }
+    
+    public Map<String, Object> getConsolidatedProperties() {
+        return getConsolidatedProperties(this.jsonSchema);
+    }
+
+    private Map<String, Object> getConsolidatedProperties(Map<String, Object> jsonSchema) {
+
+        Map<String, Object> consolidatedProperties = (Map<String, Object>) jsonSchema.get("properties");
+
+        //If there is a super type e.g Car is Base Type, Vehicle is super type
+        Object reference = jsonSchema.get("$ref");
+        if (reference != null) {
+            Map<String, Object> superJsonSchema = (Map<String, Object>) ((Map<String, Object>) jsonSchema.get("definitions")).get(reference.toString().replaceAll("#/definitions/", ""));
+            consolidatedProperties.putAll(getConsolidatedProperties(superJsonSchema));
+        }
+
+        return consolidatedProperties;
+    }
+
+    public Map<String, Object> getLocalizedProperties() {
+        return getLocalizedProperties(this.jsonSchema);
+    }
+    
+    private Map<String, Object> getLocalizedProperties(Map<String, Object> jsonSchema) {
+        Map<String, Object> localizedProperties = new HashMap<>();
+        List<String> localized = (List<String>) jsonSchema.get("localized");
+        Map<String, Object> properties = (Map<String, Object>) jsonSchema.get("properties");
+        if (localized != null) {
+            localized
+                    .parallelStream()
+                    .forEach(propertyName -> localizedProperties.put(propertyName, (Map<String, Object>) properties.get(propertyName)));
+        }
+
+        //If there is a super type e.g Car is Base Type, Vehicle is super type
+        Object reference = jsonSchema.get("$ref");
+        if (reference != null) {
+            Map<String, Object> superJsonSchema = (Map<String, Object>) ((Map<String, Object>) jsonSchema.get("definitions")).get(reference.toString().replaceAll("#/definitions/", ""));
+            localizedProperties.putAll(getLocalizedProperties(superJsonSchema));
+        }
+
+        return localizedProperties;
     }
 
 }
