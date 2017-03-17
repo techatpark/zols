@@ -1,7 +1,7 @@
 package org.zols.datastore;
 
 import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
@@ -14,8 +14,8 @@ import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Query;
+import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
-import static org.zols.datastore.util.JsonUtil.asObject;
 import static org.zols.datastore.util.JsonUtil.asString;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
@@ -38,8 +38,9 @@ public abstract class DataStore {
         if (object != null) {
             Set<ConstraintViolation<Object>> violations = validator.validate(object);
             if (violations.isEmpty()) {
-                createdObject = (T) asObject(object.getClass(),
-                        create(jsonSchema(object.getClass()), asMap(object)));
+                JSONSchema jsonSchema = jsonSchema(object.getClass());
+                createdObject = (T) asJsonDataObject(object.getClass(),
+                        create(jsonSchema, jsonSchema.getImmutableJSONData(object)));
             } else {
                 throw new ConstraintViolationException(object, violations);
             }
@@ -47,9 +48,18 @@ public abstract class DataStore {
         }
         return createdObject;
     }
+    
+    public static <T> T asJsonDataObject(Class<T> clazz, Map<String, Object> map) {
+        if(map != null) {
+            map.remove("$type");
+        }
+        return JsonUtil.asObject(clazz, map);
+    }
+
+    
 
     public <T> T read(Class<T> clazz, String idValue) throws DataStoreException {
-        return (T) asObject(clazz, read(jsonSchema(clazz), idValue));
+        return (T) asJsonDataObject(clazz, read(jsonSchema(clazz), idValue));
     }
 
     public <T> T update(T object, String idValue) throws DataStoreException {
@@ -57,7 +67,8 @@ public abstract class DataStore {
         if (object != null) {
             Set<ConstraintViolation<Object>> violations = validator.validate(object);
             if (violations.isEmpty()) {
-                boolean updated = update(jsonSchema(object.getClass()), asMap(object));
+                JSONSchema jsonSchema = jsonSchema(object.getClass());
+                boolean updated = update(jsonSchema, jsonSchema.getImmutableJSONData(object));
                 if (updated) {
                     updatedObject = (T) read(object.getClass(), idValue);
                 }
@@ -85,7 +96,7 @@ public abstract class DataStore {
         List<T> objects = null;
         List<Map<String, Object>> maps = list(jsonSchema(clazz));
         if (maps != null) {
-            objects = maps.stream().map(map -> asObject(clazz, map)).collect(toList());
+            objects = maps.stream().map(map -> asJsonDataObject(clazz, map)).collect(toList());
         }
         return objects;
     }
@@ -94,7 +105,7 @@ public abstract class DataStore {
         List<T> objects = null;
         List<Map<String, Object>> maps = list(jsonSchema(clazz), query);
         if (maps != null) {
-            objects = maps.stream().map(map -> asObject(clazz, map)).collect(toList());
+            objects = maps.stream().map(map -> asJsonDataObject(clazz, map)).collect(toList());
         }
         return objects;
     }
@@ -102,7 +113,7 @@ public abstract class DataStore {
     public <T> Page<T> list(Class<T> clazz, Integer pageNumber, Integer pageSize) throws DataStoreException {
         Page<Map<String, Object>> page = list(jsonSchema(clazz), pageNumber, pageSize);
         if (page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asObject(clazz, map)).collect(toList()));
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asJsonDataObject(clazz, map)).collect(toList()));
         }
         return null;
     }
@@ -110,7 +121,7 @@ public abstract class DataStore {
     public <T> Page<T> list(Class<T> clazz, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         Page<Map<String, Object>> page = list(jsonSchema(clazz), query, pageNumber, pageSize);
         if (page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asObject(clazz, map)).collect(toList()));
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asJsonDataObject(clazz, map)).collect(toList()));
         }
         return null;
     }
@@ -129,11 +140,11 @@ public abstract class DataStore {
             throws DataStoreException {
 
         Map<String, Object> rawJsonSchema = getRawJsonSchema(schemaId);
-        
+
         JSONSchema enlargedJsonSchema = jsonSchema(rawJsonSchema);
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
-            return create(enlargedJsonSchema, jsonData);
+            return create(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -149,7 +160,7 @@ public abstract class DataStore {
         JSONSchema enlargedJsonSchema = jsonSchema(getRawJsonSchema(schemaId));
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
-            return update(enlargedJsonSchema, jsonData);
+            return update(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -162,7 +173,7 @@ public abstract class DataStore {
         jsonData.putAll(partialJsonData);
         Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
         if (violations == null) {
-            return update(enlargedJsonSchema, jsonData);
+            return update(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -217,10 +228,11 @@ public abstract class DataStore {
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
         Map<String, Object> rawJsonSchema = getRawJsonSchema(schema);
-        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(rawJsonSchema);
-        if ( violations == null) {
-            return create(jsonSchemaForSchema(), schema);
-        }else {
+        JSONSchema jsonSchema = jsonSchemaForSchema();
+        Set<ConstraintViolation<Object>> violations = jsonSchema.validate(rawJsonSchema);
+        if (violations == null) {
+            return create(jsonSchemaForSchema(), jsonSchema.getImmutableJSONData(schema));
+        } else {
             throw new ConstraintViolationException(schema, violations);
         }
     }
@@ -229,11 +241,12 @@ public abstract class DataStore {
             throws DataStoreException {
         Map<String, Object> schema = asMap(jsonSchemaTxt);
         Map<String, Object> rawJsonSchema = getRawJsonSchema(asMap(jsonSchemaTxt));
-        Set<ConstraintViolation<Object>> violations = jsonSchemaForSchema().validate(rawJsonSchema);
-        
+        JSONSchema jsonSchema = jsonSchemaForSchema();
+        Set<ConstraintViolation<Object>> violations = jsonSchema.validate(rawJsonSchema);
+
         if (violations == null) {
-            return update(jsonSchemaForSchema(), asMap(jsonSchemaTxt));
-        }else {
+            return update(jsonSchema, jsonSchema.getImmutableJSONData(asMap(jsonSchemaTxt)));
+        } else {
             throw new ConstraintViolationException(schema, violations);
         }
     }
@@ -258,7 +271,7 @@ public abstract class DataStore {
             throws DataStoreException {
         Map<String, Object> clonedSchema = asMap(asString(schema));
         if (clonedSchema != null) {
-            
+            clonedSchema.remove("$type");
             Map<String, Object> definitions = getDefinitions(clonedSchema);
 
             if (!definitions.isEmpty()) {
@@ -286,10 +299,10 @@ public abstract class DataStore {
                 Map<String, Map<String, Object>> properties = (Map<String, Map<String, Object>>) schemaEntry.getValue();
 
                 properties.entrySet().forEach(propertyEntry -> {
-                    Object refValue ;
-                    if ( ( refValue = propertyEntry.getValue().get("$ref")) != null) {
+                    Object refValue;
+                    if ((refValue = propertyEntry.getValue().get("$ref")) != null) {
                         definitions.put(refValue.toString(), null);
-                        propertyEntry.getValue().put("$ref","#/definitions/" + refValue.toString());
+                        propertyEntry.getValue().put("$ref", "#/definitions/" + refValue.toString());
                     }
                 });
 
@@ -305,7 +318,7 @@ public abstract class DataStore {
     public List<Map<String, Object>> listSchema() throws DataStoreException {
         return list(jsonSchemaForSchema());
     }
-    
+
     /**
      *
      * @param jsonSchema schema of dynamic data
@@ -313,7 +326,7 @@ public abstract class DataStore {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     protected List<Map<String, Object>> list(JSONSchema jsonSchema)
-            throws DataStoreException{
+            throws DataStoreException {
         return list(jsonSchema, (Query) null);
     }
 
@@ -382,10 +395,6 @@ public abstract class DataStore {
     protected abstract boolean update(JSONSchema jsonSchema,
             Map<String, Object> validatedData)
             throws DataStoreException;
-
-    
-    
- 
 
     /**
      *

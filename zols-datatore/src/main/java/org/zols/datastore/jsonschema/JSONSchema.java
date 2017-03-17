@@ -121,17 +121,12 @@ public class JSONSchema {
     }
 
     // Validate the Data against Schema
-    public Set<ConstraintViolation<Object>> validate(Map<String, Object> jsonData) {
-        return validate(asString(jsonData));
-    }
-
-    /**
-     * validates using JSON Schema
-     *
-     * @param jsonData
-     * @return null if valid
-     */
-    public Set<ConstraintViolation<Object>> validate(String jsonData) {
+    public Set<ConstraintViolation<Object>> validate(Map<String, Object> jsonDataAsMap) {
+        LinkedHashMap jsonData2 = new LinkedHashMap<>(jsonDataAsMap);
+        jsonData2.remove("$type");
+        
+        
+        
         Set<ConstraintViolation<Object>> constraintViolations = null;
         try {
             ScriptEngine scriptEngine = scriptEngine();
@@ -139,7 +134,7 @@ public class JSONSchema {
             Object schema
                     = inv.invokeMethod(JSON, "parse", jsonSchemaAsTxt);
             Object data
-                    = inv.invokeMethod(JSON, "parse", jsonData);
+                    = inv.invokeMethod(JSON, "parse", asString(jsonData2));
 
             Object errors = inv.invokeFunction("validateJsonSchema", schema, data);
 
@@ -160,6 +155,7 @@ public class JSONSchema {
         }
         return constraintViolations;
     }
+
 
     /**
      * gets Id Field from given JSON schema
@@ -269,6 +265,16 @@ public class JSONSchema {
         }
 
         return localizedProperties;
+    }
+    
+    public Map<String, Object> getImmutableJSONData(Object object) {  
+        return getImmutableJSONData(asMap(object));
+    }
+    
+    public Map<String, Object> getImmutableJSONData(Map<String, Object> jsonData) {
+        LinkedHashMap linkedHashMap = new LinkedHashMap<>(jsonData);
+        linkedHashMap.put("$type", this.type);
+        return Collections.unmodifiableMap(linkedHashMap);
     }
 
 }

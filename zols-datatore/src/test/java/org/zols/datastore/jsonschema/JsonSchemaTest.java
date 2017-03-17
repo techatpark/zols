@@ -17,7 +17,7 @@ import org.junit.Test;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonText;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.model.Employee;
 
@@ -27,14 +27,14 @@ public class JsonSchemaTest {
     public void testJSONSchemaFromClassWithValidData() {
         JSONSchema jSONSchema = jsonSchema(Employee.class);
         assertNull("JSON Schema Generation from Class with Valid Data",
-                jSONSchema.validate(sampleJsonText("employee")));
+                jSONSchema.validate(sampleJson("employee")));
     }
 
     @Test
     public void testJSONSchemaFromClassWithInvalidData() {
         JSONSchema jSONSchema = jsonSchema(Employee.class);
         assertNotNull("JSON Schema Generation from Class with Valid Data",
-                jSONSchema.validate(sampleJsonText("employee_invalid")));
+                jSONSchema.validate(sampleJson("employee_invalid")));
     }
 
     @Test
@@ -48,19 +48,19 @@ public class JsonSchemaTest {
     @Test
     public void testSimpleInvalidSchemaValidation() {
         assertNotNull("Invalid JSON Schema validation",
-                jsonSchemaForSchema().validate(sampleJsonSchemaText("vechicle_invalid")));
+                jsonSchemaForSchema().validate(sampleJsonSchema("vechicle_invalid")));
     }
 
     @Test
     public void testDataValidation() {
         assertNull("JSON Schema Data validation",
-                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("vechicle")));
+                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJson("vechicle")));
     }
 
     @Test
     public void testSimpleInvalidDataValidation() throws ScriptException, IOException, URISyntaxException, NoSuchMethodException {
         assertNotNull("JSON Schema Invalid Data validation",
-                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJsonText("car_invalid")));
+                jsonSchema(sampleJsonSchemaText("vechicle")).validate(sampleJson("car_invalid")));
 
     }
     
@@ -81,7 +81,7 @@ public class JsonSchemaTest {
     @Test
     public void testCompositeSchemaWithMultiLevelInheritance() {
 //       assertNotNull("Composite JSON Schema Invalid Data validation",
-//                jsonSchema(sampleJsonSchemaText("sportscar_composite")).validate(sampleJsonText("sportscar_invalid")));
+//                jsonSchema(sampleJsonSchemaText("sportscar_composite")).validate(sampleJson("sportscar_invalid")));
     }
 
 }
