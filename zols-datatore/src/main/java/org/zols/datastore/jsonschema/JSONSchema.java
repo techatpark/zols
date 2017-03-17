@@ -94,6 +94,7 @@ public class JSONSchema {
     private final String jsonSchemaAsTxt;
     private final Map<String, Object> jsonSchema;
     private final String idField;
+    private final String type;
     private final String baseType;
     private final List<String> hierarchy;
 
@@ -103,6 +104,7 @@ public class JSONSchema {
         this.idField = getIdField();
         this.hierarchy = getHierarchy();
         this.baseType = this.hierarchy.get(this.hierarchy.size()-1);
+        this.type = this.hierarchy.get(0);
     }
 
     private static ScriptEngine _scriptEngine;
@@ -189,6 +191,10 @@ public class JSONSchema {
 
         }
         return hierarchyList;
+    }
+    
+    public String type() {
+        return type;
     }
 
     public String baseType() {

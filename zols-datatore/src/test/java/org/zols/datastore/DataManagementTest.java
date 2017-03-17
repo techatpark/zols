@@ -36,7 +36,10 @@ public class DataManagementTest {
         dataStore.createSchema(sampleJsonSchemaText("address"));
         dataStore.createSchema(sampleJsonSchemaText("person"));
         dataStore.createSchema(sampleJsonSchemaText("teacher"));
+        dataStore.createSchema(sampleJsonSchemaText("headmaster"));
+        
         dataStore.create("teacher", sampleJson("teacher"));
+        dataStore.create("teacher", sampleJson("headmaster"));
     }
 
     @After
@@ -47,6 +50,8 @@ public class DataManagementTest {
         dataStore.deleteSchema(sampleJsonSchemaText("person"));
         dataStore.delete("teacher");
         dataStore.deleteSchema(sampleJsonSchemaText("teacher"));
+        dataStore.delete("headmaster");
+        dataStore.deleteSchema(sampleJsonSchemaText("headmaster"));
     }
 
     @Test
@@ -86,7 +91,7 @@ public class DataManagementTest {
 
     @Test
     public void testList() throws DataStoreException {
-        Assert.assertEquals("Listing Simple Data", 1, dataStore.list("teacher").size());
+        Assert.assertEquals("Listing Simple Data", 2, dataStore.list("teacher").size());
     }
 
     @Test
@@ -97,20 +102,13 @@ public class DataManagementTest {
     }
 
     @Test
-    @Ignore
     public void testListDataWithExistsInQuery() throws DataStoreException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", "Rajan");
-        map.put("salary", 2000);
-        map.put("isContractor", false);
-        map.put("department", "CSE");
-        dataStore.create("teacher", map);
-        List<String> departments = new ArrayList<>();
-        departments.add("IT");
-        departments.add("CSE");
+        List<String> subjects = new ArrayList<>();
+        subjects.add("English");
+        subjects.add("Tamil");
         Query query = new Query();
-        query.addFilter(new Filter("department", EXISTS_IN, departments));
-        Assert.assertEquals("Listing Simple Data with valid Exists In query", 2, dataStore.list("teacher", query).size());
+        query.addFilter(new Filter("subject", EXISTS_IN, subjects));
+        Assert.assertEquals("Listing Simple Data with valid Exists In query", 1, dataStore.list("teacher", query).size());
     }
 
     @Test
@@ -119,4 +117,19 @@ public class DataManagementTest {
         query.addFilter(new Filter("name", EQUALS, "Saravana"));
         Assert.assertEquals("Listing Simple Data with valid query", null, dataStore.list("teacher", query));
     }
+    
+    
+    /**
+     * Teacher should be available if i list person
+     * @throws DataStoreException 
+     */
+    @Test
+    @Ignore
+    public void testExistanceAsSupertype() throws DataStoreException {
+        
+        List<Map<String, Object>> persons = dataStore.list("person");
+        List<Map<String, Object>> teachers = dataStore.list("teacher");
+        List<Map<String, Object>> headmasters = dataStore.list("headmaster");
+        System.out.println("Teachers are " + teachers);
+       }
 }
