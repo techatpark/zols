@@ -305,6 +305,17 @@ public abstract class DataStore {
     public List<Map<String, Object>> listSchema() throws DataStoreException {
         return list(jsonSchemaForSchema());
     }
+    
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
+     * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    protected List<Map<String, Object>> list(JSONSchema jsonSchema)
+            throws DataStoreException{
+        return list(jsonSchema, (Query) null);
+    }
 
     /**
      * ALL ABSTRACT METHODS WILL COME HERE
@@ -372,14 +383,9 @@ public abstract class DataStore {
             Map<String, Object> validatedData)
             throws DataStoreException;
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract List<Map<String, Object>> list(JSONSchema jsonSchema)
-            throws DataStoreException;
+    
+    
+ 
 
     /**
      *

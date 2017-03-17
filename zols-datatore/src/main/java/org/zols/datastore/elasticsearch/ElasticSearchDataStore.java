@@ -216,10 +216,7 @@ public class ElasticSearchDataStore extends DataStore {
         return page;
     }
 
-    @Override
-    protected List<Map<String, Object>> list(JSONSchema jsonSchema) {
-        return list(jsonSchema, (Query) null);
-    }
+
 
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema, Query query) {
