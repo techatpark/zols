@@ -64,6 +64,29 @@
                     },
                     "required": ["name", "age", "address"],
                     "labelField": "name"
+                },
+                "address": {
+                    "idField": "name",
+                    "name": "address",
+                    "localized": ["city"],
+                    "title": "Address",
+                    "type": "object",
+                    "properties": {
+                        "street_address": {
+                            "type": "string"
+                        },
+                        "city": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "integer"
+                        },
+                        "state": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["name", "street_address", "city", "state"],
+                    "labelField": "street_address"
                 }
             },
             "properties": {
@@ -72,6 +95,84 @@
                 }
             },
             "required": ["subject"]
+        },
+        "person": {
+            "idField": "name",
+            "name": "person",
+            "localized": ["first_name"],
+            "title": "Person",
+            "type": "object",
+            "definitions": {
+                "address": {
+                    "idField": "name",
+                    "name": "address",
+                    "localized": ["city"],
+                    "title": "Address",
+                    "type": "object",
+                    "properties": {
+                        "street_address": {
+                            "type": "string"
+                        },
+                        "city": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "integer"
+                        },
+                        "state": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["name", "street_address", "city", "state"],
+                    "labelField": "street_address"
+                }
+            },
+            "properties": {
+                "address": {
+                    "$ref": "#/definitions/address"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "format": "html",
+                    "options": {
+                        "wysiwyg": true
+                    },
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "age": {
+                    "type": "integer"
+                }
+            },
+            "required": ["name", "age", "address"],
+            "labelField": "name"
+        },
+        "address": {
+            "idField": "name",
+            "name": "address",
+            "localized": ["city"],
+            "title": "Address",
+            "type": "object",
+            "properties": {
+                "street_address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                }
+            },
+            "required": ["name", "street_address", "city", "state"],
+            "labelField": "street_address"
         }
     },
     "properties": {

@@ -26,6 +26,10 @@ public class Filter<T> {
          */
         EQUALS,
         /**
+         * Compare with =
+         */
+        NOT_EQUALS,
+        /**
          * Compare with
          */
         GREATER_THAN,

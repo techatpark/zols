@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.util.stream.Collectors.toList;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.script.Invocable;
@@ -197,8 +198,13 @@ public class JSONSchema {
         return baseType;
     }
 
-    List<String> hierarchy() {
+    public List<String> hierarchy() {
         return hierarchy;
+    }
+    
+    public List<String> superTypes() {
+        return hierarchy.stream()
+                .filter(hierarchyType->!hierarchyType.equals(this.type)).collect(toList());
     }
 
     public String idField() {

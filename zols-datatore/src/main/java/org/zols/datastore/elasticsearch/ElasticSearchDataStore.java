@@ -136,10 +136,7 @@ public class ElasticSearchDataStore extends DataStore {
         return response.isFound();
     }
 
-    @Override
-    protected boolean delete(JSONSchema jsonSchema) {
-        return delete(jsonSchema, (Query) null);
-    }
+
 
     @Override
     protected boolean delete(JSONSchema jsonSchema, Query query) {
@@ -216,8 +213,6 @@ public class ElasticSearchDataStore extends DataStore {
         return page;
     }
 
-
-
     @Override
     protected List<Map<String, Object>> list(JSONSchema jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
@@ -271,6 +266,9 @@ public class ElasticSearchDataStore extends DataStore {
                             break;
                         case EQUALS:
                             queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
+                            break;
+                        case NOT_EQUALS:
+                            queryBuilder.must(QueryBuilders.notQuery(QueryBuilders.matchQuery(filter.getName(), filter.getValue())));
                             break;
                         case IS_NULL:
                             queryBuilder.must(QueryBuilders.missingQuery(filter.getName()));

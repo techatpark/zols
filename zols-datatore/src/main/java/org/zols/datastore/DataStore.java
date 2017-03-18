@@ -13,6 +13,8 @@ import javax.validation.Validator;
 import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
+import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.NOT_EQUALS;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
@@ -48,15 +50,13 @@ public abstract class DataStore {
         }
         return createdObject;
     }
-    
+
     public static <T> T asJsonDataObject(Class<T> clazz, Map<String, Object> map) {
-        if(map != null) {
+        if (map != null) {
             map.remove("$type");
         }
         return JsonUtil.asObject(clazz, map);
     }
-
-    
 
     public <T> T read(Class<T> clazz, String idValue) throws DataStoreException {
         return (T) asJsonDataObject(clazz, read(jsonSchema(clazz), idValue));
@@ -283,6 +283,9 @@ public abstract class DataStore {
                     }
                 });
                 clonedSchema.put("definitions", definitions);
+
+                clonedSchema.put("definitions", jsonSchema(clonedSchema).getConsolidatedDefinitions());
+
             }
         }
         return clonedSchema;
@@ -327,7 +330,21 @@ public abstract class DataStore {
      */
     protected List<Map<String, Object>> list(JSONSchema jsonSchema)
             throws DataStoreException {
-        return list(jsonSchema, (Query) null);
+        return list(jsonSchema, getTypeFilteredQuery(jsonSchema));
+    }
+
+    private Query getTypeFilteredQuery(JSONSchema jsonSchema) {
+        Query query = new Query();
+        List<String> superTypes = jsonSchema.superTypes();
+        if (!superTypes.isEmpty()) {
+            superTypes.forEach(type -> query.addFilter(new Filter("$type", NOT_EQUALS, type)));
+        }
+        return query;
+    }
+    
+
+    private boolean delete(JSONSchema jsonSchema) throws DataStoreException {
+        return delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
     }
 
     /**
@@ -356,14 +373,7 @@ public abstract class DataStore {
             JSONSchema jsonSchema,
             String idValue) throws DataStoreException;
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @return status of the delete operation
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract boolean delete(JSONSchema jsonSchema)
-            throws DataStoreException;
+
 
     /**
      *

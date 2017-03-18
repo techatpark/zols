@@ -37,9 +37,10 @@ public class DataManagementTest {
         dataStore.createSchema(sampleJsonSchemaText("person"));
         dataStore.createSchema(sampleJsonSchemaText("teacher"));
         dataStore.createSchema(sampleJsonSchemaText("headmaster"));
-        
+
+        dataStore.create("person", sampleJson("person"));
         dataStore.create("teacher", sampleJson("teacher"));
-        dataStore.create("teacher", sampleJson("headmaster"));
+        dataStore.create("headmaster", sampleJson("headmaster"));
     }
 
     @After
@@ -67,7 +68,7 @@ public class DataManagementTest {
         map = dataStore.read("teacher", "SATHISH");
         Assert.assertEquals("Updating Simple Data", "TAMIL", map.get("subject"));
     }
-    
+
     @Test
     public void testPartialUpdate() throws DataStoreException {
         Map<String, Object> partialMap = new HashMap<>();
@@ -117,19 +118,20 @@ public class DataManagementTest {
         query.addFilter(new Filter("name", EQUALS, "Saravana"));
         Assert.assertEquals("Listing Simple Data with valid query", null, dataStore.list("teacher", query));
     }
-    
-    
+
     /**
      * Teacher should be available if i list person
-     * @throws DataStoreException 
+     *
+     * @throws DataStoreException
      */
     @Test
-    @Ignore
     public void testExistanceAsSupertype() throws DataStoreException {
-        
+
         List<Map<String, Object>> persons = dataStore.list("person");
         List<Map<String, Object>> teachers = dataStore.list("teacher");
         List<Map<String, Object>> headmasters = dataStore.list("headmaster");
-        System.out.println("Teachers are " + teachers);
-       }
+        Assert.assertEquals("Test Existance As Base type Person", 3, dataStore.list("person").size());
+        Assert.assertEquals("Test Existance As Base type teacher", 2, dataStore.list("teacher").size());
+        Assert.assertEquals("Test Existance As Base type headmaster", 1, dataStore.list("headmaster").size());
+    }
 }

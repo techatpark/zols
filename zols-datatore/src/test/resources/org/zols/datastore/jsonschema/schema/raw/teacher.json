@@ -58,6 +58,29 @@
             },
             "required": ["name", "age", "address"],
             "labelField": "name"
+        },
+        "address": {
+            "idField": "name",
+            "name": "address",
+            "localized": ["city"],
+            "title": "Address",
+            "type": "object",
+            "properties": {
+                "street_address": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "integer"
+                },
+                "state": {
+                    "type": "string"
+                }
+            },
+            "required": ["name", "street_address", "city", "state"],
+            "labelField": "street_address"
         }
     },
     "properties": {
