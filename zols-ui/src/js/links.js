@@ -20,27 +20,30 @@
       title:"Links",
       link_group:{},
       link_groups:[],
-
+      link:{},
+      links:[],
+      setProperty:function(propName,propValue) {
+        $.observable(this).setProperty(propName, propValue);
+        $.templates("#links_screen_template").link("#links_screen", this);
+        return this;
+      },
       listGroups: function() {
         $.get(base_url + '/link_groups')
             .done(function(data) {
-
                   if(Array.isArray(data) && data.length != 0) {
-                      $.observable(screen_object).setProperty("link_groups", data);
-                      $.observable(screen_object).setProperty("link_group", data[0]);
-                      $.templates("#links_screen_template").link("#links_screen", screen_object);
-                  }
+                      screen_object.setProperty("link_groups", data).setProperty("link_group", data[0]);
 
+                  }
             });
       },
       setLinkGroup: function(data) {
-        $.observable(this).setProperty("link_group", data);
+        this.setProperty("link_group", data);
       }
 
     };
 
     screen_object.listGroups();
 
-    
+
 
 }(jQuery));
