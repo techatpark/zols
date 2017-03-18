@@ -89,7 +89,8 @@ public abstract class DataStore {
 
     public boolean delete(Class clazz, Query query)
             throws DataStoreException {
-        return delete(jsonSchema(clazz), query);
+        JSONSchema jsonSchema = jsonSchema(clazz);
+        return delete(jsonSchema, getTypeFilteredQuery(jsonSchema,query));
     }
 
     public <T> List<T> list(Class<T> clazz) throws DataStoreException {
@@ -103,7 +104,8 @@ public abstract class DataStore {
 
     public <T> List<T> list(Class<T> clazz, Query query) throws DataStoreException {
         List<T> objects = null;
-        List<Map<String, Object>> maps = list(jsonSchema(clazz), query);
+        JSONSchema jsonSchema = jsonSchema(clazz);
+        List<Map<String, Object>> maps = list(jsonSchema,getTypeFilteredQuery(jsonSchema,query));
         if (maps != null) {
             objects = maps.stream().map(map -> asJsonDataObject(clazz, map)).collect(toList());
         }
@@ -119,7 +121,8 @@ public abstract class DataStore {
     }
 
     public <T> Page<T> list(Class<T> clazz, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        Page<Map<String, Object>> page = list(jsonSchema(clazz), query, pageNumber, pageSize);
+        JSONSchema jsonSchema = jsonSchema(clazz);
+        Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema,query), pageNumber, pageSize);
         if (page != null) {
             return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> asJsonDataObject(clazz, map)).collect(toList()));
         }
@@ -191,7 +194,8 @@ public abstract class DataStore {
 
     public boolean delete(String schemaId, Query query)
             throws DataStoreException {
-        return delete(jsonSchema(getRawJsonSchema(schemaId)), query);
+        JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
+        return delete(jsonSchema, this.getTypeFilteredQuery(jsonSchema,query));
     }
 
     public List<Map<String, Object>> list(String schemaId)
@@ -201,7 +205,8 @@ public abstract class DataStore {
 
     public List<Map<String, Object>> list(String schemaId, Query query)
             throws DataStoreException {
-        return list(jsonSchema(getRawJsonSchema(schemaId)), query);
+        JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
+        return list(jsonSchema, this.getTypeFilteredQuery(jsonSchema,query));
     }
 
     public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
@@ -211,7 +216,8 @@ public abstract class DataStore {
 
     public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
             throws DataStoreException {
-        return list(jsonSchema(getRawJsonSchema(schemaId)), query, pageNumber, pageSize);
+        JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
+        return list(jsonSchema, getTypeFilteredQuery(jsonSchema,query), pageNumber, pageSize);
     }
 
     /**
@@ -333,18 +339,28 @@ public abstract class DataStore {
         return list(jsonSchema, getTypeFilteredQuery(jsonSchema));
     }
 
-    private Query getTypeFilteredQuery(JSONSchema jsonSchema) {
-        Query query = new Query();
+    private Query getTypeFilteredQuery(JSONSchema jsonSchema,Query query) {
+        
         List<String> superTypes = jsonSchema.superTypes();
         if (!superTypes.isEmpty()) {
-            superTypes.forEach(type -> query.addFilter(new Filter("$type", NOT_EQUALS, type)));
+             query.addFilter(new Filter("$type", Filter.Operator.NOT_EXISTS_IN, superTypes));
         }
         return query;
+    }
+    
+    private Query getTypeFilteredQuery(JSONSchema jsonSchema) {
+        return getTypeFilteredQuery(jsonSchema,new Query());
     }
     
 
     private boolean delete(JSONSchema jsonSchema) throws DataStoreException {
         return delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
+    }
+    
+
+    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
+            Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return list(jsonSchema, getTypeFilteredQuery(jsonSchema), pageNumber, pageSize);
     }
 
     /**
@@ -406,18 +422,7 @@ public abstract class DataStore {
             Map<String, Object> validatedData)
             throws DataStoreException;
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param pageNumber
-     * @param pageSize
-     * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract Page<Map<String, Object>> list(JSONSchema jsonSchema,
-            Integer pageNumber,
-            Integer pageSize)
-            throws DataStoreException;
+
 
     /**
      *

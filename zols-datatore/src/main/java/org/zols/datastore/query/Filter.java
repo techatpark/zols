@@ -5,6 +5,8 @@
  */
 package org.zols.datastore.query;
 
+import java.util.Objects;
+
 /**
  *
  * @author sathish_ku
@@ -57,6 +59,10 @@ public class Filter<T> {
          * Exists in given values
          */
         EXISTS_IN,
+        /**
+         * Not Exists in given values
+         */
+        NOT_EXISTS_IN,
         /**
          * Checks value in between
          */
@@ -143,5 +149,40 @@ public class Filter<T> {
     public Object getValue() {
         return value;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.name);
+        hash = 83 * hash + Objects.hashCode(this.operator);
+        hash = 83 * hash + Objects.hashCode(this.value);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Filter<?> other = (Filter<?>) obj;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (this.operator != other.operator) {
+            return false;
+        }
+        if (!Objects.equals(this.value, other.value)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

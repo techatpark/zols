@@ -136,8 +136,6 @@ public class ElasticSearchDataStore extends DataStore {
         return response.isFound();
     }
 
-
-
     @Override
     protected boolean delete(JSONSchema jsonSchema, Query query) {
         SearchResponse response = client
@@ -178,12 +176,6 @@ public class ElasticSearchDataStore extends DataStore {
         client.admin().indices().refresh(new RefreshRequest(indexName));
 
         return response.isCreated();
-    }
-
-    @Override
-    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
-            Integer pageNumber, Integer pageSize) {
-        return list(jsonSchema, null, pageNumber, pageSize);
     }
 
     @Override
@@ -258,6 +250,8 @@ public class ElasticSearchDataStore extends DataStore {
             if (queries != null) {
                 int size = queries.size();
                 Filter filter;
+                Collection collection;
+                BoolQueryBuilder boolQuery;
                 for (int index = 0; index < size; index++) {
                     filter = queries.get(index);
                     switch (filter.getOperator()) {
@@ -268,7 +262,7 @@ public class ElasticSearchDataStore extends DataStore {
                             queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
                             break;
                         case NOT_EQUALS:
-                            queryBuilder.must(QueryBuilders.notQuery(QueryBuilders.matchQuery(filter.getName(), filter.getValue())));
+                            queryBuilder.mustNot(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
                             break;
                         case IS_NULL:
                             queryBuilder.must(QueryBuilders.missingQuery(filter.getName()));
@@ -277,10 +271,20 @@ public class ElasticSearchDataStore extends DataStore {
                             queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
                             break;
                         case EXISTS_IN:
-                            Collection collection = (Collection) filter.getValue();
+                            boolQuery = QueryBuilders.boolQuery();
+                            collection = (Collection) filter.getValue();
                             for (Object object : collection) {
-                                queryBuilder.should(QueryBuilders.matchQuery(filter.getName(), object));
+                                boolQuery.should(QueryBuilders.matchQuery(filter.getName(), object));
                             }
+                            queryBuilder.must(boolQuery);
+                            break;
+                        case NOT_EXISTS_IN:
+                            boolQuery = QueryBuilders.boolQuery();
+                            collection = (Collection) filter.getValue();
+                            for (Object object : collection) {
+                                boolQuery.should(QueryBuilders.matchQuery(filter.getName(), object));
+                            }
+                            queryBuilder.mustNot(boolQuery);
                             break;
                         case IN_BETWEEN:
                             Object[] rangeValues = (Object[]) filter.getValue();

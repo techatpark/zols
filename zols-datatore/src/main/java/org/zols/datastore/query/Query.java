@@ -36,7 +36,9 @@ public class Query {
      * @param filter filter to be added
      */
     public void addFilter(Filter filter) {
-        filters.add(filter);
+        if(!filters.contains(filter)) {
+            filters.add(filter);
+        }
     }
 
 }
