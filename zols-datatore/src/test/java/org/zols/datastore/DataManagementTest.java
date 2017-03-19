@@ -8,6 +8,7 @@ package org.zols.datastore;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
@@ -57,6 +58,29 @@ public class DataManagementTest {
     @Test
     public void testCreate() throws DataStoreException {
         Assert.assertNotNull("Creating Simple Data", dataStore.read("teacher", "SATHISH"));
+    }
+    
+    @Test
+    public void testCreateLocalized() throws DataStoreException {
+        Map<String,Object> teacherMap = sampleJson("teacher");
+        teacherMap.put("name", "NEWONE");
+        teacherMap.put("first_name", "ஹேப்ப");
+        dataStore.create("teacher", teacherMap, Locale.TAIWAN);
+
+        Assert.assertEquals("Creating Localized Data","ஹேப்ப",dataStore.read("teacher", Locale.TAIWAN,"NEWONE").get("first_name") );
+    }
+    
+    @Test
+    public void testReadLocalized() throws DataStoreException {
+        Map<String,Object> teacherMap = sampleJson("teacher");
+        teacherMap.put("name", "NEWONE");
+        teacherMap.put("first_name", "SATI");
+        dataStore.create("teacher", teacherMap);
+        teacherMap.put("first_name", "ஹேப்ப");
+        dataStore.update("teacher", teacherMap, Locale.TAIWAN);
+        Assert.assertEquals("Reading Localized Data","SATI",dataStore.read("teacher", "NEWONE").get("first_name") );
+        Assert.assertNull("Reading Localized Data",dataStore.read("teacher", "NEWONE").get("first_name$"+Locale.TAIWAN.getLanguage()) );
+        Assert.assertEquals("Reading Localized Data","ஹேப்ப",dataStore.read("teacher", Locale.TAIWAN, "NEWONE").get("first_name") );
     }
 
     @Test

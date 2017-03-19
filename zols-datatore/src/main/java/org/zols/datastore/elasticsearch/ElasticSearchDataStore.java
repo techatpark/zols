@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
@@ -20,10 +23,13 @@ import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
 import static org.elasticsearch.common.settings.Settings.settingsBuilder;
 import org.elasticsearch.common.unit.TimeValue;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -169,13 +175,21 @@ public class ElasticSearchDataStore extends DataStore {
     @Override
     protected boolean update(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = validatedDataObject.get(jsonSchema.idField()).toString();
-        IndexResponse response = client.prepareIndex(indexName, jsonSchema.baseType(), idValue).setRefresh(true)
-                .setSource(validatedDataObject)
-                .execute()
-                .actionGet();
-        client.admin().indices().refresh(new RefreshRequest(indexName));
+        
+        UpdateRequest updateRequest = new UpdateRequest(indexName, jsonSchema.baseType(), idValue)
+        .doc(validatedDataObject);
 
-        return response.isCreated();
+        UpdateResponse response;
+        try {
+            response = client.update(updateRequest).get();
+            client.admin().indices().refresh(new RefreshRequest(indexName));
+            return response.isCreated();
+        } catch (InterruptedException | ExecutionException ex) {
+            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
+        return false;
     }
 
     @Override

@@ -14,11 +14,11 @@ import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
  */
 public class LocalitationUtil {
 
-    public static Map<String, Object> prepareJSON(Map<String, Object> jsonSchemaAsMap,
+    public static Map<String, Object> prepareJSON(final JSONSchema jSONSchema,
             Map<String, Object> jsonData,
             Locale locale) {
         String localeCode = locale.getLanguage();
-        JSONSchema jSONSchema = jsonSchema(jsonSchemaAsMap);
+
         Map<String, Object> localizedProperties = jSONSchema.getLocalizedProperties();
         localizedProperties.entrySet().stream().forEach((localizedPropertiesEntry) -> {
             jsonData.put(localizedPropertiesEntry.getKey() + "$" + localeCode, jsonData.remove(localizedPropertiesEntry.getKey()));
@@ -42,7 +42,33 @@ public class LocalitationUtil {
         return jsonData;
     }
 
-    
+    public static Map<String, Object> readJSON(Map<String, Object> jsonData) {
+        if (jsonData != null) {
+            List<String> localeFileds = new ArrayList();
+            jsonData.entrySet().forEach(property -> {
+                String fieldName = property.getKey();
+                if (fieldName.contains("$")) {
+                    localeFileds.add(fieldName);
+                } else if (property.getValue() instanceof Map) {
+                    readJSON((Map<String, Object>) property.getValue());
+                } else if (property.getValue() instanceof Collection) {
+                    ((Collection) property.getValue()).forEach(collectionData -> {
+                        if (collectionData instanceof Map) {
+                            readJSON((Map<String, Object>) collectionData);
+                        }
+                    });
+                }
+
+            });
+            localeFileds.forEach(fieldName -> {
+
+                jsonData.remove(fieldName);
+
+            });
+        }
+
+        return jsonData;
+    }
 
     public static Map<String, Object> readJSON(
             Map<String, Object> jsonData,

@@ -211,10 +211,10 @@ public class JSONSchema {
         return idField;
     }
     
-    public Map<String, Object> getJsonSchema(String typeName) {
+    public JSONSchema getJsonSchema(String typeName) {
         Map<String, Map<String, Object>> consolidatedDefinitions = getConsolidatedDefinitions();
 
-        return consolidatedDefinitions.get(typeName);
+        return jsonSchema(consolidatedDefinitions.get(typeName));
     }
     public Map<String, Map<String, Object>> getConsolidatedDefinitions() {
         return getConsolidatedDefinitions(this.jsonSchema);

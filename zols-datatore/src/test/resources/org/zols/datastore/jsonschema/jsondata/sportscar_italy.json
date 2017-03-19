@@ -1,14 +1,20 @@
 {
     "reg_number": "KL01",
     "four_wheel_drive$it": true,
+    "four_wheel_drive": false,
     "track": "F1",
     "insurance": {
-        "company$it": "AIG"
+        "company$it": "AIG_ITALY",
+        "company": "AIG"
     },
-    "owners":[
-        {"name":"sathish",
-         "city$it":"Madurai"},
-        {"name":"krishna",
-         "city$it":"Erode"}
+    "owners": [
+        {
+            "name": "sathish",
+            "city$it": "Madurai"
+        },
+        {
+            "name": "krishna",
+            "city$it": "Erode"
+        }
     ]
 }

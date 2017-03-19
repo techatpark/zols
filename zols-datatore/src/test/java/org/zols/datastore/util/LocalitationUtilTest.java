@@ -10,9 +10,9 @@ import java.util.Locale;
 import java.util.Map;
 import org.junit.Assert;
 import org.junit.Test;
+import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
-import static org.zols.datastore.util.JsonUtil.asString;
 
 /**
  *
@@ -24,7 +24,7 @@ public class LocalitationUtilTest {
     @Test
     public void testPrepareJSONMethod() {
         Map<String,Object> localizedJsonData = 
-                LocalitationUtil.prepareJSON(sampleJsonSchema("raw/teacher"), 
+                LocalitationUtil.prepareJSON(jsonSchema(sampleJsonSchema("raw/teacher")), 
                         sampleJson("teacher"),
                         Locale.ITALY);
         
@@ -37,6 +37,10 @@ public class LocalitationUtilTest {
     public void testReadJSONMethod() {
         Map<String,Object> localizedJsonData = 
                 LocalitationUtil.readJSON( sampleJson("sportscar_italy"), Locale.ITALY);
+        
+        Map<String,Object> plainJsonData = 
+                LocalitationUtil.readJSON( sampleJson("sportscar_italy"));
+        
         Assert.assertTrue("Locale Specific Field stripped", localizedJsonData.get("four_wheel_drive$it")==null);
         
         Assert.assertTrue("Locale Specific nested Field stripped", ((Map<String,Object>) localizedJsonData.get("insurance")).get("company")!=null);
