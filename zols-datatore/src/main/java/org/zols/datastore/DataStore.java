@@ -14,7 +14,6 @@ import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.NOT_EQUALS;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
@@ -42,7 +41,7 @@ public abstract class DataStore {
             if (violations.isEmpty()) {
                 JSONSchema jsonSchema = jsonSchema(object.getClass());
                 createdObject = (T) asJsonDataObject(object.getClass(),
-                        create(jsonSchema, jsonSchema.getImmutableJSONData(object)));
+                        create(jsonSchema, getImmutableJSONData(jsonSchema,object)));
             } else {
                 throw new ConstraintViolationException(object, violations);
             }
@@ -61,6 +60,16 @@ public abstract class DataStore {
     public <T> T read(Class<T> clazz, String idValue) throws DataStoreException {
         return (T) asJsonDataObject(clazz, read(jsonSchema(clazz), idValue));
     }
+    
+    public Map<String, Object> getImmutableJSONData(JSONSchema jsonSchema,Object object) {  
+        return getImmutableJSONData(jsonSchema,asMap(object));
+    }
+    
+    public Map<String, Object> getImmutableJSONData(JSONSchema jsonSchema,Map<String, Object> jsonData) {
+        LinkedHashMap linkedHashMap = new LinkedHashMap<>(jsonData);
+        linkedHashMap.put("$type", jsonSchema.type());
+        return Collections.unmodifiableMap(linkedHashMap);
+    }
 
     public <T> T update(T object, String idValue) throws DataStoreException {
         T updatedObject = null;
@@ -68,7 +77,7 @@ public abstract class DataStore {
             Set<ConstraintViolation<Object>> violations = validator.validate(object);
             if (violations.isEmpty()) {
                 JSONSchema jsonSchema = jsonSchema(object.getClass());
-                boolean updated = update(jsonSchema, jsonSchema.getImmutableJSONData(object));
+                boolean updated = update(jsonSchema, getImmutableJSONData(jsonSchema,object));
                 if (updated) {
                     updatedObject = (T) read(object.getClass(), idValue);
                 }
@@ -144,10 +153,36 @@ public abstract class DataStore {
 
         Map<String, Object> rawJsonSchema = getRawJsonSchema(schemaId);
 
-        JSONSchema enlargedJsonSchema = jsonSchema(rawJsonSchema);
-        Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
+        JSONSchema jsonSchema = jsonSchema(rawJsonSchema);
+        Set<ConstraintViolation<Object>> violations = jsonSchema.validate(jsonData);
         if (violations == null) {
-            return create(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
+            return create(jsonSchema, getImmutableJSONData(jsonSchema,jsonData));
+        } else {
+            throw new ConstraintViolationException(jsonData, violations);
+        }
+    }
+
+    
+
+    public boolean update(String schemaId, Map<String, Object> jsonData)
+            throws DataStoreException {
+        JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
+        Set<ConstraintViolation<Object>> violations = jsonSchema.validate(jsonData);
+        if (violations == null) {
+            return update(jsonSchema, getImmutableJSONData(jsonSchema,jsonData));
+        } else {
+            throw new ConstraintViolationException(jsonData, violations);
+        }
+    }
+
+    public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
+            throws DataStoreException {
+        JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
+        Map<String, Object> jsonData = read(jsonSchema, idValue);
+        jsonData.putAll(partialJsonData);
+        Set<ConstraintViolation<Object>> violations = jsonSchema.validate(jsonData);
+        if (violations == null) {
+            return update(jsonSchema, getImmutableJSONData(jsonSchema,jsonData));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -157,31 +192,7 @@ public abstract class DataStore {
             throws DataStoreException {
         return read(jsonSchema(getRawJsonSchema(schemaId)), name);
     }
-
-    public boolean update(String schemaId, Map<String, Object> jsonData)
-            throws DataStoreException {
-        JSONSchema enlargedJsonSchema = jsonSchema(getRawJsonSchema(schemaId));
-        Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
-        if (violations == null) {
-            return update(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
-        } else {
-            throw new ConstraintViolationException(jsonData, violations);
-        }
-    }
-
-    public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
-            throws DataStoreException {
-        JSONSchema enlargedJsonSchema = jsonSchema(getRawJsonSchema(schemaId));
-        Map<String, Object> jsonData = read(enlargedJsonSchema, idValue);
-        jsonData.putAll(partialJsonData);
-        Set<ConstraintViolation<Object>> violations = enlargedJsonSchema.validate(jsonData);
-        if (violations == null) {
-            return update(enlargedJsonSchema, enlargedJsonSchema.getImmutableJSONData(jsonData));
-        } else {
-            throw new ConstraintViolationException(jsonData, violations);
-        }
-    }
-
+    
     public boolean delete(String schemaId)
             throws DataStoreException {
         return delete(jsonSchema(getRawJsonSchema(schemaId)));
@@ -237,7 +248,7 @@ public abstract class DataStore {
         JSONSchema jsonSchema = jsonSchemaForSchema();
         Set<ConstraintViolation<Object>> violations = jsonSchema.validate(rawJsonSchema);
         if (violations == null) {
-            return create(jsonSchemaForSchema(), jsonSchema.getImmutableJSONData(schema));
+            return create(jsonSchemaForSchema(), getImmutableJSONData(jsonSchema,schema));
         } else {
             throw new ConstraintViolationException(schema, violations);
         }
@@ -251,7 +262,7 @@ public abstract class DataStore {
         Set<ConstraintViolation<Object>> violations = jsonSchema.validate(rawJsonSchema);
 
         if (violations == null) {
-            return update(jsonSchema, jsonSchema.getImmutableJSONData(asMap(jsonSchemaTxt)));
+            return update(jsonSchema, getImmutableJSONData(jsonSchema,asMap(jsonSchemaTxt)));
         } else {
             throw new ConstraintViolationException(schema, violations);
         }

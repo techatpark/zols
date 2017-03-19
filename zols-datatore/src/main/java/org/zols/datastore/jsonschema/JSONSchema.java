@@ -273,14 +273,6 @@ public class JSONSchema {
         return localizedProperties;
     }
     
-    public Map<String, Object> getImmutableJSONData(Object object) {  
-        return getImmutableJSONData(asMap(object));
-    }
     
-    public Map<String, Object> getImmutableJSONData(Map<String, Object> jsonData) {
-        LinkedHashMap linkedHashMap = new LinkedHashMap<>(jsonData);
-        linkedHashMap.put("$type", this.type);
-        return Collections.unmodifiableMap(linkedHashMap);
-    }
 
 }

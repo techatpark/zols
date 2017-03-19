@@ -12,7 +12,6 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
@@ -85,9 +84,16 @@ public class DataManagementTest {
     }
 
     @Test
-    public void testDeleteAll() throws DataStoreException {
+    public void testDeleteAllOfBasicType() throws DataStoreException {
+        dataStore.delete("person");
+        Assert.assertNull("Deleting All the data of a type", dataStore.list("person"));
+        Assert.assertNull("Deleting All the data of a type should not affect child type", dataStore.list("teacher"));
+    }
+    
+    @Test
+    public void testDeleteAllOfChildType() throws DataStoreException {
         dataStore.delete("teacher");
-        Assert.assertNull("Deleting Simple Data", dataStore.read("teacher", "SATHISH"));
+        Assert.assertNull("Deleting All the data of a child type", dataStore.list("teacher"));
     }
 
     @Test
@@ -103,13 +109,23 @@ public class DataManagementTest {
     }
 
     @Test
-    public void testListDataWithExistsInQuery() throws DataStoreException {
+    public void testListDataWithExistsInQueryWithChildType() throws DataStoreException {
         List<String> subjects = new ArrayList<>();
         subjects.add("English");
-        subjects.add("Tamil");
+        subjects.add("Science");
         Query query = new Query();
         query.addFilter(new Filter("subject", EXISTS_IN, subjects));
-        Assert.assertEquals("Listing Simple Data with valid Exists In query", 1, dataStore.list("teacher", query).size());
+        Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("headmaster", query).size());
+    }
+    
+    @Test
+    public void testListDataWithExistsInQueryWithSuperType() throws DataStoreException {
+        List<String> subjects = new ArrayList<>();
+        subjects.add("English");
+        subjects.add("Science");
+        Query query = new Query();
+        query.addFilter(new Filter("subject", EXISTS_IN, subjects));
+        Assert.assertEquals("Listing Simple Data with valid Exists In query on Super Type", 2, dataStore.list("teacher", query).size());
     }
 
     @Test
