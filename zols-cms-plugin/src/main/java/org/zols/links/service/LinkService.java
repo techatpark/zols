@@ -38,24 +38,47 @@ public class LinkService {
     private DataStore dataStore;
 
     /**
-     * Creates a new Link with given Object
+     * Creates a new Link for given group (e.g header)
      *
+     * @param groupName
      * @param link Object to be Create
      * @return created Link object
      */
     @Secured("ROLE_ADMIN")
-    public Link create(Link link) throws DataStoreException {
+    public Link createFor(String groupName, Link link) throws DataStoreException {
         Link createdLink = null;
         if (link != null) {
-
+            link.setGroupName(groupName);
             createdLink = dataStore.create(link);
-            LOGGER.info("Created Link {}", createdLink.getName());
+            LOGGER.info("Created Link {} for {}", createdLink.getName(),groupName);
 
             if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
                 LOGGER.info("Setting Default Link URL {}", createdLink.getName());
                 createdLink.setTargetUrl("/create_page/" + createdLink.getName());
                 update(createdLink);
             }
+        }
+        return createdLink;
+    }
+
+    @Secured("ROLE_ADMIN")
+    public Link createUnder(String parentLinkName, Link link) throws DataStoreException {
+        Link createdLink = null;
+        if (link != null) {
+            Link parentLink = read(parentLinkName);
+            if (parentLink != null) {
+                link.setParentLinkName(parentLinkName);
+                link.setGroupName(parentLink.getGroupName());
+                createdLink = dataStore.create(link);
+                LOGGER.info("Created Link {} under {}", createdLink.getName(),parentLinkName);
+
+                if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
+                    LOGGER.info("Setting Default Link URL {}", createdLink.getName());
+                    createdLink.setTargetUrl("/create_page/" + createdLink.getName());
+                    update(createdLink);
+                }
+            }
+
         }
         return createdLink;
     }

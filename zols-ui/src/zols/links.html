@@ -21,49 +21,172 @@
 </head>
 
 <body>
-    <div id="links_screen" class="container-fluid" th:fragment="content" >
-</div>
+    <div id="links_screen" class="container-fluid" th:fragment="content">
+    </div>
 
-<script id="links_screen_template" type="text/x-jsrender">
-
+    <script id="links_screen_template" type="text/x-jsrender">
         <div class="panel panel-primary">
-        <div class="panel-heading">
-
-          <div class="pull-right" >
-            <div class="dropdown">
-            <b>Repository</b>
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    {^{:link_group.label}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                    {^{for link_groups}}
-                    <li><a href="#" data-link="{on ~root.setLinkGroup #data}">{{:label}}</a></li>
+            <div class="panel-heading">
+                <b>{^{:title}}</b> {^{if link_groups.length != 0 && title === 'Links'}}
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <b>Group</b>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            {^{:link_group.label}}
+                            <span class="caret"></span>
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Edit" data-link="{on ~root.editGroup }"><i class="glyphicon glyphicon-edit"></i></button>
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete" data-link="{on ~root.removeGroup #data.link_group}" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            {^{for link_groups}}
+                            <li><a href="#" data-link="{on ~root.setLinkGroup #data}">{{:label}}</a></li>
+                            {{/for}}
+                            <li role="separator" class="divider"></li>
+                            <li><a data-link="{on ~root.addGroup}">Create New</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {{/if}}
+                <div class="clearfix"></div>
+            </div>
+            <div class="panel-body">
+                <div className="row-fluid">
+                {^{if parentLinks.length !=0 }}
+                <ol class="breadcrumb">
+                    <li><a>Home</a></li>
+                    {^{for parentLinks}}
+                    <li><a>{{:name}}</a></li>
                     {{/for}}
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#" >Create New</a></li>
-                </ul>
+                </ol>
+                {{/if}}
+                </div>
+                <div class="row-fluid">
+                    {^{if title==='Link Group'}}
+                    {{include tmpl="#link_group_template"/}}
+                    {{else title==='Link'}}
+                    {{include tmpl="#link_template"/}}
+                    {{else link_groups.length === 0}}
+                    There are no groups. Please create new group <a href="#" data-link="{on ~root.addGroup}">here.</a>
+                    {{else links.length === 0 && title==='Links'}}
+                    There are no links. Please ceate new link <a href="#" data-link="{on ~root.addLink}">here.</a>
+                    {{else links.length != 0 && title==='Links'}}
+                    {{include tmpl="#links_template"/}}
+                    {{/if}}
+                </div>
             </div>
         </div>
-        <div class="clearfix"></div>
-        </div>
-        <div class="panel-body">
-          Panel content
-        </div>
-        </div>
-</script>
+    </script>
+
+    <script id="links_template" type="text/x-jsrender">
+        <ul class="list-group">
+            {^{for links}}
+            <li class="list-group-item">
+                <span class="badge" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-download"></i></span>
+                <span class="badge" data-link="{on ~root.removeDocument #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
+                <a  href="#" data-link="{on ~root.setParentLink #data}">{{:name}}</a>
+            </li>
+            {{/for}}
+        </ul>
+    </script>
 
 
-        <!-- build:js({app,.tmp}) scripts/jsviews.min.js -->
-        <script src="/js/jsviews.min.js"></script>
-        <!-- endbuild -->
 
-        <!-- build:js scripts/links.js -->
-        <script src="/js/links.js"></script>
-        <!-- endbuild -->
+    <script id="link_group_template" type="text/x-jsrender">
+        <form class="form-horizontal" onsubmit="return false;">
+            <fieldset>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="name">Name</label>
+                    <div class="col-md-4">
+                        <input name="name" data-link="link_group.name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required="" />
+                    </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Label</label>
+                    <div class="col-md-4">
+                        <input name="label" data-link="link_group.label" type="text" placeholder="" class="form-control input-md" required="" />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Description</label>
+                    <div class="col-md-4">
+                        <input name="label" data-link="link_group.description" type="text" placeholder="" class="form-control input-md" required="" />
+
+                    </div>
+                </div>
 
 
-  
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                        <button name="saveBtn" class="btn btn-success" type="submit" data-link="{on ~root.saveGroup}">Save</button>
+                        <button name="discardBtn" class="btn btn-danger" type="button" data-link="{on ~root.listGroups}">Discard Changes</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </script>
+    <script id="link_template" type="text/x-jsrender">
+        <form class="form-horizontal" onsubmit="return false;">
+            <fieldset>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="name">Name</label>
+                    <div class="col-md-4">
+                        <input name="name" data-link="link.name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required="" />
+                    </div>
+                </div>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Label</label>
+                    <div class="col-md-4">
+                        <input name="label" data-link="link.label" type="text" placeholder="" class="form-control input-md" required="" />
+
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="label">Description</label>
+                    <div class="col-md-4">
+                        <input name="label" data-link="link.description" type="text" placeholder="" class="form-control input-md" required="" />
+
+                    </div>
+                </div>
+
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="saveBtn"></label>
+                    <div class="col-md-8">
+                        <button name="saveBtn" class="btn btn-success" type="submit" data-link="{on ~root.saveLink}">Save</button>
+                        <button name="discardBtn" class="btn btn-danger" type="button" data-link="{on ~root.listGroups}">Discard Changes</button>
+                    </div>
+                </div>
+
+            </fieldset>
+        </form>
+    </script>
+
+
+    <!-- build:js({app,.tmp}) scripts/jsviews.min.js -->
+    <script src="/js/jsviews.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/links.js -->
+    <script src="/js/links.js"></script>
+    <!-- endbuild -->
+
+
+
 
     <!-- References
         http://bootsnipp.com/snippets/featured/responsive-breadcrumbs

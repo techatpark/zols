@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.Link;
+import org.zols.links.service.LinkGroupService;
 import org.zols.links.service.LinkService;
 
 @RestController
@@ -32,11 +33,20 @@ public class LinkController {
 
     @Autowired
     private LinkService linkService;
+    
+        @Autowired
+    private LinkGroupService linkGroupService;    
 
-    @RequestMapping(method = POST)
-    public Link create(@RequestBody Link link) throws DataStoreException {
+    @RequestMapping(value = "/for/{groupName}",method = POST)
+    public Link createFor(@PathVariable(value = "groupName") String groupName,@RequestBody Link link) throws DataStoreException {
         LOGGER.info("Creating new links {}", link.getName());
-        return linkService.create(link);
+        return linkService.createFor(groupName,link);
+    }
+    
+    @RequestMapping(value = "/under/{parentLinkName}",method = POST)
+    public Link createUnder(@PathVariable(value = "parentLinkName") String parentLinkName,@RequestBody Link link) throws DataStoreException {
+        LOGGER.info("Creating new links {}", link.getName());
+        return linkService.createUnder(parentLinkName,link);
     }
 
     @RequestMapping(value = "/{name}", method = GET)
@@ -67,8 +77,14 @@ public class LinkController {
         LOGGER.info("Getting Links ");
         return linkService.list();
     }
+    
+    @RequestMapping(value = "/for/{name}", method = GET)    
+    public List<Link> listFirstLevelLinks(@PathVariable(value = "name") String name) throws DataStoreException {
+        LOGGER.info("Getting first level links of group {} ",name);
+        return linkGroupService.getFirstLevelLinks(name);
+    }
 
-    @RequestMapping(value = "/childen_of/{name}", method = GET)
+    @RequestMapping(value = "/under/{name}", method = GET)
     public List<Link> listChildren(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting childen of Link {}", name);
         return linkService.listChildren(name);

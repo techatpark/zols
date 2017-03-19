@@ -68,9 +68,5 @@ public class LinkGroupController {
         return linkGroupService.list();
     }
     
-    @RequestMapping(value = "/{name}/first_level_links", method = GET)    
-    public List<Link> listFirstLevelLinks(@PathVariable(value = "name") String name) throws DataStoreException {
-        LOGGER.info("Getting first level links of group {} ",name);
-        return linkGroupService.getFirstLevelLinks(name);
-    }
+
 }

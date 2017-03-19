@@ -1,6 +1,6 @@
 'use strict';
 
-(function ($) {
+(function($) {
     var base_url = baseURL();
 
     function baseURL() {
@@ -17,28 +17,131 @@
     });
 
     var screen_object = {
-      title:"Links",
-      link_group:{},
-      link_groups:[],
-      link:{},
-      links:[],
-      setProperty:function(propName,propValue) {
-        $.observable(this).setProperty(propName, propValue);
-        $.templates("#links_screen_template").link("#links_screen", this);
-        return this;
-      },
-      listGroups: function() {
-        $.get(base_url + '/link_groups')
-            .done(function(data) {
-                  if(Array.isArray(data) && data.length != 0) {
-                      screen_object.setProperty("link_groups", data).setProperty("link_group", data[0]);
+        title: "Links",
+        link_groups: [],
+        link_group: {},
+        links: [],
+        link: {},
+        parentLinks: [],
+        is_edit: false,
+        setProperty: function(propName, propValue) {
+            $.observable(this).setProperty(propName, propValue);
+            $.templates("#links_screen_template").link("#links_screen", this);
+            return this;
+        },
+        listGroups: function() {
+            $.get(base_url + '/link_groups')
+                .done(function(data) {
+                    if (Array.isArray(data) && data.length != 0) {
+                        screen_object.setProperty("link_groups", data).setProperty("title", "Links");
+                        screen_object.setLinkGroup(data[0]);
+                    } else {
+                        screen_object.setProperty("link_groups", []).setProperty("title", "Links");
+                    }
+                });
+        },
+        setLinkGroup: function(data) {
+            screen_object.setProperty("link_group", data);
+            this.parentLinks = [];
+            screen_object.listLinks();
+        },
+        setParentLink: function(data) {
+            this.parentLinks.push(data);
+            this.listLinks();
+        },
+        addGroup: function() {
+            screen_object.is_edit = false;
+            screen_object.setProperty("title", "Link Group").setProperty("link_group", {});
+        },
+        addLink: function() {
+            screen_object.setProperty("title", "Link").setProperty("link", {});
+        },
+        listLinks: function() {
+            if (this.parentLinks.length === 0) {
+                $.get(base_url + '/links/for/' + this.link_group.name)
+                    .done(function(data) {
+                        screen_object.setProperty("title", "Links").setProperty("links", data);
+                    });
+            } else {
+                $.get(base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name)
+                    .done(function(data) {
+                        screen_object.setProperty("title", "Links").setProperty("links", data);
+                    });
+            }
 
-                  }
+        },
+        editGroup: function() {
+            $.get(base_url + '/link_groups/' + this.link_group.name)
+                .done(function(data) {
+                    screen_object.is_edit = true;
+                    screen_object.setProperty("title", "Link Group").setProperty("link_group", data);
+                });
+        },
+        removeGroup: function(link_group) {
+            $.ajax({
+                method: 'DELETE',
+                url: base_url + '/link_groups/' + link_group.name,
+                dataType: 'json'
+            }).done(function(data) {
+                screen_object.listGroups();
             });
-      },
-      setLinkGroup: function(data) {
-        this.setProperty("link_group", data);
-      }
+
+        },
+        saveGroup: function() {
+            if (screen_object.is_edit) {
+                $.ajax({
+                    method: 'PUT',
+                    url: base_url + '/link_groups/' + this.link_group.name,
+                    dataType: 'json',
+                    data: JSON.stringify(this.link_group)
+                }).done(function(data) {
+                    screen_object.listGroups();
+                });
+            } else {
+                $.ajax({
+                    method: 'POST',
+                    url: base_url + '/link_groups',
+                    dataType: 'json',
+                    data: JSON.stringify(this.link_group)
+                }).done(function(data) {
+                    screen_object.listGroups();
+                });
+            }
+        },
+        saveLink: function() {
+            if (screen_object.is_edit) {
+                $.ajax({
+                    method: 'PUT',
+                    url: base_url + '/links/' + this.link.name,
+                    dataType: 'json',
+                    data: JSON.stringify(this.link)
+                }).done(function(data) {
+                    screen_object.listLinks();
+                });
+            } else {
+                if (this.parentLinks.length === 0) {
+                    $.ajax({
+                        method: 'POST',
+                        url: base_url + '/links/for/' + this.link_group.name,
+                        dataType: 'json',
+                        data: JSON.stringify(this.link)
+                    }).done(function(data) {
+                        screen_object.listLinks();
+                    });
+                } else {
+                    $.ajax({
+                        method: 'POST',
+                        url: base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name,
+                        dataType: 'json',
+                        data: JSON.stringify(this.link)
+                    }).done(function(data) {
+                        screen_object.listLinks();
+                    });
+                }
+            }
+
+
+        }
 
     };
 
