@@ -167,7 +167,7 @@ public abstract class DataStore {
     }
 
     public <T> Page<T> list(Class<T> clazz, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        Page<Map<String, Object>> page = list(jsonSchema(clazz), pageNumber, pageSize);
+        Page<Map<String, Object>> page = list(jsonSchema(clazz), locale,pageNumber, pageSize);
         if (page != null) {
             return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList()));
         }
@@ -304,7 +304,11 @@ public abstract class DataStore {
 
     public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
             throws DataStoreException {
-        return list(jsonSchema(getRawJsonSchema(schemaId)), pageNumber, pageSize);
+        return list(jsonSchema(getRawJsonSchema(schemaId)), (Locale)null, pageNumber, pageSize);
+    }
+    public Page<Map<String, Object>> list(String schemaId, Locale locale, Integer pageNumber, Integer pageSize)
+            throws DataStoreException {
+        return list(jsonSchema(getRawJsonSchema(schemaId)), locale, pageNumber, pageSize);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
@@ -456,11 +460,7 @@ public abstract class DataStore {
         return delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
     }
 
-    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
-            Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(jsonSchema,(Locale)null,pageNumber,pageSize);
-    }
-    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,Locale locale,
+    private Page<Map<String, Object>> list(JSONSchema jsonSchema,Locale locale,
             Integer pageNumber, Integer pageSize) throws DataStoreException {
 
         Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema), pageNumber, pageSize);
