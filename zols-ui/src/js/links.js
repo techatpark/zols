@@ -45,8 +45,13 @@
             this.parentLinks = [];
             screen_object.listLinks();
         },
-        setParentLink: function(data) {
-            this.parentLinks.push(data);
+        setParentLink: function(parent_link) {
+            var indexOfParentLink = this.parentLinks.indexOf(parent_link);
+            if (indexOfParentLink === -1) {
+                this.parentLinks.push(parent_link);
+            } else {
+                this.parentLinks = this.parentLinks.slice(0, indexOfParentLink + 1);
+            }
             this.listLinks();
         },
         addGroup: function() {
@@ -77,14 +82,31 @@
                     screen_object.setProperty("title", "Link Group").setProperty("link_group", data);
                 });
         },
+        editlink: function() {
+            $.get(base_url + '/links/for/' + this.link.name)
+                .done(function(data) {
+                    screen_object.is_edit = true;
+                    screen_object.setProperty("title", "Link").setProperty("link", data);
+                });
+        },
         removeGroup: function(link_group) {
-            $.ajax({
-                method: 'DELETE',
-                url: base_url + '/link_groups/' + link_group.name,
-                dataType: 'json'
-            }).done(function(data) {
-                screen_object.listGroups();
-            });
+
+            $("#confirmationModal .btn-primary")
+                .unbind("click")
+                .bind("click", function() {
+                    $("#confirmationModal").modal('hide');
+                    $.ajax({
+                        method: 'DELETE',
+                        url: base_url + '/link_groups/' + link_group.name,
+                        dataType: 'json'
+                    }).done(function(data) {
+                        screen_object.listGroups();
+                    });
+
+                });
+
+            $("#confirmationModal").modal('show');
+
 
         },
         saveGroup: function() {
@@ -107,6 +129,15 @@
                     screen_object.listGroups();
                 });
             }
+        },
+        removelink: function(link) {
+            $.ajax({
+                method: 'DELETE',
+                url: base_url + '/links/' + link.name,
+                dataType: 'json'
+            }).done(function(data) {
+                screen_object.listLinks();
+            });
         },
         saveLink: function() {
             if (screen_object.is_edit) {
@@ -139,7 +170,6 @@
                     });
                 }
             }
-
 
         }
 
