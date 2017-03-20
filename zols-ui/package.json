@@ -17,7 +17,10 @@
     "build:js": "cp -R 'src/js' dist",
     "build:css": "node-sass --output-style compressed -o dist/css src/scss",
     "build:images": "cpx 'src/**/*.{png,jpg,svg,ico}' dist",
-    "swagger:docs": "mkdir dist/swagger && cpx 'node_modules/swagger-ui/dist/**/*.*' dist/swagger && replace-in-file 'http://petstore.swagger.io/v2/swagger.json' 'http://localhost:8080/v2/api-docs' dist/swagger/index.html"
+    "swagger:docs": "mkdir dist/swagger && cpx 'node_modules/swagger-ui/dist/**/*.*' dist/swagger && replace-in-file 'http://petstore.swagger.io/v2/swagger.json' 'http://localhost:8080/v2/api-docs' dist/swagger/index.html",
+    "package": "rm -rf ../zols-cms-plugin/src/main/resources/templates && rm -rf ../zols-cms-plugin/src/main/resources/static && npm run package:static && npm run package:templates",
+    "package:templates": "cpx 'dist/**/*.{html,htm}' ../zols-cms-plugin/src/main/resources/templates",
+    "package:static": "cpx 'dist/**/*.{png,jpg,svg,ico,js,css,eot,ttf,woff,woff2}' ../zols-cms-plugin/src/main/resources/static"
   },
   "devDependencies": {
     "cpx": "^1.3.2",
