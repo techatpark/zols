@@ -5,6 +5,7 @@
  */
 package org.zols.datastore;
 
+import java.util.List;
 import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
@@ -12,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
-import static org.zols.datastore.util.JsonUtil.asString;
 import static org.zols.datastore.util.TestUtil.testDataStore;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -47,10 +47,16 @@ public class SchemaManagementTest {
 
     @Test
     public void testGetRawJsonSchema() throws DataStoreException {
-        Map<String,Object> rawJsonSchema = dataStore.getRawJsonSchema("headmaster");
+        Map<String, Object> rawJsonSchema = dataStore.getRawJsonSchema("headmaster");
 
+        Assert.assertEquals("Getting Raw Schema for Complex Type", sampleJsonSchema("raw/headmaster"), rawJsonSchema);
+    }
 
-        Assert.assertEquals("Getting Raw Schema for Complex Type",sampleJsonSchema("raw/headmaster"), rawJsonSchema);
+    @Test
+    public void testGetChildrenSchema() throws DataStoreException {
+        List<Map<String, Object>> children = dataStore.listChildSchema("person");
+        Assert.assertEquals("Listing children Schema", 1, children.size());
+
     }
 
 }

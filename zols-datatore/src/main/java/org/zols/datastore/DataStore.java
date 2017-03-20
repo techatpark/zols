@@ -14,6 +14,7 @@ import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
@@ -420,6 +421,16 @@ public abstract class DataStore {
     public Boolean deleteSchema(String schemaId) throws DataStoreException {
         return delete(jsonSchemaForSchema(), schemaId);
     }
+    
+    public List<Map<String, Object>> listChildSchema(String schemaId) throws DataStoreException {
+        Query query = new Query();
+        query.addFilter(new Filter("$ref", EQUALS, schemaId));
+        return list(jsonSchemaForSchema(),query);
+    }
+    
+    public List<Map<String, Object>> listSchema(Query query) throws DataStoreException {
+        return list(jsonSchemaForSchema(),query);
+    }
 
     public List<Map<String, Object>> listSchema() throws DataStoreException {
         return list(jsonSchemaForSchema());
@@ -443,7 +454,10 @@ public abstract class DataStore {
         return readJsonData(list(jsonSchema, getTypeFilteredQuery(jsonSchema)),locale);
     }
 
-    private Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) {
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) {
+        if(query == null) {
+            query = new Query();
+        }
 
         List<String> superTypes = jsonSchema.superTypes();
         if (!superTypes.isEmpty()) {
@@ -452,8 +466,8 @@ public abstract class DataStore {
         return query;
     }
 
-    private Query getTypeFilteredQuery(JSONSchema jsonSchema) {
-        return getTypeFilteredQuery(jsonSchema, new Query());
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema) {
+        return getTypeFilteredQuery(jsonSchema, null);
     }
 
     private boolean delete(JSONSchema jsonSchema) throws DataStoreException {

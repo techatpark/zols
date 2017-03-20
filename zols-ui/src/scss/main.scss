@@ -5,6 +5,7 @@ $navbar-default-link-hover-color: #ffffff;
 $navbar-default-link-active-color: #ffffff;
 $navbar-default-link-active-bg: #264571;
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import '_bootstrap-slider';
 
 body {
     margin-top: 50px;
