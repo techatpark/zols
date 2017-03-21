@@ -110,7 +110,7 @@
     </script>
 
     <script id="link_group_template" type="text/x-jsrender">
-        <form class="form-horizontal" onsubmit="return false;">
+        <form id="link_group_form" class="form-horizontal" onsubmit="return false;">
             <fieldset>
 
                 <!-- Text input-->
@@ -133,7 +133,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="label">Description</label>
                     <div class="col-md-4">
-                        <input name="label" data-link="link_group.description" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="label" data-link="link_group.description" type="text" placeholder="" class="form-control input-md" />
 
                     </div>
                 </div>
@@ -152,7 +152,7 @@
         </form>
     </script>
     <script id="link_template" type="text/x-jsrender">
-        <form class="form-horizontal" onsubmit="return false;">
+        <form id="link_form" class="form-horizontal" onsubmit="return false;">
             <fieldset>
 
                 <!-- Text input-->
@@ -175,7 +175,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="label">Description</label>
                     <div class="col-md-4">
-                        <input name="label" data-link="link.description" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="label" data-link="link.description" type="text" placeholder="" class="form-control input-md" />
 
                     </div>
                 </div>

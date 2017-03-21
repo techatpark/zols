@@ -129,6 +129,7 @@
 
         },
         saveGroup: function() {
+          if(document.forms["link_group_form"].checkValidity()) {
             if (screen_object.is_edit) {
                 $.ajax({
                     method: 'PUT',
@@ -156,6 +157,8 @@
                     }]);
                 });
             }
+          }
+
         },
         removelink: function(link) {
             $.ajax({
@@ -171,48 +174,52 @@
             });
         },
         saveLink: function() {
-            if (screen_object.is_edit) {
-                $.ajax({
-                    method: 'PUT',
-                    url: base_url + '/links/' + this.link.name,
-                    dataType: 'json',
-                    data: JSON.stringify(this.link)
-                }).done(function(data) {
-                    screen_object.listLinks();
-                    screen_object.showMessages([{
-                        type: "success",
-                        "message": "Link saved successfully"
-                    }]);
-                });
-            } else {
-                if (this.parentLinks.length === 0) {
-                    $.ajax({
-                        method: 'POST',
-                        url: base_url + '/links/for/' + this.link_group.name,
-                        dataType: 'json',
-                        data: JSON.stringify(this.link)
-                    }).done(function(data) {
-                        screen_object.listLinks();
-                        screen_object.showMessages([{
-                            type: "success",
-                            "message": "Link created successfully"
-                        }]);
-                    });
-                } else {
-                    $.ajax({
-                        method: 'POST',
-                        url: base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name,
-                        dataType: 'json',
-                        data: JSON.stringify(this.link)
-                    }).done(function(data) {
-                        screen_object.listLinks();
-                        screen_object.showMessages([{
-                            type: "success",
-                            "message": "Link created successfully"
-                        }]);
-                    });
-                }
+            if(document.forms["link_form"].checkValidity()) {
+              if (screen_object.is_edit) {
+                  $.ajax({
+                      method: 'PUT',
+                      url: base_url + '/links/' + this.link.name,
+                      dataType: 'json',
+                      data: JSON.stringify(this.link)
+                  }).done(function(data) {
+                      screen_object.listLinks();
+                      screen_object.showMessages([{
+                          type: "success",
+                          "message": "Link saved successfully"
+                      }]);
+                  });
+              } else {
+                  if (this.parentLinks.length === 0) {
+                      $.ajax({
+                          method: 'POST',
+                          url: base_url + '/links/for/' + this.link_group.name,
+                          dataType: 'json',
+                          data: JSON.stringify(this.link)
+                      }).done(function(data) {
+                          screen_object.listLinks();
+                          screen_object.showMessages([{
+                              type: "success",
+                              "message": "Link created successfully"
+                          }]);
+                      });
+                  } else {
+                      $.ajax({
+                          method: 'POST',
+                          url: base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name,
+                          dataType: 'json',
+                          data: JSON.stringify(this.link)
+                      }).done(function(data) {
+                          screen_object.listLinks();
+                          screen_object.showMessages([{
+                              type: "success",
+                              "message": "Link created successfully"
+                          }]);
+                      });
+                  }
+              }
+
             }
+
 
         }
 
