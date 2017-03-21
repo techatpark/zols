@@ -14,6 +14,7 @@ import org.zols.datastore.jsonschema.JSONSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchemaForSchema;
 import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Filter;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
@@ -167,7 +168,7 @@ public abstract class DataStore {
     }
 
     public <T> Page<T> list(Class<T> clazz, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        Page<Map<String, Object>> page = list(jsonSchema(clazz), pageNumber, pageSize);
+        Page<Map<String, Object>> page = list(jsonSchema(clazz), locale,pageNumber, pageSize);
         if (page != null) {
             return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList()));
         }
@@ -304,7 +305,11 @@ public abstract class DataStore {
 
     public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
             throws DataStoreException {
-        return list(jsonSchema(getRawJsonSchema(schemaId)), pageNumber, pageSize);
+        return list(jsonSchema(getRawJsonSchema(schemaId)), (Locale)null, pageNumber, pageSize);
+    }
+    public Page<Map<String, Object>> list(String schemaId, Locale locale, Integer pageNumber, Integer pageSize)
+            throws DataStoreException {
+        return list(jsonSchema(getRawJsonSchema(schemaId)), locale, pageNumber, pageSize);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
@@ -416,6 +421,16 @@ public abstract class DataStore {
     public Boolean deleteSchema(String schemaId) throws DataStoreException {
         return delete(jsonSchemaForSchema(), schemaId);
     }
+    
+    public List<Map<String, Object>> listChildSchema(String schemaId) throws DataStoreException {
+        Query query = new Query();
+        query.addFilter(new Filter("$ref", EQUALS, schemaId));
+        return list(jsonSchemaForSchema(),query);
+    }
+    
+    public List<Map<String, Object>> listSchema(Query query) throws DataStoreException {
+        return list(jsonSchemaForSchema(),query);
+    }
 
     public List<Map<String, Object>> listSchema() throws DataStoreException {
         return list(jsonSchemaForSchema());
@@ -439,7 +454,10 @@ public abstract class DataStore {
         return readJsonData(list(jsonSchema, getTypeFilteredQuery(jsonSchema)),locale);
     }
 
-    private Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) {
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) {
+        if(query == null) {
+            query = new Query();
+        }
 
         List<String> superTypes = jsonSchema.superTypes();
         if (!superTypes.isEmpty()) {
@@ -448,19 +466,15 @@ public abstract class DataStore {
         return query;
     }
 
-    private Query getTypeFilteredQuery(JSONSchema jsonSchema) {
-        return getTypeFilteredQuery(jsonSchema, new Query());
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema) {
+        return getTypeFilteredQuery(jsonSchema, null);
     }
 
     private boolean delete(JSONSchema jsonSchema) throws DataStoreException {
         return delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
     }
 
-    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,
-            Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(jsonSchema,(Locale)null,pageNumber,pageSize);
-    }
-    protected Page<Map<String, Object>> list(JSONSchema jsonSchema,Locale locale,
+    private Page<Map<String, Object>> list(JSONSchema jsonSchema,Locale locale,
             Integer pageNumber, Integer pageSize) throws DataStoreException {
 
         Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema), pageNumber, pageSize);

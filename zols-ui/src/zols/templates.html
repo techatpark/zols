@@ -257,7 +257,7 @@
                         <label class="col-md-4 control-label" for="dataType">Data Type</label>
                         <div class="col-md-4">
                             <select id="dataType" name="dataType" data-link="dataType" type="text" placeholder="" class="form-control input-md" required="">
-                <option th:each="schema : ${schemas}" th:value="${schema.id}" th:text="${schema.title}" value="Sample">Sample Schema</option>
+                <option th:each="schema : ${schemas}" th:value="${schema.name}" th:text="${schema.title}" value="Sample">Sample Schema</option>
                 </select>
                         </div>
                     </div>

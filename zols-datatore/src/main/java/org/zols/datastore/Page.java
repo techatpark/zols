@@ -6,6 +6,7 @@
 package org.zols.datastore;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -41,5 +42,44 @@ public class Page<T> {
     public List<T> getContent() {
         return content;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.pageNumber);
+        hash = 89 * hash + Objects.hashCode(this.pageSize);
+        hash = 89 * hash + Objects.hashCode(this.total);
+        hash = 89 * hash + Objects.hashCode(this.content);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Page<?> other = (Page<?>) obj;
+        if (!Objects.equals(this.pageNumber, other.pageNumber)) {
+            return false;
+        }
+        if (!Objects.equals(this.pageSize, other.pageSize)) {
+            return false;
+        }
+        if (!Objects.equals(this.total, other.total)) {
+            return false;
+        }
+        if (!Objects.equals(this.content, other.content)) {
+            return false;
+        }
+        return true;
+    }
+    
+    
 
 }

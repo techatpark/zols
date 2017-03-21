@@ -82,6 +82,22 @@ public class DataManagementTest {
         Assert.assertNull("Reading Localized Data",dataStore.read("teacher", "NEWONE").get("first_name$"+Locale.TAIWAN.getLanguage()) );
         Assert.assertEquals("Reading Localized Data","ஹேப்ப",dataStore.read("teacher", Locale.TAIWAN, "NEWONE").get("first_name") );
     }
+    
+    @Test
+    public void testListLocalized() throws DataStoreException {
+        Map<String,Object> teacherMap = sampleJson("teacher");
+        teacherMap.put("name", "NEWONE");
+        teacherMap.put("first_name", "SATI");
+        dataStore.create("teacher", teacherMap);
+        teacherMap.put("first_name", "ஹேப்ப");
+        dataStore.update("teacher", teacherMap, Locale.TAIWAN);
+        
+        Page<Map<String,Object>> page = dataStore.list("teacher", 0, 10);
+        
+        Page<Map<String,Object>> taiwanPage = dataStore.list("teacher", Locale.TAIWAN, 0, 10);
+        
+        Assert.assertNotEquals("Listing localized data", page, taiwanPage);
+    }
 
     @Test
     public void testUpdate() throws DataStoreException {
