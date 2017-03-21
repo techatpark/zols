@@ -20,14 +20,14 @@
 
 </head>
 
-<body>
-  <div class="row-fluid" id="alerts">
-  </div>
-
-    <div id="links_screen" class="container-fluid" th:fragment="content">
+<body th:fragment="content">
+    <div class="row-fluid" id="alerts">
     </div>
 
-    <div id="confirmationModal" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div id="links_screen" class="container-fluid">
+    </div>
+
+    <div id="confirmationModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -48,8 +48,7 @@
     <script id="alert_template" type="text/x-jsrender">
         {^{if messages.length != 0}} {^{for messages}}
         <div class="alert alert-{{:type}} alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            {{:message}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> {{:message}}
         </div>
         {{/for}} {{/if}}
     </script>

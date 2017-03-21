@@ -111,7 +111,7 @@ public abstract class DataStore {
             Set<ConstraintViolation<Object>> violations = validator.validate(object);
             if (violations.isEmpty()) {
                 JSONSchema jsonSchema = jsonSchema(object.getClass());
-                boolean updated = update(jsonSchema, getImmutableJSONData(jsonSchema, object, locale));
+                boolean updated = updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, object, locale));
                 if (updated) {
                     updatedObject = (T) read(object.getClass(), idValue);
                 }
@@ -236,7 +236,7 @@ public abstract class DataStore {
         JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
         Set<ConstraintViolation<Object>> violations = jsonSchema.validate(jsonData);
         if (violations == null) {
-            return update(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
+            return updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -254,7 +254,7 @@ public abstract class DataStore {
         jsonData.putAll(partialJsonData);
         Set<ConstraintViolation<Object>> violations = jsonSchema.validate(jsonData);
         if (violations == null) {
-            return update(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
+            return updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -530,6 +530,7 @@ public abstract class DataStore {
     protected abstract boolean delete(JSONSchema jsonSchema, Query query)
             throws DataStoreException;
 
+    protected abstract boolean update(JSONSchema jsonSchema, Map<String, Object> validatedDataObject) throws DataStoreException;
     /**
      *
      * @param jsonSchema schema of dynamic data
@@ -537,7 +538,7 @@ public abstract class DataStore {
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    protected abstract boolean update(JSONSchema jsonSchema,
+    protected abstract boolean updatePartially(JSONSchema jsonSchema,
             Map<String, Object> validatedData)
             throws DataStoreException;
 
