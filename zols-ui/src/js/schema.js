@@ -222,9 +222,15 @@
                 delete properties[key].required;
 
                 //trim unused
-                if (properties[key].format && properties[key].format === 'text') {
-                    delete properties[key].format;
-                    delete properties[key].options;
+                if (properties[key].format ){
+                  if(properties[key].format === 'text') {
+                      delete properties[key].format;
+                      delete properties[key].options;
+                  }
+                  if(properties[key].format === 'html') {
+
+                      properties[key].options.wysiwyg = true;
+                  }
                 }
 
                 if (properties[key].type) {

@@ -62,7 +62,12 @@
     <script id="schema_screen_template" type="text/x-jsrender">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <b>{^{:title}}</b>
+                <b>{^{:title}}</b> {^{if schemas.length != 0 }}
+                <span class="pull-right">
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Create Schema" data-link="{on ~root.addSchema}"><i class="glyphicon glyphicon-plus"></i></button>
+                </span>
+                <div class="clearfix"></div>
+                {{/if}}
             </div>
             <div class="panel-body">
                 <div class="row-fluid">
@@ -138,9 +143,12 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h3 class="panel-title">
-                Properties</h3>
-                        <span class="pull-right clickable"><i data-link="{on ~root.addProperty}" class="glyphicon glyphicon-plus"></i></span>
+                        <b>Properties</b>
+                        <span class="pull-right">
+                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Property" data-link="{on ~root.addProperty}"><i class="glyphicon glyphicon-plus"></i></button>
+                        </span>
+                        <div class="clearfix"></div>
+
                     </div>
                     <div class="panel-body" id="schemaLayout">
                         {^{props schema.properties}} {^{include tmpl="#attribute_template"/}} {{/props}}
@@ -164,9 +172,13 @@
 
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">
-                        #{{:#getIndex()+1}}</h3>
-                <span class="pull-right clickable"><i class="glyphicon glyphicon-remove" data-link="{on ~root.removeProperty #data.key}"  data-link="name{:key}"></i></span>
+                <b>#{{:#getIndex()+1}}</b>
+                <span class="pull-right">
+                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete" data-link="{on ~root.removeProperty #data.key}"><i class="glyphicon glyphicon-minus"></i></button>
+                        </span>
+                <div class="clearfix"></div>
+
+
             </div>
             <div class="panel-body">
                 <!-- Text input-->

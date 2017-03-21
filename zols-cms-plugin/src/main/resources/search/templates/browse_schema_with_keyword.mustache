@@ -1,0 +1,40 @@
+{
+    "size":{{size}}{{^size}}10{{/size}},
+    {{#from}}"from":{{from}},{{/from}}
+    "aggregations": {
+        "types": {
+            "terms": {
+                "field": "$type"
+            }
+        },
+        "brand": {
+            "terms": {
+                "field": "brand"
+            }
+        },
+        "min_price": {
+            "min": {
+                "field": "price"
+            }
+        }
+        ,
+        "max_price": {
+            "max": {
+                "field": "price"
+            }
+        }
+    },
+    "query": {
+        "bool": {
+            "must": [
+                {
+                    "query_string":{  
+                        "default_field":"title",
+                        "query":"{{keyword}}"
+                     }
+                }
+            ],
+            "filter": []
+        }
+    }
+}
