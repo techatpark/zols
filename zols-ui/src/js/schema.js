@@ -1,6 +1,6 @@
 'use strict';
 
-(function ($) {
+(function($) {
     var base_url = baseURL();
 
     function baseURL() {
@@ -12,294 +12,256 @@
         return url;
     }
 
-    // Set an option globally
-    JSONEditor.defaults.options.theme = 'bootstrap3';
-
     $.ajaxSetup({
         contentType: 'application/json'
     });
 
-    $('[data-toggle="tooltip"]').tooltip();
+    var screen_object = {
+        title: "Schemas",
+        schemas: [],
+        schema: {},
+        is_edit: false,
+        JSON_TYPES: ['array', 'string', 'integer', 'number', 'boolean'],
+        setProperty: function(propName, propValue) {
+            $.observable(this).setProperty(propName, propValue);
+            $.templates("#schema_screen_template").link("#main_screen", this);
+            return this;
+        },
+        showMessages: function(messages) {
+            this.setProperty("messages", messages);
+            $.templates("#alert_template").link("#alerts", this);
+        },
+        getErrors: function(errResponse) {
+            var messages = [];
+            errResponse.responseJSON.errors.forEach((item, index, arr) => {
+                messages.push({
+                    type: "warning",
+                    "message": '[' + item.field + '] - ' + item.defaultMessage
+                });
+            });
+            return messages;
+        },
+        listSchemas: function() {
+            $.get(base_url + '/schema')
+                .done(function(data) {
+                    if (Array.isArray(data) && data.length != 0) {
+                        screen_object.setProperty("schemas", data).setProperty("title", "Schemas");
+                    } else {
+                        screen_object.setProperty("link_groups", []).setProperty("title", "Schemas");
+                    }
+                });
+        },
+        addSchema: function(baseSchema) {
+            var newSchema = {
+                'type': 'object',
+                '$type': 'schema',
+                properties: {}
+            };
+            if(baseSchema != undefined) {
+              newSchema['$ref'] = baseSchema.name;
+            }
+            screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
 
-    var schemaTemplate;
-    var schema;
-    var schemas;
-    var confirmationPromise;
-    var isEdit = false;
+        },
+        editSchema: function(schemaToEdit) {
+            $.get(base_url + '/schema/' + schemaToEdit.name)
+                .done(function(data) {
+                    screen_object.is_edit = true;
+                    screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
+                    screen_object.fillTypes();
 
-    var JSON_TYPES = ['array', 'string', 'integer', 'number', 'boolean'];
+                });
+        },
+        addProperty: function() {
+            console.log('add prop');
+            var totalProperties = Object.keys(this.schema.properties).length;
+            this.schema.properties['newProperty' + totalProperties] = this.patchedProperty({});
 
-    $('#edit_selected').on('click', function () {
-        $.fn.renderSchema();
-    });
-    $("#del_conf_ok").on('click', function () {
-        $("#delete-conf-model").modal('hide');
-        confirmationPromise.resolve();
-    });
-    $("del_conf_cancel").on('click', function () {
-        confirmationPromise.reject();
-    });
+            screen_object.setProperty("title", "Schema");
+        },
+        removeProperty: function(propName) {
+            delete this.schema.properties[propName];
+            screen_object.setProperty("title", "Schema");
+        },
+        patchedProperty: function(property) {
+            return jQuery.extend(true, {
+                'type': 'string',
+                'format': 'text',
+                'items': {
+                    'type': "string"
+                },
+                'required': false,
+                'options': {
+                    'wysiwyg': false
+                }
+            }, property);
+        },
+        patchedSchema: function(schema) {
+            var patchedSchema = jQuery.extend(true, {}, schema);
 
-    $('#delete_selected').on('click', function () {
-        $("#delete-conf-model").modal('show');
-        confirmationPromise = $.Deferred();
-        confirmationPromise.done(function () {
-            $.fn.deleteSchema();
-        });
-    });
+            var properties = patchedSchema.properties;
 
-    $('#result').on('click', '#addAttr', function () {
-        var totalProperties = Object.keys(schema.properties).length;
-        schema.properties['newProperty' + totalProperties] = $.fn.patchedProperty({});
-        $.fn.renderSchema();
-    });
+            var required = patchedSchema.required;
 
-    $("#result").on('click', '.glyphicon-remove', function () {
-        //TODO: need to delete the property object from the selectedSchema variable here.
-        delete schema.properties[$(this).attr('name')];
-        $.fn.renderSchema();
-    });
+            for (var key in properties) {
+                properties[key] = screen_object.patchedProperty(properties[key]);
+                if (required) {
+                    if (required.indexOf(key) > -1) {
+                        properties[key].required = true;
+                    }
+                }
+                if (properties[key]['$ref']) {
+                    properties[key].type = properties[key]['$ref'];
+                    delete properties[key]['$ref'];
+                }
 
-    $.fn.patchedProperty = function (property) {
-        return jQuery.extend(true, {'type': 'string', 'format': 'text', 'items': {'type': "string"}, 'required': false, 'options': {'wysiwyg': false}}, property);
-    };
+                if (properties[key].type === 'array' && properties[key].items['$ref'] != undefined) {
+                    properties[key].items.type = properties[key].items['$ref'];
+                    delete properties[key].items['$ref'];
+                }
 
-    $.fn.listSchemas = function () {
-        $.get(base_url + '/schema').done(function (data) {
-            if (data.length === 0) {
-                var template = $.templates("#noSchema");
-                template.link('#result', {});
-                $('#result a').click(function () {
-                    $.fn.createSchema();
+            }
+
+            console.log(patchedSchema);
+            return patchedSchema;
+        },
+        fillTypes: function() {
+            var options = '';
+            for (var index in this.schemas) {
+                var schemaElement = this.schemas[index];
+                if (schemaElement.name !== this.schema.name) {
+                    options += "<option value='" + schemaElement.name + "'>" + schemaElement.title + "</option>";
+                }
+            }
+
+            $("select[name='type']").each(function(i, obj) {
+                $(obj).append(options);
+                $(obj).val($(obj).attr('data-name'));
+            });
+
+            $("select[name='arraytypes']").each(function(i, obj) {
+                $(obj).append(options);
+                $(obj).val($(obj).attr('data-name'));
+            });
+        },
+        removeSchema: function(schema) {
+
+            $("#confirmationModal .btn-primary")
+                .unbind("click")
+                .bind("click", function() {
+                    $("#confirmationModal").modal('hide');
+                    $.ajax({
+                        method: 'DELETE',
+                        url: base_url + '/schema/' + schema.name,
+                        dataType: 'json'
+                    }).done(function(data) {
+
+                        screen_object.listSchemas();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Schema deleted successfully"
+                        }]);
+                    });
+
+                });
+
+            $("#confirmationModal").modal('show');
+
+
+        },
+        saveSchema: function(schema) {
+            var v4Schema = this.v4Schema(schema);
+            if (screen_object.is_edit) {
+                $.ajax({
+                    method: 'PUT',
+                    url: base_url + '/schema/' + v4Schema.name,
+                    dataType: 'json',
+                    data: JSON.stringify(v4Schema)
+                }).done(function(data) {
+                    screen_object.listSchemas();
+                    screen_object.showMessages([{
+                        type: "success",
+                        "message": "Schema saved successfully"
+                    }]);
+                }).error(function(data) {
+
                 });
             } else {
-                schemas = data;
-                var template = $.templates("#listSchema");
-                template.link('#result', {schema: data});
 
-                $('#createSchema').click(function () {
-                    $.fn.createSchema();
-                });
+                $.ajax({
+                    method: 'POST',
+                    url: base_url + '/schema',
+                    dataType: 'json',
+                    data: JSON.stringify(v4Schema)
+                }).done(function(data) {
+                    screen_object.listSchemas();
+                    screen_object.showMessages([{
+                        type: "success",
+                        "message": "Schema created successfully"
+                    }]);
+                }).error(function(data) {
 
-
-                $('#result .glyphicon-trash').on('click', function () {
-                    schema = schemas[$(this).parent().parent().index()];
-                    $("#delete-conf-model").modal('show');
-                    confirmationPromise = $.Deferred();
-                    confirmationPromise.done(function () {
-                        $.fn.deleteSchema();
-                    });
-                });
-
-                $('#result .glyphicon-edit').on('click', function () {
-                    schema = schemas[$(this).parent().parent().index()];
-                    isEdit = true;
-                    $.fn.renderSchema();
                 });
 
             }
-        });
-    };
 
 
-    $.fn.v4Schema = function () {
-        var patchedSchema = jQuery.extend(true, {}, schema);
+        },
+        v4Schema: function(schema) {
+            var patchedSchema = jQuery.extend(true, {}, schema);
 
-        var properties = patchedSchema.properties;
+            var properties = patchedSchema.properties;
 
-        var required = [];
+            var required = [];
 
-        for (var key in properties) {
-            //repair required
-            if (properties[key].required) {
-                required.push(key);
-            }
-            delete properties[key].required;
+            for (var key in properties) {
+                //repair required
+                if (properties[key].required) {
+                    required.push(key);
+                }
+                delete properties[key].required;
 
-            //trim unused
-            if (properties[key].format && properties[key].format === 'text') {
-                delete properties[key].format;
-                delete properties[key].options;
-            }
+                //trim unused
+                if (properties[key].format ){
+                  if(properties[key].format === 'text') {
+                      delete properties[key].format;
+                      delete properties[key].options;
+                  }
+                  if(properties[key].format === 'html') {
 
-            if (properties[key].type) {
-                if (properties[key].type === 'array') {
-                    if (JSON_TYPES.indexOf(properties[key].items.type) === -1) {
-                        properties[key].items['$ref'] = properties[key].items.type;
-                        delete properties[key].items.type;
+                      properties[key].options.wysiwyg = true;
+                  }
+                }
+
+                if (properties[key].type) {
+                    if (properties[key].type === 'array') {
+                        if (this.JSON_TYPES.indexOf(properties[key].items.type) === -1) {
+                            properties[key].items['$ref'] = properties[key].items.type;
+                            delete properties[key].items.type;
+                        }
+                        delete properties[key].options;
+                    } else {
+                        delete properties[key].items;
                     }
-                    delete properties[key].options;
-                }
-                else {
-                    delete properties[key].items;
-                }
 
-                if (JSON_TYPES.indexOf(properties[key].type) === -1) {
-                    properties[key]['$ref'] = properties[key].type;
-                    delete properties[key].type;
-                }
+                    if (this.JSON_TYPES.indexOf(properties[key].type) === -1) {
+                        properties[key]['$ref'] = properties[key].type;
+                        delete properties[key].type;
+                    }
 
-            }
-        }
-
-        if (required.length !== 0) {
-            patchedSchema.required = required;
-        }
-        return patchedSchema;
-    };
-
-    $.fn.saveSchema = function () {
-
-        var v4Schema = $.fn.v4Schema(schema);
-
-
-        console.log(v4Schema);
-        if (isEdit) {
-            $.ajax({
-                method: 'PUT',
-                url: base_url + '/schema/' + v4Schema.id,
-                dataType: 'json',
-                data: JSON.stringify(v4Schema)
-            }).done(function (data) {
-                $.fn.refreshList();
-            }).error(function (data) {
-                $.fn.onError(data);
-            });
-        } else {
-            $.ajax({
-                method: 'POST',
-                url: base_url + '/schema',
-                dataType: 'json',
-                data: JSON.stringify(v4Schema)
-            }).done(function (data) {
-                $.fn.refreshList();
-            }).error(function (data) {
-                $.fn.onError(data);
-            });
-        }
-    };
-
-    $.fn.deleteSchema = function () {
-        $.ajax({
-            method: 'DELETE',
-            url: base_url + '/schema/' + schema.id,
-            dataType: 'json'
-        }).done(function (data) {
-            schemas = null;
-            $.fn.refreshList();
-        }).error(function (data) {
-            $.fn.onError(data);
-        });
-    };
-
-    $.fn.v3Schema = function () {
-        var patchedSchema = jQuery.extend(true, {}, schema);
-
-        var properties = patchedSchema.properties;
-
-        var required = patchedSchema.required;
-
-        for (var key in properties) {
-            properties[key] = $.fn.patchedProperty(properties[key]);
-            if (required) {
-                if (required.indexOf(key) > -1) {
-                    properties[key].required = true;
                 }
             }
-            if (properties[key]['$ref']) {
-                properties[key].type = properties[key]['$ref'];
-                delete properties[key]['$ref'];
-            }
 
-            if (properties[key].type === 'array') {
-                properties[key].items.type = properties[key].items['$ref'];
-                delete properties[key].items['$ref'];
+            if (required.length !== 0) {
+                patchedSchema.required = required;
             }
-
+            return patchedSchema;
         }
 
-        console.log(patchedSchema);
-        return patchedSchema;
     };
 
-
-    $.fn.renderSchema = function () {
-        schemaTemplate = $.templates('#schemaForm');
-        schema.isEdit = isEdit;
-        schema = $.fn.v3Schema();
-        schemaTemplate.link('#result', schema);
-        delete schema.isEdit;
-
-        var options = '';
-        for (var index in schemas) {
-            var schemaElement = schemas[index];
-            if (schemaElement.id !== schema.id) {
-                options += "<option value='" + schemaElement.id + "'>" + schemaElement.title + "</option>";
-            }
-        }
-
-        $("select[name='type']").each(function (i, obj) {
-            $(obj).append(options);
-            $(obj).val($(obj).attr('data-name'));
-        });
-
-        $("select[name='arraytypes']").each(function (i, obj) {
-            $(obj).append(options);
-            $(obj).val($(obj).attr('data-name'));
-        });
+    screen_object.listSchemas();
 
 
-        $.fn.listIdAndLabelFileds();
-        $("input[name='name']")
-                .focusout(function () {
-                    $.fn.listIdAndLabelFileds();
-                });
-        $('#result form').submit(function (event) {
-            event.preventDefault();
-            $.fn.saveSchema();
-        });
-    };
-
-    $.fn.createSchema = function () {
-        schema = {'type': 'object', properties: {}};
-        isEdit = false;
-        $.fn.renderSchema();
-    };
-
-    $.fn.refreshList = function () {
-        $.fn.listSchemas();
-    };
-
-    $.fn.onError = function (data) {
-        $("#result").prepend('<div class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">&times;</a><strong>Error ! </strong>There was a problem. Please contact admin</div>');
-    };
-
-    $.fn.listIdAndLabelFileds = function () {
-        var currentIdField = schema.idField;
-        console.log('currentIdField ' + currentIdField);
-        $('#idField').find('option').remove();
-        $.each(Object.keys(schema.properties), function (i, d) {
-
-                $('#idField').append('<option value="' + d + '">' + d + '</option>');
-
-
-        });
-        $('#idField').val(currentIdField);
-        schema.idField = currentIdField;
-
-        var currentLabelField = schema.labelField;
-        console.log('currentLabelField ' + currentLabelField);
-        $('#labelField').find('option').remove();
-        $.each(Object.keys(schema.properties), function (i, d) {
-
-                $('#labelField').append('<option value="' + d + '">' + d + '</option>');
-            
-        });
-        $('#labelField').val(currentLabelField);
-        schema.labelField = currentLabelField;
-
-    };
-
-    $.fn.listSchemas();
 
 }(jQuery));

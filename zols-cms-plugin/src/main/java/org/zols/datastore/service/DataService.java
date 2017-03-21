@@ -55,6 +55,13 @@ public class DataService {
     public List<Map<String, Object>> list(String schemaName) throws DataStoreException {
         return dataStore.list(schemaName);
     }
+    
+    public Page<Map<String, Object>> list(String schemaName, Query query,
+            Pageable pageable) throws DataStoreException {
+
+        org.zols.datastore.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
+        return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
+    }
 
     public Page<Map<String, Object>> list(String schemaName, String queryString,
             Pageable pageable) throws DataStoreException {
