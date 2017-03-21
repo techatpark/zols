@@ -29,6 +29,20 @@
             $.templates("#links_screen_template").link("#links_screen", this);
             return this;
         },
+        showMessages: function(messages) {
+            this.setProperty("messages", messages);
+            $.templates("#alert_template").link("#alerts", this);
+        },
+        getErrors: function(errResponse) {
+            var messages = [];
+            errResponse.responseJSON.errors.forEach((item, index, arr) => {
+                messages.push({
+                    type: "warning",
+                    "message": '[' + item.field + '] - ' + item.defaultMessage
+                });
+            });
+            return messages;
+        },
         listGroups: function() {
             $.get(base_url + '/link_groups')
                 .done(function(data) {
@@ -100,7 +114,12 @@
                         url: base_url + '/link_groups/' + link_group.name,
                         dataType: 'json'
                     }).done(function(data) {
+
                         screen_object.listGroups();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Group deleted successfully"
+                        }]);
                     });
 
                 });
@@ -117,7 +136,11 @@
                     dataType: 'json',
                     data: JSON.stringify(this.link_group)
                 }).done(function(data) {
-                    screen_object.listGroups();
+                    screen_object.setLinkGroup( screen_object.link_group);
+                    screen_object.showMessages([{
+                        type: "success",
+                        "message": "Group saved successfully"
+                    }]);
                 });
             } else {
                 $.ajax({
@@ -127,6 +150,10 @@
                     data: JSON.stringify(this.link_group)
                 }).done(function(data) {
                     screen_object.listGroups();
+                    screen_object.showMessages([{
+                        type: "success",
+                        "message": "Group created successfully"
+                    }]);
                 });
             }
         },
@@ -137,6 +164,10 @@
                 dataType: 'json'
             }).done(function(data) {
                 screen_object.listLinks();
+                screen_object.showMessages([{
+                    type: "success",
+                    "message": "Link deleted successfully"
+                }]);
             });
         },
         saveLink: function() {
@@ -148,6 +179,10 @@
                     data: JSON.stringify(this.link)
                 }).done(function(data) {
                     screen_object.listLinks();
+                    screen_object.showMessages([{
+                        type: "success",
+                        "message": "Link saved successfully"
+                    }]);
                 });
             } else {
                 if (this.parentLinks.length === 0) {
@@ -158,6 +193,10 @@
                         data: JSON.stringify(this.link)
                     }).done(function(data) {
                         screen_object.listLinks();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Link created successfully"
+                        }]);
                     });
                 } else {
                     $.ajax({
@@ -167,6 +206,10 @@
                         data: JSON.stringify(this.link)
                     }).done(function(data) {
                         screen_object.listLinks();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Link created successfully"
+                        }]);
                     });
                 }
             }
