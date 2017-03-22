@@ -225,6 +225,27 @@
                 </select>
                     </div>
                 </div>
+
+                <!-- Select input-->
+                <div class="form-group" data-link="visible{:prop.type === 'string'}">
+                    <label class="col-md-4 control-label" for="type">Enum</label>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Value" data-link="{on ~root.addEnumValue #data}"><i class="glyphicon glyphicon-plus"></i></button>
+                        <ul class="list-group">
+                            {^{for prop.enum ~enum=#data}}
+
+                            <li class="list-group-item">
+                                <span class="badge"><button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Delete Value" data-link="{on ~root.removeEnumValue ~enum #getIndex()}"><i class="glyphicon glyphicon-plus"></i></button></span>
+                                <input data-link="#data" />
+                            </li>
+                            {{/for}}
+                        </ul>
+
+
+
+                    </div>
+                </div>
+
                 <!-- Select input-->
                 <div class="form-group" data-link="visible{:prop.type === 'array'}">
                     <label class="col-md-4 control-label" for="type">Array Type</label>

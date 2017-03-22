@@ -72,6 +72,19 @@
 
                 });
         },
+        addEnumValue: function(data) {
+          if(data.prop.enum === undefined) {
+            data.prop.enum = [];
+          }
+          data.prop.enum.push("VALUE"+data.prop.enum.length);
+            screen_object.setProperty("title", "Schema");
+
+        },
+        removeEnumValue: function(data,index) {
+          data.prop.enum.splice(index, 1);
+          screen_object.setProperty("title", "Schema");
+
+        },
         addProperty: function() {
             console.log('add prop');
             var totalProperties = Object.keys(this.schema.properties).length;
@@ -102,6 +115,8 @@
             var properties = patchedSchema.properties;
 
             var required = patchedSchema.required;
+
+
 
             for (var key in properties) {
                 properties[key] = screen_object.patchedProperty(properties[key]);
