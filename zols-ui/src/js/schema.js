@@ -77,7 +77,7 @@
             data.prop.enum = [];
           }
           data.prop.enum.push("VALUE"+data.prop.enum.length);
-            screen_object.setProperty("title", "Schema");
+          screen_object.setProperty("title", "Schema");
 
         },
         removeEnumValue: function(data,index) {
@@ -225,9 +225,20 @@
         v4Schema: function(schema) {
             var patchedSchema = jQuery.extend(true, {}, schema);
 
+
+            if(!patchedSchema.idField) {
+              delete patchedSchema.idField;
+              delete patchedSchema.labelField;
+            }
             var properties = patchedSchema.properties;
 
             var required = [];
+
+            //PATHCH for Enum Binding
+            $( "input[data-enum-name]" ).each(function( index, element ) {
+              var key = $(element).attr('data-enum-name');
+              patchedSchema.properties[key].enum[index] = $(element).val();
+            });
 
             for (var key in properties) {
                 //repair required
@@ -247,6 +258,7 @@
                       properties[key].options.wysiwyg = true;
                   }
                 }
+
 
                 if (properties[key].type) {
                     if (properties[key].type === 'array') {
