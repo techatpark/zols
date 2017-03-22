@@ -234,11 +234,7 @@
 
             var required = [];
 
-            //PATHCH for Enum Binding
-            $( "input[data-enum-name]" ).each(function( index, element ) {
-              var key = $(element).attr('data-enum-name');
-              patchedSchema.properties[key].enum[index] = $(element).val();
-            });
+
 
             for (var key in properties) {
                 //repair required
@@ -278,6 +274,18 @@
 
                 }
             }
+
+            //PATHCH for Enum Binding
+
+            for (var key in properties) {
+              if(properties[key].enum) {
+                properties[key].enum =[];
+              }
+            }
+            $( "input[data-enum-name]" ).each(function( index, element ) {
+              var key = $(element).attr('data-enum-name');
+              patchedSchema.properties[key].enum[index] = $(element).val();
+            });
 
             if (required.length !== 0) {
                 patchedSchema.required = required;
