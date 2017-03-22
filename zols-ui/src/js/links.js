@@ -30,17 +30,24 @@
             return this;
         },
         showMessages: function(messages) {
-            this.setProperty("messages", messages);
-            $.templates("#alert_template").link("#alerts", this);
+            $("#alerts").html($.templates("#alert_template").render({"messages":messages}));
         },
         getErrors: function(errResponse) {
             var messages = [];
-            errResponse.responseJSON.errors.forEach((item, index, arr) => {
-                messages.push({
-                    type: "warning",
-                    "message": '[' + item.field + '] - ' + item.defaultMessage
-                });
-            });
+            if(errResponse.responseJSON) {
+              errResponse.responseJSON.errors.forEach((item, index, arr) => {
+                  messages.push({
+                      type: "warning",
+                      "message": '[' + item.field + '] - ' + item.defaultMessage
+                  });
+              });
+            }else {
+              messages.push({
+                  type: "warning",
+                  "message": 'Service is down. Please contact the admin'
+              });
+            }
+
             return messages;
         },
         listGroups: function() {
@@ -52,6 +59,8 @@
                     } else {
                         screen_object.setProperty("link_groups", []).setProperty("title", "Links");
                     }
+                }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                    screen_object.showMessages(screen_object.getErrors(errorThrown));
                 });
         },
         setLinkGroup: function(data) {
@@ -80,20 +89,25 @@
                 $.get(base_url + '/links/for/' + this.link_group.name)
                     .done(function(data) {
                         screen_object.setProperty("title", "Links").setProperty("links", data);
-                    });
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
+                    });;
             } else {
                 $.get(base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name)
                     .done(function(data) {
                         screen_object.setProperty("title", "Links").setProperty("links", data);
-                    });
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
+                    });;
             }
-
         },
         editGroup: function() {
             $.get(base_url + '/link_groups/' + this.link_group.name)
                 .done(function(data) {
                     screen_object.is_edit = true;
                     screen_object.setProperty("title", "Link Group").setProperty("link_group", data);
+                }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                    screen_object.showMessages(screen_object.getErrors(errorThrown));
                 });
         },
         editlink: function(data) {
@@ -101,10 +115,11 @@
                 .done(function(data) {
                     screen_object.is_edit = true;
                     screen_object.setProperty("title", "Link").setProperty("link", data);
-                });       
+                }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                    screen_object.showMessages(screen_object.getErrors(errorThrown));
+                });
         },
         removeGroup: function(link_group) {
-
             $("#confirmationModal .btn-primary")
                 .unbind("click")
                 .bind("click", function() {
@@ -114,12 +129,13 @@
                         url: base_url + '/link_groups/' + link_group.name,
                         dataType: 'json'
                     }).done(function(data) {
-
                         screen_object.listGroups();
                         screen_object.showMessages([{
                             type: "success",
                             "message": "Group deleted successfully"
                         }]);
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
                     });
 
                 });
@@ -142,6 +158,8 @@
                             type: "success",
                             "message": "Group saved successfully"
                         }]);
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
                     });
                 } else {
                     $.ajax({
@@ -155,6 +173,8 @@
                             type: "success",
                             "message": "Group created successfully"
                         }]);
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
                     });
                 }
             }
@@ -175,6 +195,8 @@
                             type: "success",
                             "message": "Link deleted successfully"
                         }]);
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
                     });
                 });
             $("#confirmationModal").modal('show');
@@ -193,6 +215,8 @@
                             type: "success",
                             "message": "Link saved successfully"
                         }]);
+                    }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                        screen_object.showMessages(screen_object.getErrors(errorThrown));
                     });
                 } else {
                     if (this.parentLinks.length === 0) {
@@ -207,6 +231,8 @@
                                 type: "success",
                                 "message": "Link created successfully"
                             }]);
+                        }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                            screen_object.showMessages(screen_object.getErrors(errorThrown));
                         });
                     } else {
                         $.ajax({
@@ -220,6 +246,8 @@
                                 type: "success",
                                 "message": "Link created successfully"
                             }]);
+                        }).error(function(XMLHttpRequest, textStatus, errorThrown) {
+                            screen_object.showMessages(screen_object.getErrors(errorThrown));
                         });
                     }
                 }

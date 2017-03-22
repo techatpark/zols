@@ -46,7 +46,7 @@
     </div>
 
     <script id="alert_template" type="text/x-jsrender">
-        {^{if messages.length != 0}} {^{for messages}}
+        {{if messages.length != 0}} {{for messages}}
         <div class="alert alert-{{:type}} alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> {{:message}}
         </div>
@@ -117,7 +117,7 @@
                 <span class="badge" data-link="{on ~root.editlink #data}" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
                 <span class="badge" data-link="{on ~root.removelink #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
                 <a href="#" data-link="{on ~root.setParentLink #data}">{{:label}}</a>
-            </li>   
+            </li>
             {{/for}}
         </ul>
     </script>
