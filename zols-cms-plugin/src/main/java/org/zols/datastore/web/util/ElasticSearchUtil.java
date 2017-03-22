@@ -44,7 +44,7 @@ public class ElasticSearchUtil {
     private String indexName;
 
     //http://teknosrc.com/execute-raw-elasticsearch-query-using-transport-client-java-api/
-    @Autowired(required=false)
+    @Autowired
     private Client client;
 
     public AggregatedResults aggregatedSearch(String type,
