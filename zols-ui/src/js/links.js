@@ -96,12 +96,12 @@
                     screen_object.setProperty("title", "Link Group").setProperty("link_group", data);
                 });
         },
-        editlink: function() {
-            $.get(base_url + '/links/for/' + this.link.name)
+        editlink: function(data) {
+            $.get(base_url + '/links/' + data.name)
                 .done(function(data) {
                     screen_object.is_edit = true;
                     screen_object.setProperty("title", "Link").setProperty("link", data);
-                });
+                });       
         },
         removeGroup: function(link_group) {
 
@@ -129,94 +129,100 @@
 
         },
         saveGroup: function() {
-          if(document.forms["link_group_form"].checkValidity()) {
-            if (screen_object.is_edit) {
-                $.ajax({
-                    method: 'PUT',
-                    url: base_url + '/link_groups/' + this.link_group.name,
-                    dataType: 'json',
-                    data: JSON.stringify(this.link_group)
-                }).done(function(data) {
-                    screen_object.setLinkGroup( screen_object.link_group);
-                    screen_object.showMessages([{
-                        type: "success",
-                        "message": "Group saved successfully"
-                    }]);
-                });
-            } else {
-                $.ajax({
-                    method: 'POST',
-                    url: base_url + '/link_groups',
-                    dataType: 'json',
-                    data: JSON.stringify(this.link_group)
-                }).done(function(data) {
-                    screen_object.listGroups();
-                    screen_object.showMessages([{
-                        type: "success",
-                        "message": "Group created successfully"
-                    }]);
-                });
+            if (document.forms["link_group_form"].checkValidity()) {
+                if (screen_object.is_edit) {
+                    $.ajax({
+                        method: 'PUT',
+                        url: base_url + '/link_groups/' + this.link_group.name,
+                        dataType: 'json',
+                        data: JSON.stringify(this.link_group)
+                    }).done(function(data) {
+                        screen_object.setLinkGroup(screen_object.link_group);
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Group saved successfully"
+                        }]);
+                    });
+                } else {
+                    $.ajax({
+                        method: 'POST',
+                        url: base_url + '/link_groups',
+                        dataType: 'json',
+                        data: JSON.stringify(this.link_group)
+                    }).done(function(data) {
+                        screen_object.listGroups();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Group created successfully"
+                        }]);
+                    });
+                }
             }
-          }
 
         },
         removelink: function(link) {
-            $.ajax({
-                method: 'DELETE',
-                url: base_url + '/links/' + link.name,
-                dataType: 'json'
-            }).done(function(data) {
-                screen_object.listLinks();
-                screen_object.showMessages([{
-                    type: "success",
-                    "message": "Link deleted successfully"
-                }]);
-            });
+            $("#confirmationModal .btn-primary")
+                .unbind("click")
+                .bind("click", function() {
+                    $("#confirmationModal").modal('hide');
+                    $.ajax({
+                        method: 'DELETE',
+                        url: base_url + '/links/' + link.name,
+                        dataType: 'json'
+                    }).done(function(data) {
+                        screen_object.listLinks();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Link deleted successfully"
+                        }]);
+                    });
+                });
+            $("#confirmationModal").modal('show');
         },
         saveLink: function() {
-            if(document.forms["link_form"].checkValidity()) {
-              if (screen_object.is_edit) {
-                  $.ajax({
-                      method: 'PUT',
-                      url: base_url + '/links/' + this.link.name,
-                      dataType: 'json',
-                      data: JSON.stringify(this.link)
-                  }).done(function(data) {
-                      screen_object.listLinks();
-                      screen_object.showMessages([{
-                          type: "success",
-                          "message": "Link saved successfully"
-                      }]);
-                  });
-              } else {
-                  if (this.parentLinks.length === 0) {
-                      $.ajax({
-                          method: 'POST',
-                          url: base_url + '/links/for/' + this.link_group.name,
-                          dataType: 'json',
-                          data: JSON.stringify(this.link)
-                      }).done(function(data) {
-                          screen_object.listLinks();
-                          screen_object.showMessages([{
-                              type: "success",
-                              "message": "Link created successfully"
-                          }]);
-                      });
-                  } else {
-                      $.ajax({
-                          method: 'POST',
-                          url: base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name,
-                          dataType: 'json',
-                          data: JSON.stringify(this.link)
-                      }).done(function(data) {
-                          screen_object.listLinks();
-                          screen_object.showMessages([{
-                              type: "success",
-                              "message": "Link created successfully"
-                          }]);
-                      });
-                  }
-              }
+            if (document.forms["link_form"].checkValidity()) {
+                if (screen_object.is_edit) {
+                    $.ajax({
+                        method: 'PUT',
+                        url: base_url + '/links/' + this.link.name,
+                        dataType: 'json',
+                        data: JSON.stringify(this.link)
+                    }).done(function(data) {
+                        screen_object.listLinks();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Link saved successfully"
+                        }]);
+                    });
+                } else {
+                    if (this.parentLinks.length === 0) {
+                        $.ajax({
+                            method: 'POST',
+                            url: base_url + '/links/for/' + this.link_group.name,
+                            dataType: 'json',
+                            data: JSON.stringify(this.link)
+                        }).done(function(data) {
+                            screen_object.listLinks();
+                            screen_object.showMessages([{
+                                type: "success",
+                                "message": "Link created successfully"
+                            }]);
+                        });
+                    } else {
+                        $.ajax({
+                            method: 'POST',
+                            url: base_url + '/links/under/' + this.parentLinks[this.parentLinks.length - 1].name,
+                            dataType: 'json',
+                            data: JSON.stringify(this.link)
+                        }).done(function(data) {
+                            screen_object.listLinks();
+                            screen_object.showMessages([{
+                                type: "success",
+                                "message": "Link created successfully"
+                            }]);
+                        });
+                    }
+                }
 
             }
 

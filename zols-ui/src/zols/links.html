@@ -76,10 +76,11 @@
                     </div>
                 </div>
                 {{/if}}
-                <div class="clearfix"></div>
+                <div class="clearfix">
+                </div>
             </div>
             <div class="panel-body">
-                <div className="row-fluid">
+                <div class="row-fluid">
                     {^{if parentLinks.length !=0 }}
                     <ol class="breadcrumb">
                         <li><a data-link="{on ~root.setLinkGroup ~root.link_group}">Home</a></li>
@@ -88,9 +89,21 @@
                         {{/for}}
                     </ol>
                     {{/if}}
+
                 </div>
+
                 <div class="row-fluid">
-                    {^{if title==='Link Group'}} {{include tmpl="#link_group_template"/}} {{else title==='Link'}} {{include tmpl="#link_template"/}} {{else link_groups.length === 0}} There are no groups. Please create new group <a href="#" data-link="{on ~root.addGroup}">here.</a>                    {{else links.length === 0 && title==='Links'}} There are no links. Please ceate new link <a href="#" data-link="{on ~root.addLink}">here.</a> {{else links.length != 0 && title==='Links'}} {{include tmpl="#links_template"/}} {{/if}}
+                    {^{if title==='Link Group'}}
+                    {{include tmpl="#link_group_template"/}}
+                    {{else title==='Link'}}
+                    {{include tmpl="#link_template"/}}
+                    {{else link_groups.length === 0}}
+                    There are no groups. Please create new group <a href="#" data-link="{on ~root.addGroup}">here.</a>
+                    {{else links.length === 0 && title==='Links'}}
+                    There are no links. Please ceate new link <a href="#" data-link="{on ~root.addLink}">here.</a>
+                    {{else links.length != 0 && title==='Links'}}
+                    {{include tmpl="#links_template"/}}
+                    {{/if}}
                 </div>
             </div>
         </div>
@@ -98,12 +111,13 @@
 
     <script id="links_template" type="text/x-jsrender">
         <ul class="list-group">
+        <span class="badge" data-link="{on ~root.addLink}" data-toggle="tooltip" data-placement="top" title="addlink"><i class="glyphicon glyphicon-plus"></i></span>
             {^{for links}}
             <li class="list-group-item">
-                <span class="badge" data-link="{on ~root.editlink}" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
+                <span class="badge" data-link="{on ~root.editlink #data}" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
                 <span class="badge" data-link="{on ~root.removelink #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
                 <a href="#" data-link="{on ~root.setParentLink #data}">{{:label}}</a>
-            </li>
+            </li>   
             {{/for}}
         </ul>
     </script>
