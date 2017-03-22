@@ -87,7 +87,7 @@
                 var displayContent = dataList.content.map(function(item){
                    var displayItem = {};
                    displayItem.labelField = item[schema.labelField];
-                   displayItem.idField = item[schema.nameField];
+                   displayItem.idField = item[schema.idField];
                    return displayItem;
                 });
                 dataList.displayContent = displayContent;
@@ -108,8 +108,8 @@
                         $.fn.deleteData();
                     });
 
-                   data = $.view(this).data;
-                    var result = $.grep(dataList.content, function(item){ return item[schema.nameField] == data.idField; });
+                    data = $.view(this).data;
+                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
                     data = result[0];
                 });
                 $('#result .glyphicon-edit').on('click', function () {
@@ -117,7 +117,7 @@
 
                     data = $.view(this).data;
 
-                    var result = $.grep(dataList.content, function(item){ return item[schema.nameField] == data.idField; });
+                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
                     data = result[0];
                     $.fn.renderData();
                 });
@@ -141,6 +141,10 @@
         $("#schemaHeader").hide();
         var template = $.templates("#data_entry");
         template.link('#result', {});
+
+        if(data && data["$type"]) {
+          delete data["$type"];
+        }
         var editor = $("#editor_holder").jsonEditor({schemaName: schema.name, value: data});
 
         $("#result form").submit(function (event) {
@@ -149,7 +153,7 @@
                 var value = editor.getValue();
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/data/' + schema.name + "/" + value[schema.nameField],
+                    url: base_url + '/data/' + schema.name + "/" + value[schema.idField],
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function (data) {
@@ -176,7 +180,7 @@
     $.fn.deleteData = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + schema.name + '/' + data[schema.nameField],
+            url: base_url + '/data/' + schema.name + '/' + data[schema.idField],
             dataType: 'json'
         }).done(function (data) {
             $.fn.listData(0);

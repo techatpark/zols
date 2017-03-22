@@ -11,7 +11,7 @@
     "watch:css": "onchange 'src/scss' -- npm run build:css",
     "watch:images": "cpx 'src/**/*.{png,jpg,svg,ico}' dist --watch",
     "build": "npm run clean && mkdir dist && npm run copy:vendorjs && npm run copy:vendorfonts && npm run build:js && npm run build:css && npm run build:html",
-    "copy:vendorjs": "mkdir dist/js && cp node_modules/jsviews/jsviews.min.js dist/js && cp node_modules/json-editor/dist/jsoneditor.min.js dist/js && mkdir dist/js/sceditor && cp -R node_modules/sceditor/minified/ dist/js/sceditor && uglifyjs node_modules/jquery/dist/jquery.js node_modules/bootstrap-sass/assets/javascripts/bootstrap.js node_modules/bootstrap-slider/dist/bootstrap-slider.js node_modules/select2/dist/js/select2.full.js -m -c -o dist/js/vendor.min.js",
+    "copy:vendorjs": "mkdir dist/js && cp node_modules/jsviews/jsviews.min.js dist/js && cp node_modules/json-editor/dist/jsoneditor.min.js dist/js && mkdir dist/js/sceditor && cp -R node_modules/sceditor/minified/ dist/js/sceditor && uglifyjs node_modules/jquery/dist/jquery.js node_modules/bootstrap-sass/assets/javascripts/bootstrap.js node_modules/bootstrap-slider/dist/bootstrap-slider.js -m -c -o dist/js/vendor.min.js",
     "copy:vendorfonts": "cp -R node_modules/bootstrap-sass/assets/fonts dist/",
     "build:html": "cpx 'src/**/*.{html,htm}' dist",
     "build:js": "cp -R 'src/js' dist",
