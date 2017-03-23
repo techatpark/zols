@@ -1,12 +1,17 @@
 'use strict';
-(function ($) {
+(function($) {
 
-    $.fn.jsonEditor = function (options) {
+    $.fn.jsonEditor = function(options) {
 
         // This is the easiest way to have default options.
 
         var $element = this;
-        var settings = $.extend({theme: 'bootstrap3', disable_properties: true, disable_collapse: true, disable_edit_json: true}, JSONEditor.defaults.options);
+        var settings = $.extend({
+            theme: 'bootstrap3',
+            disable_properties: true,
+            disable_collapse: true,
+            disable_edit_json: true
+        }, JSONEditor.defaults.options);
 
         settings = $.extend(settings, options);
 
@@ -27,34 +32,66 @@
         });
 
 
-        $.fn.setSchemaName = function (schemaName) {
+        $.fn.setSchemaName = function(schemaName) {
             $.ajax({
                 url: base_url + '/schema/' + schemaName + '?enlarged',
                 type: "get",
                 async: false,
-                success: function (data) {
-                    if(editor) {
+                success: function(data) {
+                    if (editor) {
                         editor.destroy();
-                    }                    
+                    }
                     $element.empty();
-                    editor = new JSONEditor($element[0], $.extend(settings, {schema: data}));
-                    if(settings.value) {
+                    editor = new JSONEditor($element[0], $.extend(settings, {
+                        schema: data
+                    }));
+
+                    $("input[type='text'].form-control").each(function(index, element) {
+                        var name = $(element).attr('name');
+                        if (name) {
+                            name = name.replace(']', '');
+                            name = name.substring(name.lastIndexOf("[") + 1);
+
+                            var property = data.properties[name];
+                            if (property && property.options && property.options.lookup) {
+
+                                $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
+                                    $.get(base_url + '/data/' + schema.name).done(function(data) {
+                                        var currencies = [];
+
+                                        data.content.forEach(function(element) {
+                                            currencies.push({value:element[schema.labelField],data:element[schema.idField]});
+                                        });
+                                        $(element).autocomplete({
+                                            lookup: currencies
+                                        });
+                                    });
+                                });
+
+
+                            }
+
+                        }
+
+                    });
+
+                    if (settings.value) {
                         editor.setValue(settings.value);
                     }
-                    
+
                 },
-                error: function () {
+                error: function() {
                     connectionError();
                 }
             });
-            
+
         };
 
-        $.fn.getValue = function () {
+        $.fn.getValue = function() {
             return editor.getValue();
         };
 
-        $.fn.setValue = function (value) {
+        $.fn.setValue = function(value) {
             editor.setValue(value);
         };
         $.fn.setSchemaName(options.schemaName);

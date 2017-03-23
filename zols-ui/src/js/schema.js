@@ -25,6 +25,7 @@
         setProperty: function(propName, propValue) {
             $.observable(this).setProperty(propName, propValue);
             $.templates("#schema_screen_template").link("#main_screen", this);
+            screen_object.fillTypes();
             return this;
         },
         showMessages: function(messages) {
@@ -47,7 +48,7 @@
                     if (Array.isArray(data) && data.length != 0) {
                         screen_object.setProperty("schemas", data).setProperty("title", "Schemas");
                     } else {
-                        screen_object.setProperty("link_groups", []).setProperty("title", "Schemas");
+                        screen_object.setProperty("schemas", []).setProperty("title", "Schemas");
                     }
                 });
         },
@@ -68,7 +69,7 @@
                 .done(function(data) {
                     screen_object.is_edit = true;
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
-                    screen_object.fillTypes();
+
 
                 });
         },
@@ -105,7 +106,7 @@
                 },
                 'required': false,
                 'options': {
-                    'wysiwyg': false
+                    'wysiwyg': false,'lookup':''
                 }
             }, property);
         },
@@ -148,6 +149,11 @@
                     options += "<option value='" + schemaElement.name + "'>" + schemaElement.title + "</option>";
                 }
             }
+
+            $("select[name='lookup']").each(function(i, obj) {
+                $(obj).append(options);
+                $(obj).val($(obj).attr('data-name'));
+            });
 
             $("select[name='type']").each(function(i, obj) {
                 $(obj).append(options);
@@ -247,7 +253,7 @@
                 if (properties[key].format ){
                   if(properties[key].format === 'text') {
                       delete properties[key].format;
-                      delete properties[key].options;
+                      
                   }
                   if(properties[key].format === 'html') {
 

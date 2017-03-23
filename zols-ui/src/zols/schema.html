@@ -228,6 +228,19 @@
 
                 <!-- Select input-->
                 <div class="form-group" data-link="visible{:prop.type === 'string'}">
+                    <label class="col-md-4 control-label" for="type">Lookup</label>
+                    <div class="col-md-4">
+                        <select name="lookup" data-name="{{:prop.options.lookup}}" data-link="prop.options.lookup" type="text" placeholder="" class="form-control input-md">
+
+                            </select>
+
+
+
+                    </div>
+                </div>
+
+                <!-- Select input-->
+                <div class="form-group" data-link="visible{:prop.type === 'string'}">
                     <label class="col-md-4 control-label" for="type">Enum</label>
                     <div class="col-md-4">
                         <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Value" data-link="{on ~root.addEnumValue #data}"><i class="glyphicon glyphicon-plus"></i></button>
