@@ -56,10 +56,14 @@
                 template.link('#result', {schema: data});
                 $('.carousel-inner a').on('click', function () {
                     $('#schemaHeader').show();
-                    schema = $.view(this).data;
-                    $('#categorynameLbl').text(schema.title);
+                    var orig_schema = $.view(this).data;
+                    $.get(base_url + '/schema/'+orig_schema.name+'?enlarged').done(function (data) {
+                      schema = data;
+                      $('#categorynameLbl').text(schema.title);
 
-                    $.fn.listData(0);
+                      $.fn.listData(0);
+                    });
+
                 });
             }
 

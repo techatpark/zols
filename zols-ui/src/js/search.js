@@ -5,16 +5,19 @@
 
     var filters = {};
     $('#query-filters li.active').each(function() {
-        var filterName = $(this).children().first().text();
-        var values = [];
-        var index = 0;
-        $(this).children().each(function() {
-            if (index !== 0) {
-                values.push($(this).children().first().text());
-            }
-            index++;
-        });
-        filters[filterName] = values;
+        if(filterName != "$type") {
+          var filterName = $(this).children().first().text();
+          var values = [];
+          var index = 0;
+          $(this).children().each(function() {
+              if (index !== 0) {
+                  values.push($(this).children().first().text());
+              }
+              index++;
+          });
+          filters[filterName] = values;
+        }
+
     });
     console.log(filters);
     $('#query-filters .glyphicon-remove-circle').on("click", function(e) {
@@ -25,6 +28,7 @@
     });
 
     function addFilter(name, value) {
+
         if (filters[name]) {
             if (filters[name].indexOf(value) === -1) {
                 filters[name].push(value);
@@ -36,9 +40,11 @@
     }
 
     function setFilter(name, value) {
-        console.log(value);
-        filters[name] = value;
-        openUpdatedFilterUrl();
+        if(name != "$type") {
+          filters[name] = value;
+          openUpdatedFilterUrl();
+        }
+
     }
 
     function removeFilter(name, value) {
@@ -57,11 +63,14 @@
     function openUpdatedFilterUrl() {
         var filterTexts = [];
         for (var filterName in filters) {
-            if (Object.prototype.toString.call(filters[filterName]) === '[object Array]') {
-                filterTexts.push(filterName + "=" + filters[filterName].join(','));
-            } else {
-                filterTexts.push(filterName + "=" + filters[filterName]);
+            if(filterName != "$type") {
+              if (Object.prototype.toString.call(filters[filterName]) === '[object Array]') {
+                  filterTexts.push(filterName + "=" + filters[filterName].join(','));
+              } else {
+                  filterTexts.push(filterName + "=" + filters[filterName]);
+              }
             }
+
         }
         var filteredUrl;
         if (filterTexts.length !== 0) {
