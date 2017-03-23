@@ -99,7 +99,7 @@
 
 
                     <div class="col-lg-4" th:each="product : ${aggregations.page.content}">
-                        <img class="img-responsive" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
+                        <img class="img-responsive" th:src="${product.imageUrl}" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
                         <h2 th:text="${product.title}">Heading</h2>
                     </div>
 

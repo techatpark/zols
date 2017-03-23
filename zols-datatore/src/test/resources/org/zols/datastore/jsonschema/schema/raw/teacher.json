@@ -3,6 +3,8 @@
     "title": "Teacher",
     "type": "object",
     "$ref": "#/definitions/person",
+    "idField": "name",
+    "labelField": "name",
     "definitions": {
         "person": {
             "idField": "name",

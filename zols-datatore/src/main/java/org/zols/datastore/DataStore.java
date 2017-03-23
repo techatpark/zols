@@ -388,7 +388,17 @@ public abstract class DataStore {
                 });
                 clonedSchema.put("definitions", definitions);
 
-                clonedSchema.put("definitions", jsonSchema(clonedSchema).getConsolidatedDefinitions());
+                JSONSchema jsonSchema = jsonSchema(clonedSchema);
+                Map<String, Map<String, Object>> consolidatedDefinitions = jsonSchema.getConsolidatedDefinitions();
+                clonedSchema.put("definitions", consolidatedDefinitions);
+                Map<String,Object> baseSchema = consolidatedDefinitions.get(jsonSchema.baseType());
+                if(baseSchema != null) {
+                    clonedSchema.put("idField", baseSchema.get("idField"));
+                    clonedSchema.put("labelField", baseSchema.get("labelField"));
+                }
+                
+                
+                
 
             }
         }

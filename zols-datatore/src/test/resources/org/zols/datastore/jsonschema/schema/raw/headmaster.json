@@ -1,10 +1,12 @@
 {
+    "idField": "name",
     "name": "headmaster",
     "title": "Headmaster",
     "type": "object",
     "$ref": "#/definitions/teacher",
     "definitions": {
         "teacher": {
+            "idField": "name",
             "name": "teacher",
             "title": "Teacher",
             "type": "object",
@@ -94,7 +96,8 @@
                     "type": "string"
                 }
             },
-            "required": ["subject"]
+            "required": ["subject"],
+            "labelField": "name"
         },
         "person": {
             "idField": "name",
@@ -180,5 +183,6 @@
             "type": "string"
         }
     },
-    "required": ["school"]
+    "required": ["school"],
+    "labelField": "name"
 }
