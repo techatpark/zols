@@ -118,8 +118,13 @@
                     data = $.view(this).data;
 
                     var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
-                    data = result[0];
-                    $.fn.renderData();
+
+
+                    $.get(base_url + '/data/' + schema.name+'/'+data.idField).done(function(serverdata) {
+                      data = serverdata;
+                      $.fn.renderData();
+                    });
+
                 });
                 $('#result .pager li').not(".disabled").on('click', function () {
                     if($(this).index() === 0) {
