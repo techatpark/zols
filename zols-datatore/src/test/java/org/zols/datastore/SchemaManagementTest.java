@@ -34,6 +34,8 @@ public class SchemaManagementTest {
         dataStore.createSchema(sampleJsonSchemaText("address"));
         dataStore.createSchema(sampleJsonSchemaText("person"));
         dataStore.createSchema(sampleJsonSchemaText("teacher"));
+        dataStore.createSchema(sampleJsonSchemaText("headmaster"));
+        dataStore.createSchema(sampleJsonSchemaText("ceo"));
     }
 
     @After
@@ -44,6 +46,12 @@ public class SchemaManagementTest {
         dataStore.deleteSchema(sampleJsonSchemaText("person"));
         dataStore.delete("teacher");
         dataStore.deleteSchema(sampleJsonSchemaText("teacher"));
+        dataStore.delete("headmaster");
+        dataStore.deleteSchema(sampleJsonSchemaText("headmaster"));
+        
+        dataStore.delete("ceo");
+        dataStore.deleteSchema(sampleJsonSchemaText("ceo"));
+        
     }
 
     @Test
@@ -57,6 +65,13 @@ public class SchemaManagementTest {
     public void testGetChildrenSchema() throws DataStoreException {
         List<Map<String, Object>> children = dataStore.listChildSchema("person");
         Assert.assertEquals("Listing children Schema", 1, children.size());
+
+    }
+    
+    @Test
+    public void testGetExtentins() throws DataStoreException {
+        List<Map<String, Object>> children = dataStore.listExtenstions("teacher");
+        Assert.assertEquals("Listing children Schema", 2, children.size());
 
     }
 

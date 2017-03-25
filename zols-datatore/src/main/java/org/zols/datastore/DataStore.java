@@ -432,6 +432,27 @@ public abstract class DataStore {
         return delete(jsonSchemaForSchema(), schemaId);
     }
     
+    public List<Map<String, Object>> listExtenstions(String schemaId) throws DataStoreException {
+        List<Map<String, Object>> list = listChildSchema(schemaId);
+        if(list != null && !list.isEmpty()) {
+            List<Map<String, Object>> childrenOfChidrens = new ArrayList();
+            list.forEach(schema->{
+                try {
+                    List<Map<String, Object>> children = listExtenstions(schema.get("name").toString());
+                    if(children != null) {
+                        childrenOfChidrens.addAll(children);
+                    }
+                    
+                } catch (DataStoreException ex) {
+                    Logger.getLogger(DataStore.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+            });
+            list.addAll(childrenOfChidrens);
+        }
+        return list;
+    }
+    
     public List<Map<String, Object>> listChildSchema(String schemaId) throws DataStoreException {
         Query query = new Query();
         query.addFilter(new Filter("$ref", EQUALS, schemaId));
