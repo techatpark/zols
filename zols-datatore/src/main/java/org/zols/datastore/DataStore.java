@@ -452,7 +452,15 @@ public abstract class DataStore {
         }
         return list;
     }
-    
+    public List<String> listExtenstionTypes(String schemaId) throws DataStoreException {
+        List<Map<String, Object>> list = listExtenstions(schemaId);
+        
+        if(list != null) {
+            return list.stream().map(schema->schema.get("name").toString()).collect(toList());
+        }
+        
+        return null;
+    }
     public List<Map<String, Object>> listChildSchema(String schemaId) throws DataStoreException {
         Query query = new Query();
         query.addFilter(new Filter("$ref", EQUALS, schemaId));
@@ -484,20 +492,26 @@ public abstract class DataStore {
             throws DataStoreException {
         return readJsonData(list(jsonSchema, getTypeFilteredQuery(jsonSchema)),locale);
     }
+    
+    
 
-    public Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) {
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema, Query query) throws DataStoreException {
         if(query == null) {
             query = new Query();
         }
 
-        List<String> superTypes = jsonSchema.superTypes();
-        if (!superTypes.isEmpty()) {
-            query.addFilter(new Filter("$type", Filter.Operator.NOT_EXISTS_IN, superTypes));
+        List<String> implementations = listExtenstionTypes(jsonSchema.type());
+        if(implementations == null || implementations.isEmpty()) {
+            query.addFilter(new Filter("$type", Filter.Operator.EQUALS, jsonSchema.type()));
         }
+        else {
+            implementations.add(jsonSchema.type());
+            query.addFilter(new Filter("$type", Filter.Operator.EXISTS_IN, implementations));
+        } 
         return query;
     }
 
-    public Query getTypeFilteredQuery(JSONSchema jsonSchema) {
+    public Query getTypeFilteredQuery(JSONSchema jsonSchema) throws DataStoreException {
         return getTypeFilteredQuery(jsonSchema, null);
     }
 
