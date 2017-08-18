@@ -5,22 +5,25 @@
  */
 package org.zols.datastore;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.reflections.Reflections;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
 import org.zols.datastore.query.Query;
-import static org.zols.datastore.util.TestUtil.testDataStore;
+import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
 public class DataManagementTest {
@@ -28,7 +31,7 @@ public class DataManagementTest {
     private final DataStore dataStore;
 
     public DataManagementTest() {
-        dataStore = testDataStore();
+        dataStore = DataStoreProvider.getDataStore();
     }
 
     @Before
@@ -59,43 +62,43 @@ public class DataManagementTest {
     public void testCreate() throws DataStoreException {
         Assert.assertNotNull("Creating Simple Data", dataStore.read("teacher", "SATHISH"));
     }
-    
+
     @Test
     public void testCreateLocalized() throws DataStoreException {
-        Map<String,Object> teacherMap = sampleJson("teacher");
+        Map<String, Object> teacherMap = sampleJson("teacher");
         teacherMap.put("name", "NEWONE");
         teacherMap.put("first_name", "ஹேப்ப");
         dataStore.create("teacher", teacherMap, Locale.TAIWAN);
 
-        Assert.assertEquals("Creating Localized Data","ஹேப்ப",dataStore.read("teacher", Locale.TAIWAN,"NEWONE").get("first_name") );
+        Assert.assertEquals("Creating Localized Data", "ஹேப்ப", dataStore.read("teacher", Locale.TAIWAN, "NEWONE").get("first_name"));
     }
-    
+
     @Test
     public void testReadLocalized() throws DataStoreException {
-        Map<String,Object> teacherMap = sampleJson("teacher");
+        Map<String, Object> teacherMap = sampleJson("teacher");
         teacherMap.put("name", "NEWONE");
         teacherMap.put("first_name", "SATI");
         dataStore.create("teacher", teacherMap);
         teacherMap.put("first_name", "ஹேப்ப");
         dataStore.update("teacher", teacherMap, Locale.TAIWAN);
-        Assert.assertEquals("Reading Localized Data","SATI",dataStore.read("teacher", "NEWONE").get("first_name") );
-        Assert.assertNull("Reading Localized Data",dataStore.read("teacher", "NEWONE").get("first_name$"+Locale.TAIWAN.getLanguage()) );
-        Assert.assertEquals("Reading Localized Data","ஹேப்ப",dataStore.read("teacher", Locale.TAIWAN, "NEWONE").get("first_name") );
+        Assert.assertEquals("Reading Localized Data", "SATI", dataStore.read("teacher", "NEWONE").get("first_name"));
+        Assert.assertNull("Reading Localized Data", dataStore.read("teacher", "NEWONE").get("first_name$" + Locale.TAIWAN.getLanguage()));
+        Assert.assertEquals("Reading Localized Data", "ஹேப்ப", dataStore.read("teacher", Locale.TAIWAN, "NEWONE").get("first_name"));
     }
-    
+
     @Test
     public void testListLocalized() throws DataStoreException {
-        Map<String,Object> teacherMap = sampleJson("teacher");
+        Map<String, Object> teacherMap = sampleJson("teacher");
         teacherMap.put("name", "NEWONE");
         teacherMap.put("first_name", "SATI");
         dataStore.create("teacher", teacherMap);
         teacherMap.put("first_name", "ஹேப்ப");
         dataStore.update("teacher", teacherMap, Locale.TAIWAN);
-        
-        Page<Map<String,Object>> page = dataStore.list("teacher", 0, 10);
-        
-        Page<Map<String,Object>> taiwanPage = dataStore.list("teacher", Locale.TAIWAN, 0, 10);
-        
+
+        Page<Map<String, Object>> page = dataStore.list("teacher", 0, 10);
+
+        Page<Map<String, Object>> taiwanPage = dataStore.list("teacher", Locale.TAIWAN, 0, 10);
+
         Assert.assertNotEquals("Listing localized data", page, taiwanPage);
     }
 
@@ -129,7 +132,7 @@ public class DataManagementTest {
         Assert.assertNull("Deleting All the data of a type", dataStore.list("person"));
         Assert.assertNull("Deleting All the data of a type should not affect child type", dataStore.list("teacher"));
     }
-    
+
     @Test
     public void testDeleteAllOfChildType() throws DataStoreException {
         dataStore.delete("teacher");
@@ -157,7 +160,7 @@ public class DataManagementTest {
         query.addFilter(new Filter("subject", EXISTS_IN, subjects));
         Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("headmaster", query).size());
     }
-    
+
     @Test
     public void testListDataWithExistsInQueryWithSuperType() throws DataStoreException {
         List<String> subjects = new ArrayList<>();

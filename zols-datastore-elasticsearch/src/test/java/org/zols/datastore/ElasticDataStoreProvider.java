@@ -3,24 +3,25 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.util;
+package org.zols.datastore;
 
 import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
+import org.zols.datastore.util.DataStoreProvider;
 
 /**
  *
  * @author sathish
  */
-public class TestUtil {
-    
+public class ElasticDataStoreProvider implements DataStoreProvider {
+
     private static ElasticSearchDataStore _dataStore;
 
-    public static ElasticSearchDataStore testDataStore() {
-        if(_dataStore == null) {
+    @Override
+    public DataStore buildDataStore() {
+        if (_dataStore == null) {
             _dataStore = new ElasticSearchDataStore();
         }
         return _dataStore;
     }
-    
-    
+
 }

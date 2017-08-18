@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.model.Employee;
-import static org.zols.datastore.util.TestUtil.testDataStore;
+import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
 public class ObjectManagementTest {
@@ -18,7 +18,7 @@ public class ObjectManagementTest {
     private final DataStore dataStore;
 
     public ObjectManagementTest() {
-        dataStore = testDataStore();
+        dataStore = DataStoreProvider.getDataStore();
     }
 
     @Before

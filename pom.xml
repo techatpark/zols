@@ -26,11 +26,11 @@
     </parent>
     
     <modules>
-        <module>zols-datatore</module>
+        <module>zols-datastore</module>
         <module>zols-datastore-elasticsearch</module>
         <module>zols-cms-plugin</module>
         <module>zols-cms</module>
-        
+        <module>zols-datastore-test</module>
     </modules>
     
     <properties>

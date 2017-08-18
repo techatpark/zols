@@ -13,8 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
-import static org.zols.datastore.util.JsonUtil.asString;
-import static org.zols.datastore.util.TestUtil.testDataStore;
+import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -26,7 +25,7 @@ public class SchemaManagementTest {
     private final DataStore dataStore;
 
     public SchemaManagementTest() {
-        dataStore = testDataStore();
+        dataStore = DataStoreProvider.getDataStore();
     }
 
     @Before
