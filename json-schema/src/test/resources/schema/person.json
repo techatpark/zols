@@ -20,5 +20,6 @@
             "minimum": 0
         }
     },
-    "required": ["firstName", "lastName","address"]
+    "required": ["firstName", "lastName","address"],
+    "localized": ["firstName"]
 }

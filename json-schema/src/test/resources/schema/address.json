@@ -13,5 +13,6 @@
     },
     "required": [
         "post-office-box"
-    ]
+    ],
+    "localized": ["extended-address"]
 }

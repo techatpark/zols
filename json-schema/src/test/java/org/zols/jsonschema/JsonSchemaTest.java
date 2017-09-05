@@ -5,13 +5,16 @@
  */
 package org.zols.jsonschema;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.everit.json.schema.Schema;
+import java.util.stream.Collectors;
 import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.Test;
@@ -23,17 +26,47 @@ import org.junit.Test;
 public class JsonSchemaTest {
 
     @Test
-    public void testSomeMethod() {
-        try (InputStream inputStream = getClass().getResourceAsStream("/schema/person.json")) {
-            JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-            Schema schema = SchemaLoader.load(rawSchema,new TestSchemaClient());
-            JSONObject rawData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person.json")));
-            schema.validate(rawData); // throws a ValidationException if this object is invalid
-        } catch (IOException ex) {
-            Logger.getLogger(JsonSchema.class.getName()).log(Level.SEVERE, null, ex);
-        } catch(ValidationException exception) {
-            System.out.println(exception);
-        }
+    public void testValidation() {
+        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+
+        JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person.json")));
+     
+        jsonScherma.validate(jsonData.toMap());
+
     }
+    
+    @Test(expected = ValidationException.class)
+    public void testInvalidation() {
+        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+
+        JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_invalid.json")));
+     
+        jsonScherma.validate(jsonData.toMap());
+
+    }
+    
+    @Test
+    public void testGetLocalizedData() {
+        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+
+        JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_full.json")));
+
+        Map<String,Object> ld = jsonScherma.getLocalizedData(jsonData.toMap(), Locale.CHINESE);
+        
+        System.out.println("ld" + ld);
+    }
+
+    private String getSchema(String nameOfSchema) {
+        InputStream inputStream = getClass().getResourceAsStream("/schema/" + nameOfSchema + ".json");
+
+        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream))) {
+            return buffer.lines().collect(Collectors.joining("\n"));
+        } catch (IOException ex) {
+            Logger.getLogger(JsonSchemaTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    
 
 }
