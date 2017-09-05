@@ -1,7 +1,14 @@
 {
     "firstName": "Sathish",
-    "firstName_fr": "French",
-    "firstName_zh": "Chineese",
     "lastName": "Kumar",
-    "age": 10
+    "age": 10,
+    "other-addresses": [{
+            "city": "Madurai",
+            "state": "Tamilnadu",
+            "postel-code": 625001
+        }, {
+            "city": "Bengaluru",
+            "state": "Karnataka",
+            "postel-code": 500001
+        }]
 }

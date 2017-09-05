@@ -1,18 +1,21 @@
 {
-    "$id": "address",
     "$schema": "http://json-schema.org/draft-06/schema#",
+    "$id": "address",
     "description": "An Address following the convention of http://microformats.org/wiki/hcard",
     "type": "object",
     "properties": {
-        "post-office-box": {
+        "city": {
             "type": "string"
         },
-        "extended-address": {
+        "state": {
             "type": "string"
+        },
+        "postel-code": {
+            "type": "integer"
         }
     },
     "required": [
-        "post-office-box"
+        "postel-code"
     ],
-    "localized": ["extended-address"]
+    "localized": ["city"]
 }

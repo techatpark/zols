@@ -1,13 +1,19 @@
 {
     "firstName": "Sathish",
-    "firstName_fr": "French",
-
     "lastName": "Kumar",
     "age": 10,
-    "address": {
-        "post-office-box": "1234",
-        "extended-address": "aaaaa",
-        "extended-address_fr": "French",
-        "extended-address_zh": "Chineese"
-    }
+    "home-address": {
+        "city": "Chennai",
+        "state": "Tamilnadu",
+        "postel-code": 600001
+    },
+    "other-addresses": [{
+            "city": "Madurai",
+            "state": "Tamilnadu",
+            "postel-code": 625001
+        }, {
+            "city": "Bengaluru",
+            "state": "Karnataka",
+            "postel-code": 500001
+        }]
 }

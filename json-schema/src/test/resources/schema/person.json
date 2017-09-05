@@ -1,6 +1,6 @@
 {
-    "$id": "person",
     "$schema": "http://json-schema.org/draft-06/schema#",
+    "$id": "person",
     "description": "An Address following the convention of http://microformats.org/wiki/hcard",
     "title": "Person",
     "type": "object",
@@ -11,15 +11,21 @@
         "lastName": {
             "type": "string"
         },
-        "address": {
-            "$ref": "address"
-        },
         "age": {
             "description": "Age in years",
             "type": "integer",
             "minimum": 0
+        },
+        "home-address": {
+            "$ref": "address"
+        },
+        "other-addresses": {
+            "type": "array",
+            "items": { 
+                "$ref": "address"
+            }
         }
     },
-    "required": ["firstName", "lastName","address"],
+    "required": ["firstName", "lastName", "home-address"],
     "localized": ["firstName"]
 }

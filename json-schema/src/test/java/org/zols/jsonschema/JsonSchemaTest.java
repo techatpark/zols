@@ -49,9 +49,9 @@ public class JsonSchemaTest {
     public void testGetLocalizedData() {
         JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
 
-        JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_full.json")));
+        JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_zh.json")));
 
-        Map<String,Object> ld = jsonScherma.getLocalizedData(jsonData.toMap(), Locale.CHINESE);
+        Map<String,Object> ld = jsonScherma.localizeData(jsonData.toMap(), Locale.CHINESE);
         
         System.out.println("ld" + ld);
     }
