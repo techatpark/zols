@@ -5,55 +5,33 @@
  */
 package org.zols.jsonschema;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.Function;
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.loader.SchemaLoader;
-import org.json.JSONObject;
-import org.json.JSONTokener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author sathish
  */
-public class JsonSchema {
+public abstract class JsonSchema {
 
-    private final Schema schema;
+    protected final static String LOCALE_SEPARATOR = "_";
 
-    private final Map<String, Object> schemaMap;
+    protected final Map<String, Object> schemaMap;
 
-    private final Function<String, String> jsonSchemaSupplier;
+    protected final Function<String, Map<String, Object>> schemaSupplier;
 
-    private final static String LOCALE_SEPARATOR = "_";
-
-    public JsonSchema(InputStream inputStream, Function<String, String> jsonSchemaSupplier) {
-
-        JSONObject rawSchema = new JSONObject(new JSONTokener(inputStream));
-        this.jsonSchemaSupplier = jsonSchemaSupplier;
-        schemaMap = rawSchema.toMap();
-        schema = SchemaLoader.load(rawSchema, (String schameRef) -> new ByteArrayInputStream(jsonSchemaSupplier.apply(schameRef).getBytes(StandardCharsets.UTF_8)));
+    public JsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
+        this.schemaMap = jsonSchemaSupplier.apply(schemaId);
+        this.schemaSupplier = jsonSchemaSupplier;
     }
-
-    public JsonSchema(String schemaId, Function<String, String> jsonSchemaSupplier) {
-
-        JSONObject rawSchema = new JSONObject(new JSONTokener(jsonSchemaSupplier.apply(schemaId)));
-        this.jsonSchemaSupplier = jsonSchemaSupplier;
-        schemaMap = rawSchema.toMap();
-        schema = SchemaLoader.load(rawSchema, (String schameRef) -> new ByteArrayInputStream(jsonSchemaSupplier.apply(schameRef).getBytes(StandardCharsets.UTF_8)));
-    }
-
-    public void validate(Map<String, Object> jsonData) {
-        schema.validate(new JSONObject(jsonData));
-    }
-
+    
     public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
 
         List<String> localizedKeys = (List<String>) schemaMap.get("localized");
@@ -61,8 +39,8 @@ public class JsonSchema {
         if (localizedKeys != null && !localizedKeys.isEmpty()) {
 
             Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Entry<String, Object> property = it.next();
+            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, Object> property = it.next();
                 Object propertyValue;
                 if (property.getKey().contains(LOCALE_SEPARATOR)) {
                     if (property.getKey().endsWith(LOCALE_SEPARATOR + locale.getLanguage())) {
@@ -71,11 +49,11 @@ public class JsonSchema {
                     it.remove();
                 } else if ((propertyValue = property.getValue()) instanceof Map) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = new JsonSchema(propertySchemaId, jsonSchemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
                     propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = new JsonSchema(propertySchemaId, jsonSchemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -97,16 +75,16 @@ public class JsonSchema {
         if (localizedKeys != null && !localizedKeys.isEmpty()) {
 
             Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Entry<String, Object> property = it.next();
+            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, Object> property = it.next();
                 Object propertyValue;
                  if ((propertyValue = property.getValue()) instanceof Map) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = new JsonSchema(propertySchemaId, jsonSchemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
                     propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = new JsonSchema(propertySchemaId, jsonSchemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -127,6 +105,15 @@ public class JsonSchema {
             jsonData.putAll(localizedValues);
         }
         return jsonData;
+    }
+    
+    private JsonSchema getJsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
+        try {
+            return this.getClass().getDeclaredConstructor(String.class,Function.class).newInstance(schemaId,jsonSchemaSupplier);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(JsonSchema.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     private String getSchemaOfProperty(String propertyName) {
@@ -152,6 +139,10 @@ public class JsonSchema {
         }
 
         return null;
+    }
+
+    public void validate(Map<String, Object> toMap) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

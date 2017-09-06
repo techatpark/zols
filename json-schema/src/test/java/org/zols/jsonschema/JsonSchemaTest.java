@@ -18,6 +18,7 @@ import org.everit.json.schema.ValidationException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.junit.Test;
+import org.zols.jsonschema.everit.EveritJsonSchema;
 
 /**
  *
@@ -27,7 +28,7 @@ public class JsonSchemaTest {
 
     @Test
     public void testValidation() {
-        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+        JsonSchema jsonScherma = new EveritJsonSchema("person", this::getSchema);
 
         JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person.json")));
      
@@ -37,7 +38,7 @@ public class JsonSchemaTest {
     
     @Test(expected = ValidationException.class)
     public void testInvalidation() {
-        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+        JsonSchema jsonScherma = new EveritJsonSchema("person", this::getSchema);
 
         JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_invalid.json")));
      
@@ -47,7 +48,7 @@ public class JsonSchemaTest {
     
     @Test
     public void testGetLocalizedData() {
-        JsonSchema jsonScherma = new JsonSchema(getClass().getResourceAsStream("/schema/person.json"), this::getSchema);
+        JsonSchema jsonScherma = new EveritJsonSchema("person", this::getSchema);
 
         JSONObject jsonData = new JSONObject(new JSONTokener(getClass().getResourceAsStream("/jsondata/person_zh.json")));
 
@@ -56,11 +57,11 @@ public class JsonSchemaTest {
         System.out.println("ld" + ld);
     }
 
-    private String getSchema(String nameOfSchema) {
+    private Map<String,Object> getSchema(String nameOfSchema) {
         InputStream inputStream = getClass().getResourceAsStream("/schema/" + nameOfSchema + ".json");
 
         try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream))) {
-            return buffer.lines().collect(Collectors.joining("\n"));
+            return new JSONObject(buffer.lines().collect(Collectors.joining("\n"))).toMap();
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTest.class.getName()).log(Level.SEVERE, null, ex);
         }
