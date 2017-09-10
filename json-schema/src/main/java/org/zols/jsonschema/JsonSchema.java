@@ -141,8 +141,5 @@ public abstract class JsonSchema {
         return null;
     }
 
-    public void validate(Map<String, Object> toMap) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    public abstract void validate(Map<String, Object> toMap) ;
 }
