@@ -5,42 +5,55 @@
  */
 package org.zols.jsonschema;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import org.json.JSONObject;
+import java.util.Arrays;
+import java.util.Locale;
 import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.zols.jsonschema.everit.EveritJsonSchema;
+import org.zols.jsonschema.util.TestUtil;
+import static org.zols.jsonschema.util.TestUtil.getTestData;
 
 /**
  *
  * @author sathish
  */
 public class JsonSchemaTest {
-    
+
     @Test
     public void testGetParents() {
-        JsonSchema jsonScherma = new EveritJsonSchema("mobile", this::getSchema);
-        Assert.assertEquals("Getting parents of mobile", 2, jsonScherma.getParents().size());
+        JsonSchema jsonSchemaMobile = new EveritJsonSchema("mobile", TestUtil::getTestSchema);
+
+        assertEquals("Getting parents of mobile", 2, jsonSchemaMobile.getParents().size());
+        assertEquals("Getting first parent id of mobile", "device", jsonSchemaMobile.getParents().get(0).getId());
+        assertEquals("Getting last parent id of mobile", "product", jsonSchemaMobile.getParents().get(1).getId());
+
     }
 
-    private Map<String,Object> getSchema(String nameOfSchema) {
-        InputStream inputStream = getClass().getResourceAsStream("/schema/" + nameOfSchema + ".json");
+    @Test
+    public void testLocalizeData() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
 
-        try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream))) {
-            return new JSONObject(buffer.lines().collect(Collectors.joining("\n"))).toMap();
-        } catch (IOException ex) {
-            Logger.getLogger(JsonSchemaTest.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        Assert.assertNotNull("Localizing Computer data with 'name' field",
+                jsonSchemaComputer.localizeData(getTestData("computer"), Locale.CHINESE).get("name_zh"));
+
+        Assert.assertNull("Localizing Computer data with 'name' field",
+                jsonSchemaComputer.localizeData(getTestData("computer"), Locale.CHINESE).get("name"));
+
     }
 
-    
+    @Test
+    public void testGetLocalizedProperties() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedProperties().containsAll(Arrays.asList("name","brand")));
+    }
+
+    @Test
+    public void testDelocalizeData() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        assertEquals("Getting De-localized Data of computer", getTestData("computer_zh"), jsonSchemaComputer.delocalizeData(getTestData("computer_full"), Locale.CHINESE));
+
+    }
 
 }

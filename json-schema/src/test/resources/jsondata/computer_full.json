@@ -1,0 +1,10 @@
+{
+    "id": 1,
+    "name": "DELL Desktop",
+    "name_zh": "桌面",
+    "name_fr": "DELL bureau",
+    "price": 12.50,
+    "tags": ["cold", "ice"],
+    "brand":"DELL",
+    "os":"ios"
+}

@@ -1,0 +1,8 @@
+{
+    "id": 1,
+    "name": "DELL Desktop",
+    "price": 12.50,
+    "tags": ["cold", "ice"],
+    "brand":"DELL",
+    "os":"ios"
+}
