@@ -19,22 +19,22 @@ import org.zols.jsonschema.JsonSchema;
  *
  * @author sathish
  */
-public class EveritJsonSchema extends JsonSchema{
-    
+public class EveritJsonSchema extends JsonSchema {
+
     private final Schema schema;
-    
+
     //To Cache Shemastreams
-    private final Map<String,InputStream> schemaStreams ;
+    private final Map<String, InputStream> schemaStreams;
 
     public EveritJsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
-        super(schemaId,schemaSupplier);
+        super(schemaId, schemaSupplier);
         schemaStreams = new HashMap<>();
-        schema = SchemaLoader.load(new JSONObject(schemaMap), this::getSchemaInputStream );
+        schema = SchemaLoader.load(new JSONObject(schemaMap), this::getSchemaInputStream);
     }
-    
+
     private InputStream getSchemaInputStream(String schemaId) {
         InputStream inputStream = schemaStreams.get(schemaId);
-        if(inputStream == null) {
+        if (inputStream == null) {
             inputStream = new ByteArrayInputStream(new JSONObject(schemaSupplier.apply(schemaId)).toString().getBytes());
             schemaStreams.put(schemaId, inputStream);
         }
@@ -46,5 +46,19 @@ public class EveritJsonSchema extends JsonSchema{
         schema.validate(new JSONObject(jsonData));
     }
 
-    
+    @Override
+    public String getId() {
+        return (String) schemaMap.get("id");
+    }
+
+    @Override
+    public String getTitle() {
+        return (String) schemaMap.get("title");
+    }
+
+    @Override
+    public String getDescription() {
+        return (String) schemaMap.get("description");
+    }
+
 }

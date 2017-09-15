@@ -1,6 +1,6 @@
 
 {
-    "$id":"mobile",
+    "id":"mobile",
     "$schema": "http://json-schema.org/draft-06/schema#",
     "title": "Mobile",
     "description": "A mobile from Acme's catalog",

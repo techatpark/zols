@@ -27,7 +27,10 @@ public class JsonSchemaTest {
     @Test
     public void testGetParents() {
         JsonSchema jsonScherma = new EveritJsonSchema("mobile", this::getSchema);
+        
         Assert.assertEquals("Getting parents of mobile", 2, jsonScherma.getParents().size());
+        Assert.assertEquals("Getting first parent of mobile", "device", jsonScherma.getParents().get(0).getId());
+        Assert.assertEquals("Getting second parent of mobile", "product", jsonScherma.getParents().get(1).getId());
     }
 
     private Map<String,Object> getSchema(String nameOfSchema) {

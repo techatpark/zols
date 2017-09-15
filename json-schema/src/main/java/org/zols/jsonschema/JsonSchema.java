@@ -176,6 +176,10 @@ public abstract class JsonSchema {
     public String toString() {
         return schemaMap.toString(); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public abstract String getId() ;
+    public abstract String getTitle() ;
+    public abstract String getDescription() ;
 
     
     public abstract void validate(Map<String, Object> jsonData) ;
