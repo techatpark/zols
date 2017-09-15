@@ -6,18 +6,22 @@
 package org.zols.jsonschema;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * This Class represents the JSON Schema (Ref: http://json-schema.org/) 
+ * and provides utilities like localization and traversing
  *
- * @author sathish
+ * 
  */
 public abstract class JsonSchema {
 
@@ -30,6 +34,33 @@ public abstract class JsonSchema {
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
         this.schemaMap = jsonSchemaSupplier.apply(schemaId);
         this.schemaSupplier = jsonSchemaSupplier;
+    }
+    
+    /**
+     * Gets the list of parents from bottom to top
+     * @return parents
+     */
+    public List<JsonSchema> getParents() {
+        
+        List<JsonSchema> parents = new ArrayList<>();
+        Optional<JsonSchema> parent = getParent();
+        if(parent.isPresent()) {
+            parents.add(parent.get());
+            parents.addAll(parent.get().getParents());
+        }
+        return parents;
+    }
+    
+    /**
+     * Gets Parent of the Schema if exists
+     * @return 
+     */
+    public Optional<JsonSchema> getParent() {
+        String reference ;
+        if((reference = (String) schemaMap.get("$ref") )!= null) {
+            return Optional.of(getJsonSchema(reference));
+        }
+        return Optional.empty();
     }
     
     public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
@@ -49,11 +80,11 @@ public abstract class JsonSchema {
                     it.remove();
                 } else if ((propertyValue = property.getValue()) instanceof Map) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
                     propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -80,11 +111,11 @@ public abstract class JsonSchema {
                 Object propertyValue;
                  if ((propertyValue = property.getValue()) instanceof Map) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
                     propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
                     String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId, schemaSupplier);
+                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -107,9 +138,9 @@ public abstract class JsonSchema {
         return jsonData;
     }
     
-    private JsonSchema getJsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
+    private JsonSchema getJsonSchema(String schemaId) {
         try {
-            return this.getClass().getDeclaredConstructor(String.class,Function.class).newInstance(schemaId,jsonSchemaSupplier);
+            return this.getClass().getDeclaredConstructor(String.class,Function.class).newInstance(schemaId,this.schemaSupplier);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(JsonSchema.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -141,5 +172,11 @@ public abstract class JsonSchema {
         return null;
     }
 
-    public abstract void validate(Map<String, Object> toMap) ;
+    @Override
+    public String toString() {
+        return schemaMap.toString(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
+    public abstract void validate(Map<String, Object> jsonData) ;
 }

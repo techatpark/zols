@@ -1,0 +1,15 @@
+
+{
+    "$id":"mobile",
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "title": "Mobile",
+    "description": "A mobile from Acme's catalog",
+    "type": "object",
+    "$ref":"device",
+    "properties": {
+        "os":{
+            "enum": [ "android", "ios" ]
+        }
+    },
+    "required": ["os"]
+}
