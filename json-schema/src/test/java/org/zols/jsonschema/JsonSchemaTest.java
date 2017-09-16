@@ -23,6 +23,11 @@ public class JsonSchemaTest {
 
     @Test
     public void testGetParents() {
+        JsonSchema jsonScherma = new EveritJsonSchema("mobile", TestUtil::getTestSchema);
+
+        Assert.assertEquals("Getting parents of mobile", 2, jsonScherma.getParents().size());
+        Assert.assertEquals("Getting first parent of mobile", "device", jsonScherma.getParents().get(0).getId());
+        Assert.assertEquals("Getting second parent of mobile", "product", jsonScherma.getParents().get(1).getId());
         JsonSchema jsonSchemaMobile = new EveritJsonSchema("mobile", TestUtil::getTestSchema);
 
         assertEquals("Getting parents of mobile", 2, jsonSchemaMobile.getParents().size());
@@ -46,7 +51,7 @@ public class JsonSchemaTest {
     @Test
     public void testGetLocalizedProperties() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedProperties().containsAll(Arrays.asList("name","brand")));
+        assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedProperties().containsAll(Arrays.asList("name", "brand")));
     }
 
     @Test
