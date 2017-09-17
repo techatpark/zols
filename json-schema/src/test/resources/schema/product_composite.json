@@ -4,6 +4,27 @@
     "title": "Product",
     "description": "A product from Acme's catalog",
     "type": "object",
+    "definitions": {
+        "seller": {
+            "id": "seller",
+            "$schema": "http://json-schema.org/draft-06/schema#",
+            "title": "Seller",
+            "description": "A seller from Acme's catalog",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "description": "The unique identifier for a seller",
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "Name of the product",
+                    "type": "string"
+                }
+            },
+            "required": ["id", "name"],
+            "localized": ["name"]
+        }
+    },
     "properties": {
         "id": {
             "description": "The unique identifier for a product",
@@ -28,11 +49,11 @@
         "sellers": {
             "type": "array",
             "items": {
-                "$ref": "seller"
+                "$ref": "#/definitions/seller"
             }
         },
         "preferredSeller": {
-            "$ref": "seller" 
+            "$ref": "#/definitions/seller" 
         }
     },
     "required": ["id", "name", "price"],

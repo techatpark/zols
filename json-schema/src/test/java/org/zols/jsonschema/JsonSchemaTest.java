@@ -7,6 +7,7 @@ package org.zols.jsonschema;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Map;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -49,6 +50,20 @@ public class JsonSchemaTest {
     }
 
     @Test
+    public void testGetSchemaOf() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        JsonSchema jsonSchemaSeller = jsonSchemaComputer.getSchemaOf("sellers");
+        Assert.assertEquals("Getting schema of seller from computer", "seller", jsonSchemaSeller.getId());
+    }
+
+    @Test
+    public void testGetPropertyOf() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String, Object> sellerProperty = jsonSchemaComputer.getPropertyOf("sellers");
+        Assert.assertEquals("Getting Property of seller from computer", "seller", sellerProperty.get("$ref"));
+    }
+
+    @Test
     public void testGetLocalizedProperties() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedProperties().containsAll(Arrays.asList("name", "brand")));
@@ -59,6 +74,12 @@ public class JsonSchemaTest {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         assertEquals("Getting De-localized Data of computer", getTestData("computer_zh"), jsonSchemaComputer.delocalizeData(getTestData("computer_full"), Locale.CHINESE));
 
+    }
+
+    @Test
+    public void testGetProperties() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        assertEquals("get properties of computer", 7, jsonSchemaComputer.getProperties().size());
     }
 
 }

@@ -1,8 +1,21 @@
 {
     "id": 1,
-    "name": "DELL Desktop",
+    "name": "HP Laptop",
     "price": 12.50,
-    "tags": ["cold", "ice"],
-    "brand":"DELL",
-    "os":"ios"
+    "tags": ["Personal", "Electronics"],
+    "sellers": [{
+            "id": 1,
+            "name": "HP Showroom"
+        },
+        {
+            "id": 2,
+            "name": "Laptop Showroom"
+        }
+    ],
+    "preferredSeller": {
+        "id": 1,
+        "name": "HP Showroom"
+    },
+    "brand": "HP",
+    "os": "ios"
 }

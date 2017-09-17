@@ -33,6 +33,9 @@ public abstract class JsonSchema {
 
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
         this.schemaMap = jsonSchemaSupplier.apply(schemaId);
+        if (schemaMap == null) {
+            System.out.println("ss");
+        }
         this.schemaSupplier = jsonSchemaSupplier;
     }
 
@@ -107,12 +110,12 @@ public abstract class JsonSchema {
                     }
                     it.remove();
                 } else if ((propertyValue = property.getValue()) instanceof Map) {
-                    String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
+
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
-                    String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
+ 
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -129,7 +132,8 @@ public abstract class JsonSchema {
 
     /**
      * Localize the given data. all localized fields property will be appended
-     * with locale separator
+     * with locale separator. if property name is title it will be renamed as 
+     * title_zh for chineese locale
      *
      * @param jsonData
      * @param locale
@@ -146,12 +150,10 @@ public abstract class JsonSchema {
                 Map.Entry<String, Object> property = it.next();
                 Object propertyValue;
                 if ((propertyValue = property.getValue()) instanceof Map) {
-                    String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
-                    String propertySchemaId = getSchemaOfProperty(property.getKey());
-                    JsonSchema propertyJsconSchema = getJsonSchema(propertySchemaId);
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
                         if (value instanceof Map) {
@@ -183,10 +185,38 @@ public abstract class JsonSchema {
         return null;
     }
 
-    private String getSchemaOfProperty(String propertyName) {
+    /**
+     * Get Properties of Schema. Returns empty map if none exists
+     *
+     * @return
+     */
+    public Map<String, Map<String, Object>> getProperties() {
+        Map<String, Map<String, Object>> properties = (Map<String, Map<String, Object>>) schemaMap.get("properties");
+        if (properties == null) {
+            properties = new HashMap<>();
+        }
+        List<JsonSchema> parents = getParents();
+        for (JsonSchema parent : parents) {
+            properties.putAll(parent.getProperties());
+        }
+
+        return properties;
+    }
+
+    /**
+     * get property for a given name, returns null if not exists
+     *
+     * @param propertyName
+     * @return
+     */
+    public Map<String, Object> getPropertyOf(String propertyName) {
+        return getProperties().get(propertyName);
+    }
+
+    public JsonSchema getSchemaOf(String propertyName) {
 
         String schemaId = null;
-        Map<String, Object> map = getTypeOfProperty(propertyName);
+        Map<String, Object> map = getPropertyOf(propertyName);
         if (map != null) {
             schemaId = (String) map.get("$ref");
             // Might be array item. So check inside items property
@@ -195,27 +225,13 @@ public abstract class JsonSchema {
             }
         }
 
-        return schemaId;
-    }
-
-    private Map<String, Object> getTypeOfProperty(String propertyName) {
-
-        Map<String, Object> m = (Map<String, Object>) schemaMap.get("properties");
-        if (m != null) {
-            return (Map<String, Object>) m.get(propertyName);
-        }
-
-        return null;
+        return getJsonSchema(schemaId);
     }
 
     @Override
     public String toString() {
         return schemaMap.toString(); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    public abstract String getId() ;
-    public abstract String getTitle() ;
-    public abstract String getDescription() ;
 
     public abstract String getId();
 
