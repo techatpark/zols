@@ -6,7 +6,6 @@
 package org.zols.jsonschema;
 
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.Map;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
@@ -14,7 +13,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.zols.jsonschema.everit.EveritJsonSchema;
 import org.zols.jsonschema.util.TestUtil;
-import static org.zols.jsonschema.util.TestUtil.getTestData;
 
 /**
  *
@@ -24,29 +22,9 @@ public class JsonSchemaTest {
 
     @Test
     public void testGetParents() {
-        JsonSchema jsonScherma = new EveritJsonSchema("mobile", TestUtil::getTestSchema);
+        JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
 
         Assert.assertEquals("Getting parents of mobile", 2, jsonScherma.getParents().size());
-        Assert.assertEquals("Getting first parent of mobile", "device", jsonScherma.getParents().get(0).getId());
-        Assert.assertEquals("Getting second parent of mobile", "product", jsonScherma.getParents().get(1).getId());
-        JsonSchema jsonSchemaMobile = new EveritJsonSchema("mobile", TestUtil::getTestSchema);
-
-        assertEquals("Getting parents of mobile", 2, jsonSchemaMobile.getParents().size());
-        assertEquals("Getting first parent id of mobile", "device", jsonSchemaMobile.getParents().get(0).getId());
-        assertEquals("Getting last parent id of mobile", "product", jsonSchemaMobile.getParents().get(1).getId());
-
-    }
-
-    @Test
-    public void testLocalizeData() {
-        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-
-        Assert.assertNotNull("Localizing Computer data with 'name' field",
-                jsonSchemaComputer.localizeData(getTestData("computer"), Locale.CHINESE).get("name_zh"));
-
-        Assert.assertNull("Localizing Computer data with 'name' field",
-                jsonSchemaComputer.localizeData(getTestData("computer"), Locale.CHINESE).get("name"));
-
     }
 
     @Test
@@ -59,8 +37,8 @@ public class JsonSchemaTest {
     @Test
     public void testGetPropertyOf() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        Map<String, Object> sellerProperty = jsonSchemaComputer.getPropertyOf("sellers");
-        Assert.assertEquals("Getting Property of seller from computer", "seller", sellerProperty.get("$ref"));
+        Map<String, Object> sellersProperty = jsonSchemaComputer.getPropertyOf("sellers");
+        Assert.assertEquals("Getting Property of seller from computer", "array", sellersProperty.get("type"));
     }
 
     @Test
@@ -70,16 +48,9 @@ public class JsonSchemaTest {
     }
 
     @Test
-    public void testDelocalizeData() {
-        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertEquals("Getting De-localized Data of computer", getTestData("computer_zh"), jsonSchemaComputer.delocalizeData(getTestData("computer_full"), Locale.CHINESE));
-
-    }
-
-    @Test
     public void testGetProperties() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertEquals("get properties of computer", 7, jsonSchemaComputer.getProperties().size());
+        assertEquals("get properties of computer", 8, jsonSchemaComputer.getProperties().size());
     }
 
 }

@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,12 +30,40 @@ public abstract class JsonSchema {
 
     protected final Function<String, Map<String, Object>> schemaSupplier;
 
+    private final JsonSchema parent;
+    private final List<JsonSchema> parents;
+
+    private final Map<String, Map<String, Object>> properties;
+
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
         this.schemaMap = jsonSchemaSupplier.apply(schemaId);
-        if (schemaMap == null) {
-            System.out.println("ss");
-        }
         this.schemaSupplier = jsonSchemaSupplier;
+
+        //Calculate and store Parent related attributes
+        parents = new ArrayList<>();
+        properties = new HashMap<>();
+        String reference;
+
+        if (schemaMap.get("properties") != null) {
+            properties.putAll((Map<String, Map<String, Object>>) schemaMap.get("properties"));
+        }
+
+        if ((reference = (String) schemaMap.get("$ref")) != null) {
+            parent = getJsonSchema(reference);
+
+            if (parent != null) {
+                // Add Parent
+                parents.add(parent);
+                // Add Super Parents
+                parents.addAll(parent.getParents());
+
+                parents.forEach(p -> properties.putAll(p.getProperties()));
+
+            }
+        } else {
+            parent = null;
+        }
+
     }
 
     /**
@@ -45,13 +72,6 @@ public abstract class JsonSchema {
      * @return parents
      */
     public List<JsonSchema> getParents() {
-
-        List<JsonSchema> parents = new ArrayList<>();
-        Optional<JsonSchema> parent = getParent();
-        if (parent.isPresent()) {
-            parents.add(parent.get());
-            parents.addAll(parent.get().getParents());
-        }
         return parents;
     }
 
@@ -60,12 +80,19 @@ public abstract class JsonSchema {
      *
      * @return
      */
-    public Optional<JsonSchema> getParent() {
-        String reference;
-        if ((reference = (String) schemaMap.get("$ref")) != null) {
-            return Optional.of(getJsonSchema(reference));
-        }
-        return Optional.empty();
+    public JsonSchema getParent() {
+        return parent;
+    }
+
+    /**
+     * Get Consolidated Properties of Schema and it's parents. Returns empty map
+     * if none exists
+     *
+     * @return
+     */
+    public Map<String, Map<String, Object>> getProperties() {
+
+        return properties;
     }
 
     /**
@@ -78,9 +105,8 @@ public abstract class JsonSchema {
         if (localizedKeys == null) {
             localizedKeys = new ArrayList<>();
 
-            List<JsonSchema> parents = getParents();
-            for (JsonSchema parent : parents) {
-                localizedKeys.addAll(parent.getLocalizedProperties());
+            for (JsonSchema p : parents) {
+                localizedKeys.addAll(p.getLocalizedProperties());
             }
 
         }
@@ -114,7 +140,7 @@ public abstract class JsonSchema {
                     JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
                 } else if ((propertyValue = property.getValue()) instanceof List) {
- 
+
                     JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
                     List<Object> list = (List) propertyValue;
                     list.parallelStream().forEach(value -> {
@@ -132,7 +158,7 @@ public abstract class JsonSchema {
 
     /**
      * Localize the given data. all localized fields property will be appended
-     * with locale separator. if property name is title it will be renamed as 
+     * with locale separator. if property name is title it will be renamed as
      * title_zh for chineese locale
      *
      * @param jsonData
@@ -186,31 +212,13 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Get Properties of Schema. Returns empty map if none exists
-     *
-     * @return
-     */
-    public Map<String, Map<String, Object>> getProperties() {
-        Map<String, Map<String, Object>> properties = (Map<String, Map<String, Object>>) schemaMap.get("properties");
-        if (properties == null) {
-            properties = new HashMap<>();
-        }
-        List<JsonSchema> parents = getParents();
-        for (JsonSchema parent : parents) {
-            properties.putAll(parent.getProperties());
-        }
-
-        return properties;
-    }
-
-    /**
      * get property for a given name, returns null if not exists
      *
      * @param propertyName
      * @return
      */
     public Map<String, Object> getPropertyOf(String propertyName) {
-        return getProperties().get(propertyName);
+        return properties.get(propertyName);
     }
 
     public JsonSchema getSchemaOf(String propertyName) {
