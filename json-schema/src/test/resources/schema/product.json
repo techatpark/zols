@@ -9,7 +9,7 @@
             "description": "The unique identifier for a product",
             "type": "integer"
         },
-        "name": {
+        "title": {
             "description": "Name of the product",
             "type": "string"
         },
@@ -35,6 +35,6 @@
             "$ref": "seller" 
         }
     },
-    "required": ["id", "name", "price"],
-    "localized": ["name"]
+    "required": ["id", "title", "price"],
+    "localized": ["title"]
 }

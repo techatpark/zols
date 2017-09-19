@@ -6,9 +6,11 @@
 package org.zols.jsonschema;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Map;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.zols.jsonschema.everit.EveritJsonSchema;
@@ -51,6 +53,19 @@ public class JsonSchemaTest {
     public void testGetProperties() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         assertEquals("get properties of computer", 8, jsonSchemaComputer.getProperties().size());
+    }
+
+    @Test
+    public void testLocalizeData() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String, Object> jsonData = TestUtil.getTestData("computer");
+        Map<String, Object> jsonDataLocalized = jsonSchemaComputer.localizeData(jsonData, Locale.ITALY);
+        assertFalse("Purity of localizeData", jsonData == jsonDataLocalized);
+        
+        
+        assertEquals("Localizeing the computer", "HP Laptop" , jsonDataLocalized.get("title_it"));
+        
+        assertEquals("Localizeing the computer", "HP" , jsonDataLocalized.get("brand_it"));
     }
 
 }

@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,52 +115,9 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Delocalize the given json data
-     *
-     * @param jsonData
-     * @param locale
-     * @return
-     */
-    public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
-
-        List<String> localizedKeys = getLocalizedProperties();
-
-        if (!localizedKeys.isEmpty()) {
-
-            Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, Object> property = it.next();
-                Object propertyValue;
-                if (property.getKey().contains(LOCALE_SEPARATOR)) {
-                    if (property.getKey().endsWith(LOCALE_SEPARATOR + locale.getLanguage())) {
-                        localizedValues.put(property.getKey().substring(0, property.getKey().lastIndexOf(LOCALE_SEPARATOR)), property.getValue());
-                    }
-                    it.remove();
-                } else if ((propertyValue = property.getValue()) instanceof Map) {
-
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
-                } else if ((propertyValue = property.getValue()) instanceof List) {
-
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    List<Object> list = (List) propertyValue;
-                    list.parallelStream().forEach(value -> {
-                        if (value instanceof Map) {
-                            propertyJsconSchema.delocalizeData((Map<String, Object>) value, locale);
-                        }
-                    });
-                }
-            }
-
-            jsonData.putAll(localizedValues);
-        }
-        return jsonData;
-    }
-
-    /**
-     * Localize the given data. all localized fields property will be appended
-     * with locale separator. if property name is title it will be renamed as
-     * title_zh for chineese locale
+     * Localize the given data into new Map. all localized fields property will
+     * be appended with locale separator. if property name is title it will be
+     * renamed as title_zh for chineese locale
      *
      * @param jsonData
      * @param locale
@@ -167,39 +125,26 @@ public abstract class JsonSchema {
      */
     public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
 
+        Map<String, Object> jsonDataLocalized = new HashMap();
         List<String> localizedKeys = getLocalizedProperties();
 
-        if (!localizedKeys.isEmpty()) {
+        if (localizedKeys.isEmpty()) {
+            jsonDataLocalized = new HashMap<>(jsonData);
 
-            Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, Object> property = it.next();
-                Object propertyValue;
-                if ((propertyValue = property.getValue()) instanceof Map) {
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
-                } else if ((propertyValue = property.getValue()) instanceof List) {
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    List<Object> list = (List) propertyValue;
-                    list.parallelStream().forEach(value -> {
-                        if (value instanceof Map) {
-                            propertyJsconSchema.localizeData((Map<String, Object>) value, locale);
-                        }
-                    });
-                } else if (property.getKey().contains(LOCALE_SEPARATOR)) {
+        } else {
+            Set<Map.Entry<String, Object>> entries = jsonData.entrySet();
 
-                    it.remove();
+            for (Map.Entry<String, Object> entry : entries) {
+                String key = entry.getKey();
+                if (localizedKeys.contains(key)) {
+                    jsonDataLocalized.put(key + LOCALE_SEPARATOR + locale.getLanguage(), entry.getValue());
+                } else {
+                    jsonDataLocalized.put(key, entry.getValue());
                 }
 
-                if (localizedKeys.contains(property.getKey())) {
-                    localizedValues.put(property.getKey() + LOCALE_SEPARATOR + locale.getLanguage(), property.getValue());
-                    it.remove();
-                }
             }
-
-            jsonData.putAll(localizedValues);
         }
-        return jsonData;
+        return jsonDataLocalized;
     }
 
     private JsonSchema getJsonSchema(String schemaId) {

@@ -1,6 +1,6 @@
 {
     "id": 1,
-    "name": "HP Laptop",
+    "title": "HP Laptop",
     "price": 12.50,
     "tags": ["Personal", "Electronics"],
     "sellers": [{
