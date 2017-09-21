@@ -6,16 +6,18 @@
     "sellers": [{
             "id": 1,
             "name": "HP Showroom"
-        },
-        {
+        },{
             "id": 2,
-            "name": "Laptop Showroom"
-        }
-    ],
-    "preferredSeller": {
-        "id": 1,
-        "name": "HP Showroom"
+            "name": "More Showroom"
+        }],
+    "prefererredSeller": {
+        "id": 3,
+        "name": "Muthu"
     },
+    "warehouseLocations": [{
+            "latitude": 1,
+            "longitude": 2
+        }],
     "brand": "HP",
     "os": "ios"
 }

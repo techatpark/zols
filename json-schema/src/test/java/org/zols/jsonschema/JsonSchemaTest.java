@@ -6,14 +6,16 @@
 package org.zols.jsonschema;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import org.json.JSONObject;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.zols.jsonschema.everit.EveritJsonSchema;
 import org.zols.jsonschema.util.TestUtil;
+import static org.zols.jsonschema.util.TestUtil.getTestData;
 
 /**
  *
@@ -31,7 +33,7 @@ public class JsonSchemaTest {
     @Test
     public void testGetSchemaOf() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        JsonSchema jsonSchemaSeller = jsonSchemaComputer.getSchemaOf("seller");
+        JsonSchema jsonSchemaSeller = jsonSchemaComputer.getSchemaOf("sellers");
         Assert.assertEquals("Getting schema of seller from computer", "seller", jsonSchemaSeller.getId());
     }
 
@@ -51,7 +53,7 @@ public class JsonSchemaTest {
     @Test
     public void testGetProperties() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertEquals("get properties of computer", 8, jsonSchemaComputer.getProperties().size());
+        assertEquals("get properties of computer", 9, jsonSchemaComputer.getProperties().size());
     }
     
     @Test
@@ -62,6 +64,25 @@ public class JsonSchemaTest {
         
         
         assertEquals("get definitions of computer", 4, ((Map)compositeSchema.get("definitions")).size());
+    }
+    
+    @Test
+    public void testLocalizeData() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String,Object> jsonData = getTestData("computer");
+        Map<String,Object> localizedJsonData = jsonSchemaComputer.localizeData(jsonData, Locale.ITALY);
+        Assert.assertFalse("Purity of localizeData",jsonData == localizedJsonData);
+        
+        Assert.assertNull("Removing Localized field",localizedJsonData.get("title"));
+        Assert.assertNotNull("Replacing Localized field",localizedJsonData.get("title_it"));
+        
+        
+        Assert.assertNull("Removing Nested Localized field",((Map)localizedJsonData.get("prefererredSeller")).get("name"));
+        Assert.assertNotNull("Replacing Nested Localized field",((Map)localizedJsonData.get("prefererredSeller")).get("name_it"));
+        
+        Assert.assertNull("Removing Nested Array Localized field",((Map)((List)localizedJsonData.get("sellers")).get(0)).get("name"));
+        Assert.assertNotNull("Replacing Nested Array Localized field",((Map)((List)localizedJsonData.get("sellers")).get(0)).get("name_it"));
+        
     }
 
 }

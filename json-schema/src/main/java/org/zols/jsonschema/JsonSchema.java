@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -118,14 +119,15 @@ public abstract class JsonSchema {
         Map<String, Object> compositeSchema = new HashMap<>(schemaMap);
 
         compositeSchema.put("definitions", getDefinitions(compositeSchema));
-        
+
         return compositeSchema;
     }
-    
+
     /**
      * gets valid json property name to put inside definitions of json schema
+     *
      * @param referenceUrl
-     * @return 
+     * @return
      */
     private String getJSONPropertyName(String referenceUrl) {
         return referenceUrl.replaceAll("http", "").replaceAll(":", "").replaceAll("/", "").replaceAll("\\.", "");
@@ -159,7 +161,7 @@ public abstract class JsonSchema {
                                 String jsonPathName = getJSONPropertyName(referencePath);
                                 definitions.put(jsonPathName, propScemaMap);
                                 definitions.putAll(getDefinitions(propScemaMap));
-                                itemsMap.put("$ref",  "#/definitions/" +jsonPathName);
+                                itemsMap.put("$ref", "#/definitions/" + jsonPathName);
                             }
                         }
 
@@ -221,9 +223,9 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Localize the given data. all localized fields property will be appended
-     * with locale separator. if property name is title it will be renamed as
-     * title_zh for chineese locale
+     * Localize the given data and copy to new Map. all localized fields
+     * property will be appended with locale separator. if property name is
+     * title it will be renamed as title_zh for chineese locale
      *
      * @param jsonData
      * @param locale
@@ -231,39 +233,47 @@ public abstract class JsonSchema {
      */
     public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
 
+        Map<String, Object> localizedJsonData;
         List<String> localizedKeys = getLocalizedProperties();
 
-        if (!localizedKeys.isEmpty()) {
+        if (localizedKeys.isEmpty()) {
+            localizedJsonData = new HashMap<>(jsonData);
+        } else {
+            localizedJsonData = new HashMap<>(jsonData.size());
 
-            Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, Object> property = it.next();
-                Object propertyValue;
-                if ((propertyValue = property.getValue()) instanceof Map) {
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
-                } else if ((propertyValue = property.getValue()) instanceof List) {
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    List<Object> list = (List) propertyValue;
-                    list.parallelStream().forEach(value -> {
-                        if (value instanceof Map) {
-                            propertyJsconSchema.localizeData((Map<String, Object>) value, locale);
+            jsonData.entrySet().forEach((entry) -> {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+                if (localizedKeys.contains(key)) {
+                    localizedJsonData.put(key + LOCALE_SEPARATOR + locale.getLanguage(), value);
+                } else {
+                    localizedJsonData.put(key, value);
+                }
+
+                if (value instanceof Map) {
+                    Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
+                    localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale));
+
+                } else if (value instanceof List) {
+                    List nestedList = (List) value;
+                    List newList = new ArrayList(nestedList.size());
+                    for (Object object : nestedList) {
+                        if (object instanceof Map) {
+                            Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
+                            newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale));
+
+                        }else {
+                            newList.add(object);
                         }
-                    });
-                } else if (property.getKey().contains(LOCALE_SEPARATOR)) {
+                    }
+                    localizedJsonData.put(key, newList);
 
-                    it.remove();
                 }
 
-                if (localizedKeys.contains(property.getKey())) {
-                    localizedValues.put(property.getKey() + LOCALE_SEPARATOR + locale.getLanguage(), property.getValue());
-                    it.remove();
-                }
-            }
+            });
 
-            jsonData.putAll(localizedValues);
         }
-        return jsonData;
+        return localizedJsonData;
     }
 
     private JsonSchema getJsonSchema(String schemaId) {
