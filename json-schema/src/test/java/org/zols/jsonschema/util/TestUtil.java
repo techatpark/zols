@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,8 +27,11 @@ public class TestUtil {
 
     private static final String USER_AGENT = "Mozilla/5.0";
 
+    private static final Map<String, Map<String, Object>> schemasMap = new HashMap<>();
+
     public static Map<String, Object> getTestSchema(String schemaPath) {
-        if (schemaPath != null) {
+        Map<String, Object> schemaMap = schemasMap.get(schemaPath);
+        if (schemaMap == null && schemaPath != null) {
             InputStream inputStream = TestUtil.class.getResourceAsStream("/schema/" + schemaPath + ".json");
             // Not Available in file system. Internet ?
             if (inputStream == null) {
@@ -50,14 +54,17 @@ public class TestUtil {
 
             }
             try (BufferedReader buffer = new BufferedReader(new InputStreamReader(inputStream))) {
-                return new JSONObject(buffer.lines().collect(Collectors.joining("\n"))).toMap();
+                schemaMap = new JSONObject(buffer.lines().collect(Collectors.joining("\n"))).toMap();
+                
+                schemasMap.put(schemaPath, schemaMap);
+
             } catch (IOException ex) {
                 Logger.getLogger(JsonSchemaTest.class.getName()).log(Level.SEVERE, null, ex);
             }
 
         }
 
-        return null;
+        return schemaMap;
     }
 
     public static Map<String, Object> getTestData(String pathOfData) {

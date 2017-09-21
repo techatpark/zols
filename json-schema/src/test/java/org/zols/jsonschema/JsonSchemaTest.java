@@ -7,6 +7,7 @@ package org.zols.jsonschema;
 
 import java.util.Arrays;
 import java.util.Map;
+import org.json.JSONObject;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -54,11 +55,13 @@ public class JsonSchemaTest {
     }
     
     @Test
-    public void testGetDefinitions() {
+    public void testCompositeSchema() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         
-        Map<String, Map<String,Object>> definitions = jsonSchemaComputer.getDefinitions();
-        assertEquals("get definitions of computer", 4, definitions.size());
+        Map<String, Object> compositeSchema = jsonSchemaComputer.getCompositeSchema();
+        
+        
+        assertEquals("get definitions of computer", 4, ((Map)compositeSchema.get("definitions")).size());
     }
 
 }

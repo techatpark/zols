@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -114,11 +113,22 @@ public abstract class JsonSchema {
         return localizedKeys;
     }
 
-    public Map<String, Map<String, Object>> getDefinitions() {
+    public Map<String, Object> getCompositeSchema() {
         // This is going to contain one more item (definitions).
         Map<String, Object> compositeSchema = new HashMap<>(schemaMap);
 
-        return getDefinitions(compositeSchema);
+        compositeSchema.put("definitions", getDefinitions(compositeSchema));
+        
+        return compositeSchema;
+    }
+    
+    /**
+     * gets valid json property name to put inside definitions of json schema
+     * @param referenceUrl
+     * @return 
+     */
+    private String getJSONPropertyName(String referenceUrl) {
+        return referenceUrl.replaceAll("http", "").replaceAll(":", "").replaceAll("/", "").replaceAll("\\.", "");
     }
 
     private Map<String, Map<String, Object>> getDefinitions(Map<String, Object> schemaAsMap) {
@@ -129,9 +139,10 @@ public abstract class JsonSchema {
                 // If not JSON Pointer
                 if (!referencePath.startsWith("#/")) {
                     Map<String, Object> parentScemaMap = schemaSupplier.apply(referencePath);
-                    definitions.put(referencePath, parentScemaMap);
+                    String jsonPathName = getJSONPropertyName(referencePath);
+                    definitions.put(jsonPathName, parentScemaMap);
                     definitions.putAll(getDefinitions(parentScemaMap));
-                    //schemaEntry.setValue("#/definitions/" + schemaEntry.getValue());
+                    schemaEntry.setValue("#/definitions/" + jsonPathName);
                 }
 
             } else if (schemaEntry.getKey().equals("properties")) {
@@ -145,17 +156,19 @@ public abstract class JsonSchema {
                             referencePath = (String) itemsMap.get("$ref");
                             if (referencePath != null) {
                                 Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
-                                definitions.put(referencePath, propScemaMap);
+                                String jsonPathName = getJSONPropertyName(referencePath);
+                                definitions.put(jsonPathName, propScemaMap);
                                 definitions.putAll(getDefinitions(propScemaMap));
-                                //itemsMap.put("$ref", props)
+                                itemsMap.put("$ref",  "#/definitions/" +jsonPathName);
                             }
                         }
 
                     } else if (!referencePath.startsWith("#/")) {
                         Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
-                        definitions.put(referencePath, propScemaMap);
+                        String jsonPathName = getJSONPropertyName(referencePath);
+                        definitions.put(jsonPathName, propScemaMap);
                         definitions.putAll(getDefinitions(propScemaMap));
-                        //propertyEntry.getValue().put("$ref", "#/definitions/" + refValue.toString());
+                        propertyEntry.getValue().put("$ref", "#/definitions/" + jsonPathName);
                     }
                 });
 
