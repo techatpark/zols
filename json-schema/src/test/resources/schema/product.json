@@ -25,14 +25,15 @@
             "minItems": 1,
             "uniqueItems": true
         },
-        "sellers": {
-            "type": "array",
-            "items": {
-                "$ref": "seller"
-            }
-        },
-        "preferredSeller": {
+        "seller": {
             "$ref": "seller" 
+        },
+        "warehouseLocations": {
+            "type": "array",
+            "description": "Coordinates of the warehouse with the product",
+            "items": {
+                "$ref": "http://json-schema.org/geo"
+            }
         }
     },
     "required": ["id", "title", "price"],

@@ -36,9 +36,9 @@ public abstract class JsonSchema {
 
     private final Map<String, Map<String, Object>> properties;
 
-    public JsonSchema(String schemaId, Function<String, Map<String, Object>> jsonSchemaSupplier) {
-        this.schemaMap = jsonSchemaSupplier.apply(schemaId);
-        this.schemaSupplier = jsonSchemaSupplier;
+    public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
+        this.schemaMap = schemaSupplier.apply(schemaId);
+        this.schemaSupplier = schemaSupplier;
 
         //Calculate and store Parent related attributes
         parents = new ArrayList<>();
@@ -114,10 +114,103 @@ public abstract class JsonSchema {
         return localizedKeys;
     }
 
+    public Map<String, Map<String, Object>> getDefinitions() {
+        // This is going to contain one more item (definitions).
+        Map<String, Object> compositeSchema = new HashMap<>(schemaMap);
+
+        return getDefinitions(compositeSchema);
+    }
+
+    private Map<String, Map<String, Object>> getDefinitions(Map<String, Object> schemaAsMap) {
+        Map<String, Map<String, Object>> definitions = new HashMap();
+        schemaAsMap.entrySet().forEach((schemaEntry) -> {
+            if (schemaEntry.getKey().equals("$ref")) {
+                String referencePath = schemaEntry.getValue().toString();
+                // If not JSON Pointer
+                if (!referencePath.startsWith("#/")) {
+                    Map<String, Object> parentScemaMap = schemaSupplier.apply(referencePath);
+                    definitions.put(referencePath, parentScemaMap);
+                    definitions.putAll(getDefinitions(parentScemaMap));
+                    //schemaEntry.setValue("#/definitions/" + schemaEntry.getValue());
+                }
+
+            } else if (schemaEntry.getKey().equals("properties")) {
+                Map<String, Map<String, Object>> props = (Map<String, Map<String, Object>>) schemaEntry.getValue();
+
+                props.entrySet().forEach(propertyEntry -> {
+                    String referencePath = (String) propertyEntry.getValue().get("$ref");
+                    if (referencePath == null) {
+                        Map<String, Object> itemsMap = (Map<String, Object>) propertyEntry.getValue().get("items");
+                        if (itemsMap != null) {
+                            referencePath = (String) itemsMap.get("$ref");
+                            if (referencePath != null) {
+                                Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
+                                definitions.put(referencePath, propScemaMap);
+                                definitions.putAll(getDefinitions(propScemaMap));
+                                //itemsMap.put("$ref", props)
+                            }
+                        }
+
+                    } else if (!referencePath.startsWith("#/")) {
+                        Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
+                        definitions.put(referencePath, propScemaMap);
+                        definitions.putAll(getDefinitions(propScemaMap));
+                        //propertyEntry.getValue().put("$ref", "#/definitions/" + refValue.toString());
+                    }
+                });
+
+            }
+        });
+        return definitions;
+    }
+
     /**
-     * Localize the given data into new Map. all localized fields property will
-     * be appended with locale separator. if property name is title it will be
-     * renamed as title_zh for chineese locale
+     * Delocalize the given json data
+     *
+     * @param jsonData
+     * @param locale
+     * @return
+     */
+    public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
+
+        List<String> localizedKeys = getLocalizedProperties();
+
+        if (!localizedKeys.isEmpty()) {
+
+            Map<String, Object> localizedValues = new HashMap<>();
+            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, Object> property = it.next();
+                Object propertyValue;
+                if (property.getKey().contains(LOCALE_SEPARATOR)) {
+                    if (property.getKey().endsWith(LOCALE_SEPARATOR + locale.getLanguage())) {
+                        localizedValues.put(property.getKey().substring(0, property.getKey().lastIndexOf(LOCALE_SEPARATOR)), property.getValue());
+                    }
+                    it.remove();
+                } else if ((propertyValue = property.getValue()) instanceof Map) {
+
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
+                    propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
+                } else if ((propertyValue = property.getValue()) instanceof List) {
+
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
+                    List<Object> list = (List) propertyValue;
+                    list.parallelStream().forEach(value -> {
+                        if (value instanceof Map) {
+                            propertyJsconSchema.delocalizeData((Map<String, Object>) value, locale);
+                        }
+                    });
+                }
+            }
+
+            jsonData.putAll(localizedValues);
+        }
+        return jsonData;
+    }
+
+    /**
+     * Localize the given data. all localized fields property will be appended
+     * with locale separator. if property name is title it will be renamed as
+     * title_zh for chineese locale
      *
      * @param jsonData
      * @param locale
@@ -125,26 +218,39 @@ public abstract class JsonSchema {
      */
     public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
 
-        Map<String, Object> jsonDataLocalized = new HashMap();
         List<String> localizedKeys = getLocalizedProperties();
 
-        if (localizedKeys.isEmpty()) {
-            jsonDataLocalized = new HashMap<>(jsonData);
+        if (!localizedKeys.isEmpty()) {
 
-        } else {
-            Set<Map.Entry<String, Object>> entries = jsonData.entrySet();
+            Map<String, Object> localizedValues = new HashMap<>();
+            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
+                Map.Entry<String, Object> property = it.next();
+                Object propertyValue;
+                if ((propertyValue = property.getValue()) instanceof Map) {
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
+                    propertyJsconSchema.localizeData((Map<String, Object>) propertyValue, locale);
+                } else if ((propertyValue = property.getValue()) instanceof List) {
+                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
+                    List<Object> list = (List) propertyValue;
+                    list.parallelStream().forEach(value -> {
+                        if (value instanceof Map) {
+                            propertyJsconSchema.localizeData((Map<String, Object>) value, locale);
+                        }
+                    });
+                } else if (property.getKey().contains(LOCALE_SEPARATOR)) {
 
-            for (Map.Entry<String, Object> entry : entries) {
-                String key = entry.getKey();
-                if (localizedKeys.contains(key)) {
-                    jsonDataLocalized.put(key + LOCALE_SEPARATOR + locale.getLanguage(), entry.getValue());
-                } else {
-                    jsonDataLocalized.put(key, entry.getValue());
+                    it.remove();
                 }
 
+                if (localizedKeys.contains(property.getKey())) {
+                    localizedValues.put(property.getKey() + LOCALE_SEPARATOR + locale.getLanguage(), property.getValue());
+                    it.remove();
+                }
             }
+
+            jsonData.putAll(localizedValues);
         }
-        return jsonDataLocalized;
+        return jsonData;
     }
 
     private JsonSchema getJsonSchema(String schemaId) {
@@ -183,14 +289,42 @@ public abstract class JsonSchema {
 
     @Override
     public String toString() {
-        return schemaMap.toString(); //To change body of generated methods, choose Tools | Templates.
+        return asString();
     }
 
-    public abstract String getId();
+    /**
+     * Gets id of Json Schema
+     *
+     * @return
+     */
+    public String getId() {
+        return (String) schemaMap.get("id");
+    }
 
-    public abstract String getTitle();
+    /**
+     * Gets title of Json Schema
+     *
+     * @return
+     */
+    public String getTitle() {
+        return (String) schemaMap.get("title");
+    }
 
-    public abstract String getDescription();
+    /**
+     * Gets description of Json Schema
+     *
+     * @return
+     */
+    public String getDescription() {
+        return (String) schemaMap.get("description");
+    }
+
+    /**
+     * Gets Schema as a JSON String
+     *
+     * @return
+     */
+    protected abstract String asString();
 
     public abstract void validate(Map<String, Object> jsonData);
 }

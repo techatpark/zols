@@ -47,18 +47,8 @@ public class EveritJsonSchema extends JsonSchema {
     }
 
     @Override
-    public String getId() {
-        return (String) schemaMap.get("id");
-    }
-
-    @Override
-    public String getTitle() {
-        return (String) schemaMap.get("title");
-    }
-
-    @Override
-    public String getDescription() {
-        return (String) schemaMap.get("description");
+    protected String asString() {
+        return schema.toString();
     }
 
 }
