@@ -187,39 +187,52 @@ public abstract class JsonSchema {
      * @return
      */
     public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
-
+        Map<String, Object> delocalizeJsonData = new HashMap<>(jsonData.size());
         List<String> localizedKeys = getLocalizedProperties();
 
-        if (!localizedKeys.isEmpty()) {
+        jsonData.entrySet().forEach((entry) -> {
 
-            Map<String, Object> localizedValues = new HashMap<>();
-            for (Iterator<Map.Entry<String, Object>> it = jsonData.entrySet().iterator(); it.hasNext();) {
-                Map.Entry<String, Object> property = it.next();
-                Object propertyValue;
-                if (property.getKey().contains(LOCALE_SEPARATOR)) {
-                    if (property.getKey().endsWith(LOCALE_SEPARATOR + locale.getLanguage())) {
-                        localizedValues.put(property.getKey().substring(0, property.getKey().lastIndexOf(LOCALE_SEPARATOR)), property.getValue());
-                    }
-                    it.remove();
-                } else if ((propertyValue = property.getValue()) instanceof Map) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
 
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    propertyJsconSchema.delocalizeData((Map<String, Object>) propertyValue, locale);
-                } else if ((propertyValue = property.getValue()) instanceof List) {
-
-                    JsonSchema propertyJsconSchema = getSchemaOf(property.getKey());
-                    List<Object> list = (List) propertyValue;
-                    list.parallelStream().forEach(value -> {
-                        if (value instanceof Map) {
-                            propertyJsconSchema.delocalizeData((Map<String, Object>) value, locale);
-                        }
-                    });
+            if (localizedKeys.contains(key)) {
+                String localizedKey = key + LOCALE_SEPARATOR + locale.getLanguage();
+                Object localizedValue = jsonData.get(localizedKey);
+                if (localizedValue == null) {
+                    delocalizeJsonData.put(key, value);
+                } else {
+                    delocalizeJsonData.put(key, localizedValue);
                 }
+            } else {
+                // if localized ignore
+                if (!key.contains(LOCALE_SEPARATOR)) {
+                    delocalizeJsonData.put(key, value);
+                }
+
             }
 
-            jsonData.putAll(localizedValues);
-        }
-        return jsonData;
+            if (value instanceof Map) {
+                Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
+                delocalizeJsonData.put(key, getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+
+            } else if (value instanceof List) {
+                List nestedList = (List) value;
+                List newList = new ArrayList(nestedList.size());
+                for (Object object : nestedList) {
+                    if (object instanceof Map) {
+                        Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
+                        newList.add(getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+
+                    } else {
+                        newList.add(object);
+                    }
+                }
+                delocalizeJsonData.put(key, newList);
+
+            }
+
+        });
+        return delocalizeJsonData;
     }
 
     /**
@@ -233,10 +246,8 @@ public abstract class JsonSchema {
      */
     public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
 
-        Map<String, Object> localizedJsonData;
+        Map<String, Object> localizedJsonData = new HashMap<>(jsonData.size());
         List<String> localizedKeys = getLocalizedProperties();
-
-        localizedJsonData = new HashMap<>(jsonData.size());
 
         jsonData.entrySet().forEach((entry) -> {
             String key = entry.getKey();
