@@ -236,43 +236,39 @@ public abstract class JsonSchema {
         Map<String, Object> localizedJsonData;
         List<String> localizedKeys = getLocalizedProperties();
 
-        if (localizedKeys.isEmpty()) {
-            localizedJsonData = new HashMap<>(jsonData);
-        } else {
-            localizedJsonData = new HashMap<>(jsonData.size());
+        localizedJsonData = new HashMap<>(jsonData.size());
 
-            jsonData.entrySet().forEach((entry) -> {
-                String key = entry.getKey();
-                Object value = entry.getValue();
-                if (localizedKeys.contains(key)) {
-                    localizedJsonData.put(key + LOCALE_SEPARATOR + locale.getLanguage(), value);
-                } else {
-                    localizedJsonData.put(key, value);
-                }
+        jsonData.entrySet().forEach((entry) -> {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if (localizedKeys.contains(key)) {
+                localizedJsonData.put(key + LOCALE_SEPARATOR + locale.getLanguage(), value);
+            } else {
+                localizedJsonData.put(key, value);
+            }
 
-                if (value instanceof Map) {
-                    Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                    localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale));
+            if (value instanceof Map) {
+                Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
+                localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale));
 
-                } else if (value instanceof List) {
-                    List nestedList = (List) value;
-                    List newList = new ArrayList(nestedList.size());
-                    for (Object object : nestedList) {
-                        if (object instanceof Map) {
-                            Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                            newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale));
+            } else if (value instanceof List) {
+                List nestedList = (List) value;
+                List newList = new ArrayList(nestedList.size());
+                for (Object object : nestedList) {
+                    if (object instanceof Map) {
+                        Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
+                        newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale));
 
-                        }else {
-                            newList.add(object);
-                        }
+                    } else {
+                        newList.add(object);
                     }
-                    localizedJsonData.put(key, newList);
-
                 }
+                localizedJsonData.put(key, newList);
 
-            });
+            }
 
-        }
+        });
+
         return localizedJsonData;
     }
 
