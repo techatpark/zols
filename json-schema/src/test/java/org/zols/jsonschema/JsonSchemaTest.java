@@ -90,7 +90,7 @@ public class JsonSchemaTest {
     @Test
     public void testDelocalizeData() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        Map<String, Object> jsonData = getTestData("computer");
+        Map<String, Object> jsonData = getTestData("computer_full");
         Map<String, Object> delocalizedJsonData = jsonSchemaComputer.delocalizeData(jsonData, Locale.ITALY);
 
         assertFalse("puririty of delocalization", jsonData == delocalizedJsonData);
