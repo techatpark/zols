@@ -45,5 +45,6 @@
     "required": ["id",
         "title",
         "price"],
-    "localized": ["title"]
+    "localized": ["title"],
+    "ids": ["id"]
 }

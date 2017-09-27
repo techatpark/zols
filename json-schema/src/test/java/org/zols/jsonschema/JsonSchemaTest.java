@@ -101,9 +101,21 @@ public class JsonSchemaTest {
         assertNull("Removing Nested Localized field", ((Map) delocalizedJsonData.get("prefererredSeller")).get("name_it"));
         assertEquals("Keeping Nested Localized field value into default locale value", "Italy name",
                 ((Map) delocalizedJsonData.get("prefererredSeller")).get("name"));
+        assertEquals("Retaining default locale value for Nested Array Localized field", "More Showroom", ((Map) ((List) delocalizedJsonData.get("sellers")).get(1)).get("name"));
+    }
 
-        
-        assertEquals("Retaining default locale value for Nested Array Localized field", "More Showroom",((Map) ((List) delocalizedJsonData.get("sellers")).get(1)).get("name"));
+    @Test
+    public void testGetIdProperties() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdProperties().size());
+        assertEquals("Checking id property order", jsonSchemaComputer.getIdProperties().keySet().iterator().next(), "id");
+    }
+
+    @Test
+    public void testGetIdValues() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String, Object> jsonData = getTestData("computer");
+        assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdValues(jsonData)[0]);
     }
 
 }

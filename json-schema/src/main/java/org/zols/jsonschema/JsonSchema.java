@@ -93,6 +93,22 @@ public abstract class JsonSchema {
 
         return properties;
     }
+    /**
+     * get the id properties from the Json Schema ordered by it's name
+     * 
+     * @return 
+     */
+    public Map<String, Map<String, Object>> getIdProperties() {
+        return null;
+    }
+    /**
+     * Get the id values from the json data
+     * @param jsonData
+     * @return 
+     */
+    public Object[] getIdValues(Map<String,Object> jsonData) {
+        return null;
+    }
 
     /**
      * Getting localized property names. Returns empty list if none exists
@@ -280,10 +296,12 @@ public abstract class JsonSchema {
 
         return localizedJsonData;
     }
+
     /**
      * get the value from Json Schema supplier
+     *
      * @param schemaId
-     * @return 
+     * @return
      */
 
     private JsonSchema getJsonSchema(String schemaId) {
