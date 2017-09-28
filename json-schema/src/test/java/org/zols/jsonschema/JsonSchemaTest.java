@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -130,6 +132,14 @@ public class JsonSchemaTest {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         Map<String, Object> jsonData = getTestData("computer");
         assertEquals("Checking id property value", 1, jsonSchemaComputer.getIdValues(jsonData)[0]);
+    }
+    
+    @Test
+    public void testValidate() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String, Object> jsonData = getTestData("computer");
+        Set<ConstraintViolation> cv = jsonSchemaComputer.validate(jsonData);
+        assertEquals("Checking id property value", 1, cv.size());
     }
 
 }

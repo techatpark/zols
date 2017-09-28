@@ -12,9 +12,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.validation.ConstraintViolation;
 
 /**
  * This Class represents the JSON Schema (Ref: http://json-schema.org/) and
@@ -402,5 +404,6 @@ public abstract class JsonSchema {
      */
     protected abstract String asString();
 
-    public abstract void validate(Map<String, Object> jsonData);
+    public abstract Set<ConstraintViolation> validate(Map<String, Object> jsonData);
+    
 }

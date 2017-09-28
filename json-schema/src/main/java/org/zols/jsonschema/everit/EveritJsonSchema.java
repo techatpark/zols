@@ -8,12 +8,18 @@ package org.zols.jsonschema.everit;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
+import static java.util.stream.Collectors.toSet;
+import javax.validation.ConstraintViolation;
 import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
 import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONObject;
 import org.zols.jsonschema.JsonSchema;
+import org.zols.jsonschema.violations.JsonSchemaConstraintViolation;
 
 /**
  *
@@ -42,8 +48,26 @@ public class EveritJsonSchema extends JsonSchema {
     }
 
     @Override
-    public void validate(Map<String, Object> jsonData) {
-        schema.validate(new JSONObject(jsonData));
+    public Set<ConstraintViolation> validate(Map<String, Object> jsonData) {
+        try {
+            schema.validate(new JSONObject(jsonData));
+        } catch (ValidationException ve) {
+            if (ve.getCausingExceptions().isEmpty()) {
+                Set<ConstraintViolation> constraintViolations = new HashSet<>();
+                constraintViolations.add(getConstraintViolation(ve));
+                return constraintViolations;
+            } else {
+                return ve.getCausingExceptions().stream().map(this::getConstraintViolation).collect(toSet());
+            }
+
+        }
+
+        return null;
+    }
+
+    private JsonSchemaConstraintViolation getConstraintViolation(ValidationException ve) {
+        return null;
+
     }
 
     @Override
