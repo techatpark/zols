@@ -7,6 +7,7 @@ package org.zols.jsonschema;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -31,6 +32,7 @@ public abstract class JsonSchema {
 
     private final JsonSchema parent;
     private final List<JsonSchema> parents;
+    private final List<String> idPropertyNames;
 
     private final Map<String, Map<String, Object>> properties;
 
@@ -63,6 +65,11 @@ public abstract class JsonSchema {
             parent = null;
         }
 
+        idPropertyNames = parent == null ? (List<String>) schemaMap.get("ids") : parent.getIdPropertyNames();
+
+        if (idPropertyNames != null) {
+            Collections.sort(idPropertyNames);
+        }
     }
 
     /**
@@ -82,6 +89,15 @@ public abstract class JsonSchema {
     public JsonSchema getParent() {
         return parent;
     }
+    
+    /**
+     * Gets Root of the Schema if exists, else returns itself
+     *
+     * @return
+     */
+    public JsonSchema getRoot() {
+        return parents.isEmpty() ? this : parents.get(parents.size()-1);
+    }
 
     /**
      * Get Consolidated Properties of Schema and it's parents. Returns empty map
@@ -93,21 +109,33 @@ public abstract class JsonSchema {
 
         return properties;
     }
+
     /**
-     * get the id properties from the Json Schema ordered by it's name
-     * 
-     * @return 
+     * get the id properties from the Json Schema in asending order
+     *
+     * @return
      */
-    public Map<String, Map<String, Object>> getIdProperties() {
-        return null;
+    public List<String> getIdPropertyNames() {
+        return idPropertyNames;
     }
+
     /**
      * Get the id values from the json data
+     *
      * @param jsonData
-     * @return 
+     * @return
      */
-    public Object[] getIdValues(Map<String,Object> jsonData) {
-        return null;
+    public Object[] getIdValues(final Map<String, Object> jsonData) {
+        Object[] idValues = null;
+        if (idPropertyNames != null) {
+            int idsCount = idPropertyNames.size();
+            idValues = new Object[idsCount];
+            for (int i = 0; i < idsCount; i++) {
+                idValues[i] = jsonData.get(idPropertyNames.get(i));
+            }
+            return idValues;
+        }
+        return idValues;
     }
 
     /**
@@ -115,15 +143,13 @@ public abstract class JsonSchema {
      *
      * @return
      */
-    public List<String> getLocalizedProperties() {
+    public List<String> getLocalizedPropertyNames() {
         List<String> localizedKeys = (List<String>) schemaMap.get("localized");
         if (localizedKeys == null) {
             localizedKeys = new ArrayList<>();
-
             for (JsonSchema p : parents) {
-                localizedKeys.addAll(p.getLocalizedProperties());
+                localizedKeys.addAll(p.getLocalizedPropertyNames());
             }
-
         }
         return localizedKeys;
     }
@@ -202,7 +228,7 @@ public abstract class JsonSchema {
      */
     public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
         Map<String, Object> delocalizeJsonData = new HashMap<>(jsonData.size());
-        List<String> localizedKeys = getLocalizedProperties();
+        List<String> localizedKeys = getLocalizedPropertyNames();
 
         jsonData.entrySet().forEach((entry) -> {
 
@@ -261,7 +287,7 @@ public abstract class JsonSchema {
     public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
 
         Map<String, Object> localizedJsonData = new HashMap<>(jsonData.size());
-        List<String> localizedKeys = getLocalizedProperties();
+        List<String> localizedKeys = getLocalizedPropertyNames();
 
         jsonData.entrySet().forEach((entry) -> {
             String key = entry.getKey();
@@ -303,7 +329,6 @@ public abstract class JsonSchema {
      * @param schemaId
      * @return
      */
-
     private JsonSchema getJsonSchema(String schemaId) {
         try {
             return this.getClass().getDeclaredConstructor(String.class, Function.class).newInstance(schemaId, this.schemaSupplier);

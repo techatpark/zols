@@ -30,7 +30,21 @@ public class JsonSchemaTest {
     public void testGetParents() {
         JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
 
-        assertEquals("Getting parents of mobile", 2, jsonScherma.getParents().size());
+        assertEquals("Getting parents of computer", 2, jsonScherma.getParents().size());
+    }
+    
+    @Test
+    public void testParent() {
+        JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+
+        assertEquals("Getting parent of computer", "device", jsonScherma.getParent().getId());
+    }
+    
+    @Test
+    public void testRoot() {
+        JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+
+        assertEquals("Getting root of computer", "product", jsonScherma.getRoot().getId());
     }
 
     @Test
@@ -48,9 +62,9 @@ public class JsonSchemaTest {
     }
 
     @Test
-    public void testGetLocalizedProperties() {
+    public void testGetLocalizedPropertyNames() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedProperties().containsAll(Arrays.asList("title", "brand")));
+        assertTrue("Getting Localized Properties of computer", jsonSchemaComputer.getLocalizedPropertyNames().containsAll(Arrays.asList("title", "brand")));
     }
 
     @Test
@@ -105,17 +119,17 @@ public class JsonSchemaTest {
     }
 
     @Test
-    public void testGetIdProperties() {
+    public void testGetIdPropertyNames() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
-        assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdProperties().size());
-        assertEquals("Checking id property order", jsonSchemaComputer.getIdProperties().keySet().iterator().next(), "id");
+        assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdPropertyNames().size());
+        assertEquals("Checking id property order", Arrays.asList("id"),jsonSchemaComputer.getIdPropertyNames());
     }
 
     @Test
     public void testGetIdValues() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         Map<String, Object> jsonData = getTestData("computer");
-        assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdValues(jsonData)[0]);
+        assertEquals("Checking id property value", 1, jsonSchemaComputer.getIdValues(jsonData)[0]);
     }
 
 }
