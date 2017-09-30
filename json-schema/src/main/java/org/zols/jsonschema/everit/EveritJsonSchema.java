@@ -31,6 +31,12 @@ public class EveritJsonSchema extends JsonSchema {
 
     //To Cache Shemastreams
     private final Map<String, InputStream> schemaStreams;
+    
+    public EveritJsonSchema(Map<String, Object> schemaMap, Function<String, Map<String, Object>> schemaSupplier) {
+        super(schemaMap,schemaSupplier);
+        schemaStreams = new HashMap<>();
+        schema = SchemaLoader.load(new JSONObject(schemaMap), this::getSchemaInputStream);
+    }
 
     public EveritJsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
         super(schemaId, schemaSupplier);

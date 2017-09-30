@@ -37,9 +37,13 @@ public abstract class JsonSchema {
     private final List<String> idPropertyNames;
 
     private final Map<String, Map<String, Object>> properties;
-
+    
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
-        this.schemaMap = schemaSupplier.apply(schemaId);
+        this(schemaSupplier.apply(schemaId),schemaSupplier);
+    }
+
+    public JsonSchema(Map<String, Object> schemaMap, Function<String, Map<String, Object>> schemaSupplier) {
+        this.schemaMap = schemaMap;
         this.schemaSupplier = schemaSupplier;
 
         //Calculate and store Parent related attributes
