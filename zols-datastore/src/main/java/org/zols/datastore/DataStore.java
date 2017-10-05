@@ -81,18 +81,18 @@ public abstract class DataStore {
         if (map != null) {
             map.remove("$type");
         }
-        return JsonUtil.asObject(clazz, readJsonData(map, locale));
+        return JsonUtil.asObject(clazz, readJsonData(jsonSchema(clazz),map, locale));
     }
 
-    private List<Map<String, Object>> readJsonData(List<Map<String, Object>> listofData, Locale locale) {
+    private List<Map<String, Object>> readJsonData(JSONSchema jSONSchema,List<Map<String, Object>> listofData, Locale locale) {
         if (listofData != null) {
-            listofData.parallelStream().forEach(jsonData -> readJsonData(jsonData, locale));
+            listofData.parallelStream().forEach(jsonData -> readJsonData(jSONSchema,jsonData, locale));
         }
         return listofData;
     }
 
     //TODO
-    private Map<String, Object> readJsonData(Map<String, Object> map, Locale locale) {
+    private Map<String, Object> readJsonData(JSONSchema jSONSchema,Map<String, Object> map, Locale locale) {
         if(locale != null && !Locale.getDefault().equals(locale)) {
             map = LocalitationUtil.readJSON(map, locale);
         }else {
@@ -267,7 +267,8 @@ public abstract class DataStore {
 
     public Map<String, Object> read(String schemaId, Locale locale, String name)
             throws DataStoreException {
-        return readJsonData(read(jsonSchema(getRawJsonSchema(schemaId)), name), locale);
+        JSONSchema jSONSchema = jsonSchema(getRawJsonSchema(schemaId));
+        return readJsonData(jSONSchema,read(jSONSchema, name), locale);
     }
 
     public boolean delete(String schemaId)
@@ -300,7 +301,7 @@ public abstract class DataStore {
     public List<Map<String, Object>> list(String schemaId, Locale locale,Query query)
             throws DataStoreException {
         JSONSchema jsonSchema = jsonSchema(getRawJsonSchema(schemaId));
-        return readJsonData(list(jsonSchema, this.getTypeFilteredQuery(jsonSchema, query)),locale);
+        return readJsonData(jsonSchema,list(jsonSchema, this.getTypeFilteredQuery(jsonSchema, query)),locale);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
@@ -490,7 +491,7 @@ public abstract class DataStore {
      */
     protected List<Map<String, Object>> list(JSONSchema jsonSchema,Locale locale)
             throws DataStoreException {
-        return readJsonData(list(jsonSchema, getTypeFilteredQuery(jsonSchema)),locale);
+        return readJsonData(jsonSchema,list(jsonSchema, getTypeFilteredQuery(jsonSchema)),locale);
     }
     
     
@@ -524,7 +525,7 @@ public abstract class DataStore {
 
         Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema), pageNumber, pageSize);
         if (page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), readJsonData(page.getContent(),locale));
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), readJsonData(jsonSchema,page.getContent(),locale));
         }
         return page;
     }
