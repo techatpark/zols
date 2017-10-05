@@ -18,6 +18,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import static org.zols.jsonschema.JsonSchema.LOCALE_SEPARATOR;
 import org.zols.jsonschema.everit.EveritJsonSchema;
 import org.zols.jsonschema.util.TestUtil;
 import static org.zols.jsonschema.util.TestUtil.getTestData;
@@ -93,13 +94,13 @@ public class JsonSchemaTest {
         assertFalse("Purity of localizeData", jsonData == localizedJsonData);
 
         assertNull("Removing Localized field", localizedJsonData.get("title"));
-        assertNotNull("Replacing Localized field", localizedJsonData.get("title_it"));
+        assertNotNull("Replacing Localized field", localizedJsonData.get("title"+LOCALE_SEPARATOR+"it"));
 
         assertNull("Removing Nested Localized field", ((Map) localizedJsonData.get("prefererredSeller")).get("name"));
-        assertNotNull("Replacing Nested Localized field", ((Map) localizedJsonData.get("prefererredSeller")).get("name_it"));
+        assertNotNull("Replacing Nested Localized field", ((Map) localizedJsonData.get("prefererredSeller")).get("name"+LOCALE_SEPARATOR+"it"));
 
         assertNull("Removing Nested Array Localized field", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"));
-        assertNotNull("Replacing Nested Array Localized field", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name_it"));
+        assertNotNull("Replacing Nested Array Localized field", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"+LOCALE_SEPARATOR+"it"));
 
     }
 
@@ -111,10 +112,10 @@ public class JsonSchemaTest {
 
         assertFalse("puririty of delocalization", jsonData == delocalizedJsonData);
 
-        assertNull("Removing Localized field", delocalizedJsonData.get("title_it"));
+        assertNull("Removing Localized field", delocalizedJsonData.get("title"+LOCALE_SEPARATOR+"it"));
         assertEquals("Keeping Localized field value into default locale value", "Italy title", delocalizedJsonData.get("title"));
 
-        assertNull("Removing Nested Localized field", ((Map) delocalizedJsonData.get("prefererredSeller")).get("name_it"));
+        assertNull("Removing Nested Localized field", ((Map) delocalizedJsonData.get("prefererredSeller")).get("name"+LOCALE_SEPARATOR+"it"));
         assertEquals("Keeping Nested Localized field value into default locale value", "Italy name",
                 ((Map) delocalizedJsonData.get("prefererredSeller")).get("name"));
         assertEquals("Retaining default locale value for Nested Array Localized field", "More Showroom", ((Map) ((List) delocalizedJsonData.get("sellers")).get(1)).get("name"));

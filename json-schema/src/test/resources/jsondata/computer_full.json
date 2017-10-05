@@ -1,13 +1,13 @@
 {
     "id": 1,
     "title": "HP Laptop",
-    "title_it": "Italy title",
+    "title$it": "Italy title",
     "price": 12.50,
     "tags": ["Personal", "Electronics"],
     "sellers": [{
             "id": 1,
             "name": "HP Showroom",
-            "name_it": "Italy name"
+            "name$it": "Italy name"
         }, {
             "id": 2,
             "name": "More Showroom"
@@ -15,13 +15,13 @@
     "prefererredSeller": {
         "id": 3,
         "name": "Muthu",
-        "name_it": "Italy name"
+        "name$it": "Italy name"
     },
     "warehouseLocations": [{
             "latitude": 1,
             "longitude": 2
         }],
     "brand": "HP",
-    "brand_it": "Italy brand",
+    "brand$it": "Italy brand",
     "os": "ios"
 }

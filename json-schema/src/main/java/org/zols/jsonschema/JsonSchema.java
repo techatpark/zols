@@ -26,7 +26,7 @@ import javax.validation.ConstraintViolation;
  */
 public abstract class JsonSchema {
 
-    protected final static String LOCALE_SEPARATOR = "_";
+    protected final static String LOCALE_SEPARATOR = "$";
 
     protected final Map<String, Object> schemaMap;
 
