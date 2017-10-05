@@ -30,6 +30,7 @@ import static org.zols.datastore.util.JsonUtil.asList;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
 
+
 /**
  *
  * @author wz07
@@ -273,6 +274,92 @@ public class JSONSchema {
         return localizedProperties;
     }
     
+    
+    public  Map<String, Object> localizeData(final JSONSchema jSONSchema,
+            Map<String, Object> jsonData,
+            Locale locale) {
+        String localeCode = locale.getLanguage();
+
+        Map<String, Object> localizedProperties = jSONSchema.getLocalizedProperties();
+        localizedProperties.entrySet().stream().forEach((localizedPropertiesEntry) -> {
+            jsonData.put(localizedPropertiesEntry.getKey() + "$" + localeCode, jsonData.remove(localizedPropertiesEntry.getKey()));
+        });
+
+        Map<String, Object> consolidatedProperties = jSONSchema.getConsolidatedProperties();
+        jsonData.entrySet().forEach(property -> {
+            String fieldName = property.getKey();
+            Object fieldValue = property.getValue();
+            if (fieldValue instanceof Map) {
+                Map<String, Object> propertySchema = (Map<String, Object>) consolidatedProperties.get(fieldName);
+                Object reference = propertySchema.get("$ref");
+                if (reference != null) {
+                    String schemaName = reference.toString().replaceAll("#/definitions/", "");
+                    localizeData(jSONSchema.getJsonSchema(schemaName), (Map<String, Object>) fieldValue, locale);
+                }
+            }
+
+        });
+
+        return jsonData;
+    }
+
+    public  Map<String, Object> delocalizeData(Map<String, Object> jsonData) {
+        if (jsonData != null) {
+            List<String> localeFileds = new ArrayList();
+            jsonData.entrySet().forEach(property -> {
+                String fieldName = property.getKey();
+                if (fieldName.contains("$")) {
+                    localeFileds.add(fieldName);
+                } else if (property.getValue() instanceof Map) {
+                    delocalizeData((Map<String, Object>) property.getValue());
+                } else if (property.getValue() instanceof Collection) {
+                    ((Collection) property.getValue()).forEach(collectionData -> {
+                        if (collectionData instanceof Map) {
+                            delocalizeData((Map<String, Object>) collectionData);
+                        }
+                    });
+                }
+
+            });
+            localeFileds.forEach(fieldName -> {
+
+                jsonData.remove(fieldName);
+
+            });
+        }
+
+        return jsonData;
+    }
+
+    public  Map<String, Object> delocalizeData(
+            Map<String, Object> jsonData,
+            Locale locale) {
+        String localeCode = locale.getLanguage();
+
+        List<String> localeFileds = new ArrayList();
+        jsonData.entrySet().forEach(property -> {
+            String fieldName = property.getKey();
+            if (fieldName.endsWith("$" + localeCode)) {
+                localeFileds.add(fieldName);
+            } else if (property.getValue() instanceof Map) {
+                delocalizeData((Map<String, Object>) property.getValue(), locale);
+            } else if (property.getValue() instanceof Collection) {
+                ((Collection) property.getValue()).forEach(collectionData -> {
+                    if (collectionData instanceof Map) {
+                        delocalizeData((Map<String, Object>) collectionData, locale);
+                    }
+                });
+            }
+
+        });
+        localeFileds.forEach(fieldName -> {
+
+            Object obj = jsonData.remove(fieldName);
+            jsonData.put(fieldName.substring(0, fieldName.indexOf("$")), obj);
+
+        });
+        return jsonData;
+    }
     
 
 }

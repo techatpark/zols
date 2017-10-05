@@ -19,7 +19,6 @@ import org.zols.datastore.query.Query;
 import org.zols.datastore.util.JsonUtil;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
-import org.zols.datastore.util.LocalitationUtil;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -72,7 +71,7 @@ public abstract class DataStore {
         Map linkedHashMap = new LinkedHashMap<>(jsonData);
         linkedHashMap.put("$type", jsonSchema.type());
         if(locale != null && !Locale.getDefault().equals(locale)) {
-            linkedHashMap = LocalitationUtil.prepareJSON(jsonSchema,linkedHashMap,locale);
+            linkedHashMap = jsonSchema.localizeData(jsonSchema,linkedHashMap,locale);
         }
         return Collections.unmodifiableMap(linkedHashMap);
     }
@@ -94,9 +93,9 @@ public abstract class DataStore {
     //TODO
     private Map<String, Object> readJsonData(JSONSchema jSONSchema,Map<String, Object> map, Locale locale) {
         if(locale != null && !Locale.getDefault().equals(locale)) {
-            map = LocalitationUtil.readJSON(map, locale);
+            map = jSONSchema.delocalizeData(map, locale);
         }else {
-            map = LocalitationUtil.readJSON(map);
+            map = jSONSchema.delocalizeData(map);
         }
         return map;
     }
