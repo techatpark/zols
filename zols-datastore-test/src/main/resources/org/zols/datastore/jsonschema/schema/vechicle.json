@@ -1,9 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "name": "vechicle",
+    "$id": "vechicle",
     "title": "Vechicle Schema",
     "type": "object",
-    "idField":"reg_number",
+    "ids":["reg_number"],
     "properties": {
         "reg_number": {
             "type": "string"

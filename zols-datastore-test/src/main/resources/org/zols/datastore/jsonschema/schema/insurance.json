@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "name": "insurance",
+    "$id": "insurance",
     "title": "Insurance Schema",
     "type": "object",
     "properties": {

@@ -1,5 +1,5 @@
 {
-    "id": "product",
+    "$id": "product",
     "$schema": "http://json-schema.org/draft-06/schema#",
     "title": "Product",
     "description": "A invalid product from Acme's catalog",

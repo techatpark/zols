@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.zols.datastore.jsonschema.JSONSchema;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
@@ -29,8 +28,13 @@ public class DataService {
     @Autowired
     private DataStore dataStore;
 
-    public String getIdField(String schemaName) throws DataStoreException {
-        return JSONSchema.jsonSchema(dataStore.getSchema(schemaName)).idField();
+    public String getIdField(String schemaId) throws DataStoreException {
+        String idPropertyName = null ;
+        List<String> idProps = dataStore.getJsonSchemaById(schemaId).getIdPropertyNames(); 
+        if(!idProps.isEmpty()) {
+            idPropertyName = idProps.get(0);
+        }
+        return idPropertyName;
     }
 
     @Secured("ROLE_ADMIN")

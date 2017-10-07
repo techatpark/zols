@@ -17,12 +17,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.zols.datastore.DataStore;
-import static org.zols.datastore.jsonschema.JSONSchema.jsonSchema;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.web.util.HttpUtil.getPageUrl;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
+import org.zols.jsonschema.JsonSchema;
 
 @Controller
 @RequestMapping("/browse")
@@ -44,25 +44,16 @@ public class BrowseController {
 
     @RequestMapping(value = "/{schemaName}/{keyword}")
     public String browseByCategoryWithKeyword(Model model,
-            @PathVariable("schemaName") String schemaName,
+            @PathVariable("schemaName") String schemaId,
             @PathVariable("keyword") String keyword,
             HttpServletRequest request,
             Pageable pageable) throws DataStoreException {
         Query query = getQuery(request);
         model.addAttribute("query", query);   
-        Map<String,Object> jsonSchema = dataStore.getRawJsonSchema(schemaName);
-        model.addAttribute("schema", jsonSchema);
-        List<String> parentNames = jsonSchema(jsonSchema).hierarchy();
-
-        if(parentNames != null && parentNames.size() > 1) {
-            List<Map<String,Object>> parents = new ArrayList<>();
-            for (String parentName : parentNames) {
-                parents.add(dataStore.getSchema(parentName));
-            }
-            model.addAttribute("parents",parents );
-        }
-        
-        model.addAttribute("aggregations", categoryService.browseSchema(schemaName, keyword, query,pageable));
+        JsonSchema jsonSchema = dataStore.getJsonSchemaById(schemaId);
+        model.addAttribute("schema", jsonSchema.getCompositeSchema());
+        model.addAttribute("parents",jsonSchema.getParents());
+        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,pageable));
         String pageUrl = getPageUrl(request);
         model.addAttribute("pageurl", pageUrl);
         int indexOfQuestionMark = pageUrl.indexOf("?");

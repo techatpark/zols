@@ -1,5 +1,5 @@
 {
-    "name": "teacher",
+    "$id": "teacher",
     "title": "Teacher",
     "$ref": "person",
     "type": "object",

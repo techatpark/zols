@@ -1,7 +1,7 @@
 {
-    "name": "person",
+    "$id": "person",
     "title": "Person",
-    "idField": "name",
+    "ids":[ "name"],
     "labelField": "name",
     "type": "object",
     "properties": {

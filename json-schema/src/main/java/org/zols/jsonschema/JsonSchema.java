@@ -26,7 +26,7 @@ import javax.validation.ConstraintViolation;
  */
 public abstract class JsonSchema {
 
-    protected final static String LOCALE_SEPARATOR = "$";
+    protected final static String LOCALE_SEPARATOR = "^";
 
     protected final Map<String, Object> schemaMap;
 
@@ -37,9 +37,9 @@ public abstract class JsonSchema {
     private final List<String> idPropertyNames;
 
     private final Map<String, Map<String, Object>> properties;
-    
+
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
-        this(schemaSupplier.apply(schemaId),schemaSupplier);
+        this(schemaSupplier.apply(schemaId), schemaSupplier);
     }
 
     public JsonSchema(Map<String, Object> schemaMap, Function<String, Map<String, Object>> schemaSupplier) {
@@ -95,14 +95,14 @@ public abstract class JsonSchema {
     public JsonSchema getParent() {
         return parent;
     }
-    
+
     /**
      * Gets Root of the Schema if exists, else returns itself
      *
      * @return
      */
     public JsonSchema getRoot() {
-        return parents.isEmpty() ? this : parents.get(parents.size()-1);
+        return parents.isEmpty() ? this : parents.get(parents.size() - 1);
     }
 
     /**
@@ -175,8 +175,8 @@ public abstract class JsonSchema {
      * @param referenceUrl
      * @return
      */
-    private String getJSONPropertyName(String referenceUrl) {
-        return referenceUrl.replaceAll("http", "").replaceAll(":", "").replaceAll("/", "").replaceAll("\\.", "");
+    public String getJSONPropertyName(String referenceUrl) {
+        return referenceUrl.replaceAll("http", "").replaceAll(":", "").replaceAll("/", "").replaceAll("\\.", "").replaceAll("#", "");
     }
 
     private Map<String, Map<String, Object>> getDefinitions(Map<String, Object> schemaAsMap) {
@@ -232,53 +232,65 @@ public abstract class JsonSchema {
      * @param locale
      * @return
      */
-    public Map<String, Object> delocalizeData(Map<String, Object> jsonData, Locale locale) {
-        Map<String, Object> delocalizeJsonData = new HashMap<>(jsonData.size());
-        List<String> localizedKeys = getLocalizedPropertyNames();
+    public Map<String, Object> delocalizeData(final Map<String, Object> jsonData, final Locale locale) {
+        
+        if (jsonData != null) {
+            Map<String, Object> delocalizeJsonData ;
+            if (locale != null) {
+                delocalizeJsonData = new HashMap<>(jsonData.size());
+                List<String> localizedKeys = getLocalizedPropertyNames();
 
-        jsonData.entrySet().forEach((entry) -> {
+                jsonData.entrySet().forEach((entry) -> {
 
-            String key = entry.getKey();
-            Object value = entry.getValue();
+                    final String key = entry.getKey();
+                    final Object value = entry.getValue();
 
-            if (localizedKeys.contains(key)) {
-                String localizedKey = key + LOCALE_SEPARATOR + locale.getLanguage();
-                Object localizedValue = jsonData.get(localizedKey);
-                if (localizedValue == null) {
-                    delocalizeJsonData.put(key, value);
-                } else {
-                    delocalizeJsonData.put(key, localizedValue);
-                }
-            } else {
-                // if localized ignore
-                if (!key.contains(LOCALE_SEPARATOR)) {
-                    delocalizeJsonData.put(key, value);
-                }
-
-            }
-
-            if (value instanceof Map) {
-                Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                delocalizeJsonData.put(key, getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
-
-            } else if (value instanceof List) {
-                List nestedList = (List) value;
-                List newList = new ArrayList(nestedList.size());
-                for (Object object : nestedList) {
-                    if (object instanceof Map) {
-                        Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                        newList.add(getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
-
+                    if (localizedKeys.contains(key)) {
+                        String localizedKey = key + LOCALE_SEPARATOR + locale.getLanguage();
+                        Object localizedValue = jsonData.get(localizedKey);
+                        if (localizedValue == null) {
+                            delocalizeJsonData.put(key, value);
+                        } else {
+                            delocalizeJsonData.put(key, localizedValue);
+                        }
                     } else {
-                        newList.add(object);
+                        // if localized ignore
+                        if (!key.contains(LOCALE_SEPARATOR)) {
+                            delocalizeJsonData.put(key, value);
+                        } else {
+                            delocalizeJsonData.put(key.substring(0, key.lastIndexOf(LOCALE_SEPARATOR)), value);
+                        }
+
                     }
-                }
-                delocalizeJsonData.put(key, newList);
 
+                    if (value instanceof Map) {
+                        Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
+                        delocalizeJsonData.put(key, getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+
+                    } else if (value instanceof List) {
+                        List nestedList = (List) value;
+                        List newList = new ArrayList(nestedList.size());
+                        for (Object object : nestedList) {
+                            if (object instanceof Map) {
+                                Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
+                                newList.add(getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+
+                            } else {
+                                newList.add(object);
+                            }
+                        }
+                        delocalizeJsonData.put(key, newList);
+
+                    }
+
+                });
+                return delocalizeJsonData;
+            } else {
+                return new HashMap<>(jsonData);
             }
+        }
 
-        });
-        return delocalizeJsonData;
+        return null;
     }
 
     /**
@@ -380,7 +392,7 @@ public abstract class JsonSchema {
      * @return
      */
     public String getId() {
-        return (String) schemaMap.get("id");
+        return (String) schemaMap.get("$id");
     }
 
     /**
@@ -409,5 +421,5 @@ public abstract class JsonSchema {
     protected abstract String asString();
 
     public abstract Set<ConstraintViolation> validate(Map<String, Object> jsonData);
-    
+
 }

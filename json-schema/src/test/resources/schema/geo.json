@@ -1,5 +1,5 @@
 {
-    "id": "geo",
+    "$id": "geo",
     "$schema": "http://json-schema.org/draft-06/schema#",
     "description": "A geographical coordinate",
     "type": "object",

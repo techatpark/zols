@@ -6,17 +6,16 @@
 package org.zols.datastore.jsonschema.util;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import static java.lang.ClassLoader.getSystemResource;
-import java.net.URISyntaxException;
-import static java.nio.file.Files.readAllBytes;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.zols.datastore.DataStore;
 import static org.zols.datastore.util.JsonUtil.asMap;
+import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
@@ -24,24 +23,25 @@ import static org.zols.datastore.util.JsonUtil.asMap;
  */
 public class JsonSchemaTestUtil {
 
-    public static Map<String, Object> sampleJsonSchema(String dataName) {
-        return asMap(sampleJsonSchemaText(dataName));
+    public static Map<String, Object> getJsonSchemaAsMap(String dataName) {
+        return asMap(getJsonSchemaAsText(dataName));
     }
 
-    public static String sampleJsonSchemaText(String schamaName) {
+    public static String getJsonSchemaAsText(String schamaName) {
         String schemaContent = null;
         try {
-            schemaContent = getFile("org/zols/datastore/jsonschema/schema/" + schamaName + ".json");
+
+            schemaContent = getFile("../json-schema/src/test/resources/schema/" + schamaName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return schemaContent;
     }
 
-    public static String sampleJsonText(String dataName) {
+    public static String getJsonDataAsText(String dataName) {
         String schemaContent = null;
         try {
-            schemaContent = getFile("org/zols/datastore/jsonschema/jsondata/" + dataName + ".json");
+            schemaContent = getFile("../json-schema/src/test/resources/jsondata/" + dataName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -49,16 +49,17 @@ public class JsonSchemaTestUtil {
     }
 
     public static Map<String, Object> sampleJson(String dataName) {
-        return asMap(sampleJsonText(dataName));
+        return asMap(getJsonDataAsText(dataName));
     }
 
     private static String getFile(String fileName) throws IOException {
 
         StringBuilder result = new StringBuilder();
 
-        //Get file from resources folder
-        ClassLoader classLoader = JsonSchemaTestUtil.class.getClassLoader();
-        InputStream fileStream = classLoader.getResourceAsStream(fileName);
+        
+        
+        File file = new File(fileName);
+        InputStream fileStream = new FileInputStream(file);
 
         try (Scanner scanner = new Scanner(fileStream)) {
             while (scanner.hasNextLine()) {
@@ -69,5 +70,46 @@ public class JsonSchemaTestUtil {
 
         return result.toString();
 
+    }
+    
+    public static void createAllSchema(DataStore dataStore) throws DataStoreException {
+        dataStore.createSchema(getJsonSchemaAsText("geo"));
+        
+        dataStore.createSchema(getJsonSchemaAsText("seller"));
+        
+        dataStore.createSchema(getJsonSchemaAsText("product"));
+        
+        dataStore.createSchema(getJsonSchemaAsText("device"));
+        
+        dataStore.createSchema(getJsonSchemaAsText("computer"));
+        
+        dataStore.createSchema(getJsonSchemaAsText("mobile"));
+    }
+    
+    public static void deleteAllSchema(DataStore dataStore) throws DataStoreException {
+        dataStore.delete("geo");
+        dataStore.deleteSchema(getJsonSchemaAsText("geo"));
+        
+        dataStore.delete("seller");
+        dataStore.deleteSchema(getJsonSchemaAsText("seller"));
+        
+        dataStore.delete("product");
+        dataStore.deleteSchema(getJsonSchemaAsText("product"));
+        
+        
+        dataStore.delete("device");
+        dataStore.deleteSchema(getJsonSchemaAsText("device"));
+        
+        dataStore.delete("computer");
+        dataStore.deleteSchema(getJsonSchemaAsText("computer"));
+        
+        dataStore.delete("mobile");
+        dataStore.deleteSchema(getJsonSchemaAsText("mobile"));
+    }
+    
+    
+    public static void createAllData(DataStore dataStore) throws DataStoreException {
+        dataStore.create("computer",sampleJson("computer"));
+        dataStore.create("mobile",sampleJson("mobile"));
     }
 }

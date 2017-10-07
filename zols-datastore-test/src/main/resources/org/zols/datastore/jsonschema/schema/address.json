@@ -1,7 +1,7 @@
 {
-    "name": "address",
+    "$id": "address",
     "title": "Address",
-    "idField": "name",
+    "ids":[ "name"],
     "labelField": "street_address",
     "type": "object",
     "properties": {

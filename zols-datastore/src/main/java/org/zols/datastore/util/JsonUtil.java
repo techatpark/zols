@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.zols.datastore.jsonschema.JSONSchema;
 
 /**
  *
@@ -31,7 +30,7 @@ public class JsonUtil {
                     new TypeReference<HashMap<String, Object>>() {
                     });
         } catch (IOException ex) {
-            Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JsonUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -42,7 +41,7 @@ public class JsonUtil {
                     new TypeReference<HashMap<String, Object>>() {
                     });
         } catch (IOException ex) {
-            Logger.getLogger(JSONSchema.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JsonUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

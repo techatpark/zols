@@ -1,26 +1,26 @@
 {
-    "idField": "name",
+    "ids":[ "name"],
     "name": "headmaster",
     "title": "Headmaster",
     "type": "object",
     "$ref": "#/definitions/teacher",
     "definitions": {
         "teacher": {
-            "idField": "name",
+            "ids":[ "name"],
             "name": "teacher",
             "title": "Teacher",
             "type": "object",
             "$ref": "#/definitions/person",
             "definitions": {
                 "person": {
-                    "idField": "name",
+                    "ids":[ "name"],
                     "name": "person",
                     "localized": ["first_name"],
                     "title": "Person",
                     "type": "object",
                     "definitions": {
                         "address": {
-                            "idField": "name",
+                            "ids":[ "name"],
                             "name": "address",
                             "localized": ["city"],
                             "title": "Address",
@@ -68,7 +68,7 @@
                     "labelField": "name"
                 },
                 "address": {
-                    "idField": "name",
+                    "ids":[ "name"],
                     "name": "address",
                     "localized": ["city"],
                     "title": "Address",
@@ -100,14 +100,14 @@
             "labelField": "name"
         },
         "person": {
-            "idField": "name",
+            "ids":[ "name"],
             "name": "person",
             "localized": ["first_name"],
             "title": "Person",
             "type": "object",
             "definitions": {
                 "address": {
-                    "idField": "name",
+                    "ids":[ "name"],
                     "name": "address",
                     "localized": ["city"],
                     "title": "Address",
@@ -155,7 +155,7 @@
             "labelField": "name"
         },
         "address": {
-            "idField": "name",
+            "ids":[ "name"],
             "name": "address",
             "localized": ["city"],
             "title": "Address",

@@ -1,8 +1,8 @@
 {
-    "name": "employee",
+    "$id": "employee",
     "title": "Employee Schema",
     "type": "object",
-    "idField": "name",    
+    "ids":[ "name"],    
     "properties": {
         "name": {
             "type": "string"

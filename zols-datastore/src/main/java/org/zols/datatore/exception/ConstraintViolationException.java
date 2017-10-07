@@ -13,17 +13,17 @@ import javax.validation.ConstraintViolation;
  * @author sathish
  */
 public class ConstraintViolationException extends DataStoreException {
-    private final Set<ConstraintViolation<Object>> violations;
+    private final Set<ConstraintViolation> violations;
     
     private final Object object ;
     
-    public <T> ConstraintViolationException(T object,Set<ConstraintViolation<Object>> violations) {
+    public <T> ConstraintViolationException(T object,Set<ConstraintViolation> violations) {
         super("Bean validation failed for "+ object.getClass().getName());
         this.object = object;
         this.violations = violations;
     }
 
-    public Set<ConstraintViolation<Object>> getViolations() {
+    public Set<ConstraintViolation> getViolations() {
         return violations;
     }
 

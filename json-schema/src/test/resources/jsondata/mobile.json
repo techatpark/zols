@@ -1,8 +1,8 @@
 {
-    "id": 1,
-    "title": "HP Laptop",
+    "id": 2,
+    "title": "HP Mobile",
     "price": 12.50,
-    "tags": ["Official", "Electronics"],
+    "tags": ["Personal", "Electronics"],
     "sellers": [{
             "id": 1,
             "name": "HP Showroom"

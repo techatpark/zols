@@ -3,18 +3,18 @@
     "title": "Teacher",
     "type": "object",
     "$ref": "#/definitions/person",
-    "idField": "name",
+    "ids":[ "name"],
     "labelField": "name",
     "definitions": {
         "person": {
-            "idField": "name",
+            "ids":[ "name"],
             "name": "person",
             "localized": ["first_name"],
             "title": "Person",
             "type": "object",
             "definitions": {
                 "address": {
-                    "idField": "name",
+                    "ids":[ "name"],
                     "name": "address",
                     "localized": ["city"],
                     "title": "Address",
@@ -62,7 +62,7 @@
             "labelField": "name"
         },
         "address": {
-            "idField": "name",
+            "ids":[ "name"],
             "name": "address",
             "localized": ["city"],
             "title": "Address",

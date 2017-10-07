@@ -11,8 +11,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJsonSchemaText;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
 import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
@@ -30,46 +30,27 @@ public class SchemaManagementTest {
 
     @Before
     public void beforeTest() throws DataStoreException {
-        dataStore.createSchema(sampleJsonSchemaText("address"));
-        dataStore.createSchema(sampleJsonSchemaText("person"));
-        dataStore.createSchema(sampleJsonSchemaText("teacher"));
-        dataStore.createSchema(sampleJsonSchemaText("headmaster"));
-        dataStore.createSchema(sampleJsonSchemaText("ceo"));
+        createAllSchema(dataStore);
+
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.delete("address");
-        dataStore.deleteSchema(sampleJsonSchemaText("address"));
-        dataStore.delete("person");
-        dataStore.deleteSchema(sampleJsonSchemaText("person"));
-        dataStore.delete("teacher");
-        dataStore.deleteSchema(sampleJsonSchemaText("teacher"));
-        dataStore.delete("headmaster");
-        dataStore.deleteSchema(sampleJsonSchemaText("headmaster"));
+        deleteAllSchema(dataStore);
         
-        dataStore.delete("ceo");
-        dataStore.deleteSchema(sampleJsonSchemaText("ceo"));
-        
-    }
-
-    @Test
-    public void testGetRawJsonSchema() throws DataStoreException {
-        Map<String, Object> rawJsonSchema = dataStore.getRawJsonSchema("headmaster");
-        Assert.assertEquals("Getting Raw Schema for Complex Type", sampleJsonSchema("raw/headmaster"), rawJsonSchema);
     }
 
 
     @Test
     public void testGetChildrenSchema() throws DataStoreException {
-        List<Map<String, Object>> children = dataStore.listChildSchema("person");
+        List<Map<String, Object>> children = dataStore.listChildSchema("product");
         Assert.assertEquals("Listing children Schema", 1, children.size());
 
     }
     
     @Test
     public void testGetExtentins() throws DataStoreException {
-        List<Map<String, Object>> children = dataStore.listExtenstions("teacher");
+        List<Map<String, Object>> children = dataStore.listExtenstions("device");
         Assert.assertEquals("Listing children Schema", 2, children.size());
 
     }

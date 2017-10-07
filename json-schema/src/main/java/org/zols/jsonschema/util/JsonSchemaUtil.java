@@ -92,6 +92,9 @@ public class JsonSchemaUtil {
         if (!ids.isEmpty()) {
             jsonSchemaAsMap.put("ids", ids);
         }
+        
+        jsonSchemaAsMap.put("$id", jsonSchemaAsMap.remove("id"));
+        
         return new EveritJsonSchema(jsonSchemaAsMap, null);
     }
 }
