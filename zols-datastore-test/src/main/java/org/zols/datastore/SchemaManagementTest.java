@@ -7,6 +7,7 @@ package org.zols.datastore;
 
 import java.util.List;
 import java.util.Map;
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,6 +41,18 @@ public class SchemaManagementTest {
         
     }
 
+    @Test
+    public void testCreateSchema() throws DataStoreException {
+        Assert.assertNotNull("Test Create Schema", dataStore.getSchema("product"));
+    }
+    
+    @Test
+    public void testUpdateSchema() throws DataStoreException {
+        Map<String,Object> schema = dataStore.getSchema("product");
+        schema.put("description", "Updated description");
+        dataStore.updateSchema(new JSONObject(schema).toString());
+        Assert.assertEquals("Test Update Schema","Updated description", dataStore.getSchema("product").get("description"));
+    }
 
     @Test
     public void testGetChildrenSchema() throws DataStoreException {
