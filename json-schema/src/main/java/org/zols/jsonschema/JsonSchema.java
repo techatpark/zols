@@ -163,8 +163,11 @@ public abstract class JsonSchema {
     public Map<String, Object> getCompositeSchema() {
         // This is going to contain one more item (definitions).
         Map<String, Object> compositeSchema = new HashMap<>(schemaMap);
-
-        compositeSchema.put("definitions", getDefinitions(compositeSchema));
+        
+        Map<String,Map<String, Object>> definitions = getDefinitions(compositeSchema);
+        if(!definitions.isEmpty()) {
+            compositeSchema.put("definitions", definitions);
+        }
 
         return compositeSchema;
     }
