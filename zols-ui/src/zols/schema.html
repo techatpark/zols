@@ -96,9 +96,9 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="name">Name</label>
+                    <label class="col-md-4 control-label" for="$id">Id</label>
                     <div class="col-md-4">
-                        <input name="name" data-link="schema.name" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" required="" />
+                        <input name="$id" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md"  />
                     </div>
                 </div>
 
@@ -106,7 +106,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="label">Title</label>
                     <div class="col-md-4">
-                        <input name="label" data-link="schema.title" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="label" data-link="schema.title" type="text" placeholder="" class="form-control input-md"  />
 
                     </div>
                 </div>
@@ -117,25 +117,16 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="$ref">Reference</label>
                     <div class="col-md-4">
-                        <input name="$ref" data-link="schema.$ref" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="$ref" data-link="schema.$ref" type="text" placeholder="" class="form-control input-md"  />
 
                     </div>
                 </div>
                 {{else}}
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="idField">ID Field</label>
-                    <div class="col-md-4">
-                        <input name="idField" data-link="schema.idField" type="text" placeholder="" class="form-control input-md" required="" />
-
-                    </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
                     <label class="col-md-4 control-label" for="labelField">Label Field</label>
                     <div class="col-md-4">
-                        <input name="labelField" data-link="schema.labelField" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="labelField" data-link="schema.labelField" type="text" placeholder="" class="form-control input-md"  />
 
                     </div>
                 </div>
@@ -185,7 +176,21 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="name">Name</label>
                     <div class="col-md-4">
-                        <input name="name" data-link="key" type="text" placeholder="" class="form-control input-md" required="" />
+                        <input name="name" data-link="key" type="text" placeholder="" class="form-control input-md"  />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="ids">Id</label>
+                    <div class="col-md-4">
+                        <input name="ids" data-name="{{:prop.ids}}" data-link="prop.ids" type="checkbox" placeholder="" class="form-control input-md"  />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="required">Required</label>
+                    <div class="col-md-4">
+                        <input name="required" data-name="{{:prop.required}}" data-link="prop.required" type="checkbox" placeholder="" class="form-control input-md"  />
                     </div>
                 </div>
 
@@ -248,7 +253,7 @@
                             {^{for prop.enum ~enum=#data}}
                             <li class="list-group-item">
                                 <span class="badge"><i class="glyphicon glyphicon-minus" data-link="{on ~root.removeEnumValue ~enum #getIndex()}"></i></span>
-                                <input name="name" data-name="{{:#data}}" data-enum-name="{{:~enum.key}}" data-link="#data" type="text" placeholder="" class="form-control" required="" />
+                                <input name="name" data-name="{{:#data}}" data-enum-name="{{:~enum.key}}" data-link="#data" type="text" placeholder="" class="form-control"  />
                             </li>
                             {{/for}}
                         </ul>

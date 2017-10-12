@@ -87,7 +87,6 @@
 
         },
         addProperty: function() {
-            console.log('add prop');
             var totalProperties = Object.keys(this.schema.properties).length;
             this.schema.properties['newProperty' + totalProperties] = this.patchedProperty({});
 
@@ -105,6 +104,7 @@
                     'type': "string"
                 },
                 'required': false,
+                'ids': false,
                 'options': {
                     'wysiwyg': false,'lookup':''
                 }
@@ -117,6 +117,8 @@
 
             var required = patchedSchema.required;
 
+            var ids = patchedSchema.ids;
+
 
 
             for (var key in properties) {
@@ -124,6 +126,11 @@
                 if (required) {
                     if (required.indexOf(key) > -1) {
                         properties[key].required = true;
+                    }
+                }
+                if (ids) {
+                    if (ids.indexOf(key) > -1) {
+                        properties[key].ids = true;
                     }
                 }
                 if (properties[key]['$ref']) {
@@ -138,7 +145,6 @@
 
             }
 
-            console.log(patchedSchema);
             return patchedSchema;
         },
         fillTypes: function() {
@@ -192,6 +198,8 @@
         },
         saveSchema: function(schema) {
             var v4Schema = this.v4Schema(schema);
+            console.log(v4Schema);
+
             if (screen_object.is_edit) {
                 $.ajax({
                     method: 'PUT',
@@ -225,7 +233,7 @@
                 });
 
             }
-
+            
 
         },
         v4Schema: function(schema) {
@@ -240,6 +248,8 @@
 
             var required = [];
 
+            var ids = [];
+
 
 
             for (var key in properties) {
@@ -249,11 +259,17 @@
                 }
                 delete properties[key].required;
 
+                //repair ids
+                if (properties[key].ids) {
+                    ids.push(key);
+                }
+                delete properties[key].ids;
+
                 //trim unused
                 if (properties[key].format ){
                   if(properties[key].format === 'text') {
                       delete properties[key].format;
-                      
+
                   }
                   if(properties[key].format === 'html') {
 
@@ -296,6 +312,11 @@
             if (required.length !== 0) {
                 patchedSchema.required = required;
             }
+
+            if (ids.length !== 0) {
+                patchedSchema.ids = ids;
+            }
+
             return patchedSchema;
         }
 
