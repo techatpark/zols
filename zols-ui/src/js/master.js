@@ -57,7 +57,7 @@
                 $('.carousel-inner a').on('click', function () {
                     $('#schemaHeader').show();
                     var orig_schema = $.view(this).data;
-                    $.get(base_url + '/schema/'+orig_schema.name+'?enlarged').done(function (data) {
+                    $.get(base_url + '/schema/'+orig_schema.$id+'?enlarged').done(function (data) {
                       schema = data;
                       $('#categorynameLbl').text(schema.title);
 
@@ -70,10 +70,20 @@
         });
     };
 
+    $.fn.baseSchema = function(schema1) {
+      var baseSchema = schema1;
+      var $ref = schema1.$ref;
+      if($ref != undefined) {
+        var refTokenArray = $ref.split('/');
+        var refSchemaId = refTokenArray[refTokenArray.length-1]
+        return $.fn.baseSchema(schema.definitions[refSchemaId]);
+      }
+      return baseSchema;
+    },
     $.fn.listData = function (pageNumber) {
         data = null;
         isEdit = false;
-        var listUrl = base_url + '/data/' + schema.name + '?page='+pageNumber;
+        var listUrl = base_url + '/data/' + schema.$id + '?page='+pageNumber;
         var searchBox = $('#schemaHeader .input-group .form-control');
         if(searchBox && searchBox.val()) {
             listUrl = listUrl + "&q=" + searchBox.val();
@@ -90,8 +100,9 @@
 
                 var displayContent = dataList.content.map(function(item){
                    var displayItem = {};
-                   displayItem.labelField = item[schema.labelField];
-                   displayItem.idField = item[schema.idField];
+                   var bs = $.fn.baseSchema(schema);
+                   displayItem.label = item[bs.label];
+                   displayItem.idField = item[bs.ids[0]];
                    return displayItem;
                 });
                 dataList.displayContent = displayContent;
@@ -124,7 +135,7 @@
                     var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
 
 
-                    $.get(base_url + '/data/' + schema.name+'/'+data.idField).done(function(serverdata) {
+                    $.get(base_url + '/data/' + schema.$id+'/'+data.idField).done(function(serverdata) {
                       data = serverdata;
                       $.fn.renderData();
                     });
@@ -154,7 +165,7 @@
         if(data && data["$type"]) {
           delete data["$type"];
         }
-        var editor = $("#editor_holder").jsonEditor({schemaName: schema.name, value: data});
+        var editor = $("#editor_holder").jsonEditor({schemaName: schema.$id, value: data});
 
         $("#result form").submit(function (event) {
             event.preventDefault();
@@ -162,7 +173,7 @@
                 var value = editor.getValue();
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/data/' + schema.name + "/" + value[schema.idField],
+                    url: base_url + '/data/' + schema.$id + "/" + value[schema.idField],
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function (data) {
@@ -173,7 +184,7 @@
             } else {
                 $.ajax({
                     method: 'POST',
-                    url: base_url + '/data/' + schema.name,
+                    url: base_url + '/data/' + schema.$id,
                     dataType: 'json',
                     data: JSON.stringify(editor.getValue())
                 }).done(function (data) {
@@ -189,7 +200,7 @@
     $.fn.deleteData = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + schema.name + '/' + data[schema.idField],
+            url: base_url + '/data/' + schema.$id + '/' + data[schema.idField],
             dataType: 'json'
         }).done(function (data) {
             $.fn.listData(0);

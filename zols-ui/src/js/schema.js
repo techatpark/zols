@@ -59,13 +59,13 @@
                 properties: {}
             };
             if(baseSchema != undefined) {
-              newSchema['$ref'] = baseSchema.name;
+              newSchema['$ref'] = baseSchema.$id;
             }
             screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
 
         },
         editSchema: function(schemaToEdit) {
-            $.get(base_url + '/schema/' + schemaToEdit.name)
+            $.get(base_url + '/schema/' + schemaToEdit.$id)
                 .done(function(data) {
                     screen_object.is_edit = true;
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
@@ -151,8 +151,8 @@
             var options = '';
             for (var index in this.schemas) {
                 var schemaElement = this.schemas[index];
-                if (schemaElement.name !== this.schema.name) {
-                    options += "<option value='" + schemaElement.name + "'>" + schemaElement.title + "</option>";
+                if (schemaElement.$id !== this.schema.$id) {
+                    options += "<option value='" + schemaElement.$id + "'>" + schemaElement.title + "</option>";
                 }
             }
 
@@ -179,7 +179,7 @@
                     $("#confirmationModal").modal('hide');
                     $.ajax({
                         method: 'DELETE',
-                        url: base_url + '/schema/' + schema.name,
+                        url: base_url + '/schema/' + schema.$id,
                         dataType: 'json'
                     }).done(function(data) {
 
@@ -203,7 +203,7 @@
             if (screen_object.is_edit) {
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/schema/' + v4Schema.name,
+                    url: base_url + '/schema/' + v4Schema.$id,
                     dataType: 'json',
                     data: JSON.stringify(v4Schema)
                 }).done(function(data) {
@@ -233,7 +233,7 @@
                 });
 
             }
-            
+
 
         },
         v4Schema: function(schema) {
