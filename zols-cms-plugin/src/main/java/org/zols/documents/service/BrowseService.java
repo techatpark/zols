@@ -41,7 +41,7 @@ public class BrowseService {
             String keyword,
             Query query,
             Pageable pageable) throws DataStoreException {
-        return dataService.list(schemaId, query, pageable);
+        return dataService.list(schemaId, query, pageable,null);
     }
 
     public AggregatedResults browseSchema(String schemaId,

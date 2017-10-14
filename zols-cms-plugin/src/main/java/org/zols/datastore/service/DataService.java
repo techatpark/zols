@@ -6,6 +6,7 @@
 package org.zols.datastore.service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +39,17 @@ public class DataService {
     }
 
     @Secured("ROLE_ADMIN")
-    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
-        return dataStore.create(schemaName, jsonData);
+    public Map<String, Object> create(String schemaName, Map<String, Object> jsonData,Locale loc) throws DataStoreException {
+        return dataStore.create(schemaName, jsonData,loc);
     }
 
-    public Map<String, Object> read(String schemaName, String name) throws DataStoreException {
-        return dataStore.read(schemaName, name);
+    public Map<String, Object> read(String schemaName, String name,Locale loc) throws DataStoreException {
+        return dataStore.read(schemaName, name,loc);
     }
 
     @Secured("ROLE_ADMIN")
-    public boolean update(String schemaName, Map<String, Object> jsonData) throws DataStoreException {
-        return dataStore.update(schemaName, jsonData);
+    public boolean update(String schemaName, Map<String, Object> jsonData,Locale loc) throws DataStoreException {
+        return dataStore.update(schemaName, jsonData,loc);
     }
 
     @Secured("ROLE_ADMIN")
@@ -56,19 +57,19 @@ public class DataService {
         return dataStore.delete(schemaName, name);
     }
 
-    public List<Map<String, Object>> list(String schemaName) throws DataStoreException {
-        return dataStore.list(schemaName);
+    public List<Map<String, Object>> list(String schemaName,Locale loc) throws DataStoreException {
+        return dataStore.list(schemaName,loc);
     }
     
     public Page<Map<String, Object>> list(String schemaName, Query query,
-            Pageable pageable) throws DataStoreException {
+            Pageable pageable,Locale loc) throws DataStoreException {
 
         org.zols.datastore.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
         return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 
     public Page<Map<String, Object>> list(String schemaName, String queryString,
-            Pageable pageable) throws DataStoreException {
+            Pageable pageable,Locale loc) throws DataStoreException {
         Query query = null;
         if (queryString != null) {
             query = new Query();

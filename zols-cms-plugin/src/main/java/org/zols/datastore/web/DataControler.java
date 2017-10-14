@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.web;
 
+import java.util.Locale;
 import java.util.Map;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -40,24 +41,24 @@ public class DataControler {
 
     @RequestMapping(method = POST)
     public Map<String, Object> create(@PathVariable(value = "schemaId") String schemaName,
-            @RequestBody Map<String, Object> jsonData) throws DataStoreException {
+            @RequestBody Map<String, Object> jsonData,Locale loc) throws DataStoreException {
         LOGGER.info("Creating new instance of {}", schemaName);
-        return dataService.create(schemaName, jsonData);
+        return dataService.create(schemaName, jsonData,loc);
     }
 
     @RequestMapping(value = "/{id}", method = GET)
     public Map<String, Object> read(@PathVariable(value = "schemaId") String schemaName,
-            @PathVariable(value = "id") String id) throws DataStoreException {
+            @PathVariable(value = "id") String id,Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data ", id);
-        return dataService.read(schemaName, id);
+        return dataService.read(schemaName, id,loc);
     }
 
     @RequestMapping(value = "/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "schemaId") String schemaName,
             @PathVariable(value = "id") String id,
-            @RequestBody Map<String, Object> jsonData) throws DataStoreException {
-        dataService.update(schemaName, jsonData);
+            @RequestBody Map<String, Object> jsonData,Locale loc) throws DataStoreException {
+        dataService.update(schemaName, jsonData,loc);
 
     }
 
@@ -72,9 +73,9 @@ public class DataControler {
     @RequestMapping(method = GET)
     public Page<Map<String, Object>> list(@PathVariable(value = "schemaId") String schemaName,
             @RequestParam(value="q",required = false) String queryString,
-            Pageable pageable) throws DataStoreException {
+            Pageable pageable,Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data for {}", schemaName);
-        return dataService.list(schemaName, queryString ,pageable);
+        return dataService.list(schemaName, queryString ,pageable,loc);
     }
 
 }

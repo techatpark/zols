@@ -215,7 +215,7 @@ public abstract class DataStore {
         JsonSchema jsonSchema = getJsonSchemaById(schemaId);
         Set<ConstraintViolation> violations = jsonSchema.validate(jsonData);
         if (violations == null) {
-            return create(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
+            return jsonSchema.delocalizeData(create(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale)), locale);
         } else {
             throw new ConstraintViolationException(jsonData, violations);
         }
@@ -254,6 +254,11 @@ public abstract class DataStore {
             throw new ConstraintViolationException(jsonData, violations);
         }
     }
+    
+    public Map<String, Object> read(String schemaId, String name,Locale loc)
+            throws DataStoreException {
+        return read(schemaId, loc, name);
+    }
 
     public Map<String, Object> read(String schemaId, String name)
             throws DataStoreException {
@@ -281,6 +286,11 @@ public abstract class DataStore {
             throws DataStoreException {
         JsonSchema jsonSchema = getJsonSchemaById(schemaId);
         return delete(jsonSchema, this.getTypeFilteredQuery(jsonSchema, query));
+    }
+    
+    public List<Map<String, Object>> list(String schemaId,Locale loc)
+            throws DataStoreException {
+        return list(getJsonSchemaById(schemaId),loc);
     }
 
     public List<Map<String, Object>> list(String schemaId)

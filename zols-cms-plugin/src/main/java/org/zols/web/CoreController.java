@@ -5,6 +5,7 @@
  */
 package org.zols.web;
 
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,8 +53,8 @@ public class CoreController {
     }
 
     @RequestMapping("/pages/{name}")
-    public String pages(@PathVariable(value = "name") String name,Model model) throws DataStoreException {
-        PageRequest pageRequest = pageService.readRequest(name);
+    public String pages(@PathVariable(value = "name") String name,Model model,Locale loc) throws DataStoreException {
+        PageRequest pageRequest = pageService.readRequest(name,loc);
         model.addAttribute("data", pageRequest.getData());
         return pageRequest.getTemplate().getPath();
     }

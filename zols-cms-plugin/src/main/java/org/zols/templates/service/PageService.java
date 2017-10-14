@@ -6,6 +6,7 @@
 package org.zols.templates.service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
@@ -47,11 +48,11 @@ public class PageService {
      * @return created Page object
      */
     @Secured("ROLE_ADMIN")
-    public Page create(PageRequest pageRequest) throws DataStoreException {
+    public Page create(PageRequest pageRequest,Locale loc) throws DataStoreException {
         Page createdPage = null;
         if (pageRequest != null) {
             
-            Map<String,Object> createdData = dataService.create(pageRequest.getTemplate().getDataType(), pageRequest.getData());
+            Map<String,Object> createdData = dataService.create(pageRequest.getTemplate().getDataType(), pageRequest.getData(),loc);
             
             String dataName = createdData.get(dataService.getIdField(pageRequest.getTemplate().getDataType())).toString();
             
@@ -73,7 +74,7 @@ public class PageService {
      * @param pageName String to be Search
      * @return searched Page
      */
-    public PageRequest readRequest(String pageName) throws DataStoreException {
+    public PageRequest readRequest(String pageName,Locale loc) throws DataStoreException {
         LOGGER.info("Reading Page Request {}", pageName);
         PageRequest pageRequest;
         Page page = read(pageName);
@@ -81,7 +82,7 @@ public class PageService {
             pageRequest = new PageRequest();
             Template template = templateService.read(page.getTemplateName());
             pageRequest.setTemplate(template);
-            pageRequest.setData(dataService.read(template.getDataType(), page.getDataName()));
+            pageRequest.setData(dataService.read(template.getDataType(), page.getDataName(),loc));
             return pageRequest;
         }
         return null;

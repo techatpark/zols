@@ -7,6 +7,7 @@
 package org.zols.templates.web;
 
 import java.util.List;
+import java.util.Locale;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,9 @@ public class PageController {
     private PageService pageService;
 
     @RequestMapping(method = POST)
-    public Page create(@RequestBody PageRequest createPageRequest) throws DataStoreException {
+    public Page create(@RequestBody PageRequest createPageRequest,Locale loc) throws DataStoreException {
         LOGGER.info("Creating new pages {}", createPageRequest.getLinkName());
-        return pageService.create(createPageRequest);
+        return pageService.create(createPageRequest,loc);
     }
 
     @RequestMapping(value = "/{name}", method = GET)
