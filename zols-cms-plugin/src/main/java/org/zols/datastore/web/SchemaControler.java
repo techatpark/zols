@@ -52,7 +52,7 @@ public class SchemaControler {
     @RequestMapping(value = "/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "id") String id,
-            @RequestBody String jsonSchema) throws DataStoreException {
+            @RequestBody Map<String, Object> jsonSchema) throws DataStoreException {
 
         LOGGER.info("Updating jsonSchemas with id {} with {}", id, jsonSchema);
         schemaService.update(jsonSchema);

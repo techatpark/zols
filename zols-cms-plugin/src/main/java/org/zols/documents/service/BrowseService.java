@@ -49,7 +49,7 @@ public class BrowseService {
             Query query,
             Pageable pageable) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
-        JsonSchema schema = dataStore.getJsonSchemaById(schemaId);
+        JsonSchema schema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         if (schema != null) {
             Map<String, Object> browseQuery = new HashMap<>();
             browseQuery.put("keyword", keyword);

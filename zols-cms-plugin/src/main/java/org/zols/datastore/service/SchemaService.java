@@ -31,14 +31,14 @@ public class SchemaService {
     /**
      * Creates a new JsonSchema with given Object
      *
-     * @param schema Object to be Create
+     * @param schemaMap Object to be Create
      * @return created JsonSchema object
      */
     @Secured("ROLE_ADMIN")
-    public Map<String, Object> create(Map<String, Object> schema) throws DataStoreException {
+    public Map<String, Object> create(Map<String, Object> schemaMap) throws DataStoreException {
         Map<String, Object> createdJsonSchema = null;
-        if (schema != null) {
-            createdJsonSchema = dataStore.createSchema(JsonUtil.asString(schema));
+        if (schemaMap != null) {
+            createdJsonSchema = dataStore.getSchemaManager().create(schemaMap);
             LOGGER.info("Created JsonSchema  {}", createdJsonSchema);
         }
         return createdJsonSchema;
@@ -53,7 +53,7 @@ public class SchemaService {
      */
     public Map<String, Object> read(String schemaId) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaId);
-        return dataStore.getSchema(schemaId);
+        return dataStore.getSchemaManager().get(schemaId);
     }
 
     /**
@@ -65,7 +65,7 @@ public class SchemaService {
      */
     public Map<String, Object> readEnlargedSchema(String schemaId) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaId);
-        return dataStore.getRawJsonSchema(schemaId);
+        return dataStore.getSchemaManager().getCompositeSchema(schemaId);
     }
 
     /**
@@ -75,11 +75,11 @@ public class SchemaService {
      * @return status of the Update Operation
      */
     @Secured("ROLE_ADMIN")
-    public Boolean update(String schema) throws DataStoreException {
+    public Boolean update(Map<String, Object> schemaMap) throws DataStoreException {
         Boolean updated = false;
-        if (schema != null) {
-            LOGGER.info("Updating JsonSchema  {}", schema);
-            updated = dataStore.updateSchema(schema);
+        if (schemaMap != null) {
+            LOGGER.info("Updating JsonSchema  {}", schemaMap);
+            updated = dataStore.getSchemaManager().update(schemaMap);
         }
         return updated;
     }
@@ -93,7 +93,7 @@ public class SchemaService {
     @Secured("ROLE_ADMIN")
     public Boolean delete(String schemaId) throws DataStoreException {
         LOGGER.info("Deleting JsonSchema  {}", schemaId);
-        return dataStore.deleteSchema(schemaId);
+        return dataStore.getSchemaManager().delete(schemaId);
     }
 
     /**
@@ -103,6 +103,6 @@ public class SchemaService {
      */
     public List<Map<String, Object>> list() throws DataStoreException {
         LOGGER.info("Getting JsonSchemas ");
-        return dataStore.listSchema();
+        return dataStore.getSchemaManager().list();
     }
 }

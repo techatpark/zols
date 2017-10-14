@@ -6,9 +6,6 @@
 package org.zols.datastore.web;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -50,7 +47,7 @@ public class BrowseController {
             Pageable pageable) throws DataStoreException {
         Query query = getQuery(request);
         model.addAttribute("query", query);   
-        JsonSchema jsonSchema = dataStore.getJsonSchemaById(schemaId);
+        JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         model.addAttribute("schema", jsonSchema.getCompositeSchema());
         model.addAttribute("parents",jsonSchema.getParents());
         model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,pageable));

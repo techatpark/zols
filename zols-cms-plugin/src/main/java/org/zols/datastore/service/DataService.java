@@ -31,7 +31,7 @@ public class DataService {
 
     public String getIdField(String schemaId) throws DataStoreException {
         String idPropertyName = null ;
-        List<String> idProps = dataStore.getJsonSchemaById(schemaId).getIdPropertyNames(); 
+        List<String> idProps = dataStore.getSchemaManager().getJsonSchema(schemaId).getIdPropertyNames(); 
         if(!idProps.isEmpty()) {
             idPropertyName = idProps.get(0);
         }

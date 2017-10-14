@@ -7,7 +7,6 @@ package org.zols.datastore;
 
 import java.util.List;
 import java.util.Map;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -43,27 +42,27 @@ public class SchemaManagementTest {
 
     @Test
     public void testCreateSchema() throws DataStoreException {
-        Assert.assertNotNull("Test Create Schema", dataStore.getSchema("product"));
+        Assert.assertNotNull("Test Create Schema", dataStore.getSchemaManager().get("product"));
     }
     
     @Test
     public void testUpdateSchema() throws DataStoreException {
-        Map<String,Object> schema = dataStore.getSchema("product");
-        schema.put("description", "Updated description");
-        dataStore.updateSchema(new JSONObject(schema).toString());
-        Assert.assertEquals("Test Update Schema","Updated description", dataStore.getSchema("product").get("description"));
+        Map<String,Object> schemaMap = dataStore.getSchemaManager().get("product");
+        schemaMap.put("description", "Updated description");
+        dataStore.getSchemaManager().update(schemaMap);
+        Assert.assertEquals("Test Update Schema","Updated description", dataStore.getSchemaManager().get("product").get("description"));
     }
 
     @Test
     public void testGetChildrenSchema() throws DataStoreException {
-        List<Map<String, Object>> children = dataStore.listChildSchema("product");
+        List<Map<String, Object>> children = dataStore.getSchemaManager().listChildren("product");
         Assert.assertEquals("Listing children Schema", 1, children.size());
 
     }
     
     @Test
     public void testGetExtentins() throws DataStoreException {
-        List<Map<String, Object>> children = dataStore.listExtenstions("device");
+        List<Map<String, Object>> children = dataStore.getSchemaManager().listExtenstions("device");
         Assert.assertEquals("Listing children Schema", 2, children.size());
 
     }
