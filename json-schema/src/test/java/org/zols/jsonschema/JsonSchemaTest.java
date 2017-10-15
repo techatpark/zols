@@ -35,14 +35,14 @@ public class JsonSchemaTest {
 
         assertEquals("Getting parents of computer", 2, jsonScherma.getParents().size());
     }
-    
+
     @Test
     public void testParent() {
         JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
 
         assertEquals("Getting parent of computer", "device", jsonScherma.getParent().getId());
     }
-    
+
     @Test
     public void testRoot() {
         JsonSchema jsonScherma = new EveritJsonSchema("computer", TestUtil::getTestSchema);
@@ -94,13 +94,32 @@ public class JsonSchemaTest {
         assertFalse("Purity of localizeData", jsonData == localizedJsonData);
 
         assertNull("Removing Localized field", localizedJsonData.get("title"));
-        assertNotNull("Replacing Localized field", localizedJsonData.get("title"+LOCALE_SEPARATOR+"it"));
+        assertEquals("Replacing Localized field", "HP Laptop", localizedJsonData.get("title" + LOCALE_SEPARATOR + "it"));
 
         assertNull("Removing Nested Localized field", ((Map) localizedJsonData.get("prefererredSeller")).get("name"));
-        assertNotNull("Replacing Nested Localized field", ((Map) localizedJsonData.get("prefererredSeller")).get("name"+LOCALE_SEPARATOR+"it"));
+        assertEquals("Replacing Nested Localized field", "Muthu", ((Map) localizedJsonData.get("prefererredSeller")).get("name" + LOCALE_SEPARATOR + "it"));
 
         assertNull("Removing Nested Array Localized field", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"));
-        assertNotNull("Replacing Nested Array Localized field", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"+LOCALE_SEPARATOR+"it"));
+        assertEquals("Replacing Nested Array Localized field", "HP Showroom", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name" + LOCALE_SEPARATOR + "it"));
+
+    }
+
+    @Test
+    public void testLocalizeDataKeepDefault() {
+        JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
+        Map<String, Object> jsonData = getTestData("computer");
+        Map<String, Object> localizedJsonData = jsonSchemaComputer.localizeData(jsonData, Locale.ITALY,true);
+        Map<String, Object> n;
+        assertFalse("Purity of localizeData", jsonData == localizedJsonData);
+
+        assertEquals("Retaining Localized field",  "HP Laptop", localizedJsonData.get("title"));
+        assertEquals("Replacing Localized field", "HP Laptop", localizedJsonData.get("title" + LOCALE_SEPARATOR + "it"));
+
+        assertEquals("Retaining Nested Localized field",  "Muthu",((Map) localizedJsonData.get("prefererredSeller")).get("name"));
+        assertEquals("Replacing Nested Localized field", "Muthu", ((Map) localizedJsonData.get("prefererredSeller")).get("name" + LOCALE_SEPARATOR + "it"));
+
+        assertEquals("Retaining Nested Array Localized field","HP Showroom",  ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"));
+        assertEquals("Replacing Nested Array Localized field", "HP Showroom", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name" + LOCALE_SEPARATOR + "it"));
 
     }
 
@@ -112,10 +131,10 @@ public class JsonSchemaTest {
 
         assertFalse("puririty of delocalization", jsonData == delocalizedJsonData);
 
-        assertNull("Removing Localized field", delocalizedJsonData.get("title"+LOCALE_SEPARATOR+"it"));
+        assertNull("Removing Localized field", delocalizedJsonData.get("title" + LOCALE_SEPARATOR + "it"));
         assertEquals("Keeping Localized field value into default locale value", "Italy title", delocalizedJsonData.get("title"));
 
-        assertNull("Removing Nested Localized field", ((Map) delocalizedJsonData.get("prefererredSeller")).get("name"+LOCALE_SEPARATOR+"it"));
+        assertNull("Removing Nested Localized field", ((Map) delocalizedJsonData.get("prefererredSeller")).get("name" + LOCALE_SEPARATOR + "it"));
         assertEquals("Keeping Nested Localized field value into default locale value", "Italy name",
                 ((Map) delocalizedJsonData.get("prefererredSeller")).get("name"));
         assertEquals("Retaining default locale value for Nested Array Localized field", "More Showroom", ((Map) ((List) delocalizedJsonData.get("sellers")).get(1)).get("name"));
@@ -125,7 +144,7 @@ public class JsonSchemaTest {
     public void testGetIdPropertyNames() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         assertEquals("Checking id property size", 1, jsonSchemaComputer.getIdPropertyNames().size());
-        assertEquals("Checking id property order", Arrays.asList("id"),jsonSchemaComputer.getIdPropertyNames());
+        assertEquals("Checking id property order", Arrays.asList("id"), jsonSchemaComputer.getIdPropertyNames());
     }
 
     @Test
@@ -134,7 +153,7 @@ public class JsonSchemaTest {
         Map<String, Object> jsonData = getTestData("computer");
         assertEquals("Checking id property value", 1, jsonSchemaComputer.getIdValues(jsonData)[0]);
     }
-    
+
     @Test
     public void testValidate() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);

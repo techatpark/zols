@@ -295,6 +295,10 @@ public abstract class JsonSchema {
 
         return null;
     }
+    
+    public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
+        return localizeData(jsonData, locale, Boolean.FALSE);
+    }
 
     /**
      * Localize the given data and copy to new Map. all localized fields
@@ -303,9 +307,10 @@ public abstract class JsonSchema {
      *
      * @param jsonData
      * @param locale
+     * @param keepDefault
      * @return
      */
-    public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
+    public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale,Boolean keepDefault) {
 
         Map<String, Object> localizedJsonData = new HashMap<>(jsonData.size());
         List<String> localizedKeys = getLocalizedPropertyNames();
@@ -313,23 +318,26 @@ public abstract class JsonSchema {
         jsonData.entrySet().forEach((entry) -> {
             String key = entry.getKey();
             Object value = entry.getValue();
+            
             if (localizedKeys.contains(key)) {
                 localizedJsonData.put(key + LOCALE_SEPARATOR + locale.getLanguage(), value);
+                if(keepDefault) {
+                    localizedJsonData.put(key, value);
+                }
             } else {
                 localizedJsonData.put(key, value);
             }
 
             if (value instanceof Map) {
                 Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale));
-
+                localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale,keepDefault));
             } else if (value instanceof List) {
                 List nestedList = (List) value;
                 List newList = new ArrayList(nestedList.size());
                 for (Object object : nestedList) {
                     if (object instanceof Map) {
                         Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                        newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale));
+                        newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale,keepDefault));
 
                     } else {
                         newList.add(object);

@@ -378,6 +378,10 @@ public abstract class DataStore {
         return schemaManager;
     }
     
+    public <T> ObjectManager<T> getSchemaManager(Class<T> clazz) {
+        return new ObjectManager<>(this);
+    }
+    
     
 
     /**
