@@ -23,6 +23,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.ConstraintViolation;
 import org.zols.jsonschema.JsonSchema;
+import org.zols.jsonschema.bind.annotation.Localized;
 import org.zols.jsonschema.everit.EveritJsonSchema;
 
 /**
@@ -88,9 +89,18 @@ public class JsonSchemaUtil {
                 ids.add(field.getName());
             }
         }
-
         if (!ids.isEmpty()) {
             jsonSchemaAsMap.put("ids", ids);
+        }
+        
+        List<String> localized = new ArrayList<>();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.isAnnotationPresent(Localized.class)) {
+                localized.add(field.getName());
+            }
+        }
+        if (!localized.isEmpty()) {
+            jsonSchemaAsMap.put("localized", localized);
         }
         
         jsonSchemaAsMap.put("$id", jsonSchemaAsMap.remove("id"));

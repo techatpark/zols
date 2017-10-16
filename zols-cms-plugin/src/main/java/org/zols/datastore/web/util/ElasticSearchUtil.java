@@ -30,7 +30,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
-import static org.zols.datastore.elasticsearch.ElasticSearchDataStore.getQueryBuilder;
+import static org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence.getQueryBuilder;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;

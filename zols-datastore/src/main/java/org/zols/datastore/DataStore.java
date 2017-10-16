@@ -1,347 +1,198 @@
 package org.zols.datastore;
 
+import org.zols.datastore.query.Page;
 import java.util.*;
 import java.util.Map;
-import java.util.Set;
 import static java.util.stream.Collectors.toList;
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import org.zols.datastore.persistence.DataStorePersistence;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
-import org.zols.datastore.util.JsonUtil;
-import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
-import static org.zols.jsonschema.util.JsonSchemaUtil.getJsonSchema;
 
 /**
  * Data Store is used to Store Static and Dynamic Objects using JSON Schema
  *
  * @author Sathish Kumar Thiyagarajan
  */
-public abstract class DataStore {
+public class DataStore {
 
-    private final Validator validator;
     private final SchemaManager schemaManager;
+    private final DataStorePersistence dataStorePersistence;
 
     public DataStore() {
-        validator = Validation.buildDefaultValidatorFactory().getValidator();
         schemaManager = new SchemaManager(this);
+        dataStorePersistence = null;
     }
 
-    public <T> T create(T object) throws DataStoreException {
-        return create(object, null);
+    public DataStore(DataStorePersistence dataStorePersistence) {
+        schemaManager = new SchemaManager(this);
+        this.dataStorePersistence = dataStorePersistence;
     }
 
-    public <T> T create(T object, Locale locale) throws DataStoreException {
-        T createdObject = null;
-        if (object != null) {
-            Set violations = validator.validate(object);
-            if (violations.isEmpty()) {
-                JsonSchema jsonSchema = getJsonSchema(object.getClass());
-                createdObject = (T) readJsonDataAsObject(object.getClass(),
-                        create(jsonSchema, getImmutableJSONData(jsonSchema, object, locale)), locale);
-            } else {
-                throw new ConstraintViolationException(object, violations);
-            }
-
-        }
-        return createdObject;
+    public Map<String, Object> create(String schemaId, Map<String, Object> dataMap) throws DataStoreException {
+        return create(schemaId, dataMap, null);
     }
 
-    public <T> T read(Class<T> clazz, Locale locale, String idValue) throws DataStoreException {
-        return (T) readJsonDataAsObject(clazz, read(getJsonSchema(clazz), idValue), locale);
-    }
+    public Map<String, Object> create(String schemaId, Map<String, Object> dataMap, Locale locale) throws DataStoreException {
+        Map<String, Object> createdDataAsMap = null;
 
-    public <T> T read(Class<T> clazz, String idValue) throws DataStoreException {
-        return read(clazz, null, idValue);
-    }
+        if (dataMap != null) {
+            JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
+            if (jsonSchema != null) {
+                Set violations = jsonSchema.validate(dataMap);
+                if (violations.isEmpty()) {
 
-    public Map<String, Object> getImmutableJSONData(JsonSchema jsonSchema, Object object, Locale locale) {
-        return getImmutableJSONData(jsonSchema, asMap(object), locale);
-    }
+                    if (locale == null) {
+                        createdDataAsMap = this.create(jsonSchema, dataMap);
 
-    public Map<String, Object> getImmutableJSONData(JsonSchema jsonSchema, Map<String, Object> jsonData, Locale locale) {
-        Map linkedHashMap = new LinkedHashMap<>(jsonData);
-        linkedHashMap.put("$type", jsonSchema.getId());
-        if (locale != null && !Locale.getDefault().equals(locale)) {
-            linkedHashMap = jsonSchema.localizeData(linkedHashMap, locale);
-        }
-        return Collections.unmodifiableMap(linkedHashMap);
-    }
+                    } else {
+                        createdDataAsMap = jsonSchema.delocalizeData(this.create(jsonSchema, jsonSchema.localizeData(dataMap, locale, true)), locale);
 
-    private <T> T readJsonDataAsObject(Class<T> clazz, Map<String, Object> map, Locale locale) {
-        if (map != null) {
-            map.remove("$type");
-        }
-        return JsonUtil.asObject(clazz, readJsonData(getJsonSchema(clazz), map, locale));
-    }
+                    }
 
-    private List<Map<String, Object>> readJsonData(JsonSchema jSONSchema, List<Map<String, Object>> listofData, Locale locale) {
-        if (listofData != null) {
-            return listofData.stream().map(data
-                    -> readJsonData(jSONSchema, data, locale)
-            ).collect(toList());
-        }
-        return listofData;
-    }
-
-//TODO
-    private Map<String, Object> readJsonData(JsonSchema jSONSchema, Map<String, Object> map, Locale locale) {
-        if (locale != null && !Locale.getDefault().equals(locale)) {
-            map = jSONSchema.delocalizeData(map, locale);
-        }
-        return map;
-    }
-
-    public <T> T update(T object, String idValue) throws DataStoreException {
-        return update(object, idValue, null);
-    }
-
-    public <T> T update(T object, String idValue, Locale locale) throws DataStoreException {
-        T updatedObject = null;
-        if (object != null) {
-            Set violations = validator.validate(object);
-            if (violations.isEmpty()) {
-                JsonSchema jsonSchema = getJsonSchema(object.getClass());
-                boolean updated = updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, object, locale));
-                if (updated) {
-                    updatedObject = (T) read(object.getClass(), idValue);
+                } else {
+                    throw new ConstraintViolationException(dataMap, violations);
                 }
-            } else {
-                throw new ConstraintViolationException(object, violations);
             }
+
         }
-        return updatedObject;
+        return createdDataAsMap;
     }
 
-    public boolean delete(Class clazz) throws DataStoreException {
-        return delete(getJsonSchema(clazz));
-    }
-
-    public boolean delete(Class clazz, String idValue) throws DataStoreException {
-        return delete(getJsonSchema(clazz), idValue);
-    }
-
-    public boolean delete(Class clazz, Query query)
-            throws DataStoreException {
-        JsonSchema jsonSchema = getJsonSchema(clazz);
-        return delete(jsonSchema, getTypeFilteredQuery(jsonSchema, query));
-    }
-
-    public <T> List<T> list(Class<T> clazz) throws DataStoreException {
-        return list(clazz, (Locale) null);
-    }
-
-    public <T> List<T> list(Class<T> clazz, Locale locale) throws DataStoreException {
-        List<T> objects = null;
-        List<Map<String, Object>> maps = list(getJsonSchema(clazz));
-        if (maps != null) {
-            objects = maps.stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList());
-        }
-        return objects;
-    }
-
-    public <T> List<T> list(Class<T> clazz, Query query) throws DataStoreException {
-        return list(clazz, (Locale) null, query);
-    }
-
-    public <T> List<T> list(Class<T> clazz, Locale locale, Query query) throws DataStoreException {
-        List<T> objects = null;
-        JsonSchema jsonSchema = getJsonSchema(clazz);
-        List<Map<String, Object>> maps = list(jsonSchema, getTypeFilteredQuery(jsonSchema, query));
-        if (maps != null) {
-            objects = maps.stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList());
-        }
-        return objects;
-    }
-
-    public <T> Page<T> list(Class<T> clazz, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(clazz, (Locale) null, pageNumber, pageSize);
-    }
-
-    public <T> Page<T> list(Class<T> clazz, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        Page<Map<String, Object>> page = list(getJsonSchema(clazz), locale, pageNumber, pageSize);
-        if (page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList()));
-        }
-        return null;
-    }
-
-    public <T> Page<T> list(Class<T> clazz, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(clazz, (Locale) null, query, pageNumber, pageSize);
-    }
-
-    public <T> Page<T> list(Class<T> clazz, Locale locale, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        JsonSchema jsonSchema = getJsonSchema(clazz);
-        Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema, query), pageNumber, pageSize);
-        if (page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().stream().map(map -> readJsonDataAsObject(clazz, map, locale)).collect(toList()));
-        }
-        return null;
-    }
-
-    /**
-     * Data Related
-     *
-     */
-    /**
-     *
-     * @param schemaId
-     * @param jsonData
-     * @return
-     * @throws DataStoreException
-     */
-    public Map<String, Object> create(String schemaId, Map<String, Object> jsonData)
-            throws DataStoreException {
-        return create(schemaId, jsonData, null);
-    }
-
-    /**
-     *
-     * @param schemaId
-     * @param jsonData
-     * @param locale
-     * @return
-     * @throws DataStoreException
-     */
-    public Map<String, Object> create(String schemaId, Map<String, Object> jsonData, Locale locale)
-            throws DataStoreException {
+    public Optional<Map<String, Object>> read(String schemaId, String idValue, Locale locale) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        Set<ConstraintViolation> violations = jsonSchema.validate(jsonData);
-        if (violations == null) {
-            return jsonSchema.delocalizeData(create(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale)), locale);
+        if (jsonSchema == null) {
+            return Optional.empty();
         } else {
-            throw new ConstraintViolationException(jsonData, violations);
+            Map<String, Object> dataAsMap = read(jsonSchema, idValue,locale);
+
+            if (dataAsMap == null) {
+                return Optional.empty();
+            }
+
+            return Optional.of(dataAsMap);
         }
+
     }
 
-    public boolean update(String schemaId, Map<String, Object> jsonData)
-            throws DataStoreException {
-        return update(schemaId, jsonData, null);
+    public Optional<Map<String, Object>> read(String schemaId, String idValue) throws DataStoreException {
+        return read(schemaId, idValue, null);
     }
 
-    public boolean update(String schemaId, Map<String, Object> jsonData, Locale locale)
-            throws DataStoreException {
-        JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        Set<ConstraintViolation> violations = jsonSchema.validate(jsonData);
-        if (violations == null) {
-            return updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
-        } else {
-            throw new ConstraintViolationException(jsonData, violations);
+    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, String idValue) throws DataStoreException {
+        return update(schemaId, dataMap, idValue, null);
+    }
+
+    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, String idValue, Locale locale) throws DataStoreException {
+        Map<String, Object> updatedDataAsMap = null;
+
+        if (dataMap != null) {
+            JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
+            if (jsonSchema != null) {
+                Set violations = jsonSchema.validate(dataMap);
+                if (violations.isEmpty()) {
+
+                    boolean updated;
+                    if (locale == null) {
+                        updated = updatePartial(jsonSchema, dataMap);
+                    } else {
+                        updated = updatePartial(jsonSchema, jsonSchema.localizeData(dataMap, locale));
+                    }
+
+                    if (updated) {
+                        updatedDataAsMap = read(schemaId, idValue, locale).get();
+                    }
+
+                } else {
+                    throw new ConstraintViolationException(dataMap, violations);
+                }
+            }
+
         }
+        return updatedDataAsMap;
     }
-
-    public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData)
-            throws DataStoreException {
-        return updatePartial(schemaId, idValue, partialJsonData, null);
-    }
-
-    public boolean updatePartial(String schemaId, String idValue, Map<String, Object> partialJsonData, Locale locale)
-            throws DataStoreException {
+    
+    public void updatePartial(String schemaId, Map<String, Object> dataMap, String idValue) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        Map<String, Object> jsonData = read(jsonSchema, idValue);
-        jsonData.putAll(partialJsonData);
-        Set<ConstraintViolation> violations = jsonSchema.validate(jsonData);
-        if (violations == null) {
-            return updatePartially(jsonSchema, getImmutableJSONData(jsonSchema, jsonData, locale));
-        } else {
-            throw new ConstraintViolationException(jsonData, violations);
+        if(jsonSchema != null) {
+            this.update(jsonSchema, idValue,dataMap);
         }
     }
     
-    public Map<String, Object> read(String schemaId, String name,Locale loc)
-            throws DataStoreException {
-        return read(schemaId, loc, name);
+
+    public boolean delete(String schemaId) throws DataStoreException {
+        JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
+        return jsonSchema == null ? false : delete(jsonSchema);
     }
 
-    public Map<String, Object> read(String schemaId, String name)
-            throws DataStoreException {
-        return read(schemaId, (Locale) null, name);
-    }
-
-    public Map<String, Object> read(String schemaId, Locale locale, String name)
-            throws DataStoreException {
-        JsonSchema jSONSchema = schemaManager.getJsonSchema(schemaId);
-        Map<String, Object> fullData = read(jSONSchema, name);
-        return jSONSchema.delocalizeData(fullData, locale);
-    }
-
-    public boolean delete(String schemaId)
-            throws DataStoreException {
-        return delete(schemaManager.getJsonSchema(schemaId));
-    }
-
-    public boolean delete(String schemaId, String name)
-            throws DataStoreException {
-        return delete(schemaManager.getJsonSchema(schemaId), name);
+    public boolean delete(String schemaId, String idValue) throws DataStoreException {
+        JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
+        return jsonSchema == null ? false : delete(jsonSchema, idValue);
     }
 
     public boolean delete(String schemaId, Query query)
             throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        return delete(jsonSchema, this.getTypeFilteredQuery(jsonSchema, query));
-    }
-    
-    public List<Map<String, Object>> list(String schemaId,Locale loc)
-            throws DataStoreException {
-        return list(schemaManager.getJsonSchema(schemaId),loc);
+        return jsonSchema == null ? false : delete(jsonSchema, query);
     }
 
-    public List<Map<String, Object>> list(String schemaId)
-            throws DataStoreException {
-        return list(schemaManager.getJsonSchema(schemaId));
-    }
-
-    public List<Map<String, Object>> list(String schemaId, Query query)
-            throws DataStoreException {
-        return list(schemaId, (Locale) null, query);
-    }
-
-    public List<Map<String, Object>> list(String schemaId, Locale locale, Query query)
-            throws DataStoreException {
+    public List<Map<String, Object>> list(String schemaId, Query query, Locale locale) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        Query typeFilteredQuery = getTypeFilteredQuery(jsonSchema, query);
-        return readJsonData(jsonSchema, list(jsonSchema, typeFilteredQuery), locale);
+        if (jsonSchema != null) {
+            List<Map<String, Object>> maps = list(jsonSchema, query);
+            return maps == null ? null:maps.parallelStream().map(dataAsMap
+                    -> jsonSchema.delocalizeData(dataAsMap, locale)
+            ).collect(toList());
+        }
+
+        return null;
     }
 
-    public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize)
-            throws DataStoreException {
-        return list(schemaManager.getJsonSchema(schemaId), (Locale) null, pageNumber, pageSize);
+    public List<Map<String, Object>> list(String schemaId) throws DataStoreException {
+
+        return list(schemaId, null, (Locale)null);
     }
 
-    public Page<Map<String, Object>> list(String schemaId, Locale locale, Integer pageNumber, Integer pageSize)
-            throws DataStoreException {
-        return list(schemaManager.getJsonSchema(schemaId), locale, pageNumber, pageSize);
+    public List<Map<String, Object>> list(String schemaId, Locale locale) throws DataStoreException {
+        return list(schemaId, null, locale);
     }
 
-    public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize)
-            throws DataStoreException {
+    public List<Map<String, Object>> list(String schemaId, Query query) throws DataStoreException {
+        return list(schemaId, query, null);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId,Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return list(schemaId,null, null, pageNumber, pageSize);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId,Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
+
+        return list(schemaId,null, locale, pageNumber, pageSize);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId,Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return list(schemaId,query, null, pageNumber, pageSize);
+    }
+
+    public Page<Map<String, Object>> list(String schemaId, Query query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        return list(jsonSchema, getTypeFilteredQuery(jsonSchema, query), pageNumber, pageSize);
+        Page<Map<String, Object>> page = list(jsonSchema, query, pageNumber, pageSize);
+
+        if (page != null) {
+            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().parallelStream().map(dataAsMap
+                    -> jsonSchema.delocalizeData(dataAsMap, locale)
+            ).collect(toList()));
+        }
+        return null;
     }
 
-
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema)
-            throws DataStoreException {
-        return list(jsonSchema, (Locale) null);
+    private Query getTypeFilteredQuery(JsonSchema jsonSchema) throws DataStoreException {
+        return getTypeFilteredQuery(jsonSchema, null);
     }
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param locale
-     * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema, Locale locale)
-            throws DataStoreException {
-        return readJsonData(jsonSchema, list(jsonSchema, getTypeFilteredQuery(jsonSchema)), locale);
-    }
-
-    public Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
+    private Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
         if (query == null) {
             query = new Query();
         }
@@ -356,125 +207,66 @@ public abstract class DataStore {
         return query;
     }
 
-    public Query getTypeFilteredQuery(JsonSchema jsonSchema) throws DataStoreException {
-        return getTypeFilteredQuery(jsonSchema, null);
-    }
-
-    private boolean delete(JsonSchema jsonSchema) throws DataStoreException {
-        return delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
-    }
-
-    private Page<Map<String, Object>> list(JsonSchema jsonSchema, Locale locale,
-            Integer pageNumber, Integer pageSize) throws DataStoreException {
-
-        Page<Map<String, Object>> page = list(jsonSchema, getTypeFilteredQuery(jsonSchema), pageNumber, pageSize);
-        if (locale != null && page != null) {
-            return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), readJsonData(jsonSchema, page.getContent(), locale));
-        }
-        return page;
-    }
-
     public SchemaManager getSchemaManager() {
         return schemaManager;
     }
-    
-    public <T> ObjectManager<T> getSchemaManager(Class<T> clazz) {
-        return new ObjectManager<>(this);
+
+    public <T> ObjectManager<T> getObjectManager(Class<T> clazz) {
+        return new ObjectManager<>(clazz, this);
+    }
+
+    Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> dataAsMap) throws DataStoreException {
+        dataAsMap.put("$type", jsonSchema.getId());
+        return dataStorePersistence.create(jsonSchema, dataAsMap);
+    }
+
+    Map<String, Object> read(JsonSchema jsonSchema, String idValue) throws DataStoreException {
+        return dataStorePersistence.read(jsonSchema, idValue);
     }
     
-    
+    Map<String, Object> read(JsonSchema jsonSchema, String idValue,Locale locale) throws DataStoreException {
+        return jsonSchema.delocalizeData(dataStorePersistence.read(jsonSchema, idValue),locale);
+    }
 
-    /**
-     * ALL ABSTRACT METHODS WILL COME HERE
-     */
-    /**
-     *
-     * @param validatedDataObject validated object
-     * @param jsonSchema schema of dynamic data
-     * @return dynamic data as map
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract Map<String, Object> create(
-            JsonSchema jsonSchema,
-            Map<String, Object> validatedDataObject)
-            throws DataStoreException;
+    boolean update(JsonSchema jsonSchema, String id ,Map<String, Object> dataAsMap) throws DataStoreException {
+        dataAsMap.put("$type", jsonSchema.getId());
+        return dataStorePersistence.update(jsonSchema, id,dataAsMap);
+    }
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param idValue dynamic object name
-     * @return dynamic data as map
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract Map<String, Object> read(
-            JsonSchema jsonSchema,
-            String idValue) throws DataStoreException;
+    boolean delete(JsonSchema jsonSchema) throws DataStoreException {
+        return dataStorePersistence.delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
+    }
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param idValue dynamic object name
-     * @return status of the delete operation
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract boolean delete(JsonSchema jsonSchema,
-            String idValue) throws DataStoreException;
+    boolean delete(JsonSchema jsonSchema, Query query) throws DataStoreException {
+        return dataStorePersistence.delete(jsonSchema, query);
+    }
 
-    /**
-     *
-     * @param jsonSchema
-     * @param query
-     * @return
-     * @throws DataStoreException
-     */
-    protected abstract boolean delete(JsonSchema jsonSchema, Query query)
-            throws DataStoreException;
+    boolean delete(JsonSchema jsonSchema, String idValue) throws DataStoreException {
+        return dataStorePersistence.delete(jsonSchema, idValue);
+    }
 
-    protected abstract boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) throws DataStoreException;
+    boolean updatePartial(JsonSchema jsonSchema, Map<String, Object> dataAsMap) throws DataStoreException {
+        dataAsMap.put("$type", jsonSchema.getId());
+        return dataStorePersistence.updatePartially(jsonSchema, dataAsMap);
+    }
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param validatedData validated Object
-     * @return status of the update operation
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract boolean updatePartially(JsonSchema jsonSchema,
-            Map<String, Object> validatedData)
-            throws DataStoreException;
+    List<Map<String, Object>> list(JsonSchema jsonSchema,
+            Query query) throws DataStoreException {
+        List<Map<String, Object>> dataAsMaps = dataStorePersistence.list(jsonSchema, getTypeFilteredQuery(jsonSchema, query));
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param query query to consider
-     * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
-            Query query)
-            throws DataStoreException;
+        return dataAsMaps;
+    }
 
-    /**
-     *
-     * @param jsonSchema schema of dynamic data
-     * @param query query to consider
-     * @param pageNumber
-     * @param pageSize
-     * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
-     */
-    protected abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
+    Page<Map<String, Object>> list(JsonSchema jsonSchema,
             Query query,
             Integer pageNumber,
-            Integer pageSize)
-            throws DataStoreException;
+            Integer pageSize) throws DataStoreException {
+        return dataStorePersistence.list(jsonSchema, getTypeFilteredQuery(jsonSchema, query), pageNumber, pageSize);
+    }
 
-    /**
-     * Drops the DataStore
-     *
-     * @throws DataStoreException
-     */
-    protected abstract void drop() throws DataStoreException;
+    List<Map<String, Object>> list(JsonSchema jsonSchema) throws DataStoreException {
+        return list(jsonSchema, null);
+    }
 
     
 

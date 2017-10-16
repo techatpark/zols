@@ -5,11 +5,9 @@
  */
 package org.zols.datastore;
 
-
-import java.util.ArrayList;
+import org.zols.datastore.query.Page;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.junit.After;
@@ -48,7 +46,6 @@ public class DataManagementTest {
         deleteAllSchema(dataStore);
     }
 
-
     @Test
     public void testCreate() throws DataStoreException {
         Assert.assertNotNull("Creating Simple Data", dataStore.read("computer", "1"));
@@ -60,7 +57,7 @@ public class DataManagementTest {
         computer.put("id", 2);
         computer.put("title", "Taiwan Title");
         dataStore.create("computer", computer, Locale.TAIWAN);
-        Assert.assertEquals("Creating Localized Data", "Taiwan Title", dataStore.read("computer", Locale.TAIWAN, "2").get("title"));
+        Assert.assertEquals("Creating Localized Data", "Taiwan Title", dataStore.read("computer", "2", Locale.TAIWAN).get().get("title"));
     }
 
     @Test
@@ -70,20 +67,21 @@ public class DataManagementTest {
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", computer, Locale.TAIWAN);
-        Assert.assertEquals("Reading Localized Data", "Normal Title", dataStore.read("computer", "2").get("title"));
-        Assert.assertEquals("Reading Localized Data", "Taiwan Title", dataStore.read("computer", Locale.TAIWAN, "2").get("title"));
+        dataStore.update("computer", computer, "2", Locale.TAIWAN);
+        Assert.assertEquals("Reading Localized Data", "Normal Title", dataStore.read("computer", "2").get().get("title"));
+        Assert.assertEquals("Reading Localized Data", "Taiwan Title", dataStore.read("computer", "2", Locale.TAIWAN).get().get("title"));
     }
+    
+
 
     @Test
-    @Ignore
     public void testListLocalized() throws DataStoreException {
         Map<String, Object> computer = sampleJson("computer");
         computer.put("id", 2);
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", computer, Locale.TAIWAN);
+        dataStore.update("computer", computer, "2", Locale.TAIWAN);
 
         Page<Map<String, Object>> page = dataStore.list("computer", 0, 10);
 
@@ -95,31 +93,28 @@ public class DataManagementTest {
     
     @Test
     public void testUpdate() throws DataStoreException {
-        Map<String, Object> computer = dataStore.read("computer","1");
+        Map<String, Object> computer = dataStore.read("computer", "1").get();
         computer.put("title", "Changed");
-        dataStore.update("computer", computer);
-        computer = dataStore.read("computer","1");
+        dataStore.update("computer", computer, "1");
+        computer = dataStore.read("computer", "1").get();
         Assert.assertEquals("Updating Simple Data", "Changed", computer.get("title"));
     }
 
-    
     @Test
     public void testPartialUpdate() throws DataStoreException {
         Map<String, Object> computer = new HashMap<>();
         computer.put("title", "Changed");
-        dataStore.updatePartial("computer", "1", computer);
-        Map<String, Object> map = dataStore.read("computer", "1");
+        dataStore.updatePartial("computer", computer,"1");
+        Map<String, Object> map = dataStore.read("computer", "1").get();
         Assert.assertEquals("Partially Updating Simple Data", "Changed", map.get("title"));
     }
 
-    
     @Test
     public void testDelete() throws DataStoreException {
         dataStore.delete("computer", "1");
-        Assert.assertNull("Deleting Simple Data", dataStore.read("computer", "1"));
+        Assert.assertFalse("Deleting Simple Data", dataStore.read("computer", "1").isPresent());
     }
 
-    
     @Test
     public void testDeleteAllOfBasicType() throws DataStoreException {
         dataStore.delete("product");
@@ -127,7 +122,7 @@ public class DataManagementTest {
         Assert.assertNull("Deleting All the data of a type should not affect child type", dataStore.list("mobile"));
     }
 
-    @Test 
+    @Test
     public void testDeleteAllOfChildType() throws DataStoreException {
         dataStore.delete("computer");
         Assert.assertNotNull("Deleting All the data of only a child type", dataStore.list("mobile"));
@@ -140,7 +135,6 @@ public class DataManagementTest {
         Assert.assertEquals("Listing Simple Data", 2, dataStore.list("product").size());
     }
 
-    
     @Test
     public void testListDataWithQuery() throws DataStoreException {
         Query query = new Query();
@@ -148,27 +142,21 @@ public class DataManagementTest {
         Assert.assertEquals("Listing Simple Data with valid query", 1, dataStore.list("mobile", query).size());
     }
 
-    
     @Test
     public void testListDataWithExistsInQueryWithChildType() throws DataStoreException {
 
         Query query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
         Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 2, dataStore.list("product", query).size());
-        
-         query = new Query();
+
+        query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
         Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("mobile", query).size());
-        
-       
-       
+
         query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Personal")));
         Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("product", query).size());
     }
 
-    
-    
 
-    
 }

@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.reflections.Reflections;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.persistence.DataStorePersistence;
 
 /**
  *
@@ -21,11 +22,11 @@ public interface DataStoreProvider {
     static DataStore getDataStore() {
         Reflections reflections = new Reflections("org.zols.datastore");
         
-        Set<Class<? extends DataStore>> subTypes = reflections.getSubTypesOf(DataStore.class);
+        Set<Class<? extends DataStorePersistence>> subTypes = reflections.getSubTypesOf(DataStorePersistence.class);
         
         if(subTypes.size() == 1) {
             try {
-                return subTypes.iterator().next().newInstance();
+                return new DataStore(subTypes.iterator().next().newInstance());
             } catch (InstantiationException | IllegalAccessException ex) {
                 Logger.getLogger(DataStoreProvider.class.getName()).log(Level.SEVERE, null, ex);
             }

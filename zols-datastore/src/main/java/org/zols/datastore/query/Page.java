@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore;
+package org.zols.datastore.query;
 
 import java.util.List;
 import java.util.Objects;

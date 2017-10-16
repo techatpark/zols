@@ -64,7 +64,7 @@ public class DataService {
     public Page<Map<String, Object>> list(String schemaName, Query query,
             Pageable pageable,Locale loc) throws DataStoreException {
 
-        org.zols.datastore.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
+        org.zols.datastore.query.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
         return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 
@@ -76,7 +76,7 @@ public class DataService {
             query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, queryString + "*"));
         }
 
-        org.zols.datastore.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
+        org.zols.datastore.query.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
         return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 

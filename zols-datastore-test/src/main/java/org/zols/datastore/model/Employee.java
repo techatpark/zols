@@ -8,16 +8,18 @@ package org.zols.datastore.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import org.zols.jsonschema.bind.annotation.Localized;
 
-@Entity(name="employee")
+@Entity(name = "employee")
 public class Employee {
 
     @Id
     private String name;
-    
+
     @NotNull
+    @Localized
     private String city;
-    
+
     private Boolean isContractor;
     private int salary;
 
@@ -28,8 +30,6 @@ public class Employee {
     public void setCity(String city) {
         this.city = city;
     }
-    
-    
 
     public String getName() {
         return name;

@@ -68,7 +68,7 @@ public class EveritJsonSchema extends JsonSchema {
 
         }
 
-        return null;
+        return new HashSet<>();
     }
 
     private JsonSchemaConstraintViolation getConstraintViolation(ValidationException ve) {

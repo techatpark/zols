@@ -5,8 +5,11 @@
  */
 package org.zols.datastore;
 
+import java.util.Locale;
 import org.junit.After;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.zols.datastore.model.Employee;
@@ -16,9 +19,11 @@ import org.zols.datatore.exception.DataStoreException;
 public class ObjectManagementTest {
 
     private final DataStore dataStore;
+    private final ObjectManager<Employee> employeeManager;
 
     public ObjectManagementTest() {
         dataStore = DataStoreProvider.getDataStore();
+        employeeManager = dataStore.getObjectManager(Employee.class);
     }
 
     @Before
@@ -28,42 +33,58 @@ public class ObjectManagementTest {
         employee.setCity("Madurai");
         employee.setSalary(10000);
         employee.setIsContractor(Boolean.TRUE);
-        dataStore.create(employee);
+        employeeManager.create(employee);
+        
+        Employee employeeLocalized = new Employee();
+        employeeLocalized.setName("SathishLocal");
+        employeeLocalized.setCity("மதுரை");
+        employeeLocalized.setSalary(10000);
+        employeeLocalized.setIsContractor(Boolean.TRUE);
+        employeeManager.create(employeeLocalized,Locale.CHINESE);
     }
 
     @After
     public void afterTest() throws DataStoreException {
-        dataStore.delete(Employee.class, "Sathish");
+        employeeManager.delete("Sathish");
     }
 
     @Test
     public void testCreateObject() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Object", dataStore.read(Employee.class, "Sathish"));
+        assertTrue("Creating Simple Object", employeeManager.read("Sathish").isPresent());
     }
 
     @Test
     public void testUpdateObject() throws DataStoreException {
-        Employee employee = dataStore.read(Employee.class, "Sathish");
+        Employee employee = employeeManager.read("Sathish").get();
         employee.setSalary(2000);
-        dataStore.update(employee, "Sathish");
-        employee = dataStore.read(Employee.class, "Sathish");
-        Assert.assertEquals("Updating Simple Object", 2000, employee.getSalary());
+        employee = employeeManager.update(employee, "Sathish");
+        assertEquals("Updating Simple Object", 2000, employee.getSalary());
     }
     
+    @Test
+    public void testUpdateLocalizedObject() throws DataStoreException {
+        Employee employeeLocalized = employeeManager.read("SathishLocal").get();
+        employeeLocalized.setCity("Madurai");
+        assertEquals("Updated Simple Localized Object", "Madurai", employeeManager.update(employeeLocalized, "SathishLocal").getCity());
+        assertEquals("Updated Simple Localized Object", "மதுரை", employeeManager.read("SathishLocal",Locale.CHINESE).get().getCity());
+        
+    }
+
     @Test
     public void testDeleteObject() throws DataStoreException {
-        dataStore.delete(Employee.class, "Sathish");
-        Assert.assertNull("Deleting Simple Object", dataStore.read(Employee.class, "Sathish"));
+        employeeManager.delete("Sathish");
+        assertFalse("Deleting Simple Object", employeeManager.read("Sathish").isPresent());
     }
-    
+
     @Test
     public void testDeleteAllObject() throws DataStoreException {
-        dataStore.delete(Employee.class);
-        Assert.assertNull("Deleting Simple Objects", dataStore.read(Employee.class, "Sathish"));
+        employeeManager.delete();
+        assertFalse("Deleting Simple Objects", employeeManager.read("Sathish").isPresent());
     }
+
     
     @Test
-    public void testListObject() throws DataStoreException {        
-        Assert.assertEquals("Listing Simple Object", 1, dataStore.list(Employee.class).size());
+    public void testListObject() throws DataStoreException {
+        assertEquals("Listing Simple Object", 2, employeeManager.list().size());
     }
 }

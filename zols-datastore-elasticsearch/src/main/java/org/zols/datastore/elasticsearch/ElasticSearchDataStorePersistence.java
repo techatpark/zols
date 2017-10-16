@@ -36,8 +36,8 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import org.zols.datastore.DataStore;
-import org.zols.datastore.Page;
+import org.zols.datastore.persistence.DataStorePersistence;
+import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
@@ -49,23 +49,23 @@ import org.zols.jsonschema.JsonSchema;
  * Elastic Search Implementation of DataStore
  *
  */
-public class ElasticSearchDataStore extends DataStore {
+public class ElasticSearchDataStorePersistence implements DataStorePersistence {
 
-    private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStore.class);
+    private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStorePersistence.class);
 
     private final Client client;
 
     private final String indexName;
 
-    public ElasticSearchDataStore() {
+    public ElasticSearchDataStorePersistence() {
         this("zols", null);
     }
 
-    public ElasticSearchDataStore(String indexName) {
+    public ElasticSearchDataStorePersistence(String indexName) {
         this(indexName, null);
     }
 
-    public ElasticSearchDataStore(String indexName, Client client) {
+    public ElasticSearchDataStorePersistence(String indexName, Client client) {
         this.indexName = indexName;
         if (client == null) {
             Settings settings = settingsBuilder()
@@ -90,7 +90,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    public Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         LOGGER.debug("Create Data for ", getTypeName(jsonSchema));
         Object idValue = getIdValue(jsonSchema,validatedDataObject);
         IndexRequestBuilder indexRequestBuilder;
@@ -121,7 +121,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
+    public Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
         GetResponse getResponse = client
                 .prepareGet(indexName, getTypeName(jsonSchema), idValue)
                 .execute()
@@ -131,7 +131,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected boolean delete(JsonSchema jsonSchema, String idValue) {
+    public boolean delete(JsonSchema jsonSchema, String idValue) {
         DeleteResponse response = client
                 .prepareDelete(indexName, getTypeName(jsonSchema), idValue).setRefresh(true)
                 .execute()
@@ -142,7 +142,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected boolean delete(JsonSchema jsonSchema, Query query) {
+    public boolean delete(JsonSchema jsonSchema, Query query) {
         SearchResponse response = client
                 .prepareSearch()
                 .setSearchType(SearchType.SCAN)
@@ -172,19 +172,18 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected boolean update(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        String idValue = getIdValue(jsonSchema, validatedDataObject).toString();
+    public boolean update(JsonSchema jsonSchema, String idValue,Map<String, Object> validatedDataObject) {
         IndexResponse response = client.prepareIndex(indexName, getTypeName(jsonSchema), idValue).setRefresh(true)
                 .setSource(validatedDataObject)
                 .execute()
                 .actionGet();
         client.admin().indices().refresh(new RefreshRequest(indexName));
 
-        return response.isCreated();
+        return true;
     }
     
     @Override
-    protected boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+    public boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = getIdValue(jsonSchema, validatedDataObject).toString();
         
         UpdateRequest updateRequest = new UpdateRequest(indexName, getTypeName(jsonSchema), idValue)
@@ -194,9 +193,9 @@ public class ElasticSearchDataStore extends DataStore {
         try {
             response = client.update(updateRequest).get();
             client.admin().indices().refresh(new RefreshRequest(indexName));
-            return response.isCreated();
+            return true;
         } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(ElasticSearchDataStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
         }
         
 
@@ -204,7 +203,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected Page<Map<String, Object>> list(JsonSchema jsonSchema,
+    public Page<Map<String, Object>> list(JsonSchema jsonSchema,
             Query query, Integer pageNumber, Integer pageSize) {
         Page<Map<String, Object>> page = null;
         SearchRequestBuilder builder = client
@@ -231,7 +230,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) {
+    public List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) {
         List<Map<String, Object>> list = null;
         SearchResponse response = client
                 .prepareSearch()
@@ -263,7 +262,7 @@ public class ElasticSearchDataStore extends DataStore {
     }
 
     @Override
-    protected void drop() throws DataStoreException {
+    public void drop() throws DataStoreException {
         client.admin().indices().delete(new DeleteIndexRequest(indexName));
     }
 

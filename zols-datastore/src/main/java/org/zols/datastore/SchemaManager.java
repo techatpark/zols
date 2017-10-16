@@ -40,7 +40,7 @@ public final class SchemaManager {
     public Map<String, Object> create(Map<String, Object> schemaMap)
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
-        if (violations == null) {
+        if (violations.isEmpty()) {
             return dataStore.create(jsonSchemaForSchema, schemaMap);
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
@@ -52,11 +52,11 @@ public final class SchemaManager {
         return dataStore.read(jsonSchemaForSchema, schemaId);
     }
 
-    public boolean update(Map<String, Object> schemaMap)
+    public boolean update(String schemaId,Map<String, Object> schemaMap)
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
-        if (violations == null) {
-            return dataStore.update(jsonSchemaForSchema, schemaMap);
+        if (violations.isEmpty()) {
+            return dataStore.update(jsonSchemaForSchema, schemaId,schemaMap);
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
@@ -88,7 +88,6 @@ public final class SchemaManager {
                     List<Map<String, Object>> children = listExtenstions(schema.get("$id").toString());
                     if (children != null) {
                         childrenOfChidrens.addAll(children);
-
                     }
 
                 } catch (DataStoreException ex) {
@@ -113,6 +112,9 @@ public final class SchemaManager {
     }
 
     public List<Map<String, Object>> listChildren(String schemaId) throws DataStoreException {
+        if(jsonSchemaForSchema.getId().equals(schemaId)) {
+            return null;
+        }
         Query query = new Query();
         query.addFilter(new Filter("$ref", EQUALS, schemaId));
         return dataStore.list(jsonSchemaForSchema, query);
