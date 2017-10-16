@@ -13,7 +13,6 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
-import org.zols.datastore.util.JsonUtil;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -75,11 +74,11 @@ public class SchemaService {
      * @return status of the Update Operation
      */
     @Secured("ROLE_ADMIN")
-    public Boolean update(Map<String, Object> schemaMap) throws DataStoreException {
+    public Boolean update(String schemaId ,Map<String, Object> schemaMap) throws DataStoreException {
         Boolean updated = false;
         if (schemaMap != null) {
             LOGGER.info("Updating JsonSchema  {}", schemaMap);
-            updated = dataStore.getSchemaManager().update(schemaMap);
+            updated = dataStore.getSchemaManager().update(schemaId,schemaMap);
         }
         return updated;
     }

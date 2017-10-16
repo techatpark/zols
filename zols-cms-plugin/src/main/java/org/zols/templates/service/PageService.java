@@ -8,6 +8,7 @@ package org.zols.templates.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -41,6 +42,7 @@ public class PageService {
 
     @Autowired
     private TemplateService templateService;
+    
     /**
      * Creates a new Page with given Object
      *
@@ -60,7 +62,7 @@ public class PageService {
             page.setDataName(dataName);
             page.setTemplateName(pageRequest.getTemplate().getName());
             
-            createdPage = dataStore.create(page);
+            createdPage = dataStore.getObjectManager(Page.class).create(page);
             LOGGER.info("Created Page {}", createdPage.getName());
             
             linkService.linkUrl(pageRequest.getLinkName(), "/pages/"+createdPage.getName());
@@ -77,12 +79,12 @@ public class PageService {
     public PageRequest readRequest(String pageName,Locale loc) throws DataStoreException {
         LOGGER.info("Reading Page Request {}", pageName);
         PageRequest pageRequest;
-        Page page = read(pageName);
-        if(page != null) {
+        Optional<Page> page = read(pageName);
+        if(page.isPresent()) {
             pageRequest = new PageRequest();
-            Template template = templateService.read(page.getTemplateName());
-            pageRequest.setTemplate(template);
-            pageRequest.setData(dataService.read(template.getDataType(), page.getDataName(),loc));
+            Optional<Template> template = templateService.read(page.get().getTemplateName());
+            pageRequest.setTemplate(template.get());
+            pageRequest.setData(dataService.read(template.get().getDataType(), page.get().getDataName(),loc).get());
             return pageRequest;
         }
         return null;
@@ -94,9 +96,9 @@ public class PageService {
      * @param pageName String to be Search
      * @return searched Page
      */
-    public Page read(String pageName) throws DataStoreException {
+    public Optional<Page> read(String pageName) throws DataStoreException {
         LOGGER.info("Reading Page {}", pageName);
-        return dataStore.read(Page.class, pageName);
+        return dataStore.getObjectManager(Page.class).read(pageName);
     }
 
     /**
@@ -110,7 +112,7 @@ public class PageService {
         Page updated = null;
         if (page != null) {
             LOGGER.info("Updating Page {}", page);
-            updated = dataStore.update(page,page.getName());
+            updated = dataStore.getObjectManager(Page.class).update(page,page.getName());
         }
         return updated;
     }
@@ -124,7 +126,7 @@ public class PageService {
     @Secured("ROLE_ADMIN")
     public Boolean delete(String pageName) throws DataStoreException {
         LOGGER.info("Deleting Page {}", pageName);
-        return dataStore.delete(Page.class, pageName);
+        return dataStore.getObjectManager(Page.class).delete(pageName);
     }
 
     /**
@@ -134,7 +136,7 @@ public class PageService {
      */
     public List<Page> list() throws DataStoreException {
         LOGGER.info("Getting Pages ");
-        return dataStore.list(Page.class);
+        return dataStore.getObjectManager(Page.class).list();
     }
     
  

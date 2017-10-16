@@ -5,7 +5,6 @@
  */
 package org.zols.documents.service;
 
-
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -41,7 +40,7 @@ public class BrowseService {
             String keyword,
             Query query,
             Pageable pageable) throws DataStoreException {
-        return dataService.list(schemaId, query, pageable,null);
+        return dataService.list(schemaId, query, pageable, null);
     }
 
     public AggregatedResults browseSchema(String schemaId,
@@ -49,6 +48,7 @@ public class BrowseService {
             Query query,
             Pageable pageable) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
+        /*
         JsonSchema schema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         if (schema != null) {
             Map<String, Object> browseQuery = new HashMap<>();
@@ -57,6 +57,7 @@ public class BrowseService {
                     (keyword == null) ? "browse_schema" : "browse_schema_with_keyword",
                     browseQuery, pageable, dataStore.getTypeFilteredQuery(schema, query));
         }
+         */
         return aggregatedResults;
     }
 

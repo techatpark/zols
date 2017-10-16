@@ -55,7 +55,7 @@ public class SchemaControler {
             @RequestBody Map<String, Object> jsonSchema) throws DataStoreException {
 
         LOGGER.info("Updating jsonSchemas with id {} with {}", id, jsonSchema);
-        schemaService.update(jsonSchema);
+        schemaService.update(id,jsonSchema);
 
     }
 

@@ -7,6 +7,7 @@ package org.zols.templates.web;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,7 @@ public class TemplateRepositoryController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public TemplateRepository read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Optional<TemplateRepository> read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting templateRepository ", name);
         return templateRepositoryService.read(name);
     }

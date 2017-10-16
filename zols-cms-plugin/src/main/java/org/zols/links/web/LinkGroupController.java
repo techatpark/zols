@@ -6,6 +6,7 @@
 package org.zols.links.web;
 
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class LinkGroupController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)    
-    public LinkGroup read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Optional<LinkGroup> read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting group ", name);
         return linkGroupService.read(name);
     }

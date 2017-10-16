@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.zols.datastore.DataStore;
-import org.zols.datastore.elasticsearch.ElasticSearchDataStore;
+import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import org.zols.web.interceptor.PagePopulationInterceptor;
 
 @Configuration
@@ -40,9 +40,9 @@ public class ZolsConfiguration extends WebMvcConfigurerAdapter {
     @Bean
     public DataStore dataStore() {
         if(client == null) {
-            return new ElasticSearchDataStore(indexName);
+            return new DataStore(new ElasticSearchDataStorePersistence(indexName));
         }
-        return new ElasticSearchDataStore(indexName,client);
+        return new DataStore(new ElasticSearchDataStorePersistence(indexName,client));
     }
 
 }

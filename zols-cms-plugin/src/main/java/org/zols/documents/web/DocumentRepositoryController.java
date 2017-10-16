@@ -6,6 +6,7 @@
 package org.zols.documents.web;
 
 import java.util.List;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -45,7 +46,7 @@ public class DocumentRepositoryController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public DocumentRepository read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Optional<DocumentRepository> read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting documentRepository ", name);
         return documentRepositoryService.read(name);
     }

@@ -22,7 +22,7 @@ public class JsonSchemaUtilTest {
     @Test
     public void testValidateSchema() {
 
-        assertTrue("Checking valid schema", JsonSchemaUtil.validateSchema(getTestSchema("product"))==null);
+        assertTrue("Checking valid schema", JsonSchemaUtil.validateSchema(getTestSchema("product")).isEmpty());
         assertTrue("Checking invalid schema", !JsonSchemaUtil.validateSchema(getTestSchema("product_invalid")).isEmpty());
     }
 

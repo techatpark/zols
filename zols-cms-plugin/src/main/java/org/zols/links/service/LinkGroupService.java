@@ -8,6 +8,7 @@ package org.zols.links.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.Valid;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
@@ -44,7 +45,7 @@ public class LinkGroupService {
     public LinkGroup create(@Valid LinkGroup group) throws DataStoreException {
         LinkGroup createdGroup = null;
         if (group != null) {
-            createdGroup = dataStore.create(group);
+            createdGroup = dataStore.getObjectManager(LinkGroup.class).create(group);
             LOGGER.info("Created Group {}", createdGroup.getName());
         }
         return createdGroup;
@@ -56,9 +57,9 @@ public class LinkGroupService {
      * @param groupName String to be Search
      * @return searched Group
      */
-    public LinkGroup read(String groupName) throws DataStoreException {
+    public Optional<LinkGroup> read(String groupName) throws DataStoreException {
         LOGGER.info("Reading Group {}", groupName);
-        return dataStore.read(LinkGroup.class, groupName);
+        return dataStore.getObjectManager(LinkGroup.class).read(groupName);
     }
 
     /**
@@ -72,7 +73,7 @@ public class LinkGroupService {
         LinkGroup updated = null;
         if (group != null) {
             LOGGER.info("Updating Group {}", group);
-            updated = dataStore.update(group, group.getName());
+            updated = dataStore.getObjectManager(LinkGroup.class).update(group, group.getName());
         }
         return updated;
     }
@@ -87,7 +88,7 @@ public class LinkGroupService {
     public Boolean delete(String groupName) throws DataStoreException {
         LOGGER.info("Deleting Group {}", groupName);
         linkService.deleteLinksUnder(groupName);
-        return dataStore.delete(LinkGroup.class, groupName);
+        return dataStore.getObjectManager(LinkGroup.class).delete(groupName);
     }
 
     /**
@@ -95,7 +96,7 @@ public class LinkGroupService {
      * @return list all the categories
      */
     public List<LinkGroup> list() throws DataStoreException {
-        return dataStore.list(LinkGroup.class);
+        return dataStore.getObjectManager(LinkGroup.class).list();
     }
 
     /**
@@ -109,7 +110,7 @@ public class LinkGroupService {
         Query query = new Query();
         query.addFilter(new Filter<>("groupName", EQUALS, groupName));
         query.addFilter(new Filter<>("parentLinkName", IS_NULL));
-        return dataStore.list(Link.class, query);
+        return dataStore.getObjectManager(Link.class).list(query);
     }
 
     /**

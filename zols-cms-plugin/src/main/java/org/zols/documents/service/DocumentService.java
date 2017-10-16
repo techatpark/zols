@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,8 @@ public class DocumentService {
      */
     @Secured("ROLE_ADMIN")
     public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) throws DataStoreException {
-        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
-        String folderPath = documentRepository.getPath();
+        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String folderPath = documentRepository.get().getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
         }
@@ -92,8 +93,8 @@ public class DocumentService {
      */
     @Secured("ROLE_ADMIN")
     public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) throws DataStoreException {
-        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
-        String folderPath = documentRepository.getPath();
+        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String folderPath = documentRepository.get().getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
         }
@@ -103,8 +104,8 @@ public class DocumentService {
 
     @Secured("ROLE_ADMIN")
     public void delete(String documentRepositoryName, String filePath) throws DataStoreException {
-        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
-        String path = documentRepository.getPath();
+        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String path = documentRepository.get().getPath();
         if (filePath != null && filePath.trim().length() != 0) {
             path = path + File.separator + filePath;
         }
@@ -137,8 +138,8 @@ public class DocumentService {
      */
     @Secured("ROLE_ADMIN")
     public List<Document> list(String documentRepositoryName, String folderPath) throws DataStoreException {
-        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
-        String path = documentRepository.getPath();
+        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String path = documentRepository.get().getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
         }
@@ -152,7 +153,7 @@ public class DocumentService {
             document.setRepositoryName(documentRepositoryName);
             document.setFileName(innerFile.getName());
             document.setIsDir(innerFile.isDirectory());
-            document.setPath(innerFile.getPath().replaceAll(documentRepository.getPath(), ""));
+            document.setPath(innerFile.getPath().replaceAll(documentRepository.get().getPath(), ""));
             documents.add(document);
         }
         return documents;
@@ -167,8 +168,8 @@ public class DocumentService {
      */
     @Secured("ROLE_ADMIN")
     public List<Document> listAll(String documentRepositoryName, String folderPath) throws DataStoreException {
-        DocumentRepository documentRepository = documentRepositoryService.read(documentRepositoryName);
-        String path = documentRepository.getPath();
+        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+        String path = documentRepository.get().getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
         }

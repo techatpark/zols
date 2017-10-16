@@ -8,6 +8,7 @@ package org.zols.templates.web;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class PageController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Page read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Optional<Page> read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting page ", name);
         return pageService.read(name);
     }

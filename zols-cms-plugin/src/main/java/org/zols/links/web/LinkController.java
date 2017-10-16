@@ -6,6 +6,7 @@
 package org.zols.links.web;
 
 import java.util.List;
+import java.util.Optional;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,7 @@ public class LinkController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Link read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Optional<Link> read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting link ", name);
         return linkService.read(name);
     }

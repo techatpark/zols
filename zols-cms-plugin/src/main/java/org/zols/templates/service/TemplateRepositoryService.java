@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -46,7 +47,7 @@ public class TemplateRepositoryService {
     public TemplateRepository create(TemplateRepository templateRepository) throws DataStoreException {
         TemplateRepository createdTemplateRepository = null;
         if (templateRepository != null) {
-            createdTemplateRepository = dataStore.create(templateRepository);
+            createdTemplateRepository = dataStore.getObjectManager(TemplateRepository.class).create(templateRepository);
             LOGGER.info("Created Template Repository {}", createdTemplateRepository.getName());
         }
         return createdTemplateRepository;
@@ -58,9 +59,9 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be Search
      * @return searched TemplateRepository
      */
-    public TemplateRepository read(String templateRepositoryName) throws DataStoreException {
+    public Optional<TemplateRepository> read(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Reading Template Repository {}", templateRepositoryName);
-        return dataStore.read(TemplateRepository.class, templateRepositoryName);
+        return dataStore.getObjectManager(TemplateRepository.class).read( templateRepositoryName);
     }
 
     /**
@@ -74,7 +75,7 @@ public class TemplateRepositoryService {
         TemplateRepository updated = null;
         if (templateRepository != null) {
             LOGGER.info("Updating Template Repository {}", templateRepository);
-            updated = dataStore.update(templateRepository, templateRepository.getName());
+            updated = dataStore.getObjectManager(TemplateRepository.class).update(templateRepository, templateRepository.getName());
         }
         return updated;
     }
@@ -88,7 +89,7 @@ public class TemplateRepositoryService {
     @Secured("ROLE_ADMIN")
     public Boolean delete(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
-        dataStore.delete(TemplateRepository.class, templateRepositoryName);
+        dataStore.getObjectManager(TemplateRepository.class).delete( templateRepositoryName);
         return deleteTemplatesUnder(templateRepositoryName);
     }
 
@@ -103,7 +104,7 @@ public class TemplateRepositoryService {
         LOGGER.info("Deleting Template  under Repository {}", templateRepositoryName);
         Query query = new Query();
         query.addFilter(new Filter("repositoryName", Filter.Operator.EQUALS, templateRepositoryName));
-        return dataStore.delete(Template.class, query);
+        return dataStore.getObjectManager(Template.class).delete( query);
     }
 
     /**
@@ -113,7 +114,7 @@ public class TemplateRepositoryService {
      */
     public List<TemplateRepository> list() throws DataStoreException {
         LOGGER.info("Getting TemplateRepositories ");
-        return dataStore.list(TemplateRepository.class);
+        return dataStore.getObjectManager(TemplateRepository.class).list();
     }
 
     /**
@@ -126,7 +127,7 @@ public class TemplateRepositoryService {
         LOGGER.info("Getting templates of repository  {}", repositoryName);
         Query query = new Query();
         query.addFilter(new Filter<>("repositoryName", EQUALS, repositoryName));
-        return dataStore.list(Template.class, query);
+        return dataStore.getObjectManager(Template.class).list( query);
     }
 
     /**
@@ -137,11 +138,11 @@ public class TemplateRepositoryService {
      */
     public List<Map<String, String>> listTemplateFiles(String repositoryName) throws DataStoreException {
         List<Map<String, String>> templateFiles = null;
-        TemplateRepository repository = read(repositoryName);
-        if (repository != null) {
-            if (repository.getType().equals(TemplateRepository.FILE_SYSTEM)) {
+        Optional<TemplateRepository> repository = read(repositoryName);
+        if (repository.isPresent()) {
+            if (repository.get().getType().equals(TemplateRepository.FILE_SYSTEM)) {
                 templateFiles = new ArrayList<>();
-                File root = new File(repository.getPath());
+                File root = new File(repository.get().getPath());
                 listTemplateFiles(templateFiles, root.getAbsolutePath(), root);
 
             }

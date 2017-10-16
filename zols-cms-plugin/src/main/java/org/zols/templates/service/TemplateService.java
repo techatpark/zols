@@ -6,6 +6,7 @@
 package org.zols.templates.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -37,7 +38,7 @@ public class TemplateService {
     public Template create(Template template) throws DataStoreException {
         Template createdTemplate = null;
         if (template != null) {
-            createdTemplate = dataStore.create(template);
+            createdTemplate = dataStore.getObjectManager(Template.class).create(template);
             LOGGER.info("Created Template  {}", createdTemplate.getName());
         }
         return createdTemplate;
@@ -49,9 +50,9 @@ public class TemplateService {
      * @param templateName String to be Search
      * @return searched Template
      */
-    public Template read(String templateName) throws DataStoreException {
+    public Optional<Template> read(String templateName) throws DataStoreException {
         LOGGER.info("Reading Template  {}", templateName);
-        return dataStore.read(Template.class, templateName);
+        return dataStore.getObjectManager(Template.class).read(templateName);
     }
 
     /**
@@ -65,7 +66,7 @@ public class TemplateService {
         Template updated = null;
         if (template != null) {
             LOGGER.info("Updating Template  {}", template);
-            updated = dataStore.update(template,template.getName());
+            updated = dataStore.getObjectManager(Template.class).update(template,template.getName());
         }
         return updated;
     }
@@ -79,7 +80,7 @@ public class TemplateService {
     @Secured("ROLE_ADMIN")
     public Boolean delete(String templateName) throws DataStoreException {
         LOGGER.info("Deleting Template  {}", templateName);
-        return dataStore.delete(Template.class, templateName);
+        return dataStore.getObjectManager(Template.class).delete( templateName);
     }
 
     /**
@@ -89,6 +90,6 @@ public class TemplateService {
      */
     public List<Template> list() throws DataStoreException {
         LOGGER.info("Getting Templates ");
-        return dataStore.list(Template.class);
+        return dataStore.getObjectManager(Template.class).list();
     }
 }

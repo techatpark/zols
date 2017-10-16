@@ -7,6 +7,7 @@ package org.zols.datastore.web;
 
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class DataControler {
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public Map<String, Object> read(@PathVariable(value = "schemaId") String schemaName,
+    public Optional<Map<String, Object>> read(@PathVariable(value = "schemaId") String schemaName,
             @PathVariable(value = "id") String id,Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data ", id);
         return dataService.read(schemaName, id,loc);
@@ -58,7 +59,7 @@ public class DataControler {
     public void update(@PathVariable(value = "schemaId") String schemaName,
             @PathVariable(value = "id") String id,
             @RequestBody Map<String, Object> jsonData,Locale loc) throws DataStoreException {
-        dataService.update(schemaName, jsonData,loc);
+        dataService.update(schemaName, id,jsonData,loc);
 
     }
 

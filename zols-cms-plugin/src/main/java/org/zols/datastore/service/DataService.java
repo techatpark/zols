@@ -8,6 +8,7 @@ package org.zols.datastore.service;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,13 +44,13 @@ public class DataService {
         return dataStore.create(schemaName, jsonData,loc);
     }
 
-    public Map<String, Object> read(String schemaName, String name,Locale loc) throws DataStoreException {
-        return dataStore.read(schemaName, name,loc);
+    public Optional<Map<String, Object>> read(String schemaName, String id,Locale loc) throws DataStoreException {
+        return dataStore.read(schemaName, id,loc);
     }
 
     @Secured("ROLE_ADMIN")
-    public boolean update(String schemaName, Map<String, Object> jsonData,Locale loc) throws DataStoreException {
-        return dataStore.update(schemaName, jsonData,loc);
+    public Map<String, Object> update(String schemaId, String id,Map<String, Object> jsonData,Locale loc) throws DataStoreException {
+        return dataStore.update(schemaId,id, jsonData,loc);
     }
 
     @Secured("ROLE_ADMIN")
@@ -79,5 +80,7 @@ public class DataService {
         org.zols.datastore.query.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
         return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
+
+    
 
 }

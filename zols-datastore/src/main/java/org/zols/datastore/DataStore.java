@@ -81,11 +81,11 @@ public class DataStore {
         return read(schemaId, idValue, null);
     }
 
-    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, String idValue) throws DataStoreException {
-        return update(schemaId, dataMap, idValue, null);
+    public Map<String, Object> update(String schemaId, String idValue, Map<String, Object> dataMap) throws DataStoreException {
+        return update(schemaId, idValue,dataMap, null);
     }
 
-    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, String idValue, Locale locale) throws DataStoreException {
+    public Map<String, Object> update(String schemaId, String idValue,Map<String, Object> dataMap,  Locale locale) throws DataStoreException {
         Map<String, Object> updatedDataAsMap = null;
 
         if (dataMap != null) {
