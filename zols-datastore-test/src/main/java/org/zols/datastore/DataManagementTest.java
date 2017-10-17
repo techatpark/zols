@@ -13,7 +13,6 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllData;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
@@ -75,7 +74,6 @@ public class DataManagementTest {
 
 
     @Test
-    @Ignore
     public void testListLocalized() throws DataStoreException {
         Map<String, Object> computer = sampleJson("computer");
         computer.put("id", 2);
@@ -88,7 +86,7 @@ public class DataManagementTest {
 
         Page<Map<String, Object>> taiwanPage = dataStore.list("computer", Locale.TAIWAN, 0, 10);
 
-        Assert.assertNotEquals("Listing localized data", page, taiwanPage);
+        Assert.assertNotEquals("Listing localized data", page.getContent(), taiwanPage.getContent());
     }
 
     
