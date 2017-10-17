@@ -142,7 +142,7 @@ public final class ObjectManager<T> {
     }
 
     private List<T> getObjects(List<Map<String, Object>> maps, Locale locale) {
-        return maps.parallelStream().map(dataAsMap
+        return maps == null ? null : maps.parallelStream().map(dataAsMap
                 -> asObject(jsonSchema.delocalizeData(dataAsMap, locale))
         ).collect(toList());
     }
