@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "clean": "rm -rf dist",
-    "postinstall": "npm run build",
+    "postinstall": "npm run package",
     "serve": "browser-sync start --server 'dist' --files 'dist'",
     "watch": "npm run build && npm-run-all -p serve watch:html watch:js watch:css watch:images",
     "watch:html": "cpx 'src/**/*.{html,htm}' dist --watch",
