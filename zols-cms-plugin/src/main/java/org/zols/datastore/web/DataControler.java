@@ -48,10 +48,11 @@ public class DataControler {
     }
 
     @RequestMapping(value = "/{id}", method = GET)
-    public Optional<Map<String, Object>> read(@PathVariable(value = "schemaId") String schemaName,
+    public Map<String, Object> read(@PathVariable(value = "schemaId") String schemaName,
             @PathVariable(value = "id") String id,Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data ", id);
-        return dataService.read(schemaName, id,loc);
+        Optional<Map<String, Object>> optional = dataService.read(schemaName, id,loc);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{id}", method = PUT)

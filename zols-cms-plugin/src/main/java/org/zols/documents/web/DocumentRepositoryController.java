@@ -46,9 +46,10 @@ public class DocumentRepositoryController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Optional<DocumentRepository> read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public DocumentRepository read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting documentRepository ", name);
-        return documentRepositoryService.read(name);
+        Optional<DocumentRepository> optional =  documentRepositoryService.read(name);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{name}", method = PUT)

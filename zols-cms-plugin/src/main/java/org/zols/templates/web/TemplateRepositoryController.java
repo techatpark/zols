@@ -46,9 +46,10 @@ public class TemplateRepositoryController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Optional<TemplateRepository> read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public TemplateRepository read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting templateRepository ", name);
-        return templateRepositoryService.read(name);
+        Optional<TemplateRepository> optional =  templateRepositoryService.read(name);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{name}", method = PUT)

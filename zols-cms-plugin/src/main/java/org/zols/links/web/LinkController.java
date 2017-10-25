@@ -51,9 +51,10 @@ public class LinkController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Optional<Link> read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Link read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting link ", name);
-        return linkService.read(name);
+        Optional<Link> optional =  linkService.read(name);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{name}", method = PUT)

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
-import org.zols.links.domain.Link;
 import org.zols.links.service.LinkGroupService;
 
 @RestController
@@ -41,9 +40,10 @@ public class LinkGroupController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)    
-    public Optional<LinkGroup> read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public LinkGroup read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting group ", name);
-        return linkGroupService.read(name);
+        Optional<LinkGroup> optional =  linkGroupService.read(name);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{name}", method = PUT)

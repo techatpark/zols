@@ -42,9 +42,10 @@ public class PageController {
     }
 
     @RequestMapping(value = "/{name}", method = GET)
-    public Optional<Page> read(@PathVariable(value = "name") String name) throws DataStoreException {
+    public Page read(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting page ", name);
-        return pageService.read(name);
+        Optional<Page> optional =  pageService.read(name);
+        return optional.orElse(null);
     }
 
     @RequestMapping(value = "/{name}", method = PUT)

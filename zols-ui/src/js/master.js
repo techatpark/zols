@@ -124,7 +124,7 @@
                     });
 
                     data = $.view(this).data;
-                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    var result = $.grep(dataList.content, function(item){ return item[schema.ids[0]] == data.idField; });
                     data = result[0];
                 });
                 $('#result .glyphicon-edit').on('click', function () {
@@ -132,7 +132,7 @@
 
                     data = $.view(this).data;
 
-                    var result = $.grep(dataList.content, function(item){ return item[schema.idField] == data.idField; });
+                    var result = $.grep(dataList.content, function(item){ return item[schema.ids[0]] == data.idField; });
 
 
                     $.get(base_url + '/data/' + schema.$id+'/'+data.idField).done(function(serverdata) {
