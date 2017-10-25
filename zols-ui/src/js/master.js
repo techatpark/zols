@@ -173,7 +173,7 @@
                 var value = editor.getValue();
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/data/' + schema.$id + "/" + value[schema.idField],
+                    url: base_url + '/data/' + schema.$id + "/" + value[schema.ids[0]],
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function (data) {

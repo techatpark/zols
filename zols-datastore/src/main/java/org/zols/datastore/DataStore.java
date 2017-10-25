@@ -63,17 +63,8 @@ public class DataStore {
 
     public Optional<Map<String, Object>> read(String schemaId, String idValue, Locale locale) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        if (jsonSchema == null) {
-            return Optional.empty();
-        } else {
-            Map<String, Object> dataAsMap = read(jsonSchema, idValue,locale);
-
-            if (dataAsMap == null) {
-                return Optional.empty();
-            }
-
-            return Optional.of(dataAsMap);
-        }
+        return (jsonSchema == null)
+                ? Optional.empty() : Optional.ofNullable(read(jsonSchema, idValue, locale));
 
     }
 
@@ -82,10 +73,10 @@ public class DataStore {
     }
 
     public Map<String, Object> update(String schemaId, String idValue, Map<String, Object> dataMap) throws DataStoreException {
-        return update(schemaId, idValue,dataMap, null);
+        return update(schemaId, idValue, dataMap, null);
     }
 
-    public Map<String, Object> update(String schemaId, String idValue,Map<String, Object> dataMap,  Locale locale) throws DataStoreException {
+    public Map<String, Object> update(String schemaId, String idValue, Map<String, Object> dataMap, Locale locale) throws DataStoreException {
         Map<String, Object> updatedDataAsMap = null;
 
         if (dataMap != null) {
@@ -113,14 +104,13 @@ public class DataStore {
         }
         return updatedDataAsMap;
     }
-    
+
     public void updatePartial(String schemaId, Map<String, Object> dataMap, String idValue) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        if(jsonSchema != null) {
-            this.update(jsonSchema, idValue,dataMap);
+        if (jsonSchema != null) {
+            this.update(jsonSchema, idValue, dataMap);
         }
     }
-    
 
     public boolean delete(String schemaId) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
@@ -142,7 +132,7 @@ public class DataStore {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
         if (jsonSchema != null) {
             List<Map<String, Object>> maps = list(jsonSchema, query);
-            return maps == null ? null:maps.parallelStream().map(dataAsMap
+            return maps == null ? null : maps.parallelStream().map(dataAsMap
                     -> jsonSchema.delocalizeData(dataAsMap, locale)
             ).collect(toList());
         }
@@ -152,7 +142,7 @@ public class DataStore {
 
     public List<Map<String, Object>> list(String schemaId) throws DataStoreException {
 
-        return list(schemaId, null, (Locale)null);
+        return list(schemaId, null, (Locale) null);
     }
 
     public List<Map<String, Object>> list(String schemaId, Locale locale) throws DataStoreException {
@@ -163,17 +153,17 @@ public class DataStore {
         return list(schemaId, query, null);
     }
 
-    public Page<Map<String, Object>> list(String schemaId,Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(schemaId,null, null, pageNumber, pageSize);
+    public Page<Map<String, Object>> list(String schemaId, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return list(schemaId, null, null, pageNumber, pageSize);
     }
 
-    public Page<Map<String, Object>> list(String schemaId,Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public Page<Map<String, Object>> list(String schemaId, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
 
-        return list(schemaId,null, locale, pageNumber, pageSize);
+        return list(schemaId, null, locale, pageNumber, pageSize);
     }
 
-    public Page<Map<String, Object>> list(String schemaId,Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return list(schemaId,query, null, pageNumber, pageSize);
+    public Page<Map<String, Object>> list(String schemaId, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return list(schemaId, query, null, pageNumber, pageSize);
     }
 
     public Page<Map<String, Object>> list(String schemaId, Query query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
@@ -223,14 +213,14 @@ public class DataStore {
     Map<String, Object> read(JsonSchema jsonSchema, String idValue) throws DataStoreException {
         return dataStorePersistence.read(jsonSchema, idValue);
     }
-    
-    Map<String, Object> read(JsonSchema jsonSchema, String idValue,Locale locale) throws DataStoreException {
-        return jsonSchema.delocalizeData(dataStorePersistence.read(jsonSchema, idValue),locale);
+
+    Map<String, Object> read(JsonSchema jsonSchema, String idValue, Locale locale) throws DataStoreException {
+        return jsonSchema.delocalizeData(dataStorePersistence.read(jsonSchema, idValue), locale);
     }
 
-    boolean update(JsonSchema jsonSchema, String id ,Map<String, Object> dataAsMap) throws DataStoreException {
+    boolean update(JsonSchema jsonSchema, String id, Map<String, Object> dataAsMap) throws DataStoreException {
         dataAsMap.put("$type", jsonSchema.getId());
-        return dataStorePersistence.update(jsonSchema, id,dataAsMap);
+        return dataStorePersistence.update(jsonSchema, id, dataAsMap);
     }
 
     boolean delete(JsonSchema jsonSchema) throws DataStoreException {
@@ -267,7 +257,5 @@ public class DataStore {
     List<Map<String, Object>> list(JsonSchema jsonSchema) throws DataStoreException {
         return list(jsonSchema, null);
     }
-
-    
 
 }

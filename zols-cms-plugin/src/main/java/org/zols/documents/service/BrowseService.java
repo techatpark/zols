@@ -5,7 +5,6 @@
  */
 package org.zols.documents.service;
 
-import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import org.zols.datastore.service.DataService;
 import org.zols.datastore.web.util.AggregatedResults;
 import org.zols.datastore.web.util.ElasticSearchUtil;
 import org.zols.datatore.exception.DataStoreException;
-import org.zols.jsonschema.JsonSchema;
 
 @Service
 public class BrowseService {
