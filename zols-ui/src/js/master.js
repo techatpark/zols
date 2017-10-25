@@ -200,7 +200,7 @@
     $.fn.deleteData = function () {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + schema.$id + '/' + data[schema.idField],
+            url: base_url + '/data/' + schema.$id + '/' + data[schema.ids[0]],
             dataType: 'json'
         }).done(function (data) {
             $.fn.listData(0);
