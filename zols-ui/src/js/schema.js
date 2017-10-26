@@ -26,6 +26,7 @@
             $.observable(this).setProperty(propName, propValue);
             $.templates("#schema_screen_template").link("#main_screen", this);
             screen_object.fillTypes();
+            screen_object.sortProperties();
             return this;
         },
         showMessages: function(messages) {
@@ -64,11 +65,42 @@
             screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
 
         },
+        sortProperties: function() {
+          var patchedSchema = screen_object.schema;
+          var properties = patchedSchema.properties;
+
+          if(properties != undefined) {
+            var keysSorted = Object.keys(properties).sort(function(a,b){return properties[a].propertyOrder-properties[b].propertyOrder})
+
+            var $people = $('#schemaLayout'),
+            $peopleli = $people.children('.panel-primary');
+
+            $peopleli.sort(function(a,b){
+                  var an = keysSorted.indexOf(a.getAttribute('data-name')),
+                    bn = keysSorted.indexOf(b.getAttribute('data-name'));
+
+                  if(an > bn) {
+                    return 1;
+                  }
+                  if(an < bn) {
+                    return -1;
+                  }
+                  return 0;
+            });
+
+            $peopleli.detach().appendTo($people);
+          }
+
+
+        },
         editSchema: function(schemaToEdit) {
             $.get(base_url + '/schema/' + schemaToEdit.$id)
                 .done(function(data) {
                     screen_object.is_edit = true;
+
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
+
+
 
 
                 });
@@ -88,7 +120,9 @@
         },
         addProperty: function() {
             var totalProperties = Object.keys(this.schema.properties).length;
-            this.schema.properties['newProperty' + totalProperties] = this.patchedProperty({});
+            var patchedProperty = this.patchedProperty({});
+            patchedProperty.propertyOrder = totalProperties+1;
+            this.schema.properties['newProperty' + totalProperties] = patchedProperty;
 
             screen_object.setProperty("title", "Schema");
         },
