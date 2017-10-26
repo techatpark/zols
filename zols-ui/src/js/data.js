@@ -56,10 +56,6 @@
                             if (property && property.options && property.options.lookup) {
 
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
-
-
-
-
                                     $.get(base_url + '/data/' + schema['$id']).done(function(data) {
                                     $(element).attr( 'autocomplete', 'off' ).typeahead({
                                         source: data.content,
