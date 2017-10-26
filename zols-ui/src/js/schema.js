@@ -139,6 +139,7 @@
                 },
                 'required': false,
                 'ids': false,
+                'localized': false,
                 'options': {
                     'wysiwyg': false,'lookup':''
                 }
@@ -153,6 +154,8 @@
 
             var ids = patchedSchema.ids;
 
+            var localized = patchedSchema.localized;
+
 
 
             for (var key in properties) {
@@ -162,11 +165,18 @@
                         properties[key].required = true;
                     }
                 }
+                if (localized) {
+                    if (localized.indexOf(key) > -1) {
+                        properties[key].localized = true;
+                    }
+                }
+
                 if (ids) {
                     if (ids.indexOf(key) > -1) {
                         properties[key].ids = true;
                     }
                 }
+
                 if (properties[key]['$ref']) {
                     properties[key].type = properties[key]['$ref'];
                     delete properties[key]['$ref'];
@@ -283,6 +293,7 @@
             var required = [];
 
             var ids = [];
+            var localized = [];
 
 
 
@@ -299,6 +310,12 @@
                 }
                 delete properties[key].ids;
 
+                //repair localized
+                if (properties[key].localized) {
+                    localized.push(key);
+                }
+                delete properties[key].localized;
+
                 //trim unused
                 if (properties[key].format ){
                   if(properties[key].format === 'text') {
@@ -306,9 +323,22 @@
 
                   }
                   if(properties[key].format === 'html') {
-
                       properties[key].options.wysiwyg = true;
                   }
+                }
+
+                if(properties[key].options) {
+                  if(!properties[key].options.wysiwyg) {
+                    delete properties[key].options.wysiwyg;
+                  }
+                  if(properties[key].options.lookup == "") {
+                    delete properties[key].options.lookup;
+                  }
+
+                  if(jQuery.isEmptyObject(properties[key].options)) {
+                    delete properties[key].options;
+                  }
+
                 }
 
 
@@ -349,6 +379,10 @@
 
             if (ids.length !== 0) {
                 patchedSchema.ids = ids;
+            }
+
+            if (localized.length !== 0) {
+                patchedSchema.localized = localized;
             }
 
             return patchedSchema;
