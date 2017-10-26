@@ -260,7 +260,7 @@ public abstract class JsonSchema {
                         // if localized ignore
                         if (!key.contains(LOCALE_SEPARATOR)) {
                             delocalizeJsonData.put(key, value);
-                        } else {
+                        } else if(key.contains(LOCALE_SEPARATOR+ locale.getLanguage())){
                             delocalizeJsonData.put(key.substring(0, key.lastIndexOf(LOCALE_SEPARATOR)), value);
                         }
 

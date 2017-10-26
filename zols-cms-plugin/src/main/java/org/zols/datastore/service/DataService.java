@@ -77,7 +77,7 @@ public class DataService {
             query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, queryString + "*"));
         }
 
-        org.zols.datastore.query.Page<Map<String, Object>> page = dataStore.list(schemaName, query, pageable.getPageNumber(), pageable.getPageSize());
+        org.zols.datastore.query.Page<Map<String, Object>> page = dataStore.list(schemaName, query, loc,pageable.getPageNumber(), pageable.getPageSize());
         return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 
