@@ -56,16 +56,20 @@
                             if (property && property.options && property.options.lookup) {
 
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
-                                    $.get(base_url + '/data/' + schema['$id']).done(function(data) {
-                                        var currencies = [];
 
-                                        data.content.forEach(function(element) {
-                                            currencies.push({value:element[schema.label],data:element[schema[schema.ids[0]]]});
-                                        });
-                                        $(element).autocomplete({
-                                            lookup: currencies
-                                        });
+
+
+
+                                    $.get(base_url + '/data/' + schema['$id']).done(function(data) {
+                                    $(element).attr( 'autocomplete', 'off' ).typeahead({
+                                        source: data.content,
+                                        displayText:function(item) {
+                                          return item[schema.ids[0]];
+                                        },
+                                        autoSelect: true
+                                      });
                                     });
+
                                 });
 
 
