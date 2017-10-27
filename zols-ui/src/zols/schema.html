@@ -19,7 +19,7 @@
     <script src="/js/vendor.min.js" type="text/javascript"></script>
     <!-- build:js scripts/main.js -->
     <script src="/js/main.js"></script>
-    <script src="/js/jsviews.min.js"></script>
+
     <!-- endbuild -->
 
 </head>
@@ -81,8 +81,8 @@
         <ul class="list-group">
             {^{for schemas}}
             <li class="list-group-item">
-                <span class="badge" data-link="{on ~root.editSchema #data}" data-toggle="tooltip" data-placement="top" title="Download" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
-                <span class="badge" data-link="{on ~root.removeSchema #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-toggle="modal" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge" data-link="{on ~root.editSchema #data}" data-toggle="tooltip" data-placement="top" title="Download" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
+                <span class="badge" data-link="{on ~root.removeSchema #data}" data-toggle="tooltip" data-placement="top" title="Delete"  data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge" data-link="{on ~root.addSchema #data}" data-toggle="tooltip" data-placement="top" title="Fork"><i class="glyphicon glyphicon-chevron-down"></i></span> {{:title}}
 
             </li>
@@ -295,7 +295,7 @@
         </div>
     </script>
 
-
+    <script src="/js/jsviews.min.js"></script>
 
     <!-- build:js({app,.tmp}) scripts/schema.js -->
     <script src="/js/schema.js"></script>

@@ -13,13 +13,14 @@ import static org.slf4j.LoggerFactory.getLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.thymeleaf.spring4.SpringTemplateEngine;
-import org.thymeleaf.spring4.resourceresolver.SpringResourceResourceResolver;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.AbstractConfigurableTemplateResolver;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
-import org.thymeleaf.templateresolver.TemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.UrlTemplateResolver;
+import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.TemplateRepository;
 import org.zols.templates.service.TemplateRepositoryService;
 
@@ -42,7 +43,7 @@ public class TemplateConfiguration {
     public void intializeTemplates() {
         int retry = 0;
         LOGGER.debug("intialize Template Repositories");
-        TemplateResolver resolver;
+        AbstractConfigurableTemplateResolver resolver;
         File file;
         try {
             List<TemplateRepository> templateRepositories = templateRepositoryService.list();
@@ -67,7 +68,7 @@ public class TemplateConfiguration {
                 }
             }
 
-        } catch (Exception e) {
+        } catch (DataStoreException e) {
             LOGGER.error("Error intializing Template Repositories", e);
             retry++;
             if (retry < 2) {
@@ -85,20 +86,17 @@ public class TemplateConfiguration {
     }
 
     private void addZolsTemplates() {
-        TemplateResolver resolver = new TemplateResolver();
-        resolver.setResourceResolver(thymeleafResourceResolver());
+        ClassLoaderTemplateResolver resolver = new ClassLoaderTemplateResolver();
+        
         resolver.setPrefix("classpath:/zolstemplates/");
 
         intializeResolver(resolver);
         templateEngine.addTemplateResolver(resolver);
     }
 
-    @Bean
-    public SpringResourceResourceResolver thymeleafResourceResolver() {
-        return new SpringResourceResourceResolver();
-    }
 
-    private void intializeResolver(TemplateResolver resolver) {
+
+    private void intializeResolver(AbstractConfigurableTemplateResolver resolver) {
 //        resolver.setPrefix(this.properties.getPrefix());
         resolver.setSuffix(this.properties.getSuffix());
         resolver.setTemplateMode(this.properties.getMode());
