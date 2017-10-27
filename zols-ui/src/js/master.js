@@ -19,7 +19,7 @@
     var confirmationPromise;
     var isEdit = false;
 
-    
+
 
     $("#del_conf_ok").on('click', function() {
         $("#delete-conf-model").modal('hide');
@@ -175,7 +175,7 @@
             schemaName: schema.$id,
             value: data
         });
-        $("#editor_holder>div>h3>span").html("");
+        $("#editor_holder>div>h3").hide();
         $("#result form").submit(function(event) {
             event.preventDefault();
             if (isEdit) {

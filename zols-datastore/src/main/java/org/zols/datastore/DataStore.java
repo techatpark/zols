@@ -182,7 +182,7 @@ public class DataStore {
         return getTypeFilteredQuery(jsonSchema, null);
     }
 
-    private Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
+    public Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
         if (query == null) {
             query = new Query();
         }

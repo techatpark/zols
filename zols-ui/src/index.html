@@ -53,6 +53,11 @@
                         <!--*/-->
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        <li><select class="form-control" id="language_selector">
+              <option value="en">English</option>
+              <option value="zh">Chineese</option>
+              <option value="fr">French</option>
+            </select></li>
                         <li sec:authorize="!isAuthenticated()"><a href="login.html" th:href="@{/login}">Signin</a></li>
 
                         <li class="dropdown" sec:authorize="isAuthenticated()">
@@ -106,7 +111,7 @@
 
     </div>
 
-
+    <script src="/js/main.js" type="text/javascript"></script>
 
 </body>
 
