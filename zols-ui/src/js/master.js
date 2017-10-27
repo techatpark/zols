@@ -166,7 +166,7 @@
           delete data["$type"];
         }
         var editor = $("#editor_holder").jsonEditor({schemaName: schema.$id, value: data});
-
+        $("#editor_holder>div>h3>span").html("");
         $("#result form").submit(function (event) {
             event.preventDefault();
             if (isEdit) {
