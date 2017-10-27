@@ -27,9 +27,7 @@
             return url;
         }
 
-        $.ajaxSetup({
-            contentType: 'application/json'
-        });
+        
 
 
         $.fn.setSchemaName = function(schemaName) {

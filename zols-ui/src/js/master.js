@@ -19,21 +19,7 @@
     var confirmationPromise;
     var isEdit = false;
 
-    $("#language_selector")
-        .change(function() {
-            $.ajaxSetup({
-                contentType: 'application/json',
-                headers: {
-                    'Accept-Language': $(this).val()
-                }
-            });
-            $.fn.listData(0);
-
-        })
-
-    $.ajaxSetup({
-        contentType: 'application/json'
-    });
+    
 
     $("#del_conf_ok").on('click', function() {
         $("#delete-conf-model").modal('hide');
