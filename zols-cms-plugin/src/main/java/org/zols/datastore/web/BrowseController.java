@@ -6,6 +6,7 @@
 package org.zols.datastore.web;
 
 
+import java.util.Locale;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,8 @@ public class BrowseController {
     public String browseByCategory(Model model,
             @PathVariable("schemaName") String schemaName,
             HttpServletRequest request,
-            Pageable pageable) throws DataStoreException {        
-        return browseByCategoryWithKeyword(model, schemaName, null, request, pageable);
+            Pageable pageable,Locale locale) throws DataStoreException {        
+        return browseByCategoryWithKeyword(model, schemaName, null, request, pageable,locale);
     }
 
     @RequestMapping(value = "/{schemaName}/{keyword}")
@@ -44,13 +45,13 @@ public class BrowseController {
             @PathVariable("schemaName") String schemaId,
             @PathVariable("keyword") String keyword,
             HttpServletRequest request,
-            Pageable pageable) throws DataStoreException {
+            Pageable pageable,Locale locale) throws DataStoreException {
         Query query = getQuery(request);
         model.addAttribute("query", query);   
         JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         model.addAttribute("schema", jsonSchema.getCompositeSchema());
         model.addAttribute("parents",jsonSchema.getParents());
-        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,pageable));
+        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,locale,pageable));
         String pageUrl = getPageUrl(request);
         model.addAttribute("pageurl", pageUrl);
         int indexOfQuestionMark = pageUrl.indexOf("?");

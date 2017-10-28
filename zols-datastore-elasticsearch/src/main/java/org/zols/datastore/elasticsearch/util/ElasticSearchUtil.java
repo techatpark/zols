@@ -56,7 +56,7 @@ public class ElasticSearchUtil {
         queryValuesMap.put("size", pageSize);
         queryValuesMap.put("from", pageNumber * pageSize);
         Map<String, Object> searchResponse = searchResponse(type, template, queryValuesMap, query);
-        Page<List> resultsOf = pageOf(searchResponse, pageNumber,pageSize);
+        Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber,pageSize);
         if (resultsOf != null) {
             aggregatedResults = new AggregatedResults();
             aggregatedResults.setPage(resultsOf);
@@ -122,9 +122,9 @@ public class ElasticSearchUtil {
         return buckets;
     }
 
-    private Page<List> pageOf(Map<String, Object> searchResponse, Integer pageNumber,
+    private Page<Map<String, Object>> pageOf(Map<String, Object> searchResponse, Integer pageNumber,
             Integer pageSize) {
-        Page<List> page = null;
+        Page<Map<String, Object>> page = null;
         List<Map<String, Object>> list = resultsOf(searchResponse);
         if (list != null) {
             Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());

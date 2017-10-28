@@ -260,10 +260,16 @@ public class DataStore {
         return list(jsonSchema, null);
     }
 
-    public AggregatedResults browse(String schemaId, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public AggregatedResults browse(String schemaId, String keyword, Query query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
         if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
             JsonSchema schema = schemaManager.getJsonSchema(schemaId);
-            return ((BrowsableDataStorePersistence) dataStorePersistence).browse(schema, keyword, getTypeFilteredQuery(schema, query), pageNumber, pageSize);
+            AggregatedResults aggregatedResults = ((BrowsableDataStorePersistence) dataStorePersistence).browse(schema, keyword, getTypeFilteredQuery(schema, query), pageNumber, pageSize);
+            
+            Page<Map<String, Object>> page = aggregatedResults.getPage();
+            aggregatedResults.setPage(new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().parallelStream().map(dataAsMap-> schema.delocalizeData(dataAsMap, locale)
+            ).collect(toList())));
+            
+            return aggregatedResults;
         } else {
             throw new UnsupportedOperationException("now a BrowsableDataStorePersistence");
         }

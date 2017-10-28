@@ -15,7 +15,7 @@ import org.zols.datastore.query.AggregatedResults;
 public class SpringAggregatedResults {
 
     private final List<Map<String,Object>> buckets;
-    private final Page<List> page;
+    private final Page<Map<String, Object>> page;
 
     public SpringAggregatedResults(AggregatedResults aggregatedResults,Pageable pageable) {
         buckets = aggregatedResults.getBuckets();
@@ -26,7 +26,7 @@ public class SpringAggregatedResults {
         return buckets;
     }
 
-    public Page<List> getPage() {
+    public Page<Map<String, Object>> getPage() {
         return page;
     }
     

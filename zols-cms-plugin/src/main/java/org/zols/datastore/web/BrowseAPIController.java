@@ -6,6 +6,7 @@
 package org.zols.datastore.web;
 
 
+import java.util.Locale;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.zols.datastore.query.AggregatedResults;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
@@ -39,8 +39,8 @@ public class BrowseAPIController {
 
     @RequestMapping(value = "/browse/{schemaName}")
     public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,
-            Pageable pageable,HttpServletRequest request) throws DataStoreException {
-        return browseService.browseSchema(schemaName, null, getQuery(request),pageable);
+            Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
+        return browseService.browseSchema(schemaName, null, getQuery(request),locale,pageable);
     }
 
 }

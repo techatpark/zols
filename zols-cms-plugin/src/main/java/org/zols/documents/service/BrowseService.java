@@ -5,6 +5,7 @@
  */
 package org.zols.documents.service;
 
+import java.util.Locale;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,9 +40,9 @@ public class BrowseService {
 
     public SpringAggregatedResults browseSchema(String schemaId,
             String keyword,
-            Query query,
+            Query query,Locale locale,
             Pageable pageable) throws DataStoreException {
-        return new SpringAggregatedResults(dataStore.browse(schemaId, keyword, query, pageable.getPageNumber(), pageable.getPageSize()),pageable);
+        return new SpringAggregatedResults(dataStore.browse(schemaId, keyword, query, locale,pageable.getPageNumber(), pageable.getPageSize()),pageable);
     }
     
     

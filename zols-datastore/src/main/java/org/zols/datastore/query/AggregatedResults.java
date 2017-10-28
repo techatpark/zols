@@ -11,7 +11,7 @@ import java.util.Map;
 public class AggregatedResults {
 
     private List<Map<String,Object>> buckets;
-    private Page<List> page;
+    private Page<Map<String, Object>> page;
 
     public List<Map<String, Object>> getBuckets() {
         return buckets;
@@ -21,11 +21,11 @@ public class AggregatedResults {
         this.buckets = buckets;
     }
 
-    public Page<List> getPage() {
+    public Page<Map<String, Object>> getPage() {
         return page;
     }
 
-    public void setPage(Page<List> page) {
+    public void setPage(Page<Map<String, Object>> page) {
         this.page = page;
     }
 
