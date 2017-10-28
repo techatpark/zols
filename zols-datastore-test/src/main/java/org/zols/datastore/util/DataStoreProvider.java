@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.reflections.Reflections;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.persistence.DataStorePersistence;
 
 /**
@@ -23,7 +24,7 @@ public interface DataStoreProvider {
         Reflections reflections = new Reflections("org.zols.datastore");
         
         Set<Class<? extends DataStorePersistence>> subTypes = reflections.getSubTypesOf(DataStorePersistence.class);
-        
+        subTypes.remove(BrowsableDataStorePersistence.class);
         if(subTypes.size() == 1) {
             try {
                 return new DataStore(subTypes.iterator().next().newInstance());

@@ -16,10 +16,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.zols.datastore.web.util.AggregatedResults;
+import org.zols.datastore.query.AggregatedResults;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
+import org.zols.documents.service.SpringAggregatedResults;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -37,7 +38,7 @@ public class BrowseAPIController {
     }
 
     @RequestMapping(value = "/browse/{schemaName}")
-    public AggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,
+    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,
             Pageable pageable,HttpServletRequest request) throws DataStoreException {
         return browseService.browseSchema(schemaName, null, getQuery(request),pageable);
     }

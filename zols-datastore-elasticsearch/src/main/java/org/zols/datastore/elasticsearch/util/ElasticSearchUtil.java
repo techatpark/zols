@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.web.util;
+package org.zols.datastore.elasticsearch.util;
 
+import org.zols.datastore.query.AggregatedResults;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -24,38 +25,38 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import static org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence.getQueryBuilder;
+import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
 
-@Component
+
 public class ElasticSearchUtil {
 
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchUtil.class);
 
-    @Value("${spring.application.name}")
-    private String indexName;
+    private final Client client;
 
-    //http://teknosrc.com/execute-raw-elasticsearch-query-using-transport-client-java-api/
-    @Autowired
-    private Client client;
+    private final String indexName;
 
+    public ElasticSearchUtil(Client client, String indexName) {
+        this.client = client;
+        this.indexName = indexName;
+    }
+
+
+    
     public AggregatedResults aggregatedSearch(String type,
             String template,
             Map<String, Object> queryValuesMap,
-            Pageable pageable, Query query) {
+            Integer pageNumber,
+            Integer pageSize, Query query) {
         AggregatedResults aggregatedResults = null;
-        queryValuesMap.put("size", pageable.getPageSize());
-        queryValuesMap.put("from", (pageable.getPageNumber() * pageable.getPageSize()));
+        queryValuesMap.put("size", pageSize);
+        queryValuesMap.put("from", pageNumber * pageSize);
         Map<String, Object> searchResponse = searchResponse(type, template, queryValuesMap, query);
-        Page<List> resultsOf = pageOf(searchResponse, pageable);
+        Page<List> resultsOf = pageOf(searchResponse, pageNumber,pageSize);
         if (resultsOf != null) {
             aggregatedResults = new AggregatedResults();
             aggregatedResults.setPage(resultsOf);
@@ -67,13 +68,12 @@ public class ElasticSearchUtil {
     public AggregatedResults aggregatedSearch(String type,
             String template,
             Map<String, Object> queryValuesMap,
-            Pageable pageable) {
-        return aggregatedSearch(type, template, queryValuesMap, pageable, null);
+            Integer pageNumber,
+            Integer pageSize) {
+        return aggregatedSearch(type, template, queryValuesMap, pageNumber,pageSize, null);
     }
 
-//    public List<Map<String, Object>> search(String type, String template, Object model) {
-//        return resultsOf(searchResponse(type, template, model));
-//    }
+
     private List<Map<String, Object>> bucketsOf(Map<String, Object> searchResponse) {
         List<Map<String, Object>> buckets = null;
         if (searchResponse != null) {
@@ -122,35 +122,38 @@ public class ElasticSearchUtil {
         return buckets;
     }
 
-    private Page<List> pageOf(Map<String, Object> searchResponse, Pageable pageable) {
+    private Page<List> pageOf(Map<String, Object> searchResponse, Integer pageNumber,
+            Integer pageSize) {
         Page<List> page = null;
         List<Map<String, Object>> list = resultsOf(searchResponse);
         if (list != null) {
-            Integer noOfRecords = (Integer) ((Map<String, Object>) searchResponse.get("hits")).get("total");
-            page = new PageImpl(list, pageable, noOfRecords);
+            Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());
+            page = new Page(pageNumber, pageSize, noOfRecords, list);
         }
         return page;
     }
 
     public Page<List> pageOf(String type,
             String template,
-            Map<String, Object> queryValuesMap, Pageable pageable) {
+            Map<String, Object> queryValuesMap, Integer pageNumber,
+            Integer pageSize) {
         Page<List> page = null;
-        queryValuesMap.put("size", pageable.getPageSize());
-        queryValuesMap.put("from", (pageable.getPageNumber() * pageable.getPageSize()));
+        queryValuesMap.put("size", pageSize);
+        queryValuesMap.put("from", pageNumber * pageSize);
         Map<String, Object> searchResponse = searchResponse(type, template, queryValuesMap);
         List<Map<String, Object>> list = resultsOf(searchResponse);
         if (list != null) {
-            Integer noOfRecords = (Integer) ((Map<String, Object>) searchResponse.get("hits")).get("total");
-            page = new PageImpl(list, pageable, noOfRecords);
+            Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());
+            page = new Page(pageNumber, pageSize, noOfRecords, list);
         }
         return page;
     }
 
     public Page<List> pageOf(String type,
-            String template,Pageable pageable) {
+            String template,Integer pageNumber,
+            Integer pageSize) {
         
-        return pageOf(type, template, new HashMap<String, Object>(2), pageable);
+        return pageOf(type, template, new HashMap<>(2), pageNumber,pageSize);
     }
 
     public List<Map<String, Object>> resultsOf(String type,
@@ -196,7 +199,7 @@ public class ElasticSearchUtil {
         SearchResponse response = searchRequestBuilder
                 .execute()
                 .actionGet();
-        client.close();
+ 
         return asMap(response.toString());
     }
 

@@ -7,6 +7,7 @@ package org.zols.datastore.elasticsearch;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -36,7 +37,9 @@ import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import org.zols.datastore.persistence.DataStorePersistence;
+import org.zols.datastore.elasticsearch.util.ElasticSearchUtil;
+import org.zols.datastore.persistence.BrowsableDataStorePersistence;
+import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
@@ -49,13 +52,15 @@ import org.zols.jsonschema.JsonSchema;
  * Elastic Search Implementation of DataStore
  *
  */
-public class ElasticSearchDataStorePersistence implements DataStorePersistence {
+public class ElasticSearchDataStorePersistence implements BrowsableDataStorePersistence {
 
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStorePersistence.class);
 
     private final Client client;
 
     private final String indexName;
+    
+    private final ElasticSearchUtil elasticSearchUtil;
 
     public ElasticSearchDataStorePersistence() {
         this("zols", null);
@@ -76,7 +81,7 @@ public class ElasticSearchDataStorePersistence implements DataStorePersistence {
         } else {
             this.client = client;
         }
-
+        elasticSearchUtil = new ElasticSearchUtil(client, indexName);
         createIndexIfNotExists();
     }
 
@@ -331,6 +336,19 @@ public class ElasticSearchDataStorePersistence implements DataStorePersistence {
 
     private Object getIdValue(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         return jsonSchema == null ? null :jsonSchema.getIdValues(validatedDataObject)[0];
+    }
+
+    @Override
+    public AggregatedResults browse(JsonSchema schema, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        AggregatedResults aggregatedResults = null;
+        if (schema != null) {
+            Map<String, Object> browseQuery = new HashMap<>();
+            browseQuery.put("keyword", keyword);
+            aggregatedResults = elasticSearchUtil.aggregatedSearch(schema.getJSONPropertyName(schema.getRoot().getId()),
+                    (keyword == null) ? "browse_schema" : "browse_schema_with_keyword",
+                    browseQuery, pageNumber,pageSize, query);
+        }
+        return aggregatedResults;
     }
 
 }

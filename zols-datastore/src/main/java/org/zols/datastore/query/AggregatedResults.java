@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.zols.datastore.web.util;
+package org.zols.datastore.query;
 
 import java.util.List;
 import java.util.Map;
-import org.springframework.data.domain.Page;
 
 public class AggregatedResults {
 

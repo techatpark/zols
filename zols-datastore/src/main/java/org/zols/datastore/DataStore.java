@@ -4,7 +4,9 @@ import org.zols.datastore.query.Page;
 import java.util.*;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
+import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.persistence.DataStorePersistence;
+import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.ConstraintViolationException;
@@ -182,7 +184,7 @@ public class DataStore {
         return getTypeFilteredQuery(jsonSchema, null);
     }
 
-    public Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
+    private Query getTypeFilteredQuery(JsonSchema jsonSchema, Query query) throws DataStoreException {
         if (query == null) {
             query = new Query();
         }
@@ -256,6 +258,15 @@ public class DataStore {
 
     List<Map<String, Object>> list(JsonSchema jsonSchema) throws DataStoreException {
         return list(jsonSchema, null);
+    }
+
+    public AggregatedResults browse(String schemaId, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
+            JsonSchema schema = schemaManager.getJsonSchema(schemaId);
+            return ((BrowsableDataStorePersistence) dataStorePersistence).browse(schema, keyword, getTypeFilteredQuery(schema, query), pageNumber, pageSize);
+        } else {
+            throw new UnsupportedOperationException("now a BrowsableDataStorePersistence");
+        }
     }
 
 }
