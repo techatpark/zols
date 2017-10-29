@@ -24,13 +24,14 @@ import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence.getQueryBuilder;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import static org.zols.datastore.util.JsonUtil.asString;
-
+import org.zols.jsonschema.JsonSchema;
 
 public class ElasticSearchUtil {
 
@@ -45,9 +46,7 @@ public class ElasticSearchUtil {
         this.indexName = indexName;
     }
 
-
-    
-    public AggregatedResults aggregatedSearch(String type,
+    public AggregatedResults aggregatedSearch(JsonSchema jsonSchema,
             String template,
             Map<String, Object> queryValuesMap,
             Integer pageNumber,
@@ -55,8 +54,8 @@ public class ElasticSearchUtil {
         AggregatedResults aggregatedResults = null;
         queryValuesMap.put("size", pageSize);
         queryValuesMap.put("from", pageNumber * pageSize);
-        Map<String, Object> searchResponse = searchResponse(type, template, queryValuesMap, query);
-        Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber,pageSize);
+        Map<String, Object> searchResponse = searchResponse(jsonSchema, template, queryValuesMap, query, pageNumber, pageSize);
+        Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber, pageSize);
         if (resultsOf != null) {
             aggregatedResults = new AggregatedResults();
             aggregatedResults.setPage(resultsOf);
@@ -65,14 +64,13 @@ public class ElasticSearchUtil {
         return aggregatedResults;
     }
 
-    public AggregatedResults aggregatedSearch(String type,
+    public AggregatedResults aggregatedSearch(JsonSchema jsonSchema,
             String template,
             Map<String, Object> queryValuesMap,
             Integer pageNumber,
             Integer pageSize) {
-        return aggregatedSearch(type, template, queryValuesMap, pageNumber,pageSize, null);
+        return aggregatedSearch(jsonSchema, template, queryValuesMap, pageNumber, pageSize, null);
     }
-
 
     private List<Map<String, Object>> bucketsOf(Map<String, Object> searchResponse) {
         List<Map<String, Object>> buckets = null;
@@ -133,14 +131,14 @@ public class ElasticSearchUtil {
         return page;
     }
 
-    public Page<List> pageOf(String type,
+    public Page<List> pageOf(JsonSchema jsonSchema,
             String template,
             Map<String, Object> queryValuesMap, Integer pageNumber,
             Integer pageSize) {
         Page<List> page = null;
         queryValuesMap.put("size", pageSize);
         queryValuesMap.put("from", pageNumber * pageSize);
-        Map<String, Object> searchResponse = searchResponse(type, template, queryValuesMap);
+        Map<String, Object> searchResponse = searchResponse(jsonSchema, template, queryValuesMap, pageNumber, pageSize);
         List<Map<String, Object>> list = resultsOf(searchResponse);
         if (list != null) {
             Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());
@@ -149,17 +147,18 @@ public class ElasticSearchUtil {
         return page;
     }
 
-    public Page<List> pageOf(String type,
-            String template,Integer pageNumber,
+    public Page<List> pageOf(JsonSchema jsonSchema,
+            String template, Integer pageNumber,
             Integer pageSize) {
-        
-        return pageOf(type, template, new HashMap<>(2), pageNumber,pageSize);
+
+        return pageOf(jsonSchema, template, new HashMap<>(2), pageNumber, pageSize);
     }
 
-    public List<Map<String, Object>> resultsOf(String type,
+    public List<Map<String, Object>> resultsOf(JsonSchema jsonSchema,
             String template,
-            Map<String, Object> queryValuesMap) {
-        return resultsOf(searchResponse(type, template, queryValuesMap));
+            Map<String, Object> queryValuesMap, Integer pageNumber,
+            Integer pageSize) {
+        return resultsOf(searchResponse(jsonSchema, template, queryValuesMap, pageNumber, pageSize));
     }
 
     private List<Map<String, Object>> resultsOf(Map<String, Object> searchResponse) {
@@ -178,10 +177,43 @@ public class ElasticSearchUtil {
         return list;
     }
 
-    public Map<String, Object> searchResponse(String type, String queryText, Query query) {
+    private void addAggregations(JsonSchema jsonSchema,
+            SearchRequestBuilder searchRequestBuilder) {
+        searchRequestBuilder.addAggregation(AggregationBuilders.terms("Types").field("$type"));
+        jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
+            String filter = (String) entry.getValue().get("filter");
+            if (filter != null) {
+                String title = entry.getKey();
+                if (entry.getValue().get("title") != null) {
+                    title = entry.getValue().get("title").toString();
+                }
+                switch (filter) {
+                    case "minmax":
+                        searchRequestBuilder
+                                .addAggregation(AggregationBuilders.min("min_" + title).field(entry.getKey()))
+                                .addAggregation(AggregationBuilders.max("max_" + title).field(entry.getKey()));
+                        break;
+                    case "terms":
+                        searchRequestBuilder
+                                .addAggregation(AggregationBuilders.terms(title).field(entry.getKey()));
+
+                        break;
+                }
+            }
+
+        });
+
+    }
+
+    public Map<String, Object> searchResponse(JsonSchema jsonSchema, String queryText, Query query, Integer pageNumber, Integer pageSize) {
 
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName)
-                .setTypes(type);
+                .setTypes(jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId()));
+
+        if (pageNumber != null) {
+            searchRequestBuilder.setSize(pageSize)
+                    .setFrom(pageNumber * pageSize);
+        }
         if (query != null) {
             QueryBuilder builder = getQueryBuilder(query);
             Map<String, Object> queryAsMap = asMap(queryText);
@@ -196,23 +228,26 @@ public class ElasticSearchUtil {
             searchRequestBuilder
                     .setSource(queryText);
         }
+
+        addAggregations(jsonSchema, searchRequestBuilder);
+
         SearchResponse response = searchRequestBuilder
                 .execute()
                 .actionGet();
- 
+
         return asMap(response.toString());
     }
 
-    public Map<String, Object> searchResponse(String type, String queryText) {
-        return searchResponse(type, queryText, null);
+    public Map<String, Object> searchResponse(JsonSchema jsonSchema, String queryText, Integer pageNumber, Integer pageSize) {
+        return searchResponse(jsonSchema, queryText, null, pageNumber, pageSize);
     }
 
-    public Map<String, Object> searchResponse(String type, String template, Object model, Query query) {
-        return searchResponse(type, render(template, model), query);
+    public Map<String, Object> searchResponse(JsonSchema jsonSchema, String template, Object model, Query query, Integer pageNumber, Integer pageSize) {
+        return searchResponse(jsonSchema, render(template, model), query, pageNumber, pageSize);
     }
 
-    public Map<String, Object> searchResponse(String type, String template, Object model) {
-        return searchResponse(type, template, model, null);
+    public Map<String, Object> searchResponse(JsonSchema jsonSchema, String template, Object model, Integer pageNumber, Integer pageSize) {
+        return searchResponse(jsonSchema, template, model, null, pageNumber, pageSize);
     }
 
     public static String getContentFromClasspath(String resourcePath) {

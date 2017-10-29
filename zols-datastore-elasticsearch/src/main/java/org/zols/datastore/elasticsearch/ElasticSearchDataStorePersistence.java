@@ -344,7 +344,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         if (schema != null) {
             Map<String, Object> browseQuery = new HashMap<>();
             browseQuery.put("keyword", keyword);
-            aggregatedResults = elasticSearchUtil.aggregatedSearch(schema.getJSONPropertyName(schema.getRoot().getId()),
+            aggregatedResults = elasticSearchUtil.aggregatedSearch(schema,
                     (keyword == null) ? "browse_schema" : "browse_schema_with_keyword",
                     browseQuery, pageNumber,pageSize, query);
         }

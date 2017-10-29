@@ -1,24 +1,5 @@
 {
-    "size":{{size}}{{^size}}10{{/size}},
-    {{#from}}"from":{{from}},{{/from}}
-    "aggregations": {
-        "types": {
-            "terms": {
-                "field": "$type"
-            }
-        },
-        "min_yearofproduction": {
-            "min": {
-                "field": "yearofproduction"
-            }
-        }
-        ,
-        "max_yearofproduction": {
-            "max": {
-                "field": "yearofproduction"
-            }
-        }
-    },
+    
     "query": {
         "bool": {
             "filter": []
