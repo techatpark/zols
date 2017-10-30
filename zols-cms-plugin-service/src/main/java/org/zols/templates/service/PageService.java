@@ -12,9 +12,6 @@ import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.zols.datastore.service.DataService;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.service.LinkService;
@@ -26,22 +23,30 @@ import org.zols.templates.domain.Template;
  *
  * @author sathish_ku
  */
-@Service
+
 public class PageService {
 
     private static final Logger LOGGER = getLogger(PageService.class);
 
-    @Autowired
-    private DataService dataService;
     
-    @Autowired
-    private LinkService linkService;
+    private final DataService dataService;
     
-    @Autowired
-    private DataStore dataStore;
+    
+    private final LinkService linkService;
+    
+    
+    private final DataStore dataStore;
+    
+    private final TemplateService templateService;
 
-    @Autowired
-    private TemplateService templateService;
+    public PageService(DataService dataService, LinkService linkService, DataStore dataStore, TemplateService templateService) {
+        this.dataService = dataService;
+        this.linkService = linkService;
+        this.dataStore = dataStore;
+        this.templateService = templateService;
+    }
+    
+    
     
     /**
      * Creates a new Page with given Object
@@ -49,7 +54,7 @@ public class PageService {
      * @param pageRequest Object to be Create
      * @return created Page object
      */
-    @Secured("ROLE_ADMIN")
+    
     public Page create(PageRequest pageRequest,Locale loc) throws DataStoreException {
         Page createdPage = null;
         if (pageRequest != null) {
@@ -107,7 +112,7 @@ public class PageService {
      * @param page Object to be update
      * @return returns the status of the Update Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Page update(Page page) throws DataStoreException {
         Page updated = null;
         if (page != null) {
@@ -123,7 +128,7 @@ public class PageService {
      * @param pageName String to be delete
      * @return status of the delete operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean delete(String pageName) throws DataStoreException {
         LOGGER.info("Deleting Page {}", pageName);
         return dataStore.getObjectManager(Page.class).delete(pageName);

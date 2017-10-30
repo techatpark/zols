@@ -17,23 +17,27 @@ import static org.zols.datastore.query.Filter.Operator.IS_NULL;
 import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
 
-@Service
+
 public class LinkGroupService {
 
     private static final Logger LOGGER = getLogger(LinkGroupService.class);
 
-    @Autowired
-    private DataStore dataStore;
+    
+    private final DataStore dataStore;
 
-    @Autowired
-    private LinkService linkService;
+    
+
+
+    public LinkGroupService(DataStore dataStore) {
+        this.dataStore = dataStore;
+        
+    }
+    
+    
 
     /**
      * Creates a new Group with given Object
@@ -41,7 +45,7 @@ public class LinkGroupService {
      * @param group Object to be Create
      * @return created Group object
      */
-    @Secured("ROLE_ADMIN")
+    
     public LinkGroup create(@Valid LinkGroup group) throws DataStoreException {
         LinkGroup createdGroup = null;
         if (group != null) {
@@ -68,7 +72,7 @@ public class LinkGroupService {
      * @param group Object to be update
      * @return status of the Update
      */
-    @Secured("ROLE_ADMIN")
+    
     public LinkGroup update(LinkGroup group) throws DataStoreException {
         LinkGroup updated = null;
         if (group != null) {
@@ -84,11 +88,24 @@ public class LinkGroupService {
      * @param groupName String to be delete
      * @return status of Delete
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean delete(String groupName) throws DataStoreException {
         LOGGER.info("Deleting Group {}", groupName);
-        linkService.deleteLinksUnder(groupName);
+        deleteLinksUnder(groupName);
         return dataStore.getObjectManager(LinkGroup.class).delete(groupName);
+    }
+    
+    /**
+     * Get the list of link with given Parent name
+     *
+     * @param groupName String to be search
+     * @return list of links
+     */
+    public Boolean deleteLinksUnder(String groupName) throws DataStoreException {
+        LOGGER.info("Deleting links under group {}", groupName);
+        Query query = new Query();
+        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
+        return dataStore.getObjectManager(Link.class).delete(query);
     }
 
     /**
@@ -138,10 +155,23 @@ public class LinkGroupService {
             if (link.getTargetUrl() == null || link.getTargetUrl().trim().length() == 0) {
                 link.setTargetUrl("/pages/add?link=" + link.getName());
             }
-            List<Link> childLinks = linkService.listChildren(link.getName());
+            List<Link> childLinks = listChildren(link.getName());
             link.setChildren(childLinks);
             walkLinkTree(childLinks);
         }
+    }
+    
+    /**
+     * Get the list of link with given Parent name
+     *
+     * @param parentLinkName String to be search
+     * @return list of links
+     */
+    public List<Link> listChildren(String parentLinkName) throws DataStoreException {
+        LOGGER.info("Getting children of link {}", parentLinkName);
+        Query query = new Query();
+        query.addFilter(new Filter<>("parentLinkName", EQUALS, parentLinkName));
+        return dataStore.getObjectManager(Link.class).list(query);
     }
 
 }

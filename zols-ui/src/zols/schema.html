@@ -62,7 +62,7 @@
     <script id="schema_screen_template" type="text/x-jsrender">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <b>{^{:title}}</b> {^{if schemas.length != 0 }}
+                <b>{^{:title}}</b> {^{if schemas.length != 0 && title ==='Schemas'}}
                 <span class="pull-right">
                     <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Create Schema" data-link="{on ~root.addSchema}"><i class="glyphicon glyphicon-plus"></i></button>
                 </span>
@@ -82,7 +82,7 @@
             {^{for schemas}}
             <li class="list-group-item">
                 <span class="badge" data-link="{on ~root.editSchema #data}" data-toggle="tooltip" data-placement="top" title="Download" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
-                <span class="badge" data-link="{on ~root.removeSchema #data}" data-toggle="tooltip" data-placement="top" title="Delete"  data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
+                <span class="badge" data-link="{on ~root.removeSchema #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
                 <span class="badge" data-link="{on ~root.addSchema #data}" data-toggle="tooltip" data-placement="top" title="Fork"><i class="glyphicon glyphicon-chevron-down"></i></span> {{:title}}
 
             </li>
@@ -117,7 +117,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="$ref">Reference</label>
                     <div class="col-md-4">
-                        <input name="$ref" data-link="schema.$ref" type="text" placeholder="" class="form-control input-md" />
+                        <input name="$ref" data-link="schema.$ref" type="text" placeholder="" class="form-control input-md" disabled/>
 
                     </div>
                 </div>
@@ -173,6 +173,29 @@
 
             </div>
             <div class="panel-body">
+
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label">&nbsp;</label>
+                    <div class="col-md-4">
+                        <label class="control-label">
+                  <input name="ids" data-name="{{:prop.ids}}" data-link="prop.ids" type="checkbox" placeholder="" class="form-control input-md" />
+                  <label class="label-text">Identifier</label>
+                        </label>
+
+                        <label class="control-label">
+                      <input name="required" data-name="{{:prop.required}}" data-link="prop.required" type="checkbox" placeholder="" class="form-control input-md" />
+                      <label class="label-text">Required</label>
+                        </label>
+                        <label class="control-label">
+                      <input name="localized" data-name="{{:prop.localized}}" data-link="prop.localized" type="checkbox" placeholder="" class="form-control input-md" />
+                      <label class="label-text">Localized</label>
+                        </label>
+                    </div>
+                </div>
+
+
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="name">Name</label>
@@ -181,26 +204,9 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="ids">Id</label>
-                    <div class="col-md-4">
-                        <input name="ids" data-name="{{:prop.ids}}" data-link="prop.ids" type="checkbox" placeholder="" class="form-control input-md" />
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="localized">Localized</label>
-                    <div class="col-md-4">
-                        <input name="localized" data-name="{{:prop.localized}}" data-link="prop.localized" type="checkbox" placeholder="" class="form-control input-md" />
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="required">Required</label>
-                    <div class="col-md-4">
-                        <input name="required" data-name="{{:prop.required}}" data-link="prop.required" type="checkbox" placeholder="" class="form-control input-md" />
-                    </div>
-                </div>
+
 
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="required">Title</label>

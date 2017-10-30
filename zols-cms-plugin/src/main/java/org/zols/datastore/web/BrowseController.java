@@ -51,7 +51,7 @@ public class BrowseController {
         JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         model.addAttribute("schema", jsonSchema.getCompositeSchema());
         model.addAttribute("parents",jsonSchema.getParents());
-        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,locale,pageable));
+        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()));
         String pageUrl = getPageUrl(request);
         model.addAttribute("pageurl", pageUrl);
         int indexOfQuestionMark = pageUrl.indexOf("?");

@@ -89,7 +89,7 @@ public class LinkController {
     @RequestMapping(value = "/under/{name}", method = GET)
     public List<Link> listChildren(@PathVariable(value = "name") String name) throws DataStoreException {
         LOGGER.info("Getting childen of Link {}", name);
-        return linkService.listChildren(name);
+        return linkGroupService.listChildren(name);
     }
 
     @RequestMapping(value = "/{name}/link_url", method = PATCH)

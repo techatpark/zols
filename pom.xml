@@ -32,6 +32,7 @@
         <module>zols-cms</module>
         <module>zols-datastore-test</module>
         <module>json-schema</module>
+        <module>zols-cms-plugin-service</module>
     </modules>
     
     <properties>

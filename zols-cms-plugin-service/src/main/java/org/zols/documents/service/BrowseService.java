@@ -9,43 +9,40 @@ import java.util.Locale;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.query.AggregatedResults;
+import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import org.zols.datastore.service.DataService;
 import org.zols.datatore.exception.DataStoreException;
 
-@Service
+
 public class BrowseService {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(BrowseService.class);
 
-    @Autowired
-    private DataService dataService;
+    private final DataService dataService;
 
-    @Autowired
-    private DataStore dataStore;
+    private final DataStore dataStore;
 
-   
+    public BrowseService(DataService dataService, DataStore dataStore) {
+        this.dataService = dataService;
+        this.dataStore = dataStore;
+    }
+
     public Page<Map<String, Object>> searchSchema(String schemaId,
             String keyword,
             Query query,
-            Pageable pageable) throws DataStoreException {
-        return dataService.list(schemaId, query, pageable, null);
+            Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return dataService.list(schemaId, query, pageNumber,pageSize, null);
     }
 
-    public SpringAggregatedResults browseSchema(String schemaId,
+    public AggregatedResults browseSchema(String schemaId,
             String keyword,
-            Query query,Locale locale,
-            Pageable pageable) throws DataStoreException {
-        return new SpringAggregatedResults(dataStore.browse(schemaId, keyword, query, locale,pageable.getPageNumber(), pageable.getPageSize()),pageable);
+            Query query, Locale locale,
+            Integer pageNumber, Integer pageSize) throws DataStoreException {
+        return dataStore.browse(schemaId, keyword, query, locale, pageNumber, pageSize);
     }
-    
-    
 
 }
-

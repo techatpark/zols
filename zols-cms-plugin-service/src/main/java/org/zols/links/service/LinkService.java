@@ -10,34 +10,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.zols.datastore.DataStore;
-import org.zols.datastore.query.Filter;
-import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.zols.datastore.query.Filter.Operator.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
-import org.zols.links.provider.LinkProvider;
 
-@Service
 public class LinkService {
 
     private static final Logger LOGGER = getLogger(LinkService.class);
 
-    @Autowired
-    private ApplicationContext applicationContext;
+    private final LinkGroupService linkGroupService;
 
-    @Autowired
-    private LinkGroupService linkGroupService;
+    private final DataStore dataStore;
 
-    @Autowired
-    private DataStore dataStore;
-
+    public LinkService(LinkGroupService linkGroupService, DataStore dataStore) {
+        this.linkGroupService = linkGroupService;
+        this.dataStore = dataStore;
+    }
+    
     /**
      * Creates a new Link for given group (e.g header)
      *
@@ -45,7 +36,6 @@ public class LinkService {
      * @param link Object to be Create
      * @return created Link object
      */
-    @Secured("ROLE_ADMIN")
     public Link createFor(String groupName, Link link) throws DataStoreException {
         Link createdLink = null;
         if (link != null) {
@@ -62,7 +52,6 @@ public class LinkService {
         return createdLink;
     }
 
-    @Secured("ROLE_ADMIN")
     public Link createUnder(String parentLinkName, Link link) throws DataStoreException {
         Link createdLink = null;
         if (link != null) {
@@ -101,7 +90,6 @@ public class LinkService {
      * @param link Object to be update
      * @return status of the Update operation
      */
-    @Secured("ROLE_ADMIN")
     public Link update(Link link) throws DataStoreException {
         Link updated = null;
         if (link != null) {
@@ -117,10 +105,9 @@ public class LinkService {
      * @param linkName String to be delete
      * @return status of the Delete operation
      */
-    @Secured("ROLE_ADMIN")
     public Boolean delete(String linkName) throws DataStoreException {
         LOGGER.info("Deleting Link {}", linkName);
-        List<Link> children = listChildren(linkName);
+        List<Link> children = linkGroupService.listChildren(linkName);
         if (children != null) {
             for (Link child : children) {
                 delete(child.getName());
@@ -129,32 +116,9 @@ public class LinkService {
         return dataStore.getObjectManager(Link.class).delete(linkName);
     }
 
-    /**
-     * Get the list of link with given Parent name
-     *
-     * @param groupName String to be search
-     * @return list of links
-     */
-    @Secured("ROLE_ADMIN")
-    public Boolean deleteLinksUnder(String groupName) throws DataStoreException {
-        LOGGER.info("Deleting links under group {}", groupName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
-        return dataStore.getObjectManager(Link.class).delete(query);
-    }
+    
 
-    /**
-     * Get the list of link with given Parent name
-     *
-     * @param parentLinkName String to be search
-     * @return list of links
-     */
-    public List<Link> listChildren(String parentLinkName) throws DataStoreException {
-        LOGGER.info("Getting children of link {}", parentLinkName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("parentLinkName", EQUALS, parentLinkName));
-        return dataStore.getObjectManager(Link.class).list(query);
-    }
+    
 
     /**
      *
@@ -178,17 +142,17 @@ public class LinkService {
                 firstlevelLinks = linkGroupService.getFirstLevelLinks(group.getName());
                 if (firstlevelLinks != null) {
                     for (Link link : firstlevelLinks) {
-                        link.setChildren(listChildren(link.getName()));
+                        link.setChildren(linkGroupService.listChildren(link.getName()));
                     }
                     applicationLinks.put(group.getName(), firstlevelLinks);
                 }
             }
         }
 
-        Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
-        beansMap.entrySet().stream().forEach((entry) -> {
-            applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
-        });
+//        Map<String, LinkProvider> beansMap = applicationContext.getBeansOfType(LinkProvider.class);
+//        beansMap.entrySet().stream().forEach((entry) -> {
+//            applicationLinks.put(entry.getKey(), entry.getValue().getLinks());
+//        });
 
         return applicationLinks;
     }
@@ -200,7 +164,6 @@ public class LinkService {
      * @param url URL to be linked
      * @return status of the Update
      */
-    @Secured("ROLE_ADMIN")
     public Link linkUrl(String linkName, String url) throws DataStoreException {
         Link updated = null;
         if (linkName != null) {

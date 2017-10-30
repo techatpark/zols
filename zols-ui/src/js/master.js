@@ -70,6 +70,18 @@
         });
     };
 
+    $.fn.getIdFiled = function(schema,def){
+
+      if(schema["$ref"]) {
+        if(def == undefined) {
+          def = schema.definitions;
+        }
+        var parent = def[schema["$ref"].replace("#/definitions/","")];
+        return $.fn.getIdFiled(parent,def);
+      }
+      return schema.ids[0];
+    };
+
     $.fn.baseSchema = function(schema1) {
             var baseSchema = schema1;
             var $ref = schema1.$ref;
@@ -127,7 +139,7 @@
 
                         data = $.view(this).data;
                         var result = $.grep(dataList.content, function(item) {
-                            return item[schema.ids[0]] == data.idField;
+                            return item[$.fn.getIdFiled(schema)] == data.idField;
                         });
                         data = result[0];
                     });
@@ -137,7 +149,7 @@
                         data = $.view(this).data;
 
                         var result = $.grep(dataList.content, function(item) {
-                            return item[schema.ids[0]] == data.idField;
+                            return item[$.fn.getIdFiled(schema)] == data.idField;
                         });
 
 
@@ -182,7 +194,7 @@
                 var value = editor.getValue();
                 $.ajax({
                     method: 'PUT',
-                    url: base_url + '/data/' + schema.$id + "/" + value[schema.ids[0]],
+                    url: base_url + '/data/' + schema.$id + "/" + value[$.fn.getIdFiled(schema)],
                     dataType: 'json',
                     data: JSON.stringify(value)
                 }).done(function(data) {
@@ -209,7 +221,7 @@
     $.fn.deleteData = function() {
         $.ajax({
             method: 'DELETE',
-            url: base_url + '/data/' + schema.$id + '/' + data[schema.ids[0]],
+            url: base_url + '/data/' + schema.$id + '/' + data[$.fn.getIdFiled(schema)],
             dataType: 'json'
         }).done(function(data) {
             $.fn.listData(0);

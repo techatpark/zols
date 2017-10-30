@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.zols.datastore.service.DataService;
+import static org.zols.datastore.web.util.SpringConverter.getPage;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
@@ -77,7 +78,7 @@ public class DataControler {
             @RequestParam(value="q",required = false) String queryString,
             Pageable pageable,Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data for {}", schemaName);
-        return dataService.list(schemaName, queryString ,pageable,loc);
+        return getPage(dataService.list(schemaName, queryString ,pageable.getPageNumber(),pageable.getPageSize(),loc),pageable);
     }
 
 }

@@ -15,9 +15,6 @@ import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
@@ -29,13 +26,19 @@ import org.zols.templates.domain.TemplateRepository;
  *
  * @author sathish_ku
  */
-@Service
+
 public class TemplateRepositoryService {
 
     private static final Logger LOGGER = getLogger(TemplateRepositoryService.class);
 
-    @Autowired
-    private DataStore dataStore;
+    
+    private final DataStore dataStore;
+
+    public TemplateRepositoryService(DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+    
+    
 
     /**
      * Creates a new TemplateRepository with given Object
@@ -43,7 +46,7 @@ public class TemplateRepositoryService {
      * @param templateRepository Object to be Create
      * @return created TemplateRepository object
      */
-    @Secured("ROLE_ADMIN")
+    
     public TemplateRepository create(TemplateRepository templateRepository) throws DataStoreException {
         TemplateRepository createdTemplateRepository = null;
         if (templateRepository != null) {
@@ -70,7 +73,7 @@ public class TemplateRepositoryService {
      * @param templateRepository Object to be update
      * @return status of the Update Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public TemplateRepository update(TemplateRepository templateRepository) throws DataStoreException {
         TemplateRepository updated = null;
         if (templateRepository != null) {
@@ -86,7 +89,7 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be delete
      * @return status of the Delete Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean delete(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
         dataStore.getObjectManager(TemplateRepository.class).delete( templateRepositoryName);
@@ -99,7 +102,7 @@ public class TemplateRepositoryService {
      * @param templateRepositoryName String to be delete
      * @return status of the Delete Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean deleteTemplatesUnder(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template  under Repository {}", templateRepositoryName);
         Query query = new Query();

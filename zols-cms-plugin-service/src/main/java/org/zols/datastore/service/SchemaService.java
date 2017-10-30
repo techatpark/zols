@@ -10,22 +10,27 @@ import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
 import org.zols.datatore.exception.DataStoreException;
 
 /**
  *
  * @author sathish_ku
  */
-@Service
+
 public class SchemaService {
 
     private static final Logger LOGGER = getLogger(SchemaService.class);
 
-    @Autowired
-    private DataStore dataStore;
+    
+    private final DataStore dataStore;
+
+    public SchemaService(DataStore dataStore) {
+        this.dataStore = dataStore;
+    }
+    
+    
+    
+    
 
     /**
      * Creates a new JsonSchema with given Object
@@ -33,7 +38,7 @@ public class SchemaService {
      * @param schemaMap Object to be Create
      * @return created JsonSchema object
      */
-    @Secured("ROLE_ADMIN")
+    
     public Map<String, Object> create(Map<String, Object> schemaMap) throws DataStoreException {
         Map<String, Object> createdJsonSchema = null;
         if (schemaMap != null) {
@@ -73,7 +78,7 @@ public class SchemaService {
      * @param schema Object to be update
      * @return status of the Update Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean update(String schemaId ,Map<String, Object> schemaMap) throws DataStoreException {
         Boolean updated = false;
         if (schemaMap != null) {
@@ -89,7 +94,7 @@ public class SchemaService {
      * @param schemaId String to be delete
      * @return status of the Delete Operation
      */
-    @Secured("ROLE_ADMIN")
+    
     public Boolean delete(String schemaId) throws DataStoreException {
         LOGGER.info("Deleting JsonSchema  {}", schemaId);
         return dataStore.getSchemaManager().delete(schemaId);

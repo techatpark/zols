@@ -16,10 +16,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.domain.Document;
 import org.zols.documents.domain.DocumentRepository;
@@ -29,14 +25,20 @@ import org.zols.documents.domain.Upload;
  * DocumentService provides methods to access and add files to the file systems.
  *
  */
-@Service
+
 public class DocumentService {
 
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DocumentService.class);
 
-    @Autowired
-    private DocumentRepositoryService documentRepositoryService;
+    
+    private final DocumentRepositoryService documentRepositoryService;
+
+    public DocumentService(DocumentRepositoryService documentRepositoryService) {
+        this.documentRepositoryService = documentRepositoryService;
+    }
+    
+    
 
     /**
      * Upload documents
@@ -45,24 +47,23 @@ public class DocumentService {
      * @param upload documents to be uploaded
      * @param rootFolderPath source path of the document
      */
-    @Secured("ROLE_ADMIN")
+    
     public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) throws DataStoreException {
         Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.get().getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
         }
-        List<MultipartFile> multipartFiles = upload.getFiles();
+        List<File> multipartFiles = upload.getFiles();
         if (null != multipartFiles && multipartFiles.size() > 0) {
-            for (MultipartFile multipartFile : multipartFiles) {
+            for (File multipartFile : multipartFiles) {
                 //Handle file content - multipartFile.getInputStream()
                 byte[] bytes;
                 try {
-                    bytes = multipartFile.getBytes();
-
+                    
                     BufferedOutputStream stream
-                            = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getOriginalFilename())));
-                    stream.write(bytes);
+                            = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getAbsolutePath())));
+                    
                     stream.close();
                 } catch (IOException ex) {
                     java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,7 +79,7 @@ public class DocumentService {
      * created
      * @param directoryName the name of the directory to be created
      */
-    @Secured("ROLE_ADMIN")
+    
     public void createDirectory(String documentRepositoryName, String directoryName) throws DataStoreException {
         createDirectory(documentRepositoryName, null, directoryName);
     }
@@ -91,7 +92,7 @@ public class DocumentService {
      * @param rootFolderPath folder where we need to create directory
      * @param directoryName the name of the directory to be created
      */
-    @Secured("ROLE_ADMIN")
+    
     public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) throws DataStoreException {
         Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.get().getPath();
@@ -102,7 +103,7 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
-    @Secured("ROLE_ADMIN")
+    
     public void delete(String documentRepositoryName, String filePath) throws DataStoreException {
         Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
@@ -136,7 +137,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
-    @Secured("ROLE_ADMIN")
+    
     public List<Document> list(String documentRepositoryName, String folderPath) throws DataStoreException {
         Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
@@ -166,7 +167,7 @@ public class DocumentService {
      * @param folderPath the directory to list the files
      * @return list of documents
      */
-    @Secured("ROLE_ADMIN")
+    
     public List<Document> listAll(String documentRepositoryName, String folderPath) throws DataStoreException {
         Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();

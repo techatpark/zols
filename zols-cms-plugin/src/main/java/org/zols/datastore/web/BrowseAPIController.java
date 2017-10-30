@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
-import org.zols.documents.service.SpringAggregatedResults;
+import org.zols.datastore.web.util.SpringAggregatedResults;
+import static org.zols.datastore.web.util.SpringConverter.getAggregatedResults;
+import static org.zols.datastore.web.util.SpringConverter.getPage;
 
 @RestController
 @RequestMapping(value = "/api")
@@ -34,13 +36,13 @@ public class BrowseAPIController {
     @RequestMapping(value = "/search/{schemaName}")
     public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,
             Pageable pageable,HttpServletRequest request) throws DataStoreException {
-        return browseService.searchSchema(schemaName, null, getQuery(request),pageable);
+        return getPage(browseService.searchSchema(schemaName, null, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
     }
 
     @RequestMapping(value = "/browse/{schemaName}")
     public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,
             Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
-        return browseService.browseSchema(schemaName, null, getQuery(request),locale,pageable);
+        return getAggregatedResults(browseService.browseSchema(schemaName, null, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
     }
 
 }
