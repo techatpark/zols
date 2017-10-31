@@ -58,7 +58,12 @@
                     $('#schemaHeader').show();
                     var orig_schema = $.view(this).data;
                     $.get(base_url + '/schema/' + orig_schema.$id + '?enlarged').done(function(data) {
+
+
+
                         schema = data;
+
+
                         $('#categorynameLbl').text(schema.title);
 
                         $.fn.listData(0);
@@ -70,6 +75,7 @@
         });
     };
 
+  
     $.fn.getIdFiled = function(schema,def){
 
       if(schema["$ref"]) {

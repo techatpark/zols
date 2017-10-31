@@ -1,15 +1,17 @@
 package org.zols.cms;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import static org.springframework.boot.SpringApplication.run;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 import org.zols.plugin.EnableCMS;
 
-@SpringBootApplication
+@ComponentScan
+@EnableAutoConfiguration
 @EnableCMS
 public class Application {
 
-    public static void main(String[] args) throws Throwable {
-        SpringApplication.run(Application.class, args);
+    public static void main(String[] args) {
+        ApplicationContext ctx = run(Application.class, args);
     }
-
 }

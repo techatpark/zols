@@ -62,7 +62,9 @@
             if(baseSchema != undefined) {
               newSchema['$ref'] = baseSchema.$id;
             }
+            screen_object.is_edit = false;
             screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
+            $(".alert").remove();
 
         },
         sortProperties: function() {
@@ -100,7 +102,7 @@
 
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
 
-
+                    $(".alert").remove();
 
 
                 });

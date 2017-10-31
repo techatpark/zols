@@ -93,7 +93,7 @@
     <script id="schema_template" type="text/x-jsrender">
         <form class="form-horizontal" onsubmit="return false;">
             <fieldset>
-
+                {^{if !is_edit}}
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="$id">Id</label>
@@ -101,6 +101,7 @@
                         <input name="$id" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
                     </div>
                 </div>
+                {{/if}}
 
                 <!-- Text input-->
                 <div class="form-group">
@@ -115,7 +116,7 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="$ref">Reference</label>
+                    <label class="col-md-4 control-label" for="$ref">Parent</label>
                     <div class="col-md-4">
                         <input name="$ref" data-link="schema.$ref" type="text" placeholder="" class="form-control input-md" disabled/>
 
@@ -140,7 +141,6 @@
                             <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Property" data-link="{on ~root.addProperty}"><i class="glyphicon glyphicon-plus"></i></button>
                         </span>
                         <div class="clearfix"></div>
-
                     </div>
                     <div class="panel-body" id="schemaLayout">
                         {^{props schema.properties}} {^{include tmpl="#attribute_template"/}} {{/props}}
