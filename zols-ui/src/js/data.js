@@ -27,8 +27,17 @@
             return url;
         }
 
-        
 
+        $.fn.getConsolidatedProperties = function(schema) {
+          var properties = schema.properties;
+          var definitions = schema.definitions;
+          while(schema["$ref"]) {
+
+            schema = definitions[schema["$ref"].replace("#/definitions/","")];
+            Object.assign(properties,schema.properties);
+          }
+          return properties;
+        }
 
         $.fn.setSchemaName = function(schemaName) {
             $.ajax({
@@ -36,6 +45,7 @@
                 type: "get",
                 async: false,
                 success: function(data) {
+                    var consolidatedProperties = $.fn.getConsolidatedProperties(data);
                     if (editor) {
                         editor.destroy();
                     }
@@ -50,7 +60,7 @@
                             name = name.replace(']', '');
                             name = name.substring(name.lastIndexOf("[") + 1);
 
-                            var property = data.properties[name];
+                            var property = consolidatedProperties[name];
                             if (property && property.options && property.options.lookup) {
 
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {

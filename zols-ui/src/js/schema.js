@@ -65,6 +65,13 @@
             screen_object.is_edit = false;
             screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
             $(".alert").remove();
+            $('#schema_title').off();
+            $('#schema_title').on('input', function() {
+                screen_object.schema.title = $('#schema_title').val();
+                screen_object.schema.$id =$('#schema_title').val().toLowerCase();
+                $('#schema_id').val(screen_object.schema.$id);
+            });
+
 
         },
         sortProperties: function() {
@@ -103,7 +110,7 @@
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
 
                     $(".alert").remove();
-
+                    $('#schema_title').off();
 
                 });
         },

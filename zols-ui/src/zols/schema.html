@@ -93,24 +93,26 @@
     <script id="schema_template" type="text/x-jsrender">
         <form class="form-horizontal" onsubmit="return false;">
             <fieldset>
-                {^{if !is_edit}}
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="$id">Id</label>
-                    <div class="col-md-4">
-                        <input name="$id" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
-                    </div>
-                </div>
-                {{/if}}
+
 
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="title">Title</label>
                     <div class="col-md-4">
-                        <input name="title" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
+                        <input id="schema_title" name="title" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
 
                     </div>
                 </div>
+
+                {^{if !is_edit}}
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="$id">Id</label>
+                    <div class="col-md-4">
+                        <input id="schema_id" name="$id" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
+                    </div>
+                </div>
+                {{/if}}
 
                 {{if schema.$ref}}
 
@@ -126,7 +128,7 @@
                 <!-- Text input-->
 
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="label">Label</label>
+                    <label class="col-md-4 control-label" for="label">Label Field</label>
                     <div class="col-md-4">
                         <input name="label" data-link="schema.label" type="text" placeholder="" class="form-control input-md" />
 
@@ -136,7 +138,7 @@
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <b>Properties</b>
+                        <b>Fields</b>
                         <span class="pull-right">
                             <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add Property" data-link="{on ~root.addProperty}"><i class="glyphicon glyphicon-plus"></i></button>
                         </span>
