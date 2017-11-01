@@ -18,6 +18,7 @@ import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.web.util.HttpUtil.getPageUrl;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
+import static org.zols.datastore.web.util.SpringConverter.getAggregatedResults;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
 import org.zols.jsonschema.JsonSchema;
@@ -51,7 +52,7 @@ public class BrowseController {
         JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         model.addAttribute("schema", jsonSchema.getCompositeSchema());
         model.addAttribute("parents",jsonSchema.getParents());
-        model.addAttribute("aggregations", categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()));
+        model.addAttribute("aggregations", getAggregatedResults(categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()),pageable));
         String pageUrl = getPageUrl(request);
         model.addAttribute("pageurl", pageUrl);
         int indexOfQuestionMark = pageUrl.indexOf("?");

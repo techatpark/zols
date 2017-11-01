@@ -5,18 +5,51 @@ $navbar-default-link-hover-color: #ffffff;
 $navbar-default-link-active-color: #ffffff;
 $navbar-default-link-active-bg: #264571;
 @import '../../node_modules/bootstrap-sass/assets/stylesheets/_bootstrap';
+@import '_bootstrap-slider';
+@import '_select2';
 
-.thumbnail img {
-  width: 171px;
-  height: 180px;
+body {
+    margin-top: 50px;
 }
 
-.row>[class^="col-"] {
-  line-height: 3;
-  text-align: center;
-  color: #333;
-  background-color: rgba(255,0,0,.15);
+.browsehappy {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
-.row>[class^="col-"]:nth-child(odd) {
-  background-color: rgba(255,0,0,.3);
+// Login Page - Start
+
+.panel-heading {
+    padding: 5px 15px;
+}
+
+.panel-footer {
+    padding: 1px 15px;
+    color: #A0A0A0;
+}
+
+.profile-img {
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 10px;
+    display: block;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+// Login Page - End
+
+.navbar-fixed-top .nav {
+    padding: 15px 0;
+}
+@media (max-width: 767px) {
+    .navbar-brand {
+        padding: 0;
+    }
+
+    .navbar-brand img {
+        margin-top: 5px;
+        margin-left: 5px;
+    }
 }
