@@ -83,11 +83,12 @@
 
                 </div>
                 <ol id="query-filters" class="breadcrumb pull-right" th:if="${query != null}">
-                    <li class="active" th:each="filter : ${query.filters}">
+                    <li class="active" th:each="filter : ${query.filters}" th:if="${filter.name != '$type'}">
                         <span th:text="${filter.name}" th:name="${filter.name}">Home</span>
                         <span href="#" th:if="${filter?.value}" th:each="value : ${filter.value}">
-                                <span th:text="${value}">Text</span><a href="#"><i class="glyphicon glyphicon-remove-circle"></i></a>
+                                <span th:text="${value}">Text</span>
                         </span>
+                        <a href="#" th:if="${filter?.value}"><i class="glyphicon glyphicon-remove-circle"></i></a>
                     </li>
                     <!--/*-->
                     <li class="active"><a href="#">Library</a></li>

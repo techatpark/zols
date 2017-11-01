@@ -68,9 +68,9 @@
             $('#schema_title').off();
             $('#schema_title').on('input', function() {
                 screen_object.schema.title = $('#schema_title').val();
-                screen_object.schema.$id =$('#schema_title').val().toLowerCase();
+                screen_object.schema.$id =$('#schema_title').val().replace(' ','_').toLowerCase();
                 $('#schema_id').val(screen_object.schema.$id);
-            });
+            }).focus();
 
 
         },
@@ -108,11 +108,26 @@
                     screen_object.is_edit = true;
 
                     screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(data));
-
+                    screen_object.setLabelFields();
                     $(".alert").remove();
                     $('#schema_title').off();
 
                 });
+        },
+        setLabelFields: function() {
+          var properties = screen_object.schema.properties;
+          var label = screen_object.schema.label;
+          if(properties != undefined) {
+            for (var key in properties) {
+              $('#schema-label')
+             .append($("<option></option>")
+                        .attr("value",key)
+                        .text(properties[key].title));
+            }
+            $('#schema-label').val(label);
+
+          }
+
         },
         addEnumValue: function(data) {
           if(data.prop.enum === undefined) {
@@ -130,18 +145,32 @@
         addProperty: function() {
             var totalProperties = Object.keys(this.schema.properties).length;
             var patchedProperty = this.patchedProperty({});
+            patchedProperty.title = 'New Property' +  totalProperties;
             patchedProperty.propertyOrder = totalProperties+1;
-            this.schema.properties['newProperty' + totalProperties] = patchedProperty;
+            var propName = 'newProperty' + totalProperties;
+            this.schema.properties[propName] = patchedProperty;
 
             screen_object.setProperty("title", "Schema");
+
+            var name_txtbox = $("#schemaLayout div.panel:last-child input[name='name']");
+
+            $("#schemaLayout div.panel:last-child input[name='title']").focus().select().on('input', function() {
+              delete screen_object.schema.properties[name_txtbox.val()]
+              var val = $(this).val().replace(' ','_').toLowerCase();
+              name_txtbox.val(val);
+              patchedProperty.title = $(this).val();
+              screen_object.schema.properties[name_txtbox.val()] = patchedProperty;
+            });
+            screen_object.setLabelFields();
         },
         removeProperty: function(propName) {
             delete this.schema.properties[propName];
             screen_object.setProperty("title", "Schema");
+            screen_object.setLabelFields();
         },
         patchedProperty: function(property) {
             return jQuery.extend(true, {
-                'type': 'string',
+                'type': 'integer',
                 'format': 'text',
                 'items': {
                     'type': "string"

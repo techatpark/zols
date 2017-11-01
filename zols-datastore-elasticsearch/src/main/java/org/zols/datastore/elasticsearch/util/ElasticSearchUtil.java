@@ -179,7 +179,7 @@ public class ElasticSearchUtil {
 
     private void addAggregations(JsonSchema jsonSchema,
             SearchRequestBuilder searchRequestBuilder) {
-        searchRequestBuilder.addAggregation(AggregationBuilders.terms("Types").field("$type"));
+        searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").field("$type"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
             String filter = (String) entry.getValue().get("filter");
             if (filter != null) {

@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="title">Title</label>
                     <div class="col-md-4">
-                        <input id="schema_title" name="title" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
+                        <input id="schema_title" name="title" autocomplete="off" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
 
                     </div>
                 </div>
@@ -109,12 +109,10 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="$id">Id</label>
                     <div class="col-md-4">
-                        <input id="schema_id" name="$id" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
+                        <input id="schema_id" name="$id" autocomplete="off" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
                     </div>
                 </div>
-                {{/if}}
-
-                {{if schema.$ref}}
+                {{/if}} {{if schema.$ref}}
 
                 <!-- Text input-->
                 <div class="form-group">
@@ -130,7 +128,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="label">Label Field</label>
                     <div class="col-md-4">
-                        <input name="label" data-link="schema.label" type="text" placeholder="" class="form-control input-md" />
+                        <select id="schema-label" name="label" data-link="schema.label" required placeholder="" class="form-control input-md">
+                        </select>
 
                     </div>
                 </div>
@@ -198,6 +197,13 @@
                 </div>
 
 
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="required">Title</label>
+                    <div class="col-md-4">
+                        <input name="title" data-name="{{:prop.title}}" autocomplete="off" data-link="prop.title" placeholder="" class="form-control input-md" />
+                    </div>
+                </div>
+
                 <!-- Text input-->
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="name">Name</label>
@@ -210,12 +216,7 @@
 
 
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="required">Title</label>
-                    <div class="col-md-4">
-                        <input name="title" data-name="{{:prop.title}}" data-link="prop.title" placeholder="" class="form-control input-md" />
-                    </div>
-                </div>
+
 
                 <!-- Select input-->
                 <div class="form-group">
