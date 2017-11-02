@@ -220,6 +220,10 @@
                     delete properties[key]['$ref'];
                 }
 
+                if (properties[key].options && properties[key].options.lookup) {
+                  properties[key].type = properties[key].options.lookup;
+                }
+
                 if (properties[key].type === 'array' && properties[key].items['$ref'] != undefined) {
                     properties[key].items.type = properties[key].items['$ref'];
                     delete properties[key].items['$ref'];
@@ -315,8 +319,27 @@
                 });
 
             }
+            
 
 
+        },
+        schemaById: function(schemaId) {
+          var schema_of_id ;
+          this.schemas.forEach((item, index, arr) => {
+              if(schemaId === item.$id) {
+                schema_of_id= item;
+              }
+          });
+          return schema_of_id;
+        },
+        isLookup: function(type_schema) {
+          var is_lookup = false;
+          if(type_schema.ids) {
+            is_lookup = true;
+          }else if(type_schema.$ref){
+            is_lookup = this.isLookup(this.schemaById(type_schema.$ref));
+          }
+          return is_lookup;
         },
         v4Schema: function(schema) {
             var patchedSchema = jQuery.extend(true, {}, schema);
@@ -354,6 +377,38 @@
                 }
                 delete properties[key].localized;
 
+
+
+
+                if (properties[key].type) {
+                    if (properties[key].type === 'array') {
+
+                        if (this.JSON_TYPES.indexOf(properties[key].items.type) === -1) {
+
+                            properties[key].items['$ref'] = properties[key].items.type;
+                            delete properties[key].items.type;
+                        }
+                        delete properties[key].options;
+                    } else {
+                        delete properties[key].items;
+                    }
+
+                    if (this.JSON_TYPES.indexOf(properties[key].type) === -1) {
+                        //Custom Type
+                        var type_schema = this.schemaById(properties[key].type);
+                        var isLookup = this.isLookup(type_schema);
+                        if(isLookup) {
+                          properties[key].options.lookup = properties[key].type;
+                          properties[key].type = "string";
+                        }else {
+                          properties[key]['$ref'] = properties[key].type;
+                          delete properties[key].type;
+                        }
+
+                    }
+
+                }
+
                 //trim unused
                 if (properties[key].format ){
                   if(properties[key].format === 'text') {
@@ -376,25 +431,6 @@
                   if(jQuery.isEmptyObject(properties[key].options)) {
                     delete properties[key].options;
                   }
-
-                }
-
-
-                if (properties[key].type) {
-                    if (properties[key].type === 'array') {
-                        if (this.JSON_TYPES.indexOf(properties[key].items.type) === -1) {
-                            properties[key].items['$ref'] = properties[key].items.type;
-                            delete properties[key].items.type;
-                        }
-                        delete properties[key].options;
-                    } else {
-                        delete properties[key].items;
-                    }
-
-                    if (this.JSON_TYPES.indexOf(properties[key].type) === -1) {
-                        properties[key]['$ref'] = properties[key].type;
-                        delete properties[key].type;
-                    }
 
                 }
             }
