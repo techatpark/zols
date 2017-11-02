@@ -161,6 +161,14 @@
               patchedProperty.title = $(this).val();
               screen_object.schema.properties[name_txtbox.val()] = patchedProperty;
             });
+
+            var required_checkbox = $("#schemaLayout div.panel:last-child input[name='required']");
+            $("#schemaLayout div.panel:last-child input[name='ids']").change(function(){
+                if($(this).is(':checked')) {
+                    required_checkbox.prop('checked', true);
+                } 
+            });
+
             screen_object.setLabelFields();
         },
         removeProperty: function(propName) {
@@ -272,7 +280,7 @@
                         screen_object.listSchemas();
                         screen_object.showMessages([{
                             type: "success",
-                            "message": "Schema deleted successfully"
+                            "message": "Schema is deleted successfully"
                         }]);
                     });
 
@@ -286,40 +294,46 @@
             var v4Schema = this.v4Schema(schema);
             console.log(v4Schema);
 
-            if (screen_object.is_edit) {
-                $.ajax({
-                    method: 'PUT',
-                    url: base_url + '/schema/' + v4Schema.$id,
-                    dataType: 'json',
-                    data: JSON.stringify(v4Schema)
-                }).done(function(data) {
-                    screen_object.listSchemas();
-                    screen_object.showMessages([{
-                        type: "success",
-                        "message": "Schema saved successfully"
-                    }]);
-                }).error(function(data) {
+            if(document.getElementsByClassName("form-horizontal")[0].checkValidity()) {
+              if (screen_object.is_edit) {
+                  $.ajax({
+                      method: 'PUT',
+                      url: base_url + '/schema/' + v4Schema.$id,
+                      dataType: 'json',
+                      data: JSON.stringify(v4Schema)
+                  }).done(function(data) {
+                      screen_object.listSchemas();
+                      screen_object.showMessages([{
+                          type: "success",
+                          "message": "Schema is saved successfully"
+                      }]);
+                  }).error(function(data) {
 
-                });
-            } else {
+                  });
+              } else {
 
-                $.ajax({
-                    method: 'POST',
-                    url: base_url + '/schema',
-                    dataType: 'json',
-                    data: JSON.stringify(v4Schema)
-                }).done(function(data) {
-                    screen_object.listSchemas();
-                    screen_object.showMessages([{
-                        type: "success",
-                        "message": "Schema created successfully"
-                    }]);
-                }).error(function(data) {
+                  $.ajax({
+                      method: 'POST',
+                      url: base_url + '/schema',
+                      dataType: 'json',
+                      data: JSON.stringify(v4Schema)
+                  }).done(function(data) {
+                      screen_object.listSchemas();
+                      screen_object.showMessages([{
+                          type: "success",
+                          "message": "Schema is created successfully"
+                      }]);
+                  }).error(function(data) {
 
-                });
+                  });
+
+              }
 
             }
-            
+
+
+
+
 
 
         },
@@ -359,6 +373,9 @@
 
 
             for (var key in properties) {
+
+
+
                 //repair required
                 if (properties[key].required) {
                     required.push(key);
@@ -376,7 +393,6 @@
                     localized.push(key);
                 }
                 delete properties[key].localized;
-
 
 
 
@@ -447,6 +463,8 @@
               patchedSchema.properties[key].enum[index] = $(element).val();
             });
 
+
+
             if (required.length !== 0) {
                 patchedSchema.required = required;
             }
@@ -457,6 +475,18 @@
 
             if (localized.length !== 0) {
                 patchedSchema.localized = localized;
+            }
+
+            for (var key in properties) {
+              if(patchedSchema.properties[key].enum && patchedSchema.properties[key].enum.length != 0) {
+                var new_enum = [];
+                patchedSchema.properties[key].enum.forEach((item, index, arr) => {
+                    if(item!= null) {
+                      new_enum.push(item);
+                    }
+                });
+                patchedSchema.properties[key].enum = new_enum;
+              }
             }
 
             return patchedSchema;

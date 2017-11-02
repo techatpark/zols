@@ -28,6 +28,7 @@
     "npm-run-all": "^3.0.0",
     "uglify-js": "^2.7.3",
     "bootstrap-sass": "^3.3.7",
+    "font-awesome": "^4.7.0",
     "jquery": "^2.2.0",
     "node-sass": "^3.8.0",
     "onchange": "^2.5.0"

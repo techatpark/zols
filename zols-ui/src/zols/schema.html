@@ -44,8 +44,8 @@
                     Are you sure you want to delete ?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
+                    <button type="button" class="btn btn-primary">Yes</button>
                 </div>
             </div>
         </div>
@@ -64,14 +64,14 @@
             <div class="panel-heading">
                 <b>{^{:title}}</b> {^{if schemas.length != 0 && title ==='Schemas'}}
                 <span class="pull-right">
-                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Create Schema" data-link="{on ~root.addSchema}"><i class="glyphicon glyphicon-plus"></i></button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Create new Schema" data-link="{on ~root.addSchema}"><i class="glyphicon glyphicon-plus"></i></button>
                 </span>
                 <div class="clearfix"></div>
                 {{/if}}
             </div>
             <div class="panel-body">
                 <div class="row-fluid">
-                    {^{if schemas.length != 0 && title==='Schemas'}} {{include tmpl="#schemas_template"/}} {{else schemas.length === 0 && title==='Schemas'}} There are no schema. Please create new schema <a href="#" data-link="{on ~root.addSchema}">here.</a>                    {^{else title==='Schema'}} {{include tmpl="#schema_template"/}}{{/if}}
+                    {^{if schemas.length != 0 && title==='Schemas'}} {{include tmpl="#schemas_template"/}} {{else schemas.length === 0 && title==='Schemas'}} There are no schemas available. Click <a href="#" data-link="{on ~root.addSchema}">here.</a>                    to create one {^{else title==='Schema'}} {{include tmpl="#schema_template"/}}{{/if}}
                 </div>
             </div>
         </div>
@@ -81,9 +81,9 @@
         <ul class="list-group">
             {^{for schemas}}
             <li class="list-group-item">
-                <span class="badge" data-link="{on ~root.editSchema #data}" data-toggle="tooltip" data-placement="top" title="Download" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
+                <span class="badge" data-link="{on ~root.editSchema #data}" data-toggle="tooltip" data-placement="top" title="Edit" data-target="#confirmationModal"><i class="glyphicon glyphicon-edit"></i></span>
                 <span class="badge" data-link="{on ~root.removeSchema #data}" data-toggle="tooltip" data-placement="top" title="Delete" data-target="#confirmationModal"><i class="glyphicon glyphicon-trash"></i></span>
-                <span class="badge" data-link="{on ~root.addSchema #data}" data-toggle="tooltip" data-placement="top" title="Fork"><i class="glyphicon glyphicon-chevron-down"></i></span> {{:title}}
+                <span class="badge" data-link="{on ~root.addSchema #data}" data-toggle="tooltip" data-placement="top" title="Inherit"><i class="glyphicon glyphicon-object-align-vertical"></i></span> {{:title}}
 
             </li>
             {{/for}}
@@ -99,7 +99,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="title">Title</label>
                     <div class="col-md-4">
-                        <input id="schema_title" name="title" autocomplete="off" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
+                        <input id="schema_title" required name="title" autocomplete="off" data-link="schema.title" type="text" placeholder="" class="form-control input-md" />
 
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="$id">Id</label>
                     <div class="col-md-4">
-                        <input id="schema_id" name="$id" autocomplete="off" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
+                        <input id="schema_id" required name="$id" autocomplete="off" data-link="schema.$id" type="text" placeholder="" pattern="[a-zA-Z0-9]+" title="Please enter only letters without spaces" class="form-control input-md" />
                     </div>
                 </div>
                 {{/if}} {{if schema.$ref}}
@@ -152,8 +152,8 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="saveBtn"></label>
                     <div class="col-md-8">
-                        <button name="saveBtn" class="btn btn-success" type="submit" data-link="{on ~root.saveSchema #data.schema}">Save</button>
-                        <button name="discardBtn" class="btn btn-danger" type="button" data-link="{on ~root.listSchemas}">Discard Changes</button>
+                        <button class="btn btn-danger" type="button" data-link="{on ~root.listSchemas}">Discard</button>
+                        <button class="btn btn-success" type="submit" data-link="{on ~root.saveSchema #data.schema}">Save</button>
                     </div>
                 </div>
 
@@ -200,7 +200,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="required">Title</label>
                     <div class="col-md-4">
-                        <input name="title" data-name="{{:prop.title}}" autocomplete="off" data-link="prop.title" placeholder="" class="form-control input-md" />
+                        <input name="title" required data-name="{{:prop.title}}" autocomplete="off" data-link="prop.title" placeholder="" class="form-control input-md" />
                     </div>
                 </div>
 
@@ -208,7 +208,7 @@
                 <div class="form-group">
                     <label class="col-md-4 control-label" for="name">Name</label>
                     <div class="col-md-4">
-                        <input name="name" data-link="key" type="text" placeholder="" class="form-control input-md" />
+                        <input name="name" required data-link="key" type="text" placeholder="" class="form-control input-md" />
                     </div>
                 </div>
 
