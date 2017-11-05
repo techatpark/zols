@@ -59,8 +59,8 @@
                 '$type': 'schema',
                 properties: {}
             };
-            if(baseSchema != undefined) {
-              newSchema['$ref'] = baseSchema.$id;
+            if (baseSchema != undefined) {
+                newSchema['$ref'] = baseSchema.$id;
             }
             screen_object.is_edit = false;
             screen_object.setProperty("title", "Schema").setProperty("schema", screen_object.patchedSchema(newSchema));
@@ -68,37 +68,39 @@
             $('#schema_title').off();
             $('#schema_title').on('input', function() {
                 screen_object.schema.title = $('#schema_title').val();
-                screen_object.schema.$id =$('#schema_title').val().replace(' ','_').toLowerCase();
+                screen_object.schema.$id = $('#schema_title').val().replace(' ', '_').toLowerCase();
                 $('#schema_id').val(screen_object.schema.$id);
             }).focus();
 
 
         },
         sortProperties: function() {
-          var patchedSchema = screen_object.schema;
-          var properties = patchedSchema.properties;
+            var patchedSchema = screen_object.schema;
+            var properties = patchedSchema.properties;
 
-          if(properties != undefined) {
-            var keysSorted = Object.keys(properties).sort(function(a,b){return properties[a].propertyOrder-properties[b].propertyOrder})
+            if (properties != undefined) {
+                var keysSorted = Object.keys(properties).sort(function(a, b) {
+                    return properties[a].propertyOrder - properties[b].propertyOrder
+                })
 
-            var $people = $('#schemaLayout'),
-            $peopleli = $people.children('.panel-primary');
+                var $people = $('#schemaLayout'),
+                    $peopleli = $people.children('.panel-primary');
 
-            $peopleli.sort(function(a,b){
-                  var an = keysSorted.indexOf(a.getAttribute('data-name')),
-                    bn = keysSorted.indexOf(b.getAttribute('data-name'));
+                $peopleli.sort(function(a, b) {
+                    var an = keysSorted.indexOf(a.getAttribute('data-name')),
+                        bn = keysSorted.indexOf(b.getAttribute('data-name'));
 
-                  if(an > bn) {
-                    return 1;
-                  }
-                  if(an < bn) {
-                    return -1;
-                  }
-                  return 0;
-            });
+                    if (an > bn) {
+                        return 1;
+                    }
+                    if (an < bn) {
+                        return -1;
+                    }
+                    return 0;
+                });
 
-            $peopleli.detach().appendTo($people);
-          }
+                $peopleli.detach().appendTo($people);
+            }
 
 
         },
@@ -115,38 +117,38 @@
                 });
         },
         setLabelFields: function() {
-          var properties = screen_object.schema.properties;
-          var label = screen_object.schema.label;
-          if(properties != undefined) {
-            for (var key in properties) {
-              $('#schema-label')
-             .append($("<option></option>")
-                        .attr("value",key)
-                        .text(properties[key].title));
-            }
-            $('#schema-label').val(label);
+            var properties = screen_object.schema.properties;
+            var label = screen_object.schema.label;
+            if (properties != undefined) {
+                for (var key in properties) {
+                    $('#schema-label')
+                        .append($("<option></option>")
+                            .attr("value", key)
+                            .text(properties[key].title));
+                }
+                $('#schema-label').val(label);
 
-          }
+            }
 
         },
         addEnumValue: function(data) {
-          if(data.prop.enum === undefined) {
-            data.prop.enum = [];
-          }
-          data.prop.enum.push("VALUE"+data.prop.enum.length);
-          screen_object.setProperty("title", "Schema");
+            if (data.prop.enum === undefined) {
+                data.prop.enum = [];
+            }
+            data.prop.enum.push("VALUE" + data.prop.enum.length);
+            screen_object.setProperty("title", "Schema");
 
         },
-        removeEnumValue: function(data,index) {
-          data.prop.enum.splice(index, 1);
-          screen_object.setProperty("title", "Schema");
+        removeEnumValue: function(data, index) {
+            data.prop.enum.splice(index, 1);
+            screen_object.setProperty("title", "Schema");
 
         },
         addProperty: function() {
             var totalProperties = Object.keys(this.schema.properties).length;
             var patchedProperty = this.patchedProperty({});
-            patchedProperty.title = 'New Property' +  totalProperties;
-            patchedProperty.propertyOrder = totalProperties+1;
+            patchedProperty.title = 'New Property' + totalProperties;
+            patchedProperty.propertyOrder = totalProperties + 1;
             var propName = 'newProperty' + totalProperties;
             this.schema.properties[propName] = patchedProperty;
 
@@ -155,18 +157,18 @@
             var name_txtbox = $("#schemaLayout div.panel:last-child input[name='name']");
 
             $("#schemaLayout div.panel:last-child input[name='title']").focus().select().on('input', function() {
-              delete screen_object.schema.properties[name_txtbox.val()]
-              var val = $(this).val().replace(' ','_').toLowerCase();
-              name_txtbox.val(val);
-              patchedProperty.title = $(this).val();
-              screen_object.schema.properties[name_txtbox.val()] = patchedProperty;
+                delete screen_object.schema.properties[name_txtbox.val()]
+                var val = $(this).val().replace(' ', '_').toLowerCase();
+                name_txtbox.val(val);
+                patchedProperty.title = $(this).val();
+                screen_object.schema.properties[name_txtbox.val()] = patchedProperty;
             });
 
             var required_checkbox = $("#schemaLayout div.panel:last-child input[name='required']");
-            $("#schemaLayout div.panel:last-child input[name='ids']").change(function(){
-                if($(this).is(':checked')) {
+            $("#schemaLayout div.panel:last-child input[name='ids']").change(function() {
+                if ($(this).is(':checked')) {
                     required_checkbox.prop('checked', true);
-                } 
+                }
             });
 
             screen_object.setLabelFields();
@@ -187,7 +189,8 @@
                 'ids': false,
                 'localized': false,
                 'options': {
-                    'wysiwyg': false,'lookup':''
+                    'wysiwyg': false,
+                    'lookup': ''
                 }
             }, property);
         },
@@ -223,13 +226,23 @@
                     }
                 }
 
+                if (properties[key].type === 'array') {
+                    properties[key].array = true;
+                    properties[key].type = properties[key].items.type;
+                    if (properties[key].items.enum) {
+                        properties[key].enum = properties[key].items.enum;
+                        properties[key].format = properties[key].items.format;
+                    }
+
+                }
+
                 if (properties[key]['$ref']) {
                     properties[key].type = properties[key]['$ref'];
                     delete properties[key]['$ref'];
                 }
 
                 if (properties[key].options && properties[key].options.lookup) {
-                  properties[key].type = properties[key].options.lookup;
+                    properties[key].type = properties[key].options.lookup;
                 }
 
                 if (properties[key].type === 'array' && properties[key].items['$ref'] != undefined) {
@@ -294,40 +307,40 @@
             var v4Schema = this.v4Schema(schema);
             console.log(v4Schema);
 
-            if(document.getElementsByClassName("form-horizontal")[0].checkValidity()) {
-              if (screen_object.is_edit) {
-                  $.ajax({
-                      method: 'PUT',
-                      url: base_url + '/schema/' + v4Schema.$id,
-                      dataType: 'json',
-                      data: JSON.stringify(v4Schema)
-                  }).done(function(data) {
-                      screen_object.listSchemas();
-                      screen_object.showMessages([{
-                          type: "success",
-                          "message": "Schema is saved successfully"
-                      }]);
-                  }).error(function(data) {
+            if (document.getElementsByClassName("form-horizontal")[0].checkValidity()) {
+                if (screen_object.is_edit) {
+                    $.ajax({
+                        method: 'PUT',
+                        url: base_url + '/schema/' + v4Schema.$id,
+                        dataType: 'json',
+                        data: JSON.stringify(v4Schema)
+                    }).done(function(data) {
+                        screen_object.listSchemas();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Schema is saved successfully"
+                        }]);
+                    }).error(function(data) {
 
-                  });
-              } else {
+                    });
+                } else {
 
-                  $.ajax({
-                      method: 'POST',
-                      url: base_url + '/schema',
-                      dataType: 'json',
-                      data: JSON.stringify(v4Schema)
-                  }).done(function(data) {
-                      screen_object.listSchemas();
-                      screen_object.showMessages([{
-                          type: "success",
-                          "message": "Schema is created successfully"
-                      }]);
-                  }).error(function(data) {
+                    $.ajax({
+                        method: 'POST',
+                        url: base_url + '/schema',
+                        dataType: 'json',
+                        data: JSON.stringify(v4Schema)
+                    }).done(function(data) {
+                        screen_object.listSchemas();
+                        screen_object.showMessages([{
+                            type: "success",
+                            "message": "Schema is created successfully"
+                        }]);
+                    }).error(function(data) {
 
-                  });
+                    });
 
-              }
+                }
 
             }
 
@@ -338,30 +351,30 @@
 
         },
         schemaById: function(schemaId) {
-          var schema_of_id ;
-          this.schemas.forEach((item, index, arr) => {
-              if(schemaId === item.$id) {
-                schema_of_id= item;
-              }
-          });
-          return schema_of_id;
+            var schema_of_id;
+            this.schemas.forEach((item, index, arr) => {
+                if (schemaId === item.$id) {
+                    schema_of_id = item;
+                }
+            });
+            return schema_of_id;
         },
         isLookup: function(type_schema) {
-          var is_lookup = false;
-          if(type_schema.ids) {
-            is_lookup = true;
-          }else if(type_schema.$ref){
-            is_lookup = this.isLookup(this.schemaById(type_schema.$ref));
-          }
-          return is_lookup;
+            var is_lookup = false;
+            if (type_schema.ids) {
+                is_lookup = true;
+            } else if (type_schema.$ref) {
+                is_lookup = this.isLookup(this.schemaById(type_schema.$ref));
+            }
+            return is_lookup;
         },
         v4Schema: function(schema) {
             var patchedSchema = jQuery.extend(true, {}, schema);
 
 
-            if(!patchedSchema.idField) {
-              delete patchedSchema.idField;
-              delete patchedSchema.labelField;
+            if (!patchedSchema.idField) {
+                delete patchedSchema.idField;
+                delete patchedSchema.labelField;
             }
             var properties = patchedSchema.properties;
 
@@ -396,6 +409,7 @@
 
 
 
+
                 if (properties[key].type) {
                     if (properties[key].type === 'array') {
 
@@ -413,12 +427,12 @@
                         //Custom Type
                         var type_schema = this.schemaById(properties[key].type);
                         var isLookup = this.isLookup(type_schema);
-                        if(isLookup) {
-                          properties[key].options.lookup = properties[key].type;
-                          properties[key].type = "string";
-                        }else {
-                          properties[key]['$ref'] = properties[key].type;
-                          delete properties[key].type;
+                        if (isLookup) {
+                            properties[key].options.lookup = properties[key].type;
+                            properties[key].type = "string";
+                        } else {
+                            properties[key]['$ref'] = properties[key].type;
+                            delete properties[key].type;
                         }
 
                     }
@@ -426,27 +440,27 @@
                 }
 
                 //trim unused
-                if (properties[key].format ){
-                  if(properties[key].format === 'text') {
-                      delete properties[key].format;
+                if (properties[key].format) {
+                    if (properties[key].format === 'text') {
+                        delete properties[key].format;
 
-                  }
-                  if(properties[key].format === 'html') {
-                      properties[key].options.wysiwyg = true;
-                  }
+                    }
+                    if (properties[key].format === 'html') {
+                        properties[key].options.wysiwyg = true;
+                    }
                 }
 
-                if(properties[key].options) {
-                  if(!properties[key].options.wysiwyg) {
-                    delete properties[key].options.wysiwyg;
-                  }
-                  if(properties[key].options.lookup == "") {
-                    delete properties[key].options.lookup;
-                  }
+                if (properties[key].options) {
+                    if (!properties[key].options.wysiwyg) {
+                        delete properties[key].options.wysiwyg;
+                    }
+                    if (properties[key].options.lookup == "") {
+                        delete properties[key].options.lookup;
+                    }
 
-                  if(jQuery.isEmptyObject(properties[key].options)) {
-                    delete properties[key].options;
-                  }
+                    if (jQuery.isEmptyObject(properties[key].options)) {
+                        delete properties[key].options;
+                    }
 
                 }
             }
@@ -454,13 +468,13 @@
             //PATHCH for Enum Binding
 
             for (var key in properties) {
-              if(properties[key].enum) {
-                properties[key].enum =[];
-              }
+                if (properties[key].enum) {
+                    properties[key].enum = [];
+                }
             }
-            $( "input[data-enum-name]" ).each(function( index, element ) {
-              var key = $(element).attr('data-enum-name');
-              patchedSchema.properties[key].enum[index] = $(element).val();
+            $("input[data-enum-name]").each(function(index, element) {
+                var key = $(element).attr('data-enum-name');
+                patchedSchema.properties[key].enum[index] = $(element).val();
             });
 
 
@@ -478,16 +492,30 @@
             }
 
             for (var key in properties) {
-              if(patchedSchema.properties[key].enum && patchedSchema.properties[key].enum.length != 0) {
-                var new_enum = [];
-                patchedSchema.properties[key].enum.forEach((item, index, arr) => {
-                    if(item!= null) {
-                      new_enum.push(item);
-                    }
-                });
-                patchedSchema.properties[key].enum = new_enum;
-              }
+                if (patchedSchema.properties[key].enum && patchedSchema.properties[key].enum.length != 0) {
+                    var new_enum = [];
+                    patchedSchema.properties[key].enum.forEach((item, index, arr) => {
+                        if (item != null) {
+                            new_enum.push(item);
+                        }
+                    });
+                    patchedSchema.properties[key].enum = new_enum;
+                }
+
+                if (properties[key].array) {
+                    properties[key].items = {};
+                    properties[key].items.type = properties[key].type;
+                    properties[key].items.enum = properties[key].enum;
+                    properties[key].items.format = properties[key].format;
+                    properties[key].type = 'array';
+                    delete properties[key].enum;
+                    delete properties[key].format;
+                }
+                delete properties[key].array;
+
             }
+
+
 
             return patchedSchema;
         }
