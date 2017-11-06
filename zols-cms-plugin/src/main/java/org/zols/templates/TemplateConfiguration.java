@@ -18,7 +18,6 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.AbstractConfigurableTemplateResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.FileTemplateResolver;
-import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.UrlTemplateResolver;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.TemplateRepository;
@@ -98,6 +97,7 @@ public class TemplateConfiguration {
 
     private void intializeResolver(AbstractConfigurableTemplateResolver resolver) {
 //        resolver.setPrefix(this.properties.getPrefix());
+resolver.setCacheable(false);
         resolver.setSuffix(this.properties.getSuffix());
         resolver.setTemplateMode(this.properties.getMode());
         resolver.setCharacterEncoding(this.properties.getEncoding().toString());

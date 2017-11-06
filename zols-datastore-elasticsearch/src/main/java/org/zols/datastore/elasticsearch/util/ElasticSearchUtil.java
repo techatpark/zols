@@ -95,8 +95,9 @@ public class ElasticSearchUtil {
                             bucketItem = new HashMap<>();
                             bucketItem.put("min", ((Map<String, Object>) aggregations.get(aggregationName)).get("value"));
                             bucketItem.put("max", ((Map<String, Object>) aggregations.get(aggregationName.replaceAll("min_", "max_"))).get("value"));
+                            bucket.put("title",   ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
                             bucket.put("item", bucketItem);
-                        } else {
+                        } else if (!aggregationName.startsWith("max_")){
                             bucket.put("name", aggregationName);
                             bucket.put("type", "term");
                             bucketsMaps = (List<Map<String, Object>>) ((Map<String, Object>) entrySet.getValue()).get("buckets");
@@ -108,6 +109,8 @@ public class ElasticSearchUtil {
                                 bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
                                 bucketItems.add(bucketItem);
                             }
+                            bucket.put("title",   ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+                            
                             bucket.put("items", bucketItems);
                         }
                         buckets.add(bucket);
@@ -179,7 +182,9 @@ public class ElasticSearchUtil {
 
     private void addAggregations(JsonSchema jsonSchema,
             SearchRequestBuilder searchRequestBuilder) {
-        searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").field("$type"));
+        HashMap<String,Object> map = new HashMap<>();
+        map.put("title", "Types");
+        searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
             String filter = (String) entry.getValue().get("filter");
             if (filter != null) {
@@ -190,12 +195,12 @@ public class ElasticSearchUtil {
                 switch (filter) {
                     case "minmax":
                         searchRequestBuilder
-                                .addAggregation(AggregationBuilders.min("min_" + title).field(entry.getKey()))
-                                .addAggregation(AggregationBuilders.max("max_" + title).field(entry.getKey()));
+                                .addAggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
+                                .addAggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
                         break;
                     case "terms":
                         searchRequestBuilder
-                                .addAggregation(AggregationBuilders.terms(title).field(entry.getKey()));
+                                .addAggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
 
                         break;
                 }

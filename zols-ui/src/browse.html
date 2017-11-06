@@ -23,105 +23,113 @@
 <body>
     <section>
         <div class="container" th:fragment="content">
-            <div class="row">
-                <ol class="breadcrumb" th:if="${parents != null}">
-                    <li th:each="parent : ${parents}"><a href="#" th:href="@{'/browse/'+${parent.id}}" th:text="${parent.title}">Home</a></li>
-                    <!--/*-->
-                    <li><a href="#">Library</a></li>
-                    <!--*/-->
-                    <li class="active" th:if="${category != null}" th:text="${category.label}">Data</li>
-                </ol>
 
 
-                <div class="col-sm-3">
+            <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+            <header class="row">
+                <div class="col-md-8">
+                    <ol class="breadcrumb" th:if="${parents != null}">
+                        <li th:each="parent : ${parents}"><a href="#" th:href="@{'/browse/'+${parent.id}}" th:text="${parent.title}">Home</a></li>
+                        <!--/*-->
+                        <li><a href="#">Library</a></li>
+                        <!--*/-->
+                        <li class="active" th:if="${category != null}" th:text="${category.label}">Data</li>
+                    </ol>
+                </div>
+                <div class="col-md-4">
+                    <span class="label label-default ">New<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                    <span class="label label-default ">New<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                    <span class="label label-default ">New<span class="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+                    <span class="badge badge-pill badge-danger pull-right"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span>Clear All</span>
+                </div>
+            </header>
 
+            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+            <main class="row">
+                <aside class="col-md-3" th:if="${aggregations != null}">
 
-
-
-
-
-
-                    <div class="panel-group" th:if="${aggregations != null}">
-                        <div class="panel panel-default term-filters" th:if="${bucket.type == 'term'}" th:each="bucket : ${aggregations.buckets}">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                 <span th:text="${bucket.name}">Content</span></a>
-                            </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in">
-                                <div class="panel-body">
-                                    <ul th:each="bucketItem : ${bucket.items}">
-                                        <li th:name="${bucket.name}" class="list-group-item">
-                                            <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
+                    <div class="panel panel-default" th:if="${bucket.type == 'term'}" th:each="bucket : ${aggregations.buckets}">
+                        <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
+                        <div class="panel-body">
+                            <ul class="list-group" th:each="bucketItem : ${bucket.items}">
+                                <li th:name="${bucket.name}" class="list-group-item">
+                                    <span class="badge" th:text="${bucketItem.count}">14</span>
+                                    <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
                                             <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
-                                            <span class="badge" th:text="${bucketItem.count}">14</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                </li>
+
+                            </ul>
                         </div>
-                        <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                               <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                 <span th:text="${bucket.name}">Content</span></a>
-                            </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in">
-                                <div class="panel-body" th:name="${bucket.name}">
-                                    <input class="range-slider" data-th-attr="data-slider-id=${bucket.name},data-slider-min=${#numbers.formatInteger(bucket.item.min, 1)}, data-slider-max=${bucket.item.max}, data-slider-value='['+${bucket.item.min}+','+${bucket.item.max}+']',data-slider-step=${(bucket.item.max-bucket.item.min)/4}"
-                                        data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14" />
-                                </div>
+                    </div>
+
+                    <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
+                        <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <span class="label label-info pull-left" th:text="${bucket.item.min}">info</span><span class="col-md-9 label label-default "><input type="range" min="0" max="150" value="60" /></span><span class="label label-info pull-right" th:text="${bucket.item.max}">150</span>
                             </div>
                         </div>
                     </div>
 
+                </aside>
+                <section class="col-md-9 container">
 
 
+                    <div class="row">
+
+                        <nav class="col-md-12" aria-label="Page navigation">
+                            <ul class="pagination pull-right">
+                                <li>
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li><a href="#">1</a></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li>
+                                    <a href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+
+                    <div id="features_items" th:name="${cleanpageurl}" class="row">
+
+                        <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
+                            <a href="#" class="thumbnail">
+                                <img th:src="${product.imageUrl}" src="https://camo.githubusercontent.com/8be51b11b95c6c6bdb9f588d840b7aa13073a295/68747470733a2f2f7777772e706c75732d696e6e6f766174696f6e732e636f6d2f696d616765732f746167636c6f75642d62772e6a7067" alt="Hi">
+                                <h2 th:text="${product.title}">hnjj</h2>
+                            </a>
+                        </div>
+
+                        <!--/*-->
+                        <div class="col-xs-6 col-md-4">
+                            <a href="#" class="thumbnail">
+                                <img src="https://i.pinimg.com/474x/31/aa/92/31aa92a3e01660e359c4a2e4a43b71c5--tag-cloud-app-design.jpg" alt="Hi">
+                                <h2>hnjj</h2>
+                            </a>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <a href="#" class="thumbnail">
+                                <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE3MSAxODAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MTgwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVmNjE4Y2MwYTcgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMHB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWY2MThjYzBhNyI+PHJlY3Qgd2lkdGg9IjE3MSIgaGVpZ2h0PSIxODAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI1OS41NTQ2ODc1IiB5PSI5NC41Ij4xNzF4MTgwPC90ZXh0PjwvZz48L2c+PC9zdmc+"
+                                    alt="Hi">
+                            </a>
+                        </div>
+                        <!--*/-->
 
 
-                </div>
-                <ol id="query-filters" class="breadcrumb pull-right" th:if="${query != null}">
-                    <li class="active" th:each="filter : ${query.filters}" th:if="${filter.name != '$type'}">
-                        <span th:text="${filter.name}" th:name="${filter.name}">Home</span>
-                        <span href="#" th:if="${filter?.value}" th:each="value : ${filter.value}">
-                                <span th:text="${value}">Text</span>
-                        </span>
-                        <a href="#" th:if="${filter?.value}"><i class="glyphicon glyphicon-remove-circle"></i></a>
-                    </li>
-                    <!--/*-->
-                    <li class="active"><a href="#">Library</a></li>
-                    <li class="active"><a href="#">Data</a></li>
-                    <!--*/-->
-                    <li><a th:href="${#strings.substring(pageurl,0,#strings.indexOf(pageurl,'?'))}">Clear All</a></li>
-                </ol>
-                <div id="features_items" th:name="${cleanpageurl}" class="col-sm-9 padding-right" th:if="${aggregations != null}">
-
-
-                    <div class="col-lg-4" th:each="product : ${aggregations.page.content}">
-                        <img class="img-responsive" th:src="${product.imageUrl}" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140" />
-                        <h2 th:text="${product.title}">Heading</h2>
                     </div>
 
 
-                </div>
 
-                <ul class="pagination" th:if="${aggregations.page.totalPages &gt; 1}">
-                    <li th:class="${aggregations.page.number eq 0} ? 'disabled' : ''">
-                        <a th:if="${not aggregations.page.first}" th:href="@{${pageurl}(page=${aggregations.page.number-1},size=${aggregations.page.size})}">&laquo;</a>
-                        <a th:if="${aggregations.page.first}" href="javascript:void(0);">&laquo;</a>
-                    </li>
+                </section>
+            </main>
 
-                    <li th:each="pageNo : ${#numbers.sequence(0, (aggregations.page.totalPages -1) % 3)}" th:class="${aggregations.page.number eq (pageNo + aggregations.page.number)}? 'active' : ''">
-                        <a th:href="@{${pageurl}(page=${pageNo + aggregations.page.number},size=${aggregations.page.size})}" th:text="${pageNo + aggregations.page.number + 1}" />
-                    </li>
-                    <li th:class="${aggregations.page.number + 1 ge aggregations.page.totalPages} ? 'disabled' : ''">
-                        <a th:if="${not aggregations.page.last}" th:href="@{${pageurl}(page=${aggregations.page.number+1},size=${aggregations.page.size})}">&raquo;</a>
-                        <a th:if="${aggregations.page.last}" href="javascript:void(0);">&raquo;</a>
-                    </li>
-                </ul>
-            </div>
 
             <!-- build:js({app,.tmp}) /scripts/create_page.js -->
             <script src="/js/search.js"></script>

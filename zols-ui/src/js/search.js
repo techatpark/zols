@@ -88,7 +88,7 @@
         }
     });
     if (sliders != undefined) {
-        sliders.on('slideStart', function(e) {
+        sliders.on('slideEnd', function(e) {
             setFilter($(this).parent().attr('name'), '[' + e.value[0] + '-' + e.value[1] + ']');
         });
     }
