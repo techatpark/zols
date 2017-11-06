@@ -29,14 +29,14 @@
 
 
         $.fn.getConsolidatedProperties = function(schema) {
-          var properties = schema.properties;
-          var definitions = schema.definitions;
-          while(schema["$ref"]) {
+            var properties = schema.properties;
+            var definitions = schema.definitions;
+            while (schema["$ref"]) {
 
-            schema = definitions[schema["$ref"].replace("#/definitions/","")];
-            Object.assign(properties,schema.properties);
-          }
-          return properties;
+                schema = definitions[schema["$ref"].replace("#/definitions/", "")];
+                Object.assign(properties, schema.properties);
+            }
+            return properties;
         }
 
         $.fn.setSchemaName = function(schemaName) {
@@ -54,6 +54,43 @@
                         schema: data
                     }));
 
+                    $("button.json-editor-btn-add").each(function(index, element) {
+                        var name = $(element).parent().parent().parent().attr('data-schemapath');
+                        if(name) {
+                          name = name.replace(']', '');
+                          name = name.substring(name.lastIndexOf("[") + 1);
+                          name = name.substring(name.lastIndexOf(".") + 1);
+
+                          var property = consolidatedProperties[name];
+                          if (property && property.options && property.options.lookup) {
+                            $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
+                                $.get(base_url + '/data/' + schema['$id']).done(function(data) {
+                                    var ta = {
+                                        source: data.content,
+                                        displayText: function(item) {
+                                            return item[schema.ids[0]];
+                                        },
+                                        autoSelect: true
+                                    };
+
+
+
+                                    $(element).parent().parent().children().first().on('click', "div.form-group>input[type='text']", function() {
+                                      if($(this).attr('added') !== 'true') {
+                                        $(this).attr('autocomplete', 'off').typeahead(ta);
+                                        $(this).attr('added','true');
+
+
+                                      }
+                                    });
+
+                                });
+
+                            });
+                          }
+                        }
+                    });
+
                     $("input[type='text'].form-control").each(function(index, element) {
                         var name = $(element).attr('name');
                         if (name) {
@@ -65,13 +102,13 @@
 
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
                                     $.get(base_url + '/data/' + schema['$id']).done(function(data) {
-                                    $(element).attr( 'autocomplete', 'off' ).typeahead({
-                                        source: data.content,
-                                        displayText:function(item) {
-                                          return item[schema.ids[0]];
-                                        },
-                                        autoSelect: true
-                                      });
+                                        $(element).attr('autocomplete', 'off').typeahead({
+                                            source: data.content,
+                                            displayText: function(item) {
+                                                return item[schema.ids[0]];
+                                            },
+                                            autoSelect: true
+                                        });
                                     });
 
                                 });

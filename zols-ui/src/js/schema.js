@@ -228,7 +228,12 @@
 
                 if (properties[key].type === 'array') {
                     properties[key].array = true;
-                    properties[key].type = properties[key].items.type;
+                    if(properties[key].items.hasOwnProperty("$ref")) {
+                      properties[key].type = properties[key].items.$ref;
+                    }else {
+                      properties[key].type = properties[key].items.type;
+                    }
+
                     if (properties[key].items.enum) {
                         properties[key].enum = properties[key].items.enum;
                         properties[key].format = properties[key].items.format;
@@ -504,12 +509,23 @@
 
                 if (properties[key].array) {
                     properties[key].items = {};
-                    properties[key].items.type = properties[key].type;
-                    properties[key].items.enum = properties[key].enum;
+                    if(properties[key].type != undefined) {
+                      properties[key].items.type = properties[key].type;
+                    }
+                    if(properties[key].enum != undefined) {
+                      properties[key].items.enum = properties[key].enum;
+                    }
+                    if(properties[key].format != undefined) {
                     properties[key].items.format = properties[key].format;
+                    }
+                    if(properties[key].$ref != undefined) {
+                      properties[key].items.$ref = properties[key].$ref;
+                    }
+
                     properties[key].type = 'array';
                     delete properties[key].enum;
                     delete properties[key].format;
+                    delete properties[key].$ref;
                 }
                 delete properties[key].array;
 
