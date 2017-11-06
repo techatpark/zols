@@ -55,7 +55,7 @@
                                 <li th:name="${bucket.name}" class="list-group-item">
                                     <span class="badge" th:text="${bucketItem.count}">14</span>
                                     <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
-                                            <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
+                                    <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
                                 </li>
 
                             </ul>
@@ -66,7 +66,8 @@
                         <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
                         <div class="panel-body">
                             <div class="row">
-                                <span class="label label-info pull-left" th:text="${bucket.item.min}">info</span><span class="col-md-9 label label-default "><input type="range" min="0" max="150" value="60" /></span><span class="label label-info pull-right" th:text="${bucket.item.max}">150</span>
+                                <span class="label label-info pull-left" th:text="${bucket.item.min}">info</span><span class="col-md-9 label label-default "><input type="range" min="0" max="150" value="60" /></span><span class="label label-info pull-right"
+                                    th:text="${bucket.item.max}">150</span>
                             </div>
                         </div>
                     </div>
@@ -103,7 +104,7 @@
                         <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
                             <a href="#" class="thumbnail">
                                 <img th:src="${product.imageUrl}" src="https://camo.githubusercontent.com/8be51b11b95c6c6bdb9f588d840b7aa13073a295/68747470733a2f2f7777772e706c75732d696e6e6f766174696f6e732e636f6d2f696d616765732f746167636c6f75642d62772e6a7067" alt="Hi">
-                                <h2 th:text="${product.title}">hnjj</h2>
+                                <h5 th:text="${product.title}">hnjj</h5>
                             </a>
                         </div>
 
@@ -111,7 +112,7 @@
                         <div class="col-xs-6 col-md-4">
                             <a href="#" class="thumbnail">
                                 <img src="https://i.pinimg.com/474x/31/aa/92/31aa92a3e01660e359c4a2e4a43b71c5--tag-cloud-app-design.jpg" alt="Hi">
-                                <h2>hnjj</h2>
+                                <h5>hnjj</h5>
                             </a>
                         </div>
                         <div class="col-xs-6 col-md-4">
