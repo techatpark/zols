@@ -95,9 +95,9 @@ public class ElasticSearchUtil {
                             bucketItem = new HashMap<>();
                             bucketItem.put("min", ((Map<String, Object>) aggregations.get(aggregationName)).get("value"));
                             bucketItem.put("max", ((Map<String, Object>) aggregations.get(aggregationName.replaceAll("min_", "max_"))).get("value"));
-                            bucket.put("title",   ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
                             bucket.put("item", bucketItem);
-                        } else if (!aggregationName.startsWith("max_")){
+                        } else if (!aggregationName.startsWith("max_")) {
                             bucket.put("name", aggregationName);
                             bucket.put("type", "term");
                             bucketsMaps = (List<Map<String, Object>>) ((Map<String, Object>) entrySet.getValue()).get("buckets");
@@ -109,8 +109,8 @@ public class ElasticSearchUtil {
                                 bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
                                 bucketItems.add(bucketItem);
                             }
-                            bucket.put("title",   ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
-                            
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+
                             bucket.put("items", bucketItems);
                         }
                         buckets.add(bucket);
@@ -182,7 +182,7 @@ public class ElasticSearchUtil {
 
     private void addAggregations(JsonSchema jsonSchema,
             SearchRequestBuilder searchRequestBuilder) {
-        HashMap<String,Object> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
         searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
@@ -220,12 +220,10 @@ public class ElasticSearchUtil {
                     .setFrom(pageNumber * pageSize);
         }
         if (query != null) {
-            QueryBuilder builder = getQueryBuilder(query);
             Map<String, Object> queryAsMap = asMap(queryText);
-            List filter = (List) ((Map<String, Object>) ((Map<String, Object>) queryAsMap.get("query")).get("bool")).get("filter");
-            filter.add(asMap(builder.toString()));
             String filterAppendedQuery = asString(queryAsMap);
             LOGGER.debug("Executing Elastic Search Query\n{}", filterAppendedQuery);
+            searchRequestBuilder.setPostFilter(getQueryBuilder(query));
             searchRequestBuilder
                     .setSource(filterAppendedQuery);
         } else {
