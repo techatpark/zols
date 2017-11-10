@@ -7,6 +7,7 @@ package org.zols.datastore.web;
 
 
 import java.util.Locale;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,10 +19,12 @@ import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.web.util.HttpUtil.getPageUrl;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
+import org.zols.datastore.web.util.SpringAggregatedResults;
 import static org.zols.datastore.web.util.SpringConverter.getAggregatedResults;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.documents.service.BrowseService;
 import org.zols.jsonschema.JsonSchema;
+import org.zols.web.PageWrapper;
 
 @Controller
 @RequestMapping("/browse")
@@ -52,7 +55,11 @@ public class BrowseController {
         JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
         model.addAttribute("schema", jsonSchema.getCompositeSchema());
         model.addAttribute("parents",jsonSchema.getParents());
-        model.addAttribute("aggregations", getAggregatedResults(categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()),pageable));
+        SpringAggregatedResults aggregatedResults = getAggregatedResults(categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
+        model.addAttribute("aggregations",aggregatedResults) ;
+        if(aggregatedResults != null) {
+            model.addAttribute("pageWrapper", new PageWrapper<>(aggregatedResults.getPage(), "/browse/"+schemaId));
+        }
         String pageUrl = getPageUrl(request);
         model.addAttribute("pageurl", pageUrl);
         int indexOfQuestionMark = pageUrl.indexOf("?");

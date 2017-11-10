@@ -198,7 +198,7 @@ public class ElasticSearchUtil {
                                 .addAggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
                                 .addAggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
                         break;
-                    case "terms":
+                    case "term":
                         searchRequestBuilder
                                 .addAggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
 
