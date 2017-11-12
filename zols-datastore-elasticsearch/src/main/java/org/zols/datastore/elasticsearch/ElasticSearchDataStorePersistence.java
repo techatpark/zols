@@ -35,15 +35,16 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import org.zols.datastore.elasticsearch.util.ElasticSearchUtil;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import org.zols.datastore.query.Query;
+import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
@@ -59,8 +60,6 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     private final Client client;
 
     private final String indexName;
-    
-    private final ElasticSearchUtil elasticSearchUtil;
 
     public ElasticSearchDataStorePersistence() {
         this("zols", null);
@@ -81,7 +80,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         } else {
             this.client = client;
         }
-        elasticSearchUtil = new ElasticSearchUtil(client, indexName);
+
         createIndexIfNotExists();
     }
 
@@ -97,7 +96,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     @Override
     public Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         LOGGER.debug("Create Data for ", getTypeName(jsonSchema));
-        Object idValue = getIdValue(jsonSchema,validatedDataObject);
+        Object idValue = getIdValue(jsonSchema, validatedDataObject);
         IndexRequestBuilder indexRequestBuilder;
         if (idValue == null) {
             indexRequestBuilder = client.prepareIndex(indexName, getTypeName(jsonSchema)).setRefresh(true);
@@ -177,7 +176,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public boolean update(JsonSchema jsonSchema, String idValue,Map<String, Object> validatedDataObject) {
+    public boolean update(JsonSchema jsonSchema, String idValue, Map<String, Object> validatedDataObject) {
         IndexResponse response = client.prepareIndex(indexName, getTypeName(jsonSchema), idValue).setRefresh(true)
                 .setSource(validatedDataObject)
                 .execute()
@@ -186,13 +185,13 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
         return true;
     }
-    
+
     @Override
     public boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
         String idValue = getIdValue(jsonSchema, validatedDataObject).toString();
-        
+
         UpdateRequest updateRequest = new UpdateRequest(indexName, getTypeName(jsonSchema), idValue)
-        .doc(validatedDataObject);
+                .doc(validatedDataObject);
 
         UpdateResponse response;
         try {
@@ -202,7 +201,6 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         } catch (InterruptedException | ExecutionException ex) {
             Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
         return false;
     }
@@ -335,20 +333,154 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     private Object getIdValue(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        return jsonSchema == null ? null :jsonSchema.getIdValues(validatedDataObject)[0];
+        return jsonSchema == null ? null : jsonSchema.getIdValues(validatedDataObject)[0];
     }
 
     @Override
     public AggregatedResults browse(JsonSchema schema, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
         if (schema != null) {
-            Map<String, Object> browseQuery = new HashMap<>();
-            browseQuery.put("keyword", keyword);
-            aggregatedResults = elasticSearchUtil.aggregatedSearch(schema,
-                    (keyword == null) ? "browse_schema" : "browse_schema_with_keyword",
-                    browseQuery, pageNumber,pageSize, query);
+            if (keyword != null) {
+                query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, keyword + "*"));
+            }
+            Map<String, Object> searchResponse = searchResponse(schema, query, pageNumber, pageSize);
+            Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber, pageSize);
+            if (resultsOf != null) {
+                aggregatedResults = new AggregatedResults();
+                aggregatedResults.setPage(resultsOf);
+                aggregatedResults.setBuckets(bucketsOf(searchResponse));
+            }
         }
         return aggregatedResults;
+    }
+
+    private List<Map<String, Object>> bucketsOf(Map<String, Object> searchResponse) {
+        List<Map<String, Object>> buckets = null;
+        if (searchResponse != null) {
+            Map<String, Object> aggregations = (Map<String, Object>) searchResponse.get("aggregations");
+            if (aggregations != null) {
+                Map<String, Object> bucket;
+                Map<String, Object> bucketItem;
+                List<Map<String, Object>> bucketItems;
+                List<Map<String, Object>> bucketsMaps;
+
+                buckets = new ArrayList<>();
+                String aggregationName;
+                for (Map.Entry<String, Object> entrySet : aggregations.entrySet()) {
+
+                    aggregationName = entrySet.getKey();
+                    if (!aggregationName.startsWith("max_")) {
+                        bucket = new HashMap<>();
+                        if (aggregationName.startsWith("min_")) {
+                            bucket.put("name", aggregationName.replaceAll("min_", ""));
+                            bucket.put("type", "minmax");
+                            bucketItem = new HashMap<>();
+                            bucketItem.put("min", ((Map<String, Object>) aggregations.get(aggregationName)).get("value"));
+                            bucketItem.put("max", ((Map<String, Object>) aggregations.get(aggregationName.replaceAll("min_", "max_"))).get("value"));
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+                            bucket.put("item", bucketItem);
+                        } else if (!aggregationName.startsWith("max_")) {
+                            bucket.put("name", aggregationName);
+                            bucket.put("type", "term");
+                            bucketsMaps = (List<Map<String, Object>>) ((Map<String, Object>) entrySet.getValue()).get("buckets");
+                            bucketItems = new ArrayList<>();
+                            for (Map<String, Object> bucketsMap : bucketsMaps) {
+                                bucketItem = new HashMap<>();
+                                bucketItem.put("name", bucketsMap.get("key").toString());
+                                bucketItem.put("label", bucketsMap.get("key").toString());
+                                bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
+                                bucketItems.add(bucketItem);
+                            }
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+
+                            bucket.put("items", bucketItems);
+                        }
+                        buckets.add(bucket);
+                    }
+
+                }
+
+            }
+        }
+        return buckets;
+    }
+
+    private Page<Map<String, Object>> pageOf(Map<String, Object> searchResponse, Integer pageNumber,
+            Integer pageSize) {
+        Page<Map<String, Object>> page = null;
+        List<Map<String, Object>> list = resultsOf(searchResponse);
+        if (list != null) {
+            Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());
+            page = new Page(pageNumber, pageSize, noOfRecords, list);
+        }
+        return page;
+    }
+
+    private List<Map<String, Object>> resultsOf(Map<String, Object> searchResponse) {
+        List<Map<String, Object>> list = null;
+        if (searchResponse != null) {
+            Integer noOfRecords = (Integer) ((Map<String, Object>) searchResponse.get("hits")).get("total");
+            if (0 != noOfRecords) {
+                List<Map<String, Object>> recordsMapList = (List<Map<String, Object>>) ((Map<String, Object>) searchResponse.get("hits")).get("hits");
+                list = new ArrayList<>(recordsMapList.size());
+                for (Map<String, Object> recordsMapList1 : recordsMapList) {
+                    list.add((Map<String, Object>) recordsMapList1.get("_source"));
+                }
+            }
+        }
+        return list;
+    }
+
+    private void addAggregations(JsonSchema jsonSchema,
+            SearchRequestBuilder searchRequestBuilder) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("title", "Types");
+        searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
+        jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
+            String filter = (String) entry.getValue().get("filter");
+            if (filter != null) {
+                String title = entry.getKey();
+                if (entry.getValue().get("title") != null) {
+                    title = entry.getValue().get("title").toString();
+                }
+                switch (filter) {
+                    case "minmax":
+                        searchRequestBuilder
+                                .addAggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
+                                .addAggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+                        break;
+                    case "term":
+                        searchRequestBuilder
+                                .addAggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+
+                        break;
+                }
+            }
+
+        });
+
+    }
+
+    public Map<String, Object> searchResponse(JsonSchema jsonSchema,
+            Query query, Integer pageNumber, Integer pageSize) {
+
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName)
+                .setTypes(jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId()));
+
+        if (pageNumber != null) {
+            searchRequestBuilder.setSize(pageSize)
+                    .setFrom(pageNumber * pageSize);
+        }
+
+        searchRequestBuilder.setPostFilter(getQueryBuilder(query));
+
+        addAggregations(jsonSchema, searchRequestBuilder);
+
+        SearchResponse response = searchRequestBuilder
+                .execute()
+                .actionGet();
+
+        return asMap(response.toString());
     }
 
 }
