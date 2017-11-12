@@ -31,12 +31,7 @@
             <artifactId>jna</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.github.spullara.mustache.java</groupId>
-            <artifactId>compiler</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-  
+       
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>zols-datastore-test</artifactId>
