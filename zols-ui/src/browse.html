@@ -123,8 +123,8 @@
 
                 <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
                     <a href="#" class="thumbnail">
-                        <img th:src="${product.imageUrl}" src="https://camo.githubusercontent.com/8be51b11b95c6c6bdb9f588d840b7aa13073a295/68747470733a2f2f7777772e706c75732d696e6e6f766174696f6e732e636f6d2f696d616765732f746167636c6f75642d62772e6a7067" alt="Hi">
-                        <h5 th:text="${product.title}">hnjj</h5>
+                        <img class="img-thumbnail" th:src="${product.imageUrl}" src="https://camo.githubusercontent.com/8be51b11b95c6c6bdb9f588d840b7aa13073a295/68747470733a2f2f7777772e706c75732d696e6e6f766174696f6e732e636f6d2f696d616765732f746167636c6f75642d62772e6a7067" alt="Hi">
+                        <h5 th:text="${product.title}">Title</h5>
                     </a>
                 </div>
 
