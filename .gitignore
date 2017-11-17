@@ -32,3 +32,6 @@ build
 /zols-cms-plugin/src/main/resources/static
 /zols-cms-plugin/src/main/resources/templates
 /zols-ui/app/styles/*.css
+/zols-ui/app/index.html
+/zols-ui/app/scss/main.scss
+
