@@ -27,6 +27,25 @@
             return url;
         }
 
+        $.fn.getLocalizedPropertyNames = function(schema, definitions) {
+            var localized = [];
+            if (definitions == undefined) {
+                definitions = schema.definitions;
+            }
+
+            if (schema.localized) {
+                localized = schema.localized;
+            }
+            while (schema["$ref"]) {
+                schema = definitions[schema["$ref"].replace("#/definitions/", "")];
+                localized = localized.concat($.fn.getLocalizedPropertyNames(schema, definitions));
+            }
+
+
+            return localized.filter(function(elem, index, self) {
+                return index == self.indexOf(elem);
+            });
+        };
 
         $.fn.getConsolidatedProperties = function(schema) {
             var properties = schema.properties;
@@ -46,6 +65,7 @@
                 async: false,
                 success: function(data) {
                     var consolidatedProperties = $.fn.getConsolidatedProperties(data);
+                    var localizedPropertyNames = $.fn.getLocalizedPropertyNames(data);
                     if (editor) {
                         editor.destroy();
                     }
@@ -56,67 +76,101 @@
 
                     $("button.json-editor-btn-add").each(function(index, element) {
                         var name = $(element).parent().parent().parent().attr('data-schemapath');
-                        if(name) {
-                          name = name.replace(']', '');
-                          name = name.substring(name.lastIndexOf("[") + 1);
-                          name = name.substring(name.lastIndexOf(".") + 1);
-
-                          var property = consolidatedProperties[name];
-                          if (property && property.options && property.options.lookup) {
-                            $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
-                                $.get(base_url + '/data/' + schema['$id']).done(function(data) {
-                                    var ta = {
-                                        source: data.content,
-                                        displayText: function(item) {
-                                            return item[schema.ids[0]];
-                                        },
-                                        autoSelect: true
-                                    };
-
-
-
-                                    $(element).parent().parent().children().first().on('click', "div.form-group>input[type='text']", function() {
-                                      if($(this).attr('added') !== 'true') {
-                                        $(this).attr('autocomplete', 'off').typeahead(ta);
-                                        $(this).attr('added','true');
-
-
-                                      }
-                                    });
-
-                                });
-
-                            });
-                          }
-                        }
-                    });
-
-                    $("input[type='text'].form-control").each(function(index, element) {
-                        var name = $(element).attr('name');
                         if (name) {
                             name = name.replace(']', '');
                             name = name.substring(name.lastIndexOf("[") + 1);
+                            name = name.substring(name.lastIndexOf(".") + 1);
 
                             var property = consolidatedProperties[name];
                             if (property && property.options && property.options.lookup) {
-
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
                                     $.get(base_url + '/data/' + schema['$id']).done(function(data) {
-                                        $(element).attr('autocomplete', 'off').typeahead({
+                                        var ta = {
                                             source: data.content,
                                             displayText: function(item) {
                                                 return item[schema.ids[0]];
                                             },
                                             autoSelect: true
+                                        };
+
+
+
+                                        $(element).parent().parent().children().first().on('click', "div.form-group>input[type='text']", function() {
+                                            if ($(this).attr('added') !== 'true') {
+                                                $(this).attr('autocomplete', 'off').typeahead(ta);
+                                                $(this).attr('added', 'true');
+
+
+                                            }
                                         });
+
                                     });
 
                                 });
+                            }
+                        }
+                    });
+
+                    $("input[type='text'].form-control").each(function(index, element) {
+                        var name = $(element).attr('name');
+                        var localizedIds = [];
+                        if (name) {
+                            name = name.replace(']', '');
+                            name = name.substring(name.lastIndexOf("[") + 1);
+
+                            var property = consolidatedProperties[name];
+                            if (property) {
+                                if (property.options && property.options.lookup) {
+                                    $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
+                                        $.get(base_url + '/data/' + schema['$id']).done(function(data) {
+                                            $(element).attr('autocomplete', 'off').typeahead({
+                                                source: data.content,
+                                                displayText: function(item) {
+                                                    return item[schema.ids[0]];
+                                                },
+                                                autoSelect: true
+                                            });
+                                        });
+
+                                    });
+                                } else if (property.type === "string") {
+
+                                    var is_localized = $.inArray(name, localizedPropertyNames);
+                                    if (is_localized !== -1) {
+                                        var localizedId = "localized-" + new Date().getTime();
+                                        localizedIds.push(localizedId);
+                                        $(element).attr('id', localizedId);
+                                    }
+                                }
+
 
 
                             }
 
                         }
+                        if (localizedIds.length !== 0) {
+
+                            if (typeof google !== "undefined") {
+                                var locale = localStorage.getItem("locale");
+                                if(locale) {
+                                  var options = {
+                                      sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+                                      destinationLanguage: [locale],
+                                      shortcutKey: 'ctrl+g',
+                                      transliterationEnabled: true
+                                  };
+
+                                  // Create an instance on TransliterationControl with the required
+                                  // options.
+                                  var control =
+                                      new google.elements.transliteration.TransliterationControl(options);
+                                  control.makeTransliteratable(localizedIds);
+                                }
+
+                            }
+
+                        }
+
 
                     });
 
