@@ -3,95 +3,47 @@
 (function($) {
 
 
-    var filters = {};
-    $('#query-filters li.active').each(function() {
-        if(filterName != "$type") {
-          var filterName = $(this).children().first().text();
-          var values = [];
-          var index = 0;
-          $(this).children().each(function() {
-              if (index !== 0) {
-                  values.push($(this).children().first().text());
-              }
-              index++;
-          });
-          filters[filterName] = values;
+    $(".terms-filter-group>li").on('click', function() {
+        var filterName = $(this).attr('name');
+        var filterValue = $(this).attr('value');
+        var filterParameterValue = $.fn.getParameter(filterName);
+        if(filterParameterValue == undefined) {
+          $.fn.setParameter(filterName,filterValue);
         }
-
-    });
-    console.log(filters);
-    $('#query-filters .glyphicon-remove-circle').on("click", function(e) {
-        removeFilter($(this).closest("li").children().first().text(), $(this).parent().prev().html());
-    });
-    $(".term-filters .panel-body ul li a").on("click", function(e) {
-        setFilter($(this).parent().attr('name'), $(this).attr('name'));
-    });
-
-    function addFilter(name, value) {
-
-        if (filters[name]) {
-            if (filters[name].indexOf(value) === -1) {
-                filters[name].push(value);
-            }
-        } else {
-            filters[name] = [value];
+        else if(filterParameterValue.indexOf(filterValue) === -1){
+          $.fn.setParameter(filterName,filterParameterValue+","+filterValue);
         }
-        openUpdatedFilterUrl();
+    });
+
+    $.fn.getParameter = function(name) {
+        if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
+            return decodeURIComponent(name[1]);
     }
 
-    function setFilter(name, value) {
-        if(name != "$type") {
-          filters[name] = value;
-          openUpdatedFilterUrl();
-        }
+    $.fn.setParameter = function(key, value) {
+        key = encodeURI(key);
+        value = encodeURI(value);
 
-    }
+        var kvp = document.location.search.substr(1).split('&');
 
-    function removeFilter(name, value) {
-        console.log('removefilter ' + name + ' == ' + value);
-        var i = filters[name].indexOf(value);
-        if (i !== -1) {
-            filters[name].splice(i, 1);
-            if (filters[name].length === 0) {
-                delete filters[name];
+        var i = kvp.length;
+        var x;
+        while (i--) {
+            x = kvp[i].split('=');
+
+            if (x[0] == key) {
+                x[1] = value;
+                kvp[i] = x.join('=');
+                break;
             }
         }
-        openUpdatedFilterUrl();
-    }
 
-
-    function openUpdatedFilterUrl() {
-        var filterTexts = [];
-        for (var filterName in filters) {
-            if(filterName != "$type") {
-              if (Object.prototype.toString.call(filters[filterName]) === '[object Array]') {
-                  filterTexts.push(filterName + "=" + filters[filterName].join(','));
-              } else {
-                  filterTexts.push(filterName + "=" + filters[filterName]);
-              }
-            }
-
+        if (i < 0) {
+            kvp[kvp.length] = [key, value].join('=');
         }
-        var filteredUrl;
-        if (filterTexts.length !== 0) {
-            filteredUrl = $("#features_items").attr('name') + '?' + filterTexts.join('&');
-        } else {
-            filteredUrl = $("#features_items").attr('name');
-        }
-        window.location = filteredUrl;
-    }
 
-    // With JQuery
-    var sliders = $('.range-slider').slider({
-        formatter: function(value) {
-            return 'Current value: ' + value;
-        }
-    });
-    if (sliders != undefined) {
-        sliders.on('slideEnd', function(e) {
-            setFilter($(this).parent().attr('name'), '[' + e.value[0] + '-' + e.value[1] + ']');
-        });
+        //this will reload the page, it's likely better to store this until finished
+        document.location.search = kvp.join('&');
     }
-
 
 }(jQuery));

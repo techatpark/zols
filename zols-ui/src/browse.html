@@ -22,24 +22,23 @@
 
 <body>
     <section>
-        <div class="container" th:fragment="content">
+        <div class="container" th:fragment="content" th:if="${aggregations != null}">
 
 
             <!-- Stack the columns on mobile by making one full-width and the other half-width -->
             <header class="row">
                 <div class="col-md-8" th:if="${!parents.empty}">
                     <ol class="breadcrumb">
-                        <li th:each="parent : ${parents}"><a href="#" th:href="@{'/browse/'+${parent.id}}" th:text="${parent.title}">Home</a></li>
+                        <li th:each="i : ${#numbers.sequence(parents.size() - 1, 0, -1)}">
+                            <a href="#" th:href="@{'/browse/'+${parents[i].id}}" th:text="${parents[i].title}">Home</a>
+                        </li>
                         <!--/*-->
                         <li><a href="#">Library</a></li>
                         <!--*/-->
-                        <li class="active" th:if="${category != null}" th:text="${category.label}">Data</li>
+                        <li class="active" th:if="${schema != null}" th:text="${schema.title}">Data</li>
                     </ol>
                 </div>
                 <div id="query-filters" th:if="${query != null}" class="col-md-4">
-
-
-
                     <span th:each="filter : ${query.filters}" class="label" th:if="${filter.name != '$type'}">
                       <span th:text="${filter.name}" th:name="${filter.name}" class="label label-primary">Example heading</span>
                     <span th:text="${filter.value}" class="label label-info">New</span>
@@ -59,12 +58,11 @@
             <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
             <main class="row">
                 <aside class="col-md-3" th:if="${aggregations != null}">
-
-                    <div class="panel panel-default" th:if="${bucket.type == 'term'}" th:each="bucket : ${aggregations.buckets}">
+                    <div class="panel panel-default" th:if="${bucket.type == 'term' && bucket.items.size() > 1}" th:each="bucket : ${aggregations.buckets}">
                         <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
                         <div class="panel-body">
-                            <ul class="list-group" th:each="bucketItem : ${bucket.items}">
-                                <li th:name="${bucket.name}" class="list-group-item">
+                            <ul class="list-group terms-filter-group" >
+                                <li th:each="bucketItem : ${bucket.items}" th:name="${bucket.name}" th:value="${bucketItem.name}" class="list-group-item">
                                     <span class="badge" th:text="${bucketItem.count}">14</span>
                     <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
                     <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
@@ -77,7 +75,7 @@
         <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
             <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
             <div class="panel-body">
-                <div class="row">
+                <div class="row minmax-filter-group">
                     <span class="col-md-2 label label-info pull-left" th:text="${bucket.item.min}">0</span>
                     <span class="col-md-8 ">
                           <input type="range" data-th-attr="min=${#numbers.formatInteger(bucket.item.min, 1)}, max=${bucket.item.max}" min="0" max="150" value="60" />
@@ -91,7 +89,7 @@
         <section class="col-md-9 container">
 
 
-            <div class="row">
+            <div class="row" th:if="${pageWrapper != null}">
 
                 <nav class="col-md-12" aria-label="Page navigation">
                     <ul class="pagination pull-right">
@@ -119,7 +117,7 @@
                 </nav>
             </div>
 
-            <div id="features_items" th:name="${cleanpageurl}" class="row">
+            <div id="features_items" th:name="${cleanpageurl}" class="row" th:if="${aggregations != null}">
 
                 <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
                     <a href="#" class="thumbnail">

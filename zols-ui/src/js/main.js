@@ -14,6 +14,13 @@
                 $(".nav>.dropdown>.dropdown-toggle").html($(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']>a").html() + '<b class="caret"></b>');
                 $(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']").remove();
             }
+        }else {
+          locale = localStorage.getItem("locale");
+          if(locale == undefined) {
+            locale = 'en';
+          }
+          $(".nav>.dropdown>.dropdown-toggle").html($(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']>a").html() + '<b class="caret"></b>');
+          $(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']").remove();
         }
 
         if (localStorage.getItem("locale") && localStorage.getItem("locale") != 'en') {

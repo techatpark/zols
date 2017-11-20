@@ -21,7 +21,7 @@ public class SpringConverter {
     }
     
     public static SpringAggregatedResults getAggregatedResults(AggregatedResults aggregatedResults,Pageable pageable) {
-        return new SpringAggregatedResults(aggregatedResults,pageable);
+        return aggregatedResults == null ? null : new SpringAggregatedResults(aggregatedResults,pageable);
     }
     
 }
