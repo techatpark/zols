@@ -15,6 +15,15 @@
         }
     });
 
+    $(".minmax-filter-group>input[type='range']").on('input', function() {
+      var filterName = $(this).attr('name');
+      var filterValue =  $(this).val();
+      var filterParameterValue = $.fn.getParameter(filterName);
+
+        $.fn.setParameter(filterName,"["+ filterValue +"-" + $(this).attr('max') + "]");
+      
+    });
+
     $.fn.getParameter = function(name) {
         if (name = (new RegExp('[?&]' + encodeURIComponent(name) + '=([^&]*)')).exec(location.search))
             return decodeURIComponent(name[1]);

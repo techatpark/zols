@@ -75,10 +75,10 @@
         <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
             <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
             <div class="panel-body">
-                <div class="row minmax-filter-group">
+                <div class="row ">
                     <span class="col-md-2 label label-info pull-left" th:text="${bucket.item.min}">0</span>
-                    <span class="col-md-8 ">
-                          <input type="range" data-th-attr="min=${#numbers.formatInteger(bucket.item.min, 1)}, max=${bucket.item.max}" min="0" max="150" value="60" />
+                    <span class="col-md-8 minmax-filter-group">
+                          <input type="range" th:name="${bucket.name}" data-th-attr="min=${#numbers.formatInteger(bucket.item.min, 1)}, max=${bucket.item.max}" min="0" max="150" value="60" />
                     </span>
                     <span class="col-md-2 label label-info pull-right" th:text="${bucket.item.max}">150</span>
                 </div>
