@@ -151,10 +151,10 @@
                 <!-- Button (Double) -->
                 <div class="form-group ">
 
-                      <div class="col-md-12 text-right">
-                          <button class="btn btn-danger" type="button" data-link="{on ~root.listSchemas}">Discard</button>
-                          <button class="btn btn-success" type="submit" data-link="{on ~root.saveSchema #data.schema}">Save</button>
-                      </div>
+                    <div class="col-md-12 text-right">
+                        <button class="btn btn-danger" type="button" data-link="{on ~root.listSchemas}">Discard</button>
+                        <button class="btn btn-success" type="submit" data-link="{on ~root.saveSchema #data.schema}">Save</button>
+                    </div>
                 </div>
 
             </fieldset>
@@ -240,6 +240,7 @@
                     <label class="col-md-4 control-label" for="filter">Filter</label>
                     <div class="col-md-4">
                         <select name="filter" data-name="{{:prop.filter}}" data-link="prop.filter" type="text" placeholder="" class="form-control input-md">
+                                <option></option>
                                 <option value="minmax">Min Max</option>
                                 <option value="term">Term</option>
                                 </select>

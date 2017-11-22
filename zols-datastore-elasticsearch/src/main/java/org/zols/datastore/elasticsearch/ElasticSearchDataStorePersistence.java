@@ -322,7 +322,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                     }
                 }
             }
-            LOGGER.debug("Executing elastic search query {}", queryBuilder.toString());
+            
         }
 
         return queryBuilder;
@@ -471,10 +471,14 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             searchRequestBuilder.setSize(pageSize)
                     .setFrom(pageNumber * pageSize);
         }
+        
+        searchRequestBuilder.setQuery(getQueryBuilder(query));
 
-        searchRequestBuilder.setPostFilter(getQueryBuilder(query));
+        
 
         addAggregations(jsonSchema, searchRequestBuilder);
+        
+        LOGGER.debug("Executing elastic search query {}", searchRequestBuilder.toString());
 
         SearchResponse response = searchRequestBuilder
                 .execute()
