@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import static org.zols.datastore.web.util.HttpUtil.getQuery;
 import org.zols.datatore.exception.DataStoreException;
@@ -34,15 +35,15 @@ public class BrowseAPIController {
     private BrowseService browseService;
 
     @RequestMapping(value = "/search/{schemaName}")
-    public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,
+    public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
             Pageable pageable,HttpServletRequest request) throws DataStoreException {
-        return getPage(browseService.searchSchema(schemaName, null, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
+        return getPage(browseService.searchSchema(schemaName, keyword, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
     }
 
     @RequestMapping(value = "/browse/{schemaName}")
-    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,
+    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
             Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
-        return getAggregatedResults(browseService.browseSchema(schemaName, null, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
+        return getAggregatedResults(browseService.browseSchema(schemaName, keyword, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
     }
 
 }

@@ -46,7 +46,7 @@ public class HttpUtil {
                 for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
                     String k = entrySet.getKey();
                     String[] v = entrySet.getValue();
-                    if (!k.equals("page") && !k.equals("size")&& !k.equals("lang")) {
+                    if (!k.equals("page") && !k.equals("size") && !k.equals("lang") && !k.equals("q")) {
                         if (v.length == 1) {
                             String value = v[0];
                             if (value.contains(",")) {

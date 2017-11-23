@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.web.util.HttpUtil.getPageUrl;
@@ -36,18 +37,12 @@ public class BrowseController {
     @Autowired
     private DataStore dataStore;
 
-    @RequestMapping(value = "/{schemaName}")
-    public String browseByCategory(Model model,
-            @PathVariable("schemaName") String schemaName,
-            HttpServletRequest request,
-            Pageable pageable,Locale locale) throws DataStoreException {        
-        return browseByCategoryWithKeyword(model, schemaName, null, request, pageable,locale);
-    }
+    
 
-    @RequestMapping(value = "/{schemaName}/{keyword}")
+    @RequestMapping(value = "/{schemaName}")
     public String browseByCategoryWithKeyword(Model model,
             @PathVariable("schemaName") String schemaId,
-            @PathVariable("keyword") String keyword,
+            @RequestParam(required = false,value = "q") String keyword,
             HttpServletRequest request,
             Pageable pageable,Locale locale) throws DataStoreException {
         Query query = getQuery(request);
