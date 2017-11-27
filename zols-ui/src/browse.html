@@ -41,9 +41,10 @@
                 <div id="query-filters" th:if="${query != null}" class="col-md-4">
                     <span th:each="filter : ${query.filters}" th:if="${filter.name != '$type'}">
                       <span class="label label-primary">
-                        <span th:text="${filter.name}">New</span><span th:name="${filter.name}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        <span th:text="${filter.name}">New</span>
+                    <span th:name="${filter.name}" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                     </span>
-                    <span th:text="${filter.value}" class="label label-info">New</span>
+                    <span th:each="value : ${filter.value}" th:text="${value}" class="label label-info">New</span>
                     </span>
 
                     <!--/*-->
@@ -54,6 +55,8 @@
 
                       <a th:href="${#strings.substring(pageurl,0,#strings.indexOf(pageurl,'?'))}">Clear All</a>
 
+                    </span>
+
                 </div>
             </header>
 
@@ -63,98 +66,99 @@
                     <div class="panel panel-default" th:if="${bucket.type == 'term' && bucket.items.size() > 1}" th:each="bucket : ${aggregations.buckets}">
                         <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
                         <div class="panel-body">
-                            <ul class="list-group terms-filter-group" >
+                            <ul class="list-group terms-filter-group">
                                 <li th:each="bucketItem : ${bucket.items}" th:name="${bucket.name}" th:value="${bucketItem.name}" class="list-group-item">
                                     <span class="badge" th:text="${bucketItem.count}">14</span>
-                    <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
-                    <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
-                    </li>
+                                    <a th:if="${bucket.name != 'types'}" href="javascript://" th:name="${bucketItem.name}" th:text="${bucketItem.label}">Cras justo odio</a>
+                                    <a th:if="${bucket.name == 'types'}" th:href="@{'/browse/'+${bucketItem.name}}" th:text="${bucketItem.label}">Cras justo odio</a>
+                                </li>
 
-                    </ul>
-                </div>
-        </div>
+                            </ul>
+                        </div>
+                    </div>
 
-        <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
-            <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
-            <div class="panel-body">
-                <div class="row ">
-                    <span class="col-md-2 label label-info pull-left" th:text="${bucket.item.min}">0</span>
-                    <span class="col-md-8 minmax-filter-group">
+                    <div class="panel panel-default" th:if="${bucket.type == 'minmax'}" th:each="bucket : ${aggregations.buckets}">
+                        <div class="panel-heading" th:text="${bucket.title}">Panel heading without title</div>
+                        <div class="panel-body">
+                            <div class="row ">
+                                <span class="col-md-2 label label-info pull-left" th:text="${bucket.item.min}">0</span>
+                                <span class="col-md-8 minmax-filter-group">
                           <input type="range" th:name="${bucket.name}" data-th-attr="min=${#numbers.formatInteger(bucket.item.min, 1)}, max=${bucket.item.max}" min="0" max="150" value="60" />
                     </span>
-                    <span class="col-md-2 label label-info pull-right" th:text="${bucket.item.max}">150</span>
-                </div>
-            </div>
-        </div>
+                                <span class="col-md-2 label label-info pull-right" th:text="${bucket.item.max}">150</span>
+                            </div>
+                        </div>
+                    </div>
 
-        </aside>
-        <section class="col-md-9 container">
+                </aside>
+                <section class="col-md-9 container">
 
 
-            <div class="row" th:if="${pageWrapper != null}">
+                    <div class="row" th:if="${pageWrapper != null}">
 
-                <nav class="col-md-12" aria-label="Page navigation">
-                    <ul class="pagination pull-right">
-                        <li th:class="${pageWrapper.firstPage}?'disabled':''">
-                            <span th:if='${pageWrapper.firstPage}'>← First</span>
-                            <a th:if='${not pageWrapper.firstPage}' th:href='@{${pageWrapper.url}(page=0,size=${pageWrapper.size})}'>← First</a>
-                        </li>
-                        <li th:class="${pageWrapper.hasPreviousPage}? '' : 'disabled'">
-                            <span th:if='${not pageWrapper.hasPreviousPage}'>«</span>
-                            <a th:if='${pageWrapper.hasPreviousPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.number-2},size=${pageWrapper.size})}' title='Go to previous page'>«</a>
-                        </li>
-                        <li th:each='item : ${pageWrapper.items}' th:class="${item.current}? 'active' : ''">
-                            <span th:if='${item.current}' th:text='${item.number}'>1</span>
-                            <a th:if='${not item.current}' th:href='@{${pageWrapper.url}(page=${item.number-1},size=${pageWrapper.size})}'><span th:text='${item.number}'>1</span></a>
-                        </li>
-                        <li th:class="${pageWrapper.hasNextPage}? '' : 'disabled'">
-                            <span th:if='${not pageWrapper.hasNextPage}'>»</span>
-                            <a th:if='${pageWrapper.hasNextPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.number},size=${pageWrapper.size})}' title='Go to next page'>»</a>
-                        </li>
-                        <li th:class="${pageWrapper.lastPage}? 'disabled' : ''">
-                            <span th:if='${pageWrapper.lastPage}'>Last →</span>
-                            <a th:if='${not pageWrapper.lastPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.totalPages - 1},size=${pageWrapper.size})}'>Last →</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+                        <nav class="col-md-12" aria-label="Page navigation">
+                            <ul class="pagination pull-right">
+                                <li th:class="${pageWrapper.firstPage}?'disabled':''">
+                                    <span th:if='${pageWrapper.firstPage}'>← First</span>
+                                    <a th:if='${not pageWrapper.firstPage}' th:href='@{${pageWrapper.url}(page=0,size=${pageWrapper.size})}'>← First</a>
+                                </li>
+                                <li th:class="${pageWrapper.hasPreviousPage}? '' : 'disabled'">
+                                    <span th:if='${not pageWrapper.hasPreviousPage}'>«</span>
+                                    <a th:if='${pageWrapper.hasPreviousPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.number-2},size=${pageWrapper.size})}' title='Go to previous page'>«</a>
+                                </li>
+                                <li th:each='item : ${pageWrapper.items}' th:class="${item.current}? 'active' : ''">
+                                    <span th:if='${item.current}' th:text='${item.number}'>1</span>
+                                    <a th:if='${not item.current}' th:href='@{${pageWrapper.url}(page=${item.number-1},size=${pageWrapper.size})}'><span th:text='${item.number}'>1</span></a>
+                                </li>
+                                <li th:class="${pageWrapper.hasNextPage}? '' : 'disabled'">
+                                    <span th:if='${not pageWrapper.hasNextPage}'>»</span>
+                                    <a th:if='${pageWrapper.hasNextPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.number},size=${pageWrapper.size})}' title='Go to next page'>»</a>
+                                </li>
+                                <li th:class="${pageWrapper.lastPage}? 'disabled' : ''">
+                                    <span th:if='${pageWrapper.lastPage}'>Last →</span>
+                                    <a th:if='${not pageWrapper.lastPage}' th:href='@{${pageWrapper.url}(page=${pageWrapper.totalPages - 1},size=${pageWrapper.size})}'>Last →</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
 
-            <div id="features_items" th:name="${cleanpageurl}" class="row" th:if="${aggregations != null}">
+                    <div id="features_items" th:name="${cleanpageurl}" class="row" th:if="${aggregations != null}">
 
-                <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
-                    <a href="#" class="thumbnail">
+                        <div class="col-xs-6 col-md-4" th:each="product : ${aggregations.page.content}">
+                            <a href="#" class="thumbnail">
                         <img class="img-thumbnail" th:src="${product.imageUrl}" src="https://camo.githubusercontent.com/8be51b11b95c6c6bdb9f588d840b7aa13073a295/68747470733a2f2f7777772e706c75732d696e6e6f766174696f6e732e636f6d2f696d616765732f746167636c6f75642d62772e6a7067" alt="Hi">
                         <h5 th:text="${product.title}">Title</h5>
                     </a>
-                </div>
+                        </div>
 
-                <!--/*-->
-                <div class="col-xs-6 col-md-4">
-                    <a href="#" class="thumbnail">
+                        <!--/*-->
+                        <div class="col-xs-6 col-md-4">
+                            <a href="#" class="thumbnail">
                         <img src="https://i.pinimg.com/474x/31/aa/92/31aa92a3e01660e359c4a2e4a43b71c5--tag-cloud-app-design.jpg" alt="Hi">
                         <h5>hnjj</h5>
                     </a>
-                </div>
-                <div class="col-xs-6 col-md-4">
-                    <a href="#" class="thumbnail">
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <a href="#" class="thumbnail">
                         <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iMTcxIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE3MSAxODAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiPjwhLS0KU291cmNlIFVSTDogaG9sZGVyLmpzLzEwMCV4MTgwCkNyZWF0ZWQgd2l0aCBIb2xkZXIuanMgMi42LjAuCkxlYXJuIG1vcmUgYXQgaHR0cDovL2hvbGRlcmpzLmNvbQooYykgMjAxMi0yMDE1IEl2YW4gTWFsb3BpbnNreSAtIGh0dHA6Ly9pbXNreS5jbwotLT48ZGVmcz48c3R5bGUgdHlwZT0idGV4dC9jc3MiPjwhW0NEQVRBWyNob2xkZXJfMTVmNjE4Y2MwYTcgdGV4dCB7IGZpbGw6I0FBQUFBQTtmb250LXdlaWdodDpib2xkO2ZvbnQtZmFtaWx5OkFyaWFsLCBIZWx2ZXRpY2EsIE9wZW4gU2Fucywgc2Fucy1zZXJpZiwgbW9ub3NwYWNlO2ZvbnQtc2l6ZToxMHB0IH0gXV0+PC9zdHlsZT48L2RlZnM+PGcgaWQ9ImhvbGRlcl8xNWY2MThjYzBhNyI+PHJlY3Qgd2lkdGg9IjE3MSIgaGVpZ2h0PSIxODAiIGZpbGw9IiNFRUVFRUUiLz48Zz48dGV4dCB4PSI1OS41NTQ2ODc1IiB5PSI5NC41Ij4xNzF4MTgwPC90ZXh0PjwvZz48L2c+PC9zdmc+"
                             alt="Hi">
+                            <h5>hnjj</h5>
                     </a>
-                </div>
-                <!--*/-->
+                        </div>
+                        <!--*/-->
 
 
-            </div>
+                    </div>
 
 
 
-        </section>
-        </main>
+                </section>
+            </main>
 
 
-        <!-- build:js({app,.tmp}) /scripts/create_page.js -->
-        <script src="/js/search.js"></script>
-        <!-- endbuild -->
+            <!-- build:js({app,.tmp}) /scripts/create_page.js -->
+            <script src="/js/search.js"></script>
+            <!-- endbuild -->
 
         </div>
 
