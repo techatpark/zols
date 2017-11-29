@@ -84,11 +84,17 @@
                             var property = consolidatedProperties[name];
                             if (property && property.options && property.options.lookup) {
                                 $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
-                                    $.get(base_url + '/data/' + schema['$id']).done(function(data) {
+
                                         var ta = {
-                                            source: data.content,
-                                            displayText: function(item) {
-                                                return item[schema.ids[0]];
+                                            source: function(value, callback) {
+                                                $.getJSON("/api/data/"+schema['$id'], {
+                                                    q: value
+                                                }, function(data) {
+                                                    callback(data.content || [])
+                                                })
+                                            },
+                                            displayText:function(item) {
+                                              return item[schema.ids[0]];
                                             },
                                             autoSelect: true
                                         };
@@ -99,12 +105,10 @@
                                             if ($(this).attr('added') !== 'true') {
                                                 $(this).attr('autocomplete', 'off').typeahead(ta);
                                                 $(this).attr('added', 'true');
-
-
                                             }
                                         });
 
-                                    });
+
 
                                 });
                             }
@@ -122,15 +126,19 @@
                             if (property) {
                                 if (property.options && property.options.lookup) {
                                     $.get(base_url + '/schema/' + property.options.lookup).done(function(schema) {
-                                        $.get(base_url + '/data/' + schema['$id']).done(function(data) {
-                                            $(element).attr('autocomplete', 'off').typeahead({
-                                                source: data.content,
-                                                displayText: function(item) {
-                                                    return item[schema.ids[0]];
-                                                },
-                                                autoSelect: true
-                                            });
-                                        });
+                                      var ta = {
+                                          source: function(value, callback) {
+                                              $.getJSON("/api/data/"+schema['$id'], {
+                                                  q: value
+                                              }, function(data) {
+                                                  callback(data.content || [])
+                                              })
+                                          },
+                                          displayText:function(item) {
+                                            return item[schema.ids[0]];
+                                          },
+                                          autoSelect: true
+                                      };
 
                                     });
                                 } else if (property.type === "string") {

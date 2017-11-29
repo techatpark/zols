@@ -5,6 +5,8 @@
 
         var locale = $.fn.getParameter("lang");
 
+
+
         if (locale != undefined) {
             if (locale === "" || locale === "en") {
                 localStorage.removeItem("locale");
@@ -14,13 +16,13 @@
                 $(".nav>.dropdown>.dropdown-toggle").html($(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']>a").html() + '<b class="caret"></b>');
                 $(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']").remove();
             }
-        }else {
-          locale = localStorage.getItem("locale");
-          if(locale == undefined) {
-            locale = 'en';
-          }
-          $(".nav>.dropdown>.dropdown-toggle").html($(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']>a").html() + '<b class="caret"></b>');
-          $(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']").remove();
+        } else {
+            locale = localStorage.getItem("locale");
+            if (locale == undefined) {
+                locale = 'en';
+            }
+            $(".nav>.dropdown>.dropdown-toggle").html($(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']>a").html() + '<b class="caret"></b>');
+            $(".nav>.dropdown>.dropdown-menu>li[name='" + locale + "']").remove();
         }
 
         if (localStorage.getItem("locale") && localStorage.getItem("locale") != 'en') {
@@ -35,6 +37,8 @@
                 contentType: 'application/json'
             });
         }
+
+
 
 
     }
@@ -73,12 +77,63 @@
     }
 
     $(".nav>.dropdown>.dropdown-menu>li").on('click', function() {
-        if($(this).attr('name') === "en"){
-          $.fn.setParameter("lang","")
-        }else {
-          $.fn.setParameter("lang",$(this).attr('name'))
+        if ($(this).attr('name') === "en") {
+            $.fn.setParameter("lang", "")
+        } else {
+            $.fn.setParameter("lang", $(this).attr('name'))
         }
 
+    });
+
+    var search_schema = localStorage.getItem("search_schema");
+
+    if (search_schema == undefined) {
+        search_schema = 'asset';
+    }
+
+    var $li = $(".search-panel>.dropdown-menu>li[name='" + search_schema + "']");
+
+    $("#search_param").attr("placeholder", "Search " + search_schema);
+    $("#search_concept>.glyphicon").first().attr("class", $li.find(".glyphicon").first().attr('class'));
+    $(".search-panel>.dropdown-menu>li").show();
+    $li.hide();
+
+    $(".search-panel>.dropdown-menu>li").on('click', function() {
+        var search_schema = $(this).attr('name');
+        localStorage.setItem("search_schema", search_schema);
+        $("#search_param").attr("placeholder", "Search " + search_schema);
+        $("#search_concept>.glyphicon").first().attr("class", $(this).find(".glyphicon").first().attr('class'));
+        $(".search-panel>.dropdown-menu>li").show();
+        $(this).hide();
+    });
+
+    var $input = $("#search_param");
+    $input.typeahead({
+        source: function(value, callback) {
+            $.getJSON("/api/data/movie", {
+                q: value
+            }, function(data) {
+                callback(data.content || [])
+            })
+        },
+        displayText:function(item) {
+          return item.title;
+        },
+        autoSelect: true
+    });
+    $input.change(function() {
+        var current = $input.typeahead("getActive");
+        if (current) {
+            // Some item from your model is active!
+            if (current.name == $input.val()) {
+                // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+            } else {
+                // This means it is only a partial match, you can either add a new item
+                // or take the active if you don't want new items
+            }
+        } else {
+            // Nothing is active so it is a new value (or maybe empty value)
+        }
     });
 
 }(jQuery));
