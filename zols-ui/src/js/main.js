@@ -110,14 +110,20 @@
     var $input = $("#search_param");
     $input.typeahead({
         source: function(value, callback) {
-            $.getJSON("/api/data/movie", {
-                q: value
+            $.getJSON("/api/data/" + localStorage.getItem("search_schema"), {
+                q: value,
+                size:5
+
             }, function(data) {
                 callback(data.content || [])
             })
         },
-        displayText:function(item) {
-          return item.title;
+        displayText: function(item) {
+            return item.title;
+        },
+        highlighter: function(text,item) {
+            var html = $('<div><img src="'+item.imageUrl+'" alt="Hi"></div>');
+            return html.append(document.createTextNode(item.title)).html();
         },
         autoSelect: true
     });
