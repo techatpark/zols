@@ -16,18 +16,24 @@ import java.util.logging.Logger;
 import org.zols.datastore.DataStore;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
+import org.zols.jsonschema.JsonSchema;
+import org.zols.jsonschema.everit.EveritJsonSchema;
 
 /**
  *
  * @author WZ07
  */
 public class JsonSchemaTestUtil {
-
-    public static Map<String, Object> getJsonSchemaAsMap(String dataName) {
-        return asMap(getJsonSchema(dataName));
+    
+    public static JsonSchema getJsonSchema(String schamaName) {
+        return new EveritJsonSchema(schamaName, JsonSchemaTestUtil::getJsonSchemaAsMap);
     }
 
-    public static String getJsonSchema(String schamaName) {
+    public static Map<String, Object> getJsonSchemaAsMap(String dataName) {
+        return asMap(getJsonSchemaAsText(dataName));
+    }
+
+    public static String getJsonSchemaAsText(String schamaName) {
         String schemaContent = null;
         try {
 
@@ -86,23 +92,33 @@ public class JsonSchemaTestUtil {
         dataStore.getSchemaManager().create(getJsonSchemaAsMap("mobile"));
     }
     
-    public static void deleteAllSchema(DataStore dataStore) throws DataStoreException {
+    public static void deleteAllData(DataStore dataStore) throws DataStoreException {
         dataStore.delete("geo");
+        dataStore.delete("seller");
+        dataStore.delete("computer");
+        dataStore.delete("mobile");
+        dataStore.delete("device");
+        dataStore.delete("product");
+        
+    }
+    
+    public static void deleteAllSchema(DataStore dataStore) throws DataStoreException {
+        
         dataStore.getSchemaManager().delete("geo");
         
-        dataStore.delete("seller");
+        
         dataStore.getSchemaManager().delete("seller");
         
-        dataStore.delete("computer");
+        
         dataStore.getSchemaManager().delete("computer");
         
-        dataStore.delete("mobile");
+        
         dataStore.getSchemaManager().delete("mobile");
         
-        dataStore.delete("device");
+        
         dataStore.getSchemaManager().delete("device");
         
-        dataStore.delete("product");
+        
         dataStore.getSchemaManager().delete("product");
         
     }

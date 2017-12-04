@@ -67,11 +67,12 @@ public interface DataStorePersistence {
     /**
      *
      * @param jsonSchema schema of dynamic data
+     * @param idValue
      * @param validatedData validated Object
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    abstract boolean updatePartially(JsonSchema jsonSchema,
+    abstract boolean updatePartially(JsonSchema jsonSchema,String idValue,
             Map<String, Object> validatedData)
             throws DataStoreException;
 

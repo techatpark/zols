@@ -103,7 +103,7 @@ public class JsonSchemaUtil {
             jsonSchemaAsMap.put("localized", localized);
         }
         
-        jsonSchemaAsMap.put("$id", jsonSchemaAsMap.remove("id"));
+        jsonSchemaAsMap.put("$id", jsonSchemaAsMap.remove("id").toString().replaceAll(":", "").toLowerCase());
         
         return new EveritJsonSchema(jsonSchemaAsMap, null);
     }

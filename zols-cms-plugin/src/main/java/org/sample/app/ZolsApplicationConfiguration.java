@@ -6,10 +6,9 @@
 package org.sample.app;
 
 import java.util.Locale;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.Settings;
-import static org.elasticsearch.common.settings.Settings.settingsBuilder;
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,14 +28,10 @@ public class ZolsApplicationConfiguration extends WebMvcConfigurerAdapter {
         
     @Bean
     public DataStore dataStore() {
-        Settings settings = settingsBuilder().put("index.number_of_shards", 1)
-                .put("path.home", "/")
-                .put("path.data", "data")
-                .put("index.number_of_replicas", 0).build();
-        Client client = nodeBuilder().settings(settings).build().start().client();
-        if(client == null) {
-            return new DataStore(new ElasticSearchDataStorePersistence(indexName));
-        }
+        RestHighLevelClient client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http"),
+                        new HttpHost("localhost", 9201, "http")));
         return new DataStore(new ElasticSearchDataStorePersistence(indexName,client));
     }
 

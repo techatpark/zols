@@ -5,44 +5,59 @@
  */
 package org.zols.datastore.elasticsearch;
 
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
-import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
-import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
-import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.nio.entity.NStringEntity;
+import org.elasticsearch.ElasticsearchStatusException;
+import static org.elasticsearch.action.DocWriteResponse.Result.CREATED;
+import static org.elasticsearch.action.DocWriteResponse.Result.DELETED;
+import static org.elasticsearch.action.DocWriteResponse.Result.UPDATED;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
-import org.elasticsearch.action.index.IndexRequestBuilder;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.Settings;
-import static org.elasticsearch.common.settings.Settings.settingsBuilder;
-import org.elasticsearch.common.unit.TimeValue;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
-import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
+import static org.zols.datastore.query.Filter.Operator.FULL_TEXT_SEARCH;
+import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
+import static org.zols.datastore.query.Filter.Operator.IS_NOTNULL;
+import static org.zols.datastore.query.Filter.Operator.NOT_EQUALS;
+import static org.zols.datastore.query.Filter.Operator.NOT_EXISTS_IN;
+import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
@@ -57,216 +72,251 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStorePersistence.class);
 
-    private final Client client;
+    private final RestHighLevelClient client;
 
     private final String indexName;
 
     public ElasticSearchDataStorePersistence() {
-        this("zols", null);
+        this.client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("localhost", 9200, "http"),
+                        new HttpHost("localhost", 9201, "http")));
+        this.indexName = "zols";
     }
 
-    public ElasticSearchDataStorePersistence(String indexName) {
-        this(indexName, null);
-    }
-
-    public ElasticSearchDataStorePersistence(String indexName, Client client) {
+    public ElasticSearchDataStorePersistence(String indexName, RestHighLevelClient client) {
         this.indexName = indexName;
-        if (client == null) {
-            Settings settings = settingsBuilder()
-                    .put("path.home", "/")
-                    .put("path.data", "data")
-                    .put("index.number_of_replicas", 0).build();
-            this.client = nodeBuilder().settings(settings).local(true).build().start().client();
-        } else {
-            this.client = client;
-        }
 
-        createIndexIfNotExists();
-    }
+        this.client = client;
 
-    private void createIndexIfNotExists() {
-        IndicesExistsRequest indicesExistsRequest = new IndicesExistsRequest(indexName);
-        if (!client.admin().indices().exists(indicesExistsRequest).actionGet().isExists()) {
-            CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
-            client.admin().indices().create(createIndexRequest).actionGet();
-            LOGGER.debug("New index [{}] created", indexName);
-        }
     }
 
     @Override
-    public Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        LOGGER.debug("Create Data for ", getTypeName(jsonSchema));
+    public Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) throws DataStoreException {
+
+        String typeName = getTypeName(jsonSchema);
         Object idValue = getIdValue(jsonSchema, validatedDataObject);
-        IndexRequestBuilder indexRequestBuilder;
-        if (idValue == null) {
-            indexRequestBuilder = client.prepareIndex(indexName, getTypeName(jsonSchema)).setRefresh(true);
-        } else {
-            indexRequestBuilder = client.prepareIndex(indexName, getTypeName(jsonSchema), idValue.toString()).setRefresh(true);
+        LOGGER.debug("Creating Data for {} with id {}", typeName, idValue);
+
+        if (idValue != null) {
+            IndexRequest indexRequest = new IndexRequest(getIndexName(typeName), typeName, getEncodedId(idValue))
+                    .source(validatedDataObject);
+            
+            IndexResponse indexResponse;
+            try {
+                indexResponse = client.index(indexRequest);
+                if (indexResponse.getResult() == CREATED) {
+                    LOGGER.debug("Created Data for {} with id {}", typeName, idValue);
+                    return read(jsonSchema, idValue.toString());
+                }
+            } catch (IOException ex) {
+                throw new DataStoreException("Unable to create data for " + typeName, ex);
+            }
+
         }
 
-        IndexResponse response = indexRequestBuilder
-                .setSource(validatedDataObject)
-                .execute()
-                .actionGet();
-
-        Map<String, Object> createdData = null;
-
-        if (response.isCreated()) {
-            createdData = read(jsonSchema, response.getId());
-            //If autogenerated if then update idField
-            if (idValue == null) {
-                createdData.put(jsonSchema.getIdPropertyNames().get(0), response.getId());
-                updatePartially(jsonSchema, createdData);
-            }
-        }
-
-        return createdData;
-
+        return null;
     }
 
     @Override
-    public Map<String, Object> read(JsonSchema jsonSchema, String idValue) {
-        GetResponse getResponse = client
-                .prepareGet(indexName, getTypeName(jsonSchema), idValue)
-                .execute()
-                .actionGet();
+    public Map<String, Object> read(JsonSchema jsonSchema, String idValue) throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
 
-        return getResponse.getSource();
-    }
+        LOGGER.debug("Getting Data for {} with id {}", typeName, idValue);
 
-    @Override
-    public boolean delete(JsonSchema jsonSchema, String idValue) {
-        DeleteResponse response = client
-                .prepareDelete(indexName, getTypeName(jsonSchema), idValue).setRefresh(true)
-                .execute()
-                .actionGet();
-        client.admin().indices().refresh(new RefreshRequest(indexName));
+        GetRequest getRequest = new GetRequest(
+                getIndexName(typeName), typeName, getEncodedId(idValue));
 
-        return response.isFound();
-    }
-
-    @Override
-    public boolean delete(JsonSchema jsonSchema, Query query) {
-        SearchResponse response = client
-                .prepareSearch()
-                .setSearchType(SearchType.SCAN)
-                .setIndices(indexName)
-                .setTypes(getTypeName(jsonSchema))
-                .setQuery(getQueryBuilder(query))
-                .setScroll(new TimeValue(60000))
-                .setSize(100)
-                .execute()
-                .actionGet();
-        while (true) {
-            response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
-            boolean hitsRead = false;
-            for (SearchHit hit : response.getHits()) {
-                hitsRead = true;
-                client
-                        .prepareDelete(indexName, hit.getType(), hit.getId()).setRefresh(true)
-                        .execute()
-                        .actionGet();
-            }
-            //Break condition: No hits are returned
-            if (!hitsRead) {
-                break;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public boolean update(JsonSchema jsonSchema, String idValue, Map<String, Object> validatedDataObject) {
-        IndexResponse response = client.prepareIndex(indexName, getTypeName(jsonSchema), idValue).setRefresh(true)
-                .setSource(validatedDataObject)
-                .execute()
-                .actionGet();
-        client.admin().indices().refresh(new RefreshRequest(indexName));
-
-        return true;
-    }
-
-    @Override
-    public boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        String idValue = getIdValue(jsonSchema, validatedDataObject).toString();
-
-        UpdateRequest updateRequest = new UpdateRequest(indexName, getTypeName(jsonSchema), idValue)
-                .doc(validatedDataObject);
-
-        UpdateResponse response;
+        GetResponse getResponse;
         try {
-            response = client.update(updateRequest).get();
-            client.admin().indices().refresh(new RefreshRequest(indexName));
-            return true;
-        } catch (InterruptedException | ExecutionException ex) {
-            Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            getResponse = client.get(getRequest);
+            return getResponse.getSource();
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to get data for " + typeName + "with id " + idValue, ex);
+        }
+    }
+
+    @Override
+    public boolean update(JsonSchema jsonSchema, String idValue,
+            Map<String, Object> validatedDataObject) throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
+
+        LOGGER.debug("Updating Data for {} with id {}", typeName, idValue);
+
+        if (idValue != null) {
+            IndexRequest indexRequest = new IndexRequest(getIndexName(typeName), typeName, getEncodedId(idValue))
+                    .source(validatedDataObject);
+            IndexResponse indexResponse;
+            try {
+                indexResponse = client.index(indexRequest);
+                return indexResponse.getResult() == UPDATED;
+            } catch (IOException ex) {
+                throw new DataStoreException("Unable to create data for " + typeName, ex);
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updatePartially(JsonSchema jsonSchema, String idValue,
+            Map<String, Object> validatedData)
+            throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
+
+        LOGGER.debug("Updating Data for {} with id {}", typeName, idValue);
+
+        if (idValue != null) {
+            UpdateRequest updateRequest = new UpdateRequest(getIndexName(typeName), typeName, getEncodedId(idValue));
+            updateRequest.doc(validatedData);
+            UpdateResponse updateResponse;
+            try {
+                updateResponse = client.update(updateRequest);
+                return updateResponse.getResult() == UPDATED;
+            } catch (IOException ex) {
+                throw new DataStoreException("Unable to create data for " + typeName, ex);
+            }
+
+        }
+        return false;
+    }
+
+    @Override
+    public boolean delete(JsonSchema jsonSchema,
+            String idValue) throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
+
+        LOGGER.debug("Deleting Data for {} with id {}", typeName, idValue);
+
+        DeleteRequest deleteRequest = new DeleteRequest(
+                getIndexName(typeName), typeName, getEncodedId(idValue));
+
+        DeleteResponse deleteResponse;
+        try {
+            deleteResponse = client.delete(deleteRequest);
+            return (deleteResponse.getResult() == DELETED);
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to delete data for " + typeName + "with id " + idValue, ex);
+        }
+
+    }
+
+    private String getTypeName(JsonSchema jsonSchema) {
+        return jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId());
+    }
+
+    private Object getIdValue(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
+        return jsonSchema == null ? null : jsonSchema.getIdValues(validatedDataObject)[0];
+    }
+
+    @Override
+    public boolean delete(JsonSchema jsonSchema, Query query) throws DataStoreException {
+        
+        String typeName = getTypeName(jsonSchema);
+        QueryBuilder builder = getQueryBuilder(query);
+        if (builder != null) {
+            
+            try {
+                // Patch for Solinving delete by query conflicts
+                client.getLowLevelClient().performRequest("POST", "/" + getIndexName(typeName) + "/_refresh");
+                Map<String, String> params = Collections.singletonMap("pretty", "true");
+                HttpEntity entity = new NStringEntity("{" + "\"query\":" + builder.toString() + "}", ContentType.APPLICATION_JSON);
+                client.getLowLevelClient()
+                        .performRequest("POST", "/" + getIndexName(typeName) + "/" + typeName + "/_delete_by_query?scroll_size=1", params, entity);
+                client.getLowLevelClient().performRequest("POST", "/" + getIndexName(typeName) + "/_refresh");
+                return true;
+            } catch (IOException ex) {
+                throw new DataStoreException("Unable to delete " + getIndexName(typeName), ex);
+            }
         }
 
         return false;
     }
 
     @Override
-    public Page<Map<String, Object>> list(JsonSchema jsonSchema,
-            Query query, Integer pageNumber, Integer pageSize) {
-        Page<Map<String, Object>> page = null;
-        SearchRequestBuilder builder = client
-                .prepareSearch()
-                .setIndices(indexName)
-                .setTypes(getTypeName(jsonSchema))
-                .setQuery(getQueryBuilder(query));
-        if (pageNumber != null) {
-            builder.setSize(pageSize)
-                    .setFrom(pageNumber * pageSize);
-        }
-        SearchResponse response = builder
-                .execute()
-                .actionGet();
-        long totalHits = response.getHits().getTotalHits();
-        if (totalHits != 0) {
-            List<Map<String, Object>> list = new ArrayList<>((int) totalHits);
-            for (SearchHit hit : response.getHits()) {
-                list.add(hit.getSource());
+    public List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
+
+        LOGGER.debug("Listing Data for {} ", typeName);
+        SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
+        searchRequest.types(typeName);
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.query(getQueryBuilder(query));
+        searchRequest.source(sourceBuilder);
+
+        try {
+            SearchResponse searchResponse = client.search(searchRequest);
+
+            SearchHits hits = searchResponse.getHits();
+            long totalHits = hits.getTotalHits();
+            if (totalHits != 0) {
+                List<Map<String, Object>> list = new ArrayList<>((int) totalHits);
+                for (SearchHit hit : hits.getHits()) {
+                    list.add(hit.getSourceAsMap());
+                }
+                return list;
             }
-            page = new Page(pageNumber, pageSize, totalHits, list);
+
+        } catch (ElasticsearchStatusException ex) {
+                if(ex.status() == RestStatus.NOT_FOUND) {
+                    return null;
+                }
+                else {
+                     throw new DataStoreException("Unable to list data for " + typeName, ex);
+                }
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to list data for " + typeName, ex);
         }
-        return page;
+        return null;
     }
 
     @Override
-    public List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) {
-        List<Map<String, Object>> list = null;
-        SearchResponse response = client
-                .prepareSearch()
-                .setSearchType(SearchType.SCAN)
-                .setIndices(indexName)
-                .setTypes(getTypeName(jsonSchema))
-                .setQuery(getQueryBuilder(query))
-                .setScroll(new TimeValue(60000))
-                .setSize(100)
-                .execute()
-                .actionGet();
-        long totalHits = response.getHits().getTotalHits();
-        if (totalHits != 0) {
-            list = new ArrayList<>((int) totalHits);
-            while (true) {
-                response = client.prepareSearchScroll(response.getScrollId()).setScroll(new TimeValue(600000)).execute().actionGet();
-                boolean hitsRead = false;
-                for (SearchHit hit : response.getHits()) {
-                    hitsRead = true;
-                    list.add(hit.getSource());
+    public Page<Map<String, Object>> list(JsonSchema jsonSchema, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        String typeName = getTypeName(jsonSchema);
+
+        LOGGER.debug("Listing Data for {} page {} size {}", typeName, pageNumber, pageSize);
+        SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
+        searchRequest.types(typeName);
+
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.size(pageSize);
+        sourceBuilder.from(pageNumber * pageSize);
+        sourceBuilder.query(getQueryBuilder(query));
+        searchRequest.source(sourceBuilder);
+
+        try {
+            SearchResponse searchResponse = client.search(searchRequest);
+            SearchHits hits = searchResponse.getHits();
+            long totalHits = hits.getTotalHits();
+            if (totalHits != 0) {
+                List<Map<String, Object>> list = new ArrayList<>(pageSize);
+                for (SearchHit hit : hits.getHits()) {
+                    list.add(hit.getSourceAsMap());
                 }
-                //Break condition: No hits are returned
-                if (!hitsRead) {
-                    break;
-                }
+                return new Page(pageNumber, pageSize, totalHits, list);
             }
+
+        } catch (ElasticsearchStatusException ex) {
+                if(ex.status() == RestStatus.NOT_FOUND) {
+                    return null;
+                }
+                else {
+                     throw new DataStoreException("Unable to list data for " + typeName, ex);
+                }
+        }catch (IOException ex) {
+            throw new DataStoreException("Unable to list data for " + typeName, ex);
         }
-        return list;
+        return null;
     }
 
     @Override
     public void drop() throws DataStoreException {
-        client.admin().indices().delete(new DeleteIndexRequest(indexName));
+        try {
+            client.getLowLevelClient().performRequest("DELETE", "/" + indexName + "_*");
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to drop " + indexName, ex);
+        }
     }
 
     public static QueryBuilder getQueryBuilder(Query query) {
@@ -292,7 +342,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                             queryBuilder.mustNot(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
                             break;
                         case IS_NULL:
-                            queryBuilder.must(QueryBuilders.missingQuery(filter.getName()));
+                            queryBuilder.mustNot(QueryBuilders.existsQuery(filter.getName()));
                             break;
                         case IS_NOTNULL:
                             queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
@@ -322,20 +372,25 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                     }
                 }
             }
-            
+
         }
 
         return queryBuilder;
     }
-
-    private String getTypeName(JsonSchema jsonSchema) {
-        return jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId());
+    
+    private String getEncodedId(Object idValue) {
+        try {
+            return idValue == null ? null :URLEncoder.encode(idValue.toString(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
-    private Object getIdValue(JsonSchema jsonSchema, Map<String, Object> validatedDataObject) {
-        return jsonSchema == null ? null : jsonSchema.getIdValues(validatedDataObject)[0];
+    private String getIndexName(String typeName) {
+        return indexName + "_" + typeName;
     }
-
+    
     @Override
     public AggregatedResults browse(JsonSchema schema, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
@@ -365,19 +420,20 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 List<Map<String, Object>> bucketsMaps;
 
                 buckets = new ArrayList<>();
+   
                 String aggregationName;
                 for (Map.Entry<String, Object> entrySet : aggregations.entrySet()) {
-
-                    aggregationName = entrySet.getKey();
+                    
+                    aggregationName = entrySet.getKey().substring(entrySet.getKey().indexOf("#")+1);
                     if (!aggregationName.startsWith("max_")) {
                         bucket = new HashMap<>();
                         if (aggregationName.startsWith("min_")) {
                             bucket.put("name", aggregationName.replaceAll("min_", ""));
                             bucket.put("type", "minmax");
                             bucketItem = new HashMap<>();
-                            bucketItem.put("min", ((Map<String, Object>) aggregations.get(aggregationName)).get("value"));
-                            bucketItem.put("max", ((Map<String, Object>) aggregations.get(aggregationName.replaceAll("min_", "max_"))).get("value"));
-                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+                            bucketItem.put("min", ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("value"));
+                            bucketItem.put("max", ((Map<String, Object>) aggregations.get(entrySet.getKey().replaceAll("min_", "max_").replaceAll("min#", "max#"))).get("value"));
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("meta")).get("title"));
                             bucket.put("item", bucketItem);
                         } else if (!aggregationName.startsWith("max_")) {
                             bucket.put("name", aggregationName);
@@ -391,7 +447,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                                 bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
                                 bucketItems.add(bucketItem);
                             }
-                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(aggregationName)).get("meta")).get("title"));
+                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("meta")).get("title"));
 
                             bucket.put("items", bucketItems);
                         }
@@ -431,11 +487,10 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         return list;
     }
 
-    private void addAggregations(JsonSchema jsonSchema,
-            SearchRequestBuilder searchRequestBuilder) {
+    private void addAggregations(JsonSchema jsonSchema, SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
-        searchRequestBuilder.addAggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
+        searchRequestBuilder.aggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
             String filter = (String) entry.getValue().get("filter");
             if (filter != null) {
@@ -446,12 +501,12 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 switch (filter) {
                     case "minmax":
                         searchRequestBuilder
-                                .addAggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
-                                .addAggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+                                .aggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
+                                .aggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
                         break;
                     case "term":
                         searchRequestBuilder
-                                .addAggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
 
                         break;
                 }
@@ -462,29 +517,37 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     public Map<String, Object> searchResponse(JsonSchema jsonSchema,
-            Query query, Integer pageNumber, Integer pageSize) {
+            Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+        
+        String typeName = getTypeName(jsonSchema);
+        
+        SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
+        searchRequest.types(typeName);
 
-        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(indexName)
-                .setTypes(jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId()));
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+        sourceBuilder.size(pageSize);
+        sourceBuilder.from(pageNumber * pageSize);
+        sourceBuilder.query(getQueryBuilder(query));
+        addAggregations(jsonSchema, sourceBuilder);
+        
+        searchRequest.source(sourceBuilder);
+        
+        
 
-        if (pageNumber != null) {
-            searchRequestBuilder.setSize(pageSize)
-                    .setFrom(pageNumber * pageSize);
+        
+        
+
+        
+        
+        LOGGER.debug("Executing elastic search query {}", searchRequest.toString());
+
+        try {
+            SearchResponse searchResponse = client.search(searchRequest);
+            return asMap(searchResponse.toString());
+        } catch (IOException ex) {
+            throw new DataStoreException("Unable to browse data for " + typeName, ex);
         }
-        
-        searchRequestBuilder.setQuery(getQueryBuilder(query));
 
         
-
-        addAggregations(jsonSchema, searchRequestBuilder);
-        
-        LOGGER.debug("Executing elastic search query {}", searchRequestBuilder.toString());
-
-        SearchResponse response = searchRequestBuilder
-                .execute()
-                .actionGet();
-
-        return asMap(response.toString());
     }
-
 }

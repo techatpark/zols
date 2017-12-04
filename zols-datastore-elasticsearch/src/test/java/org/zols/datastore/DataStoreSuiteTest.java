@@ -10,9 +10,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-    SchemaManagementTest.class,
-    ObjectManagementTest.class,
-    DataManagementTest.class
+   SchemaManagementTest.class,DataManagementTest.class,ObjectManagementTest.class
 })
 public class DataStoreSuiteTest {
 

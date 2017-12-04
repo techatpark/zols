@@ -5,8 +5,6 @@
 
         var locale = $.fn.getParameter("lang");
 
-
-
         if (locale != undefined) {
             if (locale === "" || locale === "en") {
                 localStorage.removeItem("locale");
@@ -96,6 +94,7 @@
     $("#search_param").attr("placeholder", "Search " + search_schema);
     $("#search_concept>.glyphicon").first().attr("class", $li.find(".glyphicon").first().attr('class'));
     $(".search-panel>.dropdown-menu>li").show();
+    $("#search_form").attr("action","/browse/"+search_schema);
     $li.hide();
 
     $(".search-panel>.dropdown-menu>li").on('click', function() {
@@ -104,13 +103,14 @@
         $("#search_param").attr("placeholder", "Search " + search_schema);
         $("#search_concept>.glyphicon").first().attr("class", $(this).find(".glyphicon").first().attr('class'));
         $(".search-panel>.dropdown-menu>li").show();
+        $("#search_form").attr("action","/browse/"+search_schema);
         $(this).hide();
     });
 
     var $input = $("#search_param");
     $input.typeahead({
         source: function(value, callback) {
-            $.getJSON("/api/data/" + localStorage.getItem("search_schema"), {
+            $.getJSON("http://localhost:8080/api/data/" + localStorage.getItem("search_schema"), {
                 q: value,
                 size:5
 
@@ -125,7 +125,7 @@
             var html = $('<div><img src="'+item.imageUrl+'" alt="Hi"></div>');
             return html.append(document.createTextNode(item.title)).html();
         },
-        autoSelect: true
+        autoSelect: false
     });
     $input.change(function() {
         var current = $input.typeahead("getActive");

@@ -89,9 +89,9 @@ public class DataStore {
 
                     boolean updated;
                     if (locale == null) {
-                        updated = updatePartial(jsonSchema, dataMap);
+                        updated = updatePartial(jsonSchema, idValue,dataMap);
                     } else {
-                        updated = updatePartial(jsonSchema, jsonSchema.localizeData(dataMap, locale));
+                        updated = updatePartial(jsonSchema, idValue,jsonSchema.localizeData(dataMap, locale));
                     }
 
                     if (updated) {
@@ -237,9 +237,9 @@ public class DataStore {
         return dataStorePersistence.delete(jsonSchema, idValue);
     }
 
-    boolean updatePartial(JsonSchema jsonSchema, Map<String, Object> dataAsMap) throws DataStoreException {
+    boolean updatePartial(JsonSchema jsonSchema, String idValue,Map<String, Object> dataAsMap) throws DataStoreException {
         dataAsMap.put("$type", jsonSchema.getId());
-        return dataStorePersistence.updatePartially(jsonSchema, dataAsMap);
+        return dataStorePersistence.updatePartially(jsonSchema, idValue,dataAsMap);
     }
 
     List<Map<String, Object>> list(JsonSchema jsonSchema,

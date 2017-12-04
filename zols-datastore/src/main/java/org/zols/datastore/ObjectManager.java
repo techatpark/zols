@@ -96,9 +96,9 @@ public final class ObjectManager<T> {
 
                 boolean updated;
                 if (locale == null) {
-                    updated = dataStore.updatePartial(jsonSchema, dataAsMap);
+                    updated = dataStore.updatePartial(jsonSchema, idValue,dataAsMap);
                 } else {
-                    updated = dataStore.updatePartial(jsonSchema, jsonSchema.localizeData(dataAsMap, locale));
+                    updated = dataStore.updatePartial(jsonSchema, idValue,jsonSchema.localizeData(dataAsMap, locale));
                 }
 
                 if (updated) {
