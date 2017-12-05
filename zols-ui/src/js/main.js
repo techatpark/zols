@@ -87,6 +87,7 @@
 
     if (search_schema == undefined) {
         search_schema = 'asset';
+        localStorage.setItem("search_schema", search_schema);
     }
 
     var $li = $(".search-panel>.dropdown-menu>li[name='" + search_schema + "']");
@@ -94,7 +95,7 @@
     $("#search_param").attr("placeholder", "Search " + search_schema);
     $("#search_concept>.glyphicon").first().attr("class", $li.find(".glyphicon").first().attr('class'));
     $(".search-panel>.dropdown-menu>li").show();
-    $("#search_form").attr("action","/browse/"+search_schema);
+    $("#search_form").attr("action", "/browse/" + search_schema);
     $li.hide();
 
     $(".search-panel>.dropdown-menu>li").on('click', function() {
@@ -103,36 +104,80 @@
         $("#search_param").attr("placeholder", "Search " + search_schema);
         $("#search_concept>.glyphicon").first().attr("class", $(this).find(".glyphicon").first().attr('class'));
         $(".search-panel>.dropdown-menu>li").show();
-        $("#search_form").attr("action","/browse/"+search_schema);
+        $("#search_form").attr("action", "/browse/" + search_schema);
         $(this).hide();
     });
 
-    var $input = $("#search_param");
-    $input.typeahead({
+    $("#fql_flag").click(function() {
+      $("#search_param").val("");
+        if ($("#fql_flag").hasClass("fql-on")) {
+            $("#fql_flag").removeClass("fql-on");
+            $('#search_param').highlightWithinTextarea('destroy');
+            $("#search_param").typeahead(ta);
+        } else {
+            $("#fql_flag").addClass("fql-on");
+            $('#search_param').typeahead('destroy');
+            $("#search_param").highlightWithinTextarea({
+                highlight: [{
+                        highlight: 'AND',
+                        className: 'red'
+                    },
+                    {
+                        highlight: ['status','codec','origin','title'],
+                        className: 'blue'
+                    },
+                    {
+                        highlight: '=',
+                        className: 'yellow'
+                    }
+                ]
+            });
+        }
+    });
+
+    var ta = {
         source: function(value, callback) {
+
             $.getJSON("http://localhost:8080/api/data/" + localStorage.getItem("search_schema"), {
                 q: value,
-                size:5
+                size: 5
 
             }, function(data) {
                 callback(data.content || [])
             })
+
+
         },
         displayText: function(item) {
             return item.title;
         },
-        highlighter: function(text,item) {
-            var html = $('<div><img src="'+item.imageUrl+'" alt="Hi"></div>');
+        highlighter: function(text, item) {
+            var html = $('<div><img src="' + item.imageUrl + '" alt="Hi"></div>');
             return html.append(document.createTextNode(item.title)).html();
         },
         autoSelect: false
+    };
+
+    $("#search_form").submit(function(event) {
+        event.preventDefault();
+        var search_schema = localStorage.getItem("search_schema");
+        if ($("#fql_flag").hasClass("fql-on")) {
+            var search_query = $("#search_param").val();;
+            location.href = "/browse/" + search_schema + "?" + search_query.replace(new RegExp(' AND ', 'gi'), '&').replace(new RegExp(' = ', 'gi'), '=');
+        } else {
+            location.href = "/browse/" + search_schema + "?q=" + $("#search_param").val();
+        }
     });
+
+    var $input = $("#search_param");
+    $input.typeahead(ta);
     $input.change(function() {
         var current = $input.typeahead("getActive");
         if (current) {
             // Some item from your model is active!
-            if (current.name == $input.val()) {
-                // This means the exact match is found. Use toLowerCase() if you want case insensitive match.
+            if (current.title == $input.val()) {
+                location.href = "/asset/" + current.id;
+
             } else {
                 // This means it is only a partial match, you can either add a new item
                 // or take the active if you don't want new items
