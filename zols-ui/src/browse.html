@@ -38,7 +38,7 @@
                         <li class="active" th:if="${schema != null}" th:text="${schema.title}">Data</li>
                     </ol>
                 </div>
-                <div id="query-filters" th:if="${query != null}" class="col-md-4">
+                <div id="query-filters" th:if="${query != null}" class="col-md-4 pull-right">
                     <span th:each="filter : ${query.filters}" th:if="${filter.name != '$type'}">
                       <span class="label label-primary">
                         <span th:text="${filter.name}">New</span>

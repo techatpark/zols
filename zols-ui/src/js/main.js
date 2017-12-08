@@ -109,7 +109,7 @@
     });
 
     $("#fql_flag").click(function() {
-      $("#search_param").val("");
+      $("#search_param").val("").focus();
         if ($("#fql_flag").hasClass("fql-on")) {
             $("#fql_flag").removeClass("fql-on");
             $('#search_param').highlightWithinTextarea('destroy');
