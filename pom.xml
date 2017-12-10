@@ -33,6 +33,7 @@
         <module>zols-datastore-test</module>
         <module>json-schema</module>
         <module>zols-cms-plugin-service</module>
+        <module>zols-datastore-mongo</module>
     </modules>
     
     <properties>
