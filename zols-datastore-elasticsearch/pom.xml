@@ -20,15 +20,14 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.0.0</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
         
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.0.0</version>
+            <version>${elasticsearch.version}</version>
         </dependency>
-        
        
         <dependency>
             <groupId>${project.groupId}</groupId>
