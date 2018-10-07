@@ -1,13 +1,11 @@
 JSON Schema (Ext)
 ====
 
-JSON Schema Extension
+JSON Schema Extension extends JSON Schema and provide below add-ons. This will abstract the underlying JSON Schema validator.
 
+### JSR 303 Bean validation support
 ### Security
 ### Localization
-
-## License
-Zols is released under version 2.0 of the [Apache License][].
-
-[here]:https://github.com/sathishk/zols-sample
-[Apache License]: http://www.apache.org/licenses/LICENSE-2.0
+### Upward Hierarchy Navigation
+### Identifiers
+### Composites
