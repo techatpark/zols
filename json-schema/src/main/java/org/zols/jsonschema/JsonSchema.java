@@ -5,6 +5,7 @@
  */
 package org.zols.jsonschema;
 
+import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,6 +17,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.json.Json;
 import javax.validation.ConstraintViolation;
 
 /**
@@ -37,8 +39,11 @@ public abstract class JsonSchema {
     private final List<String> idPropertyNames;
 
     private final Map<String, Map<String, Object>> properties;
+    
 
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
+        
+        
         this(schemaSupplier.apply(schemaId), schemaSupplier);
     }
 

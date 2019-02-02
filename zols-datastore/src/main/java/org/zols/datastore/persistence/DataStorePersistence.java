@@ -20,14 +20,14 @@ public interface DataStorePersistence {
 
     /**
      *
-     * @param validatedDataObject validated object
+     * @param jsonData validated object
      * @param jsonSchema schema of dynamic data
      * @return dynamic data as map
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract Map<String, Object> create(
             JsonSchema jsonSchema,
-            Map<String, Object> validatedDataObject)
+            Map<String, Object> jsonData)
             throws DataStoreException;
 
     /**
@@ -62,18 +62,18 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     abstract boolean update(JsonSchema jsonSchema, String idValue,
-            Map<String, Object> validatedDataObject) throws DataStoreException;
+            Map<String, Object> jsonData) throws DataStoreException;
 
     /**
      *
      * @param jsonSchema schema of dynamic data
      * @param idValue
-     * @param validatedData validated Object
+     * @param jsonData validated Object
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract boolean updatePartially(JsonSchema jsonSchema,String idValue,
-            Map<String, Object> validatedData)
+            Map<String, Object> jsonData)
             throws DataStoreException;
 
     /**
