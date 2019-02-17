@@ -63,22 +63,22 @@ public class DataStore {
         return createdDataAsMap;
     }
 
-    public Optional<Map<String, Object>> read(String schemaId, String idValue, Locale locale) throws DataStoreException {
+    public Optional<Map<String, Object>> read(String schemaId, Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
         return (jsonSchema == null)
-                ? Optional.empty() : Optional.ofNullable(read(jsonSchema, idValue, locale));
+                ? Optional.empty() : Optional.ofNullable(read(jsonSchema, locale, idValues));
 
     }
 
-    public Optional<Map<String, Object>> read(String schemaId, String idValue) throws DataStoreException {
-        return read(schemaId, idValue, null);
+    public Optional<Map<String, Object>> read(String schemaId, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return read(schemaId, null, idValues);
     }
 
-    public Map<String, Object> update(String schemaId, String idValue, Map<String, Object> dataMap) throws DataStoreException {
-        return update(schemaId, idValue, dataMap, null);
+    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return update(schemaId, dataMap, null, idValues);
     }
 
-    public Map<String, Object> update(String schemaId, String idValue, Map<String, Object> dataMap, Locale locale) throws DataStoreException {
+    public Map<String, Object> update(String schemaId, Map<String, Object> dataMap, Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         Map<String, Object> updatedDataAsMap = null;
 
         if (dataMap != null) {
@@ -89,13 +89,13 @@ public class DataStore {
 
                     boolean updated;
                     if (locale == null) {
-                        updated = updatePartial(jsonSchema, idValue,dataMap);
+                        updated = updatePartial(jsonSchema, dataMap, idValues);
                     } else {
-                        updated = updatePartial(jsonSchema, idValue,jsonSchema.localizeData(dataMap, locale));
+                        updated = updatePartial(jsonSchema, jsonSchema.localizeData(dataMap, locale), idValues);
                     }
 
                     if (updated) {
-                        updatedDataAsMap = read(schemaId, idValue, locale).get();
+                        updatedDataAsMap = read(schemaId, locale, idValues).get();
                     }
 
                 } else {
@@ -107,10 +107,10 @@ public class DataStore {
         return updatedDataAsMap;
     }
 
-    public void updatePartial(String schemaId, Map<String, Object> dataMap, String idValue) throws DataStoreException {
+    public void updatePartial(String schemaId, Map<String, Object> dataMap, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
         if (jsonSchema != null) {
-            this.update(jsonSchema, idValue, dataMap);
+            this.update(jsonSchema, dataMap, idValues);
         }
     }
 
@@ -119,9 +119,9 @@ public class DataStore {
         return jsonSchema == null ? false : delete(jsonSchema);
     }
 
-    public boolean delete(String schemaId, String idValue) throws DataStoreException {
+    public boolean delete(String schemaId, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
-        return jsonSchema == null ? false : delete(jsonSchema, idValue);
+        return jsonSchema == null ? false : delete(jsonSchema, idValues);
     }
 
     public boolean delete(String schemaId, Query query)
@@ -212,17 +212,17 @@ public class DataStore {
         return dataStorePersistence.create(jsonSchema, dataAsMap);
     }
 
-    Map<String, Object> read(JsonSchema jsonSchema, String idValue) throws DataStoreException {
-        return dataStorePersistence.read(jsonSchema, idValue);
+    Map<String, Object> read(JsonSchema jsonSchema, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return dataStorePersistence.read(jsonSchema, idValues);
     }
 
-    Map<String, Object> read(JsonSchema jsonSchema, String idValue, Locale locale) throws DataStoreException {
-        return jsonSchema.delocalizeData(dataStorePersistence.read(jsonSchema, idValue), locale);
+    Map<String, Object> read(JsonSchema jsonSchema, Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return jsonSchema.delocalizeData(dataStorePersistence.read(jsonSchema, idValues), locale);
     }
 
-    boolean update(JsonSchema jsonSchema, String id, Map<String, Object> dataAsMap) throws DataStoreException {
+    boolean update(JsonSchema jsonSchema, Map<String, Object> dataAsMap, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         dataAsMap.put("$type", jsonSchema.getId());
-        return dataStorePersistence.update(jsonSchema, id, dataAsMap);
+        return dataStorePersistence.update(jsonSchema, dataAsMap, idValues);
     }
 
     boolean delete(JsonSchema jsonSchema) throws DataStoreException {
@@ -233,13 +233,13 @@ public class DataStore {
         return dataStorePersistence.delete(jsonSchema, query);
     }
 
-    boolean delete(JsonSchema jsonSchema, String idValue) throws DataStoreException {
-        return dataStorePersistence.delete(jsonSchema, idValue);
+    boolean delete(JsonSchema jsonSchema, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return dataStorePersistence.delete(jsonSchema, idValues);
     }
 
-    boolean updatePartial(JsonSchema jsonSchema, String idValue,Map<String, Object> dataAsMap) throws DataStoreException {
+    boolean updatePartial(JsonSchema jsonSchema, Map<String, Object> dataAsMap, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         dataAsMap.put("$type", jsonSchema.getId());
-        return dataStorePersistence.updatePartially(jsonSchema, idValue,dataAsMap);
+        return dataStorePersistence.updatePartially(jsonSchema, dataAsMap, idValues);
     }
 
     List<Map<String, Object>> list(JsonSchema jsonSchema,

@@ -10,10 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllData;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
@@ -33,9 +29,10 @@ public class DataManagementTest {
         dataStore = DataStoreProvider.getDataStore();
     }
 
+    /*
     @Before
     public void beforeTest() throws DataStoreException {
-        createAllSchema(dataStore);
+       createAllSchema(dataStore);
         createAllData(dataStore);
 
     }
@@ -156,6 +153,5 @@ public class DataManagementTest {
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Personal")));
         Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("product", query).size());
     }
-
-
+     */
 }

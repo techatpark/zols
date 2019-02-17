@@ -5,6 +5,7 @@
  */
 package org.zols.datastore;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -68,9 +69,9 @@ public final class ObjectManager<T> {
         return createdObject;
     }
 
-    public Optional<T> read(String idValue, Locale locale) throws DataStoreException {
+    public Optional<T> read(Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
 
-        Map<String, Object> dataAsMap = dataStore.read(jsonSchema, idValue);
+        Map<String, Object> dataAsMap = dataStore.read(jsonSchema, idValues);
 
         if (dataAsMap == null) {
             return Optional.empty();
@@ -79,15 +80,15 @@ public final class ObjectManager<T> {
         return Optional.of(asObject(jsonSchema.delocalizeData(dataAsMap, locale)));
     }
 
-    public Optional<T> read(String idValue) throws DataStoreException {
-        return read(idValue, null);
+    public Optional<T> read(AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return read(null, idValues);
     }
 
-    public T update(T object, String idValue) throws DataStoreException {
-        return update(object, idValue, null);
+    public T update(T object, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return update(object, null, idValues);
     }
 
-    public T update(T object, String idValue, Locale locale) throws DataStoreException {
+    public T update(T object, Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
         T updatedObject = null;
         if (object != null) {
             Set violations = validator.validate(object);
@@ -96,13 +97,13 @@ public final class ObjectManager<T> {
 
                 boolean updated;
                 if (locale == null) {
-                    updated = dataStore.updatePartial(jsonSchema, idValue,dataAsMap);
+                    updated = dataStore.updatePartial(jsonSchema, dataAsMap, idValues);
                 } else {
-                    updated = dataStore.updatePartial(jsonSchema, idValue,jsonSchema.localizeData(dataAsMap, locale));
+                    updated = dataStore.updatePartial(jsonSchema, jsonSchema.localizeData(dataAsMap, locale), idValues);
                 }
 
                 if (updated) {
-                    updatedObject = read(idValue, locale).get();
+                    updatedObject = read(locale, idValues).get();
                 }
 
             } else {
@@ -116,8 +117,8 @@ public final class ObjectManager<T> {
         return dataStore.delete(jsonSchema);
     }
 
-    public boolean delete(String idValue) throws DataStoreException {
-        return dataStore.delete(jsonSchema, idValue);
+    public boolean delete(AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+        return dataStore.delete(jsonSchema, idValues);
     }
 
     public boolean delete(Query query)

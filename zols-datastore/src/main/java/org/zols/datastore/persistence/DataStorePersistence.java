@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.persistence;
 
+import java.util.AbstractMap;
 import java.util.List;
 import java.util.Map;
 import org.zols.datastore.query.Page;
@@ -39,7 +40,7 @@ public interface DataStorePersistence {
      */
     abstract Map<String, Object> read(
             JsonSchema jsonSchema,
-            String idValue) throws DataStoreException;
+            AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -49,7 +50,7 @@ public interface DataStorePersistence {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract boolean delete(JsonSchema jsonSchema,
-            String idValue) throws DataStoreException;
+            AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -61,8 +62,8 @@ public interface DataStorePersistence {
     abstract boolean delete(JsonSchema jsonSchema, Query query)
             throws DataStoreException;
 
-    abstract boolean update(JsonSchema jsonSchema, String idValue,
-            Map<String, Object> jsonData) throws DataStoreException;
+    abstract boolean update(JsonSchema jsonSchema,
+            Map<String, Object> jsonData, AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -72,8 +73,8 @@ public interface DataStorePersistence {
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    abstract boolean updatePartially(JsonSchema jsonSchema,String idValue,
-            Map<String, Object> jsonData)
+    abstract boolean updatePartially(JsonSchema jsonSchema, 
+            Map<String, Object> jsonData,AbstractMap.SimpleEntry<String,Object>... idValues)
             throws DataStoreException;
 
     /**
@@ -102,10 +103,4 @@ public interface DataStorePersistence {
             Integer pageSize)
             throws DataStoreException;
 
-    /**
-     * Drops the DataStore
-     *
-     * @throws DataStoreException
-     */
-    abstract void drop() throws DataStoreException;
 }

@@ -7,10 +7,6 @@ package org.zols.datastore;
 
 import java.util.List;
 import java.util.Map;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
 import org.zols.datastore.util.DataStoreProvider;
@@ -28,6 +24,7 @@ public class SchemaManagementTest {
         dataStore = DataStoreProvider.getDataStore();
     }
 
+    /*
     @Before
     public void beforeTest() throws DataStoreException {
         createAllSchema(dataStore);
@@ -69,4 +66,5 @@ public class SchemaManagementTest {
         Assert.assertEquals("Listing children Schema", 2, children.size());
 
     }
+     */
 }

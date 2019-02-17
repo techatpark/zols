@@ -5,9 +5,11 @@
  */
 package org.zols.jsonschema;
 
-import java.io.StringReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.json.Json;
+import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 
 /**
@@ -36,14 +38,16 @@ public abstract class JsonSchema {
 
     private final JsonSchema parent;
     private final List<JsonSchema> parents;
+
+    /**
+     * Property Names (Sorted)
+     */
     private final List<String> idPropertyNames;
 
     private final Map<String, Map<String, Object>> properties;
-    
 
     public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
-        
-        
+
         this(schemaSupplier.apply(schemaId), schemaSupplier);
     }
 
@@ -128,6 +132,51 @@ public abstract class JsonSchema {
      */
     public List<String> getIdPropertyNames() {
         return idPropertyNames;
+    }
+
+    public AbstractMap.SimpleEntry<String, Object>[] getIdKeys(final Map<String, Object> jsonData) {
+        AbstractMap.SimpleEntry<String, Object>[] idKeys = null;
+        if (idPropertyNames != null) {
+            int idsCount = idPropertyNames.size();
+            idKeys = new SimpleEntry[idsCount];
+            String propName;
+            for (int i = 0; i < idsCount; i++) {
+                propName = idPropertyNames.get(i);
+                idKeys[i] = new SimpleEntry(propName, jsonData.get(propName));
+            }
+            return idKeys;
+        }
+        return idKeys;
+    }
+
+    public String getIdValuesAsString(final Map<String, Object> jsonData) {
+        Object[] idValues = getIdValues(jsonData);
+        return getIdValuesAsString(idValues);
+    }
+
+    public String getIdValuesAsString(AbstractMap.SimpleEntry<String, Object>... idValuesasMap) {
+        Object[] idValues = getIdValues(idValuesasMap);
+        return getIdValuesAsString(idValues);
+    }
+
+    public String getIdValuesAsString(final Object[] idValues) {
+        return idValues == null ? null : Arrays.asList(idValues).stream().map(n -> n.toString())
+                .collect(Collectors.joining("-"));
+    }
+
+    /**
+     * Get Id Values using ipValue pairs
+     *
+     * @param jsonData
+     * @return
+     */
+    public Object[] getIdValues(AbstractMap.SimpleEntry<String, Object>... idValuesAsMap) {
+        Map<String, Object> jsonData = new HashMap<>();
+
+        for (SimpleEntry<String, Object> simpleEntry : idValuesAsMap) {
+            jsonData.put(simpleEntry.getKey(), simpleEntry.getValue());
+        }
+        return getIdValues(jsonData);
     }
 
     /**
@@ -265,7 +314,7 @@ public abstract class JsonSchema {
                         // if localized ignore
                         if (!key.contains(LOCALE_SEPARATOR)) {
                             delocalizeJsonData.put(key, value);
-                        } else if(key.contains(LOCALE_SEPARATOR+ locale.getLanguage())){
+                        } else if (key.contains(LOCALE_SEPARATOR + locale.getLanguage())) {
                             delocalizeJsonData.put(key.substring(0, key.lastIndexOf(LOCALE_SEPARATOR)), value);
                         }
 

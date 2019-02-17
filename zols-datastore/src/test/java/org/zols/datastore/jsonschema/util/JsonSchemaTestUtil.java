@@ -36,8 +36,7 @@ public class JsonSchemaTestUtil {
     public static String getJsonSchemaAsText(String schamaName) {
         String schemaContent = null;
         try {
-
-            schemaContent = getFile("../json-schema/src/test/resources/schema/" + schamaName + ".json");
+            schemaContent = getFile("json-schema/src/test/resources/schema/" + schamaName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -47,7 +46,8 @@ public class JsonSchemaTestUtil {
     public static String getJsonDataAsText(String dataName) {
         String schemaContent = null;
         try {
-            schemaContent = getFile("../json-schema/src/test/resources/jsondata/" + dataName + ".json");
+
+            schemaContent = getFile("json-schema/src/test/resources/jsondata/" + dataName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -62,9 +62,13 @@ public class JsonSchemaTestUtil {
 
         StringBuilder result = new StringBuilder();
 
+        File rootFolder = new File(System.getProperty("user.dir"));
+            
+            while(!rootFolder.getName().equals("zols")) {
+                rootFolder = rootFolder.getParentFile();
+            }
         
-        
-        File file = new File(fileName);
+        File file = new File(rootFolder.getAbsolutePath() + File.separator + fileName);
         InputStream fileStream = new FileInputStream(file);
 
         try (Scanner scanner = new Scanner(fileStream)) {

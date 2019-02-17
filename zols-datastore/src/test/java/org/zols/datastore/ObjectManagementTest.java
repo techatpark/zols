@@ -6,12 +6,6 @@
 package org.zols.datastore;
 
 import java.util.Locale;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
 import org.zols.datastore.model.Employee;
 import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
@@ -26,6 +20,7 @@ public class ObjectManagementTest {
         employeeManager = dataStore.getObjectManager(Employee.class);
     }
 
+    /*
     @Before
     public void beforeTest() throws DataStoreException {
         Employee employee = new Employee();
@@ -87,4 +82,5 @@ public class ObjectManagementTest {
     public void testListObject() throws DataStoreException {
         assertEquals("Listing Simple Object", 2, employeeManager.list().size());
     }
+     */
 }
