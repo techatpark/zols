@@ -16,12 +16,12 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
-import org.zols.datastore.util.JsonUtil;
-import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.getJsonSchema;
+import org.zols.jsonschema.util.JsonUtil;
+import static org.zols.jsonschema.util.JsonUtil.asMap;
 
 /**
  *

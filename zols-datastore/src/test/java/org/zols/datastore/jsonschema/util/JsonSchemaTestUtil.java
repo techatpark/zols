@@ -14,10 +14,10 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.zols.datastore.DataStore;
-import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import org.zols.jsonschema.everit.EveritJsonSchema;
+import static org.zols.jsonschema.util.JsonUtil.asMap;
 
 /**
  *
