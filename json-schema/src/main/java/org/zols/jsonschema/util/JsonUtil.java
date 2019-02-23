@@ -23,12 +23,16 @@ import java.util.logging.Logger;
 public class JsonUtil {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
-    
+
+    public static Map<String, Object> cloneMap(Map<String, Object> map) {
+        return asMap(asString(map));
+    }
+
     public static Map<String, Object> asMap(InputStream inputStream) {
         try {
             return MAPPER.readValue(inputStream,
                     new TypeReference<HashMap<String, Object>>() {
-                    });
+            });
         } catch (IOException ex) {
             Logger.getLogger(JsonUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -39,7 +43,7 @@ public class JsonUtil {
         try {
             return MAPPER.readValue(jsonData,
                     new TypeReference<HashMap<String, Object>>() {
-                    });
+            });
         } catch (IOException ex) {
             Logger.getLogger(JsonUtil.class.getName()).log(Level.SEVERE, null, ex);
         }

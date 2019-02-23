@@ -5,6 +5,15 @@
  */
 package org.zols.jsonschema;
 
+import graphql.ExecutionResult;
+import graphql.GraphQL;
+import graphql.schema.GraphQLSchema;
+import graphql.schema.StaticDataFetcher;
+import graphql.schema.idl.RuntimeWiring;
+import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
+import graphql.schema.idl.SchemaGenerator;
+import graphql.schema.idl.SchemaParser;
+import graphql.schema.idl.TypeDefinitionRegistry;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -107,17 +116,17 @@ public class JsonSchemaTest {
     public void testLocalizeDataKeepDefault() {
         JsonSchema jsonSchemaComputer = new EveritJsonSchema("computer", TestUtil::getTestSchema);
         Map<String, Object> jsonData = getTestData("computer");
-        Map<String, Object> localizedJsonData = jsonSchemaComputer.localizeData(jsonData, Locale.ITALY,true);
+        Map<String, Object> localizedJsonData = jsonSchemaComputer.localizeData(jsonData, Locale.ITALY, true);
         Map<String, Object> n;
         assertFalse("Purity of localizeData", jsonData == localizedJsonData);
 
-        assertEquals("Retaining Localized field",  "HP Laptop", localizedJsonData.get("title"));
+        assertEquals("Retaining Localized field", "HP Laptop", localizedJsonData.get("title"));
         assertEquals("Replacing Localized field", "HP Laptop", localizedJsonData.get("title" + LOCALE_SEPARATOR + "it"));
 
-        assertEquals("Retaining Nested Localized field",  "Muthu",((Map) localizedJsonData.get("prefererredSeller")).get("name"));
+        assertEquals("Retaining Nested Localized field", "Muthu", ((Map) localizedJsonData.get("prefererredSeller")).get("name"));
         assertEquals("Replacing Nested Localized field", "Muthu", ((Map) localizedJsonData.get("prefererredSeller")).get("name" + LOCALE_SEPARATOR + "it"));
 
-        assertEquals("Retaining Nested Array Localized field","HP Showroom",  ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"));
+        assertEquals("Retaining Nested Array Localized field", "HP Showroom", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name"));
         assertEquals("Replacing Nested Array Localized field", "HP Showroom", ((Map) ((List) localizedJsonData.get("sellers")).get(0)).get("name" + LOCALE_SEPARATOR + "it"));
 
     }
@@ -159,6 +168,33 @@ public class JsonSchemaTest {
         Map<String, Object> jsonData = getTestData("computer");
         Set<ConstraintViolation> cv = jsonSchemaComputer.validate(jsonData);
         //assertEquals("Checking id property value", 1, cv.size());
+    }
+
+    @Test
+    public void testGetGraphQLTypeDefinitionRegistry() {
+        JsonSchema jsonScherma = new EveritJsonSchema("product", TestUtil::getTestSchema);
+
+        System.out.println(jsonScherma.getGraphQLSchema());
+        String schema = "type Query{ hello: String} \n" + jsonScherma.getGraphQLSchema();
+
+        SchemaParser schemaParser = new SchemaParser();
+        TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(schema);
+
+        RuntimeWiring runtimeWiring = newRuntimeWiring()
+                .type("Query", builder -> builder.dataFetcher("hello", (environment) -> {
+                   
+            return 2; //To change body of generated lambdas, choose Tools | Templates.
+        }))
+                .build();
+
+        SchemaGenerator schemaGenerator = new SchemaGenerator();
+        GraphQLSchema graphQLSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
+
+        GraphQL build = GraphQL.newGraphQL(graphQLSchema).build();
+        ExecutionResult executionResult = build.execute("{hello}");
+
+        System.out.println(executionResult.getData().toString());
+        //assertEquals("Getting parents of computer", 2, jsonScherma.getParents().size());
     }
 
 }

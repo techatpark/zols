@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
+import static org.zols.jsonschema.util.JsonUtil.cloneMap;
 
 /**
  * This Class represents the JSON Schema (Ref: http://json-schema.org/) and
@@ -214,9 +215,81 @@ public abstract class JsonSchema {
         return localizedKeys;
     }
 
+    public String getGraphQLSchema() {
+        Map<String, Object> cSchema = getCompositeSchema();
+
+        StringBuilder stringBuilder = new StringBuilder(getGraphQLType(getId(), cSchema));
+
+        Map<String, Map<String, Object>> definitions = (Map<String, Map<String, Object>>) cSchema.get("definitions");
+
+        definitions.forEach((name, definition) -> {
+            stringBuilder.append("\n").append(getGraphQLType(name, definition));
+        });
+
+        return stringBuilder.toString();
+    }
+
+    private String getGraphQLType(String id, Map<String, Object> schama) {
+        StringBuilder stringBuilder = new StringBuilder("type ");
+        stringBuilder.append(id).append(" {").append("\n");
+        Map<String, Map<String, Object>> sproperties = (Map<String, Map<String, Object>>) schama.get("properties");
+        if (sproperties != null) {
+            sproperties.forEach((name, property) -> {
+                stringBuilder.append(name)
+                        .append(": ")
+                        .append(getGraphQLFieldType(property))
+                        .append("\n");
+            });
+        }
+
+        return stringBuilder.append("}").toString();
+    }
+
+    private String getGraphQLFieldType(Map<String, Object> property) {
+        String jsonSchemaType = (String) property.get("type");
+        String graphQLType = (String) property.get("$ref");
+        if (jsonSchemaType != null) {
+            if (jsonSchemaType.equals("array")) {
+                Map<String, Object> items = (Map<String, Object>) property.get("items");
+
+                if (items != null) {
+                    jsonSchemaType = (String) items.get("type");
+                    if (jsonSchemaType == null) {
+                        graphQLType = (String) items.get("$ref");
+                    } else {
+                        graphQLType = getGraphQLFieldType(jsonSchemaType);
+                    }
+                }
+
+                graphQLType = "[" + graphQLType + "]";
+
+            } else {
+                graphQLType = getGraphQLFieldType(jsonSchemaType);
+            }
+        }
+
+        return graphQLType.replaceFirst("#/definitions/", "");
+    }
+
+    private String getGraphQLFieldType(String jsonSchemaType) {
+
+        switch (jsonSchemaType) {
+            case "string":
+                return "String";
+            case "integer":
+                return "Int";
+            case "number":
+                return "Float";
+            case "boolean":
+                return "Boolean";
+        }
+        // Custom Object.
+        return null;
+    }
+
     public Map<String, Object> getCompositeSchema() {
         // This is going to contain one more item (definitions).
-        Map<String, Object> compositeSchema = new HashMap<>(schemaMap);
+        Map<String, Object> compositeSchema = cloneMap(schemaMap);
 
         Map<String, Map<String, Object>> definitions = getDefinitions(compositeSchema);
         if (!definitions.isEmpty()) {
