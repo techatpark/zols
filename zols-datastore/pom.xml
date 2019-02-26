@@ -57,16 +57,12 @@
             <artifactId>slf4j-api</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>com.graphql-java</groupId>
-            <artifactId>graphql-java</artifactId>
-            <version>11.0</version>
-        </dependency>
+
         
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast</artifactId>
-            <version>3.11.1</version>
+            <version>3.11.2</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/ognl/ognl -->
@@ -76,6 +72,11 @@
             <version>3.2.1</version>
         </dependency>
         
+        <dependency>
+            <groupId>com.github.rutledgepaulv</groupId>
+            <artifactId>q-builders</artifactId>
+            <version>1.6</version>
+        </dependency>
         
         <dependency>
             <groupId>org.reflections</groupId>

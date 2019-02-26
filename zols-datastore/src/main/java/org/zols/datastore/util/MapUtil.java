@@ -17,6 +17,25 @@ import java.util.Map;
  */
 public class MapUtil {
 
+    public static Object getFieldValue(Map<String, Object> o, String s) {
+        if (s == null || o == null) {
+            return null;
+        }
+        Object value = o.get(s);
+        if (value == null && s.contains(".")) {
+            String field = s.substring(0,s.indexOf("."));
+            Object firstValue = o.get(field);
+            if (firstValue == null) {
+                return null;
+            }
+            else if(firstValue instanceof Map) {
+                return getFieldValue((Map<String, Object>) firstValue,s.substring(s.indexOf(".")+1,s.length()));
+            }
+
+        }
+        return value;
+    }
+
     public static void deepRemove(Map<String, Object> sourceMap, String... elements) {
         if (elements != null && sourceMap != null) {
             List<String> elemenstList = Arrays.asList(elements);

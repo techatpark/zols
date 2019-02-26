@@ -8,6 +8,7 @@ package org.zols.datastore.elasticsearch;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,7 +32,6 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -59,9 +59,9 @@ import static org.zols.datastore.query.Filter.Operator.NOT_EQUALS;
 import static org.zols.datastore.query.Filter.Operator.NOT_EXISTS_IN;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
-import static org.zols.datastore.util.JsonUtil.asMap;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
+import static org.zols.jsonschema.util.JsonUtil.asMap;
 
 /**
  *
@@ -119,7 +119,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public Map<String, Object> read(JsonSchema jsonSchema, String idValue) throws DataStoreException {
+    public Map<String, Object> read(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
 
         LOGGER.debug("Getting Data for {} with id {}", typeName, idValue);
@@ -137,7 +137,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public boolean update(JsonSchema jsonSchema, String idValue,
+    public boolean update(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String,Object>... idValues,
             Map<String, Object> validatedDataObject) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
 
@@ -159,7 +159,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public boolean updatePartially(JsonSchema jsonSchema, String idValue,
+    public boolean updatePartially(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String,Object>... idValues,
             Map<String, Object> validatedData)
             throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
@@ -183,7 +183,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
     @Override
     public boolean delete(JsonSchema jsonSchema,
-            String idValue) throws DataStoreException {
+            AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
 
         LOGGER.debug("Deleting Data for {} with id {}", typeName, idValue);
