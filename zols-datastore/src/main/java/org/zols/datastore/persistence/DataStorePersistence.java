@@ -34,7 +34,7 @@ public interface DataStorePersistence {
     /**
      *
      * @param jsonSchema schema of dynamic data
-     * @param idValue dynamic object name
+     * @param idValues dynamic object name
      * @return dynamic data as map
      * @throws org.zols.datatore.exception.DataStoreException
      */
@@ -45,7 +45,7 @@ public interface DataStorePersistence {
     /**
      *
      * @param jsonSchema schema of dynamic data
-     * @param idValue dynamic object name
+     * @param idValues dynamic object name
      * @return status of the delete operation
      * @throws org.zols.datatore.exception.DataStoreException
      */

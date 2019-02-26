@@ -55,13 +55,17 @@ public class MapQueryTest {
         person.put("city", city);
         people.add(person);
 
-        Condition<MapQuery> condition = stringFiled("city.name").eq("Madurai");
+        Condition<MapQuery> condition = new MapQuery().string("city.name").eq("Madurai");
         Predicate<Map<String, Object>> predicate = condition.query(new PredicateVisitor<>());
         assertEquals(2L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive Query");
 
-        condition = stringFiled("city.name").eq("Madurai").and().string("name").eq("Sathish");
+        condition = new MapQuery().string("city.name").eq("Madurai").and().string("name").eq("Sathish");
         predicate = condition.query(new PredicateVisitor<>());
         assertEquals(1L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive Query");
+        
+        condition = new MapQuery().string("city.name").in("Madurai","Sivakaci");
+        predicate = condition.query(new PredicateVisitor<>());
+        assertEquals(3L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive In Query");
 
     }
 

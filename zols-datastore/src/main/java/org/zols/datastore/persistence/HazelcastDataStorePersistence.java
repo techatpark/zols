@@ -7,16 +7,9 @@ package org.zols.datastore.persistence;
 
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
-import com.hazelcast.query.Predicate;
 import java.util.AbstractMap;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import ognl.DefaultMemberAccess;
-import ognl.Ognl;
-import ognl.OgnlException;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
@@ -43,8 +36,6 @@ public class HazelcastDataStorePersistence implements DataStorePersistence {
         IMap map = getIMap(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
 
-        MapPredicate mapPredicate = new MapPredicate("title == \"HP Laptopy\"");
-        Collection<Map<String, Object>> maps = map.values(mapPredicate);
         return (Map<String, Object>) map.get(ids);
     }
 
@@ -93,35 +84,6 @@ public class HazelcastDataStorePersistence implements DataStorePersistence {
 
     private IMap<String, Map<String, Object>> getIMap(JsonSchema jsonSchema) {
         return hazelcastInstance.getMap(jsonSchema.getRoot().getId());
-    }
-
-    class MapPredicate implements Predicate<String, Map<String, Object>> {
-
-        private final Object expression;
-
-        public MapPredicate(String expresion) {
-            Object exp = null;
-            try {
-                exp = Ognl.parseExpression(expresion);
-            } catch (OgnlException ex) {
-                new RuntimeException("Invalid Query", ex);
-            }
-            expression = exp;
-
-        }
-
-        @Override
-        public boolean apply(Map.Entry<String, Map<String, Object>> mapEntry) {
-            Map<String, Object> dataMap = (Map<String, Object>) mapEntry.getValue();
-            try {
-                Map context = Ognl.createDefaultContext(dataMap);
-                return (Boolean) Ognl.getValue(expression, context, dataMap);
-            } catch (OgnlException ex) {
-                Logger.getLogger(HazelcastDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            return false;
-        }
-
     }
 
 }

@@ -14,8 +14,4 @@ import com.github.rutledgepaulv.qbuilders.properties.concrete.StringProperty;
  */
 public class MapQuery extends QBuilder<MapQuery> {
 
-    public static StringProperty<MapQuery> stringFiled(String name) {
-        return new MapQuery().string(name);
-    }
-
 }
