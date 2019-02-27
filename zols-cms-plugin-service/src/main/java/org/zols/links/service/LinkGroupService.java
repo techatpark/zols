@@ -5,6 +5,7 @@
  */
 package org.zols.links.service;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,7 @@ public class LinkGroupService {
      */
     public Optional<LinkGroup> read(String groupName) throws DataStoreException {
         LOGGER.info("Reading Group {}", groupName);
-        return dataStore.getObjectManager(LinkGroup.class).read(groupName);
+        return dataStore.getObjectManager(LinkGroup.class).read(new SimpleEntry("name", groupName));
     }
 
     /**
@@ -77,7 +78,7 @@ public class LinkGroupService {
         LinkGroup updated = null;
         if (group != null) {
             LOGGER.info("Updating Group {}", group);
-            updated = dataStore.getObjectManager(LinkGroup.class).update(group, group.getName());
+            updated = dataStore.getObjectManager(LinkGroup.class).update(group, new SimpleEntry("name", group.getName()));
         }
         return updated;
     }
@@ -92,7 +93,7 @@ public class LinkGroupService {
     public Boolean delete(String groupName) throws DataStoreException {
         LOGGER.info("Deleting Group {}", groupName);
         deleteLinksUnder(groupName);
-        return dataStore.getObjectManager(LinkGroup.class).delete(groupName);
+        return dataStore.getObjectManager(LinkGroup.class).delete(new SimpleEntry("name", groupName));
     }
     
     /**

@@ -6,6 +6,7 @@
 package org.zols.datastore.persistence;
 
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
 import org.zols.datastore.query.Page;
@@ -40,7 +41,7 @@ public interface DataStorePersistence {
      */
     abstract Map<String, Object> read(
             JsonSchema jsonSchema,
-            AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -50,7 +51,7 @@ public interface DataStorePersistence {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract boolean delete(JsonSchema jsonSchema,
-            AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -63,7 +64,7 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     abstract boolean update(JsonSchema jsonSchema,
-            Map<String, Object> jsonData, AbstractMap.SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            Map<String, Object> jsonData, SimpleEntry<String,Object>... idValues) throws DataStoreException;
 
     /**
      *

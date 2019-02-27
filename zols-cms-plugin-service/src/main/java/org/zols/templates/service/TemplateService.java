@@ -5,6 +5,7 @@
  */
 package org.zols.templates.service;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Optional;
 import org.zols.datastore.DataStore;
@@ -55,7 +56,7 @@ public class TemplateService {
      */
     public Optional<Template> read(String templateName) throws DataStoreException {
         LOGGER.info("Reading Template  {}", templateName);
-        return dataStore.getObjectManager(Template.class).read(templateName);
+        return dataStore.getObjectManager(Template.class).read(new SimpleEntry("name", templateName));
     }
 
     /**
@@ -69,7 +70,7 @@ public class TemplateService {
         Template updated = null;
         if (template != null) {
             LOGGER.info("Updating Template  {}", template);
-            updated = dataStore.getObjectManager(Template.class).update(template,template.getName());
+            updated = dataStore.getObjectManager(Template.class).update(template,new SimpleEntry("name", template.getName()));
         }
         return updated;
     }
@@ -83,7 +84,7 @@ public class TemplateService {
     
     public Boolean delete(String templateName) throws DataStoreException {
         LOGGER.info("Deleting Template  {}", templateName);
-        return dataStore.getObjectManager(Template.class).delete( templateName);
+        return dataStore.getObjectManager(Template.class).delete( new SimpleEntry("name", templateName));
     }
 
     /**

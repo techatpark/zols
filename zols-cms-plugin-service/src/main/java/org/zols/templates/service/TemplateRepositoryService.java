@@ -7,6 +7,7 @@ package org.zols.templates.service;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,7 +65,7 @@ public class TemplateRepositoryService {
      */
     public Optional<TemplateRepository> read(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Reading Template Repository {}", templateRepositoryName);
-        return dataStore.getObjectManager(TemplateRepository.class).read( templateRepositoryName);
+        return dataStore.getObjectManager(TemplateRepository.class).read( new SimpleEntry("name", templateRepositoryName));
     }
 
     /**
@@ -78,7 +79,7 @@ public class TemplateRepositoryService {
         TemplateRepository updated = null;
         if (templateRepository != null) {
             LOGGER.info("Updating Template Repository {}", templateRepository);
-            updated = dataStore.getObjectManager(TemplateRepository.class).update(templateRepository, templateRepository.getName());
+            updated = dataStore.getObjectManager(TemplateRepository.class).update(templateRepository, new SimpleEntry("name", templateRepository.getName()));
         }
         return updated;
     }
@@ -92,7 +93,7 @@ public class TemplateRepositoryService {
     
     public Boolean delete(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template Repository {}", templateRepositoryName);
-        dataStore.getObjectManager(TemplateRepository.class).delete( templateRepositoryName);
+        dataStore.getObjectManager(TemplateRepository.class).delete( new SimpleEntry("name", templateRepositoryName));
         return deleteTemplatesUnder(templateRepositoryName);
     }
 

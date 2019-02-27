@@ -8,7 +8,7 @@ package org.zols.datastore.elasticsearch;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -122,7 +122,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     @Override
-    public Map<String, Object> read(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+    public Map<String, Object> read(JsonSchema jsonSchema, SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         
@@ -142,7 +142,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     
     @Override
     public boolean update(JsonSchema jsonSchema,
-            Map<String, Object> jsonData, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+            Map<String, Object> jsonData, SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         LOGGER.debug("Updating Data for {} with id {}", typeName, ids);
@@ -167,7 +167,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     
     @Override
     public boolean updatePartially(JsonSchema jsonSchema,
-            Map<String, Object> validatedData, AbstractMap.SimpleEntry<String, Object>... idValues)
+            Map<String, Object> validatedData, SimpleEntry<String, Object>... idValues)
             throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
@@ -193,7 +193,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     
     @Override
     public boolean delete(JsonSchema jsonSchema,
-            AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+            SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         LOGGER.debug("Deleting Data for {} with id {}", typeName, ids);

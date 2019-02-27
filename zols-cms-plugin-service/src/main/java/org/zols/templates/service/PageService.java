@@ -5,6 +5,7 @@
  */
 package org.zols.templates.service;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -89,7 +90,7 @@ public class PageService {
             pageRequest = new PageRequest();
             Optional<Template> template = templateService.read(page.get().getTemplateName());
             pageRequest.setTemplate(template.get());
-            pageRequest.setData(dataService.read(template.get().getDataType(), page.get().getDataName(),loc).get());
+            //pageRequest.setData(dataService.read(template.get().getDataType(), loc).get());
             return pageRequest;
         }
         return null;
@@ -103,7 +104,7 @@ public class PageService {
      */
     public Optional<Page> read(String pageName) throws DataStoreException {
         LOGGER.info("Reading Page {}", pageName);
-        return dataStore.getObjectManager(Page.class).read(pageName);
+        return dataStore.getObjectManager(Page.class).read(new SimpleEntry("name", pageName));
     }
 
     /**
@@ -117,7 +118,7 @@ public class PageService {
         Page updated = null;
         if (page != null) {
             LOGGER.info("Updating Page {}", page);
-            updated = dataStore.getObjectManager(Page.class).update(page,page.getName());
+            updated = dataStore.getObjectManager(Page.class).update(page,new SimpleEntry("name", page.getName()));
         }
         return updated;
     }
@@ -131,7 +132,7 @@ public class PageService {
     
     public Boolean delete(String pageName) throws DataStoreException {
         LOGGER.info("Deleting Page {}", pageName);
-        return dataStore.getObjectManager(Page.class).delete(pageName);
+        return dataStore.getObjectManager(Page.class).delete(new SimpleEntry("name", pageName));
     }
 
     /**

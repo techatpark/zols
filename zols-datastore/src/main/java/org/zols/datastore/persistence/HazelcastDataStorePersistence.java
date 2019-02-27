@@ -33,7 +33,7 @@ public class HazelcastDataStorePersistence {
 //    }
 //
 //    @Override
-//    public Map<String, Object> read(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+//    public Map<String, Object> read(JsonSchema jsonSchema, SimpleEntry<String, Object>... idValues) throws DataStoreException {
 //        IMap map = getIMap(jsonSchema);
 //        String ids = jsonSchema.getIdValuesAsString(idValues);
 //
@@ -41,7 +41,7 @@ public class HazelcastDataStorePersistence {
 //    }
 //
 //    @Override
-//    public boolean delete(JsonSchema jsonSchema, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+//    public boolean delete(JsonSchema jsonSchema, SimpleEntry<String, Object>... idValues) throws DataStoreException {
 //        IMap map = getIMap(jsonSchema);
 //        String ids = jsonSchema.getIdValuesAsString(idValues);
 //        map.remove(ids);
@@ -54,7 +54,7 @@ public class HazelcastDataStorePersistence {
 //    }
 //
 //    @Override
-//    public boolean update(JsonSchema jsonSchema, Map<String, Object> jsonData, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+//    public boolean update(JsonSchema jsonSchema, Map<String, Object> jsonData, SimpleEntry<String, Object>... idValues) throws DataStoreException {
 //        IMap map = getIMap(jsonSchema);
 //        String ids = jsonSchema.getIdValuesAsString(idValues);
 //        map.put(ids, jsonData);
@@ -62,7 +62,7 @@ public class HazelcastDataStorePersistence {
 //    }
 //
 //    @Override
-//    public boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> jsonPartialData, AbstractMap.SimpleEntry<String, Object>... idValues) throws DataStoreException {
+//    public boolean updatePartially(JsonSchema jsonSchema, Map<String, Object> jsonPartialData, SimpleEntry<String, Object>... idValues) throws DataStoreException {
 //        IMap map = getIMap(jsonSchema);
 //        String ids = jsonSchema.getIdValuesAsString(idValues);
 //        // Get Existing Data

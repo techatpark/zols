@@ -5,6 +5,7 @@
  */
 package org.zols.documents.service;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Optional;
 import org.zols.datastore.DataStore;
@@ -50,7 +51,7 @@ public class DocumentRepositoryService {
      */
     public Optional<DocumentRepository> read(String documentRepositoryName) throws DataStoreException {
         LOGGER.info("Reading Document Repository {}", documentRepositoryName);
-        return dataStore.getObjectManager(DocumentRepository.class).read(documentRepositoryName);
+        return dataStore.getObjectManager(DocumentRepository.class).read(new SimpleEntry("name", documentRepositoryName));
     }
 
     /**
@@ -63,7 +64,7 @@ public class DocumentRepositoryService {
         DocumentRepository updated = null;
         if (documentRepository != null) {
             LOGGER.info("Updating Document Repository {}", documentRepository);
-            updated = dataStore.getObjectManager(DocumentRepository.class).update(documentRepository, documentRepository.getName());
+            updated = dataStore.getObjectManager(DocumentRepository.class).update(documentRepository, new SimpleEntry("name", documentRepository.getName()));
         }
         return updated;
     }
@@ -76,7 +77,7 @@ public class DocumentRepositoryService {
      */
     public Boolean delete(String documentRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Document Repository {}", documentRepositoryName);
-        return dataStore.getObjectManager(DocumentRepository.class).delete(documentRepositoryName);
+        return dataStore.getObjectManager(DocumentRepository.class).delete(new SimpleEntry("name", documentRepositoryName));
     }
 
     /**

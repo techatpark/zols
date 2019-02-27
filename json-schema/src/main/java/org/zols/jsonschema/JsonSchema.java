@@ -135,8 +135,8 @@ public abstract class JsonSchema {
         return idPropertyNames;
     }
 
-    public AbstractMap.SimpleEntry<String, Object>[] getIdKeys(final Map<String, Object> jsonData) {
-        AbstractMap.SimpleEntry<String, Object>[] idKeys = null;
+    public SimpleEntry<String, Object>[] getIdKeys(final Map<String, Object> jsonData) {
+        SimpleEntry<String, Object>[] idKeys = null;
         if (idPropertyNames != null) {
             int idsCount = idPropertyNames.size();
             idKeys = new SimpleEntry[idsCount];

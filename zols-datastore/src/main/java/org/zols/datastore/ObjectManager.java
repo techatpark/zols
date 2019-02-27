@@ -6,6 +6,7 @@
 package org.zols.datastore;
 
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -69,7 +70,7 @@ public final class ObjectManager<T> {
         return createdObject;
     }
 
-    public Optional<T> read(Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+    public Optional<T> read(Locale locale, SimpleEntry... idValues) throws DataStoreException {
 
         Map<String, Object> dataAsMap = dataStore.read(jsonSchema, idValues);
 
@@ -84,11 +85,11 @@ public final class ObjectManager<T> {
         return read(null, idValues);
     }
 
-    public T update(T object, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+    public T update(T object, SimpleEntry... idValues) throws DataStoreException {
         return update(object, null, idValues);
     }
 
-    public T update(T object, Locale locale, AbstractMap.SimpleEntry... idValues) throws DataStoreException {
+    public T update(T object, Locale locale, SimpleEntry... idValues) throws DataStoreException {
         T updatedObject = null;
         if (object != null) {
             Set violations = validator.validate(object);

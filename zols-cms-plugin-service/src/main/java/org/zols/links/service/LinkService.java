@@ -5,6 +5,7 @@
  */
 package org.zols.links.service;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +82,7 @@ public class LinkService {
      */
     public Optional<Link> read(String linkName) throws DataStoreException {
         LOGGER.info("Reading Link {}", linkName);
-        return dataStore.getObjectManager(Link.class).read(linkName);
+        return dataStore.getObjectManager(Link.class).read(new SimpleEntry("name", linkName));
     }
 
     /**
@@ -94,7 +95,7 @@ public class LinkService {
         Link updated = null;
         if (link != null) {
             LOGGER.info("Updating Link {}", link);
-            updated = dataStore.getObjectManager(Link.class).update(link, link.getName());
+            updated = dataStore.getObjectManager(Link.class).update(link, new SimpleEntry("name", link.getName()));
         }
         return updated;
     }
@@ -113,7 +114,7 @@ public class LinkService {
                 delete(child.getName());
             }
         }
-        return dataStore.getObjectManager(Link.class).delete(linkName);
+        return dataStore.getObjectManager(Link.class).delete(new SimpleEntry("name", linkName));
     }
 
     

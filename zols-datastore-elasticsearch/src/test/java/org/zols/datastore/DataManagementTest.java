@@ -5,7 +5,7 @@
  */
 package org.zols.datastore;
 
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -55,7 +55,7 @@ public class DataManagementTest {
 
     @Test
     public void testCreate() throws DataStoreException {
-        assertNotNull(dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")), "Creating Simple Data");
+        assertNotNull(dataStore.read("computer", new SimpleEntry("id", "1")), "Creating Simple Data");
     }
 
     @Test
@@ -64,7 +64,7 @@ public class DataManagementTest {
         computer.put("id", 2);
         computer.put("title", "Taiwan Title");
         dataStore.create("computer", computer, Locale.TAIWAN);
-        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Creating Localized Data");
+        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new SimpleEntry("id", "2")).get().get("title"), "Creating Localized Data");
     }
 
     @Test
@@ -74,9 +74,9 @@ public class DataManagementTest {
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", computer, Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2"));
-        assertEquals("Normal Title", dataStore.read("computer", new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
-        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
+        dataStore.update("computer", computer, Locale.TAIWAN, new SimpleEntry("id", "2"));
+        assertEquals("Normal Title", dataStore.read("computer", new SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
+        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
     }
 
     @Test
@@ -86,7 +86,7 @@ public class DataManagementTest {
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", computer, Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2"));
+        dataStore.update("computer", computer, Locale.TAIWAN, new SimpleEntry("id", "2"));
 
         Page<Map<String, Object>> page = dataStore.list("computer", 0, 10);
 
@@ -97,10 +97,10 @@ public class DataManagementTest {
 
     @Test
     public void testUpdate() throws DataStoreException {
-        Map<String, Object> computer = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
+        Map<String, Object> computer = dataStore.read("computer", new SimpleEntry("id", "1")).get();
         computer.put("title", "Changed");
-        dataStore.update("computer", computer, new AbstractMap.SimpleEntry("id", "1"));
-        computer = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
+        dataStore.update("computer", computer, new SimpleEntry("id", "1"));
+        computer = dataStore.read("computer", new SimpleEntry("id", "1")).get();
         assertEquals("Changed", computer.get("title"), "Updating Simple Data");
     }
 
@@ -108,15 +108,15 @@ public class DataManagementTest {
     public void testPartialUpdate() throws DataStoreException {
         Map<String, Object> computer = new HashMap<>();
         computer.put("title", "Changed");
-        dataStore.updatePartial("computer", computer, new AbstractMap.SimpleEntry("id", "1"));
-        Map<String, Object> map = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
+        dataStore.updatePartial("computer", computer, new SimpleEntry("id", "1"));
+        Map<String, Object> map = dataStore.read("computer", new SimpleEntry("id", "1")).get();
         assertEquals("Changed", map.get("title"), "Partially Updating Simple Data");
     }
 
     @Test
     public void testDelete() throws DataStoreException {
-        dataStore.delete("computer", new AbstractMap.SimpleEntry("id", "1"));
-        assertFalse(dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).isPresent(), "Deleting Simple Data");
+        dataStore.delete("computer", new SimpleEntry("id", "1"));
+        assertFalse(dataStore.read("computer", new SimpleEntry("id", "1")).isPresent(), "Deleting Simple Data");
     }
 
     @Test

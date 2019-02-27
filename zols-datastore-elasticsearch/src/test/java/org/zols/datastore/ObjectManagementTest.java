@@ -5,7 +5,7 @@
  */
 package org.zols.datastore;
 
-import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -46,42 +46,42 @@ public class ObjectManagementTest {
 
     @AfterEach
     public void afterTest() throws DataStoreException {
-        employeeManager.delete(new AbstractMap.SimpleEntry("name", "Sathish"));
+        employeeManager.delete(new SimpleEntry("name", "Sathish"));
     }
 
     @Test
     public void testCreateObject() throws DataStoreException {
-        assertTrue(employeeManager.read(new AbstractMap.SimpleEntry("name", "Sathish")).isPresent(), "Creating Simple Object");
+        assertTrue(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Creating Simple Object");
     }
 
     @Test
     public void testUpdateObject() throws DataStoreException {
-        Employee employee = employeeManager.read(new AbstractMap.SimpleEntry("name", "Sathish")).get();
+        Employee employee = employeeManager.read(new SimpleEntry("name", "Sathish")).get();
         employee.setSalary(2000);
-        employee = employeeManager.update(employee, new AbstractMap.SimpleEntry("name", "Sathish"));
+        employee = employeeManager.update(employee, new SimpleEntry("name", "Sathish"));
         assertEquals(2000, employee.getSalary(), "Updating Simple Object");
     }
 
     /*
     @Test
     public void testUpdateLocalizedObject() throws DataStoreException {
-        Employee employeeLocalized = employeeManager.read(new AbstractMap.SimpleEntry("name", "SathishLocal")).get();
+        Employee employeeLocalized = employeeManager.read(new SimpleEntry("name", "SathishLocal")).get();
         employeeLocalized.setCity("Madurai");
-        assertEquals("Madurai", employeeManager.update(employeeLocalized, new AbstractMap.SimpleEntry("name", "SathishLocal")).getCity(), "Updated Simple Localized Object");
-        assertEquals("Updated Simple Localized Object", "மதுரை", employeeManager.read(Locale.CHINESE, new AbstractMap.SimpleEntry("name", "SathishLocal")).get().getCity());
+        assertEquals("Madurai", employeeManager.update(employeeLocalized, new SimpleEntry("name", "SathishLocal")).getCity(), "Updated Simple Localized Object");
+        assertEquals("Updated Simple Localized Object", "மதுரை", employeeManager.read(Locale.CHINESE, new SimpleEntry("name", "SathishLocal")).get().getCity());
 
     }
      */
     @Test
     public void testDeleteObject() throws DataStoreException {
-        employeeManager.delete(new AbstractMap.SimpleEntry("name", "Sathish"));
-        assertFalse(employeeManager.read(new AbstractMap.SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Object");
+        employeeManager.delete(new SimpleEntry("name", "Sathish"));
+        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Object");
     }
 
     @Test
     public void testDeleteAllObject() throws DataStoreException {
         employeeManager.delete();
-        assertFalse(employeeManager.read(new AbstractMap.SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Objects");
+        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Objects");
     }
 
     @Test
