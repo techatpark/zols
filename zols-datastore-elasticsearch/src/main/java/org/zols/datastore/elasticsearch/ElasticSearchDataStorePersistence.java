@@ -489,7 +489,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     private void addAggregations(JsonSchema jsonSchema, SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
-        searchRequestBuilder.aggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type"));
+        searchRequestBuilder.aggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type.keyword"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
             String filter = (String) entry.getValue().get("filter");
             if (filter != null) {
@@ -505,7 +505,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                         break;
                     case "term":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()+".keyword"));
                         
                         break;
                 }
