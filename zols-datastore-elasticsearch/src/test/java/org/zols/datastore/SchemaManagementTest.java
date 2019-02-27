@@ -7,64 +7,65 @@ package org.zols.datastore;
 
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
-import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
-/**
- *
- * This class will test Schema Management functionalities provided by Data Store
- */
+@RunWith(JUnitPlatform.class)
 public class SchemaManagementTest {
 
     private final DataStore dataStore;
 
     public SchemaManagementTest() {
-        dataStore = DataStoreProvider.getDataStore();
+        dataStore = new DataStore(new ElasticSearchDataStorePersistence());
     }
 
-    /*
-    @Before
+    @BeforeEach
     public void beforeTest() throws DataStoreException {
         createAllSchema(dataStore);
 
     }
 
-    @After
+    @AfterEach
     public void afterTest() throws DataStoreException {
         deleteAllSchema(dataStore);
 
     }
 
-    
     @Test
     public void testCreateSchema() throws DataStoreException {
-        Assert.assertNotNull("Test Create Schema", dataStore.getSchemaManager().get("product"));
+        assertNotNull(dataStore.getSchemaManager().get("product"), "Test Create Schema");
     }
-    
+
     @Test
     public void testUpdateSchema() throws DataStoreException {
-        Map<String,Object> schemaMap = dataStore.getSchemaManager().get("product");
+        Map<String, Object> schemaMap = dataStore.getSchemaManager().get("product");
         schemaMap.put("description", "Updated description");
-        dataStore.getSchemaManager().update("product",schemaMap);
-        Assert.assertEquals("Test Update Schema","Updated description", dataStore.getSchemaManager().get("product").get("description"));
+        dataStore.getSchemaManager().update("product", schemaMap);
+        assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
     }
-     
+
     @Test
     public void testGetChildrenSchema() throws DataStoreException {
 
         List<Map<String, Object>> children = dataStore.getSchemaManager().listChildren("product");
-        Assert.assertEquals("Listing children Schema", 1, children.size());
+        assertEquals(1, children.size(), "Listing children Schema");
 
     }
 
-    
     @Test
     public void testGetExtentins() throws DataStoreException {
         List<Map<String, Object>> children = dataStore.getSchemaManager().listExtenstions("device");
-        Assert.assertEquals("Listing children Schema", 2, children.size());
+        assertEquals(2, children.size(), "Listing children Schema");
 
     }
-     */
+
 }

@@ -5,11 +5,22 @@
  */
 package org.zols.datastore;
 
-import org.zols.datastore.query.Page;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
+import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllData;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
@@ -17,34 +28,34 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
+import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
-import org.zols.datastore.util.DataStoreProvider;
 import org.zols.datatore.exception.DataStoreException;
 
+@RunWith(JUnitPlatform.class)
 public class DataManagementTest {
 
     private final DataStore dataStore;
 
     public DataManagementTest() {
-        dataStore = DataStoreProvider.getDataStore();
+        dataStore = new DataStore(new ElasticSearchDataStorePersistence());
     }
 
-    /*
-    @Before
+    @BeforeEach
     public void beforeTest() throws DataStoreException {
-       createAllSchema(dataStore);
+        createAllSchema(dataStore);
         createAllData(dataStore);
 
     }
 
-    @After
+    @AfterEach
     public void afterTest() throws DataStoreException {
         deleteAllSchema(dataStore);
     }
 
     @Test
     public void testCreate() throws DataStoreException {
-        Assert.assertNotNull("Creating Simple Data", dataStore.read("computer", "1"));
+        assertNotNull(dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")), "Creating Simple Data");
     }
 
     @Test
@@ -53,7 +64,7 @@ public class DataManagementTest {
         computer.put("id", 2);
         computer.put("title", "Taiwan Title");
         dataStore.create("computer", computer, Locale.TAIWAN);
-        Assert.assertEquals("Creating Localized Data", "Taiwan Title", dataStore.read("computer", "2", Locale.TAIWAN).get().get("title"));
+        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Creating Localized Data");
     }
 
     @Test
@@ -63,12 +74,10 @@ public class DataManagementTest {
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", "2",computer,  Locale.TAIWAN);
-        Assert.assertEquals("Reading Localized Data", "Normal Title", dataStore.read("computer", "2").get().get("title"));
-        Assert.assertEquals("Reading Localized Data", "Taiwan Title", dataStore.read("computer", "2", Locale.TAIWAN).get().get("title"));
+        dataStore.update("computer", computer, Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2"));
+        assertEquals("Normal Title", dataStore.read("computer", new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
+        assertEquals("Taiwan Title", dataStore.read("computer", Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2")).get().get("title"), "Reading Localized Data");
     }
-    
-
 
     @Test
     public void testListLocalized() throws DataStoreException {
@@ -77,65 +86,64 @@ public class DataManagementTest {
         computer.put("title", "Normal Title");
         dataStore.create("computer", computer);
         computer.put("title", "Taiwan Title");
-        dataStore.update("computer", "2",computer, Locale.TAIWAN);
+        dataStore.update("computer", computer, Locale.TAIWAN, new AbstractMap.SimpleEntry("id", "2"));
 
         Page<Map<String, Object>> page = dataStore.list("computer", 0, 10);
 
         Page<Map<String, Object>> taiwanPage = dataStore.list("computer", Locale.TAIWAN, 0, 10);
 
-        Assert.assertNotEquals("Listing localized data", page.getContent(), taiwanPage.getContent());
+        assertNotEquals(page.getContent(), taiwanPage.getContent(), "Listing localized data");
     }
 
-    
     @Test
     public void testUpdate() throws DataStoreException {
-        Map<String, Object> computer = dataStore.read("computer", "1").get();
+        Map<String, Object> computer = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
         computer.put("title", "Changed");
-        dataStore.update("computer", "1",computer);
-        computer = dataStore.read("computer", "1").get();
-        Assert.assertEquals("Updating Simple Data", "Changed", computer.get("title"));
+        dataStore.update("computer", computer, new AbstractMap.SimpleEntry("id", "1"));
+        computer = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
+        assertEquals("Changed", computer.get("title"), "Updating Simple Data");
     }
 
     @Test
     public void testPartialUpdate() throws DataStoreException {
         Map<String, Object> computer = new HashMap<>();
         computer.put("title", "Changed");
-        dataStore.updatePartial("computer", computer,"1");
-        Map<String, Object> map = dataStore.read("computer", "1").get();
-        Assert.assertEquals("Partially Updating Simple Data", "Changed", map.get("title"));
+        dataStore.updatePartial("computer", computer, new AbstractMap.SimpleEntry("id", "1"));
+        Map<String, Object> map = dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).get();
+        assertEquals("Changed", map.get("title"), "Partially Updating Simple Data");
     }
 
     @Test
     public void testDelete() throws DataStoreException {
-        dataStore.delete("computer", "1");
-        Assert.assertFalse("Deleting Simple Data", dataStore.read("computer", "1").isPresent());
+        dataStore.delete("computer", new AbstractMap.SimpleEntry("id", "1"));
+        assertFalse(dataStore.read("computer", new AbstractMap.SimpleEntry("id", "1")).isPresent(), "Deleting Simple Data");
     }
 
     @Test
     public void testDeleteAllOfBasicType() throws DataStoreException {
         dataStore.delete("product");
-        Assert.assertNull("Deleting All the data of a type", dataStore.list("product"));
-        Assert.assertNull("Deleting All the data of a type should not affect child type", dataStore.list("mobile"));
+        assertNull(dataStore.list("product"), "Deleting All the data of a type");
+        assertNull(dataStore.list("mobile"), "Deleting All the data of a type should not affect child type");
     }
 
     @Test
     public void testDeleteAllOfChildType() throws DataStoreException {
         dataStore.delete("computer");
-        Assert.assertNotNull("Deleting All the data of only a child type", dataStore.list("mobile"));
+        assertNotNull(dataStore.list("mobile"), "Deleting All the data of only a child type");
         dataStore.delete("device");
-        Assert.assertNull("Deleting All the data of a child type", dataStore.list("mobile"));
+        assertNull(dataStore.list("mobile"), "Deleting All the data of a child type");
     }
 
     @Test
     public void testList() throws DataStoreException {
-        Assert.assertEquals("Listing Simple Data", 2, dataStore.list("product").size());
+        assertEquals(2, dataStore.list("product").size(), "Listing Simple Data");
     }
 
     @Test
     public void testListDataWithQuery() throws DataStoreException {
         Query query = new Query();
         query.addFilter(new Filter("os", EQUALS, "ios"));
-        Assert.assertEquals("Listing Simple Data with valid query", 1, dataStore.list("mobile", query).size());
+        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid query");
     }
 
     @Test
@@ -143,15 +151,15 @@ public class DataManagementTest {
 
         Query query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
-        Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 2, dataStore.list("product", query).size());
+        assertEquals(2, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
 
         query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
-        Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("mobile", query).size());
+        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
 
         query = new Query();
         query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Personal")));
-        Assert.assertEquals("Listing Simple Data with valid Exists In query on Child Type", 1, dataStore.list("product", query).size());
+        assertEquals(1, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
     }
-     */
+
 }

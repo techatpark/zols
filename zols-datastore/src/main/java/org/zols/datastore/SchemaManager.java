@@ -50,21 +50,21 @@ public final class SchemaManager {
 
     public Map<String, Object> get(String schemaId)
             throws DataStoreException {
-        return dataStore.read(jsonSchemaForSchema, new SimpleEntry("id", schemaId));
+        return dataStore.read(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
     }
 
     public boolean update(String schemaId, Map<String, Object> schemaMap)
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            return dataStore.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("id", schemaId));
+            return dataStore.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
     }
 
     public Boolean delete(String schemaId) throws DataStoreException {
-        return dataStore.delete(jsonSchemaForSchema, new SimpleEntry("id", schemaId));
+        return dataStore.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
     }
 
     public Map<String, Object> getCompositeSchema(String schemaId)
