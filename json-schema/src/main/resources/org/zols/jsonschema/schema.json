@@ -1,7 +1,8 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "$id": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://json-schema.org/draft-07/schema#",
     "title": "Core schema meta-schema",
+    "ids": ["$id"],
     "definitions": {
         "schemaArray": {
             "type": "array",
@@ -45,7 +46,6 @@
         }
     },
     "type": ["object", "boolean"],
-    "ids":["$id"],
     "properties": {
         "$id": {
             "type": "string",
@@ -59,13 +59,24 @@
             "type": "string",
             "format": "uri-reference"
         },
+        "$comment": {
+            "type": "string"
+        },
         "title": {
             "type": "string"
         },
         "description": {
             "type": "string"
         },
-        "default": {},
+        "default": true,
+        "readOnly": {
+            "type": "boolean",
+            "default": false
+        },
+        "examples": {
+            "type": "array",
+            "items": true
+        },
         "multipleOf": {
             "type": "number",
             "exclusiveMinimum": 0
@@ -104,7 +115,7 @@
                     "$ref": "#/definitions/schemaArray"
                 }
             ],
-            "default": {}
+            "default": true
         },
         "maxItems": {
             "$ref": "#/definitions/nonNegativeInteger"
@@ -150,6 +161,9 @@
             "additionalProperties": {
                 "$ref": "#"
             },
+            "propertyNames": {
+                "format": "regex"
+            },
             "default": {}
         },
         "dependencies": {
@@ -168,9 +182,10 @@
         "propertyNames": {
             "$ref": "#"
         },
-        "const": {},
+        "const": true,
         "enum": {
             "type": "array",
+            "items": true,
             "minItems": 1,
             "uniqueItems": true
         },
@@ -192,6 +207,21 @@
         "format": {
             "type": "string"
         },
+        "contentMediaType": {
+            "type": "string"
+        },
+        "contentEncoding": {
+            "type": "string"
+        },
+        "if": {
+            "$ref": "#"
+        },
+        "then": {
+            "$ref": "#"
+        },
+        "else": {
+            "$ref": "#"
+        },
         "allOf": {
             "$ref": "#/definitions/schemaArray"
         },
@@ -205,5 +235,5 @@
             "$ref": "#"
         }
     },
-    "default": {}
+    "default": true
 }

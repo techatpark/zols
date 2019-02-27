@@ -1,6 +1,6 @@
 {
     "$id": "person",
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "title": "Person",
     "description": "A Person from Acme's catalog",
     "type": "object",
