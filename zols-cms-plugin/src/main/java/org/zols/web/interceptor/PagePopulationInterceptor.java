@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.zols.links.service.LinkService;
 
-@Component
+
 public class PagePopulationInterceptor extends HandlerInterceptorAdapter  {
 
     @Autowired

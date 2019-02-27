@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.web;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -43,42 +44,44 @@ public class DataControler {
 
     @RequestMapping(method = POST)
     public Map<String, Object> create(@PathVariable(value = "schemaId") String schemaName,
-            @RequestBody Map<String, Object> jsonData,Locale loc) throws DataStoreException {
+            @RequestBody Map<String, Object> jsonData, Locale loc) throws DataStoreException {
         LOGGER.info("Creating new instance of {}", schemaName);
-        return dataService.create(schemaName, jsonData,loc);
+        return dataService.create(schemaName, jsonData, loc);
     }
 
-    @RequestMapping(value = "/{id}", method = GET)
+    @RequestMapping(value = "/{idname}/{id}", method = GET)
     public Map<String, Object> read(@PathVariable(value = "schemaId") String schemaName,
-            @PathVariable(value = "id") String id,Locale loc) throws DataStoreException {
-        LOGGER.info("Getting Data ", id);
-        Optional<Map<String, Object>> optional = dataService.read(schemaName, id,loc);
+            @PathVariable(value = "idname") String idname, @PathVariable(value = "id") String id, Locale loc) throws DataStoreException {
+        LOGGER.info("Getting Data {} value {}", idname, id);
+        Optional<Map<String, Object>> optional = dataService.read(schemaName, loc, new SimpleEntry(idname, id));
         return optional.orElse(null);
     }
 
-    @RequestMapping(value = "/{id}", method = PUT)
+    @RequestMapping(value = "/{idname}/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void update(@PathVariable(value = "schemaId") String schemaName,
+            @PathVariable(value = "idname") String idname,
             @PathVariable(value = "id") String id,
-            @RequestBody Map<String, Object> jsonData,Locale loc) throws DataStoreException {
-        dataService.update(schemaName, id,jsonData,loc);
+            @RequestBody Map<String, Object> jsonData, Locale loc) throws DataStoreException {
+        dataService.update(schemaName, jsonData, loc, new SimpleEntry(idname, id));
 
     }
 
-    @RequestMapping(value = "/{id}", method = DELETE)
+    @RequestMapping(value = "/{idname}/{id}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "schemaId") String schemaName,
+            @PathVariable(value = "idname") String idname,
             @PathVariable(value = "id") String id) throws DataStoreException {
-        LOGGER.info("Deleting jsonSchemas with id {}", id);
-        dataService.delete(schemaName, id);
+        LOGGER.info("Deleting jsonSchemas with id {} value {}", idname, id);
+        dataService.delete(schemaName, new SimpleEntry(idname, id));
     }
 
     @RequestMapping(method = GET)
     public Page<Map<String, Object>> list(@PathVariable(value = "schemaId") String schemaName,
-            @RequestParam(value="q",required = false) String queryString,
-            Pageable pageable,Locale loc) throws DataStoreException {
+            @RequestParam(value = "q", required = false) String queryString,
+            Pageable pageable, Locale loc) throws DataStoreException {
         LOGGER.info("Getting Data for {}", schemaName);
-        return getPage(dataService.list(schemaName, queryString ,pageable.getPageNumber(),pageable.getPageSize(),loc),pageable);
+        return getPage(dataService.list(schemaName, queryString, pageable.getPageNumber(), pageable.getPageSize(), loc), pageable);
     }
 
 }
