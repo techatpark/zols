@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "player",
+  "title": "Player",
+  "description": "A player of football",
+  "type": "object",
+  "properties": {
+    "number": {
+      "description": "The unique identifier for a product",
+      "type": "integer"
+    },
+    "name": {
+      "description": "The unique identifier for a product",
+      "type": "string"
+    },
+    "position": {
+      "type": "string",
+      "enum": ["G", "F", "D", "M"]
+    }
+  },
+  "required": ["number"],
+  "ids": ["number"]
+}
