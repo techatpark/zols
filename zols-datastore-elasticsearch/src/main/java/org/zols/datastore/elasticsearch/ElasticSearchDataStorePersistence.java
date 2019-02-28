@@ -5,12 +5,12 @@
  */
 package org.zols.datastore.elasticsearch;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +39,7 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -49,18 +47,11 @@ import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import org.zols.datastore.elasticsearch.qbuilders.visitors.ElasticsearchVisitor;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
-import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
-import static org.zols.datastore.query.Filter.Operator.FULL_TEXT_SEARCH;
-import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
-import static org.zols.datastore.query.Filter.Operator.IS_NOTNULL;
-import static org.zols.datastore.query.Filter.Operator.NOT_EQUALS;
-import static org.zols.datastore.query.Filter.Operator.NOT_EXISTS_IN;
 import org.zols.datastore.query.Page;
-import org.zols.datastore.query.Query;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
@@ -220,7 +211,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     @Override
-    public boolean delete(JsonSchema jsonSchema, Query query) throws DataStoreException {
+    public boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
         
         String typeName = getTypeName(jsonSchema);
         QueryBuilder builder = getQueryBuilder(query);
@@ -244,7 +235,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     @Override
-    public List<Map<String, Object>> list(JsonSchema jsonSchema, Query query) throws DataStoreException {
+    public List<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         
         LOGGER.debug("Listing Data for {} ", typeName);
@@ -281,7 +272,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     @Override
-    public Page<Map<String, Object>> list(JsonSchema jsonSchema, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public Page<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         
         LOGGER.debug("Listing Data for {} page {} size {}", typeName, pageNumber, pageSize);
@@ -318,63 +309,9 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         return null;
     }
     
-    public static QueryBuilder getQueryBuilder(Query query) {
-        BoolQueryBuilder queryBuilder = null;
-        if (query != null) {
-            queryBuilder = QueryBuilders.boolQuery();
-            List<Filter> queries = query.getFilters();
-            if (queries != null) {
-                int size = queries.size();
-                Filter filter;
-                Collection collection;
-                BoolQueryBuilder boolQuery;
-                for (int index = 0; index < size; index++) {
-                    filter = queries.get(index);
-                    switch (filter.getOperator()) {
-                        case FULL_TEXT_SEARCH:
-                            queryBuilder.must(QueryBuilders.queryStringQuery(filter.getValue().toString()));
-                            break;
-                        case EQUALS:
-                            queryBuilder.must(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
-                            break;
-                        case NOT_EQUALS:
-                            queryBuilder.mustNot(QueryBuilders.matchQuery(filter.getName(), filter.getValue()));
-                            break;
-                        case IS_NULL:
-                            queryBuilder.mustNot(QueryBuilders.existsQuery(filter.getName()));
-                            break;
-                        case IS_NOTNULL:
-                            queryBuilder.must(QueryBuilders.existsQuery(filter.getName()));
-                            break;
-                        case EXISTS_IN:
-                            boolQuery = QueryBuilders.boolQuery();
-                            collection = (Collection) filter.getValue();
-                            for (Object object : collection) {
-                                boolQuery.should(QueryBuilders.matchQuery(filter.getName(), object));
-                            }
-                            queryBuilder.must(boolQuery);
-                            break;
-                        case NOT_EXISTS_IN:
-                            boolQuery = QueryBuilders.boolQuery();
-                            collection = (Collection) filter.getValue();
-                            for (Object object : collection) {
-                                boolQuery.should(QueryBuilders.matchQuery(filter.getName(), object));
-                            }
-                            queryBuilder.mustNot(boolQuery);
-                            break;
-                        case IN_BETWEEN:
-                            Object[] rangeValues = (Object[]) filter.getValue();
-                            queryBuilder.must(QueryBuilders.rangeQuery(filter.getName())
-                                    .from(rangeValues[0])
-                                    .to(rangeValues[1]));
-                            break;
-                    }
-                }
-            }
-            
-        }
-        
-        return queryBuilder;
+    public static QueryBuilder getQueryBuilder(Condition<MapQuery> query) {
+        QueryBuilder builder = query.query(new ElasticsearchVisitor(),new ElasticsearchVisitor.Context()); 
+        return builder;
     }
     
     private String getEncodedId(Object ids) {
@@ -391,12 +328,12 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     @Override
-    public AggregatedResults browse(JsonSchema schema, String keyword, Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public AggregatedResults browse(JsonSchema schema, String keyword, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
         if (schema != null) {
-            if (keyword != null) {
-                query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, keyword + "*"));
-            }
+//            if (keyword != null) {
+//                query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, keyword + "*"));
+//            }
             Map<String, Object> searchResponse = searchResponse(schema, query, pageNumber, pageSize);
             Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber, pageSize);
             if (resultsOf != null) {
@@ -516,7 +453,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     public Map<String, Object> searchResponse(JsonSchema jsonSchema,
-            Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+            Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         
         String typeName = getTypeName(jsonSchema);
         
