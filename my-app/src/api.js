@@ -5,12 +5,11 @@ const { BASE_URL } = config();
 const api = axios.create({
   baseURL: BASE_URL
 });
+const APIModel = {
+  get: route => api.get(route),
+  post: (route, data) => api.post(route, data),
+  put: (route, data) => api.put(route, data),
+  remove: route => api.delete(route)
+};
 
-const fetchPlayers = () => api.get(`/data/player`);
-const createAPlayer = player => api.post(`/data/player`, player);
-const fetchAPlayer = (fieldName, value) =>
-  api.get(`/data/player/${fieldName}/${value}`);
-const updatePlayer = player =>
-  api.put(`data/player/number/${player.number}`, player);
-const fetchSchema = () => api.get(`/schema`);
-export { fetchPlayers, createAPlayer, fetchAPlayer, updatePlayer, fetchSchema };
+export default APIModel;

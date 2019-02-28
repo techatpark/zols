@@ -1,12 +1,13 @@
 import React, { Component } from "react";
-import { fetchSchema } from "../api";
-import { Card, CardBody, CardTitle, CardSubtitle, Row, Col } from "reactstrap";
+import Api from "../api";
+import { Link } from "react-router-dom";
+import { Card, CardBody, CardTitle, Row, Col } from "reactstrap";
 export default class Home extends Component {
   state = {
     schemas: []
   };
   componentDidMount = async () => {
-    const { data } = await fetchSchema();
+    const { data } = await Api.get(`/schema`);
     this.setState({ schemas: data });
   };
   render() {
@@ -14,15 +15,12 @@ export default class Home extends Component {
     return (
       <Row>
         {schemas.map((s, i) => (
-          <Col>
-            <Card key={i}>
+          <Col key={i}>
+            <Card>
               <CardBody>
-                <CardTitle>{s.title}</CardTitle>
-              </CardBody>
-              <CardBody>
-                <CardSubtitle>
-                  <pre>{JSON.stringify(s.properties, null, 2)}</pre>
-                </CardSubtitle>
+                <CardTitle>
+                  <Link to={`/data/${s.$id}`}>{s.title}</Link>
+                </CardTitle>
               </CardBody>
             </Card>
           </Col>

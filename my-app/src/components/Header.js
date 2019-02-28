@@ -1,14 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink
-} from "reactstrap";
+import { Nav, NavItem, NavLink } from "reactstrap";
 
 // The Header creates links that can be used to navigate
 // between routes.
@@ -17,12 +8,6 @@ const Header = () => {
     <Nav>
       <NavItem>
         <NavLink href="/">Home</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink href="/roster">Roster</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink href="schedule">Schedule</NavLink>
       </NavItem>
     </Nav>
   );
