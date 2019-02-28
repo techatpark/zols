@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.getJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import org.zols.datastore.query.Filter;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
@@ -90,45 +91,26 @@ public class ElasticSearchDataStorePersistenceTest {
     public void testList() throws DataStoreException {
         Map<String, Object> personMap = dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1"));
 
-        Query query = new Query();
+        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").eq(35)).size(), "Listing Simple Object");
 
-        query.addFilter(new Filter("age", Filter.Operator.EQUALS, 35));
+        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").ne(25)).size(), "Listing Simple Object");
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
-
-        query = new Query();
-
-        query.addFilter(new Filter("age", Filter.Operator.NOT_EQUALS, 25));
-
-        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
-
-        query = new Query();
-
-        query.addFilter(new Filter("age", Filter.Operator.IS_NULL));
-
-        assertNull(dataStorePersistence.list(jsonSchema, query), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").exists()).size(), "Listing Simple Object");
 
         personMap.remove("age");
         dataStorePersistence.update(jsonSchema, personMap, new SimpleEntry("id", "1"));
+        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").exists()), "Listing Simple Object");
 
-        personMap = dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1"));
+        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().string("lastName").in("thyagarajan")).size(), "Listing Simple Object");
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
+        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().string("firstName").nin("Thirumurugan")), "Listing Simple Object");
 
-        query = new Query();
-
-        query.addFilter(new Filter("lastName", Filter.Operator.EXISTS_IN, Arrays.asList("thyagarajan")));
-        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
-
-        query = new Query();
-
-        query.addFilter(new Filter("firstName", Filter.Operator.NOT_EXISTS_IN, Arrays.asList("sathish kumar")));
-        assertNull(dataStorePersistence.list(jsonSchema, query), "Listing Simple Object");
-
-        query = new Query();
-
-        query.addFilter(new Filter("firstName", Filter.Operator.FULL_TEXT_SEARCH, "sathish"));
-        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
-
+//        query = new Query();
+//
+//
+//        query = new Query();
+//
+//        query.addFilter(new Filter("firstName", Filter.Operator.FULL_TEXT_SEARCH, "sathish"));
+//        assertEquals(1, dataStorePersistence.list(jsonSchema, query).size(), "Listing Simple Object");
     }
 }
