@@ -5,12 +5,13 @@
  */
 package org.zols.datastore.persistence;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
@@ -60,7 +61,7 @@ public interface DataStorePersistence {
      * @return
      * @throws DataStoreException
      */
-    abstract boolean delete(JsonSchema jsonSchema, Query query)
+    abstract boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query)
             throws DataStoreException;
 
     abstract boolean update(JsonSchema jsonSchema,
@@ -86,7 +87,7 @@ public interface DataStorePersistence {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
-            Query query)
+            Condition<MapQuery> query)
             throws DataStoreException;
 
     /**
@@ -99,7 +100,7 @@ public interface DataStorePersistence {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
-            Query query,
+            Condition<MapQuery> query,
             Integer pageNumber,
             Integer pageSize)
             throws DataStoreException;

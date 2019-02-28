@@ -5,8 +5,9 @@
  */
 package org.zols.datastore.persistence;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import org.zols.datastore.query.AggregatedResults;
-import org.zols.datastore.query.Query;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
@@ -18,7 +19,7 @@ public interface BrowsableDataStorePersistence extends DataStorePersistence{
 
     AggregatedResults browse(JsonSchema jsonSchema,
             String keyword,
-            Query query,
+            Condition<MapQuery> query,
             Integer pageNumber,
             Integer pageSize) throws DataStoreException ;
 }

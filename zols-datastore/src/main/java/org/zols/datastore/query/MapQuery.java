@@ -6,7 +6,6 @@
 package org.zols.datastore.query;
 
 import com.github.rutledgepaulv.qbuilders.builders.QBuilder;
-import com.github.rutledgepaulv.qbuilders.properties.concrete.StringProperty;
 
 /**
  *
