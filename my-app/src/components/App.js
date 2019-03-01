@@ -1,11 +1,13 @@
-import React from "react";
+import React, { Component } from "react";
 import { Link,Switch, Route } from "react-router-dom";
 import SchemaList from "./schema/SchemaList";
 import DataList from "./datainstance/DataList";
 import Data from "./datainstance/Data";
 
-const App = () => (
-  <div className="container">
+export default class App extends Component {
+
+  render(){
+  return <div className="container">
 
 
       <nav className="navbar navbar-default">
@@ -39,6 +41,5 @@ const App = () => (
       </div>
 
     </div>
-)
-
-export default App
+  }
+}
