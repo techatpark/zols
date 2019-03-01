@@ -18,24 +18,31 @@ export default class Data extends Component {
 
     return (
       <div>
-        <div>List of data </div>
-        {this.state.data ? (
-          this.state.data.map((d, i) => (
-            <li key={i}>
-              <Link
-                to={`${schemaId}/${this.state.schema.required[0]}/${
-                  d[this.state.schema.required[0]]
-                }`}
-              >
-                {d.name}
-              </Link>
-            </li>
-          ))
-        ) : (
-          <p>
-            <strong>Data Not Found</strong>
-          </p>
-        )}
+        <h3>List of {schemaId} </h3>
+        <ul>
+          {this.state.data ? (
+            this.state.data.map((d, i) => (
+              <li key={i}>
+                <Link
+                  to={`${schemaId}/${this.state.schema.required[0]}/${
+                    d[this.state.schema.required[0]]
+                  }`}
+                >
+                  {d.name}
+                </Link>
+              </li>
+            ))
+          ) : (
+            <p>
+              <strong>Data Not Found</strong>
+            </p>
+          )}
+        </ul>
+        <div>
+          <button>
+            <Link to={`/data/${schemaId}/_addNew`}>Add {schemaId}</Link>
+          </button>
+        </div>
       </div>
     );
   }
