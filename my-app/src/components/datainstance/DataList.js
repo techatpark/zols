@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import Api from "../api";
+import Api from "../../api";
 
 export default class Data extends Component {
   state = {
@@ -28,7 +28,7 @@ export default class Data extends Component {
                     d[this.state.schema.required[0]]
                   }`}
                 >
-                  {d.name}
+                  {d[this.state.schema.labelField]}
                 </Link>
               </li>
             ))
