@@ -1,9 +1,8 @@
 import React from "react";
-import { Switch, Route } from "react-router-dom";
+import { Link,Switch, Route } from "react-router-dom";
 import Home from "./Home";
 import DataList from "./datainstance/DataList";
 import Data from "./datainstance/Data";
-import { Link } from "react-router-dom";
 
 const App = () => (
   <div className="container">
