@@ -5,6 +5,7 @@
  */
 package org.zols.datastore;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.Set;
 import static java.util.stream.Collectors.toList;
 import javax.validation.Validation;
 import javax.validation.Validator;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
@@ -122,12 +123,12 @@ public final class ObjectManager<T> {
         return dataStore.delete(jsonSchema, idValues);
     }
 
-    public boolean delete(Query query)
+    public boolean delete(Condition<MapQuery> query)
             throws DataStoreException {
         return dataStore.delete(jsonSchema, query);
     }
 
-    public List<T> list(Query query, Locale locale) throws DataStoreException {
+    public List<T> list(Condition<MapQuery> query, Locale locale) throws DataStoreException {
         return getObjects(dataStore.list(jsonSchema, query), locale);
     }
 
@@ -139,7 +140,7 @@ public final class ObjectManager<T> {
         return list(null, locale);
     }
 
-    public List<T> list(Query query) throws DataStoreException {
+    public List<T> list(Condition<MapQuery> query) throws DataStoreException {
         return list(query, (Locale) null);
     }
 
@@ -158,11 +159,11 @@ public final class ObjectManager<T> {
         return list(null, locale, pageNumber, pageSize);
     }
 
-    public Page<T> list(Query query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public Page<T> list(Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         return list(query, null, pageNumber, pageSize);
     }
 
-    public Page<T> list(Query query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public Page<T> list(Condition<MapQuery> query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
 
         Page<Map<String, Object>> page = dataStore.list(jsonSchema, query, pageNumber, pageSize);
 

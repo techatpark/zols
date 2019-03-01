@@ -5,6 +5,7 @@
  */
 package org.zols.datastore;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +15,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static java.util.stream.Collectors.toList;
 import javax.validation.ConstraintViolation;
-import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import org.zols.datastore.query.Query;
+import org.zols.datastore.persistence.DataStorePersistence;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
@@ -29,12 +29,12 @@ import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
  */
 public final class SchemaManager {
 
-    private final DataStore dataStore;
+    private final DataStorePersistence dataStorePersistence;
 
     private final JsonSchema jsonSchemaForSchema;
 
-    public SchemaManager(DataStore dataStore) {
-        this.dataStore = dataStore;
+    public SchemaManager(DataStorePersistence dataStorePersistence) {
+        this.dataStorePersistence = dataStorePersistence;
         jsonSchemaForSchema = jsonSchemaForSchema();
     }
 
@@ -42,7 +42,7 @@ public final class SchemaManager {
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            return dataStore.create(jsonSchemaForSchema, schemaMap);
+            return dataStorePersistence.create(jsonSchemaForSchema, schemaMap);
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
@@ -50,21 +50,21 @@ public final class SchemaManager {
 
     public Map<String, Object> get(String schemaId)
             throws DataStoreException {
-        return dataStore.read(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        return dataStorePersistence.read(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
     }
 
     public boolean update(String schemaId, Map<String, Object> schemaMap)
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            return dataStore.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
+            return dataStorePersistence.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
     }
 
     public Boolean delete(String schemaId) throws DataStoreException {
-        return dataStore.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        return dataStorePersistence.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
     }
 
     public Map<String, Object> getCompositeSchema(String schemaId)
@@ -116,17 +116,15 @@ public final class SchemaManager {
         if (jsonSchemaForSchema.getId().equals(schemaId)) {
             return null;
         }
-        Query query = new Query();
-        query.addFilter(new Filter("$ref", EQUALS, schemaId));
-        return dataStore.list(jsonSchemaForSchema, query);
+        return dataStorePersistence.list(jsonSchemaForSchema, new MapQuery().string("$ref").eq(schemaId));
     }
 
-    public List<Map<String, Object>> list(Query query) throws DataStoreException {
-        return dataStore.list(jsonSchemaForSchema, query);
+    public List<Map<String, Object>> list(Condition<MapQuery> condition) throws DataStoreException {
+        return dataStorePersistence.list(jsonSchemaForSchema, condition);
     }
 
     public List<Map<String, Object>> list() throws DataStoreException {
-        return dataStore.list(jsonSchemaForSchema);
+        return dataStorePersistence.list(jsonSchemaForSchema,null);
     }
 
     public JsonSchema getJsonSchema(String schemaId) {

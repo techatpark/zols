@@ -119,47 +119,47 @@ public class DataManagementTest {
         assertFalse(dataStore.read("computer", new SimpleEntry("id", "1")).isPresent(), "Deleting Simple Data");
     }
 
-    @Test
-    public void testDeleteAllOfBasicType() throws DataStoreException {
-        dataStore.delete("product");
-        assertNull(dataStore.list("product"), "Deleting All the data of a type");
-        assertNull(dataStore.list("mobile"), "Deleting All the data of a type should not affect child type");
-    }
+//    @Test
+//    public void testDeleteAllOfBasicType() throws DataStoreException {
+//        dataStore.delete("product");
+//        assertNull(dataStore.list("product"), "Deleting All the data of a type");
+//        assertNull(dataStore.list("mobile"), "Deleting All the data of a type should not affect child type");
+//    }
+//
+//    @Test
+//    public void testDeleteAllOfChildType() throws DataStoreException {
+//        dataStore.delete("computer");
+//        assertNotNull(dataStore.list("mobile"), "Deleting All the data of only a child type");
+//        dataStore.delete("device");
+//        assertNull(dataStore.list("mobile"), "Deleting All the data of a child type");
+//    }
 
-    @Test
-    public void testDeleteAllOfChildType() throws DataStoreException {
-        dataStore.delete("computer");
-        assertNotNull(dataStore.list("mobile"), "Deleting All the data of only a child type");
-        dataStore.delete("device");
-        assertNull(dataStore.list("mobile"), "Deleting All the data of a child type");
-    }
+//    @Test
+//    public void testList() throws DataStoreException {
+//        assertEquals(2, dataStore.list("product").size(), "Listing Simple Data");
+//    }
 
-    @Test
-    public void testList() throws DataStoreException {
-        assertEquals(2, dataStore.list("product").size(), "Listing Simple Data");
-    }
-
-    @Test
-    public void testListDataWithQuery() throws DataStoreException {
-        Query query = new Query();
-        query.addFilter(new Filter("os", EQUALS, "ios"));
-        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid query");
-    }
-
-    @Test
-    public void testListDataWithExistsInQueryWithChildType() throws DataStoreException {
-
-        Query query = new Query();
-        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
-        assertEquals(2, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
-
-        query = new Query();
-        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
-        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
-
-        query = new Query();
-        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Personal")));
-        assertEquals(1, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
-    }
+//    @Test
+//    public void testListDataWithQuery() throws DataStoreException {
+//        Query query = new Query();
+//        query.addFilter(new Filter("os", EQUALS, "ios"));
+//        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid query");
+//    }
+//
+//    @Test
+//    public void testListDataWithExistsInQueryWithChildType() throws DataStoreException {
+//
+//        Query query = new Query();
+//        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
+//        assertEquals(2, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
+//
+//        query = new Query();
+//        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Electronics")));
+//        assertEquals(1, dataStore.list("mobile", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
+//
+//        query = new Query();
+//        query.addFilter(new Filter("tags", EXISTS_IN, Arrays.asList("Personal")));
+//        assertEquals(1, dataStore.list("product", query).size(), "Listing Simple Data with valid Exists In query on Child Type");
+//    }
 
 }

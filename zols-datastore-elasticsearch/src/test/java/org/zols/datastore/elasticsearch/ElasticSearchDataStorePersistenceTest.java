@@ -89,6 +89,11 @@ public class ElasticSearchDataStorePersistenceTest {
 
     @Test
     public void testList() throws DataStoreException {
+       assertEquals(1, dataStorePersistence.list(jsonSchema, null).size(), "Listing Simple Object");
+    }
+    
+    @Test
+    public void testListWithQuery() throws DataStoreException {
         Map<String, Object> personMap = dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1"));
 
         assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").eq(35)).size(), "Listing Simple Object");
@@ -103,7 +108,7 @@ public class ElasticSearchDataStorePersistenceTest {
 
         assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().string("lastName").in("thyagarajan")).size(), "Listing Simple Object");
 
-        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().string("firstName").nin("Thirumurugan")), "Listing Simple Object");
+        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().string("firstName").nin("sathish kumar")), "Listing Simple Object");
 
 //        query = new Query();
 //

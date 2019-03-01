@@ -53,19 +53,19 @@ public class SchemaManagementTest {
         assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
     }
 
-    @Test
-    public void testGetChildrenSchema() throws DataStoreException {
-
-        List<Map<String, Object>> children = dataStore.getSchemaManager().listChildren("product");
-        assertEquals(1, children.size(), "Listing children Schema");
-
-    }
-
-    @Test
-    public void testGetExtentins() throws DataStoreException {
-        List<Map<String, Object>> children = dataStore.getSchemaManager().listExtenstions("device");
-        assertEquals(2, children.size(), "Listing children Schema");
-
-    }
+//    @Test
+//    public void testGetChildrenSchema() throws DataStoreException {
+//
+//        List<Map<String, Object>> children = dataStore.getSchemaManager().listChildren("product");
+//        assertEquals(1, children.size(), "Listing children Schema");
+//
+//    }
+//
+//    @Test
+//    public void testGetExtentins() throws DataStoreException {
+//        List<Map<String, Object>> children = dataStore.getSchemaManager().listExtenstions("device");
+//        assertEquals(2, children.size(), "Listing children Schema");
+//
+//    }
 
 }

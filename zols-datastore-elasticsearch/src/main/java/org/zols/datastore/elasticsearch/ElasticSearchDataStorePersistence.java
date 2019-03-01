@@ -310,8 +310,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
     
     public static QueryBuilder getQueryBuilder(Condition<MapQuery> query) {
-        QueryBuilder builder = query.query(new ElasticsearchVisitor(),new ElasticsearchVisitor.Context()); 
-        return builder;
+        return query == null ? null : query.query(new ElasticsearchVisitor(),new ElasticsearchVisitor.Context());
     }
     
     private String getEncodedId(Object ids) {
