@@ -27,7 +27,7 @@ export default class Data extends Component {
                   d[this.state.schema.required[0]]
                 }`}
               >
-                {d.name}
+                {d[this.state.schema.labelField]}
               </Link>
             </li>
           ))

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Api from "../api";
 import { Link } from "react-router-dom";
-import { Card, CardBody, CardTitle, Row, Col } from "reactstrap";
 export default class Home extends Component {
   state = {
     schemas: []
@@ -13,19 +12,13 @@ export default class Home extends Component {
   render() {
     const { schemas } = this.state;
     return (
-      <Row>
+      <ul>
         {schemas.map((s, i) => (
-          <Col key={i}>
-            <Card>
-              <CardBody>
-                <CardTitle>
+          <li key={i}>
                   <Link to={`/data/${s.$id}`}>{s.title}</Link>
-                </CardTitle>
-              </CardBody>
-            </Card>
-          </Col>
+          </li>
         ))}
-      </Row>
+      </ul>
     );
   }
 }
