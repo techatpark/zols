@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Home";
-import Data from "./Data";
+import Data from "./datainstance/DataList";
 
 // The Main component renders one of the three provided
 // Routes (provided that one matches). Both the /roster
