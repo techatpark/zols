@@ -214,20 +214,22 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     public boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
         
         String typeName = getTypeName(jsonSchema);
+        String indexName2 = getIndexName(typeName);
         QueryBuilder builder = getQueryBuilder(query);
         if (builder != null) {
             
             try {
                 // Patch for Solinving delete by query conflicts
-                client.getLowLevelClient().performRequest("POST", "/" + getIndexName(typeName) + "/_refresh");
+                client.getLowLevelClient().performRequest("POST", "/" + indexName2 + "/_refresh");
                 Map<String, String> params = Collections.singletonMap("pretty", "true");
                 HttpEntity entity = new NStringEntity("{" + "\"query\":" + builder.toString() + "}", ContentType.APPLICATION_JSON);
                 client.getLowLevelClient()
-                        .performRequest("POST", "/" + getIndexName(typeName) + "/" + typeName + "/_delete_by_query?scroll_size=1", params, entity);
-                client.getLowLevelClient().performRequest("POST", "/" + getIndexName(typeName) + "/_refresh");
+                        .performRequest("POST", "/" + indexName2 + "/" + typeName + "/_delete_by_query?scroll_size=1", params, entity);
+                client.getLowLevelClient().performRequest("POST", "/" + indexName2 + "/_refresh");
+                refreshIndex(indexName2);
                 return true;
             } catch (IOException ex) {
-                throw new DataStoreException("Unable to delete " + getIndexName(typeName), ex);
+                throw new DataStoreException("Unable to delete " + indexName2, ex);
             }
         }
         

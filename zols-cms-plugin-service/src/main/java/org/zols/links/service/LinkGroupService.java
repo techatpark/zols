@@ -12,12 +12,9 @@ import java.util.Map;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.zols.datastore.DataStore;
-import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import static org.zols.datastore.query.Filter.Operator.IS_NULL;
-import org.zols.datastore.query.Query;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.links.domain.LinkGroup;
 import org.zols.links.domain.Link;
@@ -104,9 +101,7 @@ public class LinkGroupService {
      */
     public Boolean deleteLinksUnder(String groupName) throws DataStoreException {
         LOGGER.info("Deleting links under group {}", groupName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
-        return dataStore.getObjectManager(Link.class).delete(query);
+        return dataStore.getObjectManager(Link.class).delete(new MapQuery().string("groupName").eq(groupName));
     }
 
     /**
@@ -125,10 +120,7 @@ public class LinkGroupService {
      */
     public List<Link> getFirstLevelLinks(String groupName) throws DataStoreException {
         LOGGER.info("Getting first level links of group {}", groupName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("groupName", EQUALS, groupName));
-        query.addFilter(new Filter<>("parentLinkName", IS_NULL));
-        return dataStore.getObjectManager(Link.class).list(query);
+        return dataStore.getObjectManager(Link.class).list(new MapQuery().string("groupName").eq(groupName).and().string("parentLinkName").doesNotExist());
     }
 
     /**
@@ -170,9 +162,7 @@ public class LinkGroupService {
      */
     public List<Link> listChildren(String parentLinkName) throws DataStoreException {
         LOGGER.info("Getting children of link {}", parentLinkName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("parentLinkName", EQUALS, parentLinkName));
-        return dataStore.getObjectManager(Link.class).list(query);
+        return dataStore.getObjectManager(Link.class).list(new MapQuery().string("parentLinkName").eq(parentLinkName));
     }
 
 }

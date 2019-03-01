@@ -7,7 +7,6 @@ package org.zols.datastore.web;
 
 
 import java.util.Locale;
-import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,20 +44,21 @@ public class BrowseController {
             @RequestParam(required = false,value = "q") String keyword,
             HttpServletRequest request,
             Pageable pageable,Locale locale) throws DataStoreException {
-        Query query = getQuery(request);
-        model.addAttribute("query", query);   
-        JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
-        model.addAttribute("schema", jsonSchema.getCompositeSchema());
-        model.addAttribute("parents",jsonSchema.getParents());
-        SpringAggregatedResults aggregatedResults = getAggregatedResults(categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
-        model.addAttribute("aggregations",aggregatedResults) ;
-        if(aggregatedResults != null) {
-            model.addAttribute("pageWrapper", new PageWrapper<>(aggregatedResults.getPage(), "/browse/"+schemaId));
-        }
-        String pageUrl = getPageUrl(request);
-        model.addAttribute("pageurl", pageUrl);
-        int indexOfQuestionMark = pageUrl.indexOf("?");
-        model.addAttribute("cleanpageurl", (indexOfQuestionMark == -1) ? pageUrl : pageUrl.substring(0, indexOfQuestionMark));
+//        
+//        Query query = getQuery(request);
+//        model.addAttribute("query", query);   
+//        JsonSchema jsonSchema = dataStore.getSchemaManager().getJsonSchema(schemaId);
+//        model.addAttribute("schema", jsonSchema.getCompositeSchema());
+//        model.addAttribute("parents",jsonSchema.getParents());
+//        SpringAggregatedResults aggregatedResults = getAggregatedResults(categoryService.browseSchema(schemaId, keyword, query,locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
+//        model.addAttribute("aggregations",aggregatedResults) ;
+//        if(aggregatedResults != null) {
+//            model.addAttribute("pageWrapper", new PageWrapper<>(aggregatedResults.getPage(), "/browse/"+schemaId));
+//        }
+//        String pageUrl = getPageUrl(request);
+//        model.addAttribute("pageurl", pageUrl);
+//        int indexOfQuestionMark = pageUrl.indexOf("?");
+//        model.addAttribute("cleanpageurl", (indexOfQuestionMark == -1) ? pageUrl : pageUrl.substring(0, indexOfQuestionMark));
         return "browse";
     }
 

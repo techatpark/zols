@@ -90,7 +90,11 @@ public class ElasticsearchVisitor extends ContextualNodeVisitor<QueryBuilder, El
         } else if (ComparisonOperator.LTE.equals(operator)) {
             return rangeQuery(field).lte(single(values));
         } else if (ComparisonOperator.IN.equals(operator)) {
-            return termsQuery(field, values);
+            BoolQueryBuilder boolQuery = boolQuery();
+            values.forEach((object) -> {
+                boolQuery.should(matchQuery(field, object));
+            });
+            return boolQuery().must(boolQuery);
         } else if (ComparisonOperator.NIN.equals(operator)) {
             BoolQueryBuilder boolQuery = boolQuery();
             values.forEach((object) -> {

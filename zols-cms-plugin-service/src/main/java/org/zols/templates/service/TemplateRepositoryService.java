@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.query.Filter;
 import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.templates.domain.Template;
@@ -106,9 +107,7 @@ public class TemplateRepositoryService {
     
     public Boolean deleteTemplatesUnder(String templateRepositoryName) throws DataStoreException {
         LOGGER.info("Deleting Template  under Repository {}", templateRepositoryName);
-        Query query = new Query();
-        query.addFilter(new Filter("repositoryName", Filter.Operator.EQUALS, templateRepositoryName));
-        return dataStore.getObjectManager(Template.class).delete( query);
+        return dataStore.getObjectManager(Template.class).delete( new MapQuery().string("repositoryName").eq(templateRepositoryName));
     }
 
     /**
@@ -129,9 +128,7 @@ public class TemplateRepositoryService {
      */
     public List<Template> listTemplates(String repositoryName) throws DataStoreException {
         LOGGER.info("Getting templates of repository  {}", repositoryName);
-        Query query = new Query();
-        query.addFilter(new Filter<>("repositoryName", EQUALS, repositoryName));
-        return dataStore.getObjectManager(Template.class).list( query);
+        return dataStore.getObjectManager(Template.class).list( new MapQuery().string("repositoryName").eq(repositoryName));
     }
 
     /**

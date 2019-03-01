@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.service;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.Filter;
+import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
@@ -53,7 +55,7 @@ public class DataService {
         return dataStore.list(schemaName, loc);
     }
 
-    public Page<Map<String, Object>> list(String schemaName, Query query,
+    public Page<Map<String, Object>> list(String schemaName, Condition<MapQuery> query,
             Integer pageNumber, Integer pageSize, Locale loc) throws DataStoreException {
 
         return dataStore.list(schemaName, query, pageNumber, pageSize);
@@ -61,11 +63,11 @@ public class DataService {
 
     public Page<Map<String, Object>> list(String schemaName, String queryString,
             Integer pageNumber, Integer pageSize, Locale loc) throws DataStoreException {
-        Query query = null;
-        if (queryString != null) {
-            query = new Query();
-            query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, queryString + "*"));
-        }
+        Condition<MapQuery> query = null;
+//        if (queryString != null) {
+//            query = new Query();
+//            query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, queryString + "*"));
+//        }
         return dataStore.list(schemaName, query, loc, pageNumber, pageSize);
 
     }

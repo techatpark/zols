@@ -189,7 +189,12 @@ public class DataStore {
 
     private Condition<MapQuery> getTypeFilteredQuery(JsonSchema jsonSchema, Condition<MapQuery> condition) throws DataStoreException {
         List<String> implementations = schemaManager.listExtenstionTypes(jsonSchema.getId());
-        implementations = asList(jsonSchema.getId());
+        if(implementations == null) {
+            implementations = asList(jsonSchema.getId());
+        }
+        else {
+            implementations.add(jsonSchema.getId());
+        }
 
         if (condition == null) {
             return new MapQuery().string("$type").in(implementations);
