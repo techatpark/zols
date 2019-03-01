@@ -1,27 +1,28 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Home";
-// import Data from "./Data";
-import Data from "./datainstance/DataList";
+import DataList from "./datainstance/DataList";
+import Data from "./datainstance/Data";
+import { Link } from "react-router-dom";
 
 const App = () => (
-  <div class="container">
+  <div className="container">
 
 
-      <nav class="navbar navbar-default">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+      <nav className="navbar navbar-default">
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Search Studio</a>
+            <Link className="navbar-brand" to={`/`}>Search Studio</Link>
           </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
+          <div id="navbar" className="navbar-collapse collapse">
+            <ul className="nav navbar-nav navbar-right">
+              <li className="active"><a href="./">Default <span className="sr-only">(current)</span></a></li>
               <li><a href="../navbar-static-top/">Static top</a></li>
               <li><a href="../navbar-fixed-top/">Fixed top</a></li>
             </ul>
@@ -30,10 +31,11 @@ const App = () => (
       </nav>
 
       
-      <div class="jumbotron">
+      <div className="jumbotron">
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route exact path="/data/:schemaId" component={Data} />
+        <Route exact path="/data/:schemaId" component={DataList} />
+        <Route exact path="/data/:schemaId/*" component={Data} />
       </Switch>
       </div>
 

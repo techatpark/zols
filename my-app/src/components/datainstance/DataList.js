@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Api from "../../api";
 
-export default class Data extends Component {
+export default class DataList extends Component {
   state = {
     schema: {}
   };
@@ -18,14 +18,14 @@ export default class Data extends Component {
 
     return (
       <div>
-        <h3>List of {schemaId} </h3>
-        <ul>
+        <h3>List of {this.state.schema.title} </h3>
+        <ul className="list-group">
           {this.state.data ? (
             this.state.data.map((d, i) => (
-              <li key={i}>
+              <li className="list-group-item" key={i}>
                 <Link
-                  to={`${schemaId}/${this.state.schema.required[0]}/${
-                    d[this.state.schema.required[0]]
+                  to={`/data/${schemaId}/${this.state.schema.ids[0]}/${
+                    d[this.state.schema.ids[0]]
                   }`}
                 >
                   {d[this.state.schema.labelField]}
@@ -39,8 +39,8 @@ export default class Data extends Component {
           )}
         </ul>
         <div>
-          <button>
-            <Link to={`/data/${schemaId}/_addNew`}>Add {schemaId}</Link>
+          <button className="btn btn-default">
+            <Link to={`/data/${schemaId}/_addNew`}>Add {this.state.schema.title}</Link>
           </button>
         </div>
       </div>
