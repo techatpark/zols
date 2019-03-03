@@ -7,6 +7,19 @@ export default class DataList extends Component {
     schema: {}
   };
 
+  onRemove = (e) => {
+    e.preventDefault();
+
+    Api.remove(e.currentTarget.getAttribute('data-ref'))
+    .then(function (response) {
+        window.location.reload();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  };
+
+
   componentDidMount = async () => {
     const schemaId = this.props.match.params.schemaId;
     const { data } = await Api.get(`/schema/${schemaId}`);
@@ -30,6 +43,9 @@ export default class DataList extends Component {
                 >
                   {d[this.state.schema.labelField]}
                 </Link>
+                <span className="badge" aria-hidden="true" data-ref={`/data/${schemaId}/${this.state.schema.ids[0]}/${
+                  d[this.state.schema.ids[0]]
+                }`} onClick={this.onRemove}><i className="glyphicon glyphicon-remove"/> </span>
               </li>
             ))
           ) : (
