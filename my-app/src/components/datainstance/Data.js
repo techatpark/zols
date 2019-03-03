@@ -5,15 +5,25 @@ import Api from "../../api";
 export default class Data extends Component {
 
   onSubmit = ({formData}, e) => {
-    if(this.state != "_addNew") {
+    if(this.state.locpath == "_addNew") {
+      
       const created_data = Api.post(`/data/${this.state.schema["$id"]}`,formData)
       .then(function (response) {
         window.history.back();
       })
       .catch(function (error) {
         console.log(error);
-      });;
-      //console.log(created_data);
+      });
+    }
+    else {
+
+      const updated_data = Api.put(`/data/${this.state.schema["$id"]}/${this.state.locpath}`,formData)
+      .then(function (response) {
+        window.history.back();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   };
 
@@ -29,9 +39,9 @@ export default class Data extends Component {
 
   componentDidMount = async () => {
     const schemaId = this.props.match.params.schemaId;
-    const locpath = this.props.location.pathname.split('/data/')[1].split('/')[1];
+    const locpath = this.props.location.pathname.split('/data/'+schemaId+'/')[1];
     const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
-
+    console.log(locpath);
     const patched_schema = Api.getPatchSchema(axis_schema.data);
 
     if(locpath != "_addNew") {
@@ -41,8 +51,6 @@ export default class Data extends Component {
       this.setState({ schema: patched_schema, locpath:locpath});
     }
   };
-
-
 
   render() {
     return (
