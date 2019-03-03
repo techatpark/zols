@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link,Switch, Route } from "react-router-dom";
 import SchemaList from "./schema/SchemaList";
+import Schema from "./schema/Schema";
 import DataList from "./datainstance/DataList";
 import Data from "./datainstance/Data";
 
@@ -31,10 +32,11 @@ export default class App extends Component {
         </div>
       </nav>
 
-      
+
       <div className="jumbotron">
       <Switch>
         <Route exact path="/" component={SchemaList} />
+          <Route exact path="/schema/:schemaId" component={Schema} />
         <Route exact path="/data/:schemaId" component={DataList} />
         <Route exact path="/data/:schemaId/*" component={Data} />
       </Switch>
