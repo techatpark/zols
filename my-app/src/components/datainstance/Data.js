@@ -4,7 +4,18 @@ import Api from "../../api";
 
 export default class Data extends Component {
 
-  onSubmit = ({formData}, e) => console.log("Data submitted: ",  formData);
+  onSubmit = ({formData}, e) => {
+    if(this.state != "_addNew") {
+      const created_data = Api.post(`/data/${this.state.schema["$id"]}`,formData)
+      .then(function (response) {
+        window.history.back();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });;
+      //console.log(created_data);
+    }
+  };
 
   onCancel = (e) => {
     e.preventDefault()
@@ -25,9 +36,9 @@ export default class Data extends Component {
 
     if(locpath != "_addNew") {
       const axis_data = await Api.get(`/data/${schemaId}/${locpath}`);
-      this.setState({ schema: patched_schema, data:  axis_data.data});
+      this.setState({ schema: patched_schema, locpath:locpath ,data:  axis_data.data});
     }else {
-      this.setState({ schema: patched_schema});
+      this.setState({ schema: patched_schema, locpath:locpath});
     }
   };
 
