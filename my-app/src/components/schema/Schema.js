@@ -7,6 +7,7 @@ export default class Schema extends Component {
 
   state = {
     schema: {},
+    schema_enlarged: {},
     patched_schema:{},
     isAdd: false
   };
@@ -22,12 +23,13 @@ export default class Schema extends Component {
       }
       };
       const patched_schema = Api.getPatchSchema(schema);
-      this.setState({ isAdd:true,schema:schema,patched_schema: patched_schema});
+      this.setState({ isAdd:true,schema:schema,schema_enlarged: patched_schema, patched_schema: patched_schema});
     }else {
       const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
-      const patched_schema = Api.getPatchSchema(axis_schema.data);
+      var schema_enlarged = axis_schema.data;
+      const patched_schema = Api.getPatchSchema(schema_enlarged);
       const {data} = await Api.get(`/schema/${schemaId}`);
-      this.setState({ isAdd:false, schema:data,patched_schema: patched_schema});
+      this.setState({ isAdd:false, schema:data,schema_enlarged: schema_enlarged,patched_schema: patched_schema});
     }
   };
 
@@ -64,11 +66,11 @@ export default class Schema extends Component {
 
   onChange = (jsondata) => {
     if(jsondata.error === false) {
-      const patched_schema = Object.assign({}, this.state.patched_schema);
-      Object.assign(patched_schema.properties, jsondata.jsObject);
+
+
       this.state.schema.properties = jsondata.jsObject;
-      this.setState({ patched_schema: {}});
-      this.setState({ patched_schema: patched_schema});
+      this.state.schema_enlarged.properties = jsondata.jsObject;
+      this.setState({ patched_schema: Api.getPatchSchema(this.state.schema_enlarged)});
     }
   };
 
