@@ -43,7 +43,7 @@ export default class Schema extends Component {
 
       Api.post(`/schema`,this.state.schema)
       .then(function (response) {
-        window.history.back();
+        window.location = '/';
 
       })
       .catch(function (error) {
@@ -51,11 +51,10 @@ export default class Schema extends Component {
       });
     }
     else {
-      this.state.schema.properties = this.state.patched_schema.properties;
       const updated_data = Api.put(`/schema/${schemaId}`,this.state.schema)
       .then(function (response) {
         console.log(response);
-        window.history.back();
+        window.location = '/';
       })
       .catch(function (error) {
         console.log(error);
@@ -67,7 +66,7 @@ export default class Schema extends Component {
     if(jsondata.error === false) {
       const patched_schema = Object.assign({}, this.state.patched_schema);
       Object.assign(patched_schema.properties, jsondata.jsObject);
-      console.log(patched_schema);
+      this.state.schema.properties = jsondata.jsObject;
       this.setState({ patched_schema: {}});
       this.setState({ patched_schema: patched_schema});
     }
@@ -75,7 +74,7 @@ export default class Schema extends Component {
 
   onCancel = (e) => {
     e.preventDefault()
-    window.history.back();
+    window.location = '/';
   };
 
 

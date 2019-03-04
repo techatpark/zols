@@ -56,19 +56,21 @@ export default class SchemaList extends Component {
       // Enter any new nodes at the parent's previous position.
       var nodeEnter = node.enter().append("g")
         .attr("class", "node")
-        .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-        .on("click", click);
+        .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; });
+
 
       nodeEnter.append("circle")
         .attr("r", 1e-6)
-        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+        .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+        .on("click", click);
 
       nodeEnter.append("text")
         .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
         .attr("dy", ".35em")
         .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
         .text(function(d) { return d.name; })
-        .style("fill-opacity", 1e-6);
+        .style("fill-opacity", 1e-6)
+        .on("click", clickOnText);
 
       // Transition nodes to their new position.
       var nodeUpdate = node.transition()
@@ -138,6 +140,11 @@ export default class SchemaList extends Component {
       }
       update(d);
     }
+
+    // Edit on click.
+    function clickOnText(d) {
+      window.location = '/schema/'+d.id;
+    }
   }
 
   getTreeChildren = (sschema) => {
@@ -145,6 +152,7 @@ export default class SchemaList extends Component {
       return schema["$ref"] === sschema["$id"];
     }).map(schema => {
       let treeObj = {};
+      treeObj.id = schema["$id"];
       treeObj.name = schema.title;
       treeObj.parent = null;
       treeObj.children = this.getTreeChildren(schema);
@@ -162,6 +170,7 @@ export default class SchemaList extends Component {
       return schema["$id"] === sschema;
     }).map(schema => {
       let treeObj = {};
+      treeObj.id = schema["$id"];
       treeObj.name = schema.title;
       treeObj.parent = null;
       treeObj.children = this.getTreeChildren(schema);
