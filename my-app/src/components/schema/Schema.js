@@ -8,17 +8,51 @@ export default class Schema extends Component {
   state = {
     schema: {},
     patched_schema:{},
-    schema_txt:""
+    isAdd: false
+  };
+
+  componentDidMount = async () => {
+    const schemaId = this.props.match.params.schemaId;
+    if(schemaId === "_addNew") {
+      const schema = {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "properties": {
+
+      }
+      };
+      const patched_schema = Api.getPatchSchema(schema);
+      this.setState({ isAdd:true,schema:schema,patched_schema: patched_schema});
+    }else {
+      const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
+      const patched_schema = Api.getPatchSchema(axis_schema.data);
+      const {data} = await Api.get(`/schema/${schemaId}`);
+      this.setState({ isAdd:false, schema:data,patched_schema: patched_schema});
+    }
   };
 
   onSubmit = (e) => {
     e.preventDefault();
     const schemaId = this.props.match.params.schemaId;
-    if(schemaId === "_addNew") {
+    if(this.state.isAdd === true) {
+      this.state.schema.properties = this.state.patched_schema.properties;
+
+      if(this.state.patched_schema.properties.hasOwnProperty("id")) {
+        this.state.schema.ids = ["id"];
+      }
+
+      Api.post(`/schema`,this.state.schema)
+      .then(function (response) {
+        console.log("added");
+        console.log(response);
+
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
     else {
       this.state.schema.properties = this.state.patched_schema.properties;
-      console.log(this.state.schema);
       const updated_data = Api.put(`/schema/${schemaId}`,this.state.schema)
       .then(function (response) {
         console.log(response);
@@ -27,9 +61,7 @@ export default class Schema extends Component {
       .catch(function (error) {
         console.log(error);
       });
-
     }
-
   };
 
   onChange = (jsondata) => {
@@ -47,37 +79,66 @@ export default class Schema extends Component {
     window.history.back();
   };
 
-  componentDidMount = async () => {
-    const schemaId = this.props.match.params.schemaId;
-    if(schemaId !== "_addNew") {
-      const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
-      const patched_schema = Api.getPatchSchema(axis_schema.data);
-      const {data} = await Api.get(`/schema/${schemaId}`);
-      this.setState({ schema:data,patched_schema: patched_schema, schema_txt: JSON.stringify(data.properties)});
-    }
-  };
+
+
+  handleChange = (event) => {
+    this.state.schema[event.target.name] = event.target.value;
+    let schema = this.state.schema;
+    this.setState({ schema: {}});
+    this.setState({ schema: schema});
+  }
 
   render() {
+    const isAdd = this.state.isAdd;
+    let idText;
+    if (isAdd) {
+        idText = <div className="col-md-4">
+          <label>
+            Id:
+            <input type="text" name="$id" value={this.state.schema["$id"]} onChange={this.handleChange}/>
+          </label>
+        </div>
+      }
     return (
-      <div className="row">
-          <div className="col-md-6">
-          <JSONInput
-              id          = 'a_unique_id'
-              placeholder = {this.state.schema.properties}
-              height      = '390px'
-              onChange    = {this.onChange}
-          />
+      <div className="container">
+          <div className="row">
+              {idText}
+              <div className="col-md-4">
+                <label>
+                  Title:
+                  <input type="text" name="title" value={this.state.schema.title} onChange={this.handleChange} />
+                </label>
+              </div>
+              <div className="col-md-4">
+                <label>
+                  Description:
+                  <input type="text" name="description" value={this.state.schema.description} onChange={this.handleChange} />
+                </label>
+              </div>
           </div>
-          <div className="col-md-6">
-            <Form schema={this.state.patched_schema} onSubmit={this.onSubmit} >
-            <div></div>
-            </Form>
+          <div className="row">
+              <div className="col-md-6">
+                <JSONInput
+                    id          = 'a_unique_id'
+                    placeholder = {this.state.schema.properties}
+                    height      = '390px'
+                    onChange    = {this.onChange}
+                />
+              </div>
+              <div className="col-md-6">
+                <Form schema={this.state.patched_schema} onSubmit={this.onSubmit} >
+                <div></div>
+                </Form>
+              </div>
           </div>
-          <div className="col-md-12">
-            <button className="btn btn-link" type="button" onClick={this.onCancel} >Cancel</button>
-            <button className="btn btn-primary" type="submit" onClick={this.onSubmit}>Submit</button>
+          <div className="row">
+              <div className="col-md-12">
+                <button className="btn btn-link" type="button" onClick={this.onCancel} >Cancel</button>
+                <button className="btn btn-primary" type="submit" onClick={this.onSubmit}>Submit</button>
+              </div>
           </div>
       </div>
+
     );
   }
 }
