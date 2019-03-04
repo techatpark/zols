@@ -1,38 +1,15 @@
 import React, {Component} from 'react';
 import * as d3 from "d3";
+import { Link } from "react-router-dom";
 import Api from "../../api";
 export default class SchemaList extends Component {
-state = {
-    schemas: []
-  };
-  drawChart() {
-    var treeData = [
-      {
-        "name": "Top Level",
-        "parent": "null",
-        "children": [
-          {
-            "name": "Level 2: A",
-            "parent": "Top Level",
-            "children": [
-              {
-                "name": "Son of A",
-                "parent": "Level 2: A"
-              },
-              {
-                "name": "Daughter of A",
-                "parent": "Level 2: A"
-              }
-            ]
-          },
-          {
-            "name": "Level 2: B",
-            "parent": "Top Level"
-          }
-        ]
-      }
-    ];
 
+  state = {
+      schemas: []
+  };
+  drawChart(treeData) {
+    d3.selectAll("#svg > *").remove();
+    console.log("dddd", treeData);
 
     // ************** Generate the tree diagram	 *****************
     var margin = {top: 20, right: 120, bottom: 20, left: 120},
@@ -162,12 +139,75 @@ state = {
       update(d);
     }
   }
+
+  getTreeChildren = (sschema) => {
+    return this.state.schemas.filter(function(schema) {
+      return schema["$ref"] === sschema["$id"];
+    }).map(schema => {
+      let treeObj = {};
+      treeObj.name = schema.title;
+      treeObj.parent = null;
+      treeObj.children = this.getTreeChildren(schema);
+      return treeObj;
+    });
+
+  }
+
+  getTreeData = () => {
+
+    var e = document.getElementById("schemas_select");
+    var sschema = e.options[e.selectedIndex].value;
+
+    var newArray = this.state.schemas.filter(function(schema) {
+      return schema["$id"] === sschema;
+    }).map(schema => {
+      let treeObj = {};
+      treeObj.name = schema.title;
+      treeObj.parent = null;
+      treeObj.children = this.getTreeChildren(schema);
+      return treeObj;
+    });
+
+
+    return newArray;
+  };
+
+  onSchemaSelection = () => this.drawChart(this.getTreeData());
+
   componentDidMount = async () => {
     const { data } = await Api.get(`/schema`);
+    var sel = document.getElementById('schemas_select');
+    for(var i = 0; i < data.length; i++) {
+        if(data[i]["$ref"] === undefined) {
+          var opt = document.createElement('option');
+          opt.innerHTML = data[i].title;
+          opt.value = data[i]["$id"];
+          sel.appendChild(opt);
+        }
+    }
     this.setState({ schemas: data });
-    this.drawChart();
+    this.drawChart(this.getTreeData());
   };
   render() {
-    return <div id="svg"></div>;
+    return <div className="container">
+        <div className="row">
+          <div className="col-md-4">
+          <select className="form-control" id="schemas_select" onChange={this.onSchemaSelection}>
+
+          </select>
+          </div>
+          <div className="col-md-8 text-right">
+          <Link to={`/schema/_addNew`}>
+            Create
+          </Link>
+          </div>
+        </div>
+        <div className="row">
+        <div className="col-md-12">
+        <div id="svg"></div>
+        </div>
+        </div>
+        </div>
+    ;
   }
 }

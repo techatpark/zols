@@ -43,8 +43,7 @@ export default class Schema extends Component {
 
       Api.post(`/schema`,this.state.schema)
       .then(function (response) {
-        console.log("added");
-        console.log(response);
+        window.history.back();
 
       })
       .catch(function (error) {
