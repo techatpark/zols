@@ -24,7 +24,40 @@ export default class Schema extends Component {
       };
       const patched_schema = Api.getPatchSchema(schema);
       this.setState({ isAdd:true,schema:schema,schema_enlarged: patched_schema, patched_schema: patched_schema});
-    }else {
+    }
+    else if(window.location.href.endsWith("_addNew") ) {
+      const schema = {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "type": "object",
+      "$ref": schemaId,
+      "properties": {}
+      };
+      const {data} = await Api.get(`/schema/${schemaId}`);
+
+      const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
+      var schema_enlarged = axis_schema.data;
+      schema_enlarged["$ref"]= "#/definitions/"+schemaId;
+      if(schema_enlarged.definitions === undefined) {
+        schema_enlarged.definitions = {};
+      }
+      delete data.title;
+      delete data.description;
+      delete data["$id"];
+      let cdata = Object.assign({}, data);
+      if(cdata["$ref"] != undefined && cdata["$ref"] !== data["$id"]) {
+        cdata["$ref"] = "#/definitions/"+cdata["$ref"];
+      }
+      schema_enlarged.definitions[schemaId] = cdata;
+
+      data["$ref"] = schemaId;
+      data.properties = {};
+
+      //console.log(schema_enlarged);
+      const patched_schema = Api.getPatchSchema(schema_enlarged);
+      //console.log(patched_schema);
+      this.setState({ isAdd:true, schema:data,schema_enlarged: schema_enlarged,patched_schema: patched_schema});
+    }
+    else {
       const axis_schema = await Api.get(`/schema/${schemaId}?enlarged`);
       var schema_enlarged = axis_schema.data;
       const patched_schema = Api.getPatchSchema(schema_enlarged);
@@ -37,7 +70,7 @@ export default class Schema extends Component {
     e.preventDefault();
     const schemaId = this.props.match.params.schemaId;
     if(this.state.isAdd === true) {
-      this.state.schema.properties = this.state.patched_schema.properties;
+      
 
       if(this.state.patched_schema.properties.hasOwnProperty("id")) {
         this.state.schema.ids = ["id"];
@@ -68,7 +101,7 @@ export default class Schema extends Component {
     if(jsondata.error === false) {
 
 
-      this.state.schema.properties = jsondata.jsObject;
+      this.state.schema.properties = JSON.parse(jsondata.json);
       this.state.schema_enlarged.properties = jsondata.jsObject;
       this.setState({ patched_schema: Api.getPatchSchema(this.state.schema_enlarged)});
     }

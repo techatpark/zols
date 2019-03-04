@@ -37,6 +37,7 @@ export default class App extends Component {
       <Switch>
         <Route exact path="/" component={SchemaList} />
           <Route exact path="/schema/:schemaId" component={Schema} />
+          <Route exact path="/schema/:schemaId/_addNew" component={Schema} />
         <Route exact path="/data/:schemaId" component={DataList} />
         <Route exact path="/data/:schemaId/*" component={Data} />
       </Switch>

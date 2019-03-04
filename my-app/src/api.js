@@ -7,12 +7,13 @@ const api = axios.create({
 });
 const APIModel = {
   getPatchSchema: schema => {
+
     const patched_schema = Object.assign({}, schema);
-    var current_schema = patched_schema;
-    while(current_schema["$ref"] !== undefined) {
-      current_schema = patched_schema.definitions[current_schema["$ref"].split('#/definitions/')[1]];
-      Object.assign(patched_schema.properties, current_schema.properties);
-      console.log(current_schema.title);
+    let cs = schema;
+    while(cs != undefined && cs["$ref"] != undefined) {
+      cs = schema.definitions[cs["$ref"].split("#/definitions/")[1]];
+      console.log(cs);
+      Object.assign(patched_schema.properties, cs.properties);
     }
     return patched_schema;
   },

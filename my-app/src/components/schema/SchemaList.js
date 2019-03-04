@@ -62,7 +62,8 @@ export default class SchemaList extends Component {
       nodeEnter.append("circle")
         .attr("r", 1e-6)
         .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
-        .on("click", click);
+        .on("click", click)
+        .on("dblclick",dnclickOnText);
 
       nodeEnter.append("text")
         .attr("x", function(d) { return d.children || d._children ? -13 : 13; })
@@ -141,6 +142,10 @@ export default class SchemaList extends Component {
       update(d);
     }
 
+    function dnclickOnText(d) {
+      window.location = '/schema/'+d.id + "/_addNew";
+    }
+
     // Edit on click.
     function clickOnText(d) {
       window.location = '/schema/'+d.id;
@@ -186,16 +191,24 @@ export default class SchemaList extends Component {
   componentDidMount = async () => {
     const { data } = await Api.get(`/schema`);
     var sel = document.getElementById('schemas_select');
-    for(var i = 0; i < data.length; i++) {
-        if(data[i]["$ref"] === undefined) {
-          var opt = document.createElement('option');
-          opt.innerHTML = data[i].title;
-          opt.value = data[i]["$id"];
-          sel.appendChild(opt);
-        }
+    if(data.length === 0) {
+      sel.style.display = "none";
+    }else {
+      for(var i = 0; i < data.length; i++) {
+          if(data[i]["$ref"] === undefined) {
+            var opt = document.createElement('option');
+            opt.innerHTML = data[i].title;
+            opt.value = data[i]["$id"];
+            sel.appendChild(opt);
+          }
+      }
     }
+
     this.setState({ schemas: data });
-    this.drawChart(this.getTreeData());
+    if(data.length !== 0) {
+      this.drawChart(this.getTreeData());
+    }
+
   };
   render() {
     return <div className="container">
