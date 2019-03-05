@@ -123,51 +123,55 @@ export default class Schema extends Component {
     const isAdd = this.state.isAdd;
     let idText;
     if (isAdd) {
-        idText = <div className="col-md-4">
-          <label>
-            Id:
-            <input type="text" name="$id" value={this.state.schema["$id"]} onChange={this.handleChange}/>
-          </label>
-        </div>
+        idText =
+        <React.Fragment>
+        <input type="text" className="form-control mb-2 mr-sm-2" type="text" name="$id" value={this.state.schema["$id"]} onChange={this.handleChange} placeholder="Id"/>
+        <label class="form-check-label" for="title">
+          &nbsp;&nbsp;&nbsp;&nbsp; with title &nbsp;&nbsp;&nbsp;&nbsp;
+        </label>
+        </React.Fragment>
       }
     return (
       <React.Fragment>
-          <div className="row">
+          <header className="row">
+              <div className="col-md-12">
+              <form className="form-inline text-right" autocomplete="off">
+              <input className="form-control mb-2 mr-sm-2 pull-left" type="text" name="dsl" placeholder="Field DSL"/>
               {idText}
-              <div className="col-md-4">
-                <label>
-                  Title:
-                  <input type="text" name="title" value={this.state.schema.title} onChange={this.handleChange} />
-                </label>
+                  <input className="form-control mb-2 mr-sm-2" type="text" name="title" value={this.state.schema.title} onChange={this.handleChange} placeholder="Title"/>
+                  <label class="form-check-label" for="title">
+                    &nbsp;&nbsp;&nbsp;&nbsp; described as &nbsp;&nbsp;&nbsp;&nbsp;
+                  </label>
+                  <input  className="form-control mb-6 mr-sm-6" type="text" name="description" value={this.state.schema.description} onChange={this.handleChange} placeholder="Description"/>
+              </form>
               </div>
-              <div className="col-md-4">
-                <label>
-                  Description:
-                  <input type="text" name="description" value={this.state.schema.description} onChange={this.handleChange} />
-                </label>
-              </div>
-          </div>
+          </header>
           <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-4">
                 <JSONInput
                     id          = 'a_unique_id'
                     placeholder = {this.state.schema.properties}
                     height      = '390px'
+                    width       = '100%'
                     onChange    = {this.onChange}
                 />
               </div>
-              <div className="col-md-6">
+              <div className="col-md-8">
                 <Form schema={this.state.patched_schema} onSubmit={this.onSubmit} FieldTemplate={Api.Tpl}>
                 <div></div>
                 </Form>
               </div>
           </div>
-          <div className="row">
-              <div className="col-md-12">
+
+              <footer className="container-fluid">
+              <div className="row">
+                  <div className="col-md-12 text-right">
                 <button className="btn btn-link" type="button" onClick={this.onCancel} >Cancel</button>
                 <button className="btn btn-primary" type="submit" onClick={this.onSubmit}>Submit</button>
               </div>
-          </div>
+              </div>
+              </footer>
+
       </React.Fragment>
 
     );
