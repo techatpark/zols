@@ -34,16 +34,16 @@ public class BrowseAPIController {
     @Autowired
     private BrowseService browseService;
 
-//    @RequestMapping(value = "/search/{schemaName}")
-//    public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
-//            Pageable pageable,HttpServletRequest request) throws DataStoreException {
-//        return getPage(browseService.searchSchema(schemaName, keyword, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
-//    }
-//
-//    @RequestMapping(value = "/browse/{schemaName}")
-//    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
-//            Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
-//        return getAggregatedResults(browseService.browseSchema(schemaName, keyword, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
-//    }
+    @RequestMapping(value = "/search/{schemaName}")
+    public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
+            Pageable pageable,HttpServletRequest request) throws DataStoreException {
+        return getPage(browseService.searchSchema(schemaName, keyword, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
+    }
+
+    @RequestMapping(value = "/browse/{schemaName}")
+    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
+            Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
+        return getAggregatedResults(browseService.browseSchema(schemaName, keyword, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
+    }
 
 }

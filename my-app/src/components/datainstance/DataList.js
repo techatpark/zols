@@ -24,7 +24,8 @@ export default class DataList extends Component {
     const schemaId = this.props.match.params.schemaId;
     const { data } = await Api.get(`/schema/${schemaId}?enlarged`);
     const list = await Api.get(`/data/${schemaId}`);
-    this.setState({ schema: Api.getPatchSchema(data), data: list.data.content });
+    console.log("message", list.data);
+    this.setState({ schema: Api.getPatchSchema(data), data: list.data });
   };
   render() {
     const schemaId = this.props.match.params.schemaId;
@@ -34,7 +35,7 @@ export default class DataList extends Component {
         <h3>List of {this.state.schema.title} </h3>
         <ul className="list-group">
           {this.state.data ? (
-            this.state.data.map((d, i) => (
+            this.state.data.content.map((d, i) => (
               <li className="list-group-item" key={i}>
                 <Link
                   to={`/data/${d["$type"]}/${this.state.schema.ids[0]}/${
