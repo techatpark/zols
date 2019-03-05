@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Form from "react-jsonschema-form";
 import JSONInput from 'react-json-editor-ajrm';
 import Api from "../../api";
+import { Link } from "react-router-dom";
 
 export default class Schema extends Component {
 
@@ -76,6 +77,12 @@ export default class Schema extends Component {
         this.state.schema.ids = ["id"];
       }
 
+      if(this.state.patched_schema.properties.hasOwnProperty("name")) {
+        this.state.schema.labelField = "name";
+      } else if(this.state.patched_schema.properties.hasOwnProperty("title")) {
+        this.state.schema.labelField = "title";
+      }
+
       Api.post(`/schema`,this.state.schema)
       .then(function (response) {
         window.location = '/';
@@ -126,11 +133,17 @@ export default class Schema extends Component {
         idText =
         <React.Fragment>
         <input type="text" className="form-control mb-2 mr-sm-2" type="text" name="$id" value={this.state.schema["$id"]} onChange={this.handleChange} placeholder="Id"/>
-        <label class="form-check-label" for="title">
+        <label className="form-check-label" for="title">
           &nbsp;&nbsp;&nbsp;&nbsp; with title &nbsp;&nbsp;&nbsp;&nbsp;
         </label>
         </React.Fragment>
       }
+    let refText;
+    if(this.state.schema["$ref"] != undefined) {
+      refText = <label className="form-check-label">
+      &nbsp;&nbsp;&nbsp;&nbsp; which extends <a href={`/schema/`+this.state.schema['$ref']}>{this.state.schema['$ref']}</a>
+      </label>
+    }
     return (
       <React.Fragment>
           <header className="row">
@@ -139,10 +152,11 @@ export default class Schema extends Component {
               <input className="form-control mb-2 mr-sm-2 pull-left" type="text" name="dsl" placeholder="Field DSL"/>
               {idText}
                   <input className="form-control mb-2 mr-sm-2" type="text" name="title" value={this.state.schema.title} onChange={this.handleChange} placeholder="Title"/>
-                  <label class="form-check-label" for="title">
+                  <label className="form-check-label" for="title">
                     &nbsp;&nbsp;&nbsp;&nbsp; described as &nbsp;&nbsp;&nbsp;&nbsp;
                   </label>
                   <input  className="form-control mb-6 mr-sm-6" type="text" name="description" value={this.state.schema.description} onChange={this.handleChange} placeholder="Description"/>
+                  {refText}
               </form>
               </div>
           </header>

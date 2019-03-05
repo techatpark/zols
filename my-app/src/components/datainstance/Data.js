@@ -55,7 +55,7 @@ export default class Data extends Component {
   render() {
     return (
       <React.Fragment>
-        <Form schema={this.state.schema} formData={this.state.data} onSubmit={this.onSubmit} >
+        <Form schema={this.state.schema} uiSchema={this.state.schema.uiSchema} formData={this.state.data} onSubmit={this.onSubmit} FieldTemplate={Api.Tpl}>
         <div>
           <button className="btn btn-link" type="button" onClick={this.onCancel} >Cancel</button>
           <button className="btn btn-primary" type="submit">Submit</button>

@@ -6,7 +6,6 @@
 package org.zols.datastore;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -25,12 +24,8 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllDat
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
-import org.zols.datastore.query.Filter;
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 
 @RunWith(JUnitPlatform.class)
@@ -139,7 +134,20 @@ public class DataManagementTest {
     public void testList() throws DataStoreException {
         assertEquals(2, dataStore.list("product").size(), "Listing Simple Data");
     }
+    
+    @Test
+    public void testListSubtype() throws DataStoreException {
+        Map<String, Object> product = dataStore.read("computer", new SimpleEntry("id", "1")).get();
+        product.put("id", 3);
+        product.put("title", "Changed");
+        product.remove("$type");
+        product.remove("os");
+        dataStore.create("product", product);
+        assertEquals(1, dataStore.list("mobile").size(), "Listing Simple Data");
+        
+    }
 
+    
     @Test
     public void testListDataWithQuery() throws DataStoreException {
         assertEquals(1, dataStore.list("mobile", new MapQuery().string("os").eq("ios")).size(), "Listing Simple Data with valid query");
