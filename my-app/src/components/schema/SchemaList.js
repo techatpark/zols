@@ -211,7 +211,7 @@ export default class SchemaList extends Component {
 
   };
   render() {
-    return <div className="container">
+    return <React.Fragment>
         <div className="row">
           <div className="col-md-4">
           <select className="form-control" id="schemas_select" onChange={this.onSchemaSelection}>
@@ -229,7 +229,7 @@ export default class SchemaList extends Component {
         <div id="svg"></div>
         </div>
         </div>
-        </div>
+      </React.Fragment>
     ;
   }
 }

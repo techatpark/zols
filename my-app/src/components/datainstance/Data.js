@@ -6,7 +6,7 @@ export default class Data extends Component {
 
   onSubmit = ({formData}, e) => {
     if(this.state.locpath == "_addNew") {
-      
+
       const created_data = Api.post(`/data/${this.state.schema["$id"]}`,formData)
       .then(function (response) {
         window.history.back();
@@ -54,14 +54,14 @@ export default class Data extends Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <Form schema={this.state.schema} formData={this.state.data} onSubmit={this.onSubmit} >
         <div>
           <button className="btn btn-link" type="button" onClick={this.onCancel} >Cancel</button>
           <button className="btn btn-primary" type="submit">Submit</button>
         </div>
         </Form>
-      </div>
+      </React.Fragment>
     );
   }
 }

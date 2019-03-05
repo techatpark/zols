@@ -1,3 +1,4 @@
+import React, { Component } from "react";
 import axios from "axios";
 import config from "./config";
 
@@ -6,6 +7,17 @@ const api = axios.create({
   baseURL: BASE_URL
 });
 const APIModel = {
+  Tpl: (props) => {
+  const {id, classNames, label, help, required, description, rawErrors=[], children} = props;
+  return (
+    <div className={classNames}>
+      {description}
+      {children}
+      {rawErrors.map(error => <div style={{color: "blue"}}><h1>{error}</h1></div>)}
+      {help}
+    </div>
+  );
+},
   getPatchSchema: schema => {
 
     const patched_schema = Object.assign({}, schema);

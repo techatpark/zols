@@ -70,7 +70,7 @@ export default class Schema extends Component {
     e.preventDefault();
     const schemaId = this.props.match.params.schemaId;
     if(this.state.isAdd === true) {
-      
+
 
       if(this.state.patched_schema.properties.hasOwnProperty("id")) {
         this.state.schema.ids = ["id"];
@@ -99,8 +99,6 @@ export default class Schema extends Component {
 
   onChange = (jsondata) => {
     if(jsondata.error === false) {
-
-
       this.state.schema.properties = JSON.parse(jsondata.json);
       this.state.schema_enlarged.properties = jsondata.jsObject;
       this.setState({ patched_schema: Api.getPatchSchema(this.state.schema_enlarged)});
@@ -133,7 +131,7 @@ export default class Schema extends Component {
         </div>
       }
     return (
-      <div className="container">
+      <React.Fragment>
           <div className="row">
               {idText}
               <div className="col-md-4">
@@ -159,7 +157,7 @@ export default class Schema extends Component {
                 />
               </div>
               <div className="col-md-6">
-                <Form schema={this.state.patched_schema} onSubmit={this.onSubmit} >
+                <Form schema={this.state.patched_schema} onSubmit={this.onSubmit} FieldTemplate={Api.Tpl}>
                 <div></div>
                 </Form>
               </div>
@@ -170,7 +168,7 @@ export default class Schema extends Component {
                 <button className="btn btn-primary" type="submit" onClick={this.onSubmit}>Submit</button>
               </div>
           </div>
-      </div>
+      </React.Fragment>
 
     );
   }

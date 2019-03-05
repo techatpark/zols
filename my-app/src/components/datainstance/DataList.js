@@ -30,7 +30,7 @@ export default class DataList extends Component {
     const schemaId = this.props.match.params.schemaId;
 
     return (
-      <div>
+      <React.Fragment>
         <h3>List of {this.state.schema.title} </h3>
         <ul className="list-group">
           {this.state.data ? (
@@ -59,7 +59,7 @@ export default class DataList extends Component {
             <Link to={`/data/${schemaId}/_addNew`}>Add {this.state.schema.title}</Link>
           </button>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
