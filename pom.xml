@@ -63,10 +63,10 @@
         <module>zols-datastore-elasticsearch</module>
         <module>zols-cms-plugin-service</module>
         <module>zols-cms-plugin</module>
-     
+        <module>zols-cms</module>
         <!--  
         <module>zols-datastore-mongo</module>
-        <module>zols-cms</module>
+        
         -->
     </modules>
     

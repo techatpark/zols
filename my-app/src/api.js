@@ -3,8 +3,9 @@ import axios from "axios";
 import config from "./config";
 
 const { BASE_URL } = config();
-const api = axios.create({
-  baseURL: BASE_URL
+let api = axios.create({
+  baseURL: BASE_URL,
+  headers:{}
 });
 const APIModel = {
   Tpl: (props) => {
@@ -18,9 +19,22 @@ const APIModel = {
     </div>
   );
 },
+  setLocale: (locale) => {
+    if(locale === undefined) {
+      api = axios.create({
+        baseURL: BASE_URL
+      
+      });
+    }else {
+      api = axios.create({
+        baseURL: BASE_URL,
+        headers:{"Accept-Language":locale}
+      });
+    }
+
+  } ,
+
   getPatchSchema: schema => {
-
-
 
     const patched_schema = Object.assign({}, schema);
     let cs = schema;

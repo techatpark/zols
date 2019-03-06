@@ -29,11 +29,18 @@ export default class App extends Component {
             </div>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
-            <ul className="nav navbar-nav navbar-right">
-              <li className="active"><a href="./">Product <span className="sr-only">(current)</span></a></li>
-              <li><a href="../navbar-static-top/">Person</a></li>
-              <li><a href="../navbar-fixed-top/">Device</a></li>
-            </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                English <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="https://getbootstrap.com/">Chineese</a></li>
+                <li><a href="https://v4-alpha.getbootstrap.com/">French</a></li>
+              </ul>
+            </li>
+
+          </ul>
           </div>
         </div>
       </nav>
