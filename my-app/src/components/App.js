@@ -4,8 +4,20 @@ import SchemaList from "./schema/SchemaList";
 import Schema from "./schema/Schema";
 import DataList from "./datainstance/DataList";
 import Data from "./datainstance/Data";
+import Api from "../api";
 
 export default class App extends Component {
+
+  state = {
+    locale: "English"
+  };
+
+
+  onLocale = (e) => {
+    e.preventDefault();
+    this.setState({ locale: e.target.innerHTML});
+    Api.setLocale(e.target.getAttribute("data-locale"));
+  };
 
   render(){
   return <div className="container-fluid">
@@ -32,11 +44,11 @@ export default class App extends Component {
           <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                English <span class="caret"></span>
+                {this.state.locale} <span class="caret"></span>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="https://getbootstrap.com/">Chineese</a></li>
-                <li><a href="https://v4-alpha.getbootstrap.com/">French</a></li>
+                <li ><a href="javascript://" data-locale="zh" onClick={this.onLocale}>Chineese</a></li>
+                <li><a href="javascript://" data-locale="" onClick={this.onLocale}>English</a></li>
               </ul>
             </li>
 

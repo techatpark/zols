@@ -41,11 +41,6 @@ public class ZolsConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocaleResolver localeResolver() {
-        return new ZolsLocaleResolver();
-    }
-
-    @Bean
     LinkService linkService() {
         return new LinkService(linkGroupService(), dataStore);
     }

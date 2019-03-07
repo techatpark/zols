@@ -14,6 +14,7 @@ import static org.zols.datastore.query.Filter.Operator.EQUALS;
 import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
 import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
 import org.zols.datastore.query.MapQuery;
+import org.zols.datastore.query.Query;
 
 /**
  *
@@ -76,5 +77,39 @@ public class HttpUtil {
             }
         }
         return condition;
+    }
+    
+    
+    public static Query getLegacyQuery(HttpServletRequest request) {
+        Query query = null;
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        if (parameterMap != null) {
+//            parameterMap.remove("page");
+//            parameterMap.remove("size");
+            if (!parameterMap.isEmpty()) {
+                query = new Query();
+                for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
+                    String k = entrySet.getKey();
+                    String[] v = entrySet.getValue();
+                    if (!k.equals("page") && !k.equals("size") && !k.equals("lang") && !k.equals("q")) {
+                        if (v.length == 1) {
+                            String value = v[0];
+                            if (value.contains(",")) {
+                                query.addFilter(new Filter(k, EXISTS_IN, Arrays.asList(value.split(","))));
+                            } else if (value.matches("\\[(.*?)\\]")) {
+                                String[] rangeValues = value.substring(1).replaceAll("]", "").split("-");
+                                query.addFilter(new Filter(k, IN_BETWEEN, Double.parseDouble(rangeValues[0]), Double.parseDouble(rangeValues[1])));
+                            } else {
+                                query.addFilter(new Filter(k, EQUALS, value));
+                            }
+                        }
+                    }
+                }
+                if (query.getFilters().isEmpty()) {
+                    query = null;
+                }
+            }
+        }
+        return query;
     }
 }

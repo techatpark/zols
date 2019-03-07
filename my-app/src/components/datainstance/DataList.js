@@ -21,7 +21,7 @@ export default class DataList extends Component {
 
 
   componentDidMount = async () => {
-    Api.setLocale();
+    
     const schemaId = this.props.match.params.schemaId;
     const { data } = await Api.get(`/schema/${schemaId}?enlarged`);
     const list = await Api.get(`/data/${schemaId}`);

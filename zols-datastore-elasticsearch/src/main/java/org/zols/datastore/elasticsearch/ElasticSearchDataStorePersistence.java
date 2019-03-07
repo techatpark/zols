@@ -364,13 +364,14 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                     aggregationName = entrySet.getKey().substring(entrySet.getKey().indexOf("#") + 1);
                     if (!aggregationName.startsWith("max_")) {
                         bucket = new HashMap<>();
+                        Object title = ((Map<String, Object>) ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("meta")).get("title");
                         if (aggregationName.startsWith("min_")) {
                             bucket.put("name", aggregationName.replaceAll("min_", ""));
                             bucket.put("type", "minmax");
                             bucketItem = new HashMap<>();
                             bucketItem.put("min", ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("value"));
                             bucketItem.put("max", ((Map<String, Object>) aggregations.get(entrySet.getKey().replaceAll("min_", "max_").replaceAll("min#", "max#"))).get("value"));
-                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("meta")).get("title"));
+                            bucket.put("title", title == null ? bucket.get("name"):title);
                             bucket.put("item", bucketItem);
                         } else if (!aggregationName.startsWith("max_")) {
                             bucket.put("name", aggregationName);
@@ -384,8 +385,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                                 bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
                                 bucketItems.add(bucketItem);
                             }
-                            bucket.put("title", ((Map<String, Object>) ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("meta")).get("title"));
-                            
+                            bucket.put("title", title == null ? bucket.get("name"):title);
                             bucket.put("items", bucketItems);
                         }
                         buckets.add(bucket);

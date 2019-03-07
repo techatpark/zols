@@ -8,6 +8,7 @@ let api = axios.create({
   headers:{}
 });
 const APIModel = {
+
   Tpl: (props) => {
   const {id, classNames, label, help, required, description, rawErrors=[], children} = props;
   return (
@@ -19,20 +20,10 @@ const APIModel = {
     </div>
   );
 },
-  setLocale: (locale) => {
-    if(locale === undefined) {
-      api = axios.create({
-        baseURL: BASE_URL
-      
-      });
-    }else {
-      api = axios.create({
-        baseURL: BASE_URL,
-        headers:{"Accept-Language":locale}
-      });
-    }
 
-  } ,
+setLocale: (locale) => {
+  localStorage.setItem("locale", locale);
+},
 
   getPatchSchema: schema => {
 
@@ -63,8 +54,6 @@ const APIModel = {
         if(!ui_order.includes(e)) {
           ui_order.push(e);
         }
-
-
     }
 
     ui_order.push("*");
@@ -76,7 +65,11 @@ const APIModel = {
 
     return patched_schema;
   },
-  get: route => api.get(route),
+  get: route => api.get(route,{
+    params: {
+      lang: localStorage.getItem("locale")
+    }
+  }),
   post: (route, data) => api.post(route, data),
   put: (route, data) => api.put(route, data),
   remove: route => api.delete(route)

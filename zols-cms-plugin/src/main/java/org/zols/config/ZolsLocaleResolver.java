@@ -8,26 +8,34 @@ package org.zols.config;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import javax.servlet.http.HttpServletRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
+import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
-public class ZolsLocaleResolver extends AcceptHeaderLocaleResolver
+public class ZolsLocaleResolver 
         implements WebMvcConfigurer {
 
-    List<Locale> LOCALES = Arrays.asList(Locale.getAvailableLocales());
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver slr = new SessionLocaleResolver();
+        slr.setDefaultLocale(Locale.US);
+        return slr;
+    }
+
+    @Bean
+    public LocaleChangeInterceptor localeChangeInterceptor() {
+        LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
+        lci.setParamName("lang");
+        return lci;
+    }
 
     @Override
-    public Locale resolveLocale(HttpServletRequest request) {
-        if (request.getHeader("Accept-Language") == null) {
-            return Locale.getDefault();
-        }
-        List<Locale.LanguageRange> list = Locale.LanguageRange.parse(request.getHeader("Accept-Language"));
-        Locale locale = Locale.lookup(list, LOCALES);
-        return locale;
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(localeChangeInterceptor());
     }
 }
-
-   
