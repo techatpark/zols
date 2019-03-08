@@ -17,6 +17,7 @@ import static java.util.stream.Collectors.toList;
 import javax.validation.ConstraintViolation;
 import org.zols.datastore.persistence.DataStorePersistence;
 import org.zols.datastore.query.MapQuery;
+import org.zols.datastore.query.Page;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
@@ -126,7 +127,9 @@ public final class SchemaManager {
     }
 
     public List<Map<String, Object>> list() throws DataStoreException {
-        return dataStorePersistence.list(jsonSchemaForSchema,null);
+        // PATCH
+        Page<Map<String, Object>> page = dataStorePersistence.list(jsonSchemaForSchema,null,0,1000);
+        return page == null ? null : page.getContent();
     }
 
     public JsonSchema getJsonSchema(String schemaId) {
