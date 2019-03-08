@@ -20,14 +20,25 @@ import org.zols.jsonschema.JsonSchema;
  * @author sathish
  */
 public interface DataStorePersistence {
-    
+
     /**
      * Called when new schema is created
+     *
      * @param jsonSchema
-     * @throws DataStoreException 
+     * @throws DataStoreException
      */
     abstract void onNewSchema(JsonSchema jsonSchema)
-            throws DataStoreException ;
+            throws DataStoreException;
+
+    /**
+     * Called when new schema is updated
+     *
+     * @param oldSchema
+     * @param newSchema
+     * @throws DataStoreException
+     */
+    abstract void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema)
+            throws DataStoreException;
 
     /**
      *
@@ -50,7 +61,7 @@ public interface DataStorePersistence {
      */
     abstract Map<String, Object> read(
             JsonSchema jsonSchema,
-            SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            SimpleEntry<String, Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -60,7 +71,7 @@ public interface DataStorePersistence {
      * @throws org.zols.datatore.exception.DataStoreException
      */
     abstract boolean delete(JsonSchema jsonSchema,
-            SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            SimpleEntry<String, Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -73,7 +84,7 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     abstract boolean update(JsonSchema jsonSchema,
-            Map<String, Object> jsonData, SimpleEntry<String,Object>... idValues) throws DataStoreException;
+            Map<String, Object> jsonData, SimpleEntry<String, Object>... idValues) throws DataStoreException;
 
     /**
      *
@@ -83,8 +94,8 @@ public interface DataStorePersistence {
      * @return status of the update operation
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    abstract boolean updatePartially(JsonSchema jsonSchema, 
-            Map<String, Object> jsonData,AbstractMap.SimpleEntry<String,Object>... idValues)
+    abstract boolean updatePartially(JsonSchema jsonSchema,
+            Map<String, Object> jsonData, AbstractMap.SimpleEntry<String, Object>... idValues)
             throws DataStoreException;
 
     /**

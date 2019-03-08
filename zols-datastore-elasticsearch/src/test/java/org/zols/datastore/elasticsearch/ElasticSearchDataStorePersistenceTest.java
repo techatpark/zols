@@ -6,7 +6,6 @@
 package org.zols.datastore.elasticsearch;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpHost;
@@ -20,9 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.getJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
-import org.zols.datastore.query.Filter;
 import org.zols.datastore.query.MapQuery;
-import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 

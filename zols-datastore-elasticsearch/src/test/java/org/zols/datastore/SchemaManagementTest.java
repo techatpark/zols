@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import org.zols.datatore.exception.DataStoreException;
 
 @RunWith(JUnitPlatform.class)
@@ -51,6 +52,16 @@ public class SchemaManagementTest {
         schemaMap.put("description", "Updated description");
         dataStore.getSchemaManager().update("product", schemaMap);
         assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
+    }
+    
+    @Test
+    public void testUpdateSchemaRemoveFields() throws DataStoreException {
+        dataStore.create("computer",sampleJson("computer"));
+        Map<String, Object> schemaMap = dataStore.getSchemaManager().get("product");
+        ((Map<String, Object>)schemaMap.get("properties")).remove("tags");
+        dataStore.getSchemaManager().update("product", schemaMap);
+        System.out.println("SS");
+        //assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
     }
 
     @Test

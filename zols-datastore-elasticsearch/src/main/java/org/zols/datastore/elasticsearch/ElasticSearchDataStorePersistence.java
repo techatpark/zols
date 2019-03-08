@@ -15,8 +15,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.util.stream.Collectors.toList;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.entity.ContentType;
@@ -27,6 +29,7 @@ import static org.elasticsearch.action.DocWriteResponse.Result.DELETED;
 import static org.elasticsearch.action.DocWriteResponse.Result.UPDATED;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
 import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest.AliasActions;
+import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
@@ -42,9 +45,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
+import org.elasticsearch.client.GetAliasesResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
@@ -523,7 +528,89 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            System.out.println();
         }
     }
+
+    @Override
+    public void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema) throws DataStoreException {
+        Map<String, Map<String, Object>> oldPropertiesMap = oldSchema.getProperties();
+        Map<String, Map<String, Object>> newPropertiesMap = newSchema.getProperties();
+        if (oldPropertiesMap != null) {
+            List<String> removedFields = oldPropertiesMap.keySet().stream()
+                    .filter(key -> {
+                        return !newPropertiesMap.containsKey(key);
+                    }).map(key -> "\"" + key + "\"").collect(toList());
+            if (!removedFields.isEmpty()) {
+                try {
+                    String typeName = getTypeName(oldSchema);
+                    String typeIndexAliasName = getIndexName(typeName);
+                    String typeIndexName = findIndexName(typeIndexAliasName);
+                    String newTypeIndexName = typeIndexAliasName + System.currentTimeMillis();
+
+                    Map<String, String> params = Collections.singletonMap("pretty", "true");
+                    String reindexRequest = "{\n"
+                            + "  \"source\": {\n"
+                            + "    \"index\": "
+                            + "\"" + typeIndexAliasName + "\""
+                            + ",\n"
+                            + "    \"_source\": {\n"
+                            + "        \"excludes\": "
+                            + removedFields.toString()
+                            + "    }\n"
+                            + "  },\n"
+                            + "  \"dest\": {\n"
+                            + "    \"index\": \""
+                            + newTypeIndexName
+                            + "\"\n"
+                            + "  }\n"
+                            + "}";
+                    HttpEntity entity = new NStringEntity(reindexRequest, ContentType.APPLICATION_JSON);
+
+                    client.getLowLevelClient()
+                            .performRequest("POST", "/_reindex", params, entity);
+
+                    // Switch
+                    String switchReq = "{\n"
+                            + "    \"actions\" : [\n"
+                            + "        { \"remove\" : { \"indices\" : \""
+                            + typeIndexName
+                            + "\", \"alias\" : \""
+                            + typeIndexAliasName
+                            + "\" } },\n"
+                            + "        { \"add\" : { \"indices\" : \""
+                            + newTypeIndexName
+                            + "\", \"alias\" : \""
+                            + typeIndexAliasName
+                            + "\" } }\n"
+                            + "    ]\n"
+                            + "}";
+                    entity = new NStringEntity(switchReq, ContentType.APPLICATION_JSON);
+
+                    client.getLowLevelClient()
+                            .performRequest("POST", "/_aliases", params, entity);
+                    
+                    client.getLowLevelClient().performRequest("DELETE", "/"+typeIndexName, params);
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+    }
+
+    private String findIndexName(String aliasName) throws IOException {
+        final StringBuilder index = new StringBuilder();
+        GetAliasesRequest requestWithAlias = new GetAliasesRequest(aliasName);
+        GetAliasesResponse response = client.indices().getAlias(requestWithAlias, RequestOptions.DEFAULT);
+        Map<String, Set<AliasMetaData>> aliasMap = response.getAliases();
+
+        aliasMap.forEach((indexName, md) -> {
+            if (indexName.startsWith(aliasName)) {
+                index.append(indexName);
+            }
+        });
+
+        return index.toString().trim().length() == 0 ? null : index.toString();
+    }
+
 }

@@ -60,7 +60,12 @@ public final class SchemaManager {
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            return dataStorePersistence.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
+            JsonSchema oldSchemaMap = this.getJsonSchema(schemaId);
+            boolean updated = dataStorePersistence.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
+            if(updated){
+                dataStorePersistence.onUpdateSchema(oldSchemaMap, this.getJsonSchema(schemaId));
+            }
+            return updated;
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
