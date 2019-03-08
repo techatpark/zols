@@ -25,6 +25,11 @@ import org.elasticsearch.ElasticsearchStatusException;
 import static org.elasticsearch.action.DocWriteResponse.Result.CREATED;
 import static org.elasticsearch.action.DocWriteResponse.Result.DELETED;
 import static org.elasticsearch.action.DocWriteResponse.Result.UPDATED;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest;
+import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest.AliasActions;
+import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
+import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -34,6 +39,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -62,13 +68,13 @@ import static org.zols.jsonschema.util.JsonUtil.asMap;
  *
  */
 public class ElasticSearchDataStorePersistence implements BrowsableDataStorePersistence {
-    
+
     private static final org.slf4j.Logger LOGGER = getLogger(ElasticSearchDataStorePersistence.class);
-    
+
     private final RestHighLevelClient client;
-    
+
     private final String indexName;
-    
+
     public ElasticSearchDataStorePersistence() {
         this.client = new RestHighLevelClient(
                 RestClient.builder(
@@ -76,25 +82,25 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                         new HttpHost("localhost", 9201, "http")));
         this.indexName = "zols";
     }
-    
+
     public ElasticSearchDataStorePersistence(String indexName, RestHighLevelClient client) {
         this.indexName = indexName;
-        
+
         this.client = client;
-        
+
     }
-    
+
     @Override
     public Map<String, Object> create(JsonSchema jsonSchema, Map<String, Object> jsonData) throws DataStoreException {
-        
+
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(jsonData);
         LOGGER.debug("Creating Data for {} with id {}", typeName, ids);
-        
+
         if (ids != null) {
             IndexRequest indexRequest = new IndexRequest(getIndexName(typeName), typeName, getEncodedId(ids))
                     .source(jsonData);
-            
+
             IndexResponse indexResponse;
             try {
                 indexResponse = client.index(indexRequest);
@@ -106,22 +112,22 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             } catch (IOException ex) {
                 throw new DataStoreException("Unable to create data for " + typeName, ex);
             }
-            
+
         }
-        
+
         return null;
     }
-    
+
     @Override
     public Map<String, Object> read(JsonSchema jsonSchema, SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
-        
+
         LOGGER.debug("Getting Data for {} with id {}", typeName, ids);
-        
+
         GetRequest getRequest = new GetRequest(
                 getIndexName(typeName), typeName, getEncodedId(ids));
-        
+
         GetResponse getResponse;
         try {
             getResponse = client.get(getRequest);
@@ -130,14 +136,14 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             throw new DataStoreException("Unable to get data for " + typeName + "with id " + ids, ex);
         }
     }
-    
+
     @Override
     public boolean update(JsonSchema jsonSchema,
             Map<String, Object> jsonData, SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         LOGGER.debug("Updating Data for {} with id {}", typeName, ids);
-        
+
         if (ids != null) {
             IndexRequest indexRequest = new IndexRequest(getIndexName(typeName), typeName, getEncodedId(ids))
                     .source(jsonData);
@@ -151,11 +157,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             } catch (IOException ex) {
                 throw new DataStoreException("Unable to create data for " + typeName, ex);
             }
-            
+
         }
         return false;
     }
-    
+
     @Override
     public boolean updatePartially(JsonSchema jsonSchema,
             Map<String, Object> validatedData, SimpleEntry<String, Object>... idValues)
@@ -163,7 +169,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         LOGGER.debug("Updating Data for {} with id {}", typeName, ids);
-        
+
         if (ids != null) {
             UpdateRequest updateRequest = new UpdateRequest(getIndexName(typeName), typeName, getEncodedId(ids));
             updateRequest.doc(validatedData);
@@ -177,21 +183,21 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             } catch (IOException ex) {
                 throw new DataStoreException("Unable to create data for " + typeName, ex);
             }
-            
+
         }
         return false;
     }
-    
+
     @Override
     public boolean delete(JsonSchema jsonSchema,
             SimpleEntry<String, Object>... idValues) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
         LOGGER.debug("Deleting Data for {} with id {}", typeName, ids);
-        
+
         DeleteRequest deleteRequest = new DeleteRequest(
                 getIndexName(typeName), typeName, getEncodedId(ids));
-        
+
         DeleteResponse deleteResponse;
         try {
             deleteResponse = client.delete(deleteRequest);
@@ -199,25 +205,25 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         } catch (IOException ex) {
             throw new DataStoreException("Unable to delete data for " + typeName + "with id " + ids, ex);
         }
-        
+
     }
-    
+
     private String getTypeName(JsonSchema jsonSchema) {
         return jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId());
     }
-    
+
     private Object getIdValue(JsonSchema jsonSchema, Map<String, Object> jsonData) {
         return jsonSchema == null ? null : jsonSchema.getIdValues(jsonData)[0];
     }
-    
+
     @Override
     public boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
-        
+
         String typeName = getTypeName(jsonSchema);
         String indexName2 = getIndexName(typeName);
         QueryBuilder builder = getQueryBuilder(query);
         if (builder != null) {
-            
+
             try {
                 // Patch for Solinving delete by query conflicts
                 client.getLowLevelClient().performRequest("POST", "/" + indexName2 + "/_refresh");
@@ -232,25 +238,25 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 throw new DataStoreException("Unable to delete " + indexName2, ex);
             }
         }
-        
+
         return false;
     }
-    
+
     @Override
     public List<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
-        
+
         LOGGER.debug("Listing Data for {} ", typeName);
         SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
         searchRequest.types(typeName);
-        
+
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.query(getQueryBuilder(query));
         searchRequest.source(sourceBuilder);
-        
+
         try {
             SearchResponse searchResponse = client.search(searchRequest);
-            
+
             SearchHits hits = searchResponse.getHits();
             long totalHits = hits.getTotalHits();
             if (totalHits != 0) {
@@ -260,7 +266,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 }
                 return list;
             }
-            
+
         } catch (ElasticsearchStatusException ex) {
             if (ex.status() == RestStatus.NOT_FOUND) {
                 return null;
@@ -272,21 +278,21 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return null;
     }
-    
+
     @Override
     public Page<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
-        
+
         LOGGER.debug("Listing Data for {} page {} size {}", typeName, pageNumber, pageSize);
         SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
         searchRequest.types(typeName);
-        
+
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.size(pageSize);
         sourceBuilder.from(pageNumber * pageSize);
         sourceBuilder.query(getQueryBuilder(query));
         searchRequest.source(sourceBuilder);
-        
+
         try {
             SearchResponse searchResponse = client.search(searchRequest);
             SearchHits hits = searchResponse.getHits();
@@ -298,7 +304,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 }
                 return new Page(pageNumber, pageSize, totalHits, list);
             }
-            
+
         } catch (ElasticsearchStatusException ex) {
             if (ex.status() == RestStatus.NOT_FOUND) {
                 return null;
@@ -310,11 +316,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return null;
     }
-    
+
     public static QueryBuilder getQueryBuilder(Condition<MapQuery> query) {
-        return query == null ? null : query.query(new ElasticsearchVisitor(),new ElasticsearchVisitor.Context());
+        return query == null ? null : query.query(new ElasticsearchVisitor(), new ElasticsearchVisitor.Context());
     }
-    
+
     private String getEncodedId(Object ids) {
         try {
             return ids == null ? null : URLEncoder.encode(ids.toString(), "UTF-8");
@@ -323,11 +329,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return null;
     }
-    
+
     private String getIndexName(String typeName) {
         return indexName + "_" + typeName;
     }
-    
+
     @Override
     public AggregatedResults browse(JsonSchema schema, String keyword, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
@@ -345,7 +351,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return aggregatedResults;
     }
-    
+
     private List<Map<String, Object>> bucketsOf(Map<String, Object> searchResponse) {
         List<Map<String, Object>> buckets = null;
         if (searchResponse != null) {
@@ -355,12 +361,12 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 Map<String, Object> bucketItem;
                 List<Map<String, Object>> bucketItems;
                 List<Map<String, Object>> bucketsMaps;
-                
+
                 buckets = new ArrayList<>();
-                
+
                 String aggregationName;
                 for (Map.Entry<String, Object> entrySet : aggregations.entrySet()) {
-                    
+
                     aggregationName = entrySet.getKey().substring(entrySet.getKey().indexOf("#") + 1);
                     if (!aggregationName.startsWith("max_")) {
                         bucket = new HashMap<>();
@@ -371,7 +377,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                             bucketItem = new HashMap<>();
                             bucketItem.put("min", ((Map<String, Object>) aggregations.get(entrySet.getKey())).get("value"));
                             bucketItem.put("max", ((Map<String, Object>) aggregations.get(entrySet.getKey().replaceAll("min_", "max_").replaceAll("min#", "max#"))).get("value"));
-                            bucket.put("title", title == null ? bucket.get("name"):title);
+                            bucket.put("title", title == null ? bucket.get("name") : title);
                             bucket.put("item", bucketItem);
                         } else if (!aggregationName.startsWith("max_")) {
                             bucket.put("name", aggregationName);
@@ -385,19 +391,19 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                                 bucketItem.put("count", (Integer) bucketsMap.get("doc_count"));
                                 bucketItems.add(bucketItem);
                             }
-                            bucket.put("title", title == null ? bucket.get("name"):title);
+                            bucket.put("title", title == null ? bucket.get("name") : title);
                             bucket.put("items", bucketItems);
                         }
                         buckets.add(bucket);
                     }
-                    
+
                 }
-                
+
             }
         }
         return buckets;
     }
-    
+
     private Page<Map<String, Object>> pageOf(Map<String, Object> searchResponse, Integer pageNumber,
             Integer pageSize) {
         Page<Map<String, Object>> page = null;
@@ -408,7 +414,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return page;
     }
-    
+
     private List<Map<String, Object>> resultsOf(Map<String, Object> searchResponse) {
         List<Map<String, Object>> list = null;
         if (searchResponse != null) {
@@ -423,7 +429,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         }
         return list;
     }
-    
+
     private void addAggregations(JsonSchema jsonSchema, SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
@@ -443,45 +449,81 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                         break;
                     case "term":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()+".keyword"));
-                        
+                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey() + ".keyword"));
+
                         break;
                 }
             }
-            
+
         });
-        
+
     }
-    
+
     public Map<String, Object> searchResponse(JsonSchema jsonSchema,
             Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
-        
+
         String typeName = getTypeName(jsonSchema);
-        
+
         SearchRequest searchRequest = new SearchRequest(getIndexName(typeName));
         searchRequest.types(typeName);
-        
+
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.size(pageSize);
         sourceBuilder.from(pageNumber * pageSize);
         sourceBuilder.query(getQueryBuilder(query));
         addAggregations(jsonSchema, sourceBuilder);
-        
+
         searchRequest.source(sourceBuilder);
-        
+
         LOGGER.debug("Executing elastic search query {}", searchRequest.toString());
-        
+
         try {
             SearchResponse searchResponse = client.search(searchRequest);
             return asMap(searchResponse.toString());
         } catch (IOException ex) {
             throw new DataStoreException("Unable to browse data for " + typeName, ex);
         }
-        
+
     }
-    
+
     private void refreshIndex(String indexName) throws IOException {
         RefreshRequest request = new RefreshRequest(indexName);
         client.indices().refresh(request, RequestOptions.DEFAULT);
+    }
+
+    @Override
+    public void onNewSchema(JsonSchema jsonSchema) throws DataStoreException {
+        if (jsonSchema.isRoot()) {
+            String typeName = jsonSchema.getId();
+            String typeIndexName = getIndexName(typeName);
+            String originalTypeIndexName = getIndexName(typeName) + "_base";
+
+            try {
+
+                GetIndexRequest request = new GetIndexRequest();
+                request.indices(originalTypeIndexName);
+
+                if (!client.indices().exists(request, RequestOptions.DEFAULT)) {
+                    CreateIndexRequest createIndexRequest = new CreateIndexRequest(originalTypeIndexName);
+                    CreateIndexResponse createIndexResponse = client.indices().create(createIndexRequest, RequestOptions.DEFAULT);
+
+                    if (createIndexResponse.isAcknowledged()) {
+                        IndicesAliasesRequest aliasesRequest = new IndicesAliasesRequest();
+                        AliasActions aliasAction
+                                = new AliasActions(AliasActions.Type.ADD)
+                                        .index(originalTypeIndexName)
+                                        .alias(typeIndexName);
+                        aliasesRequest.addAliasAction(aliasAction);
+                        AcknowledgedResponse indicesAliasesResponse
+                                = client.indices().updateAliases(aliasesRequest, RequestOptions.DEFAULT);
+                    }
+                }
+
+            } catch (IOException ex) {
+                Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            System.out.println();
+        }
     }
 }

@@ -106,6 +106,10 @@ public abstract class JsonSchema {
         return parent;
     }
 
+    public boolean isRoot() {
+        return getRoot() == this;
+    }
+
     /**
      * Gets Root of the Schema if exists, else returns itself
      *

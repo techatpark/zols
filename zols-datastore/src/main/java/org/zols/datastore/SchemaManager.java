@@ -42,7 +42,9 @@ public final class SchemaManager {
             throws DataStoreException {
         Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            return dataStorePersistence.create(jsonSchemaForSchema, schemaMap);
+            Map<String, Object> schemaMapCreated = dataStorePersistence.create(jsonSchemaForSchema, schemaMap);
+            dataStorePersistence.onNewSchema(getJsonSchema(schemaMap.get("$id").toString()));
+            return schemaMapCreated;
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }

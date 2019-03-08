@@ -20,6 +20,14 @@ import org.zols.jsonschema.JsonSchema;
  * @author sathish
  */
 public interface DataStorePersistence {
+    
+    /**
+     * Called when new schema is created
+     * @param jsonSchema
+     * @throws DataStoreException 
+     */
+    abstract void onNewSchema(JsonSchema jsonSchema)
+            throws DataStoreException ;
 
     /**
      *

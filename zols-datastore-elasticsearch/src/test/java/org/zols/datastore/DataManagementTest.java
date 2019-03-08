@@ -134,7 +134,7 @@ public class DataManagementTest {
     public void testList() throws DataStoreException {
         assertEquals(2, dataStore.list("product").size(), "Listing Simple Data");
     }
-    
+
     @Test
     public void testListSubtype() throws DataStoreException {
         Map<String, Object> product = dataStore.read("computer", new SimpleEntry("id", "1")).get();
@@ -144,10 +144,9 @@ public class DataManagementTest {
         product.remove("os");
         dataStore.create("product", product);
         assertEquals(1, dataStore.list("mobile").size(), "Listing Simple Data");
-        
+
     }
 
-    
     @Test
     public void testListDataWithQuery() throws DataStoreException {
         assertEquals(1, dataStore.list("mobile", new MapQuery().string("os").eq("ios")).size(), "Listing Simple Data with valid query");

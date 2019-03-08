@@ -103,7 +103,6 @@ public class JsonSchemaTestUtil {
         dataStore.delete("mobile");
         dataStore.delete("device");
         dataStore.delete("product");
-        
     }
     
     public static void deleteAllSchema(DataStore dataStore) throws DataStoreException {
