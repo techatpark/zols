@@ -22,8 +22,8 @@ import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.getJsonSchema;
-import org.zols.jsonschema.util.JsonUtil;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
+import static org.zols.datastore.util.MapUtil.asObject;
 
 /**
  *
@@ -58,10 +58,10 @@ public final class ObjectManager<T> {
                 Map<String, Object> createdDataAsMap;
                 if (locale == null) {
                     createdDataAsMap = dataStore.create(jsonSchema, dataAsMap);
-                    createdObject = asObject(createdDataAsMap);
+                    createdObject = asObject(clazz,createdDataAsMap);
                 } else {
                     createdDataAsMap = dataStore.create(jsonSchema, jsonSchema.localizeData(dataAsMap, locale, true));
-                    createdObject = asObject(jsonSchema.delocalizeData(createdDataAsMap, locale));
+                    createdObject = asObject(clazz,jsonSchema.delocalizeData(createdDataAsMap, locale));
                 }
 
             } else {
@@ -79,7 +79,7 @@ public final class ObjectManager<T> {
             return Optional.empty();
         }
 
-        return Optional.of(asObject(jsonSchema.delocalizeData(dataAsMap, locale)));
+        return Optional.of(asObject(clazz,jsonSchema.delocalizeData(dataAsMap, locale)));
     }
 
     public Optional<T> read(AbstractMap.SimpleEntry... idValues) throws DataStoreException {
@@ -146,7 +146,7 @@ public final class ObjectManager<T> {
 
     private List<T> getObjects(List<Map<String, Object>> maps, Locale locale) {
         return maps == null ? null : maps.parallelStream().map(dataAsMap
-                -> asObject(jsonSchema.delocalizeData(dataAsMap, locale))
+                -> asObject(clazz,jsonSchema.delocalizeData(dataAsMap, locale))
         ).collect(toList());
     }
 
@@ -169,18 +169,11 @@ public final class ObjectManager<T> {
 
         if (page != null) {
             return new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().parallelStream().map(dataAsMap
-                    -> asObject(jsonSchema.delocalizeData(dataAsMap, locale))
+                    -> asObject(clazz,jsonSchema.delocalizeData(dataAsMap, locale))
             ).collect(toList()));
         }
         return null;
     }
 
-    private T asObject(Map<String, Object> dataAsMap) {
-        if (dataAsMap == null) {
-            return null;
-        }
-        dataAsMap.remove("$type");
-        return JsonUtil.asObject(clazz, dataAsMap);
-    }
 
 }

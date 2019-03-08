@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.zols.jsonschema.util.JsonUtil;
 
 /**
  *
@@ -56,5 +57,12 @@ public class MapUtil {
             elemenstToBeRemoved.forEach(sourceMap::remove);
         }
 
+    }
+    public static <T> T asObject(Class<T> clazz ,Map<String, Object> dataAsMap) {
+        if (dataAsMap == null) {
+            return null;
+        }
+        dataAsMap.remove("$type");
+        return JsonUtil.asObject(clazz, dataAsMap);
     }
 }
