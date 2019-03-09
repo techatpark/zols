@@ -32,6 +32,7 @@ import org.elasticsearch.action.admin.indices.alias.IndicesAliasesRequest.AliasA
 import org.elasticsearch.action.admin.indices.alias.get.GetAliasesRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.admin.indices.refresh.RefreshRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
@@ -525,7 +526,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 }
 
             } catch (IOException ex) {
-                Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+                throw new DataStoreException("Unable to create index for " + typeName, ex);
             }
 
         }
@@ -541,8 +542,9 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                         return !newPropertiesMap.containsKey(key);
                     }).map(key -> "\"" + key + "\"").collect(toList());
             if (!removedFields.isEmpty()) {
+                String typeName = getTypeName(oldSchema);
                 try {
-                    String typeName = getTypeName(oldSchema);
+
                     String typeIndexAliasName = getIndexName(typeName);
                     String typeIndexName = findIndexName(typeIndexAliasName);
                     String newTypeIndexName = typeIndexAliasName + System.currentTimeMillis();
@@ -588,11 +590,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
                     client.getLowLevelClient()
                             .performRequest("POST", "/_aliases", params, entity);
-                    
-                    client.getLowLevelClient().performRequest("DELETE", "/"+typeIndexName, params);
-                    
+
+                    client.getLowLevelClient().performRequest("DELETE", "/" + typeIndexName, params);
+
                 } catch (IOException ex) {
-                    Logger.getLogger(ElasticSearchDataStorePersistence.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new DataStoreException("Unable to switch alias index for " + typeName, ex);
                 }
             }
         }
@@ -611,6 +613,23 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         });
 
         return index.toString().trim().length() == 0 ? null : index.toString();
+    }
+
+    @Override
+    public void onDeleteSchema(JsonSchema jsonSchema) throws DataStoreException {
+        // If root delete the index
+        if (jsonSchema.isRoot()) {
+            String typeName = getTypeName(jsonSchema);
+            String indexAliasName = getIndexName(typeName);
+
+            try {
+                String typeIndexName = findIndexName(indexAliasName);
+                DeleteIndexRequest request = new DeleteIndexRequest(typeIndexName);
+                AcknowledgedResponse deleteIndexResponse = client.indices().delete(request, RequestOptions.DEFAULT);
+            } catch (IOException ex) {
+                throw new DataStoreException("Unable to delete index for " + typeName, ex);
+            }
+        }
     }
 
 }

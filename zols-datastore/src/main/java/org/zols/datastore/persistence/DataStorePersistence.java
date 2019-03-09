@@ -39,6 +39,16 @@ public interface DataStorePersistence {
      */
     abstract void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema)
             throws DataStoreException;
+    
+    
+     /**
+     * Called when schema is deleted
+     *
+     * @param jsonSchema
+     * @throws DataStoreException
+     */
+    abstract void onDeleteSchema(JsonSchema jsonSchema)
+            throws DataStoreException;
 
     /**
      *

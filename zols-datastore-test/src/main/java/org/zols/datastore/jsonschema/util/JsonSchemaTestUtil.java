@@ -97,12 +97,13 @@ public class JsonSchemaTestUtil {
     }
     
     public static void deleteAllData(DataStore dataStore) throws DataStoreException {
-        dataStore.delete("geo");
-        dataStore.delete("seller");
+        
         dataStore.delete("computer");
         dataStore.delete("mobile");
         dataStore.delete("device");
         dataStore.delete("product");
+        dataStore.delete("geo");
+        dataStore.delete("seller");
     }
     
     public static void deleteAllSchema(DataStore dataStore) throws DataStoreException {

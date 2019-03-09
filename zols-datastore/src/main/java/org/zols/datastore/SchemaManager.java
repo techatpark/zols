@@ -62,7 +62,7 @@ public final class SchemaManager {
         if (violations.isEmpty()) {
             JsonSchema oldSchemaMap = this.getJsonSchema(schemaId);
             boolean updated = dataStorePersistence.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
-            if(updated){
+            if (updated) {
                 dataStorePersistence.onUpdateSchema(oldSchemaMap, this.getJsonSchema(schemaId));
             }
             return updated;
@@ -72,7 +72,13 @@ public final class SchemaManager {
     }
 
     public Boolean delete(String schemaId) throws DataStoreException {
-        return dataStorePersistence.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        boolean isDeleted;
+        JsonSchema jsonSchema = getJsonSchema(schemaId);
+        isDeleted = dataStorePersistence.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        if (isDeleted) {
+            dataStorePersistence.onDeleteSchema(jsonSchema);
+        }
+        return isDeleted;
     }
 
     public Map<String, Object> getCompositeSchema(String schemaId)
@@ -133,7 +139,7 @@ public final class SchemaManager {
 
     public List<Map<String, Object>> list() throws DataStoreException {
         // PATCH
-        Page<Map<String, Object>> page = dataStorePersistence.list(jsonSchemaForSchema,null,0,1000);
+        Page<Map<String, Object>> page = dataStorePersistence.list(jsonSchemaForSchema, null, 0, 1000);
         return page == null ? null : page.getContent();
     }
 
