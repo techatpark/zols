@@ -92,9 +92,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
     public ElasticSearchDataStorePersistence(String indexName, RestHighLevelClient client) {
         this.indexName = indexName;
-
         this.client = client;
-
     }
 
     @Override
@@ -110,7 +108,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
             IndexResponse indexResponse;
             try {
-                indexResponse = client.index(indexRequest);
+                indexResponse = client.index(indexRequest,RequestOptions.DEFAULT);
                 if (indexResponse.getResult() == CREATED) {
                     LOGGER.debug("Created Data for {} with id {}", typeName, ids);
                     refreshIndex(getIndexName(typeName));
@@ -137,7 +135,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
         GetResponse getResponse;
         try {
-            getResponse = client.get(getRequest);
+            getResponse = client.get(getRequest,RequestOptions.DEFAULT);
             return getResponse.getSource();
         } catch (IOException ex) {
             throw new DataStoreException("Unable to get data for " + typeName + "with id " + ids, ex);
@@ -156,7 +154,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                     .source(jsonData);
             IndexResponse indexResponse;
             try {
-                indexResponse = client.index(indexRequest);
+                indexResponse = client.index(indexRequest,RequestOptions.DEFAULT);
                 if (indexResponse.getResult() == UPDATED) {
                     refreshIndex(getIndexName(typeName));
                     return true;
