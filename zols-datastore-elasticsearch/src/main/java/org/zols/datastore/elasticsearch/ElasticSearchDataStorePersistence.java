@@ -47,6 +47,7 @@ import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.GetAliasesResponse;
+import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -232,12 +233,13 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
 
             try {
                 // Patch for Solinving delete by query conflicts
-                client.getLowLevelClient().performRequest("POST", "/" + indexName2 + "/_refresh");
-                Map<String, String> params = Collections.singletonMap("pretty", "true");
+                client.getLowLevelClient().performRequest(new Request("POST", "/" + indexName2 + "/_refresh"));
                 HttpEntity entity = new NStringEntity("{" + "\"query\":" + builder.toString() + "}", ContentType.APPLICATION_JSON);
+                Request req = new Request("POST", "/" + indexName2 + "/" + typeName + "/_delete_by_query?scroll_size=1");
+                req.setEntity(entity);
                 client.getLowLevelClient()
-                        .performRequest("POST", "/" + indexName2 + "/" + typeName + "/_delete_by_query?scroll_size=1", params, entity);
-                client.getLowLevelClient().performRequest("POST", "/" + indexName2 + "/_refresh");
+                        .performRequest(req);
+                client.getLowLevelClient().performRequest(new Request("POST", "/" + indexName2 + "/_refresh"));
                 refreshIndex(indexName2);
                 return true;
             } catch (IOException ex) {
@@ -261,7 +263,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         searchRequest.source(sourceBuilder);
 
         try {
-            SearchResponse searchResponse = client.search(searchRequest);
+            SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
 
             SearchHits hits = searchResponse.getHits();
             long totalHits = hits.getTotalHits();
@@ -567,9 +569,13 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                             + "  }\n"
                             + "}";
                     HttpEntity entity = new NStringEntity(reindexRequest, ContentType.APPLICATION_JSON);
+                    
+                    Request req = new Request("POST", "/_reindex");
+                    
+                    req.setEntity(entity);
 
                     client.getLowLevelClient()
-                            .performRequest("POST", "/_reindex", params, entity);
+                            .performRequest(req);
 
                     // Switch
                     String switchReq = "{\n"
@@ -587,11 +593,15 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                             + "    ]\n"
                             + "}";
                     entity = new NStringEntity(switchReq, ContentType.APPLICATION_JSON);
+                    
+                    req = new Request("POST", "/_aliases");
+                    
+                    req.setEntity(entity);
 
                     client.getLowLevelClient()
-                            .performRequest("POST", "/_aliases", params, entity);
+                            .performRequest(req);
 
-                    client.getLowLevelClient().performRequest("DELETE", "/" + typeIndexName, params);
+                    client.getLowLevelClient().performRequest(new Request("DELETE", "/" + typeIndexName));
 
                 } catch (IOException ex) {
                     throw new DataStoreException("Unable to switch alias index for " + typeName, ex);
@@ -606,9 +616,9 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         GetAliasesResponse response = client.indices().getAlias(requestWithAlias, RequestOptions.DEFAULT);
         Map<String, Set<AliasMetaData>> aliasMap = response.getAliases();
 
-        aliasMap.forEach((indexName, md) -> {
-            if (indexName.startsWith(aliasName)) {
-                index.append(indexName);
+        aliasMap.forEach((indexName2, md) -> {
+            if (indexName2.startsWith(aliasName)) {
+                index.append(indexName2);
             }
         });
 
