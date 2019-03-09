@@ -1,16 +1,14 @@
 package org.zols.cms;
 
-import java.io.IOException;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.zols.datatore.exception.DataStoreException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class HomeController {
 
-    @RequestMapping("/")
-    public String index() throws IOException, DataStoreException {
-        return "index";
+    @GetMapping("/")
+    public String index() {
+        return "Welcome to zols";
     }
 
 }
