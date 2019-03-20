@@ -10,6 +10,7 @@ import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
+import org.zols.datastore.DataStore;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
 import org.zols.datatore.exception.DataStoreException;
@@ -20,6 +21,14 @@ import org.zols.jsonschema.JsonSchema;
  * @author sathish
  */
 public interface DataStorePersistence {
+    
+     /**
+     * Called when new datastore created with this DataStorePersistence
+     *
+     * @param dataStore
+     * @throws DataStoreException
+     */
+    abstract void onIntialize(DataStore dataStore);
 
     /**
      * Called when new schema is created

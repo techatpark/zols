@@ -4,14 +4,12 @@ import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import org.zols.datastore.query.Page;
 import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import static java.util.Arrays.asList;
 import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.persistence.DataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.MapQuery;
-import org.zols.datastore.query.Query;
 import org.zols.datatore.exception.ConstraintViolationException;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
@@ -34,6 +32,7 @@ public class DataStore {
     public DataStore(DataStorePersistence dataStorePersistence) {
         this.dataStorePersistence = dataStorePersistence;
         schemaManager = new SchemaManager(dataStorePersistence);
+        dataStorePersistence.onIntialize(this);
     }
 
     public Map<String, Object> create(String schemaId, Map<String, Object> dataMap) throws DataStoreException {
@@ -183,25 +182,8 @@ public class DataStore {
         return null;
     }
 
-    private Condition<MapQuery> getTypeFilteredQuery(JsonSchema jsonSchema) throws DataStoreException {
-        return getTypeFilteredQuery(jsonSchema, null);
-    }
-
-    private Condition<MapQuery> getTypeFilteredQuery(JsonSchema jsonSchema, Condition<MapQuery> condition) throws DataStoreException {
-        List<String> implementations = schemaManager.listExtenstionTypes(jsonSchema.getId());
-        if(implementations == null) {
-            implementations = asList(jsonSchema.getId());
-        }
-        else {
-            implementations.add(jsonSchema.getId());
-        }
-
-        if (condition == null) {
-            return new MapQuery().string("$type").in(implementations);
-        } else {
-            return condition.and().string("$type").in(implementations);
-        }
-
+    public List<String> getImplementationsOf(JsonSchema jsonSchema) throws DataStoreException{
+        return schemaManager.listExtenstionTypes(jsonSchema.getId());
     }
 
     public SchemaManager getSchemaManager() {
@@ -231,7 +213,7 @@ public class DataStore {
     }
 
     boolean delete(JsonSchema jsonSchema) throws DataStoreException {
-        return dataStorePersistence.delete(jsonSchema, getTypeFilteredQuery(jsonSchema));
+        return dataStorePersistence.delete(jsonSchema, (Condition<MapQuery>) null);
     }
 
     boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
@@ -249,7 +231,7 @@ public class DataStore {
 
     List<Map<String, Object>> list(JsonSchema jsonSchema,
             Condition<MapQuery> query) throws DataStoreException {
-        List<Map<String, Object>> dataAsMaps = dataStorePersistence.list(jsonSchema, getTypeFilteredQuery(jsonSchema, query));
+        List<Map<String, Object>> dataAsMaps = dataStorePersistence.list(jsonSchema,  query);
 
         return dataAsMaps;
     }
@@ -258,7 +240,7 @@ public class DataStore {
             Condition<MapQuery> query,
             Integer pageNumber,
             Integer pageSize) throws DataStoreException {
-        return dataStorePersistence.list(jsonSchema, getTypeFilteredQuery(jsonSchema, query), pageNumber, pageSize);
+        return dataStorePersistence.list(jsonSchema,  query, pageNumber, pageSize);
     }
 
     List<Map<String, Object>> list(JsonSchema jsonSchema) throws DataStoreException {
@@ -268,7 +250,7 @@ public class DataStore {
     public AggregatedResults browse(String schemaId, String keyword, Condition<MapQuery> query, Locale locale, Integer pageNumber, Integer pageSize) throws DataStoreException {
         if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
             JsonSchema schema = schemaManager.getJsonSchema(schemaId);
-            AggregatedResults aggregatedResults = ((BrowsableDataStorePersistence) dataStorePersistence).browse(schema, keyword, getTypeFilteredQuery(schema, query), pageNumber, pageSize);
+            AggregatedResults aggregatedResults = ((BrowsableDataStorePersistence) dataStorePersistence).browse(schema, keyword,  query, pageNumber, pageSize);
             if (aggregatedResults != null) {
                 Page<Map<String, Object>> page = aggregatedResults.getPage();
                 aggregatedResults.setPage(new Page(page.getPageNumber(), page.getPageSize(), page.getTotal(), page.getContent().parallelStream().map(dataAsMap -> schema.delocalizeData(dataAsMap, locale)
