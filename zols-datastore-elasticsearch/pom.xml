@@ -16,7 +16,11 @@
             <artifactId>zols-datastore</artifactId>
             <version>${project.version}</version>
         </dependency>	
-        
+        <dependency>
+            <groupId>org.zols.rsql</groupId>
+            <artifactId>rsql-elasticsearch</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>  
 
         
         <dependency>

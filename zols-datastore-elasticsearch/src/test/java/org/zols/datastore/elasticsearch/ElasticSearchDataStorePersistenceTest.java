@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.elasticsearch;
 
+import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
@@ -86,7 +87,7 @@ public class ElasticSearchDataStorePersistenceTest {
 
     @Test
     public void testList() throws DataStoreException {
-       assertEquals(1, dataStorePersistence.list(jsonSchema, null).size(), "Listing Simple Object");
+       assertEquals(1, dataStorePersistence.list(jsonSchema, (Condition<MapQuery>) null).size(), "Listing Simple Object");
     }
     
     @Test

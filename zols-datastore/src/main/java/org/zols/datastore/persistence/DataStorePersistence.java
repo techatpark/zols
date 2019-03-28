@@ -6,6 +6,9 @@
 package org.zols.datastore.persistence;
 
 import com.github.rutledgepaulv.qbuilders.conditions.Condition;
+import com.github.rutledgepaulv.qbuilders.visitors.RSQLVisitor;
+import cz.jirutka.rsql.parser.RSQLParser;
+import cz.jirutka.rsql.parser.ast.Node;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -21,8 +24,8 @@ import org.zols.jsonschema.JsonSchema;
  * @author sathish
  */
 public interface DataStorePersistence {
-    
-     /**
+
+    /**
      * Called when new datastore created with this DataStorePersistence
      *
      * @param dataStore
@@ -48,9 +51,8 @@ public interface DataStorePersistence {
      */
     abstract void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema)
             throws DataStoreException;
-    
-    
-     /**
+
+    /**
      * Called when schema is deleted
      *
      * @param jsonSchema
@@ -99,7 +101,19 @@ public interface DataStorePersistence {
      * @return
      * @throws DataStoreException
      */
-    abstract boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query)
+    default boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query)
+            throws DataStoreException {
+        return this.delete(jsonSchema, getNode(query));
+    }
+
+    /**
+     *
+     * @param jsonSchema
+     * @param queryNode
+     * @return
+     * @throws DataStoreException
+     */
+    abstract boolean delete(JsonSchema jsonSchema, Node queryNode)
             throws DataStoreException;
 
     abstract boolean update(JsonSchema jsonSchema,
@@ -124,8 +138,21 @@ public interface DataStorePersistence {
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
+    default List<Map<String, Object>> list(JsonSchema jsonSchema,
             Condition<MapQuery> query)
+            throws DataStoreException {
+        return this.list(jsonSchema, getNode(query));
+    }
+
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
+     * @param queryNode query to consider
+     * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
+            Node queryNode)
             throws DataStoreException;
 
     /**
@@ -137,10 +164,31 @@ public interface DataStorePersistence {
      * @return list of dynamic objects
      * @throws org.zols.datatore.exception.DataStoreException
      */
-    abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
+    default Page<Map<String, Object>> list(JsonSchema jsonSchema,
             Condition<MapQuery> query,
+            Integer pageNumber,
+            Integer pageSize)
+            throws DataStoreException {
+        return this.list(jsonSchema, getNode(query), pageNumber, pageSize);
+    }
+
+    /**
+     *
+     * @param jsonSchema schema of dynamic data
+     * @param queryNode query to consider
+     * @param pageNumber
+     * @param pageSize
+     * @return list of dynamic objects
+     * @throws org.zols.datatore.exception.DataStoreException
+     */
+    abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
+            Node queryNode,
             Integer pageNumber,
             Integer pageSize)
             throws DataStoreException;
 
+    default Node getNode(Condition<MapQuery> query) {
+        String rsql = query.query(new RSQLVisitor());
+        return new RSQLParser().parse(rsql);
+    }
 }

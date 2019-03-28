@@ -138,7 +138,7 @@ public final class SchemaManager {
     }
 
     public List<Map<String, Object>> list() throws DataStoreException {
-        return dataStorePersistence.list(jsonSchemaForSchema, null);
+        return dataStorePersistence.list(jsonSchemaForSchema, (Condition<MapQuery>) null);
     }
 
     public JsonSchema getJsonSchema(String schemaId) {

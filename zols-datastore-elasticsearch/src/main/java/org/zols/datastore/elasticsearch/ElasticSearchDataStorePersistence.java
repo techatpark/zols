@@ -5,7 +5,6 @@
  */
 package org.zols.datastore.elasticsearch;
 
-import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -17,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import cz.jirutka.rsql.parser.ast.Node;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static java.util.stream.Collectors.toList;
@@ -53,7 +53,11 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.cluster.metadata.AliasMetaData;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
@@ -62,15 +66,16 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.DataStore;
-import org.zols.datastore.elasticsearch.qbuilders.visitors.ElasticsearchVisitor;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Page;
-import org.zols.datastore.query.MapQuery;
 import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
+import org.zols.rsql.ElasticComparisonNodeInterpreter;
+
+import org.zols.rsql.ElasticSearchVisitor;
 
 /**
  *
@@ -227,11 +232,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
+    public boolean delete(JsonSchema jsonSchema, Node queryNode) throws DataStoreException {
 
         String typeName = getTypeName(jsonSchema);
         String indexName2 = getIndexName(typeName);
-        QueryBuilder builder = getQueryBuilder(jsonSchema, query);
+        QueryBuilder builder = getQueryBuilder(jsonSchema, queryNode);
         if (builder != null) {
 
             try {
@@ -254,7 +259,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public List<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query) throws DataStoreException {
+    public List<Map<String, Object>> list(JsonSchema jsonSchema, Node queryNode) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
 
         LOGGER.debug("Listing Data for {} ", typeName);
@@ -262,7 +267,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         searchRequest.types(typeName);
 
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
-        sourceBuilder.query(getQueryBuilder(jsonSchema, query));
+        sourceBuilder.query(getQueryBuilder(jsonSchema, queryNode));
         searchRequest.source(sourceBuilder);
 
         try {
@@ -291,7 +296,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public Page<Map<String, Object>> list(JsonSchema jsonSchema, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public Page<Map<String, Object>> list(JsonSchema jsonSchema, Node queryNode, Integer pageNumber, Integer pageSize) throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
 
         LOGGER.debug("Listing Data for {} page {} size {}", typeName, pageNumber, pageSize);
@@ -301,7 +306,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.size(pageSize);
         sourceBuilder.from(pageNumber * pageSize);
-        sourceBuilder.query(getQueryBuilder(jsonSchema, query));
+        sourceBuilder.query(getQueryBuilder(jsonSchema, queryNode));
         searchRequest.source(sourceBuilder);
 
         try {
@@ -328,25 +333,32 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         return null;
     }
 
-    private QueryBuilder getQueryBuilder(JsonSchema jsonSchema, Condition<MapQuery> condition) throws DataStoreException {
+    private QueryBuilder getQueryBuilder(JsonSchema jsonSchema, Node queryNode) throws DataStoreException {
+
+        BoolQueryBuilder bool_builder = QueryBuilders.boolQuery();
+        if (queryNode != null) {
+            bool_builder.must(queryNode.accept(new ElasticSearchVisitor(new ElasticComparisonNodeInterpreter())));
+        }
         if (jsonSchemaForSchema() != jsonSchema) {
+
             List<String> implementations = dataStore.getImplementationsOf(jsonSchema);
-            if (implementations == null) {
-                implementations = asList(jsonSchema.getId());
+            if (implementations == null || implementations.isEmpty()) {
+                bool_builder.must(termQuery("$type", jsonSchema.getId()));
+
             } else {
                 implementations.add(jsonSchema.getId());
+                bool_builder.must(termsQuery("$type", implementations));
             }
-
-            if (condition == null) {
+            /*
+            if (queryNode == null) {
                 condition = new MapQuery().string("$type").in(implementations);
             } else {
                 condition = condition.and().string("$type").in(implementations);
-            }
+            }*/
         }
 
-        QueryBuilder builder = condition.query(new ElasticsearchVisitor(), new ElasticsearchVisitor.Context());
-
-        return builder;
+        //QueryBuilder builder = condition.query(new ElasticsearchVisitor(), new ElasticsearchVisitor.Context());
+        return bool_builder;
     }
 
     private String getEncodedId(Object ids) {
@@ -363,13 +375,13 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     @Override
-    public AggregatedResults browse(JsonSchema schema, String keyword, Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+    public AggregatedResults browse(JsonSchema schema, String keyword, Node queryNode, Integer pageNumber, Integer pageSize) throws DataStoreException {
         AggregatedResults aggregatedResults = null;
         if (schema != null) {
 //            if (keyword != null) {
 //                query.addFilter(new Filter(Filter.Operator.FULL_TEXT_SEARCH, keyword + "*"));
 //            }
-            Map<String, Object> searchResponse = searchResponse(schema, query, pageNumber, pageSize);
+            Map<String, Object> searchResponse = searchResponse(schema, queryNode, pageNumber, pageSize);
             Page<Map<String, Object>> resultsOf = pageOf(searchResponse, pageNumber, pageSize);
             if (resultsOf != null) {
                 aggregatedResults = new AggregatedResults();
@@ -488,7 +500,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     }
 
     public Map<String, Object> searchResponse(JsonSchema jsonSchema,
-            Condition<MapQuery> query, Integer pageNumber, Integer pageSize) throws DataStoreException {
+            Node queryNode, Integer pageNumber, Integer pageSize) throws DataStoreException {
 
         String typeName = getTypeName(jsonSchema);
 
@@ -498,7 +510,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
         sourceBuilder.size(pageSize);
         sourceBuilder.from(pageNumber * pageSize);
-        sourceBuilder.query(getQueryBuilder(jsonSchema, query));
+        sourceBuilder.query(getQueryBuilder(jsonSchema, queryNode));
         addAggregations(jsonSchema, sourceBuilder);
 
         searchRequest.source(sourceBuilder);
