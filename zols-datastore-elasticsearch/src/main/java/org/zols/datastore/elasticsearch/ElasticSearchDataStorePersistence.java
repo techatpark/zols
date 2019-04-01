@@ -10,7 +10,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import static java.util.Arrays.asList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -240,7 +239,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         if (builder != null) {
 
             try {
-                // Patch for Solinving delete by query conflicts
+                // Patch for Solving delete by query conflicts
                 client.getLowLevelClient().performRequest(new Request("POST", "/" + indexName2 + "/_refresh"));
                 HttpEntity entity = new NStringEntity("{" + "\"query\":" + builder.toString() + "}", ContentType.APPLICATION_JSON);
                 Request req = new Request("POST", "/" + indexName2 + "/" + typeName + "/_delete_by_query?scroll_size=1");
@@ -340,7 +339,6 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             bool_builder.must(queryNode.accept(new ElasticSearchVisitor(new ElasticComparisonNodeInterpreter())));
         }
         if (jsonSchemaForSchema() != jsonSchema) {
-
             List<String> implementations = dataStore.getImplementationsOf(jsonSchema);
             if (implementations == null || implementations.isEmpty()) {
                 bool_builder.must(termQuery("$type", jsonSchema.getId()));
@@ -349,12 +347,6 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 implementations.add(jsonSchema.getId());
                 bool_builder.must(termsQuery("$type", implementations));
             }
-            /*
-            if (queryNode == null) {
-                condition = new MapQuery().string("$type").in(implementations);
-            } else {
-                condition = condition.and().string("$type").in(implementations);
-            }*/
         }
 
         //QueryBuilder builder = condition.query(new ElasticsearchVisitor(), new ElasticsearchVisitor.Context());
