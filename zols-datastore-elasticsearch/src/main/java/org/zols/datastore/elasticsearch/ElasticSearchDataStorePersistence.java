@@ -72,9 +72,6 @@ import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
-import org.zols.rsql.ElasticComparisonNodeInterpreter;
-
-import org.zols.rsql.ElasticSearchVisitor;
 
 /**
  *
