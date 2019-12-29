@@ -188,7 +188,6 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     default Node getNode(Condition<MapQuery> query) {
-        String rsql = query.query(new RSQLVisitor());
-        return new RSQLParser().parse(rsql);
+        return query == null ? null : new RSQLParser().parse(query.query(new RSQLVisitor()));
     }
 }
