@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+ 
+<!DOCTYPE suppressions PUBLIC
+     "-//Checkstyle//DTD SuppressionFilter Configuration 1.0//EN"
+     "https://checkstyle.org/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+	<!-- Javakar setup starts -->
+	<suppress checks="LineLength" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="JavadocMethod" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="DesignForExtension" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="RightCurly" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="FinalParameters" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="JavadocType" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="FileTabCharacter" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="ArrayTypeStyle" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="MagicNumber" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="LocalVariableName" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="JavadocPackage" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="RegexpSingleline" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="JavadocVariable" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="VisibilityModifier" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="RegexpSingleline" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="NewlineAtEndOfFile" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="JavadocStyle" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="MethodName" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="NewlineAtEndOfFile" files="[\\/]main[\\/]resources[\\/].*\.properties$" />
+	
+	<suppress checks="WhitespaceAfter" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<suppress checks="WhitespaceAround" files="[\\/]com[\\/]ezeeinfo[\\/].*\.java$" />
+
+	<!-- Javakar setup ends -->
+	<suppress checks="."
+		files="com[\\/]ezeeinfo[\\/]tourone[\\/](?!dao)[^\\/]+[\\/]" />
+</suppressions>
