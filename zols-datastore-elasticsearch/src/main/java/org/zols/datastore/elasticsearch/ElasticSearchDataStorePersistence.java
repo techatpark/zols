@@ -65,6 +65,8 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.elasticsearch.rsql.ElasticComparisonNodeInterpreter;
+import org.zols.datastore.elasticsearch.rsql.ElasticSearchVisitor;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Page;
@@ -182,11 +184,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         LOGGER.debug("Updating Data for {} with id {}", typeName, ids);
 
         if (ids != null) {
-            UpdateRequest updateRequest = new UpdateRequest(getIndexName(typeName), typeName, getEncodedId(ids));
+            UpdateRequest updateRequest = new UpdateRequest(getIndexName(typeName), getEncodedId(ids));
             updateRequest.doc(validatedData);
             UpdateResponse updateResponse;
             try {
-                updateResponse = client.update(updateRequest);
+                updateResponse = client.update(updateRequest,RequestOptions.DEFAULT);
                 if (updateResponse.getResult() == UPDATED) {
                     refreshIndex(getIndexName(typeName));
                     return true;
@@ -207,11 +209,11 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         LOGGER.debug("Deleting Data for {} with id {}", typeName, ids);
 
         DeleteRequest deleteRequest = new DeleteRequest(
-                getIndexName(typeName), typeName, getEncodedId(ids));
+                getIndexName(typeName), getEncodedId(ids));
 
         DeleteResponse deleteResponse;
         try {
-            deleteResponse = client.delete(deleteRequest);
+            deleteResponse = client.delete(deleteRequest,RequestOptions.DEFAULT);
             return (deleteResponse.getResult() == DELETED);
         } catch (IOException ex) {
             throw new DataStoreException("Unable to delete data for " + typeName + "with id " + ids, ex);
@@ -270,7 +272,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
             SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 
             SearchHits hits = searchResponse.getHits();
-            long totalHits = hits.getTotalHits();
+            long totalHits = hits.getTotalHits().value;
             if (totalHits != 0) {
                 List<Map<String, Object>> list = new ArrayList<>((int) totalHits);
                 for (SearchHit hit : hits.getHits()) {
@@ -306,9 +308,9 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         searchRequest.source(sourceBuilder);
 
         try {
-            SearchResponse searchResponse = client.search(searchRequest);
+            SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
             SearchHits hits = searchResponse.getHits();
-            long totalHits = hits.getTotalHits();
+            long totalHits = hits.getTotalHits().value;
             if (totalHits != 0) {
                 List<Map<String, Object>> list = new ArrayList<>(pageSize);
                 for (SearchHit hit : hits.getHits()) {
@@ -507,7 +509,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         LOGGER.debug("Executing elastic search query {}", searchRequest.toString());
 
         try {
-            SearchResponse searchResponse = client.search(searchRequest);
+            SearchResponse searchResponse = client.search(searchRequest,RequestOptions.DEFAULT);
             return asMap(searchResponse.toString());
         } catch (IOException ex) {
             throw new DataStoreException("Unable to browse data for " + typeName, ex);

@@ -259,7 +259,7 @@ public class DataStore {
 
             return aggregatedResults;
         } else {
-            throw new UnsupportedOperationException("now a BrowsableDataStorePersistence");
+            throw new UnsupportedOperationException("not a BrowsableDataStorePersistence");
         }
     }
 

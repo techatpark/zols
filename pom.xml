@@ -58,12 +58,13 @@
         <module>json-schema</module>
         <module>zols-datastore</module>
         <module>zols-datastore-test</module>
-        <module>zols-datastore-mongo</module>
+        <module>zols-datastore-elasticsearch</module>
+        
         <!--        
         <module>zols-cms-plugin-service</module>
         <module>zols-cms-plugin</module>
         <module>zols-cms</module>  
-        <module>zols-datastore-elasticsearch</module>
+        <module>zols-datastore-mongo</module>
         -->
     </modules>
     
