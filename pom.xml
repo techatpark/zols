@@ -62,13 +62,33 @@
         <module>zols-cms-plugin-service</module>
         <module>zols-cms-plugin</module>
         <module>zols-cms</module> 
-        
         <!--        
-        
-         
         <module>zols-datastore-mongo</module>
         -->
     </modules>
     
-      
+      <build>
+		<plugins>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>checkstyle</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<failOnViolation>false</failOnViolation>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
