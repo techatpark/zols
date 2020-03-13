@@ -1,0 +1,41 @@
+@base = http://localhost:9200
+
+#### Basic Metadata
+GET {{base}}
+
+#### Index a document with Id
+PUT {{base}}/customer/_doc/1
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+
+#### Index a document without Id
+POST {{base}}/customer/_doc
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+#### Get Mapping
+GET {{base}}/customer
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+#### Get All Documents
+GET {{base}}/customer/_search
+Content-Type: application/json
+
+#### Filter All Documents
+GET {{base}}/customer/_search
+Content-Type: application/json
+
+{
+  "query": { "match_all": {} }
+}
