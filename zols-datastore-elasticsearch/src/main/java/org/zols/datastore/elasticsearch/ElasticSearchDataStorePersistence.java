@@ -51,7 +51,7 @@ import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.cluster.metadata.AliasMetaData;
+import org.elasticsearch.cluster.metadata.AliasMetadata;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -464,7 +464,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     private void addAggregations(JsonSchema jsonSchema, SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
-        searchRequestBuilder.aggregation(AggregationBuilders.terms("types").setMetaData(map).field("$type.keyword"));
+        searchRequestBuilder.aggregation(AggregationBuilders.terms("types").setMetadata(map).field("$type.keyword"));
         jsonSchema.getProperties().entrySet().parallelStream().forEach(entry -> {
             String filter = (String) entry.getValue().get("filter");
             if (filter != null) {
@@ -475,12 +475,12 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 switch (filter) {
                     case "minmax":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()))
-                                .aggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey()));
+                                .aggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey()))
+                                .aggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey()));
                         break;
                     case "term":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetaData(entry.getValue()).field(entry.getKey() + ".keyword"));
+                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey() + ".keyword"));
 
                         break;
                 }
@@ -637,7 +637,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         final StringBuilder index = new StringBuilder();
         GetAliasesRequest requestWithAlias = new GetAliasesRequest(aliasName);
         GetAliasesResponse response = client.indices().getAlias(requestWithAlias, RequestOptions.DEFAULT);
-        Map<String, Set<AliasMetaData>> aliasMap = response.getAliases();
+        Map<String, Set<AliasMetadata>> aliasMap = response.getAliases();
 
         aliasMap.forEach((indexName2, md) -> {
             if (indexName2.startsWith(aliasName)) {
