@@ -1,7 +1,10 @@
-  
-name: Java CI
+name: CI
 
-on: [push]
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
 jobs:
   build:
