@@ -15,7 +15,7 @@
     "copy:vendorfonts": "cp -R node_modules/bootstrap-sass/assets/fonts dist/",
     "build:html": "cpx 'src/**/*.{html,htm}' dist",
     "build:js": "cp -R 'src/js' dist",
-    "build:css": "node-sass --output-style compressed -o dist/css src/scss",
+    "build:css": "sass src/scss:dist/css",
     "build:images": "cp -R 'src/images' dist",
     "swagger:docs": "mkdir dist/swagger && cpx 'node_modules/swagger-ui/dist/**/*.*' dist/swagger && replace-in-file 'http://petstore.swagger.io/v2/swagger.json' 'http://localhost:8080/v2/api-docs' dist/swagger/index.html",
     "package": "npm run build && rm -rf ../zols-cms-plugin/src/main/resources/templates && rm -rf ../zols-cms-plugin/src/main/resources/static && npm run package:static && npm run package:templates",
@@ -30,7 +30,7 @@
     "bootstrap-sass": "^3.3.7",
     "font-awesome": "^4.7.0",
     "jquery": "^2.2.0",
-    "node-sass": "^3.8.0",
+    "sass": "^1.26.7",
     "onchange": "^2.5.0"
   },
   "dependencies": {
