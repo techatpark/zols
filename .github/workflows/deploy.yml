@@ -20,4 +20,11 @@ jobs:
     - name: Build with Maven
       run: mvn -B clean package -DskipTests --file pom.xml
     - name: Copy Artifacts
-        run: ls
+      uses: appleboy/scp-action@master
+      env:
+        HOST: ${{ secrets.ZOLS_VM_URL }}
+        USERNAME: ${{ secrets.USER_NAME }}
+        KEY: ${{ secrets.KEY }}
+      with:
+        source: build
+        target: ${{ secrets.TARGET_DIR }}
