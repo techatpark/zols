@@ -315,47 +315,49 @@ public abstract class JsonSchema {
 
     private Map<String, Map<String, Object>> getDefinitions(Map<String, Object> schemaAsMap) {
         Map<String, Map<String, Object>> definitions = new HashMap();
-        schemaAsMap.entrySet().forEach((schemaEntry) -> {
-            if (schemaEntry.getKey().equals("$ref")) {
-                String referencePath = schemaEntry.getValue().toString();
-                // If not JSON Pointer
-                if (!referencePath.startsWith("#/")) {
-                    Map<String, Object> parentScemaMap = schemaSupplier.apply(referencePath);
-                    String jsonPathName = getJSONPropertyName(referencePath);
-                    definitions.put(jsonPathName, parentScemaMap);
-                    definitions.putAll(getDefinitions(parentScemaMap));
-                    schemaEntry.setValue("#/definitions/" + jsonPathName);
-                }
-
-            } else if (schemaEntry.getKey().equals("properties")) {
-                Map<String, Map<String, Object>> props = (Map<String, Map<String, Object>>) schemaEntry.getValue();
-
-                props.entrySet().forEach(propertyEntry -> {
-                    String referencePath = (String) propertyEntry.getValue().get("$ref");
-                    if (referencePath == null) {
-                        Map<String, Object> itemsMap = (Map<String, Object>) propertyEntry.getValue().get("items");
-                        if (itemsMap != null) {
-                            referencePath = (String) itemsMap.get("$ref");
-                            if (referencePath != null) {
-                                Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
-                                String jsonPathName = getJSONPropertyName(referencePath);
-                                definitions.put(jsonPathName, propScemaMap);
-                                definitions.putAll(getDefinitions(propScemaMap));
-                                itemsMap.put("$ref", "#/definitions/" + jsonPathName);
-                            }
-                        }
-
-                    } else if (!referencePath.startsWith("#/")) {
-                        Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
+        if(schemaAsMap != null ) {
+            schemaAsMap.entrySet().forEach((schemaEntry) -> {
+                if (schemaEntry.getKey().equals("$ref")) {
+                    String referencePath = schemaEntry.getValue().toString();
+                    // If not JSON Pointer
+                    if (!referencePath.startsWith("#/")) {
+                        Map<String, Object> parentScemaMap = schemaSupplier.apply(referencePath);
                         String jsonPathName = getJSONPropertyName(referencePath);
-                        definitions.put(jsonPathName, propScemaMap);
-                        definitions.putAll(getDefinitions(propScemaMap));
-                        propertyEntry.getValue().put("$ref", "#/definitions/" + jsonPathName);
+                        definitions.put(jsonPathName, parentScemaMap);
+                        definitions.putAll(getDefinitions(parentScemaMap));
+                        schemaEntry.setValue("#/definitions/" + jsonPathName);
                     }
-                });
 
-            }
-        });
+                } else if (schemaEntry.getKey().equals("properties")) {
+                    Map<String, Map<String, Object>> props = (Map<String, Map<String, Object>>) schemaEntry.getValue();
+
+                    props.entrySet().forEach(propertyEntry -> {
+                        String referencePath = (String) propertyEntry.getValue().get("$ref");
+                        if (referencePath == null) {
+                            Map<String, Object> itemsMap = (Map<String, Object>) propertyEntry.getValue().get("items");
+                            if (itemsMap != null) {
+                                referencePath = (String) itemsMap.get("$ref");
+                                if (referencePath != null) {
+                                    Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
+                                    String jsonPathName = getJSONPropertyName(referencePath);
+                                    definitions.put(jsonPathName, propScemaMap);
+                                    definitions.putAll(getDefinitions(propScemaMap));
+                                    itemsMap.put("$ref", "#/definitions/" + jsonPathName);
+                                }
+                            }
+
+                        } else if (!referencePath.startsWith("#/")) {
+                            Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
+                            String jsonPathName = getJSONPropertyName(referencePath);
+                            definitions.put(jsonPathName, propScemaMap);
+                            definitions.putAll(getDefinitions(propScemaMap));
+                            propertyEntry.getValue().put("$ref", "#/definitions/" + jsonPathName);
+                        }
+                    });
+
+                }
+            });
+        }
         return definitions;
     }
 
