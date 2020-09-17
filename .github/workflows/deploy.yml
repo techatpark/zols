@@ -26,5 +26,5 @@ jobs:
         USERNAME: ${{ secrets.USER_NAME }}
         KEY: ${{ secrets.KEY }}
       with:
-        source: build
+        source: zols-cms/target/*.jar
         target: ${{ secrets.TARGET_DIR }}
