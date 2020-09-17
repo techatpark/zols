@@ -28,3 +28,4 @@ jobs:
       with:
         source: zols-cms/target/*
         target: ${{ secrets.TARGET_DIR }}
+        strip_components: 1
