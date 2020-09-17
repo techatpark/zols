@@ -3,32 +3,110 @@ POST http://localhost:8080/api/schema HTTP/1.1
 content-type: application/json
 
 {
-    "$id": "person",
+    "$id": "product",
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Person",
-    "description": "A Person from Acme's catalog",
+    "title": "Product",
+    "description": "A product from Acme's catalog",
     "type": "object",
     "properties": {
         "id": {
-            "type": "string",
-            "description": "Id"
+            "description": "The unique identifier for a product",
+            "type": "integer"
         },
-        "firstName": {
-            "type": "string",
-            "description": "First Name"
+        "title": {
+            "description": "Name of the product",
+            "type": "string"
         },
-        "lastName": {
-            "type": "string",
-            "description": "Last Name"
+        "price": {
+            "type": "number",
+            "exclusiveMinimum": 0
         },
-        "age": {
-            "description": "Age in years",
-            "type": "integer",
-            "minimum": 0
+        "tags": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "prefererredSeller": {
+            "$ref": "seller"
+        },
+        "sellers": {
+            "type": "array",
+            "items": {
+                "$ref": "seller"
+            }
+        },
+        "warehouseLocations": {
+            "type": "array",
+            "description": "Coordinates of the warehouse with the product",
+            "items": {
+                "$ref": "geo"
+            }
         }
     },
-    "required": ["id", "firstName", "lastName"],
-    "localized": ["firstName", "lastName"],
+    "required": ["id",
+        "title",
+        "price"],
+    "localized": ["title"],
     "ids": ["id"]
 }
 
+#### Create a Schema
+POST http://localhost:8080/api/schema HTTP/1.1
+content-type: application/json
+
+{
+    "$id":"device",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Device",
+    "description": "A device from Acme's catalog",
+    "type": "object",
+    "$ref":"product",
+    "properties": {
+        "brand":{
+            "type":"string"
+        }
+    },
+    "required": ["brand"],
+    "localized": ["brand"]
+}
+
+#### Create a Schema
+POST http://localhost:8080/api/schema HTTP/1.1
+content-type: application/json
+
+{
+    "$id":"mobile",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Mobile",
+    "description": "A mobile from Acme's catalog",
+    "type": "object",
+    "$ref":"device",
+    "properties": {
+        "os":{
+            "enum": [ "android", "ios" ]
+        }
+    },
+    "required": ["os"]
+}
+
+#### Create a Schema
+POST http://localhost:8080/api/schema HTTP/1.1
+content-type: application/json
+
+{
+    "$id":"computer",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Computer",
+    "description": "A computer from Acme's catalog",
+    "type": "object",
+    "$ref":"device",
+    "properties": {
+        "os":{
+            "enum": [ "linux", "windows" , "ios" ]
+        }
+    },
+    "required": ["os"]
+}
