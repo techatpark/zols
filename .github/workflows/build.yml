@@ -19,12 +19,3 @@ jobs:
         java-version: 11
     - name: Build with Maven
       run: docker run -d --rm -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.9.1 && mvn -B clean package --file pom.xml
-    - name: Copy Artifacts
-      uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.ZOLS_VM_URL }}
-        USERNAME: ${{ secrets.USER_NAME }}
-        KEY: ${{ secrets.KEY }}
-      with:
-        source: zols-cms/target/*.jar
-        target: ${{ secrets.TARGET_DIR }}
