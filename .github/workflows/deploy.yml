@@ -28,6 +28,7 @@ jobs:
       with:
         source: zols-cms/target/*.jar
         target: ${{ secrets.TARGET_DIR }}
+        strip_components: 2
     - name: Deploy
       uses: appleboy/ssh-action@master
       env:
