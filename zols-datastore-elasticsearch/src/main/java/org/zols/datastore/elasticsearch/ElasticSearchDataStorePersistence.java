@@ -440,8 +440,8 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
         Page<Map<String, Object>> page = null;
         List<Map<String, Object>> list = resultsOf(searchResponse);
         if (list != null) {
-            Long noOfRecords = new Long(((Map<String, Object>) searchResponse.get("hits")).get("total").toString());
-            page = new Page(pageNumber, pageSize, noOfRecords, list);
+            Integer noOfRecords = (Integer) ((Map<String, Object>)((Map<String, Object>) searchResponse.get("hits")).get("total")).get("value");
+            page = new Page(pageNumber, pageSize, Long.valueOf(noOfRecords), list);
         }
         return page;
     }
@@ -449,7 +449,7 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
     private List<Map<String, Object>> resultsOf(Map<String, Object> searchResponse) {
         List<Map<String, Object>> list = null;
         if (searchResponse != null) {
-            Integer noOfRecords = (Integer) ((Map<String, Object>) searchResponse.get("hits")).get("total");
+            Integer noOfRecords = (Integer) ((Map<String, Object>)((Map<String, Object>) searchResponse.get("hits")).get("total")).get("value");
             if (0 != noOfRecords) {
                 List<Map<String, Object>> recordsMapList = (List<Map<String, Object>>) ((Map<String, Object>) searchResponse.get("hits")).get("hits");
                 list = new ArrayList<>(recordsMapList.size());
@@ -475,12 +475,21 @@ public class ElasticSearchDataStorePersistence implements BrowsableDataStorePers
                 switch (filter) {
                     case "minmax":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.min("min_" + entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey()))
-                                .aggregation(AggregationBuilders.max("max_" + entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey()));
+                                .aggregation(AggregationBuilders
+                                        .min("min_" + entry.getKey())
+                                        .setMetadata(entry.getValue())
+                                        .field(entry.getKey()))
+                                .aggregation(AggregationBuilders
+                                        .max("max_" + entry.getKey())
+                                        .setMetadata(entry.getValue())
+                                        .field(entry.getKey()));
                         break;
                     case "term":
                         searchRequestBuilder
-                                .aggregation(AggregationBuilders.terms(entry.getKey()).setMetadata(entry.getValue()).field(entry.getKey() + ".keyword"));
+                                .aggregation(AggregationBuilders
+                                        .terms(entry.getKey())
+                                        .setMetadata(entry.getValue())
+                                        .field(entry.getKey() + ".keyword"));
 
                         break;
                 }

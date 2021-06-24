@@ -1,6 +1,5 @@
 package org.sample.app;
 
-import java.util.Arrays;
 import static org.springframework.boot.SpringApplication.run;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.ApplicationContext;
