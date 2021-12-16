@@ -1,0 +1,20 @@
+{
+    "copyFiles": [
+        {
+            "from": "node_modules/bootstrap/dist/js/bootstrap.min.js",
+            "to": "dist/js/bootstrap.min.js"
+        },
+        {
+            "from": "node_modules/@fortawesome/fontawesome-free/webfonts/**",
+            "to": "dist/webfonts"
+        },
+        {
+            "from": "src/images/**",
+            "to": "dist/images"
+        },
+        {
+            "from": "src/images/icons/favicon.ico",
+            "to": "dist/favicon.ico"
+        }
+    ]
+}

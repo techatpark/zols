@@ -1,30 +1,79 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "axios": "^0.18.0",
-    "d3": "3.5.17",
-    "react": "^16.8.1",
-    "react-dom": "^16.8.1",
-    "react-json-editor-ajrm": "^2.5.9",
-    "react-jsonschema-form": "^1.2.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "^2.1.4"
+  "name": "npm_scripts_static-ref",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Sathish Kumar Thiyagarajan",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techatpark/npm_scripts_static-ref.git"
+  },
+  "keywords": [
+    "npm",
+    "scripts",
+    "npm scripts",
+    "watch",
+    "minify",
+    "compress"
+  ],
+  "bugs": {
+    "url": "https://github.com/techatpark/npm_scripts_static-ref/issues"
+  },
+  "homepage": "https://github.com/techatpark/npm_scripts_static-ref#readme",
+  "main": "src/js/app.js",
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "5.15.4",
+    "@fortawesome/free-brands-svg-icons": "5.15.4",
+    "@fortawesome/free-regular-svg-icons": "5.15.4",
+    "@fortawesome/free-solid-svg-icons": "5.15.4",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
+    "autoprefixer": "^10.4.0",
+    "bootstrap": "5.1.3",
+    "browser-sync": "^2.27.7",
+    "copy-files-from-to": "3.2.2",
+    "cssnano": "^5.0.12",
+    "eslint": "^8.4.1",
+    "html-includes": "^4.4.1",
+    "html-minifier": "^4.0.0",
+    "mkdirp": "^1.0.4",
+    "npm-check-updates": "^12.0.3",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0",
+    "postcss-cli": "^9.1.0",
+    "postcss-preset-env": "^7.0.1",
+    "rimraf": "^3.0.2",
+    "sass": "^1.45.0",
+    "stylelint": "^14.1.0",
+    "stylelint-config-recommended": "^6.0.0",
+    "typescript": "^4.5.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "clean": "rimraf dist",
+    "copy": "copy-files-from-to",
+    "optimizescss": "postcss dist/css/*.css -c postcss.config.js --dir dist/css",
+    "optimizecss": "postcss src/css/*.css -c postcss.config.js --dir dist/css",
+    "scss": "sass src/scss:dist/css",
+    "tsc": "tsc",
+    "lint": "eslint src/js --ext .js,.jsx,.ts,.tsx",
+    "lint-scss": "stylelint src/scss/*.scss --syntax scss  || eslint src/js",
+    "serve": "browser-sync start --config browser-sync.js",
+    "build:css": "run-s optimizecss",
+    "build:scss": "run-s lint-scss scss build:css",
+    "build:js": "run-s lint tsc",
+    "build:html": "html-includes --src src --dest dist --minify",
+    "build": "run-s clean copy build:*",
+    "watch:scss": "onchange \"src/scss\" -- run-s build:scss",
+    "watch:css": "onchange \"src/css\" -- run-s build:scss",
+    "watch:js": "onchange \"src/js\" -- run-s build:js",
+    "watch:html": "onchange \"src/**/*.html\" -- run-s build:html",
+    "start": "npm run build && run-p serve watch:*",
+    "postinstall": "run-s build"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+    "defaults"
+  ],
+  "stylelint": {
+    "extends": "stylelint-config-recommended"
+  }
 }
