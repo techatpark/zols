@@ -1,21 +1,29 @@
 
 // Theme Related 
 $theme-colors: (
-    "primary":#f8f9fa,
+    "primary":#2f7009,
     "secondary":#e9ecef,
     "success": #00a28a,
     "info": #0179a8,
     "warning": #f7c46c,
     "danger": #b76ba3,
     "light": #3e6baf,
-    "dark": #222230
+    "dark": #3e6baf
 );
 
-$text-muted: #e9ecef, !default;
+$nav-link-color: #e9ecef !default;
+
+$navbar-padding-y:                  0;
+$navbar-padding-x:                  0;
 $body-bg: #f0f3f5 !default;
 
 .navbar-brand > img{
     width: 124px;
     height: 70px;
     margin: 0px 108px 0px 0px;
+}
+
+.dropdown-toggle>.fa-2x,
+.nav-link>.fa-2x {
+    font-size: 1.5em ;
 }
