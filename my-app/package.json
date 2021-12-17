@@ -1,12 +1,12 @@
 {
-  "name": "gurukulam-web",
+  "name": "zols-web",
   "version": "1.0.0",
-  "description": "Gurukulams Web Portal",
+  "description": "Zols Web Portal",
   "author": "Sathish Kumar Thiyagarajan",
   "license": "GPL-3.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/techatpark/npm_scripts_static-ref.git"
+    "url": "https://github.com/techatpark/zols.git"
   },
   "keywords": [
     "npm",
@@ -17,14 +17,10 @@
     "compress"
   ],
   "bugs": {
-    "url": "https://github.com/techatpark/npm_scripts_static-ref/issues"
+    "url": "https://github.com/techatpark/zols/issues"
   },
-  "homepage": "https://github.com/techatpark/npm_scripts_static-ref#readme",
+  "homepage": "https://github.com/techatpark/zols#readme",
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "5.15.4",
-    "@fortawesome/free-brands-svg-icons": "5.15.4",
-    "@fortawesome/free-regular-svg-icons": "5.15.4",
-    "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@babel/core": "^7.13.8",
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-multi-entry": "^4.0.0",
@@ -50,6 +46,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
+    "copy": "copy-files-from-to",
     "lint": "eslint src/js --ext .js",
     "serve": "browser-sync start --config browser-sync.js",
     "format:js": "prettier --write src/js",
@@ -57,7 +54,7 @@
     "build:sass": "sass src/scss:dist/css",
     "build:css": "postcss src/css --dir dist/css",
     "build:js": "rollup -c",
-    "build": "run-s clean format:js lint build:*",
+    "build": "run-s clean copy format:js lint build:*",
     "watch:html": "onchange \"src/**/*.html\" -- run-s build:html",
     "watch:sass": "onchange \"src/scss\" -- run-s build:sass",
     "watch:css": "onchange \"src/css\" -- run-s build:css",
