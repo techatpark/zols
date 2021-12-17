@@ -13,3 +13,9 @@ $theme-colors: (
 
 $text-muted: #e9ecef, !default;
 $body-bg: #f0f3f5 !default;
+
+.navbar-brand > img{
+    width: 124px;
+    height: 70px;
+    margin: 0px 108px 0px 0px;
+}
