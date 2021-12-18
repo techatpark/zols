@@ -1,5 +1,5 @@
 /*eslint no-undef: 0*/
-
+import Schema from "./../components/Schema";
 class Home {
 	constructor() {
 		this.setup();
@@ -16,6 +16,7 @@ class Home {
 			.catch((err) => {
 				console.error(err);
 			});
+		this.schemaEditor = new Schema(document.getElementById("schema-container"));
 	}
 
 	setSelectedSchema(schema) {
@@ -44,8 +45,9 @@ class Home {
 	}
 
 	drawChart() {
-		document.querySelector("main.container").innerHTML = "";
-		const treeData = this.getTreeData();
+		document.getElementById("schema-container").innerHTML = "";
+		const treeData = this.getTreeData(this.schema);
+		const editor = this.schemaEditor;
 		// Set the dimensions and margins of the diagram
 		var margin = { top: 20, right: 90, bottom: 30, left: 90 },
 			width = 960 - margin.left - margin.right,
@@ -55,7 +57,7 @@ class Home {
 		// appends a 'group' element to 'svg'
 		// moves the 'group' element to the top left margin
 		var svg = d3
-			.select("main.container")
+			.select("#schema-container")
 			.append("svg")
 			.attr("width", width + margin.right + margin.left)
 			.attr("height", height + margin.top + margin.bottom)
@@ -143,6 +145,9 @@ class Home {
 				})
 				.text(function (d) {
 					return d.data.name;
+				})
+				.on("click", (d) => {
+					editor.setSchema(d.data.id);
 				});
 
 			// UPDATE
@@ -250,10 +255,11 @@ class Home {
 		}
 	}
 
-	getTreeData() {
+	getTreeData(_schema) {
 		return {
-			name: this.schema.title,
-			children: this.getChildren(this.schema),
+			name: _schema.title,
+			id: _schema["$id"],
+			children: this.getChildren(_schema),
 		};
 	}
 
@@ -263,12 +269,7 @@ class Home {
 				return schema["$ref"] === sschema["$id"];
 			})
 			.map((schema) => {
-				let treeObj = {};
-				treeObj.id = schema["$id"];
-				treeObj.name = schema.title;
-				treeObj.parent = null;
-				treeObj.children = this.getChildren(schema);
-				return treeObj;
+				return this.getTreeData(schema);
 			});
 	}
 }
