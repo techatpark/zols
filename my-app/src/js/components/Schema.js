@@ -39,6 +39,20 @@ class Schema {
       <input class="form-control" id="nameTxt">
     </div>
   </div>
+
+  <div data-for-property="true" class="row mb-3">
+  <label for="typeSelect" class="col-sm-2 col-form-label">Type</label>
+  <div class="col-sm-10">
+  <select class="form-select" id="typeSelect" aria-label="Default select example">
+  <option value="string">Text</option>
+  <option value="integer">Integer</option>
+  <option value="number">Float</option>
+  <option value="boolean">Boolean</option>
+  <option value="array">Array</option>
+</select>
+  </div>
+	</div>
+
   <div class="row mb-3">
     <label for="titleTxt" class="col-sm-2 col-form-label">Title</label>
     <div class="col-sm-10">
@@ -115,12 +129,22 @@ class Schema {
 				.forEach((elelemnt) => {
 					elelemnt.classList.remove("d-none");
 				});
+			document
+				.querySelectorAll('[data-for-property="true"]')
+				.forEach((elelemnt) => {
+					elelemnt.classList.add("d-none");
+				});
 			document.getElementById("nameTxt").value = _input["$id"];
 		} else {
 			document
 				.querySelectorAll('[data-for-schema="true"]')
 				.forEach((elelemnt) => {
 					elelemnt.classList.add("d-none");
+				});
+			document
+				.querySelectorAll('[data-for-property="true"]')
+				.forEach((elelemnt) => {
+					elelemnt.classList.remove("d-none");
 				});
 
 			this.selectedProperty = _input;
@@ -129,6 +153,8 @@ class Schema {
 				(propName) => this.schema.properties[propName] === _input
 			);
 			document.getElementById("nameTxt").value = key;
+
+			document.getElementById("typeSelect").value = _input.type;
 		}
 	}
 
