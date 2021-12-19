@@ -227,29 +227,35 @@ class Schema {
 
 		if (this.schema.properties) {
 			Object.keys(this.schema.properties).forEach((property) => {
-				const li = document.createElement("li");
-				const anchor = document.createElement("a");
-				anchor.classList.add("d-inline-flex");
-				anchor.classList.add("align-items-center");
-				anchor.classList.add("rounded");
+				this.addProperty(property);
+			});
+		}
+	}
 
-				let title = this.schema.properties[property].title;
-				if (!title) {
-					title = property;
-				}
+	addProperty(property) {
+		const li = document.createElement("li");
+		const anchor = document.createElement("a");
+		anchor.classList.add("d-inline-flex");
+		anchor.classList.add("align-items-center");
+		anchor.classList.add("rounded");
 
-				anchor.innerHTML = title;
+		let title = this.schema.properties[property].title;
+		if (!title) {
+			title = property;
+		}
 
-				anchor.addEventListener("click", () => {
-					this.setEditor(this.schema.properties[property]);
-				});
-				li.appendChild(anchor);
+		anchor.innerHTML = title;
 
-				document.getElementById("contents-collapse").appendChild(li);
+		anchor.addEventListener("click", () => {
+			this.setEditor(this.schema.properties[property]);
+		});
+		li.appendChild(anchor);
 
-				const requiredChoice = document.createElement("div");
-				requiredChoice.classList.add("form-check");
-				requiredChoice.innerHTML = `
+		document.getElementById("contents-collapse").appendChild(li);
+
+		const requiredChoice = document.createElement("div");
+		requiredChoice.classList.add("form-check");
+		requiredChoice.innerHTML = `
 				<input class="form-check-input" type="checkbox" name="gridRadios" id="gridRadios1" value="option1" ${
 					this.schema.required && this.schema.required.includes(property)
 						? "checked"
@@ -259,9 +265,7 @@ class Schema {
 					${title}
 					</label>
 				`;
-				document.getElementById("requiredChoices").appendChild(requiredChoice);
-			});
-		}
+		document.getElementById("requiredChoices").appendChild(requiredChoice);
 	}
 }
 
