@@ -1,6 +1,7 @@
 class Schema {
-	constructor(_container) {
+	constructor(_caller, _container) {
 		this.container = _container;
+		this.caller = _caller;
 
 		this.schemaManager = document.createElement("div");
 		this.schemaManager.classList.add("row");
@@ -109,6 +110,27 @@ class Schema {
 		});
 	}
 
+	createSchema() {
+		if (this.container.firstChild === this.schemaManager) {
+			console.log("add property");
+		} else {
+			this.schema = {
+				$id: "newSchema",
+				title: "newSchema",
+			};
+			this.setSchema();
+		}
+	}
+
+	forkSchema(_schema) {
+		this.schema = {
+			$ref: _schema["$id"],
+			$id: "newSchema",
+			title: "newSchema",
+		};
+		this.setSchema();
+	}
+
 	setSchema(_schemaId) {
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
@@ -124,20 +146,26 @@ class Schema {
 			.querySelector(".fa-save")
 			.parentElement.parentElement.classList.remove("d-none");
 
-		fetch("/api/schema/" + _schemaId)
-			.then((response) => response.json())
-			.then((schema) => {
-				this.schema = schema;
-				this.setEditor(this.schema);
-				this.prepareNavigator();
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-
-		this.container.innerHTML = "";
 		this.container.appendChild(this.schemaManager);
+
+		if (_schemaId) {
+			fetch("/api/schema/" + _schemaId)
+				.then((response) => response.json())
+				.then((schema) => {
+					this.schema = schema;
+					this.setEditor(this.schema);
+					this.prepareNavigator();
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+		} else {
+			this.setEditor(this.schema);
+			this.prepareNavigator();
+		}
 	}
+
+	saveSchema() {}
 
 	goBack() {
 		// Navigate Back to Listing Screen
@@ -145,6 +173,8 @@ class Schema {
 		this.oldChildNodes.forEach((child) => {
 			this.container.appendChild(child);
 		});
+
+		this.caller.render();
 	}
 
 	setEditor(_input) {
@@ -195,41 +225,43 @@ class Schema {
 
 		document.getElementById("requiredChoices").innerHTML = "";
 
-		Object.keys(this.schema.properties).forEach((property) => {
-			const li = document.createElement("li");
-			const anchor = document.createElement("a");
-			anchor.classList.add("d-inline-flex");
-			anchor.classList.add("align-items-center");
-			anchor.classList.add("rounded");
+		if (this.schema.properties) {
+			Object.keys(this.schema.properties).forEach((property) => {
+				const li = document.createElement("li");
+				const anchor = document.createElement("a");
+				anchor.classList.add("d-inline-flex");
+				anchor.classList.add("align-items-center");
+				anchor.classList.add("rounded");
 
-			let title = this.schema.properties[property].title;
-			if (!title) {
-				title = property;
-			}
+				let title = this.schema.properties[property].title;
+				if (!title) {
+					title = property;
+				}
 
-			anchor.innerHTML = title;
+				anchor.innerHTML = title;
 
-			anchor.addEventListener("click", () => {
-				this.setEditor(this.schema.properties[property]);
+				anchor.addEventListener("click", () => {
+					this.setEditor(this.schema.properties[property]);
+				});
+				li.appendChild(anchor);
+
+				document.getElementById("contents-collapse").appendChild(li);
+
+				const requiredChoice = document.createElement("div");
+				requiredChoice.classList.add("form-check");
+				requiredChoice.innerHTML = `
+				<input class="form-check-input" type="checkbox" name="gridRadios" id="gridRadios1" value="option1" ${
+					this.schema.required && this.schema.required.includes(property)
+						? "checked"
+						: ""
+				}>
+					<label class="form-check-label" for="gridRadios1">
+					${title}
+					</label>
+				`;
+				document.getElementById("requiredChoices").appendChild(requiredChoice);
 			});
-			li.appendChild(anchor);
-
-			document.getElementById("contents-collapse").appendChild(li);
-
-			const requiredChoice = document.createElement("div");
-			requiredChoice.classList.add("form-check");
-			requiredChoice.innerHTML = `
-			<input class="form-check-input" type="checkbox" name="gridRadios" id="gridRadios1" value="option1" ${
-				this.schema.required && this.schema.required.includes(property)
-					? "checked"
-					: ""
-			}>
-				<label class="form-check-label" for="gridRadios1">
-				${title}
-				</label>
-			`;
-			document.getElementById("requiredChoices").appendChild(requiredChoice);
-		});
+		}
 	}
 }
 

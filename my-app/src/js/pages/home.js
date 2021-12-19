@@ -2,21 +2,33 @@
 import Schema from "./../components/Schema";
 class Home {
 	constructor() {
-		this.setup();
+		this.schemaEditor = new Schema(
+			this,
+			document.getElementById("schema-container")
+		);
+
+		document.querySelector(".fa-code-branch").addEventListener("click", () => {
+			this.schemaEditor.forkSchema(this.schema);
+		});
+
+		document.querySelector(".fa-plus").addEventListener("click", () => {
+			this.schemaEditor.createSchema();
+		});
+
+		this.render();
 	}
 
-	setup() {
+	render() {
 		fetch("/api/schema")
 			.then((response) => response.json())
 			.then((schemas) => {
 				this.schemas = schemas;
 				this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
-				this.setSelectedSchema(this.rootSchemas[this.rootSchemas.length - 1]);
+				this.setSelectedSchema(this.rootSchemas[0]);
 			})
 			.catch((err) => {
 				console.error(err);
 			});
-		this.schemaEditor = new Schema(document.getElementById("schema-container"));
 	}
 
 	setSelectedSchema(schema) {
