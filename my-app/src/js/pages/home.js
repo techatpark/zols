@@ -20,6 +20,13 @@ class Home {
 	}
 
 	setSelectedSchema(schema) {
+		document
+			.querySelector(".fa-save")
+			.parentElement.parentElement.classList.add("d-none");
+		document
+			.querySelector(".fa-code-branch")
+			.parentElement.parentElement.classList.remove("d-none");
+
 		const schemaList = document.getElementById("schemaList");
 		document.getElementById("schemaMenuLink").innerHTML = schema.title;
 		schemaList.innerHTML = "";

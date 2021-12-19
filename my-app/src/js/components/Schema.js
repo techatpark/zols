@@ -97,9 +97,33 @@ class Schema {
 			.addEventListener("click", () => {
 				this.setEditor(this.schema);
 			});
+		document.querySelector(".fa-save").addEventListener("click", () => {
+			this.goBack();
+
+			document
+				.querySelector(".fa-save")
+				.parentElement.parentElement.classList.add("d-none");
+			document
+				.querySelector(".fa-code-branch")
+				.parentElement.parentElement.classList.remove("d-none");
+		});
 	}
 
 	setSchema(_schemaId) {
+		this.oldChildNodes = [];
+		while (this.container.firstChild) {
+			this.oldChildNodes.push(
+				this.container.removeChild(this.container.firstChild)
+			);
+		}
+
+		document
+			.querySelector(".fa-code-branch")
+			.parentElement.parentElement.classList.add("d-none");
+		document
+			.querySelector(".fa-save")
+			.parentElement.parentElement.classList.remove("d-none");
+
 		fetch("/api/schema/" + _schemaId)
 			.then((response) => response.json())
 			.then((schema) => {
@@ -113,6 +137,14 @@ class Schema {
 
 		this.container.innerHTML = "";
 		this.container.appendChild(this.schemaManager);
+	}
+
+	goBack() {
+		// Navigate Back to Listing Screen
+		this.container.removeChild(this.schemaManager);
+		this.oldChildNodes.forEach((child) => {
+			this.container.appendChild(child);
+		});
 	}
 
 	setEditor(_input) {
