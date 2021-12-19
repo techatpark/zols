@@ -11,7 +11,7 @@ class Home {
 			.then((schemas) => {
 				this.schemas = schemas;
 				this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
-				this.setSelectedSchema(this.rootSchemas[0]);
+				this.setSelectedSchema(this.rootSchemas[this.rootSchemas.length - 1]);
 			})
 			.catch((err) => {
 				console.error(err);
