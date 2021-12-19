@@ -7,26 +7,28 @@
 
 <body>
   ${require('/partials/_header.html')}
-  <div class="container px-4 py-2" >
-    
+  <div class="container px-4 py-2">
+
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
       <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
         <i class="fas fa-bezier-curve"></i>
         <h5 class="px-2 pt-1">Schema</h5>
       </div>
-      <div class="nav col-md-4 justify-content-end list-unstyled">
-        <div class="dropdown">
-          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="schemaMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
-            --
-          </a>
-        
-          <ul id="schemaList" class="dropdown-menu" aria-labelledby="schemaMenuLink">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </div>
-      </div>
+      <ul class="nav col-md-4 justify-content-end d-flex">
+        <li class="nav-item">
+          <div class="nav-link text-dark dropdown">
+            <span class="dropdown-toggle" role="button" id="schemaMenuLink"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="fas fa-user fa-2x"></i>
+            </span>
+            <ul id="schemaList" class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="schemaMenuLink">
+              
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-code-branch"></i></a></li>
+        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
+      </ul>
     </header>
     <main id="schema-container" class="container">
 
@@ -40,9 +42,9 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
 
-    <script src="/js/pages/home.js"></script>
+  <script src="/js/pages/home.js"></script>
 
-   
+
 
   <!-- Option 2: Separate Popper and Bootstrap JS -->
   <!--
