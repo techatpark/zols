@@ -36,14 +36,14 @@ class Schema {
 		<form>
   <div class="row mb-3">
     <label for="nameTxt" class="col-sm-2 col-form-label">Name</label>
-    <div class="col-sm-10">
+    <div class="col-sm-5">
       <input class="form-control" id="nameTxt">
     </div>
   </div>
 
   <div data-for-property="true" class="row mb-3">
   <label for="typeSelect" class="col-sm-2 col-form-label">Type</label>
-  <div class="col-sm-10">
+  <div class="col-sm-5">
   <select class="form-select" id="typeSelect" aria-label="Default select example">
   <option value="string">Text</option>
   <option value="integer">Integer</option>
@@ -56,14 +56,14 @@ class Schema {
 
   <div class="row mb-3">
     <label for="titleTxt" class="col-sm-2 col-form-label">Title</label>
-    <div class="col-sm-10">
+    <div class="col-sm-5">
       <input  class="form-control" id="titleTxt">
     </div>
   </div>
 
   <div class="row mb-3">
     <label for="descriptionTxt" class="col-sm-2 col-form-label">Description</label>
-    <div class="col-sm-10">
+    <div class="col-sm-8">
 	<textarea class="form-control" id="descriptionTxt"></textarea>
     </div>
   </div>
