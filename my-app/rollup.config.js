@@ -1,7 +1,7 @@
 export default [{
-  input: 'src/js/pages/home.js',
+  input: 'src/js/pages/schema.js',
   output: {
-    file: 'dist/js/pages/home.js',
+    file: 'dist/js/pages/schema.js',
     format: 'cjs'
   }
 }

@@ -3,36 +3,136 @@
 
 <head>
   ${require('/partials/_head.html')}
-</head>
+ </head>
 
 <body>
   ${require('/partials/_header.html')}
   <div class="container-fluid px-4 py-2">
 
-    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
       <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
-        <i class="fas fa-bezier-curve"></i>
-        <h5 class="px-2 pt-1">Schema</h5>
+        <i class="fas fa-columns"></i>
+        <h5 class="px-2 pt-1">Dashboard</h5>
       </div>
-      <ul class="nav col-md-4 justify-content-end d-flex">
-        <li class="nav-item">
-          <div class="nav-link text-dark dropdown">
-            <span class="dropdown-toggle text-primary" role="button" id="schemaMenuLink"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              
-            </span>
-            <ul id="schemaList" class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="schemaMenuLink">
-              
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-code-branch"></i></a></li>
-        <li class="nav-item d-none"><a class="nav-link text-dark"><i class="far fa-save"></i></a></li>
-        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
-      </ul>
-    </header>
-    <main id="schema-container" class="container-fluid">
 
+    </header>
+    <main class="container-fluid">
+
+
+      <div class="row">
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col mt-0">
+                  <h5 class="card-title">Sales Today</h5>
+                </div>
+
+                <div class="col-auto">
+                  <div class="avatar">
+                    <div class="avatar-title rounded-circle bg-primary-dark">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-truck align-middle"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h1 class="display-5 mt-1 mb-3">2.562</h1>
+              <div class="mb-0">
+                <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -2.65% </span>
+                Less sales than usual
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col mt-0">
+                  <h5 class="card-title">Total Earnings</h5>
+                </div>
+
+                <div class="col-auto">
+                  <div class="avatar">
+                    <div class="avatar-title rounded-circle bg-primary-dark">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-dollar-sign align-middle"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h1 class="display-5 mt-1 mb-3">$24.300</h1>
+              <div class="mb-0">
+                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 8.35% </span>
+                More earnings than usual
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col mt-0">
+                  <h5 class="card-title">Visitors Today</h5>
+                </div>
+
+                <div class="col-auto">
+                  <div class="avatar">
+                    <div class="avatar-title rounded-circle bg-primary-dark">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users align-middle"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h1 class="display-5 mt-1 mb-3">17.212</h1>
+              <div class="mb-0">
+                <span class="text-success"> <i class="mdi mdi-arrow-bottom-right"></i> 5.50% </span>
+                More visitors than usual
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class="card">
+            <div class="card-body">
+              <div class="row">
+                <div class="col mt-0">
+                  <h5 class="card-title">Pending Orders</h5>
+                </div>
+
+                <div class="col-auto">
+                  <div class="avatar">
+                    <div class="avatar-title rounded-circle bg-primary-dark">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart align-middle"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h1 class="display-5 mt-1 mb-3">43</h1>
+              <div class="mb-0">
+                <span class="text-danger"> <i class="mdi mdi-arrow-bottom-right"></i> -4.25% </span>
+                Less orders than usual
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <canvas id="myBarChart" width="100px" height="100"></canvas>
+        </div>
+        <div class="col">
+          <canvas id="myLineChart" width="100px" height="100"></canvas>
+        </div>
+        <div class="col">
+          <canvas id="myDoughnutChart" width="100px" height="100"></canvas>
+        </div>
+      </div>
+
+        
+        
+      
     </main>
   </div>
 
@@ -43,7 +143,157 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
 
-  <script src="/js/pages/home.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.2/chart.min.js" integrity="sha512-tMabqarPtykgDtdtSqCL3uLVM0gS1ZkUAVhRFu1vSEFgvB73niFQWJuvviDyBGBH22Lcau4rHB5p2K2T0Xvr6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    
+<script>
+  var _seed = Date.now();
+function drawBarChart() {
+  const ctx = document.getElementById('myBarChart').getContext('2d');
+const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Product', 'Comments', 'Orders', 'Shares', 'Recomandations', 'Catelog'],
+        datasets: [{
+            label: '# of Ingesion (in millions)',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+}
+
+function drawLineChart() {
+  const labels = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+];
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'Shipping',
+    backgroundColor: 'rgb(255, 99, 132)',
+    borderColor: 'rgb(255, 99, 132)',
+    data: [0, 10, 5, 2, 20, 30, 45],
+  }]
+};
+  const ctx = document.getElementById('myLineChart').getContext('2d');
+  const config = {
+  type: 'line',
+  data: data,
+  options: {}
+};
+
+const myChart = new Chart(ctx, config);
+}
+function valueOrDefault(_val,def) {
+  return _val ? _val : def; 
+}
+function rand(min, max) {
+  min = valueOrDefault(min, 0);
+  max = valueOrDefault(max, 0);
+  _seed = (_seed * 9301 + 49297) % 233280;
+  return min + (_seed / 233280) * (max - min);
+}
+
+function numbers(config) {
+  var cfg = config || {};
+  var min = valueOrDefault(cfg.min, 0);
+  var max = valueOrDefault(cfg.max, 100);
+  var from = valueOrDefault(cfg.from, []);
+  var count = valueOrDefault(cfg.count, 8);
+  var decimals = valueOrDefault(cfg.decimals, 8);
+  var continuity = valueOrDefault(cfg.continuity, 1);
+  var dfactor = Math.pow(10, decimals) || 0;
+  var data = [];
+  var i, value;
+
+  for (i = 0; i < count; ++i) {
+    value = (from[i] || 0) + rand(min, max);
+    if (rand() <= continuity) {
+      data.push(Math.round(dfactor * value) / dfactor);
+    } else {
+      data.push(null);
+    }
+  }
+
+  return data;
+}
+function drawDoughnutChart() {
+  const DATA_COUNT = 6;
+const NUMBER_CFG = {count: DATA_COUNT, min: 0, max: 100};
+
+const data = {
+  labels: ['USA', 'GER', 'EUR', 'IND', 'SNG'],
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: numbers(NUMBER_CFG),
+      backgroundColor: Object.values({
+  red: 'rgb(255, 99, 132)',
+  orange: 'rgb(255, 159, 64)',
+  yellow: 'rgb(255, 205, 86)',
+  green: 'rgb(75, 192, 192)',
+  blue: 'rgb(54, 162, 235)',
+  purple: 'rgb(153, 102, 255)',
+  grey: 'rgb(201, 203, 207)'
+}),
+    }
+  ]
+};
+  const ctx = document.getElementById('myDoughnutChart').getContext('2d');
+  const config = {
+  type: 'doughnut',
+  data: data,
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Countrywise Revenue'
+      }
+    }
+  },
+};
+
+const myChart = new Chart(ctx, config);
+}
+
+drawBarChart()
+drawLineChart()
+drawDoughnutChart()
+</script>
 
 
 

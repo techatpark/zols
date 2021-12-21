@@ -1,5 +1,5 @@
 /*eslint no-undef: 0*/
-import Schema from "./../components/Schema";
+import Schema from "../components/Schema";
 class Home {
 	constructor() {
 		this.schemaEditor = new Schema(
