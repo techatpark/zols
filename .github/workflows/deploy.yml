@@ -29,11 +29,11 @@ jobs:
         source: zols-cms/target/*.jar
         target: ${{ secrets.TARGET_DIR }}
         strip_components: 2
-    - name: Deploy
-      uses: appleboy/ssh-action@master
-      env:
-          HOST: ${{ secrets.ZOLS_VM_URL }}
-          USERNAME: ${{ secrets.USER_NAME }}
-          KEY: ${{ secrets.KEY }}
-      with:
-          script: bash cd.sh
+#    - name: Deploy
+#      uses: appleboy/ssh-action@master
+#      env:
+#          HOST: ${{ secrets.ZOLS_VM_URL }}
+#          USERNAME: ${{ secrets.USER_NAME }}
+#          KEY: ${{ secrets.KEY }}
+#      with:
+#          script: bash cd.sh

@@ -1,29 +1,22 @@
-# EditorConfig helps developers define and maintain consistent
-# coding styles between different editors and IDEs
-# editorconfig.org
+# EditorConfig is awesome: http://EditorConfig.org
 
+# top-most EditorConfig file
 root = true
 
-
+# Unix-style newlines with a newline ending every file
 [*]
-
-# Change these settings to your own preference
-indent_style = space
-indent_size = 4
-
-# We recommend you to keep these unchanged
 end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.md]
-trim_trailing_whitespace = false
+# Matches multiple files with brace expansion notation
+# Set default charset
+[*.{html,js,php,css,scss}]
+charset = utf-8
 
-[package.json]
-indent_style = space
-indent_size = 2
+# 4 space indentation
+[*.{html,js,php,css,scss}]
+indent_style = tab
 
-[bower.json]
+# Matches the exact files
+[{package.json,bower.json,.bowerrc,.eslintrc.js,.travis.yml,.sass-lint.yml,phpcs.xml}]
 indent_style = space
-indent_size = 2
