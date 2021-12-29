@@ -28,4 +28,4 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         source: zols-cms/target/*.jar
         target: ${{ secrets.DEPLOYMENT_DIR }}
-        strip_components: 1
+        strip_components: 2
