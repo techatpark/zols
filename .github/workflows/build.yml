@@ -50,8 +50,7 @@ jobs:
         export BUILD_PRODUCTION=Y
         cd zols-ui
         npm install
-        npm run build --if-present
-        npm test
+        ls dist
       env:
         CI: true
     - name: Deploy UI
