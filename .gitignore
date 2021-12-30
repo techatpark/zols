@@ -30,11 +30,8 @@ build
 **.log
 **/deploy.txt
 **/out.log.*
-/zols-ui/app/nbproject/private/
 /zols-cms-plugin/src/main/resources/static
 /zols-cms-plugin/src/main/resources/templates
-/zols-ui/src/index.html
-/zols-ui/src/scss/main.scss
 .factorypath
 .vscode
 
