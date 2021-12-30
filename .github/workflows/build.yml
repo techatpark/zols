@@ -35,6 +35,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
         target: ${{ secrets.DEPLOYMENT_DIR }}
         script:
           echo "cd ${{ secrets.DEPLOYMENT_DIR }} && sudo kill $(ps -ef | grep zols | grep -v grep | awk '{print $2}') || true && sudo nohup ${{ secrets.SOFTWARES_DIR }}/jre/bin/java -jar target/zols-cms-*.jar >/dev/null 2>&1 &" > deploy.sh && sh deploy.sh &
