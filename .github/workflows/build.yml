@@ -29,3 +29,12 @@ jobs:
         source: zols-cms/target/*.jar
         target: ${{ secrets.DEPLOYMENT_DIR }}
         strip_components: 2
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        target: ${{ secrets.DEPLOYMENT_DIR }}
+        script:
+          echo "cd ${{ secrets.DEPLOYMENT_DIR }} && sudo kill $(ps -ef | grep zols | grep -v grep | awk '{print $2}') || true && sudo nohup ${{ secrets.SOFTWARES_DIR }}/jre/bin/java -jar target/zols-cms-*.jar >/dev/null 2>&1 &" > deploy.sh && sh deploy.sh &
