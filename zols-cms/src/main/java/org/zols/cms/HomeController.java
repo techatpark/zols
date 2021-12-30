@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String index() {
-        return "Welcome to zols";
+        return "Welcome to zols 2.0";
     }
 
 }
