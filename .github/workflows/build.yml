@@ -63,4 +63,4 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         source: zols-ui/dist
         target: ${{ secrets.STATIC_DIR }}
-        strip_components: 2
+        strip_components: 1
