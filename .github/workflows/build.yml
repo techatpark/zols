@@ -50,7 +50,8 @@ jobs:
         export BUILD_PRODUCTION=Y
         cd zols-ui
         npm install
-        ls dist
+        mkdir ../zols-web/src/main/resources/static
+        cp -rf dist/ ../zols-web/src/main/resources/static
       env:
         CI: true
     - name: Deploy UI

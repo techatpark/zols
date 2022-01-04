@@ -35,3 +35,4 @@ build
 .factorypath
 .vscode
 
+/zols-web/src/main/resources/static/
