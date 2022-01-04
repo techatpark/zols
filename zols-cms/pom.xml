@@ -12,10 +12,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>zols-cms</artifactId>
-    <packaging>jar</packaging>
     <dependencies>
-
-
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-elasticsearch</artifactId>
@@ -25,24 +22,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>org.springframework.plugin</groupId>
-            <artifactId>spring-plugin-core</artifactId>
-            <version>2.0.0.RELEASE</version>
-        </dependency>
-        
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>zols-cms-plugin</artifactId>
             <version>${project.version}</version>
         </dependency>
-        
-        
     </dependencies>
-    <properties>
-        <start-class>org.zols.cms.Application</start-class>        
-    </properties>
+
     <build>
         <plugins>
             <plugin>

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.service.DataService;
@@ -22,7 +21,7 @@ import org.zols.links.service.LinkService;
 import org.zols.templates.service.PageService;
 import org.zols.templates.service.TemplateRepositoryService;
 import org.zols.templates.service.TemplateService;
-import org.zols.web.interceptor.PagePopulationInterceptor;
+
 
 @Configuration
 @ComponentScan("org.zols")
@@ -30,14 +29,6 @@ public class ZolsConfiguration implements WebMvcConfigurer {
 
     @Autowired
     private DataStore dataStore;
-
-    @Autowired
-    private PagePopulationInterceptor pagePopulationInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(pagePopulationInterceptor);
-    }
 
     @Bean
     LinkService linkService() {
