@@ -5,3 +5,9 @@ class WorkspaceScreen {
 	}
 }
 new WorkspaceScreen();
+
+const addUser = document
+	.querySelector("i.fa-plus")
+	.addEventListener("click", () => {
+		console.log("plus button clicked to add users");
+	});

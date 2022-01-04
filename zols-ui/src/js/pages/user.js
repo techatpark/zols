@@ -6,7 +6,14 @@ class UserScreen {
 }
 new UserScreen();
 
-const plusBtn = document.getElementsByClassName("fas fa-plus")[0];
-plusBtn.addEventListener("click", function () {
-	console.log("clicked plus button to add users");
+const addUser = document
+	.querySelector("i.fa-plus")
+	.addEventListener("click", () => {
+		console.log("plus button clicked to add users");
+	});
+
+const edit = document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
+	el.addEventListener("click", () => {
+		console.log("edit all users");
+	});
 });
