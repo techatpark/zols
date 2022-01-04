@@ -11,3 +11,19 @@
 @import './components/signin';
 @import './components/toc';
 @import './components/chat';
+
+
+.table-hover > tbody {
+    tr {
+        :last-child {
+            visibility: hidden;
+        }
+
+    } 
+    tr:hover {
+        :last-child {
+            visibility: visible;
+        }
+
+    } 
+}
