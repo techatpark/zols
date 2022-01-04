@@ -19,6 +19,19 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Build with npm
+      run: |
+        export BUILD_PRODUCTION=Y
+        cd zols-ui
+        npm install
+        mkdir ../zols-web/src/main/resources/static
+        cp -rf dist/ ../zols-web/src/main/resources/static
+      env:
+        CI: true
     - name: Build with Maven
       run: docker run -d --rm -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" docker.elastic.co/elasticsearch/elasticsearch:7.16.2 && mvn -B clean package --file pom.xml
     - name: Copy Artifacts
@@ -41,19 +54,7 @@ jobs:
         target: ${{ secrets.DEPLOYMENT_DIR }}
         script:
           echo "cd ${{ secrets.DEPLOYMENT_DIR }} && kill $(ps -ef | grep zols | grep -v grep | awk '{print $2}') || true && nohup ${{ secrets.SOFTWARE_DIR }}/jre/bin/java -jar zols-cms-*.jar >/dev/null 2>&1 &" > deploy.sh && sh deploy.sh &
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        export BUILD_PRODUCTION=Y
-        cd zols-ui
-        npm install
-        mkdir ../zols-web/src/main/resources/static
-        cp -rf dist/ ../zols-web/src/main/resources/static
-      env:
-        CI: true
+
     - name: Deploy UI
       uses: appleboy/scp-action@master
       with:
