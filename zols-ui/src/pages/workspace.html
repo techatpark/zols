@@ -8,84 +8,48 @@
 <body>
   ${require('/partials/_header.html')}
   <div class="container-fluid px-4 py-2">
+
     <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
       <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
         <i class="fas fa-columns"></i>
         <h5 class="px-2 pt-1">Workspace</h5>
       </div>
       <ul class="nav col-md-4 justify-content-end d-flex">
-        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
+        <li class="nav-item"><i class="fas fa-plus"></i></li>
       </ul>
     </header>
-
     <main class="container-fluid">
-      <div class="row">
-        <div class="col-3">
-          <div class="sidebar-user"><img src="https://bootdey.com/img/Content/avatar/avatar1.png" height="40" width="40" class="img-fluid rounded-circle mb-2" alt="User">
-            <div class="font-weight-bold"><b>Hello, Sanjai</b></div></div>
-        
-    <ul class="sidebar-nav">
-      <li class="sidebar-item ">
-        <a class="sidebar-link" href="/dashboard">
-          <span class="align-middle">Account</span></a>
-        </li>
-        <li class="sidebar-item ">
-          <a class="sidebar-link" href="/dashboard">
-            <span class="align-middle">Contacts</span></a>
-          </li>
-          <li class="sidebar-item ">
-            <a class="sidebar-link" href="/dashboard">
-              <span class="align-middle">Projects</span></a>
-            </li>
-            <li class="sidebar-item ">
-              <a class="sidebar-link" href="/dashboard">
-                <span class="align-middle">Media</span></a>
-              </li>
-      </ul>
-    </div>
-
-
-        <div class="col">
-          <div class="col-xxl-9 d-flex col-lg-8">
-            <div class="flex-fill w-100 card">
-              <div class="card-header">
-                <div class="card-actions float-right">
-                  <span class="cursor-pointer mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-                  </span> 
-                  <div class="d-inline-block dropdown"><a aria-haspopup="true" class="" aria-expanded="false"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg></a>
-                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><button type="button" tabindex="0" role="menuitem" class="dropdown-item">Action</button><button type="button" tabindex="0" role="menuitem" class="dropdown-item">Another Action</button><button type="button" tabindex="0" role="menuitem" class="dropdown-item">Something else here</button>
-                    </div>
-                  </div>
-                </div>
-                <h5 class="mb-0 card-title">Top Projects</h5></div>
-                <table class="my-0 table table-striped"><thead><tr><th>Name</th>
-                  <th class="d-none d-xl-table-cell">Start Date</th>
-                  <th class="d-none d-xl-table-cell">End Date</th><th>Status</th>
-                  <th class="d-none d-md-table-cell">Assignee</th>
-                </tr></thead><tbody><tr><td>Project Apollo</td>
-                  <td class="d-none d-xl-table-cell">01/01/2018</td>
-                  <td class="d-none d-xl-table-cell">31/06/2018</td>
-                  <td><span class="badge bg-primary">Done</span></td>
-                  <td class="d-none d-md-table-cell">Carl Jenkins</td></tr>
-                  <tr><td>Project Fireball</td><td class="d-none d-xl-table-cell">01/01/2018</td><td class="d-none d-xl-table-cell">31/06/2018</td><td><span class="badge bg-danger">Cancelled</span></td>
-                    <td class="d-none d-md-table-cell">Bertha Martin</td></tr><tr><td>Project Hades</td><td class="d-none d-xl-table-cell">01/01/2018</td><td class="d-none d-xl-table-cell">31/06/2018</td>
-                      <td><span class="badge bg-primary">Done</span></td><td class="d-none d-md-table-cell">Stacie Hall</td></tr><tr><td>Project Nitro</td><td class="d-none d-xl-table-cell">01/01/2018</td>
-                        <td class="d-none d-xl-table-cell">31/06/2018</td><td><span class="badge bg-warning">In progress</span></td><td class="d-none d-md-table-cell">Carl Jenkins</td>
-                      </tr>
-                      <tr>
-                        <td>Project Phoenix</td><td class="d-none d-xl-table-cell">01/01/2018</td><td class="d-none d-xl-table-cell">31/06/2018</td>
-                        <td><span class="badge bg-primary">Done</span></td><td class="d-none d-md-table-cell">Bertha Martin</td></tr><tr><td>Project Romeo</td>
-                          <td class="d-none d-xl-table-cell">01/01/2018</td><td class="d-none d-xl-table-cell">31/06/2018</td><td><span class="badge bg-primary">Done</span></td>
-                          <td class="d-none d-md-table-cell">Ashley Briggs</td></tr><tr><td>Project Wombat</td><td class="d-none d-xl-table-cell">01/01/2018</td><td class="d-none d-xl-table-cell">31/06/2018</td>
-                            <td><span class="badge bg-warning">In progress</span></td><td class="d-none d-md-table-cell">Bertha Martin</td></tr></tbody></table>
-                          </div>
-                        </div>
-        </div>
-      </div>
-        
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Owner</th>
+            <th scope="col" style="width:100px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+        </tbody>
+      </table>        
       
     </main>
-    
   </div>
 
   <!-- Optional JavaScript; choose one of the two! -->
