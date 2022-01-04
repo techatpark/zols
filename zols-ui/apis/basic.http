@@ -1,7 +1,34 @@
 @base = http://localhost:8080
 
+
+POST {{base}}/api/auth/signup
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "email" : "emai@email.com",
+    "password" : "password",
+    "role" : ["admin"]
+}
+
+#### Login
+# @name login 
+POST {{base}}/api/auth/signin
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "password" : "password"
+}
+
+### TEST
+GET {{base}}/api/test/admin
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
 #### Index a document with Id
 POST {{base}}/api/schema
+Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 
 {
