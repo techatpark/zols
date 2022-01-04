@@ -16,13 +16,19 @@
 .table-hover > tbody {
     tr {
         :last-child {
-            visibility: hidden;
+            i {
+                display: none;
+            }
+            
         }
 
     } 
     tr:hover {
         :last-child {
-            visibility: visible;
+            i {
+                display: inline-block;
+            }
+            
         }
 
     } 
