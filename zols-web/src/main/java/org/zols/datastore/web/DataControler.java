@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.zols.datastore.service.DataService;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Locale;

@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import org.zols.datastore.model.Employee;
-import org.zols.datatore.exception.DataStoreException;
 
 public class ObjectManagementTest {
 

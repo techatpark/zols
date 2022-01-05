@@ -18,7 +18,6 @@ import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
-import org.zols.datatore.exception.DataStoreException;
 
 @RunWith(JUnitPlatform.class)
 public class SchemaManagementTest {

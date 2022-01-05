@@ -11,7 +11,7 @@ import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.documents.domain.DocumentRepository;
 
 /**

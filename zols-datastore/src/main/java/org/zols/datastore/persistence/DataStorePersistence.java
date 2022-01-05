@@ -16,7 +16,7 @@ import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
 /**
@@ -66,7 +66,7 @@ public interface DataStorePersistence {
      * @param jsonData validated object
      * @param jsonSchema schema of dynamic data
      * @return dynamic data as map
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract Map<String, Object> create(
             JsonSchema jsonSchema,
@@ -78,7 +78,7 @@ public interface DataStorePersistence {
      * @param jsonSchema schema of dynamic data
      * @param idValues dynamic object name
      * @return dynamic data as map
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract Map<String, Object> read(
             JsonSchema jsonSchema,
@@ -89,7 +89,7 @@ public interface DataStorePersistence {
      * @param jsonSchema schema of dynamic data
      * @param idValues dynamic object name
      * @return status of the delete operation
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract boolean delete(JsonSchema jsonSchema,
             SimpleEntry<String, Object>... idValues) throws DataStoreException;
@@ -125,7 +125,7 @@ public interface DataStorePersistence {
      * @param idValue
      * @param jsonData validated Object
      * @return status of the update operation
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract boolean updatePartially(JsonSchema jsonSchema,
             Map<String, Object> jsonData, AbstractMap.SimpleEntry<String, Object>... idValues)
@@ -136,7 +136,7 @@ public interface DataStorePersistence {
      * @param jsonSchema schema of dynamic data
      * @param query query to consider
      * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     default List<Map<String, Object>> list(JsonSchema jsonSchema,
             Condition<MapQuery> query)
@@ -149,7 +149,7 @@ public interface DataStorePersistence {
      * @param jsonSchema schema of dynamic data
      * @param queryNode query to consider
      * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
             Node queryNode)
@@ -162,7 +162,7 @@ public interface DataStorePersistence {
      * @param pageNumber
      * @param pageSize
      * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     default Page<Map<String, Object>> list(JsonSchema jsonSchema,
             Condition<MapQuery> query,
@@ -179,7 +179,7 @@ public interface DataStorePersistence {
      * @param pageNumber
      * @param pageSize
      * @return list of dynamic objects
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
             Node queryNode,

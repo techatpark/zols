@@ -10,7 +10,7 @@ import java.util.Map;
 import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 
 /**
  *
@@ -53,7 +53,7 @@ public class SchemaService {
      *
      * @param schemaId String to be Search
      * @return searched JsonSchema
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     public Map<String, Object> read(String schemaId) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaId);
@@ -65,7 +65,7 @@ public class SchemaService {
      *
      * @param schemaId String to be Search
      * @return searched JsonSchema
-     * @throws org.zols.datatore.exception.DataStoreException
+     * @throws DataStoreException
      */
     public Map<String, Object> readEnlargedSchema(String schemaId) throws DataStoreException {
         LOGGER.info("Reading JsonSchema  {}", schemaId);

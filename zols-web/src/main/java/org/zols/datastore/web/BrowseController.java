@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.web.util.SpringAggregatedResults;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.documents.service.BrowseService;
 import org.zols.jsonschema.JsonSchema;
 

@@ -15,7 +15,7 @@ import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.service.DataService;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 
 
 public class BrowseService {

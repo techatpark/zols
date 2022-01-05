@@ -26,7 +26,6 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSch
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datatore.exception.DataStoreException;
 
 @RunWith(JUnitPlatform.class)
 public class DataManagementTest {

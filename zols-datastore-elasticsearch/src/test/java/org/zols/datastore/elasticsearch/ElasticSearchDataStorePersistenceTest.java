@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.getJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import org.zols.datastore.query.MapQuery;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
 /**

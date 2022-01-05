@@ -14,7 +14,7 @@ import java.util.Optional;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 
 public class DataService {
 

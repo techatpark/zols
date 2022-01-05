@@ -10,8 +10,6 @@ import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.persistence.DataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.MapQuery;
-import org.zols.datatore.exception.ConstraintViolationException;
-import org.zols.datatore.exception.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
 /**

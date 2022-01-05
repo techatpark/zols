@@ -9,7 +9,7 @@ import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import cz.jirutka.rsql.parser.ast.Node;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.MapQuery;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 
 /**

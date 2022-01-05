@@ -30,8 +30,6 @@ build
 **.log
 **/deploy.txt
 **/out.log.*
-/zols-cms-plugin/src/main/resources/static
-/zols-cms-plugin/src/main/resources/templates
 .factorypath
 .vscode
 

@@ -70,7 +70,7 @@ import org.zols.datastore.elasticsearch.rsql.ElasticSearchVisitor;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.Page;
-import org.zols.datatore.exception.DataStoreException;
+import org.zols.datastore.DataStoreException;
 import org.zols.jsonschema.JsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
