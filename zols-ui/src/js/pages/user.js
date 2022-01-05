@@ -12,7 +12,13 @@ class UserScreen {
 
 		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
 			el.addEventListener("click", () => {
-				console.log("edit all users");
+				console.log("edit the users");
+			});
+		});
+
+		document.querySelectorAll("i.fa-trash").forEach((el) => {
+			el.addEventListener("click", () => {
+				console.log("detele the user");
 			});
 		});
 	}
