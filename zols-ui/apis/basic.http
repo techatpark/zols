@@ -1,15 +1,15 @@
 @base = http://localhost:8080
 
 
-POST {{base}}/api/auth/signup
-Content-Type: application/json
+# POST {{base}}/api/auth/signup
+# Content-Type: application/json
 
-{
-    "username" : "admin",
-    "email" : "emai@email.com",
-    "password" : "password",
-    "role" : ["admin"]
-}
+# {
+#     "username" : "admin",
+#     "email" : "emai@email.com",
+#     "password" : "password",
+#     "role" : ["admin"]
+# }
 
 #### Login
 # @name login 

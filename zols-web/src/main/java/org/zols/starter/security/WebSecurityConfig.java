@@ -2,6 +2,7 @@ package org.zols.starter.security;
 
 import org.zols.starter.models.ERole;
 import org.zols.starter.models.Role;
+import org.zols.starter.models.User;
 import org.zols.starter.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,11 +19,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import org.zols.starter.repository.UserRepository;
 import org.zols.starter.security.jwt.AuthEntryPointJwt;
 import org.zols.starter.security.jwt.AuthTokenFilter;
 import org.zols.starter.security.services.UserDetailsServiceImpl;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
+import java.util.Set;
 
 @Configuration
 @EnableWebSecurity
@@ -40,17 +44,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Autowired
   private AuthEntryPointJwt unauthorizedHandler;
 
-  @PostConstruct
-  void intialize() {
-    Role role = new Role();
-    role.setName(ERole.valueOf("ROLE_USER"));
-    roleRepository.save(role);
-    role.setName(ERole.valueOf("ROLE_MODERATOR"));
-    roleRepository.save(role);
-    role.setName(ERole.valueOf("ROLE_ADMIN"));
-    roleRepository.save(role);
-  }
-
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
     return new AuthTokenFilter();
@@ -59,6 +52,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
     authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    intialize();
+  }
+
+  void intialize() {
+    Role role = new Role();
+    role.setName(ERole.valueOf("ROLE_USER"));
+    roleRepository.save(role);
+    role.setName(ERole.valueOf("ROLE_MODERATOR"));
+    roleRepository.save(role);
+    role.setName(ERole.valueOf("ROLE_ADMIN"));
+    roleRepository.save(role);
+
+    User user = new User();
+    user.setUsername("admin");
+    user.setPassword(passwordEncoder().encode("password"));
+    user.setEmail("admin@email.com");
+    Set<Role> roleSet = new HashSet<>();
+    roleSet.add(role);
+    user.setRoles(roleSet);
+    userDetailsService.save(user);
+
   }
 
   @Bean
