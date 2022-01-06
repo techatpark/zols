@@ -17,8 +17,8 @@ POST {{base}}/api/auth/signin
 Content-Type: application/json
 
 {
-    "username" : "admin",
-    "password" : "password"
+    "username" : "",
+    "password" : ""
 }
 
 ### TEST

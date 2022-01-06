@@ -1,4 +1,12 @@
-export default [{
+export default [
+  {
+    input: 'src/js/index.js',
+    output: {
+      file: 'dist/js/index.js',
+      format: 'cjs'
+    }
+  },
+  {
   input: 'src/js/pages/schema.js',
   output: {
     file: 'dist/js/pages/schema.js',
