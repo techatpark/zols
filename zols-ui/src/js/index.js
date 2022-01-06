@@ -4,8 +4,6 @@ class IndexScreen {
 			window.location.href = "pages/home.html";
 		}
 
-		const host = window.location.protocol + "//" + window.location.host;
-
 		document.querySelector("#userName").focus();
 		this.registerEvents();
 	}
@@ -19,7 +17,7 @@ class IndexScreen {
 	login(event) {
 		event.preventDefault();
 		let authRequest = {
-			userName: document.querySelector("#userName").value,
+			username: document.querySelector("#userName").value,
 			password: document.querySelector("#password").value,
 		};
 		fetch("/api/auth/signin", {

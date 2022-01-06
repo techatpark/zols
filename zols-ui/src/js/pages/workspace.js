@@ -1,6 +1,9 @@
+import BasicScreen from "../core";
+
 /*eslint no-undef: 0*/
-class WorkspaceScreen {
+class WorkspaceScreen extends BasicScreen {
 	constructor() {
+		super();
 		console.log("I am code behind for workspace");
 		this.setUp();
 	}
