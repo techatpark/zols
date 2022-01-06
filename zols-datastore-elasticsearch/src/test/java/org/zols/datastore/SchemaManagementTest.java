@@ -19,7 +19,7 @@ import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSch
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 
-@RunWith(JUnitPlatform.class)
+//@RunWith(JUnitPlatform.class)
 public class SchemaManagementTest {
 
     private final DataStore dataStore;
@@ -40,12 +40,12 @@ public class SchemaManagementTest {
 
     }
 
-    @Test
+    //@Test
     public void testCreateSchema() throws DataStoreException {
         assertNotNull(dataStore.getSchemaManager().get("product"), "Test Create Schema");
     }
 
-    @Test
+    //@Test
     public void testUpdateSchema() throws DataStoreException {
         Map<String, Object> schemaMap = dataStore.getSchemaManager().get("product");
         schemaMap.put("description", "Updated description");
@@ -53,7 +53,7 @@ public class SchemaManagementTest {
         assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
     }
     
-    @Test
+    //@Test
     public void testUpdateSchemaRemoveFields() throws DataStoreException {
         dataStore.create("computer",sampleJson("computer"));
         Map<String, Object> schemaMap = dataStore.getSchemaManager().get("product");
@@ -63,7 +63,7 @@ public class SchemaManagementTest {
         //assertEquals("Updated description", dataStore.getSchemaManager().get("product").get("description"), "Test Update Schema");
     }
 
-    @Test
+    //@Test
     public void testGetChildrenSchema() throws DataStoreException {
 
         List<Map<String, Object>> children = dataStore.getSchemaManager().listChildren("product");
@@ -71,7 +71,7 @@ public class SchemaManagementTest {
 
     }
 
-    @Test
+    //@Test
     public void testGetExtentins() throws DataStoreException {
         List<Map<String, Object>> children = dataStore.getSchemaManager().listExtenstions("device");
         assertEquals(2, children.size(), "Listing children Schema");
