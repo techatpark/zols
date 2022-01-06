@@ -30,6 +30,7 @@ jobs:
         npm install
         mkdir ../zols-web/src/main/resources/static
         cp -rf dist/ ../zols-web/src/main/resources/static
+        ls ../zols-web/src/main/resources/static
       env:
         CI: true
     - name: Build with Maven
