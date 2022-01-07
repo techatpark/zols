@@ -6,8 +6,7 @@ class WorkspaceScreen extends BasicScreen {
 		super();
 		console.log("I am code behind for users");
 		this.workspaceForm = document.createElement("form");
-		this.workspaceForm.innerHTML = `<form>
-        <div class="form-group row mb-3 mt-3">
+		this.workspaceForm.innerHTML = `<div class="form-group row mb-3 mt-3">
           <label for="inputName3" class="col-sm-1 col-form-label">Name</label>
           <div class="col-sm-5">
             <input type="text" class="form-control" id="inputName3" placeholder="Enter Name" required="" autofocus="">
@@ -19,8 +18,7 @@ class WorkspaceScreen extends BasicScreen {
             <input type="text" class="form-control" id="inputDescription3" placeholder="Description">
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>`;
+        <button type="submit" class="btn btn-primary">Save</button>`;
 		this.container = document.getElementById("content");
 		this.setUp();
 	}
@@ -47,6 +45,10 @@ class WorkspaceScreen extends BasicScreen {
 			el.addEventListener("click", () => {
 				console.log("Call to action for Delete");
 			});
+		});
+
+		document.querySelector("i.fa-save").addEventListener("click", () => {
+			this.workspaceForm.innerHTML = this.workspaceForm.onclose;
 		});
 	}
 
