@@ -11,43 +11,31 @@
 
     <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
       <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
-        <i class="fas fa-columns"></i>
+        <i class="fas fa-laptop-house"></i>     
         <h5 class="px-2 pt-1">Workspace</h5>
       </div>
       <ul class="nav col-md-4 justify-content-end d-flex">
         <li class="nav-item"><i class="fas fa-plus"></i></li>
+        <li class="nav-item d-none"><a class="nav-link text-dark"><i class="far fa-save"></i></a></li>
       </ul>
     </header>
-    <main class="container-fluid">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Owner</th>
-            <th scope="col" style="width:100px"></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td colspan="2">Larry the Bird</td>
-            <td><i class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
-          </tr>
-        </tbody>
-      </table>        
+
+    <main id="content" class="container-fluid">
+      <form>
+        <div class="form-group row mb-3 mt-3">
+          <label for="inputName3" class="col-sm-1 col-form-label">Name</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="inputName3" placeholder="Enter Name" required="" autofocus="">
+          </div>
+        </div>
+        <div class="form-group row mb-3">
+          <label for="inputDescription3" class="col-sm-1 col-form-label">Description</label>
+          <div class="col-sm-5">
+            <input type="text" class="form-control" id="inputDescription3" placeholder="Description">
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </form>
       
     </main>
   </div>
