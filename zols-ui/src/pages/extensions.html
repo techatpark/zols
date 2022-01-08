@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  ${require('/partials/_head.html')}
+</head>
+
+<body>
+  ${require('/partials/_header.html')}
+  <div class="container-fluid px-4 py-2">
+    <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
+      <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
+        <i class="fab fa-buromobelexperte fa-2x"></i>
+        <h5 class="px-2 pt-1">Extensions</h5>
+      </div>
+    </header>
+    <main class="container-fluid">
+
+      <div class="row">
+        <div class="col-3">
+          <aside class="bd-aside sticky-xl-top text-muted align-self-start mb-3 mb-xl-5 px-2">
+            
+            <nav class="small" id="toc">
+              <ul class="list-unstyled">
+                <li class="my-2">
+                  <button class="btn d-inline-flex align-items-center collapsed" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#contents-collapse" aria-controls="contents-collapse">Connectors</button>
+                  <ul class="list-unstyled ps-3 collapse" id="contents-collapse">
+                    <li><a class="d-inline-flex align-items-center rounded" href="#typography">Typography</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#images">Images</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#tables">Tables</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#figures">Figures</a></li>
+                  </ul>
+                </li>
+                <li class="my-2">
+                  <button class="btn d-inline-flex align-items-center collapsed" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#forms-collapse" aria-controls="forms-collapse">Content</button>
+                  <ul class="list-unstyled ps-3 collapse" id="forms-collapse">
+                    <li><a class="d-inline-flex align-items-center rounded" href="#overview">Overview</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#disabled-forms">Disabled forms</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#sizing">Sizing</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#input-group">Input group</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#floating-labels">Floating labels</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#validation">Validation</a></li>
+                  </ul>
+                </li>
+                <li class="my-2">
+                  <button class="btn d-inline-flex align-items-center collapsed" data-bs-toggle="collapse" aria-expanded="false" data-bs-target="#components-collapse" aria-controls="components-collapse">Components</button>
+                  <ul class="list-unstyled ps-3 collapse" id="components-collapse">
+                    <li><a class="d-inline-flex align-items-center rounded" href="#accordion">Accordion</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#alerts">Alerts</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#badge">Badge</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#breadcrumb">Breadcrumb</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#buttons">Buttons</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#button-group">Button group</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#card">Card</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#carousel">Carousel</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#dropdowns">Dropdowns</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#list-group">List group</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#modal">Modal</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#navs">Navs</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#navbar">Navbar</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#pagination">Pagination</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#popovers">Popovers</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#progress">Progress</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#scrollspy">Scrollspy</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#spinners">Spinners</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#toasts">Toasts</a></li>
+                    <li><a class="d-inline-flex align-items-center rounded" href="#tooltips">Tooltips</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
+          </aside>
+        </div>
+        <div class="col">
+          <form>
+    <div class="row mb-3">
+      <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+      <div class="col-sm-10">
+        <input type="email" class="form-control" id="inputEmail3">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="inputPassword3">
+      </div>
+    </div>
+    <fieldset class="row mb-3">
+      <legend class="col-form-label col-sm-2 pt-0">Radios</legend>
+      <div class="col-sm-10">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+          <label class="form-check-label" for="gridRadios1">
+            First radio
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+          <label class="form-check-label" for="gridRadios2">
+            Second radio
+          </label>
+        </div>
+        <div class="form-check disabled">
+          <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3" disabled>
+          <label class="form-check-label" for="gridRadios3">
+            Third disabled radio
+          </label>
+        </div>
+      </div>
+    </fieldset>
+    <div class="row mb-3">
+      <div class="col-sm-10 offset-sm-2">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck1">
+          <label class="form-check-label" for="gridCheck1">
+            Example checkbox
+          </label>
+        </div>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Sign in</button>
+  </form>
+        </div>
+      </div> 
+      
+    </main>
+    
+  </div>
+
+${require('/partials/_scripts.html')}
+
+  <script src="/js/pages/schema.js"></script>
+
+
+
+  <!-- Option 2: Separate Popper and Bootstrap JS -->
+  <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
+    -->
+</body>
+
+</html>
