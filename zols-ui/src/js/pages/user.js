@@ -5,47 +5,18 @@ class UserScreen {
 		this.userForm = document.createElement("form");
 		this.userForm.classList.add("row");
 		this.userForm.classList.add("g-3");
-		this.userForm.innerHTML = `<div class="col-md-6">
-		<label for="inputEmail4" class="form-label">Email</label>
-		<input type="email" class="form-control" id="inputEmail4">
+		this.userForm.innerHTML = `<div class="mb-3">
+		<label for="exampleInputEmail1" class="form-label">Email address</label>
+		<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+		<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
 	  </div>
-	  <div class="col-md-6">
-		<label for="inputPassword4" class="form-label">Password</label>
-		<input type="password" class="form-control" id="inputPassword4">
+	  <div class="mb-3">
+		<label for="exampleInputPassword1" class="form-label">Password</label>
+		<input type="password" class="form-control" id="exampleInputPassword1">
 	  </div>
-	  <div class="col-12">
-		<label for="inputAddress" class="form-label">Address</label>
-		<input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-	  </div>
-	  <div class="col-12">
-		<label for="inputAddress2" class="form-label">Address 2</label>
-		<input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-	  </div>
-	  <div class="col-md-6">
-		<label for="inputCity" class="form-label">City</label>
-		<input type="text" class="form-control" id="inputCity">
-	  </div>
-	  <div class="col-md-4">
-		<label for="inputState" class="form-label">State</label>
-		<select id="inputState" class="form-select">
-		  <option selected>Choose...</option>
-		  <option>...</option>
-		</select>
-	  </div>
-	  <div class="col-md-2">
-		<label for="inputZip" class="form-label">Zip</label>
-		<input type="text" class="form-control" id="inputZip">
-	  </div>
-	  <div class="col-12">
-		<div class="form-check">
-		  <input class="form-check-input" type="checkbox" id="gridCheck">
-		  <label class="form-check-label" for="gridCheck">
-			Check me out
-		  </label>
-		</div>
-	  </div>
-	  <div class="col-12">
-		<button type="submit" class="btn btn-primary">Sign in</button>
+	  <div class="mb-3 form-check">
+		<input type="checkbox" class="form-check-input" id="exampleCheck1">
+		<label class="form-check-label" for="exampleCheck1">Check me out</label>
 	  </div>`;
 		this.container = document.getElementById("content");
 		this.setUp();
@@ -53,19 +24,16 @@ class UserScreen {
 
 	setUp() {
 		document.querySelector("i.fa-plus").addEventListener("click", () => {
-			document
-				.querySelector("i.fa-save")
-				.parentElement.parentElement.classList.remove("d-none");
-			document
-				.querySelector("i.fa-plus")
-				.parentElement.parentElement.classList.add("d-none");
 			this.showUserForm();
-			console.log("plus button clicked to add users");
+		});
+
+		document.querySelector("i.fa-save").addEventListener("click", () => {
+			this.showUsers();
 		});
 
 		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
 			el.addEventListener("click", () => {
-				console.log("Call to action for Edit");
+				this.showUserForm();
 			});
 		});
 
@@ -77,6 +45,12 @@ class UserScreen {
 	}
 
 	showUserForm() {
+		document
+			.querySelector("i.fa-save")
+			.parentElement.parentElement.classList.remove("d-none");
+		document
+			.querySelector("i.fa-plus")
+			.parentElement.parentElement.classList.add("d-none");
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(
@@ -84,6 +58,20 @@ class UserScreen {
 			);
 		}
 		this.container.appendChild(this.userForm);
+	}
+
+	showUsers() {
+		document
+			.querySelector("i.fa-plus")
+			.parentElement.parentElement.classList.remove("d-none");
+		document
+			.querySelector("i.fa-save")
+			.parentElement.parentElement.classList.add("d-none");
+		// Navigate Back to Listing Screen
+		this.container.removeChild(this.container.lastChild);
+		this.oldChildNodes.forEach((child) => {
+			this.container.appendChild(child);
+		});
 	}
 }
 new UserScreen();
