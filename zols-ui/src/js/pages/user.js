@@ -70,7 +70,7 @@ class UserScreen {
 		});
 
 		document.querySelectorAll("i.fa-trash").forEach((el) => {
-			el.addEventListener("click", () => {
+			el.addEventListener("on-confirmation", () => {
 				console.log("Call to action for Delete");
 			});
 		});
