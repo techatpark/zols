@@ -1,9 +1,6 @@
-import BasicScreen from "../core";
-
 /*eslint no-undef: 0*/
-class UserScreen extends BasicScreen {
+class UserScreen {
 	constructor() {
-		super();
 		console.log("I am code behind for users");
 		this.userForm = document.createElement("form");
 		this.userForm.classList.add("row");

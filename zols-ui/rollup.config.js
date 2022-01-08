@@ -7,6 +7,13 @@ export default [
     }
   },
   {
+    input: 'src/js/core.js',
+    output: {
+      file: 'dist/js/core.js',
+      format: 'cjs'
+    }
+  },
+  {
   input: 'src/js/pages/schema.js',
   output: {
     file: 'dist/js/pages/schema.js',

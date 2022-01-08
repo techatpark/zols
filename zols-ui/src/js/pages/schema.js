@@ -1,9 +1,8 @@
 /*eslint no-undef: 0*/
 import Schema from "../components/Schema";
-import BasicScreen from "../core";
-class SchemaScreen extends BasicScreen {
+
+class SchemaScreen {
 	constructor() {
-		super();
 		this.schemaEditor = new Schema(
 			this,
 			document.getElementById("schema-container")

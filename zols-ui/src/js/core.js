@@ -1,4 +1,4 @@
-class BasicScreen {
+class Core {
 	constructor() {
 		if (sessionStorage.auth) {
 			document.querySelector(".logout").addEventListener("click", () => {
@@ -11,4 +11,4 @@ class BasicScreen {
 		console.log("Core Screen");
 	}
 }
-export default BasicScreen;
+new Core();

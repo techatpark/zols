@@ -1,9 +1,6 @@
-import BasicScreen from "../core";
-
 /*eslint no-undef: 0*/
-class WorkspaceScreen extends BasicScreen {
+class WorkspaceScreen {
 	constructor() {
-		super();
 		console.log("I am code behind for users");
 		this.workspaceForm = document.createElement("form");
 		this.workspaceForm.innerHTML = `<div class="form-group row mb-3 mt-3">
