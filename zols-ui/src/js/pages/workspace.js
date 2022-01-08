@@ -49,6 +49,12 @@ class WorkspaceScreen extends BasicScreen {
 
 		document.querySelector("i.fa-save").addEventListener("click", () => {
 			this.workspaceForm.innerHTML = this.workspaceForm.onclose;
+			document
+				.querySelector("i.fa-plus")
+				.parentElement.parentElement.classList.remove("d-none");
+			document
+				.querySelector("i.fa-save")
+				.parentElement.parentElement.classList.add("d-none");
 		});
 	}
 
