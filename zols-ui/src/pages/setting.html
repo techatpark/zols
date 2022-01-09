@@ -7,7 +7,15 @@
 
 <body>
   ${require('/partials/_header.html')}
-  <div class="container px-4 py-5" id="featured-3">
+  <div class="container-fluid px-4 py-2">
+  <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
+    <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
+      <i class="fas fa-cog fa-2x"></i>
+      <h5 class="px-2 pt-1">Settings</h5>
+    </div>
+  </header>
+
+  <main class="container-fluid">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 py-5">
       <div class="col d-flex align-items-start">
         <span class="bi text-muted flex-shrink-0 me-3"><i class="fas fa-bezier-curve"></i></span>
@@ -24,10 +32,24 @@
         </div>
       </div>
       <div class="col d-flex align-items-start">
+        <span class="bi text-muted flex-shrink-0 me-3"><i class="fab fa-buromobelexperte"></i></span>        
+        <div>
+          <a href="/pages/extensions.html" class="h4 fw-bold mb-0">Extensions</a>
+          <p>Manage users and the extensions.</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
         <span class="bi text-muted flex-shrink-0 me-3"><i class="fas fa-users"></i></span>        
         <div>
           <a href="/pages/user.html" class="h4 fw-bold mb-0">User</a>
           <p>Manage users and the permissions.</p>
+        </div>
+      </div>
+      <div class="col d-flex align-items-start">
+        <span class="bi text-muted flex-shrink-0 me-3"><i class="fas fa-laptop-house"></i></span>        
+        <div>
+          <a href="/pages/rols.html" class="h4 fw-bold mb-0">Roles</a>
+          <p>Manage permissions.</p>
         </div>
       </div>
       <div class="col d-flex align-items-start">
@@ -38,8 +60,8 @@
         </div>
       </div>
     </div>
-  </div>
-
+  </main>
+</div>
 ${require('/partials/_scripts.html')}
 
 
