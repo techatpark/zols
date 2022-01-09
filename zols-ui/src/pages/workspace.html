@@ -21,21 +21,52 @@
     </header>
 
     <main id="content" class="container-fluid">
-      <form>
-        <div class="row mb-3 mt-3">
-          <label for="nameTxt" class="col-sm-1 col-form-label">Name</label>
-          <div class="col-sm-5">
-            <input class="form-control" id="nameTxt">
-          </div>
-        </div>
-        <div class="row mb-3">
-          <label for="descriptionTxt" class="col-sm-1 col-form-label">Description</label>
-          <div class="col-sm-5">
-        <textarea class="form-control" id="descriptionTxt"></textarea>
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-      </form>
+      <table class="table table-hover">
+        <caption><nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+              <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav></caption>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col" style="width:100px"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+            <th scope="row">3</th>
+            <td colspan="2">Larry the Bird</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+        </tbody>
+      </table>
       
     </main>
   </div>

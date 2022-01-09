@@ -3,59 +3,47 @@ class WorkspaceScreen {
 	constructor() {
 		console.log("I am code behind for users");
 		this.workspaceForm = document.createElement("form");
-		this.workspaceForm.innerHTML = `<div class="form-group row mb-3 mt-3">
-          <label for="inputName3" class="col-sm-1 col-form-label">Name</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" id="inputName3" placeholder="Enter Name" required="" autofocus="">
-          </div>
-        </div>
-        <div class="form-group row mb-3">
-          <label for="inputDescription3" class="col-sm-1 col-form-label">Description</label>
-          <div class="col-sm-5">
-            <input type="text" class="form-control" id="inputDescription3" placeholder="Description">
-          </div>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>`;
+		this.workspaceForm.innerHTML = `<div class="mb-3">
+		<label for="workspaceFormControlInput1" class="form-label">Name</label>
+		<input type="text" class="form-control" id="workspaceFormControlInput1" placeholder="">
+	  </div>
+	  <div class="mb-3">
+		<label for="workspaceFormControlInput1" class="form-label">Description</label>
+		<textarea class="form-control" id="workspaceFormControlInput1" rows="3"></textarea>
+	  </div>`;
 		this.container = document.getElementById("content");
 		this.setUp();
 	}
 
 	setUp() {
 		document.querySelector("i.fa-plus").addEventListener("click", () => {
-			document
-				.querySelector("i.fa-save")
-				.parentElement.parentElement.classList.remove("d-none");
-			document
-				.querySelector("i.fa-plus")
-				.parentElement.parentElement.classList.add("d-none");
 			this.showWorkspaceForm();
-			console.log("plus button clicked to add workspace");
+		});
+
+		document.querySelector("i.fa-save").addEventListener("click", () => {
+			this.showWorkspaces();
 		});
 
 		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
 			el.addEventListener("click", () => {
-				console.log("Call to action for Edit");
+				this.showWorkspaceForm();
 			});
 		});
 
 		document.querySelectorAll("i.fa-trash").forEach((el) => {
-			el.addEventListener("click", () => {
+			el.addEventListener("on-confirmation", () => {
 				console.log("Call to action for Delete");
 			});
-		});
-
-		document.querySelector("i.fa-save").addEventListener("click", () => {
-			this.workspaceForm.innerHTML = this.workspaceForm.onclose;
-			document
-				.querySelector("i.fa-plus")
-				.parentElement.parentElement.classList.remove("d-none");
-			document
-				.querySelector("i.fa-save")
-				.parentElement.parentElement.classList.add("d-none");
 		});
 	}
 
 	showWorkspaceForm() {
+		document
+			.querySelector("i.fa-save")
+			.parentElement.parentElement.classList.remove("d-none");
+		document
+			.querySelector("i.fa-plus")
+			.parentElement.parentElement.classList.add("d-none");
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(
@@ -63,6 +51,20 @@ class WorkspaceScreen {
 			);
 		}
 		this.container.appendChild(this.workspaceForm);
+	}
+
+	showWorkspaces() {
+		document
+			.querySelector("i.fa-plus")
+			.parentElement.parentElement.classList.remove("d-none");
+		document
+			.querySelector("i.fa-save")
+			.parentElement.parentElement.classList.add("d-none");
+		// Navigate Back to Listing Screen
+		this.container.removeChild(this.container.lastChild);
+		this.oldChildNodes.forEach((child) => {
+			this.container.appendChild(child);
+		});
 	}
 }
 new WorkspaceScreen();
