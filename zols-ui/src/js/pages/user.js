@@ -12,12 +12,30 @@ class UserScreen {
 	  </div>
 	  <div class="mb-3">
 		<label for="exampleInputPassword1" class="form-label">Password</label>
-		<input type="password" class="form-control" id="exampleInputPassword1">
+		<input class="form-control" id="exampleInputPassword1">
 	  </div>
-	  <div class="mb-3 form-check">
-		<input type="checkbox" class="form-check-input" id="exampleCheck1">
-		<label class="form-check-label" for="exampleCheck1">Check me out</label>
-	  </div>`;
+	  <div class="mb-3">
+	  <label for="exampleInputRole" class="form-label">Roles</label>
+	  	<div class="form-check">
+  			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+  			<label class="form-check-label" for="flexCheckDefault">
+    			Admin
+  			</label>
+		</div>
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+			<label class="form-check-label" for="flexCheckDefault">
+		  		Moderator
+			</label>
+  		</div>
+		<div class="form-check">
+			<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+			<label class="form-check-label" for="flexCheckChecked">
+		  		User
+			</label>
+		</div>
+	  </div>
+	 `;
 		this.container = document.getElementById("content");
 		this.setUp();
 	}
@@ -26,6 +44,12 @@ class UserScreen {
 		document.querySelector("i.fa-plus").addEventListener("click", () => {
 			this.showUserForm();
 		});
+
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.addEventListener("click", () => {
+				this.showUsers();
+			});
 
 		document.querySelector("i.fa-save").addEventListener("click", () => {
 			this.showUsers();
@@ -45,6 +69,11 @@ class UserScreen {
 	}
 
 	showUserForm() {
+		document.querySelector("i.fa-users").classList.add("d-none");
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.classList.remove("d-none");
+
 		document
 			.querySelector("i.fa-save")
 			.parentElement.parentElement.classList.remove("d-none");
@@ -61,6 +90,11 @@ class UserScreen {
 	}
 
 	showUsers() {
+		document.querySelector("i.fa-users").classList.remove("d-none");
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.classList.add("d-none");
+
 		document
 			.querySelector("i.fa-plus")
 			.parentElement.parentElement.classList.remove("d-none");
