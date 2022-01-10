@@ -8,7 +8,25 @@ class SchemaScreen {
 			document.getElementById("schema-container")
 		);
 
-		document.querySelector(".fa-code-branch").addEventListener("click", () => {
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.addEventListener("click", () => {
+				this.render();
+			});
+
+		document.querySelectorAll("i.fa-trash").forEach((el) => {
+			el.addEventListener("on-confirmation", () => {
+				fetch("/api/schema/" + this.schema["$id"], {
+					method: "DELETE",
+					headers: {
+						Authorization:
+							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+					},
+				}).then(() => this.render());
+			});
+		});
+
+		document.querySelector("i.fa-code-branch").addEventListener("click", () => {
 			this.schemaEditor.forkSchema(this.schema);
 		});
 
@@ -20,6 +38,11 @@ class SchemaScreen {
 	}
 
 	render() {
+		document.querySelector("i.fa-bezier-curve").classList.remove("d-none");
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.classList.add("d-none");
+
 		fetch("/api/schema", {
 			headers: {
 				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
@@ -27,13 +50,38 @@ class SchemaScreen {
 		})
 			.then((response) => response.json())
 			.then((schemas) => {
-				this.schemas = schemas;
-				this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
-				this.setSelectedSchema(this.rootSchemas[0]);
+				this.setSchemas(schemas);
 			})
 			.catch((err) => {
-				console.error(err);
+				this.setSchemas();
 			});
+	}
+
+	setSchemas(schemas) {
+		if (schemas) {
+			document.querySelector("ul.call-to-action").classList.remove("d-none");
+			this.schemas = schemas;
+			this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
+			this.setSelectedSchema(this.rootSchemas[0]);
+		} else {
+			document.querySelector("ul.call-to-action").classList.add("d-none");
+
+			document.getElementById(
+				"schema-container"
+			).innerHTML = `<main class="p-5 m-5">
+
+			<p class="lead">
+			There are no schema available.
+			</p>
+			<p class="lead">
+			  <a href="#" class="btn btn-primary fw-bold">Create New</a>
+			</p>
+		  </main>`;
+			document.querySelector(".btn-primary").addEventListener("click", () => {
+				document.querySelector("ul.call-to-action").classList.remove("d-none");
+				this.schemaEditor.createSchema();
+			});
+		}
 	}
 
 	setSelectedSchema(schema) {

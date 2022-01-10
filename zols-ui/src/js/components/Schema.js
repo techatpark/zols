@@ -33,18 +33,21 @@ class Schema {
 		this.scemaEditor = document.createElement("div");
 		this.scemaEditor.classList.add("col-9");
 		this.scemaEditor.innerHTML = `
-		<form>
-  <div class="row mb-3">
-    <label for="nameTxt" class="col-sm-2 col-form-label">Name</label>
-    <div class="col-sm-5">
-      <input class="form-control" id="nameTxt">
-    </div>
-  </div>
+		<form class="needs-validation" id="editForm" novalidate>
+		<div class="row mb-3">
+			<label for="nameTxt" class="col-sm-2 col-form-label">Name</label>
+			<div class="col-sm-5">
+			<input type="text" class="form-control" id="nameTxt" required>
+			<div class="invalid-feedback">
+          Please choose a username.
+        </div>
+			</div>
+		</div>
 
   <div data-for-property="true" class="row mb-3">
   <label for="typeSelect" class="col-sm-2 col-form-label">Type</label>
   <div class="col-sm-5">
-  <select class="form-select" id="typeSelect" aria-label="Default select example">
+  <select class="form-select" id="typeSelect" aria-label="Default select example" required>
   <option value="string">Text</option>
   <option value="integer">Integer</option>
   <option value="number">Float</option>
@@ -57,14 +60,14 @@ class Schema {
   <div class="row mb-3">
     <label for="titleTxt" class="col-sm-2 col-form-label">Title</label>
     <div class="col-sm-5">
-      <input  class="form-control" id="titleTxt">
+      <input  class="form-control" id="titleTxt" required>
     </div>
   </div>
 
   <div class="row mb-3">
     <label for="descriptionTxt" class="col-sm-2 col-form-label">Description</label>
     <div class="col-sm-8">
-	<textarea class="form-control" id="descriptionTxt"></textarea>
+	<textarea class="form-control" id="descriptionTxt" required></textarea>
     </div>
   </div>
   
@@ -86,12 +89,21 @@ class Schema {
     </div>
   </fieldset>
 
-  
+  <button id="submitBtn" class="btn btn-primary d-none" type="submit">Submit form</button>
 </form>
 		`;
 
 		this.schemaManager.appendChild(this.scemaNavigator);
 		this.schemaManager.appendChild(this.scemaEditor);
+
+		const form = this.scemaEditor.querySelector("#editForm");
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+			event.stopPropagation();
+			form.classList.add("was-validated");
+		});
+
+		this.form = form;
 
 		this.scemaNavigator
 			.querySelector("#generalLink")
@@ -110,9 +122,38 @@ class Schema {
 		});
 	}
 
+	isValidSchema() {
+		let isValid = true;
+		document.getElementById("submitBtn").click();
+		if (this.schema.properties) {
+			Object.keys(this.schema.properties).forEach((property) => {
+				if (property === "") {
+					document.getElementById("nameTxt").focus();
+					// window.error("invalid property name");
+					isValid = false;
+				}
+			});
+		}
+
+		return isValid;
+	}
+
 	createSchema() {
 		if (this.container.firstChild === this.schemaManager) {
-			console.log("add property");
+			if (this.isValidSchema()) {
+				let property = {
+					title: "New Property",
+				};
+				if (!this.schema.properties) {
+					this.schema.properties = {
+						"": property,
+					};
+				} else {
+					this.schema.properties[""] = property;
+				}
+				this.setSchema();
+				this.setEditor(property);
+			}
 		} else {
 			this.schema = {
 				$id: "newSchema",
@@ -132,6 +173,14 @@ class Schema {
 	}
 
 	setSchema(_schemaId) {
+		document.querySelector("i.fa-bezier-curve").classList.add("d-none");
+		document
+			.querySelector("i.fa-arrow-alt-circle-left")
+			.classList.remove("d-none");
+		this.container.parentElement
+			.querySelector(".dropdown")
+			.classList.add("d-none");
+
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(
@@ -183,45 +232,50 @@ class Schema {
 	}
 
 	setEditor(_input) {
-		document.getElementById("titleTxt").value = _input.title
-			? _input.title
-			: "";
-		document.getElementById("descriptionTxt").value = _input.description
-			? _input.description
-			: "";
+		if (
+			_input == this.schema ||
+			document.getElementById("submitBtn").parentElement.checkValidity()
+		) {
+			document.getElementById("titleTxt").value = _input.title
+				? _input.title
+				: "";
+			document.getElementById("descriptionTxt").value = _input.description
+				? _input.description
+				: "";
 
-		if (_input === this.schema) {
-			document
-				.querySelectorAll('[data-for-schema="true"]')
-				.forEach((elelemnt) => {
-					elelemnt.classList.remove("d-none");
-				});
-			document
-				.querySelectorAll('[data-for-property="true"]')
-				.forEach((elelemnt) => {
-					elelemnt.classList.add("d-none");
-				});
-			document.getElementById("nameTxt").value = _input["$id"];
-		} else {
-			document
-				.querySelectorAll('[data-for-schema="true"]')
-				.forEach((elelemnt) => {
-					elelemnt.classList.add("d-none");
-				});
-			document
-				.querySelectorAll('[data-for-property="true"]')
-				.forEach((elelemnt) => {
-					elelemnt.classList.remove("d-none");
-				});
+			if (_input === this.schema) {
+				document
+					.querySelectorAll('[data-for-schema="true"]')
+					.forEach((elelemnt) => {
+						elelemnt.classList.remove("d-none");
+					});
+				document
+					.querySelectorAll('[data-for-property="true"]')
+					.forEach((elelemnt) => {
+						elelemnt.classList.add("d-none");
+					});
+				document.getElementById("nameTxt").value = _input["$id"];
+			} else {
+				document
+					.querySelectorAll('[data-for-schema="true"]')
+					.forEach((elelemnt) => {
+						elelemnt.classList.add("d-none");
+					});
+				document
+					.querySelectorAll('[data-for-property="true"]')
+					.forEach((elelemnt) => {
+						elelemnt.classList.remove("d-none");
+					});
 
-			this.selectedProperty = _input;
+				this.selectedProperty = _input;
 
-			var key = Object.keys(this.schema.properties).filter(
-				(propName) => this.schema.properties[propName] === _input
-			);
-			document.getElementById("nameTxt").value = key;
+				var key = Object.keys(this.schema.properties).filter(
+					(propName) => this.schema.properties[propName] === _input
+				);
+				document.getElementById("nameTxt").value = key;
 
-			document.getElementById("typeSelect").value = _input.type;
+				document.getElementById("typeSelect").value = _input.type;
+			}
 		}
 	}
 

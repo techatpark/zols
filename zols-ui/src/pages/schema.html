@@ -11,10 +11,11 @@
 
     <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
       <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
-        <i class="fas fa-bezier-curve"></i>
+        <i class="far fa-arrow-alt-circle-left fa-2x d-none"></i>
+        <i class="fas fa-bezier-curve fa-2x"></i>
         <h5 class="px-2 pt-1">Schema</h5>
       </div>
-      <ul class="nav col-md-4 justify-content-end d-flex">
+      <ul class="nav col-md-4 justify-content-end d-flex call-to-action">
         <li class="nav-item">
           <div class="nav-link text-dark dropdown">
             <span class="dropdown-toggle text-primary" role="button" id="schemaMenuLink"
@@ -26,9 +27,12 @@
             </ul>
           </div>
         </li>
+        <li class="nav-item"><a class="nav-link text-dark">
+          <i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash"></i></a></li>
+          <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
         <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-code-branch"></i></a></li>
         <li class="nav-item d-none"><a class="nav-link text-dark"><i class="far fa-save"></i></a></li>
-        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
+        
       </ul>
     </header>
     <main id="schema-container" class="container-fluid">
@@ -40,7 +44,26 @@ ${require('/partials/_scripts.html')}
 
   <script src="/js/pages/schema.js"></script>
 
-
+  <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.getElementsByClassName('needs-validation');
+        // Loop over them and prevent submission
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    </script>
 
   <!-- Option 2: Separate Popper and Bootstrap JS -->
   <!--
