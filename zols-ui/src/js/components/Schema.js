@@ -52,7 +52,6 @@ class Schema {
   <option value="integer">Integer</option>
   <option value="number">Float</option>
   <option value="boolean">Boolean</option>
-  <option value="array">Array</option>
 </select>
   </div>
 	</div>
@@ -96,11 +95,47 @@ class Schema {
 		this.schemaManager.appendChild(this.scemaNavigator);
 		this.schemaManager.appendChild(this.scemaEditor);
 
+		const _self = this;
 		const form = this.scemaEditor.querySelector("#editForm");
 		form.addEventListener("submit", function (event) {
 			event.preventDefault();
 			event.stopPropagation();
 			form.classList.add("was-validated");
+
+			if (_self.selectedObject) {
+				_self.selectedObject.title = document.getElementById("titleTxt").value;
+				_self.selectedObject.description =
+					document.getElementById("descriptionTxt").value;
+
+				if (document.getElementById("typeSelect").offsetParent !== null) {
+					_self.selectedObject.type =
+						document.getElementById("typeSelect").value;
+				}
+
+				if (_self.selectedObject !== _self.schema) {
+					if (_self.schema.properties) {
+						Object.keys(_self.schema.properties).forEach((propName) => {
+							if (_self.schema.properties[propName] === _self.selectedObject) {
+								let new_key = document.getElementById("nameTxt").value;
+								let old_key = propName;
+								console.log("renaming ", new_key, old_key);
+								if (new_key !== old_key) {
+									Object.defineProperty(
+										_self.schema.properties,
+										new_key, // modify old key
+										// fetch description from object
+										Object.getOwnPropertyDescriptor(
+											_self.schema.properties,
+											old_key
+										)
+									);
+									delete _self.schema.properties[old_key];
+								}
+							}
+						});
+					}
+				}
+			}
 		});
 
 		this.form = form;
@@ -123,9 +158,11 @@ class Schema {
 	}
 
 	isValidSchema() {
-		let isValid = true;
+		let isValid = document
+			.getElementById("submitBtn")
+			.parentElement.checkValidity();
 		document.getElementById("submitBtn").click();
-		if (this.schema.properties) {
+		if (isValid && this.schema.properties) {
 			Object.keys(this.schema.properties).forEach((property) => {
 				if (property === "") {
 					document.getElementById("nameTxt").focus();
@@ -232,16 +269,15 @@ class Schema {
 	}
 
 	setEditor(_input) {
-		if (
-			_input == this.schema ||
-			document.getElementById("submitBtn").parentElement.checkValidity()
-		) {
+		if (!this.selectedObject || this.isValidSchema()) {
 			document.getElementById("titleTxt").value = _input.title
 				? _input.title
 				: "";
 			document.getElementById("descriptionTxt").value = _input.description
 				? _input.description
 				: "";
+
+			this.selectedObject = _input;
 
 			if (_input === this.schema) {
 				document
@@ -292,6 +328,7 @@ class Schema {
 	}
 
 	addProperty(property) {
+		this.selectedObject = property;
 		const li = document.createElement("li");
 		const anchor = document.createElement("a");
 		anchor.classList.add("d-inline-flex");
@@ -305,8 +342,10 @@ class Schema {
 
 		anchor.innerHTML = title;
 
+		const selectedProperty = this.schema.properties[property];
+
 		anchor.addEventListener("click", () => {
-			this.setEditor(this.schema.properties[property]);
+			this.setEditor(selectedProperty);
 		});
 		li.appendChild(anchor);
 
