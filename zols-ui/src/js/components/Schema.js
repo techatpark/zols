@@ -149,7 +149,12 @@ class Schema {
 		this.container.appendChild(this.schemaManager);
 
 		if (_schemaId) {
-			fetch("/api/schema/" + _schemaId)
+			fetch("/api/schema/" + _schemaId, {
+				headers: {
+					Authorization:
+						"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+				},
+			})
 				.then((response) => response.json())
 				.then((schema) => {
 					this.schema = schema;

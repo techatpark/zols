@@ -20,7 +20,11 @@ class SchemaScreen {
 	}
 
 	render() {
-		fetch("/api/schema")
+		fetch("/api/schema", {
+			headers: {
+				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+			},
+		})
 			.then((response) => response.json())
 			.then((schemas) => {
 				this.schemas = schemas;

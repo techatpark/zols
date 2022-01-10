@@ -1,16 +1,6 @@
 @base = http://localhost:8080
 
 
-# POST {{base}}/api/auth/signup
-# Content-Type: application/json
-
-# {
-#     "username" : "admin",
-#     "email" : "emai@email.com",
-#     "password" : "password",
-#     "role" : ["admin"]
-# }
-
 #### Login
 # @name login 
 POST {{base}}/api/auth/signin
@@ -46,6 +36,7 @@ Content-Type: application/json
 #### Index a document with Id
 POST {{base}}/api/schema
 Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
 
 {
     "$id":"seller",
@@ -70,6 +61,7 @@ Content-Type: application/json
 #### Index a document with Id
 POST {{base}}/api/schema
 Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
 
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
@@ -146,6 +138,7 @@ Content-Type: application/json
 #### Index a document without Id
 POST {{base}}/api/data/product
 Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
 
 {
     "id": 4,
