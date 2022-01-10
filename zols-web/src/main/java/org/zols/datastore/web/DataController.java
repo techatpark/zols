@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this jsonSchema file, choose Tools | JsonSchemas
- * and open the jsonSchema in the editor.
- */
 package org.zols.datastore.web;
 
 import org.slf4j.Logger;
@@ -23,15 +18,11 @@ import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.zols.datastore.web.util.SpringConverter.getPage;
 
-/**
- *
- * @author sathish_ku
- */
 @RestController
 @RequestMapping(value = "/api/data/{schemaId}")
-public class DataControler {
+public class DataController {
 
-    private static final Logger LOGGER = getLogger(DataControler.class);
+    private static final Logger LOGGER = getLogger(DataController.class);
 
     @Autowired
     private DataService dataService;
