@@ -146,14 +146,31 @@ class Schema {
 				this.setEditor(this.schema);
 			});
 		document.querySelector(".fa-save").addEventListener("click", () => {
-			this.goBack();
+			if (this.isValidSchema()) {
+				fetch("/api/schema/", {
+					method: "POST",
+					body: JSON.stringify(this.schema),
+					headers: {
+						"content-type": "application/json",
+						Authorization:
+							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+					},
+				})
+					.then((response) => response.json())
+					.then((schema) => {})
+					.catch((err) => {
+						console.error(err);
+					});
 
-			document
-				.querySelector(".fa-save")
-				.parentElement.parentElement.classList.add("d-none");
-			document
-				.querySelector(".fa-code-branch")
-				.parentElement.parentElement.classList.remove("d-none");
+				this.goBack();
+
+				document
+					.querySelector(".fa-save")
+					.parentElement.parentElement.classList.add("d-none");
+				document
+					.querySelector(".fa-code-branch")
+					.parentElement.parentElement.classList.remove("d-none");
+			}
 		});
 	}
 
@@ -195,6 +212,8 @@ class Schema {
 			this.schema = {
 				$id: "newSchema",
 				title: "newSchema",
+				$schema: "http://json-schema.org/draft-07/schema#",
+				type: "object",
 			};
 			this.setSchema();
 		}
@@ -237,6 +256,7 @@ class Schema {
 		if (_schemaId) {
 			fetch("/api/schema/" + _schemaId, {
 				headers: {
+					"content-type": "application/json",
 					Authorization:
 						"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
 				},
