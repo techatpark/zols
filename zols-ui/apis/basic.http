@@ -11,7 +11,7 @@ Content-Type: application/json
     "password" : "password"
 }
 
-#### Index a document with Id
+#### Create a new Schema
 POST {{base}}/api/schema
 Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
@@ -21,6 +21,7 @@ Content-Type: application/json
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "A product from Acme's catalog",
   "title": "Product",
+  "label": "title",
   "type": "object",
   "properties": {
     "id": {
@@ -46,6 +47,29 @@ Content-Type: application/json
   },
   "required": [
     "id"
+  ],
+  "ids": [
+    "id"
   ]
 }
+
+
+#### Create a new product
+POST {{base}}/api/data/product
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title" : "Zols",
+  "price" : 100000000.50,
+  "availablity" : true
+}
+
+
+
+#### List all products
+GET {{base}}/api/data/product
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
 

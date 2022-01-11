@@ -10,14 +10,64 @@
   <div class="container-fluid px-4 py-2">
 
     <header class="d-flex align-items-center pb-2 mb-2 border-bottom">
-      <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">
-        <i class="fas fa-warehouse"></i>
-        <h5 class="px-2 pt-1">Data warehouse</h5>
+      <div class="d-flex col-md-8 align-items-center text-dark text-decoration-none">      
+        <i class="far fa-arrow-alt-circle-left fa-2x d-none"></i>
+        <i class="fas fa-warehouse fa-2x"></i>
+        <h5 class="px-2 pt-1">Datawarehouse</h5>
       </div>
-    </header>
-    <main class="container-fluid">
+      <ul class="nav col-md-4 justify-content-end d-flex">
+        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-fast-backward"></i></a></li>
+        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-fast-forward"></i></a></li>
 
+
+        <li class="nav-item">
+          <div class="nav-link text-dark dropdown">
+            <span class="dropdown-toggle text-primary" role="button" id="schemaMenuLink"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              
+            </span>
+            <ul id="schemaList" class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="schemaMenuLink">
+              
+            </ul>
+          </div>
+        </li>
+
+        <li class="nav-item"><a class="nav-link text-dark"><i class="fas fa-plus"></i></a></li>
+        <li class="nav-item d-none"><a class="nav-link text-dark"><i class="far fa-save"></i></a></li>
+      </ul>
+    </header>
+    <main id="content" class="container-fluid">
+      
+      
+      <table class="table table-hover">
         
+        <thead id="table-header">
+          <tr>
+
+            <th scope="col">Name</th>
+            <th scope="col">Owner</th>
+            <th scope="col" style="width:100px"></th>
+          </tr>
+        </thead>
+        <tbody id="table-content">
+          <tr>
+            <td>Mark</td>
+            <td>Otto</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+
+            <td>Jacob</td>
+            <td>Thornton</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+          <tr>
+
+            <td colspan="2">Larry the Bird</td>
+            <td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+          </tr>
+        </tbody>
+      </table>        
       
     </main>
   </div>
