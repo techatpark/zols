@@ -273,11 +273,31 @@ class Schema {
 
 			if (this.selectedObject !== this.schema) {
 				this.selectedObject.type = document.getElementById("typeSelect").value;
+				// Rename Property Name
+				Object.keys(this.schema.properties).forEach((propName) => {
+					if (this.schema.properties[propName] === this.selectedObject) {
+						let new_key = document.getElementById("nameTxt").value;
+						let old_key = propName;
+
+						if (new_key !== old_key) {
+							Object.defineProperty(
+								this.schema.properties,
+								new_key, // modify old key
+								// fetch description from object
+								Object.getOwnPropertyDescriptor(this.schema.properties, old_key)
+							);
+							delete this.schema.properties[old_key];
+						}
+					}
+				});
+			} else {
+				this.selectedObject["$id"] = document.getElementById("nameTxt").value;
 			}
 		}
 	}
 
 	setEditor(_input) {
+		console.log("_input", _input);
 		if (this.selectedObject != _input) {
 			this.getEditorValue();
 			if (!this.selectedObject || this.isValidSchema()) {
@@ -358,7 +378,7 @@ class Schema {
 		anchor.innerHTML = title;
 
 		const selectedProperty = this.schema.properties[property];
-		this.selectedObject = selectedProperty;
+		// this.selectedObject = selectedProperty;
 
 		anchor.addEventListener("click", () => {
 			this.setEditor(selectedProperty);

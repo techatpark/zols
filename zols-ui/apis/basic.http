@@ -29,10 +29,10 @@ Content-Type: application/json
       "type": "integer",
       "title": "Id"
     },
-    "title": {
+    "name": {
       "description": "Name of the product",
       "type": "string",
-      "title": "Title"
+      "title": "Name"
     },
     "price": {
       "description": "The price for a product",
