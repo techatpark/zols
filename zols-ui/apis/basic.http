@@ -11,98 +11,18 @@ Content-Type: application/json
     "password" : "password"
 }
 
-### TEST
-GET {{base}}/api/test/admin
-Authorization: Bearer {{login.response.body.accessToken}}
-Content-Type: application/json
-
 #### Index a document with Id
 POST {{base}}/api/schema
 Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 
 {
-	"$id": "newschema",
-	"title": "Hello",
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"type": "object",
-	"description": "eeeeee",
-	"properties": {
-		"eee": {
-			"title": "New Property eeeee",
-			"description": "eeee",
-			"type": "integer"
-		}
-	},
-  "required": ["eee"]
-}
-
-#### Index a document with Id
-POST {{base}}/api/schema
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.accessToken}}
-
-{
-    "$id":"seller",
-    "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "Seller",
-    "description": "A seller from Acme's catalog",
-    "type": "object",
-    "properties": {
-        "id": {
-            "description": "The unique identifier for a seller",
-            "type": "integer"
-        },
-        "name": {
-            "description": "Name of the product",
-            "type": "string"
-        }
-    },
-    "required": ["id", "name"],
-    "localized": ["name"]
-}
-
-#### Index a document with Id
-POST {{base}}/api/schema
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.accessToken}}
-
-{
+  "$id": "product",
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "localized": [
-    "title"
-  ],
   "description": "A product from Acme's catalog",
-  "ids": [
-    "id"
-  ],
-  "label": "price",
   "title": "Product",
   "type": "object",
   "properties": {
-    "warehouseLocations": {
-      "description": "Coordinates of the warehouse with the product",
-      "title": "Warehouse Locations",
-      "type": "array",
-      "items": {
-        "$ref": "geo"
-      }
-    },
-    "price": {
-      "filter": "minmax",
-      "type": "number",
-      "exclusiveMinimum": 0,
-      "title": "Price"
-    },
-    "imageUrl": {
-      "description": "Image of the product",
-      "type": "string",
-      "title": "Image"
-    },
-    "prefererredSeller": {
-      "title": "Preferred Seller",
-      "$ref": "seller"
-    },
     "id": {
       "description": "The unique identifier for a product",
       "type": "integer",
@@ -113,60 +33,19 @@ Authorization: Bearer {{login.response.body.accessToken}}
       "type": "string",
       "title": "Title"
     },
-    "sellers": {
-      "title": "Sellers",
-      "type": "array",
-      "items": {
-        "$ref": "seller"
-      }
+    "price": {
+      "description": "The price for a product",
+      "type": "number",
+      "title": "Price"
     },
-    "tags": {
-        "filter": "term",
-      "minItems": 1,
-      "uniqueItems": true,
-      "type": "array",
-      "title": "Tags",
-      "items": {
-        "type": "string"
-      }
+    "availablity": {
+      "description": "The availablity for a product",
+      "type": "boolean",
+      "title": "is Available"
     }
   },
   "required": [
-    "price",
-    "id",
-    "title"
-  ],
-  "$id": "product"
+    "id"
+  ]
 }
 
-#### Index a document without Id
-POST {{base}}/api/data/product
-Content-Type: application/json
-Authorization: Bearer {{login.response.body.accessToken}}
-
-{
-    "id": 4,
-    "title": "343434343 Laptop",
-    "imageUrl": "https://www.reliancedigital.in/medias/HP-14s-DQ2101TU-Laptops-491996532-i-1-1200Wx1200H-96Wx96H?context=bWFzdGVyfGltYWdlc3wyMzYzOXxpbWFnZS9qcGVnfGltYWdlcy9oMjUvaGI3Lzk1NDY2NDAwOTczMTAuanBnfDIxODdmYTBhNGQxOWZhZmVlOTFlMmVjZmNmYjZjNTkwODY1MTE3NGE5Nzg1NmM3ZGI4YWViMGVmNmQ2MGExMmE",
-    "price": 12.50,
-    "tags": ["Official", "Electronics"],
-    "sellers": [{
-            "id": 1,
-            "name": "HP Showroom"
-        }, {
-            "id": 2,
-            "name": "More Showroom"
-        }],
-    "prefererredSeller": {
-        "id": 3,
-        "name": "Muthu"
-    },
-    "warehouseLocations": [{
-            "latitude": 1,
-            "longitude": 2
-        }]
-}
-
-#### Get Mapping
-GET {{base}}/api/schema/product
-Content-Type: application/json

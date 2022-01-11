@@ -92,6 +92,10 @@ class SchemaScreen {
 
 	setSelectedSchema(schema) {
 		document
+			.getElementById("schemaList")
+			.parentElement.classList.remove("d-none");
+
+		document
 			.querySelector(".fa-save")
 			.parentElement.parentElement.classList.add("d-none");
 		document

@@ -118,7 +118,7 @@ class Schema {
 							if (_self.schema.properties[propName] === _self.selectedObject) {
 								let new_key = document.getElementById("nameTxt").value;
 								let old_key = propName;
-								console.log("renaming ", new_key, old_key);
+
 								if (new_key !== old_key) {
 									Object.defineProperty(
 										_self.schema.properties,
