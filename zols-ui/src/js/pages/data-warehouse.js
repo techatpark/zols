@@ -74,7 +74,7 @@ class DataWarehouseScreen {
 
 	setSelectedSchema(schema) {
 		this.schema = schema;
-		fetch("/api/data/" + schema["$id"], {
+		fetch("/api/data/" + schema["$id"] + "", {
 			headers: {
 				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
 			},
@@ -195,6 +195,27 @@ class DataWarehouseScreen {
 		document
 			.querySelector("i.fa-save")
 			.parentElement.parentElement.classList.add("d-none");
+
+		if (dataPage.first) {
+			document
+				.querySelector("i.fa-fast-backward")
+				.parentElement.classList.add("disabled");
+		} else {
+			document
+				.querySelector("i.fa-fast-backward")
+				.parentElement.classList.remove("disabled");
+		}
+
+		if (dataPage.last) {
+			document
+				.querySelector("i.fa-fast-forward")
+				.parentElement.classList.add("disabled");
+		} else {
+			document
+				.querySelector("i.fa-fast-forward")
+				.parentElement.classList.remove("disabled");
+		}
+
 		if (this.oldChildNodes) {
 			// Navigate Back to Listing Screen
 			this.container.removeChild(this.container.lastChild);

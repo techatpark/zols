@@ -60,8 +60,32 @@ Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 
 {
+  "id": 1,
+  "name" : "Zols 1",
+  "price" : 100000000.50,
+  "availablity" : true
+}
+
+#### Create a new product
+POST {{base}}/api/data/product
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
+{
   "id": 2,
   "name" : "Zols",
+  "price" : 100000000.50,
+  "availablity" : true
+}
+
+#### Create a new product
+POST {{base}}/api/data/product
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
+{
+  "id": 3,
+  "name" : "Zols 3",
   "price" : 100000000.50,
   "availablity" : true
 }
@@ -69,7 +93,7 @@ Content-Type: application/json
 
 
 #### List all products
-GET {{base}}/api/data/product
+GET {{base}}/api/data/product?size=2
 Authorization: Bearer {{login.response.body.accessToken}}
 Content-Type: application/json
 
