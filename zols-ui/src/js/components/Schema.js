@@ -104,7 +104,6 @@ class Schema {
 		this.schemaManager.appendChild(this.scemaNavigator);
 		this.schemaManager.appendChild(this.scemaEditor);
 
-		const _self = this;
 		const form = this.scemaEditor.querySelector("#editForm");
 		form.addEventListener("submit", function (event) {
 			event.preventDefault();
@@ -271,6 +270,10 @@ class Schema {
 			this.selectedObject.title = document.getElementById("titleTxt").value;
 			this.selectedObject.description =
 				document.getElementById("descriptionTxt").value;
+
+			if (this.selectedObject !== this.schema) {
+				this.selectedObject.type = document.getElementById("typeSelect").value;
+			}
 		}
 	}
 
