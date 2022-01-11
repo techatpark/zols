@@ -102,7 +102,7 @@ class Schema {
 			event.stopPropagation();
 			form.classList.add("was-validated");
 
-			if (_self.selectedObject) {
+			if (_self.selectedObject && document.getElementById("titleTxt")) {
 				_self.selectedObject.title = document.getElementById("titleTxt").value;
 				_self.selectedObject.description =
 					document.getElementById("descriptionTxt").value;
@@ -134,6 +134,9 @@ class Schema {
 							}
 						});
 					}
+				} else {
+					_self.selectedObject["$id"] =
+						document.getElementById("nameTxt").value;
 				}
 			}
 		});
@@ -157,7 +160,9 @@ class Schema {
 					},
 				})
 					.then((response) => response.json())
-					.then((schema) => {})
+					.then((schema) => {
+						console.log(schema);
+					})
 					.catch((err) => {
 						console.error(err);
 					});
@@ -210,8 +215,8 @@ class Schema {
 			}
 		} else {
 			this.schema = {
-				$id: "newSchema",
-				title: "newSchema",
+				$id: "",
+				title: "",
 				$schema: "http://json-schema.org/draft-07/schema#",
 				type: "object",
 			};
@@ -222,8 +227,8 @@ class Schema {
 	forkSchema(_schema) {
 		this.schema = {
 			$ref: _schema["$id"],
-			$id: "newSchema",
-			title: "newSchema",
+			$id: "",
+			title: "",
 		};
 		this.setSchema();
 	}
@@ -252,6 +257,8 @@ class Schema {
 			.parentElement.parentElement.classList.remove("d-none");
 
 		this.container.appendChild(this.schemaManager);
+
+		document.getElementById("nameTxt").focus();
 
 		if (_schemaId) {
 			fetch("/api/schema/" + _schemaId, {
@@ -348,7 +355,6 @@ class Schema {
 	}
 
 	addProperty(property) {
-		this.selectedObject = property;
 		const li = document.createElement("li");
 		const anchor = document.createElement("a");
 		anchor.classList.add("d-inline-flex");
@@ -363,6 +369,7 @@ class Schema {
 		anchor.innerHTML = title;
 
 		const selectedProperty = this.schema.properties[property];
+		this.selectedObject = selectedProperty;
 
 		anchor.addEventListener("click", () => {
 			this.setEditor(selectedProperty);

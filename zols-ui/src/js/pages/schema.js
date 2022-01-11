@@ -22,7 +22,13 @@ class SchemaScreen {
 						Authorization:
 							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
 					},
-				}).then(() => this.render());
+				}).then(() => {
+					let _self = this;
+					this.schemas = this.schemas.filter(function (value, index, arr) {
+						return value !== _self.schema;
+					});
+					this.setSchemas(this.schemas);
+				});
 			});
 		});
 
@@ -58,7 +64,7 @@ class SchemaScreen {
 	}
 
 	setSchemas(schemas) {
-		if (schemas) {
+		if (schemas && schemas.length !== 0) {
 			document.querySelector("ul.call-to-action").classList.remove("d-none");
 			this.schemas = schemas;
 			this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
