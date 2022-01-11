@@ -21,7 +21,7 @@ Content-Type: application/json
   "$schema": "http://json-schema.org/draft-07/schema#",
   "description": "A product from Acme's catalog",
   "title": "Product",
-  "label": "title",
+  "label": "name",
   "type": "object",
   "properties": {
     "id": {
@@ -61,7 +61,7 @@ Content-Type: application/json
 
 {
   "id": 2,
-  "title" : "Zols",
+  "name" : "Zols",
   "price" : 100000000.50,
   "availablity" : true
 }

@@ -1,40 +1,9 @@
 /*eslint no-undef: 0*/
 class DataWarehouseScreen {
 	constructor() {
-		this.userForm = document.createElement("form");
+		this.userForm = document.createElement("div");
 		this.userForm.classList.add("row");
 		this.userForm.classList.add("g-3");
-		this.userForm.innerHTML = `<div class="mb-3">
-		<label for="exampleInputEmail1" class="form-label">Email address</label>
-		<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-		<div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-	  </div>
-	  <div class="mb-3">
-		<label for="exampleInputPassword1" class="form-label">Password</label>
-		<input class="form-control" id="exampleInputPassword1">
-	  </div>
-	  <div class="mb-3">
-	  <label for="exampleInputRole" class="form-label">Roles</label>
-	  	<div class="form-check">
-  			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-  			<label class="form-check-label" for="flexCheckDefault">
-    			Admin
-  			</label>
-		</div>
-		<div class="form-check">
-			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-			<label class="form-check-label" for="flexCheckDefault">
-		  		Moderator
-			</label>
-  		</div>
-		<div class="form-check">
-			<input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
-			<label class="form-check-label" for="flexCheckChecked">
-		  		User
-			</label>
-		</div>
-	  </div>
-	 `;
 		this.container = document.getElementById("content");
 		this.setUp();
 	}
@@ -114,8 +83,8 @@ class DataWarehouseScreen {
 			.then((dataPage) => {
 				this.showDataPage(dataPage);
 			})
-			.catch(() => {
-				console.log("No Data");
+			.catch((e) => {
+				console.log("No Data", e);
 			});
 
 		const schemaList = document.getElementById("schemaList");
@@ -153,6 +122,57 @@ class DataWarehouseScreen {
 		document
 			.querySelector("i.fa-plus")
 			.parentElement.parentElement.classList.add("d-none");
+
+		const schema = {
+			$id: "product",
+			$schema: "http://json-schema.org/draft-07/schema#",
+			description: "A product from Acme's catalog",
+			title: "Product",
+			label: "name",
+			type: "object",
+			properties: {
+				id: {
+					description: "The unique identifier for a product",
+					type: "integer",
+					title: "Id",
+				},
+				name: {
+					description: "Name of the product",
+					type: "string",
+					title: "Name",
+				},
+				price: {
+					description: "The price for a product",
+					type: "number",
+					title: "Price",
+				},
+				availablity: {
+					description: "The availablity for a product",
+					type: "boolean",
+					title: "is Available",
+				},
+			},
+			required: ["id"],
+			ids: ["id"],
+		};
+
+		// Also, you can define the form behavior on submission, e.g.:
+		const submitCallback = (rootFormElement) => {
+			// Show the resulting JSON instance in your page.
+			document.getElementById("json-result").innerText = JSON.stringify(
+				rootFormElement.getInstance(),
+				null,
+				2
+			);
+			// (For testing purposes, return false to prevent automatic redirect.)
+			return false;
+		};
+
+		// Finally, get your form...
+		const jsonSchemaForm = JsonSchemaForms.build(schema, submitCallback);
+
+		this.userForm.appendChild(jsonSchemaForm);
+
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(

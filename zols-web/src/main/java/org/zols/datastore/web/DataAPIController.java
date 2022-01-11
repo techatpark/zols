@@ -20,9 +20,9 @@ import static org.zols.datastore.web.util.SpringConverter.getPage;
 
 @RestController
 @RequestMapping(value = "/api/data/{schemaId}")
-public class DataController {
+public class DataAPIController {
 
-    private static final Logger LOGGER = getLogger(DataController.class);
+    private static final Logger LOGGER = getLogger(DataAPIController.class);
 
     @Autowired
     private DataService dataService;
