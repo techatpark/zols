@@ -110,44 +110,6 @@ class Schema {
 			event.preventDefault();
 			event.stopPropagation();
 			form.classList.add("was-validated");
-
-			if (_self.selectedObject && document.getElementById("titleTxt")) {
-				_self.selectedObject.title = document.getElementById("titleTxt").value;
-				_self.selectedObject.description =
-					document.getElementById("descriptionTxt").value;
-
-				if (document.getElementById("typeSelect").offsetParent !== null) {
-					_self.selectedObject.type =
-						document.getElementById("typeSelect").value;
-				}
-
-				if (_self.selectedObject !== _self.schema) {
-					if (_self.schema.properties) {
-						Object.keys(_self.schema.properties).forEach((propName) => {
-							if (_self.schema.properties[propName] === _self.selectedObject) {
-								let new_key = document.getElementById("nameTxt").value;
-								let old_key = propName;
-
-								if (new_key !== old_key) {
-									Object.defineProperty(
-										_self.schema.properties,
-										new_key, // modify old key
-										// fetch description from object
-										Object.getOwnPropertyDescriptor(
-											_self.schema.properties,
-											old_key
-										)
-									);
-									delete _self.schema.properties[old_key];
-								}
-							}
-						});
-					}
-				} else {
-					_self.selectedObject["$id"] =
-						document.getElementById("nameTxt").value;
-				}
-			}
 		});
 
 		this.form = form;
@@ -192,15 +154,17 @@ class Schema {
 		let isValid = document
 			.getElementById("submitBtn")
 			.parentElement.checkValidity();
-		document.getElementById("submitBtn").click();
-		if (isValid && this.schema.properties) {
-			Object.keys(this.schema.properties).forEach((property) => {
-				if (property === "") {
-					document.getElementById("nameTxt").focus();
-					// window.error("invalid property name");
-					isValid = false;
-				}
-			});
+		if (isValid) {
+			document.getElementById("submitBtn").click();
+			if (isValid && this.schema.properties) {
+				Object.keys(this.schema.properties).forEach((property) => {
+					if (property === "") {
+						document.getElementById("nameTxt").focus();
+						// window.error("invalid property name");
+						isValid = false;
+					}
+				});
+			}
 		}
 
 		return isValid;
@@ -292,8 +256,6 @@ class Schema {
 		}
 	}
 
-	saveSchema() {}
-
 	goBack() {
 		// Navigate Back to Listing Screen
 		this.container.removeChild(this.schemaManager);
@@ -304,49 +266,64 @@ class Schema {
 		this.caller.render();
 	}
 
+	getEditorValue() {
+		if (this.selectedObject) {
+			this.selectedObject.title = document.getElementById("titleTxt").value;
+			this.selectedObject.description =
+				document.getElementById("descriptionTxt").value;
+		}
+	}
+
 	setEditor(_input) {
-		if (!this.selectedObject || this.isValidSchema()) {
-			document.getElementById("titleTxt").value = _input.title
-				? _input.title
-				: "";
-			document.getElementById("descriptionTxt").value = _input.description
-				? _input.description
-				: "";
+		if (this.selectedObject != _input) {
+			this.getEditorValue();
+			if (!this.selectedObject || this.isValidSchema()) {
+				document.getElementById("titleTxt").value = _input.title
+					? _input.title
+					: "";
+				document.getElementById("descriptionTxt").value = _input.description
+					? _input.description
+					: "";
 
-			this.selectedObject = _input;
+				if (_input["$id"]) {
+					document.getElementById("nameTxt").value = _input["$id"];
+				}
 
-			if (_input === this.schema) {
-				document
-					.querySelectorAll('[data-for-schema="true"]')
-					.forEach((elelemnt) => {
-						elelemnt.classList.remove("d-none");
-					});
-				document
-					.querySelectorAll('[data-for-property="true"]')
-					.forEach((elelemnt) => {
-						elelemnt.classList.add("d-none");
-					});
-				document.getElementById("nameTxt").value = _input["$id"];
-			} else {
-				document
-					.querySelectorAll('[data-for-schema="true"]')
-					.forEach((elelemnt) => {
-						elelemnt.classList.add("d-none");
-					});
-				document
-					.querySelectorAll('[data-for-property="true"]')
-					.forEach((elelemnt) => {
-						elelemnt.classList.remove("d-none");
-					});
+				this.selectedObject = _input;
 
-				this.selectedProperty = _input;
+				if (_input === this.schema) {
+					document
+						.querySelectorAll('[data-for-schema="true"]')
+						.forEach((elelemnt) => {
+							elelemnt.classList.remove("d-none");
+						});
+					document
+						.querySelectorAll('[data-for-property="true"]')
+						.forEach((elelemnt) => {
+							elelemnt.classList.add("d-none");
+						});
+					document.getElementById("nameTxt").value = _input["$id"];
+				} else {
+					document
+						.querySelectorAll('[data-for-schema="true"]')
+						.forEach((elelemnt) => {
+							elelemnt.classList.add("d-none");
+						});
+					document
+						.querySelectorAll('[data-for-property="true"]')
+						.forEach((elelemnt) => {
+							elelemnt.classList.remove("d-none");
+						});
 
-				var key = Object.keys(this.schema.properties).filter(
-					(propName) => this.schema.properties[propName] === _input
-				);
-				document.getElementById("nameTxt").value = key;
+					this.selectedProperty = _input;
 
-				document.getElementById("typeSelect").value = _input.type;
+					var key = Object.keys(this.schema.properties).filter(
+						(propName) => this.schema.properties[propName] === _input
+					);
+					document.getElementById("nameTxt").value = key;
+
+					document.getElementById("typeSelect").value = _input.type;
+				}
 			}
 		}
 	}
