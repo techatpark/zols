@@ -24,7 +24,7 @@ class SchemaScreen {
 					},
 				}).then(() => {
 					let _self = this;
-					this.schemas = this.schemas.filter(function (value, index, arr) {
+					this.schemas = this.schemas.filter(function (value) {
 						return value !== _self.schema;
 					});
 					this.setSchemas(this.schemas);
@@ -58,7 +58,7 @@ class SchemaScreen {
 			.then((schemas) => {
 				this.setSchemas(schemas);
 			})
-			.catch((err) => {
+			.catch(() => {
 				this.setSchemas();
 			});
 	}

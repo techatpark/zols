@@ -37,9 +37,9 @@ class Schema {
 		<div class="row mb-3">
 			<label for="nameTxt" class="col-sm-2 col-form-label">Name</label>
 			<div class="col-sm-5">
-			<input type="text" class="form-control" id="nameTxt" required>
+			<input type="text" class="form-control" id="nameTxt" autocomplete="off" required>
 			<div class="invalid-feedback">
-          Please choose a username.
+          Please choose a Name.
         </div>
 			</div>
 		</div>
@@ -53,20 +53,29 @@ class Schema {
   <option value="number">Float</option>
   <option value="boolean">Boolean</option>
 </select>
+<div class="invalid-feedback">
+          Please choose a Type.
+        </div>
   </div>
 	</div>
 
   <div class="row mb-3">
     <label for="titleTxt" class="col-sm-2 col-form-label">Title</label>
     <div class="col-sm-5">
-      <input  class="form-control" id="titleTxt" required>
+      <input  class="form-control" id="titleTxt" autocomplete="off" required>
+	  <div class="invalid-feedback">
+          Please choose a Title.
+        </div>
     </div>
   </div>
 
   <div class="row mb-3">
     <label for="descriptionTxt" class="col-sm-2 col-form-label">Description</label>
     <div class="col-sm-8">
-	<textarea class="form-control" id="descriptionTxt" required></textarea>
+	<textarea class="form-control" id="descriptionTxt" autocomplete="off" required></textarea>
+	<div class="invalid-feedback">
+          Please provide a Description.
+        </div>
     </div>
   </div>
   
