@@ -35,3 +35,4 @@ build
 .vscode
 
 /zols-web/src/main/resources/static/
+zols-ui/browser-sync.js
