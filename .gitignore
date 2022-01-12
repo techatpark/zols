@@ -26,6 +26,7 @@
 .DS_Store
 build
 **/package-lock.json
+**/browser-sync.js
 **/**.log.**
 **.log
 **/deploy.txt
