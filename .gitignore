@@ -12,7 +12,7 @@
 **/.sass-cache
 **/.tmp
 .settings
-.classpath
+.classpatht
 .project
 **/**.iml
 **.iml
