@@ -17,14 +17,15 @@ public class SpringConverter {
 
     public static Page getPage(final org.zols.datastore.query.Page page,
                                final Pageable pageable) {
-        return (page == null) ? null :
-                new PageImpl<>(page.getContent(), pageable, page.getTotal());
+        return (page == null) ? null
+                : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 
     public static SpringAggregatedResults getAggregatedResults(
-            final AggregatedResults aggregatedResults, final Pageable pageable) {
-        return aggregatedResults == null ? null :
-                new SpringAggregatedResults(aggregatedResults, pageable);
+            final AggregatedResults aggregatedResults,
+            final Pageable pageable) {
+        return aggregatedResults == null ? null
+                : new SpringAggregatedResults(aggregatedResults, pageable);
     }
 
 }

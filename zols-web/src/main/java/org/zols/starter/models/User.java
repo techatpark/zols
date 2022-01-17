@@ -49,10 +49,18 @@ public class User {
     public User() {
     }
 
-    public User(final String username, final String email, final String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
+    /**
+     * Instantiates a user.
+     *
+     * @param anUsername  an username
+     * @param anEmail an email
+     * @param anPassword an password
+     */
+    public User(final String anUsername, final String anEmail,
+                final String anPassword) {
+        this.username = anUsername;
+        this.email = anEmail;
+        this.password = anPassword;
     }
 
     public Long getId() {

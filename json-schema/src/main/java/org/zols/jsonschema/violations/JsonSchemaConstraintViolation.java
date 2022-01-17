@@ -56,43 +56,50 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
     @Override
     public Object getLeafBean() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object[] getExecutableParameters() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object getExecutableReturnValue() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Path getPropertyPath() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object getInvalidValue() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public ConstraintDescriptor getConstraintDescriptor() {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object unwrap(final Class type) {
         throw new UnsupportedOperationException(
-                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                "Not supported yet.");
+        //To change body of generated methods, choose Tools | Templates.
     }
 
 }

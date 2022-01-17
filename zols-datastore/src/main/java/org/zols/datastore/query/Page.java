@@ -19,13 +19,13 @@ public class Page<T> {
     private final Long total;
     private final List<T> content;
 
-    public Page(final Integer pageNumber, final Integer pageSize,
-                                                 final Long total,
-                final List<T> content) {
-        this.pageNumber = pageNumber;
-        this.pageSize = pageSize;
-        this.total = total;
-        this.content = content;
+    public Page(final Integer thePageNumber, final Integer thePageSize,
+                                                 final Long theTotal,
+                final List<T> theContent) {
+        this.pageNumber = thePageNumber;
+        this.pageSize = thePageSize;
+        this.total = theTotal;
+        this.content = theContent;
     }
 
     public Integer getPageNumber() {

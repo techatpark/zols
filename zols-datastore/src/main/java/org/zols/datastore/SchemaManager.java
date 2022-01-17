@@ -59,7 +59,8 @@ public final class SchemaManager {
                 new SimpleEntry("$id", schemaId));
     }
 
-    public boolean update(final String schemaId, final Map<String, Object> schemaMap)
+    public boolean update(final String schemaId,
+                          final Map<String, Object> schemaMap)
             throws DataStoreException {
         Set<ConstraintViolation> violations =
                 jsonSchemaForSchema.validate(schemaMap);

@@ -31,15 +31,16 @@ public class JsonSchemaTestUtil {
                 JsonSchemaTestUtil::getJsonSchemaAsMap);
     }
 
-    public static Map<String, Object> getJsonSchemaAsMap(final String dataName) {
+    public static Map<String, Object> getJsonSchemaAsMap(
+                                          final String dataName) {
         return asMap(getJsonSchemaAsText(dataName));
     }
 
     public static String getJsonSchemaAsText(final String schamaName) {
         String schemaContent = null;
         try {
-            schemaContent = getFile("json-schema/src/test/resources/schema/" +
-                    schamaName + ".json");
+            schemaContent = getFile("json-schema/src/test/resources/schema/"
+                    + schamaName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName())
                     .log(Level.SEVERE, null, ex);

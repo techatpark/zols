@@ -43,11 +43,12 @@ public enum ComparisonOperatorProxy {
 
     private final ComparisonOperator operator;
 
-    ComparisonOperatorProxy(final ComparisonOperator operator) {
+    ComparisonOperatorProxy(final ComparisonOperator perator) {
         this.operator = operator;
     }
 
-    public static ComparisonOperatorProxy asEnum(final ComparisonOperator operator) {
+    public static ComparisonOperatorProxy asEnum(final
+                                                 ComparisonOperator operator) {
         return CACHE.get(operator);
     }
 

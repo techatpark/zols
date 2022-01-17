@@ -21,8 +21,8 @@ public class SpringAggregatedResults {
     public SpringAggregatedResults(final AggregatedResults aggregatedResults,
                                    final Pageable pageable) {
         buckets = aggregatedResults.getBuckets();
-        page = (aggregatedResults.getPage() == null) ? null :
-                new PageImpl<>(aggregatedResults.getPage().getContent(),
+        page = (aggregatedResults.getPage() == null) ? null
+                : new PageImpl<>(aggregatedResults.getPage().getContent(),
                         pageable, aggregatedResults.getPage().getTotal());
     }
 

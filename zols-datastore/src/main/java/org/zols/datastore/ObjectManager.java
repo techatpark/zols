@@ -98,7 +98,8 @@ public final class ObjectManager<T> {
         return update(object, null, idValues);
     }
 
-    public T update(final T object, final Locale locale, final SimpleEntry... idValues)
+    public T update(final T object, final Locale locale,
+                    final SimpleEntry... idValues)
             throws DataStoreException {
         T updatedObject = null;
         if (object != null) {
@@ -154,11 +155,13 @@ public final class ObjectManager<T> {
         return list(null, locale);
     }
 
-    public List<T> list(final Condition<MapQuery> query) throws DataStoreException {
+    public List<T> list(final Condition<MapQuery> query)
+                                     throws DataStoreException {
         return list(query, null);
     }
 
-    private List<T> getObjects(final List<Map<String, Object>> maps, final Locale locale) {
+    private List<T> getObjects(final List<Map<String, Object>> maps,
+                               final Locale locale) {
         return maps == null ? null : maps.parallelStream().map(dataAsMap
                 -> asObject(clazz,
                 jsonSchema.delocalizeData(dataAsMap, locale))

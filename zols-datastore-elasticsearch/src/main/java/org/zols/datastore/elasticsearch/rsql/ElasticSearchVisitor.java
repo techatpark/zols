@@ -12,7 +12,7 @@ import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 
 /**
- * Visit RSQl to produce Elastic Search Query
+ * Visit RSQl to produce Elastic Search Query.
  */
 public class ElasticSearchVisitor
         extends NoArgRSQLVisitorAdapter<QueryBuilder> {
@@ -21,7 +21,8 @@ public class ElasticSearchVisitor
             comparisonNodeInterpreter;
 
     public ElasticSearchVisitor(
-            final ComparisonNodeInterpreter<QueryBuilder> comparisonNodeInterpreter) {
+            final ComparisonNodeInterpreter<QueryBuilder>
+                                        comparisonNodeInterpreter) {
         this.comparisonNodeInterpreter = comparisonNodeInterpreter;
     }
 

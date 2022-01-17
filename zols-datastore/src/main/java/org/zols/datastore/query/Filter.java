@@ -19,55 +19,57 @@ public class Filter<T> {
     /**
      * Intialize the Filter
      *
-     * @param name     name of the filter
+     * @param aName     name of the filter
      * @param anOperator an operator of the filter
      * @param value    value of the filter
      */
-    public Filter(final String name, final Operator anOperator, final T value) {
-        this.name = name;
+    public Filter(final String aName, final Operator anOperator,
+                  final T value) {
+        this.name = aName;
         this.operator = anOperator;
         this.value = value;
     }
 
     /**
-     * Intialize the Filter
+     * Intialize the Filter.
      *
-     * @param operator operator of the filter
-     * @param value    value of the filter
+     * @param anOperator operator of the filter
+     * @param aValue    value of the filter
      */
-    public Filter(final Operator operator, final T value) {
+    public Filter(final Operator anOperator, final T aValue) {
         this.name = null;
-        this.operator = operator;
-        this.value = value;
+        this.operator = anOperator;
+        this.value = aValue;
     }
 
     /**
-     * Intialize the Filter
+     * Intialize the Filter.
      *
-     * @param name     name of the filter
-     * @param operator operator of the filter
+     * @param aName     name of the filter
+     * @param anOperator operator of the filter
      * @param value
      */
-    public Filter(final String name, final Operator operator, final T... value) {
-        this.name = name;
-        this.operator = operator;
+    public Filter(final String aName, final Operator anOperator,
+                  final T... value) {
+        this.name = aName;
+        this.operator = anOperator;
         this.value = value;
     }
 
     /**
-     * Intialize the Filter without value
+     * Intialize the Filter without value.
      *
-     * @param name     name of the filter
-     * @param operator operator of the filter
+     * @param aName     name of the filter
+     * @param anOperator operator of the filter
      */
-    public Filter(final String name, final Operator operator) {
-        this.name = name;
-        this.operator = operator;
+    public Filter(final String aName, final Operator anOperator) {
+        this.name = aName;
+        this.operator = anOperator;
         this.value = null;
     }
 
     /**
-     * gets name of the filter
+     * gets name of the filter.
      *
      * @return name
      */
@@ -76,7 +78,7 @@ public class Filter<T> {
     }
 
     /**
-     * Gets operator of the Filter
+     * Gets operator of the Filter.
      *
      * @return operator
      */
@@ -85,7 +87,7 @@ public class Filter<T> {
     }
 
     /**
-     * gets value of the Filter
+     * gets value of the Filter.
      *
      * @return value object
      */
@@ -129,51 +131,51 @@ public class Filter<T> {
     public enum Operator {
 
         /**
-         * Search Text in Full content of Document
+         * Search Text in Full content of Document.
          */
         FULL_TEXT_SEARCH,
         /**
-         * Compare with =
+         * Compare with =.
          */
         EQUALS,
         /**
-         * Compare with =
+         * Compare with =.
          */
         NOT_EQUALS,
         /**
-         * Compare with
+         * Compare with !=.
          */
         GREATER_THAN,
         /**
-         * Compare with
+         * Compare with >.
          */
         GREATER_THAN_EQUALS,
         /**
-         * Compare with
+         * Compare with >=.
          */
         LESSER_THAN,
         /**
-         * Compare with
+         * Compare with <.
          */
         LESSER_THAN_EQUALS,
         /**
-         * Compare with Null value
+         * Compare with Null value.
          */
         IS_NULL,
         /**
-         * Check not Null
+         * Check not Null.
          */
         IS_NOTNULL,
         /**
-         * Exists in given values
+         * Exists in given values.
          */
         EXISTS_IN,
         /**
-         * Not Exists in given values
+         * Not Exists in given values.
          */
         NOT_EXISTS_IN,
         /**
-         * Checks value in between
+         * Checks value in between.
          */
         IN_BETWEEN
     }

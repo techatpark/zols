@@ -24,10 +24,10 @@ import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
 public class HttpUtil {
 
     /**
-     * Removes page,size kind of parameters from request url
+     * Removes page,size kind of parameters from request url.
      *
      * @param request
-     * @return
+     * @return url
      */
     public static String getPageUrl(final HttpServletRequest request) {
         String url = request.getRequestURI();
@@ -39,14 +39,16 @@ public class HttpUtil {
         return url;
     }
 
-    public static Condition<MapQuery> getQuery(final HttpServletRequest request) {
+    public static Condition<MapQuery> getQuery(
+                                  final HttpServletRequest request) {
         Condition<MapQuery> condition = null;
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null) {
 //            parameterMap.remove("page");
 //            parameterMap.remove("size");
             if (!parameterMap.isEmpty()) {
-                for (Map.Entry<String, String[]> entrySet : parameterMap.entrySet()) {
+                for (Map.Entry<String, String[]> entrySet
+                                        : parameterMap.entrySet()) {
                     String k = entrySet.getKey();
                     String[] v = entrySet.getValue();
                     if (!k.equals("page") && !k.equals("size")
@@ -100,6 +102,7 @@ public class HttpUtil {
 
     /**
      * get the legacy query.
+     * @param request the request
      * @return query
      */
     public static Query getLegacyQuery(final HttpServletRequest request) {
@@ -114,8 +117,8 @@ public class HttpUtil {
                               String[]> entrySet : parameterMap.entrySet()) {
                     String k = entrySet.getKey();
                     String[] v = entrySet.getValue();
-                    if (!k.equals("page") && !k.equals("size") &&
-                            !k.equals("lang") && !k.equals("q")) {
+                    if (!k.equals("page") && !k.equals("size")
+                            && !k.equals("lang") && !k.equals("q")) {
                         if (v.length == 1) {
                             String value = v[0];
                             if (value.contains(",")) {

@@ -49,8 +49,8 @@ public class PredicateVisitor<T>
         } else if (ComparisonOperator.NE.equals(operator)) {
             return single(node, this::inequality);
         } else if (ComparisonOperator.EX.equals(operator)) {
-            return ((Boolean) node.getValues().iterator().next()) ?
-                    exists(node) : doesNotExist(node);
+            return ((Boolean) node.getValues().iterator().next())
+                    ? exists(node) : doesNotExist(node);
         } else if (ComparisonOperator.GT.equals(operator)) {
             return single(node, this::greaterThan);
         } else if (ComparisonOperator.LT.equals(operator)) {
@@ -75,16 +75,17 @@ public class PredicateVisitor<T>
         }
 
         throw new UnsupportedOperationException(
-                "This visitor does not support the operator " + operator +
-                        ".");
+                "This visitor does not support the operator " + operator
+                        + ".");
     }
 
-    protected boolean subquery(final Object actual, final Predicate<Object> func) {
+    protected boolean subquery(final Object actual,
+                               final Predicate<Object> func) {
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
             return stream(values).anyMatch(func);
-        } else if (actual != null &&
-                Collection.class.isAssignableFrom(actual.getClass())) {
+        } else if (actual != null
+                && Collection.class.isAssignableFrom(actual.getClass())) {
             Collection<?> values = (Collection<?>) actual;
             return values.stream().anyMatch(func);
         } else {
@@ -120,8 +121,8 @@ public class PredicateVisitor<T>
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
             return stream(values).anyMatch(query::equals);
-        } else if (actual != null &&
-                Collection.class.isAssignableFrom(actual.getClass())) {
+        } else if (actual != null
+                && Collection.class.isAssignableFrom(actual.getClass())) {
             Collection<?> values = (Collection<?>) actual;
             return values.stream().anyMatch(query::equals);
         } else {
@@ -133,8 +134,8 @@ public class PredicateVisitor<T>
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
             return stream(values).noneMatch(query::equals);
-        } else if (actual != null &&
-                Collection.class.isAssignableFrom(actual.getClass())) {
+        } else if (actual != null
+                && Collection.class.isAssignableFrom(actual.getClass())) {
             Collection<?> values = (Collection<?>) actual;
             return values.stream().noneMatch(query::equals);
         } else {
@@ -146,8 +147,8 @@ public class PredicateVisitor<T>
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
             return stream(values).noneMatch(queries::contains);
-        } else if (actual != null &&
-                Collection.class.isAssignableFrom(actual.getClass())) {
+        } else if (actual != null
+                && Collection.class.isAssignableFrom(actual.getClass())) {
             Collection<?> values = (Collection<?>) actual;
             return values.stream().noneMatch(queries::contains);
         } else {
@@ -159,8 +160,8 @@ public class PredicateVisitor<T>
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
             return stream(values).anyMatch(queries::contains);
-        } else if (actual != null &&
-                Collection.class.isAssignableFrom(actual.getClass())) {
+        } else if (actual != null
+                && Collection.class.isAssignableFrom(actual.getClass())) {
             Collection<?> values = (Collection<?>) actual;
             return values.stream().anyMatch(queries::contains);
         } else {
@@ -170,8 +171,8 @@ public class PredicateVisitor<T>
 
     protected boolean greaterThan(final Object actual, final Object query) {
         if (query instanceof Number && actual instanceof Number) {
-            return ((Number) actual).doubleValue() >
-                    ((Number) query).doubleValue();
+            return ((Number) actual).doubleValue()
+                    > ((Number) query).doubleValue();
         } else if (query instanceof String && actual instanceof String) {
             return ((String) actual).compareTo((String) query) > 0;
         } else {
@@ -182,8 +183,8 @@ public class PredicateVisitor<T>
 
     protected boolean greaterThanOrEqualTo(final Object actual, final Object query) {
         if (query instanceof Number && actual instanceof Number) {
-            return ((Number) actual).doubleValue() >=
-                    ((Number) query).doubleValue();
+            return ((Number) actual).doubleValue()
+                    >= ((Number) query).doubleValue();
         } else if (query instanceof String && actual instanceof String) {
             return ((String) actual).compareTo((String) query) >= 0;
         } else {
@@ -194,8 +195,8 @@ public class PredicateVisitor<T>
 
     protected boolean lessThan(final Object actual, final Object query) {
         if (query instanceof Number && actual instanceof Number) {
-            return ((Number) actual).doubleValue() <
-                    ((Number) query).doubleValue();
+            return ((Number) actual).doubleValue()
+                    < ((Number) query).doubleValue();
         } else if (query instanceof String && actual instanceof String) {
             return ((String) actual).compareTo((String) query) < 0;
         } else {
@@ -204,10 +205,11 @@ public class PredicateVisitor<T>
         }
     }
 
-    protected boolean lessThanOrEqualTo(final Object actual, final Object query) {
+    protected boolean lessThanOrEqualTo(final Object actual,
+                                        final Object query) {
         if (query instanceof Number && actual instanceof Number) {
-            return ((Number) actual).doubleValue() <=
-                    ((Number) query).doubleValue();
+            return ((Number) actual).doubleValue()
+                    <= ((Number) query).doubleValue();
         } else if (query instanceof String && actual instanceof String) {
             return ((String) actual).compareTo((String) query) <= 0;
         } else {
@@ -271,8 +273,8 @@ public class PredicateVisitor<T>
     }
 
     private boolean resolveMultiField(final Object root, final String field,
-                                      final ComparisonNode node,
-                                      final BiPredicate<Object, Collection<?>> func) {
+                                final ComparisonNode node,
+                                final BiPredicate<Object, Collection<?>> func) {
         if (root == null || node.getField() == null) {
             return func.test(null, node.getValues());
         } else {
@@ -287,8 +289,8 @@ public class PredicateVisitor<T>
     }
 
     private boolean recurseMulti(final Object root, final String field,
-                                 final ComparisonNode node,
-                                 final BiPredicate<Object, Collection<?>> func) {
+                          final ComparisonNode node,
+                          final BiPredicate<Object, Collection<?>> func) {
 
         if (root.getClass().isArray()) {
             return Arrays.stream((Object[]) root)
