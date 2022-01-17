@@ -78,18 +78,24 @@ import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 import static org.zols.jsonschema.util.JsonUtil.asMap;
 
 /**
- * Elastic Search Implementation of DataStore
+ * Elastic Search Implementation of DataStore.
  */
 public class ElasticSearchDataStorePersistence
         implements BrowsableDataStorePersistence {
 
     private static final org.slf4j.Logger LOGGER =
             getLogger(ElasticSearchDataStorePersistence.class);
-
+    /**
+     * tells the client.
+     */
     private final RestHighLevelClient client;
-
+    /**
+     * tells the indexName.
+     */
     private final String indexName;
-
+    /**
+     * tells the dataStore.
+     */
     private DataStore dataStore;
 
     public ElasticSearchDataStorePersistence() {
@@ -100,12 +106,23 @@ public class ElasticSearchDataStorePersistence
         this.indexName = "zols";
     }
 
+    /**
+     * this is the constructor.
+     * @param indexName indexName
+     * @param client the client
+     */
     public ElasticSearchDataStorePersistence(final String indexName,
                                              final RestHighLevelClient client) {
         this.indexName = indexName;
         this.client = client;
     }
 
+    /**
+     * creates the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param jsonData the jsonData
+     * @return data
+     */
     @Override
     public Map<String, Object> create(final JsonSchema jsonSchema,
                                       final Map<String, Object> jsonData)
@@ -141,6 +158,12 @@ public class ElasticSearchDataStorePersistence
         return null;
     }
 
+    /**
+     * reads the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param idValues the idValues
+     * @return schema
+     */
     @Override
     public Map<String, Object> read(final JsonSchema jsonSchema,
                                     final SimpleEntry<String, Object>... idValues)
@@ -164,6 +187,13 @@ public class ElasticSearchDataStorePersistence
         }
     }
 
+    /**
+     * updates the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param jsonData the jsonData
+     * @param idValues the idValues
+     * @return data
+     */
     @Override
     public boolean update(final JsonSchema jsonSchema,
                           final Map<String, Object> jsonData,
@@ -195,6 +225,13 @@ public class ElasticSearchDataStorePersistence
         return false;
     }
 
+    /**
+     * updates the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param validatedData the validatedData
+     * @param idValues the idValues
+     * @return data
+     */
     @Override
     public boolean updatePartially(final JsonSchema jsonSchema,
                                    final Map<String, Object> validatedData,
@@ -226,6 +263,12 @@ public class ElasticSearchDataStorePersistence
         return false;
     }
 
+    /**
+     * deletes the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param idValues the idValues
+     * @return data
+     */
     @Override
     public boolean delete(final JsonSchema jsonSchema,
                           final SimpleEntry<String, Object>... idValues)
@@ -250,6 +293,11 @@ public class ElasticSearchDataStorePersistence
 
     }
 
+    /**
+     * get type of the schema name.
+     * @param jsonSchema   the jsonSchema
+     * @return schema
+     */
     private String getTypeName(final JsonSchema jsonSchema) {
         return jsonSchema.getJSONPropertyName(jsonSchema.getRoot().getId());
     }
@@ -259,6 +307,12 @@ public class ElasticSearchDataStorePersistence
         return jsonSchema == null ? null : jsonSchema.getIdValues(jsonData)[0];
     }
 
+    /**
+     * deletes the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param queryNode the queryNode
+     * @return data
+     */
     @Override
     public boolean delete(final JsonSchema jsonSchema, final Node queryNode)
             throws DataStoreException {
@@ -294,6 +348,12 @@ public class ElasticSearchDataStorePersistence
         return false;
     }
 
+    /**
+     * list the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param queryNode the queryNode
+     * @return data
+     */
     @Override
     public List<Map<String, Object>> list(final JsonSchema jsonSchema,
                                           final Node queryNode)
@@ -338,6 +398,14 @@ public class ElasticSearchDataStorePersistence
         return null;
     }
 
+    /**
+     * list the page of schema.
+     * @param jsonSchema   the jsonSchema
+     * @param queryNode the queryNode
+     * @param pageSize the pageSize
+     * @param pageNumber the pageNumber
+     * @return data
+     */
     @Override
     public Page<Map<String, Object>> list(final JsonSchema jsonSchema,
                                           final Node queryNode, final Integer pageNumber,
@@ -384,6 +452,12 @@ public class ElasticSearchDataStorePersistence
         return null;
     }
 
+    /**
+     * querying the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param queryNode the queryNode
+     * @return data
+     */
     private QueryBuilder getQueryBuilder(final JsonSchema jsonSchema, final Node queryNode)
             throws DataStoreException {
 
@@ -408,15 +482,32 @@ public class ElasticSearchDataStorePersistence
         return bool_builder;
     }
 
+    /**
+     * gets the encoded id.
+     * @return data
+     */
     private String getEncodedId(final Object ids) {
         return ids == null ? null :
                 URLEncoder.encode(ids.toString(), StandardCharsets.UTF_8);
     }
 
+    /**
+     * gets the index name of the schema.
+     * @return data
+     */
     private String getIndexName(final String typeName) {
         return indexName + "_" + typeName;
     }
 
+    /**
+     * browse the schema.
+     * @param schema   the schema
+     * @param keyword the keyword
+     * @param queryNode the queryNode
+     * @param pageSize the pageSize
+     * @param pageNumber the pageNumber
+     * @return data
+     */
     @Override
     public AggregatedResults browse(final JsonSchema schema, final String keyword,
                                     final Node queryNode, final Integer pageNumber,
@@ -440,6 +531,11 @@ public class ElasticSearchDataStorePersistence
         return aggregatedResults;
     }
 
+    /**
+     * list the buckets.
+     * @param searchResponse the searchResponse
+     * @return data
+     */
     private List<Map<String, Object>> bucketsOf(
             final Map<String, Object> searchResponse) {
         List<Map<String, Object>> buckets = null;
@@ -516,6 +612,13 @@ public class ElasticSearchDataStorePersistence
         return buckets;
     }
 
+    /**
+     * page of the schema.
+     * @param searchResponse   the searchResponse
+     * @param pageSize the pageSize
+     * @param pageNumber the pageNumber
+     * @return data
+     */
     private Page<Map<String, Object>> pageOf(
             final Map<String, Object> searchResponse, final Integer pageNumber,
             final Integer pageSize) {
@@ -531,6 +634,11 @@ public class ElasticSearchDataStorePersistence
         return page;
     }
 
+    /**
+     * list the  result of the schema.
+     * @param searchResponse   the searchResponse
+     * @return data
+     */
     private List<Map<String, Object>> resultsOf(
             final Map<String, Object> searchResponse) {
         List<Map<String, Object>> list = null;
@@ -552,6 +660,12 @@ public class ElasticSearchDataStorePersistence
         return list;
     }
 
+    /**
+     * add aggregation to the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param searchRequestBuilder the searchRequestBuilder
+     * @return data
+     */
     private void addAggregations(final JsonSchema jsonSchema,
                                  final SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
@@ -595,6 +709,14 @@ public class ElasticSearchDataStorePersistence
 
     }
 
+    /**
+     * search the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param queryNode the queryNode
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return data
+     */
     public Map<String, Object> searchResponse(final JsonSchema jsonSchema,
                                               final Node queryNode,
                                               final Integer pageNumber,
@@ -629,11 +751,21 @@ public class ElasticSearchDataStorePersistence
 
     }
 
+    /**
+     * refresh the schema with index.
+     * @param indexName   the indexName
+     * @return data
+     */
     private void refreshIndex(final String indexName) throws IOException {
         RefreshRequest request = new RefreshRequest(indexName);
         client.indices().refresh(request, RequestOptions.DEFAULT);
     }
 
+    /**
+     * on creates the new schema.
+     * @param jsonSchema   the jsonSchema
+     * @return data
+     */
     @Override
     public void onNewSchema(final JsonSchema jsonSchema) throws DataStoreException {
         if (jsonSchema.isRoot()) {
@@ -677,6 +809,12 @@ public class ElasticSearchDataStorePersistence
         }
     }
 
+    /**
+     * updates the schema.
+     * @param oldSchema   the oldSchema
+     * @param newSchema the newSchema
+     * @return data
+     */
     @Override
     public void onUpdateSchema(final JsonSchema oldSchema, final JsonSchema newSchema)
             throws DataStoreException {
@@ -763,6 +901,11 @@ public class ElasticSearchDataStorePersistence
         }
     }
 
+    /**
+     * find name with index.
+     * @param aliasName   the aliasName
+     * @return data
+     */
     private String findIndexName(final String aliasName) throws IOException {
         final StringBuilder index = new StringBuilder();
         GetAliasesRequest requestWithAlias = new GetAliasesRequest(aliasName);
@@ -779,6 +922,11 @@ public class ElasticSearchDataStorePersistence
         return index.toString().trim().length() == 0 ? null : index.toString();
     }
 
+    /**
+     * delete the schema.
+     * @param jsonSchema   the jsonSchema
+     * @return data
+     */
     @Override
     public void onDeleteSchema(final JsonSchema jsonSchema)
             throws DataStoreException {
@@ -800,6 +948,11 @@ public class ElasticSearchDataStorePersistence
         }
     }
 
+    /**
+     * initialize the schema.
+     * @param dataStore   the dataStore
+     * @return data
+     */
     @Override
     public void onIntialize(final DataStore dataStore) {
         this.dataStore = dataStore;

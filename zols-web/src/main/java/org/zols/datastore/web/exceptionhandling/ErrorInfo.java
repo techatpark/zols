@@ -10,12 +10,23 @@ package org.zols.datastore.web.exceptionhandling;
  */
 public class ErrorInfo {
 
+    /**
+     * tells the field.
+     */
     private final String field;
+    /**
+     * tells the message.
+     */
     private final String message;
 
-    public ErrorInfo(final String field, final String message) {
-        this.field = field;
-        this.message = message;
+    /**
+     * this is the constructor.
+     * @param anField an field
+     * @param anMessage an message
+     */
+    public ErrorInfo(final String anField, final String anMessage) {
+        this.field = anField;
+        this.message = anMessage;
     }
 
 }

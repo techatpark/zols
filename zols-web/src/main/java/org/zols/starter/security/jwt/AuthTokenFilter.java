@@ -26,7 +26,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             LoggerFactory.getLogger(AuthTokenFilter.class);
 
     /**
-     * TokenProvider
+     * TokenProvider.
      */
     @Autowired
     private TokenProvider jwtUtils;
@@ -38,7 +38,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(final HttpServletRequest request,
+    protected final void doFilterInternal(final HttpServletRequest request,
                                     final HttpServletResponse response,
                                     final FilterChain filterChain)
             throws ServletException, IOException {

@@ -21,9 +21,17 @@ import java.util.Set;
 public class GlobalControllerExceptionHandler
         extends ResponseEntityExceptionHandler {
 
+    /**
+     * Logger.
+     */
     private final Logger logger =
             LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
+    /**
+     *
+     * @param constraintViolationException constraintViolationException
+     * @return query
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handle(
             final ConstraintViolationException constraintViolationException) {

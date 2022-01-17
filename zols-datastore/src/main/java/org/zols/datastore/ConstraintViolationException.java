@@ -12,21 +12,43 @@ import java.util.Set;
  * @author sathish
  */
 public class ConstraintViolationException extends DataStoreException {
+
+    /**
+     * violations.
+     */
     private final Set<ConstraintViolation> violations;
 
+    /**
+     * object.
+     */
     private final Object object;
 
+    /**
+     * this is the constructor.
+     * @param anObject an Object
+     * @param anViolations anViolations
+     * @param <T>
+     */
     public <T> ConstraintViolationException(final T anObject,
-                                   final Set<ConstraintViolation> violations) {
+                          final Set<ConstraintViolation> anViolations) {
         super("Bean validation failed for " + anObject.getClass().getName());
         this.object = anObject;
-        this.violations = violations;
+        this.violations = anViolations;
     }
 
-    public Set<ConstraintViolation> getViolations() {
+    /**
+     * sets violations.
+     * @return violations
+     */
+    public final Set<ConstraintViolation> getViolations() {
         return violations;
     }
 
+    /**
+     * gets object.
+     *
+     * @return object
+     */
     public Object getObject() {
         return object;
     }

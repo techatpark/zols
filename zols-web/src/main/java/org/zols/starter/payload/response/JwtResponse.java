@@ -10,13 +10,13 @@ public class JwtResponse {
     private String email;
     private final List<String> roles;
 
-    public JwtResponse(final String accessToken, final Long id, final String username,
-                       final String email, final List<String> roles) {
+    public JwtResponse(final String accessToken, final Long anId, final String anUsername,
+                       final String anEmail, final List<String> aRoles) {
         this.token = accessToken;
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.roles = roles;
+        this.id = anId;
+        this.username = anUsername;
+        this.email = anEmail;
+        this.roles = aRoles;
     }
 
     public String getAccessToken() {

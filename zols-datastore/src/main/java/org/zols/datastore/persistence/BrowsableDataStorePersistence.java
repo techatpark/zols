@@ -17,6 +17,15 @@ import org.zols.jsonschema.JsonSchema;
  */
 public interface BrowsableDataStorePersistence extends DataStorePersistence {
 
+    /**
+     * updates the schema.
+     * @param jsonSchema   the jsonSchema
+     * @param keyword the keyword
+     * @param query the query
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return schema
+     */
     default AggregatedResults browse(final JsonSchema jsonSchema,
                                      final String keyword,
                                      final Condition<MapQuery> query,
@@ -27,6 +36,14 @@ public interface BrowsableDataStorePersistence extends DataStorePersistence {
                 pageSize);
     }
 
+    /**
+     * @param jsonSchema   the jsonSchema
+     * @param keyword the keyword
+     * @param queryNode the queryNode
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return schema
+     */
     AggregatedResults browse(JsonSchema jsonSchema,
                              String keyword,
                              Node queryNode,

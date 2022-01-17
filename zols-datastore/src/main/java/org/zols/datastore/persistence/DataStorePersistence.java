@@ -26,7 +26,7 @@ import java.util.Map;
 public interface DataStorePersistence {
 
     /**
-     * Called when new datastore created with this DataStorePersistence
+     * Called when new datastore created with this DataStorePersistence.
      *
      * @param dataStore
      * @throws DataStoreException
@@ -34,7 +34,7 @@ public interface DataStorePersistence {
     void onIntialize(DataStore dataStore);
 
     /**
-     * Called when new schema is created
+     * Called when new schema is created.
      *
      * @param jsonSchema
      * @throws DataStoreException
@@ -43,7 +43,7 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     /**
-     * Called when new schema is updated
+     * Called when new schema is updated.
      *
      * @param oldSchema
      * @param newSchema
@@ -53,7 +53,7 @@ public interface DataStorePersistence {
             throws DataStoreException;
 
     /**
-     * Called when schema is deleted
+     * Called when schema is deleted.
      *
      * @param jsonSchema
      * @throws DataStoreException
@@ -95,10 +95,11 @@ public interface DataStorePersistence {
     /**
      * @param jsonSchema
      * @param query
-     * @return
+     * @return schema
      * @throws DataStoreException
      */
-    default boolean delete(final JsonSchema jsonSchema, final Condition<MapQuery> query)
+    default boolean delete(final JsonSchema jsonSchema,
+                               final Condition<MapQuery> query)
             throws DataStoreException {
         return this.delete(jsonSchema, getNode(query));
     }
@@ -106,12 +107,19 @@ public interface DataStorePersistence {
     /**
      * @param jsonSchema
      * @param queryNode
-     * @return
+     * @return schema
      * @throws DataStoreException
      */
     boolean delete(JsonSchema jsonSchema, Node queryNode)
             throws DataStoreException;
 
+    /**
+     * @param jsonSchema
+     * @param jsonData jsonData
+     * @param idValues idValues
+     * @return schema
+     * @throws DataStoreException
+     */
     boolean update(JsonSchema jsonSchema,
                    Map<String, Object> jsonData,
                    SimpleEntry<String, Object>... idValues)
@@ -120,6 +128,7 @@ public interface DataStorePersistence {
     /**
      * @param jsonSchema schema of dynamic data
      * @param jsonData   validated Object
+     * @param idValues the idValues
      * @return status of the update operation
      * @throws DataStoreException
      */
@@ -180,8 +189,13 @@ public interface DataStorePersistence {
                                    Integer pageSize)
             throws DataStoreException;
 
+    /**
+     * @param query the query
+     * @return list of dynamic objects
+     * @throws DataStoreException
+     */
     default Node getNode(final Condition<MapQuery> query) {
-        return query == null ? null :
-                new RSQLParser().parse(query.query(new RSQLVisitor()));
+        return query == null ? null
+                : new RSQLParser().parse(query.query(new RSQLVisitor()));
     }
 }

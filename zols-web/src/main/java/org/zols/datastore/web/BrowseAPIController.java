@@ -42,6 +42,14 @@ public class BrowseAPIController {
     @Autowired
     private BrowseService browseService;
 
+    /**
+     * updates the schema.
+     * @param schemaName   the jsonSchema
+     * @param keyword the keyword
+     * @param pageable the pageable
+     * @param request the request
+     * @return schema
+     */
     @RequestMapping(value = "/search/{schemaName}")
     public Page<Map<String, Object>> searchBySchema(
             @PathVariable("schemaName") final String schemaName,
@@ -53,11 +61,21 @@ public class BrowseAPIController {
                 pageable.getPageSize()), pageable);
     }
 
+    /**
+     * updates the schema.
+     * @param schemaName   the jsonSchema
+     * @param keyword the keyword
+     * @param pageable the pageable
+     * @param request the request
+     * @param locale the locale
+     * @return schema
+     */
     @RequestMapping(value = "/browse/{schemaName}")
     public SpringAggregatedResults browseBySchema(
             @PathVariable("schemaName") final String schemaName,
             @RequestParam(required = false, value = "q") final String keyword,
-            final Pageable pageable, final HttpServletRequest request, final Locale locale)
+            final Pageable pageable, final HttpServletRequest request,
+                                                  final Locale locale)
             throws DataStoreException {
         return getAggregatedResults(
                 browseService.browseSchema(schemaName, keyword,
