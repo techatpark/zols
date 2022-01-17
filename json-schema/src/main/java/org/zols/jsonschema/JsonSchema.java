@@ -45,38 +45,49 @@ public abstract class JsonSchema {
      */
     protected final Function<String, Map<String, Object>> schemaSupplier;
 
+    /**
+     * The jsonschema.
+     */
     private final JsonSchema parent;
+    /**
+     * list of jsonschema.
+     */
     private final List<JsonSchema> parents;
 
     /**
-     * Property Names (Sorted)
+     * Property Names (Sorted).
      */
     private final List<String> idPropertyNames;
 
+    /**
+     * properties.
+     */
     private final Map<String, Map<String, Object>> properties;
 
     /**
      * Instantiates a new Json schema.
      *
      * @param schemaId       the schema id
-     * @param schemaSupplier the schema supplier
+     * @param anschemaSupplier the schema supplier
      */
     public JsonSchema(final String schemaId,
-                      final Function<String, Map<String, Object>> schemaSupplier) {
+                      final Function<String, Map<String, Object>>
+                              anschemaSupplier) {
 
-        this(schemaSupplier.apply(schemaId), schemaSupplier);
+        this(anschemaSupplier.apply(schemaId), anschemaSupplier);
     }
 
     /**
      * Instantiates a new Json schema.
      *
-     * @param schemaMap      the schema map
-     * @param schemaSupplier the schema supplier
+     * @param anschemaMap      the schema map
+     * @param anschemaSupplier the schema supplier
      */
-    public JsonSchema(final Map<String, Object> schemaMap,
-                      final Function<String, Map<String, Object>> schemaSupplier) {
-        this.schemaMap = schemaMap;
-        this.schemaSupplier = schemaSupplier;
+    public JsonSchema(final Map<String, Object> anschemaMap,
+                      final Function<String, Map<String, Object>>
+                              anschemaSupplier) {
+        this.schemaMap = anschemaMap;
+        this.schemaSupplier = anschemaSupplier;
 
         //Calculate and store Parent related attributes
         parents = new ArrayList<>();
@@ -105,8 +116,8 @@ public abstract class JsonSchema {
         }
 
         idPropertyNames =
-                parent == null ? (List<String>) schemaMap.get("ids") :
-                        parent.getIdPropertyNames();
+                parent == null ? (List<String>) schemaMap.get("ids")
+                        : parent.getIdPropertyNames();
 
         if (idPropertyNames != null) {
             Collections.sort(idPropertyNames);
@@ -114,7 +125,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets the list of parents from bottom to top
+     * Gets the list of parents from bottom to top.
      *
      * @return parents parents
      */
@@ -123,7 +134,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets Parent of the Schema if exists
+     * Gets Parent of the Schema if exists.
      *
      * @return parent
      */
@@ -141,7 +152,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets Root of the Schema if exists, else returns itself
+     * Gets Root of the Schema if exists, else returns itself.
      *
      * @return root
      */
@@ -161,7 +172,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * get the id properties from the Json Schema in asending order
+     * get the id properties from the Json Schema in asending order.
      *
      * @return id property names
      */
@@ -221,13 +232,13 @@ public abstract class JsonSchema {
      * @return the id values as string
      */
     public String getIdValuesAsString(final Object[] idValues) {
-        return idValues == null ? null :
-                Arrays.asList(idValues).stream().map(n -> n.toString())
+        return idValues == null ? null
+                : Arrays.asList(idValues).stream().map(n -> n.toString())
                         .collect(Collectors.joining("-"));
     }
 
     /**
-     * Get Id Values using ipValue pairs
+     * Get Id Values using ipValue pairs.
      *
      * @param idValuesAsMap the id values as map
      * @return object [ ]
@@ -243,7 +254,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Get the id values from the json data
+     * Get the id values from the json data.
      *
      * @param jsonData the json data
      * @return object [ ]
@@ -299,11 +310,13 @@ public abstract class JsonSchema {
         return stringBuilder.toString();
     }
 
-    private String getGraphQLType(final String id, final Map<String, Object> schama) {
+    private String getGraphQLType(final String id, final Map<String,
+            Object> schama) {
         StringBuilder stringBuilder = new StringBuilder("type ");
         stringBuilder.append(id).append(" {").append("\n");
         Map<String, Map<String, Object>> sproperties =
-                (Map<String, Map<String, Object>>) schama.get("properties");
+                (Map<String, Map<String, Object>>)
+                        schama.get("properties");
         if (sproperties != null) {
             sproperties.forEach((name, property) -> {
                 stringBuilder.append(name)
@@ -378,7 +391,8 @@ public abstract class JsonSchema {
     }
 
     /**
-     * gets valid json property name to put inside definitions of json schema
+     * gets valid json property name to put inside definitions of json
+     * schema.
      *
      * @param referenceUrl the reference url
      * @return json property name
@@ -408,14 +422,16 @@ public abstract class JsonSchema {
 
                 } else if (schemaEntry.getKey().equals("properties")) {
                     Map<String, Map<String, Object>> props =
-                            (Map<String, Map<String, Object>>) schemaEntry.getValue();
+                            (Map<String, Map<String, Object>>)
+                                    schemaEntry.getValue();
 
                     props.entrySet().forEach(propertyEntry -> {
                         String referencePath =
                                 (String) propertyEntry.getValue().get("$ref");
                         if (referencePath == null) {
                             Map<String, Object> itemsMap =
-                                    (Map<String, Object>) propertyEntry.getValue()
+                                    (Map<String, Object>)
+                                            propertyEntry.getValue()
                                             .get("items");
                             if (itemsMap != null) {
                                 referencePath = (String) itemsMap.get("$ref");
@@ -453,7 +469,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Delocalize the given json data
+     * Delocalize the given json data.
      *
      * @param jsonData the json data
      * @param locale   the locale
@@ -530,7 +546,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Delocalize the given json data
+     * Delocalize the given json data.
      *
      * @param jsonData the json data
      * @return map
@@ -659,17 +675,20 @@ public abstract class JsonSchema {
     }
 
     /**
-     * get the value from Json Schema supplier
+     * get the value from Json Schema supplier.
      *
      * @param schemaId
-     * @return
+     * @return JsonSchema
      */
     private JsonSchema getJsonSchema(final String schemaId) {
         try {
             return this.getClass()
                     .getDeclaredConstructor(String.class, Function.class)
                     .newInstance(schemaId, this.schemaSupplier);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (NoSuchMethodException | SecurityException
+                | InstantiationException | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException ex) {
             Logger.getLogger(JsonSchema.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
@@ -677,7 +696,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * get property for a given name, returns null if not exists
+     * get property for a given name, returns null if not exists.
      *
      * @param propertyName the property name
      * @return property of
@@ -699,8 +718,8 @@ public abstract class JsonSchema {
         if (map != null) {
             schemaId = (String) map.get("$ref");
             // Might be array item. So check inside items property
-            if (schemaId == null &&
-                    (map = (Map<String, Object>) map.get("items")) != null) {
+            if (schemaId == null
+                    && (map = (Map<String, Object>) map.get("items")) != null) {
                 schemaId = (String) map.get("$ref");
             }
         }
@@ -708,13 +727,17 @@ public abstract class JsonSchema {
         return getJsonSchema(schemaId);
     }
 
+    /**
+     * toString method.
+     * @return string
+     */
     @Override
     public String toString() {
         return asString();
     }
 
     /**
-     * Gets id of Json Schema
+     * Gets id of Json Schema.
      *
      * @return id
      */
@@ -723,7 +746,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets title of Json Schema
+     * Gets title of Json Schema.
      *
      * @return title
      */
@@ -732,7 +755,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets description of Json Schema
+     * Gets description of Json Schema.
      *
      * @return description
      */
@@ -741,7 +764,7 @@ public abstract class JsonSchema {
     }
 
     /**
-     * Gets Schema as a JSON String
+     * Gets Schema as a JSON String.
      *
      * @return string
      */

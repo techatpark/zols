@@ -22,12 +22,19 @@ import java.util.logging.Logger;
  *
  * @author WZ07
  */
-public class JsonUtil {
+public final class JsonUtil {
+
+    private JsonUtil() {
+        throw new UnsupportedOperationException("This is a"
+                + " utility class and cannot be instantiated");
+    }
 
     /**
      * Initialize ObjectMapper.
      */
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+
 
     /**
      * Clone map map.
@@ -110,7 +117,8 @@ public class JsonUtil {
      * @param map   the map
      * @return the t
      */
-    public static <T> T asObject(final Class<T> clazz, final Map<String, Object> map) {
+    public static <T> T asObject(final Class<T> clazz, final Map<String,
+            Object> map) {
         return MAPPER.convertValue(map, clazz);
     }
 

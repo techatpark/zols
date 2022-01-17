@@ -33,9 +33,20 @@ import java.util.logging.Logger;
  *
  * @author sathish
  */
-public class JsonSchemaUtil {
+public final class JsonSchemaUtil {
 
-    private static JsonSchema _JSONSCHEMA_FOR_SCHEMA = null;
+    /**
+     * private constructor.
+     */
+    private JsonSchemaUtil() {
+        throw new UnsupportedOperationException("This is a utility"
+                + " class and cannot be instantiated");
+    }
+
+    /**
+     * initialises JSONSCHEMA_FOR_SCHEMA.
+     */
+    private static JsonSchema JSONSCHEMA_FOR_SCHEMA = null;
 
     private static String getContentFromClasspath(final String resourcePath) {
         InputStream inputStream =
@@ -54,7 +65,7 @@ public class JsonSchemaUtil {
      * @return the json schema
      */
     public static JsonSchema jsonSchemaForSchema() {
-        if (_JSONSCHEMA_FOR_SCHEMA == null) {
+        if (JSONSCHEMA_FOR_SCHEMA == null) {
 
             Map<String, Object> schema;
             try {
@@ -62,7 +73,7 @@ public class JsonSchemaUtil {
                                 "/org/zols/jsonschema/schema.json"),
                         new TypeReference<HashMap<String, Object>>() {
                         });
-                _JSONSCHEMA_FOR_SCHEMA = new EveritJsonSchema(schema, null);
+                JSONSCHEMA_FOR_SCHEMA = new EveritJsonSchema(schema, null);
             } catch (IOException ex) {
                 Logger.getLogger(JsonSchemaUtil.class.getName())
                         .log(Level.SEVERE, null, ex);
@@ -70,7 +81,7 @@ public class JsonSchemaUtil {
 
         }
 
-        return _JSONSCHEMA_FOR_SCHEMA;
+        return JSONSCHEMA_FOR_SCHEMA;
     }
 
     /**

@@ -81,6 +81,11 @@ public class EveritJsonSchema extends JsonSchema {
         return inputStream;
     }
 
+    /**
+     * validate method.
+     * @param jsonData the json data
+     * @return
+     */
     @Override
     public Set<ConstraintViolation> validate(
             final Map<String, Object> jsonData) {
@@ -103,12 +108,21 @@ public class EveritJsonSchema extends JsonSchema {
         return new HashSet<>();
     }
 
+    /**
+     * getConstraintViolation method.
+     * @param ve
+     * @return null.
+     */
     private JsonSchemaConstraintViolation getConstraintViolation(
             final ValidationException ve) {
         return null;
 
     }
 
+    /**
+     * asString method.
+     * @return string
+     */
     @Override
     protected String asString() {
         return schema.toString();
