@@ -77,7 +77,8 @@ public class DataStore {
         return createdDataAsMap;
     }
 
-    public Optional<Map<String, Object>> read(final String schemaId, final Locale locale,
+    public Optional<Map<String, Object>> read(final String schemaId,
+                                              final Locale locale,
                                               final SimpleEntry... idValues)
             throws DataStoreException {
         JsonSchema jsonSchema = schemaManager.getJsonSchema(schemaId);
@@ -317,8 +318,8 @@ public class DataStore {
     }
 
     public AggregatedResults browse(final String schemaId, final String keyword,
-                                    final Condition<MapQuery> query, final Locale locale,
-                                    final Integer pageNumber, final Integer pageSize)
+                           final Condition<MapQuery> query, final Locale locale,
+                           final Integer pageNumber, final Integer pageSize)
             throws DataStoreException {
         if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
             JsonSchema schema = schemaManager.getJsonSchema(schemaId);

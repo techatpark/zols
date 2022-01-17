@@ -20,18 +20,27 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 public class SchemaService {
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER = getLogger(SchemaService.class);
 
-
+    /**
+     * The DataStore.
+     */
     private final DataStore dataStore;
 
-    public SchemaService(final DataStore dataStore) {
-        this.dataStore = dataStore;
+    /**
+     * this is the constructor.
+     * @param anDataStore an dataStore
+     */
+    public SchemaService(final DataStore anDataStore) {
+        this.dataStore = anDataStore;
     }
 
 
     /**
-     * Creates a new JsonSchema with given Object
+     * Creates a new JsonSchema with given Object.
      *
      * @param schemaMap Object to be Create
      * @return created JsonSchema object
@@ -48,7 +57,7 @@ public class SchemaService {
     }
 
     /**
-     * Get the JsonSchema with given String
+     * Get the JsonSchema with given String.
      *
      * @param schemaId String to be Search
      * @return searched JsonSchema
@@ -61,7 +70,7 @@ public class SchemaService {
     }
 
     /**
-     * Get the Enlarged JsonSchema with given String
+     * Get the Enlarged JsonSchema with given String.
      *
      * @param schemaId String to be Search
      * @return searched JsonSchema
@@ -74,13 +83,15 @@ public class SchemaService {
     }
 
     /**
-     * Update a JsonSchema with given Object
+     * Update a JsonSchema with given Object.
      *
+     * @param schemaId id of the schema
      * @param schemaMap Object to be update
      * @return status of the Update Operation
      */
 
-    public Boolean update(final String schemaId, final Map<String, Object> schemaMap)
+    public Boolean update(final String schemaId,
+                          final Map<String, Object> schemaMap)
             throws DataStoreException {
         Boolean updated = false;
         if (schemaMap != null) {
@@ -91,7 +102,7 @@ public class SchemaService {
     }
 
     /**
-     * Delete a JsonSchema with given String
+     * Delete a JsonSchema with given String.
      *
      * @param schemaId String to be delete
      * @return status of the Delete Operation
@@ -103,7 +114,7 @@ public class SchemaService {
     }
 
     /**
-     * List all JsonSchemas
+     * List all JsonSchemas.
      *
      * @return list of schema
      */

@@ -20,12 +20,12 @@ public class Filter<T> {
      * Intialize the Filter
      *
      * @param name     name of the filter
-     * @param operator operator of the filter
+     * @param anOperator an operator of the filter
      * @param value    value of the filter
      */
-    public Filter(final String name, final Operator operator, final T value) {
+    public Filter(final String name, final Operator anOperator, final T value) {
         this.name = name;
-        this.operator = operator;
+        this.operator = anOperator;
         this.value = value;
     }
 

@@ -6,121 +6,226 @@ import org.hibernate.validator.constraints.URL;
 import javax.persistence.Id;
 
 /**
- * Document Storage contains storage information of Documents
+ * Document Storage contains storage information of Documents.
  */
 public class DocumentRepository {
 
     /**
-     * describes where the attributes to be stored
+     * describes where the attributes to be stored.
      */
     public static final String FILE_SYSTEM = "file";
+    /**
+     * describes where the attributes to be stored.
+     */
     public static final String FTP = "ftp";
 
+    /**
+     * Tells the name.
+     */
     @Id
     @NotEmpty
     private String name;
 
+    /**
+     * Tells the label.
+     */
     @NotEmpty
     private String label;
-    private String description;
-    private String type;
-    private String path;
-    private String host;
-    private String userName;
-    private String password;
-    private String rootFolder;
 
+    /**
+     * Tells the description.
+     */
+    private String description;
+
+    /**
+     * Tells the type.
+     */
+    private String type;
+    /**
+     * Tells the path.
+     */
+    private String path;
+    /**
+     * Tells the host.
+     */
+    private String host;
+    /**
+     * Tells the userName.
+     */
+    private String userName;
+    /**
+     * Tells the password.
+     */
+    private String password;
+    /**
+     * Tells the rootFolder.
+     */
+    private String rootFolder;
+    /**
+     * Tells the baseUrl.
+     */
     @URL
     private String baseUrl;
 
+    /**
+     * gets label.
+     *
+     * @return label
+     */
     public String getLabel() {
         return label;
     }
-
-    public void setLabel(final String label) {
-        this.label = label;
+    /**
+     * sets a label.
+     * @param aLabel aLabel
+     */
+    public void setLabel(final String aLabel) {
+        this.label = aLabel;
     }
-
+    /**
+     * gets host.
+     *
+     * @return host
+     */
     public String getHost() {
         return host;
     }
-
-    public void setHost(final String host) {
-        this.host = host;
+    /**
+     * sets host.
+     * @param anHost an host
+     */
+    public void setHost(final String anHost) {
+        this.host = anHost;
     }
 
     /**
-     * get the user name given by user
+     * gets aUserName.
      *
-     * @return user name
+     * @return aUserName
      */
     public String getUserName() {
         return userName;
     }
 
     /**
-     * set user name given by user
+     * sets aUserName.
      *
-     * @param userName
+     * @param aUserName aUserName
      */
-    public void setUserName(final String userName) {
-        this.userName = userName;
+    public void setUserName(final String aUserName) {
+        this.userName = aUserName;
     }
-
+    /**
+     * gets password.
+     *
+     * @return password
+     */
     public String getPassword() {
         return password;
     }
-
-    public void setPassword(final String password) {
-        this.password = password;
+    /**
+     * sets rootFolder.
+     *
+     * @param aPassword  aPassword
+     */
+    public void setPassword(final String aPassword) {
+        this.password = aPassword;
     }
-
+    /**
+     * gets rootFolder.
+     *
+     * @return rootFolder
+     */
     public String getRootFolder() {
         return rootFolder;
     }
-
-    public void setRootFolder(final String rootFolder) {
-        this.rootFolder = rootFolder;
+    /**
+     * sets rootFolder.
+     *
+     * @param aRootFolder a rootFolder
+     */
+    public void setRootFolder(final String aRootFolder) {
+        this.rootFolder = aRootFolder;
     }
-
+    /**
+     * gets path.
+     *
+     * @return path
+     */
     public String getPath() {
         return path;
     }
-
-    public void setPath(final String path) {
-        this.path = path;
+    /**
+     * sets path.
+     *
+     * @param aPath a path
+     */
+    public void setPath(final String aPath) {
+        this.path = aPath;
     }
-
+    /**
+     * gets name.
+     *
+     * @return name
+     */
     public String getName() {
         return name;
     }
-
-    public void setName(final String name) {
-        this.name = name;
+    /**
+     * sets name.
+     *
+     * @param theName the name
+     */
+    public void setName(final String theName) {
+        this.name = theName;
     }
-
+    /**
+     * gets description.
+     *
+     * @return description
+     */
     public String getDescription() {
         return description;
     }
-
-    public void setDescription(final String description) {
-        this.description = description;
+    /**
+     * sets description.
+     *
+     * @param anDescription an description
+     */
+    public void setDescription(final String anDescription) {
+        this.description = anDescription;
     }
-
+    /**
+     * gets type.
+     *
+     * @return type
+     */
     public String getType() {
         return type;
     }
-
-    public void setType(final String type) {
-        this.type = type;
+    /**
+     * sets type.
+     *
+     * @param theType the type
+     */
+    public void setType(final String theType) {
+        this.type = theType;
     }
-
+    /**
+     * gets baseUrl.
+     *
+     * @return baseUrl
+     */
     public String getBaseUrl() {
         return baseUrl;
     }
-
-    public void setBaseUrl(final String baseUrl) {
-        this.baseUrl = baseUrl;
+    /**
+     * sets baseUrl.
+     *
+     * @param aBaseUrl  baseUrl
+     */
+    public void setBaseUrl(final String aBaseUrl) {
+        this.baseUrl = aBaseUrl;
     }
 
 }

@@ -13,7 +13,14 @@ import java.util.Map;
  */
 public class AggregatedResults {
 
+    /**
+     * list of buckets.
+     */
     private List<Map<String, Object>> buckets;
+
+    /**
+     * list of page.
+     */
     private Page<Map<String, Object>> page;
 
     /**
@@ -28,10 +35,10 @@ public class AggregatedResults {
     /**
      * Sets buckets.
      *
-     * @param buckets the buckets
+     * @param theBuckets the buckets
      */
-    public void setBuckets(final List<Map<String, Object>> buckets) {
-        this.buckets = buckets;
+    public void setBuckets(final List<Map<String, Object>> theBuckets) {
+        this.buckets = theBuckets;
     }
 
     /**
@@ -45,11 +52,10 @@ public class AggregatedResults {
 
     /**
      * Sets page.
-     *
-     * @param page the page
+     * @param thePage the page
      */
-    public void setPage(final Page<Map<String, Object>> page) {
-        this.page = page;
+    public void setPage(final Page<Map<String, Object>> thePage) {
+        this.page = thePage;
     }
 
 }

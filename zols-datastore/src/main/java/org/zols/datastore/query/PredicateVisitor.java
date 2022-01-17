@@ -67,7 +67,8 @@ public class PredicateVisitor<T>
             return single(node, this::regex);
         } else if (ComparisonOperator.SUB_CONDITION_ANY.equals(operator)) {
             Predicate test = condition(node);
-            // subquery condition is ignored because a predicate has already been built.
+            // subquery condition is ignored because a predicate has already
+            // been built.
             return single(node,
                     (fieldValue, subQueryCondition) -> this.subquery(
                             fieldValue, test));

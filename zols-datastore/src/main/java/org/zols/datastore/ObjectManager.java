@@ -49,7 +49,8 @@ public final class ObjectManager<T> {
         return create(object, null);
     }
 
-    public T create(final T object, final Locale locale) throws DataStoreException {
+    public T create(final T object, final Locale locale)
+                                           throws DataStoreException {
         T createdObject = null;
         if (object != null) {
             Set violations = validator.validate(object);
@@ -169,13 +170,15 @@ public final class ObjectManager<T> {
         return list(null, null, pageNumber, pageSize);
     }
 
-    public Page<T> list(final Locale locale, final Integer pageNumber, final Integer pageSize)
+    public Page<T> list(final Locale locale, final Integer pageNumber,
+                                                 final Integer pageSize)
             throws DataStoreException {
 
         return list(null, locale, pageNumber, pageSize);
     }
 
-    public Page<T> list(final Condition<MapQuery> query, final Integer pageNumber,
+    public Page<T> list(final Condition<MapQuery> query,
+                                                final Integer pageNumber,
                         final Integer pageSize) throws DataStoreException {
         return list(query, null, pageNumber, pageSize);
     }

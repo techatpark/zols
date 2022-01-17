@@ -21,22 +21,33 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class DocumentRepositoryService {
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER =
             getLogger(DocumentRepositoryService.class);
 
+    /**
+     * The DataStore.
+     */
     private final DataStore dataStore;
 
-    public DocumentRepositoryService(final DataStore dataStore) {
-        this.dataStore = dataStore;
+    /**
+     * this is the constructor.
+     * @param anDataStore an dataStore
+     */
+    public DocumentRepositoryService(final DataStore anDataStore) {
+        this.dataStore = anDataStore;
     }
 
     /**
-     * Creates a new DocumentRepository with given Object
+     * Creates a new DocumentRepository with given Object.
      *
      * @param documentRepository Object to be Create
      * @return created DocumentRepository object
      */
-    public DocumentRepository create(final DocumentRepository documentRepository)
+    public DocumentRepository create(final DocumentRepository
+                                             documentRepository)
             throws DataStoreException {
         DocumentRepository createdDocumentRepository = null;
         if (documentRepository != null) {
@@ -50,12 +61,13 @@ public class DocumentRepositoryService {
     }
 
     /**
-     * Get the DocumentRepository with given String
+     * Get the DocumentRepository with given String.
      *
      * @param documentRepositoryName String to be Search
      * @return searched DocumentRepository
      */
-    public Optional<DocumentRepository> read(final String documentRepositoryName)
+    public Optional<DocumentRepository> read(final String
+                                                     documentRepositoryName)
             throws DataStoreException {
         LOGGER.info("Reading Document Repository {}", documentRepositoryName);
         return dataStore.getObjectManager(DocumentRepository.class)
@@ -63,12 +75,13 @@ public class DocumentRepositoryService {
     }
 
     /**
-     * Update a DocumentRepository with given Object
+     * Update a DocumentRepository with given Object.
      *
      * @param documentRepository Object to be update
      * @return status of the update operation
      */
-    public DocumentRepository update(final DocumentRepository documentRepository)
+    public DocumentRepository update(final DocumentRepository
+                                               documentRepository)
             throws DataStoreException {
         DocumentRepository updated = null;
         if (documentRepository != null) {
@@ -81,7 +94,7 @@ public class DocumentRepositoryService {
     }
 
     /**
-     * Delete a DocumentRepository with given String
+     * Delete a DocumentRepository with given String.
      *
      * @param documentRepositoryName String to be delete
      * @return status of the delete operation
@@ -94,7 +107,7 @@ public class DocumentRepositoryService {
     }
 
     /**
-     * List all DocumentRepositories
+     * List all DocumentRepositories.
      *
      * @return list of Document Repositories
      */

@@ -28,20 +28,29 @@ import java.util.logging.Level;
 
 public class DocumentService {
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DocumentService.class);
 
-
+    /**
+     * The DataStore.
+     */
     private final DocumentRepositoryService documentRepositoryService;
 
+    /**
+     * this is the constructor.
+     * @param anDocumentRepositoryService an dataStore
+     */
     public DocumentService(
-            final DocumentRepositoryService documentRepositoryService) {
-        this.documentRepositoryService = documentRepositoryService;
+            final DocumentRepositoryService anDocumentRepositoryService) {
+        this.documentRepositoryService = anDocumentRepositoryService;
     }
 
 
     /**
-     * Upload documents
+     * Upload documents.
      *
      * @param documentRepositoryName name of the repository
      * @param upload                 documents to be uploaded
@@ -65,8 +74,8 @@ public class DocumentService {
 
                     BufferedOutputStream stream
                             = new BufferedOutputStream(new FileOutputStream(
-                            new File(folderPath + File.separator +
-                                    multipartFile.getAbsolutePath())));
+                            new File(folderPath + File.separator
+                                    + multipartFile.getAbsolutePath())));
 
                     stream.close();
                 } catch (IOException ex) {
@@ -79,7 +88,7 @@ public class DocumentService {
     }
 
     /**
-     * Creates a directory in the given document path
+     * Creates a directory in the given document path.
      *
      * @param documentRepositoryName the path in which the directory will be
      *                               created
@@ -93,16 +102,16 @@ public class DocumentService {
     }
 
     /**
-     * Creates a directory in the given document path
+     * Creates a directory in the given document path.
      *
      * @param documentRepositoryName the path in which the directory will be
      *                               created
      * @param rootFolderPath         folder where we need to create directory
      * @param directoryName          the name of the directory to be created
      */
-
     public void createDirectory(final String documentRepositoryName,
-                                final String rootFolderPath, final String directoryName)
+                                final String rootFolderPath,
+                                final String directoryName)
             throws DataStoreException {
         Optional<DocumentRepository> documentRepository =
                 documentRepositoryService.read(documentRepositoryName);
@@ -114,8 +123,15 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
-
-    public void delete(final String documentRepositoryName, final String filePath)
+    /**
+     * Deletes a directory in the given document path.
+     *
+     * @param documentRepositoryName the path in which the directory will be
+     *                               created
+     * @param filePath the file path in which directory will be created
+     */
+    public void delete(final String documentRepositoryName,
+                                       final String filePath)
             throws DataStoreException {
         Optional<DocumentRepository> documentRepository =
                 documentRepositoryService.read(documentRepositoryName);
@@ -133,6 +149,10 @@ public class DocumentService {
         }
     }
 
+    /**
+     * Deletes a directory in the given document path.
+     * @param f f
+     */
     private void delete(final File f) throws IOException {
         if (f.isDirectory()) {
             for (File c : f.listFiles()) {
@@ -145,7 +165,7 @@ public class DocumentService {
     }
 
     /**
-     * List all the files in the current directory
+     * List all the files in the current directory.
      *
      * @param documentRepositoryName type of storage
      * @param folderPath             the directory to list the files
@@ -153,7 +173,8 @@ public class DocumentService {
      */
 
     public List<Document> list(final String documentRepositoryName,
-                               final String folderPath) throws DataStoreException {
+                               final String folderPath)
+                                       throws DataStoreException {
         Optional<DocumentRepository> documentRepository =
                 documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
@@ -178,7 +199,7 @@ public class DocumentService {
     }
 
     /**
-     * List all the files in the current directory
+     * List all the files in the current directory.
      *
      * @param documentRepositoryName type of storage
      * @param folderPath             the directory to list the files
@@ -200,7 +221,8 @@ public class DocumentService {
         return getFiles(path, documentRepositoryName, new File(path));
     }
 
-    private List<Document> getFiles(final String path, final String documentRepositoryName,
+    private List<Document> getFiles(final String path,
+                                    final String documentRepositoryName,
                                     final File folder) {
         Document document;
         String filePath;

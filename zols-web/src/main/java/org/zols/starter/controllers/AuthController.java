@@ -1,3 +1,6 @@
+/**
+ * package.info.
+ */
 package org.zols.starter.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,23 +30,45 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    AuthenticationManager authenticationManager;
 
+    /**
+     * declare Authentication Manager authenticationManager.
+     */
     @Autowired
-    UserRepository userRepository;
+    private AuthenticationManager authenticationManager;
 
+    /**
+     * declare a UserRepository userRepository.
+     */
     @Autowired
-    RoleRepository roleRepository;
+    private UserRepository userRepository;
 
+    /**
+     * declare a RoleRepository roleRepository.
+     */
     @Autowired
-    PasswordEncoder encoder;
+    private RoleRepository roleRepository;
 
+    /**
+     * declare a PasswordEncoder encoder.
+     */
     @Autowired
-    TokenProvider jwtUtils;
+    private PasswordEncoder encoder;
 
+    /**
+     * declare a TokenProvider jwtUtils.
+     */
+    @Autowired
+    private TokenProvider jwtUtils;
+
+    /**
+     * performs the signin function.
+     *
+     * @param loginRequest login Request
+     * @return void response entity
+     */
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody final
+    public final ResponseEntity<?> authenticateUser(@Valid @RequestBody final
                                                   LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(

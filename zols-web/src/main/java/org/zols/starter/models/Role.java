@@ -24,8 +24,8 @@ public class Role {
 
     }
 
-    public Role(final ERole name) {
-        this.name = name;
+    public Role(final ERole aName) {
+        this.name = aName;
     }
 
     public Integer getId() {

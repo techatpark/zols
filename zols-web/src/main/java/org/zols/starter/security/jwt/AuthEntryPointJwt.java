@@ -18,6 +18,9 @@ import java.util.Map;
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
+    /**
+     * Logger Facade.
+     */
     private static final Logger logger =
             LoggerFactory.getLogger(AuthEntryPointJwt.class);
 

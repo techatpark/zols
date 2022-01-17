@@ -31,8 +31,14 @@ import static org.zols.datastore.web.util.SpringConverter.getPage;
 @RequestMapping(value = "/api")
 public class BrowseAPIController {
 
+    /**
+     * logger.
+     */
     private static final Logger LOGGER = getLogger(BrowseAPIController.class);
 
+    /**
+     * BrowseService.
+     */
     @Autowired
     private BrowseService browseService;
 

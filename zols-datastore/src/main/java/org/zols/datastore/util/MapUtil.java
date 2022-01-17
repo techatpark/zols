@@ -18,7 +18,8 @@ import java.util.Map;
  */
 public class MapUtil {
 
-    public static Object getFieldValue(final Map<String, Object> o, final String s) {
+    public static Object getFieldValue(final Map<String, Object> o,
+                                                 final String s) {
         if (s == null || o == null) {
             return null;
         }
