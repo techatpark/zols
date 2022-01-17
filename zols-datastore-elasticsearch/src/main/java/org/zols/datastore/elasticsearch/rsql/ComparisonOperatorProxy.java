@@ -43,7 +43,7 @@ public enum ComparisonOperatorProxy {
 
     private final ComparisonOperator operator;
 
-    ComparisonOperatorProxy(final ComparisonOperator perator) {
+    ComparisonOperatorProxy(final ComparisonOperator operator) {
         this.operator = operator;
     }
 
