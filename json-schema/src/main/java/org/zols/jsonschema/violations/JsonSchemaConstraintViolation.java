@@ -5,12 +5,13 @@
  */
 package org.zols.jsonschema.violations;
 
-import java.util.Map;
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
 import javax.validation.metadata.ConstraintDescriptor;
+import java.util.Map;
 
 /**
+ * The type Json schema constraint violation.
  *
  * @author WZ07
  */
@@ -20,7 +21,14 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
 
     private final Map<String, Object> jsonData;
 
-    public JsonSchemaConstraintViolation(String message, Map<String, Object> jsonData) {
+    /**
+     * Instantiates a new Json schema constraint violation.
+     *
+     * @param message  the message
+     * @param jsonData the json data
+     */
+    public JsonSchemaConstraintViolation(final String message,
+                                         final Map<String, Object> jsonData) {
         this.message = message;
         this.jsonData = jsonData;
     }
@@ -47,37 +55,44 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
 
     @Override
     public Object getLeafBean() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object[] getExecutableParameters() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object getExecutableReturnValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Path getPropertyPath() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Object getInvalidValue() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public ConstraintDescriptor getConstraintDescriptor() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Object unwrap(Class type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object unwrap(final Class type) {
+        throw new UnsupportedOperationException(
+                "Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

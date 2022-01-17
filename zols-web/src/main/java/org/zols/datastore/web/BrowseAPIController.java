@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.zols.datastore.web.util.SpringAggregatedResults;
 import org.zols.datastore.DataStoreException;
+import org.zols.datastore.web.util.SpringAggregatedResults;
 import org.zols.documents.service.BrowseService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,15 +37,26 @@ public class BrowseAPIController {
     private BrowseService browseService;
 
     @RequestMapping(value = "/search/{schemaName}")
-    public Page<Map<String, Object>> searchBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
-            Pageable pageable,HttpServletRequest request) throws DataStoreException {
-        return getPage(browseService.searchSchema(schemaName, keyword, getQuery(request),pageable.getPageNumber(),pageable.getPageSize()),pageable);
+    public Page<Map<String, Object>> searchBySchema(
+            @PathVariable("schemaName") final String schemaName,
+            @RequestParam(required = false, value = "q") final String keyword,
+            final Pageable pageable, final HttpServletRequest request)
+            throws DataStoreException {
+        return getPage(browseService.searchSchema(schemaName, keyword,
+                getQuery(request), pageable.getPageNumber(),
+                pageable.getPageSize()), pageable);
     }
 
     @RequestMapping(value = "/browse/{schemaName}")
-    public SpringAggregatedResults browseBySchema(@PathVariable("schemaName") String schemaName,@RequestParam(required = false,value = "q") String keyword,
-            Pageable pageable,HttpServletRequest request,Locale locale) throws DataStoreException {
-        return getAggregatedResults(browseService.browseSchema(schemaName, keyword, getQuery(request),locale,pageable.getPageNumber(),pageable.getPageSize()),pageable);
+    public SpringAggregatedResults browseBySchema(
+            @PathVariable("schemaName") final String schemaName,
+            @RequestParam(required = false, value = "q") final String keyword,
+            final Pageable pageable, final HttpServletRequest request, final Locale locale)
+            throws DataStoreException {
+        return getAggregatedResults(
+                browseService.browseSchema(schemaName, keyword,
+                        getQuery(request), locale, pageable.getPageNumber(),
+                        pageable.getPageSize()), pageable);
     }
 
 }

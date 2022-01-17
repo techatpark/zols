@@ -11,15 +11,15 @@ public class Document {
         return repositoryName;
     }
 
-    public void setRepositoryName(String repositoryName) {
+    public void setRepositoryName(final String repositoryName) {
         this.repositoryName = repositoryName;
     }
-    
+
     public String getFileName() {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -27,7 +27,7 @@ public class Document {
         return isDir;
     }
 
-    public void setIsDir(Boolean isDir) {
+    public void setIsDir(final Boolean isDir) {
         this.isDir = isDir;
     }
 
@@ -35,9 +35,9 @@ public class Document {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
-    
-    
+
+
 }

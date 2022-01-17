@@ -13,13 +13,15 @@ import org.elasticsearch.index.query.QueryBuilders;
 
 /**
  * Visit RSQl to produce Elastic Search Query
- *
  */
-public class ElasticSearchVisitor extends NoArgRSQLVisitorAdapter<QueryBuilder> {
+public class ElasticSearchVisitor
+        extends NoArgRSQLVisitorAdapter<QueryBuilder> {
 
-    private final ComparisonNodeInterpreter<QueryBuilder> comparisonNodeInterpreter;
+    private final ComparisonNodeInterpreter<QueryBuilder>
+            comparisonNodeInterpreter;
 
-    public ElasticSearchVisitor(final ComparisonNodeInterpreter<QueryBuilder> comparisonNodeInterpreter) {
+    public ElasticSearchVisitor(
+            final ComparisonNodeInterpreter<QueryBuilder> comparisonNodeInterpreter) {
         this.comparisonNodeInterpreter = comparisonNodeInterpreter;
     }
 
@@ -42,7 +44,8 @@ public class ElasticSearchVisitor extends NoArgRSQLVisitorAdapter<QueryBuilder> 
         final BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
         for (final Node childNode : logicalNode.getChildren()) {
-            final QueryBuilder childNodeQueryBuilder = visitUnknownNode(childNode);
+            final QueryBuilder childNodeQueryBuilder =
+                    visitUnknownNode(childNode);
 
             if (logicalNode.getOperator() == LogicalOperator.AND) {
                 boolQueryBuilder.must(childNodeQueryBuilder);

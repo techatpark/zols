@@ -5,26 +5,28 @@
  */
 package org.zols.documents.service;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.List;
-import java.util.Optional;
-import org.zols.datastore.DataStore;
 import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
+import org.zols.datastore.DataStore;
 import org.zols.datastore.DataStoreException;
 import org.zols.documents.domain.DocumentRepository;
 
+import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
+import java.util.Optional;
+
+import static org.slf4j.LoggerFactory.getLogger;
+
 /**
- *
  * @author sathish_ku
  */
 public class DocumentRepositoryService {
 
-    private static final Logger LOGGER = getLogger(DocumentRepositoryService.class);
+    private static final Logger LOGGER =
+            getLogger(DocumentRepositoryService.class);
 
     private final DataStore dataStore;
 
-    public DocumentRepositoryService(DataStore dataStore) {
+    public DocumentRepositoryService(final DataStore dataStore) {
         this.dataStore = dataStore;
     }
 
@@ -34,11 +36,15 @@ public class DocumentRepositoryService {
      * @param documentRepository Object to be Create
      * @return created DocumentRepository object
      */
-    public DocumentRepository create(DocumentRepository documentRepository) throws DataStoreException {
+    public DocumentRepository create(final DocumentRepository documentRepository)
+            throws DataStoreException {
         DocumentRepository createdDocumentRepository = null;
         if (documentRepository != null) {
-            createdDocumentRepository = dataStore.getObjectManager(DocumentRepository.class).create(documentRepository);
-            LOGGER.info("Created Document Repository {}", createdDocumentRepository.getName());
+            createdDocumentRepository =
+                    dataStore.getObjectManager(DocumentRepository.class)
+                            .create(documentRepository);
+            LOGGER.info("Created Document Repository {}",
+                    createdDocumentRepository.getName());
         }
         return createdDocumentRepository;
     }
@@ -49,9 +55,11 @@ public class DocumentRepositoryService {
      * @param documentRepositoryName String to be Search
      * @return searched DocumentRepository
      */
-    public Optional<DocumentRepository> read(String documentRepositoryName) throws DataStoreException {
+    public Optional<DocumentRepository> read(final String documentRepositoryName)
+            throws DataStoreException {
         LOGGER.info("Reading Document Repository {}", documentRepositoryName);
-        return dataStore.getObjectManager(DocumentRepository.class).read(new SimpleEntry("name", documentRepositoryName));
+        return dataStore.getObjectManager(DocumentRepository.class)
+                .read(new SimpleEntry("name", documentRepositoryName));
     }
 
     /**
@@ -60,11 +68,14 @@ public class DocumentRepositoryService {
      * @param documentRepository Object to be update
      * @return status of the update operation
      */
-    public DocumentRepository update(DocumentRepository documentRepository) throws DataStoreException {
+    public DocumentRepository update(final DocumentRepository documentRepository)
+            throws DataStoreException {
         DocumentRepository updated = null;
         if (documentRepository != null) {
             LOGGER.info("Updating Document Repository {}", documentRepository);
-            updated = dataStore.getObjectManager(DocumentRepository.class).update(documentRepository, new SimpleEntry("name", documentRepository.getName()));
+            updated = dataStore.getObjectManager(DocumentRepository.class)
+                    .update(documentRepository, new SimpleEntry("name",
+                            documentRepository.getName()));
         }
         return updated;
     }
@@ -75,9 +86,11 @@ public class DocumentRepositoryService {
      * @param documentRepositoryName String to be delete
      * @return status of the delete operation
      */
-    public Boolean delete(String documentRepositoryName) throws DataStoreException {
+    public Boolean delete(final String documentRepositoryName)
+            throws DataStoreException {
         LOGGER.info("Deleting Document Repository {}", documentRepositoryName);
-        return dataStore.getObjectManager(DocumentRepository.class).delete(new SimpleEntry("name", documentRepositoryName));
+        return dataStore.getObjectManager(DocumentRepository.class)
+                .delete(new SimpleEntry("name", documentRepositoryName));
     }
 
     /**

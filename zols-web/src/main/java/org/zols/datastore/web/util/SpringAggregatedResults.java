@@ -15,12 +15,15 @@ import java.util.Map;
 
 public class SpringAggregatedResults {
 
-    private final List<Map<String,Object>> buckets;
+    private final List<Map<String, Object>> buckets;
     private final Page<Map<String, Object>> page;
 
-    public SpringAggregatedResults(AggregatedResults aggregatedResults,Pageable pageable) {
+    public SpringAggregatedResults(final AggregatedResults aggregatedResults,
+                                   final Pageable pageable) {
         buckets = aggregatedResults.getBuckets();
-        page =  (aggregatedResults.getPage() == null) ? null : new PageImpl<>(aggregatedResults.getPage().getContent(), pageable, aggregatedResults.getPage().getTotal());
+        page = (aggregatedResults.getPage() == null) ? null :
+                new PageImpl<>(aggregatedResults.getPage().getContent(),
+                        pageable, aggregatedResults.getPage().getTotal());
     }
 
     public List<Map<String, Object>> getBuckets() {
@@ -30,10 +33,6 @@ public class SpringAggregatedResults {
     public Page<Map<String, Object>> getPage() {
         return page;
     }
-    
-    
-    
 
-    
 
 }

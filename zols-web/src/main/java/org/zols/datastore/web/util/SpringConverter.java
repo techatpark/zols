@@ -11,17 +11,20 @@ import org.springframework.data.domain.Pageable;
 import org.zols.datastore.query.AggregatedResults;
 
 /**
- *
  * @author sathish
  */
 public class SpringConverter {
 
-    public static Page getPage(org.zols.datastore.query.Page page, Pageable pageable) {
-        return (page == null) ? null : new PageImpl<>(page.getContent(), pageable, page.getTotal());
+    public static Page getPage(final org.zols.datastore.query.Page page,
+                               final Pageable pageable) {
+        return (page == null) ? null :
+                new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
-    
-    public static SpringAggregatedResults getAggregatedResults(AggregatedResults aggregatedResults,Pageable pageable) {
-        return aggregatedResults == null ? null : new SpringAggregatedResults(aggregatedResults,pageable);
+
+    public static SpringAggregatedResults getAggregatedResults(
+            final AggregatedResults aggregatedResults, final Pageable pageable) {
+        return aggregatedResults == null ? null :
+                new SpringAggregatedResults(aggregatedResults, pageable);
     }
-    
+
 }

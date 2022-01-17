@@ -6,16 +6,17 @@
 package org.zols.documents.service;
 
 import com.github.rutledgepaulv.qbuilders.conditions.Condition;
-import java.util.Locale;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zols.datastore.DataStore;
+import org.zols.datastore.DataStoreException;
 import org.zols.datastore.query.AggregatedResults;
 import org.zols.datastore.query.MapQuery;
 import org.zols.datastore.query.Page;
 import org.zols.datastore.service.DataService;
-import org.zols.datastore.DataStoreException;
+
+import java.util.Locale;
+import java.util.Map;
 
 
 public class BrowseService {
@@ -27,23 +28,28 @@ public class BrowseService {
 
     private final DataStore dataStore;
 
-    public BrowseService(DataService dataService, DataStore dataStore) {
+    public BrowseService(final DataService dataService, final DataStore dataStore) {
         this.dataService = dataService;
         this.dataStore = dataStore;
     }
 
-    public Page<Map<String, Object>> searchSchema(String schemaId,
-            String keyword,
-            Condition<MapQuery> query,
-            Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return dataService.list(schemaId, query, pageNumber,pageSize, null);
+    public Page<Map<String, Object>> searchSchema(final String schemaId,
+                                                  final String keyword,
+                                                  final Condition<MapQuery> query,
+                                                  final Integer pageNumber,
+                                                  final Integer pageSize)
+            throws DataStoreException {
+        return dataService.list(schemaId, query, pageNumber, pageSize, null);
     }
 
-    public AggregatedResults browseSchema(String schemaId,
-            String keyword,
-            Condition<MapQuery> query, Locale locale,
-            Integer pageNumber, Integer pageSize) throws DataStoreException {
-        return dataStore.browse(schemaId, keyword, query, locale, pageNumber, pageSize);
+    public AggregatedResults browseSchema(final String schemaId,
+                                          final String keyword,
+                                          final Condition<MapQuery> query,
+                                          final Locale locale,
+                                          final Integer pageNumber, final Integer pageSize)
+            throws DataStoreException {
+        return dataStore.browse(schemaId, keyword, query, locale, pageNumber,
+                pageSize);
     }
 
 }

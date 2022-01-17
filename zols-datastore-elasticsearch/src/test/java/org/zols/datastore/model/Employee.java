@@ -5,10 +5,11 @@
  */
 package org.zols.datastore.model;
 
+import org.zols.jsonschema.bind.annotation.Localized;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
-import org.zols.jsonschema.bind.annotation.Localized;
 
 @Entity(name = "employee")
 public class Employee {
@@ -27,7 +28,7 @@ public class Employee {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(final String city) {
         this.city = city;
     }
 
@@ -35,7 +36,7 @@ public class Employee {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -43,7 +44,7 @@ public class Employee {
         return isContractor;
     }
 
-    public void setIsContractor(Boolean isContractor) {
+    public void setIsContractor(final Boolean isContractor) {
         this.isContractor = isContractor;
     }
 
@@ -51,7 +52,7 @@ public class Employee {
         return salary;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(final int salary) {
         this.salary = salary;
     }
 

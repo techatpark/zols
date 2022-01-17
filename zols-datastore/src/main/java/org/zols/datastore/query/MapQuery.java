@@ -8,7 +8,6 @@ package org.zols.datastore.query;
 import com.github.rutledgepaulv.qbuilders.builders.QBuilder;
 
 /**
- *
  * @author sathish
  */
 public class MapQuery extends QBuilder<MapQuery> {

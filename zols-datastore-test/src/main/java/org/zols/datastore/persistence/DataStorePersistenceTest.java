@@ -6,9 +6,8 @@
 package org.zols.datastore.persistence;
 
 /**
- *
  * @author sathish
  */
 public class DataStorePersistenceTest {
-    
+
 }

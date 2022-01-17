@@ -5,16 +5,18 @@
  */
 package org.zols.datastore;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Locale;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.AfterEach;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 import org.zols.datastore.model.Employee;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Locale;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ObjectManagementTest {
 
@@ -50,14 +52,17 @@ public class ObjectManagementTest {
 
     @Test
     public void testCreateObject() throws DataStoreException {
-        assertTrue(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Creating Simple Object");
+        assertTrue(employeeManager.read(new SimpleEntry("name", "Sathish"))
+                .isPresent(), "Creating Simple Object");
     }
 
     @Test
     public void testUpdateObject() throws DataStoreException {
-        Employee employee = employeeManager.read(new SimpleEntry("name", "Sathish")).get();
+        Employee employee =
+                employeeManager.read(new SimpleEntry("name", "Sathish")).get();
         employee.setSalary(2000);
-        employee = employeeManager.update(employee, new SimpleEntry("name", "Sathish"));
+        employee = employeeManager.update(employee,
+                new SimpleEntry("name", "Sathish"));
         assertEquals(2000, employee.getSalary(), "Updating Simple Object");
     }
 
@@ -74,18 +79,21 @@ public class ObjectManagementTest {
     @Test
     public void testDeleteObject() throws DataStoreException {
         employeeManager.delete(new SimpleEntry("name", "Sathish"));
-        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Object");
+        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish"))
+                .isPresent(), "Deleting Simple Object");
     }
 
     @Test
     public void testDeleteAllObject() throws DataStoreException {
         employeeManager.delete();
-        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish")).isPresent(), "Deleting Simple Objects");
+        assertFalse(employeeManager.read(new SimpleEntry("name", "Sathish"))
+                .isPresent(), "Deleting Simple Objects");
     }
 
     @Test
     public void testListObject() throws DataStoreException {
-        assertEquals(2, employeeManager.list().size(), "Listing Simple Object");
+        assertEquals(2, employeeManager.list().size(),
+                "Listing Simple Object");
     }
 
 }

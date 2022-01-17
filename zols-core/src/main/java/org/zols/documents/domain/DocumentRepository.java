@@ -1,8 +1,9 @@
 package org.zols.documents.domain;
 
-import javax.persistence.Id;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.URL;
+
+import javax.persistence.Id;
 
 /**
  * Document Storage contains storage information of Documents
@@ -18,7 +19,7 @@ public class DocumentRepository {
     @Id
     @NotEmpty
     private String name;
-    
+
     @NotEmpty
     private String label;
     private String description;
@@ -28,7 +29,7 @@ public class DocumentRepository {
     private String userName;
     private String password;
     private String rootFolder;
-    
+
     @URL
     private String baseUrl;
 
@@ -36,7 +37,7 @@ public class DocumentRepository {
         return label;
     }
 
-    public void setLabel(String label) {
+    public void setLabel(final String label) {
         this.label = label;
     }
 
@@ -44,7 +45,7 @@ public class DocumentRepository {
         return host;
     }
 
-    public void setHost(String host) {
+    public void setHost(final String host) {
         this.host = host;
     }
 
@@ -62,7 +63,7 @@ public class DocumentRepository {
      *
      * @param userName
      */
-    public void setUserName(String userName) {
+    public void setUserName(final String userName) {
         this.userName = userName;
     }
 
@@ -70,7 +71,7 @@ public class DocumentRepository {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -78,7 +79,7 @@ public class DocumentRepository {
         return rootFolder;
     }
 
-    public void setRootFolder(String rootFolder) {
+    public void setRootFolder(final String rootFolder) {
         this.rootFolder = rootFolder;
     }
 
@@ -86,7 +87,7 @@ public class DocumentRepository {
         return path;
     }
 
-    public void setPath(String path) {
+    public void setPath(final String path) {
         this.path = path;
     }
 
@@ -94,7 +95,7 @@ public class DocumentRepository {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -102,7 +103,7 @@ public class DocumentRepository {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -110,7 +111,7 @@ public class DocumentRepository {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(final String type) {
         this.type = type;
     }
 
@@ -118,7 +119,7 @@ public class DocumentRepository {
         return baseUrl;
     }
 
-    public void setBaseUrl(String baseUrl) {
+    public void setBaseUrl(final String baseUrl) {
         this.baseUrl = baseUrl;
     }
 

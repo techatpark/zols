@@ -5,6 +5,7 @@
  */
 package org.zols.jsonschema;
 
+import javax.validation.ConstraintViolation;
 import java.lang.reflect.InvocationTargetException;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
@@ -20,21 +21,28 @@ import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.validation.ConstraintViolation;
+
 import static org.zols.jsonschema.util.JsonUtil.cloneMap;
 
 /**
  * This Class represents the JSON Schema (Ref: http://json-schema.org/) and
- * provides utilities like localization and traversing
- *
- *
+ * provides utilities like localization and traversing.
  */
 public abstract class JsonSchema {
 
+    /**
+     * The constant LOCALE_SEPARATOR.
+     */
     protected final static String LOCALE_SEPARATOR = "^";
 
+    /**
+     * The Schema map.
+     */
     protected final Map<String, Object> schemaMap;
 
+    /**
+     * The Schema supplier.
+     */
     protected final Function<String, Map<String, Object>> schemaSupplier;
 
     private final JsonSchema parent;
@@ -47,12 +55,26 @@ public abstract class JsonSchema {
 
     private final Map<String, Map<String, Object>> properties;
 
-    public JsonSchema(String schemaId, Function<String, Map<String, Object>> schemaSupplier) {
+    /**
+     * Instantiates a new Json schema.
+     *
+     * @param schemaId       the schema id
+     * @param schemaSupplier the schema supplier
+     */
+    public JsonSchema(final String schemaId,
+                      final Function<String, Map<String, Object>> schemaSupplier) {
 
         this(schemaSupplier.apply(schemaId), schemaSupplier);
     }
 
-    public JsonSchema(Map<String, Object> schemaMap, Function<String, Map<String, Object>> schemaSupplier) {
+    /**
+     * Instantiates a new Json schema.
+     *
+     * @param schemaMap      the schema map
+     * @param schemaSupplier the schema supplier
+     */
+    public JsonSchema(final Map<String, Object> schemaMap,
+                      final Function<String, Map<String, Object>> schemaSupplier) {
         this.schemaMap = schemaMap;
         this.schemaSupplier = schemaSupplier;
 
@@ -62,7 +84,8 @@ public abstract class JsonSchema {
         String reference;
 
         if (schemaMap.get("properties") != null) {
-            properties.putAll((Map<String, Map<String, Object>>) schemaMap.get("properties"));
+            properties.putAll((Map<String, Map<String, Object>>) schemaMap.get(
+                    "properties"));
         }
 
         if ((reference = (String) schemaMap.get("$ref")) != null) {
@@ -81,7 +104,9 @@ public abstract class JsonSchema {
             parent = null;
         }
 
-        idPropertyNames = parent == null ? (List<String>) schemaMap.get("ids") : parent.getIdPropertyNames();
+        idPropertyNames =
+                parent == null ? (List<String>) schemaMap.get("ids") :
+                        parent.getIdPropertyNames();
 
         if (idPropertyNames != null) {
             Collections.sort(idPropertyNames);
@@ -91,7 +116,7 @@ public abstract class JsonSchema {
     /**
      * Gets the list of parents from bottom to top
      *
-     * @return parents
+     * @return parents parents
      */
     public List<JsonSchema> getParents() {
         return parents;
@@ -100,12 +125,17 @@ public abstract class JsonSchema {
     /**
      * Gets Parent of the Schema if exists
      *
-     * @return
+     * @return parent
      */
     public JsonSchema getParent() {
         return parent;
     }
 
+    /**
+     * Is root boolean.
+     *
+     * @return the boolean
+     */
     public boolean isRoot() {
         return getRoot() == this;
     }
@@ -113,7 +143,7 @@ public abstract class JsonSchema {
     /**
      * Gets Root of the Schema if exists, else returns itself
      *
-     * @return
+     * @return root
      */
     public JsonSchema getRoot() {
         return parents.isEmpty() ? this : parents.get(parents.size() - 1);
@@ -123,7 +153,7 @@ public abstract class JsonSchema {
      * Get Consolidated Properties of Schema and it's parents. Returns empty map
      * if none exists
      *
-     * @return
+     * @return properties
      */
     public Map<String, Map<String, Object>> getProperties() {
 
@@ -133,13 +163,20 @@ public abstract class JsonSchema {
     /**
      * get the id properties from the Json Schema in asending order
      *
-     * @return
+     * @return id property names
      */
     public List<String> getIdPropertyNames() {
         return idPropertyNames;
     }
 
-    public SimpleEntry<String, Object>[] getIdKeys(final Map<String, Object> jsonData) {
+    /**
+     * Get id keys simple entry [ ].
+     *
+     * @param jsonData the json data
+     * @return the simple entry [ ]
+     */
+    public SimpleEntry<String, Object>[] getIdKeys(
+            final Map<String, Object> jsonData) {
         SimpleEntry<String, Object>[] idKeys = null;
         if (idPropertyNames != null) {
             int idsCount = idPropertyNames.size();
@@ -154,28 +191,49 @@ public abstract class JsonSchema {
         return idKeys;
     }
 
+    /**
+     * Gets id values as string.
+     *
+     * @param jsonData the json data
+     * @return the id values as string
+     */
     public String getIdValuesAsString(final Map<String, Object> jsonData) {
         Object[] idValues = getIdValues(jsonData);
         return getIdValuesAsString(idValues);
     }
 
-    public String getIdValuesAsString(AbstractMap.SimpleEntry<String, Object>... idValuesasMap) {
+    /**
+     * Gets id values as string.
+     *
+     * @param idValuesasMap the id valuesas map
+     * @return the id values as string
+     */
+    public String getIdValuesAsString(
+            final AbstractMap.SimpleEntry<String, Object>... idValuesasMap) {
         Object[] idValues = getIdValues(idValuesasMap);
         return getIdValuesAsString(idValues);
     }
 
+    /**
+     * Gets id values as string.
+     *
+     * @param idValues the id values
+     * @return the id values as string
+     */
     public String getIdValuesAsString(final Object[] idValues) {
-        return idValues == null ? null : Arrays.asList(idValues).stream().map(n -> n.toString())
-                .collect(Collectors.joining("-"));
+        return idValues == null ? null :
+                Arrays.asList(idValues).stream().map(n -> n.toString())
+                        .collect(Collectors.joining("-"));
     }
 
     /**
      * Get Id Values using ipValue pairs
      *
-     * @param jsonData
-     * @return
+     * @param idValuesAsMap the id values as map
+     * @return object [ ]
      */
-    public Object[] getIdValues(AbstractMap.SimpleEntry<String, Object>... idValuesAsMap) {
+    public Object[] getIdValues(
+            final AbstractMap.SimpleEntry<String, Object>... idValuesAsMap) {
         Map<String, Object> jsonData = new HashMap<>();
 
         for (SimpleEntry<String, Object> simpleEntry : idValuesAsMap) {
@@ -187,8 +245,8 @@ public abstract class JsonSchema {
     /**
      * Get the id values from the json data
      *
-     * @param jsonData
-     * @return
+     * @param jsonData the json data
+     * @return object [ ]
      */
     public Object[] getIdValues(final Map<String, Object> jsonData) {
         Object[] idValues = null;
@@ -206,7 +264,7 @@ public abstract class JsonSchema {
     /**
      * Getting localized property names. Returns empty list if none exists
      *
-     * @return
+     * @return localized property names
      */
     public List<String> getLocalizedPropertyNames() {
         List<String> localizedKeys = (List<String>) schemaMap.get("localized");
@@ -219,24 +277,33 @@ public abstract class JsonSchema {
         return localizedKeys;
     }
 
+    /**
+     * Gets graph ql schema.
+     *
+     * @return the graph ql schema
+     */
     public String getGraphQLSchema() {
         Map<String, Object> cSchema = getCompositeSchema();
 
-        StringBuilder stringBuilder = new StringBuilder(getGraphQLType(getId(), cSchema));
+        StringBuilder stringBuilder =
+                new StringBuilder(getGraphQLType(getId(), cSchema));
 
-        Map<String, Map<String, Object>> definitions = (Map<String, Map<String, Object>>) cSchema.get("definitions");
+        Map<String, Map<String, Object>> definitions =
+                (Map<String, Map<String, Object>>) cSchema.get("definitions");
 
         definitions.forEach((name, definition) -> {
-            stringBuilder.append("\n").append(getGraphQLType(name, definition));
+            stringBuilder.append("\n")
+                    .append(getGraphQLType(name, definition));
         });
 
         return stringBuilder.toString();
     }
 
-    private String getGraphQLType(String id, Map<String, Object> schama) {
+    private String getGraphQLType(final String id, final Map<String, Object> schama) {
         StringBuilder stringBuilder = new StringBuilder("type ");
         stringBuilder.append(id).append(" {").append("\n");
-        Map<String, Map<String, Object>> sproperties = (Map<String, Map<String, Object>>) schama.get("properties");
+        Map<String, Map<String, Object>> sproperties =
+                (Map<String, Map<String, Object>>) schama.get("properties");
         if (sproperties != null) {
             sproperties.forEach((name, property) -> {
                 stringBuilder.append(name)
@@ -249,12 +316,13 @@ public abstract class JsonSchema {
         return stringBuilder.append("}").toString();
     }
 
-    private String getGraphQLFieldType(Map<String, Object> property) {
+    private String getGraphQLFieldType(final Map<String, Object> property) {
         String jsonSchemaType = (String) property.get("type");
         String graphQLType = (String) property.get("$ref");
         if (jsonSchemaType != null) {
             if (jsonSchemaType.equals("array")) {
-                Map<String, Object> items = (Map<String, Object>) property.get("items");
+                Map<String, Object> items =
+                        (Map<String, Object>) property.get("items");
 
                 if (items != null) {
                     jsonSchemaType = (String) items.get("type");
@@ -275,7 +343,7 @@ public abstract class JsonSchema {
         return graphQLType.replaceFirst("#/definitions/", "");
     }
 
-    private String getGraphQLFieldType(String jsonSchemaType) {
+    private String getGraphQLFieldType(final String jsonSchemaType) {
 
         switch (jsonSchemaType) {
             case "string":
@@ -291,11 +359,17 @@ public abstract class JsonSchema {
         return null;
     }
 
+    /**
+     * Gets composite schema.
+     *
+     * @return the composite schema
+     */
     public Map<String, Object> getCompositeSchema() {
         // This is going to contain one more item (definitions).
         Map<String, Object> compositeSchema = cloneMap(schemaMap);
 
-        Map<String, Map<String, Object>> definitions = getDefinitions(compositeSchema);
+        Map<String, Map<String, Object>> definitions =
+                getDefinitions(compositeSchema);
         if (!definitions.isEmpty()) {
             compositeSchema.put("definitions", definitions);
         }
@@ -306,52 +380,69 @@ public abstract class JsonSchema {
     /**
      * gets valid json property name to put inside definitions of json schema
      *
-     * @param referenceUrl
-     * @return
+     * @param referenceUrl the reference url
+     * @return json property name
      */
-    public String getJSONPropertyName(String referenceUrl) {
-        return referenceUrl.replaceAll("http", "").replaceAll(":", "").replaceAll("/", "").replaceAll("\\.", "").replaceAll("#", "");
+    public String getJSONPropertyName(final String referenceUrl) {
+        return referenceUrl.replaceAll("http", "").replaceAll(":", "")
+                .replaceAll("/", "").replaceAll("\\.", "").replaceAll("#", "");
     }
 
-    private Map<String, Map<String, Object>> getDefinitions(Map<String, Object> schemaAsMap) {
+    private Map<String, Map<String, Object>> getDefinitions(
+            final Map<String, Object> schemaAsMap) {
         Map<String, Map<String, Object>> definitions = new HashMap();
-        if(schemaAsMap != null ) {
+        if (schemaAsMap != null) {
             schemaAsMap.entrySet().forEach((schemaEntry) -> {
                 if (schemaEntry.getKey().equals("$ref")) {
                     String referencePath = schemaEntry.getValue().toString();
                     // If not JSON Pointer
                     if (!referencePath.startsWith("#/")) {
-                        Map<String, Object> parentScemaMap = schemaSupplier.apply(referencePath);
-                        String jsonPathName = getJSONPropertyName(referencePath);
+                        Map<String, Object> parentScemaMap =
+                                schemaSupplier.apply(referencePath);
+                        String jsonPathName =
+                                getJSONPropertyName(referencePath);
                         definitions.put(jsonPathName, parentScemaMap);
                         definitions.putAll(getDefinitions(parentScemaMap));
                         schemaEntry.setValue("#/definitions/" + jsonPathName);
                     }
 
                 } else if (schemaEntry.getKey().equals("properties")) {
-                    Map<String, Map<String, Object>> props = (Map<String, Map<String, Object>>) schemaEntry.getValue();
+                    Map<String, Map<String, Object>> props =
+                            (Map<String, Map<String, Object>>) schemaEntry.getValue();
 
                     props.entrySet().forEach(propertyEntry -> {
-                        String referencePath = (String) propertyEntry.getValue().get("$ref");
+                        String referencePath =
+                                (String) propertyEntry.getValue().get("$ref");
                         if (referencePath == null) {
-                            Map<String, Object> itemsMap = (Map<String, Object>) propertyEntry.getValue().get("items");
+                            Map<String, Object> itemsMap =
+                                    (Map<String, Object>) propertyEntry.getValue()
+                                            .get("items");
                             if (itemsMap != null) {
                                 referencePath = (String) itemsMap.get("$ref");
                                 if (referencePath != null) {
-                                    Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
-                                    String jsonPathName = getJSONPropertyName(referencePath);
-                                    definitions.put(jsonPathName, propScemaMap);
-                                    definitions.putAll(getDefinitions(propScemaMap));
-                                    itemsMap.put("$ref", "#/definitions/" + jsonPathName);
+                                    Map<String, Object> propScemaMap =
+                                            schemaSupplier.apply(
+                                                    referencePath);
+                                    String jsonPathName =
+                                            getJSONPropertyName(referencePath);
+                                    definitions.put(jsonPathName,
+                                            propScemaMap);
+                                    definitions.putAll(
+                                            getDefinitions(propScemaMap));
+                                    itemsMap.put("$ref",
+                                            "#/definitions/" + jsonPathName);
                                 }
                             }
 
                         } else if (!referencePath.startsWith("#/")) {
-                            Map<String, Object> propScemaMap = schemaSupplier.apply(referencePath);
-                            String jsonPathName = getJSONPropertyName(referencePath);
+                            Map<String, Object> propScemaMap =
+                                    schemaSupplier.apply(referencePath);
+                            String jsonPathName =
+                                    getJSONPropertyName(referencePath);
                             definitions.put(jsonPathName, propScemaMap);
                             definitions.putAll(getDefinitions(propScemaMap));
-                            propertyEntry.getValue().put("$ref", "#/definitions/" + jsonPathName);
+                            propertyEntry.getValue().put("$ref",
+                                    "#/definitions/" + jsonPathName);
                         }
                     });
 
@@ -364,11 +455,12 @@ public abstract class JsonSchema {
     /**
      * Delocalize the given json data
      *
-     * @param jsonData
-     * @param locale
-     * @return
+     * @param jsonData the json data
+     * @param locale   the locale
+     * @return map
      */
-    public Map<String, Object> delocalizeData(final Map<String, Object> jsonData, final Locale locale) {
+    public Map<String, Object> delocalizeData(
+            final Map<String, Object> jsonData, final Locale locale) {
 
         if (jsonData != null) {
             Map<String, Object> delocalizeJsonData;
@@ -382,7 +474,8 @@ public abstract class JsonSchema {
                     final Object value = entry.getValue();
 
                     if (localizedKeys.contains(key)) {
-                        String localizedKey = key + LOCALE_SEPARATOR + locale.getLanguage();
+                        String localizedKey =
+                                key + LOCALE_SEPARATOR + locale.getLanguage();
                         Object localizedValue = jsonData.get(localizedKey);
                         if (localizedValue == null) {
                             delocalizeJsonData.put(key, value);
@@ -393,23 +486,30 @@ public abstract class JsonSchema {
                         // if localized ignore
                         if (!key.contains(LOCALE_SEPARATOR)) {
                             delocalizeJsonData.put(key, value);
-                        } else if (key.contains(LOCALE_SEPARATOR + locale.getLanguage())) {
-                            delocalizeJsonData.put(key.substring(0, key.lastIndexOf(LOCALE_SEPARATOR)), value);
+                        } else if (key.contains(
+                                LOCALE_SEPARATOR + locale.getLanguage())) {
+                            delocalizeJsonData.put(key.substring(0,
+                                    key.lastIndexOf(LOCALE_SEPARATOR)), value);
                         }
 
                     }
 
                     if (value instanceof Map) {
-                        Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                        delocalizeJsonData.put(key, getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+                        Map<String, Object> nestedObjectMap =
+                                (Map<String, Object>) value;
+                        delocalizeJsonData.put(key,
+                                getSchemaOf(key).delocalizeData(
+                                        nestedObjectMap, locale));
 
                     } else if (value instanceof List) {
                         List nestedList = (List) value;
                         List newList = new ArrayList(nestedList.size());
                         for (Object object : nestedList) {
                             if (object instanceof Map) {
-                                Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                                newList.add(getSchemaOf(key).delocalizeData(nestedObjectMap, locale));
+                                Map<String, Object> nestedObjectMap =
+                                        (Map<String, Object>) object;
+                                newList.add(getSchemaOf(key).delocalizeData(
+                                        nestedObjectMap, locale));
 
                             } else {
                                 newList.add(object);
@@ -432,11 +532,11 @@ public abstract class JsonSchema {
     /**
      * Delocalize the given json data
      *
-     * @param jsonData
-     * @param locale
-     * @return
+     * @param jsonData the json data
+     * @return map
      */
-    public Map<String, Object> defaultLocaleData(final Map<String, Object> jsonData) {
+    public Map<String, Object> defaultLocaleData(
+            final Map<String, Object> jsonData) {
 
         if (jsonData != null) {
             Map<String, Object> delocalizeJsonData;
@@ -453,16 +553,21 @@ public abstract class JsonSchema {
                 }
 
                 if (value instanceof Map) {
-                    Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                    delocalizeJsonData.put(key, getSchemaOf(key).defaultLocaleData(nestedObjectMap));
+                    Map<String, Object> nestedObjectMap =
+                            (Map<String, Object>) value;
+                    delocalizeJsonData.put(key,
+                            getSchemaOf(key).defaultLocaleData(
+                                    nestedObjectMap));
 
                 } else if (value instanceof List) {
                     List nestedList = (List) value;
                     List newList = new ArrayList(nestedList.size());
                     for (Object object : nestedList) {
                         if (object instanceof Map) {
-                            Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                            newList.add(getSchemaOf(key).defaultLocaleData(nestedObjectMap));
+                            Map<String, Object> nestedObjectMap =
+                                    (Map<String, Object>) object;
+                            newList.add(getSchemaOf(key).defaultLocaleData(
+                                    nestedObjectMap));
 
                         } else {
                             newList.add(object);
@@ -480,7 +585,15 @@ public abstract class JsonSchema {
         return null;
     }
 
-    public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale) {
+    /**
+     * Localize data map.
+     *
+     * @param jsonData the json data
+     * @param locale   the locale
+     * @return the map
+     */
+    public Map<String, Object> localizeData(final Map<String, Object> jsonData,
+                                            final Locale locale) {
         return localizeData(jsonData, locale, Boolean.FALSE);
     }
 
@@ -489,12 +602,14 @@ public abstract class JsonSchema {
      * property will be appended with locale separator. if property name is
      * title it will be renamed as title_zh for chineese locale
      *
-     * @param jsonData
-     * @param locale
-     * @param keepDefault
-     * @return
+     * @param jsonData    the json data
+     * @param locale      the locale
+     * @param keepDefault the keep default
+     * @return map
      */
-    public Map<String, Object> localizeData(Map<String, Object> jsonData, Locale locale, Boolean keepDefault) {
+    public Map<String, Object> localizeData(final Map<String, Object> jsonData,
+                                            final Locale locale,
+                                            final Boolean keepDefault) {
 
         Map<String, Object> localizedJsonData = new HashMap<>(jsonData.size());
         List<String> localizedKeys = getLocalizedPropertyNames();
@@ -504,7 +619,8 @@ public abstract class JsonSchema {
             Object value = entry.getValue();
 
             if (localizedKeys.contains(key)) {
-                localizedJsonData.put(key + LOCALE_SEPARATOR + locale.getLanguage(), value);
+                localizedJsonData.put(
+                        key + LOCALE_SEPARATOR + locale.getLanguage(), value);
                 if (keepDefault) {
                     localizedJsonData.put(key, value);
                 }
@@ -513,15 +629,21 @@ public abstract class JsonSchema {
             }
 
             if (value instanceof Map) {
-                Map<String, Object> nestedObjectMap = (Map<String, Object>) value;
-                localizedJsonData.put(key, getSchemaOf(key).localizeData(nestedObjectMap, locale, keepDefault));
+                Map<String, Object> nestedObjectMap =
+                        (Map<String, Object>) value;
+                localizedJsonData.put(key,
+                        getSchemaOf(key).localizeData(nestedObjectMap, locale,
+                                keepDefault));
             } else if (value instanceof List) {
                 List nestedList = (List) value;
                 List newList = new ArrayList(nestedList.size());
                 for (Object object : nestedList) {
                     if (object instanceof Map) {
-                        Map<String, Object> nestedObjectMap = (Map<String, Object>) object;
-                        newList.add(getSchemaOf(key).localizeData(nestedObjectMap, locale, keepDefault));
+                        Map<String, Object> nestedObjectMap =
+                                (Map<String, Object>) object;
+                        newList.add(
+                                getSchemaOf(key).localizeData(nestedObjectMap,
+                                        locale, keepDefault));
 
                     } else {
                         newList.add(object);
@@ -542,11 +664,14 @@ public abstract class JsonSchema {
      * @param schemaId
      * @return
      */
-    private JsonSchema getJsonSchema(String schemaId) {
+    private JsonSchema getJsonSchema(final String schemaId) {
         try {
-            return this.getClass().getDeclaredConstructor(String.class, Function.class).newInstance(schemaId, this.schemaSupplier);
+            return this.getClass()
+                    .getDeclaredConstructor(String.class, Function.class)
+                    .newInstance(schemaId, this.schemaSupplier);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(JsonSchema.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JsonSchema.class.getName())
+                    .log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -554,21 +679,28 @@ public abstract class JsonSchema {
     /**
      * get property for a given name, returns null if not exists
      *
-     * @param propertyName
-     * @return
+     * @param propertyName the property name
+     * @return property of
      */
-    public Map<String, Object> getPropertyOf(String propertyName) {
+    public Map<String, Object> getPropertyOf(final String propertyName) {
         return properties.get(propertyName);
     }
 
-    public JsonSchema getSchemaOf(String propertyName) {
+    /**
+     * Gets schema of.
+     *
+     * @param propertyName the property name
+     * @return the schema of
+     */
+    public JsonSchema getSchemaOf(final String propertyName) {
 
         String schemaId = null;
         Map<String, Object> map = getPropertyOf(propertyName);
         if (map != null) {
             schemaId = (String) map.get("$ref");
             // Might be array item. So check inside items property
-            if (schemaId == null && (map = (Map<String, Object>) map.get("items")) != null) {
+            if (schemaId == null &&
+                    (map = (Map<String, Object>) map.get("items")) != null) {
                 schemaId = (String) map.get("$ref");
             }
         }
@@ -584,7 +716,7 @@ public abstract class JsonSchema {
     /**
      * Gets id of Json Schema
      *
-     * @return
+     * @return id
      */
     public String getId() {
         return (String) schemaMap.get("$id");
@@ -593,7 +725,7 @@ public abstract class JsonSchema {
     /**
      * Gets title of Json Schema
      *
-     * @return
+     * @return title
      */
     public String getTitle() {
         return (String) schemaMap.get("title");
@@ -602,7 +734,7 @@ public abstract class JsonSchema {
     /**
      * Gets description of Json Schema
      *
-     * @return
+     * @return description
      */
     public String getDescription() {
         return (String) schemaMap.get("description");
@@ -611,10 +743,17 @@ public abstract class JsonSchema {
     /**
      * Gets Schema as a JSON String
      *
-     * @return
+     * @return string
      */
     protected abstract String asString();
 
-    public abstract Set<ConstraintViolation> validate(Map<String, Object> jsonData);
+    /**
+     * Validate set.
+     *
+     * @param jsonData the json data
+     * @return the set
+     */
+    public abstract Set<ConstraintViolation> validate(
+            Map<String, Object> jsonData);
 
 }

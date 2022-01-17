@@ -6,17 +6,17 @@
 package org.zols.datastore.query;
 
 import com.github.rutledgepaulv.qbuilders.conditions.Condition;
+import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Test;
-import static org.zols.datastore.query.MapQuery.*;
 
 /**
- *
  * @author sathish
  */
 public class MapQueryTest {
@@ -55,17 +55,24 @@ public class MapQueryTest {
         person.put("city", city);
         people.add(person);
 
-        Condition<MapQuery> condition = new MapQuery().string("city.name").eq("Madurai");
-        Predicate<Map<String, Object>> predicate = condition.query(new PredicateVisitor<>());
-        assertEquals(2L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive Query");
+        Condition<MapQuery> condition =
+                new MapQuery().string("city.name").eq("Madurai");
+        Predicate<Map<String, Object>> predicate =
+                condition.query(new PredicateVisitor<>());
+        assertEquals(2L, people.stream().filter(predicate).count(),
+                "Retrieving Inner Primitive Query");
 
-        condition = new MapQuery().string("city.name").eq("Madurai").and().string("name").eq("Sathish");
+        condition = new MapQuery().string("city.name").eq("Madurai").and()
+                .string("name").eq("Sathish");
         predicate = condition.query(new PredicateVisitor<>());
-        assertEquals(1L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive Query");
-        
-        condition = new MapQuery().string("city.name").in("Madurai","Sivakaci");
+        assertEquals(1L, people.stream().filter(predicate).count(),
+                "Retrieving Inner Primitive Query");
+
+        condition =
+                new MapQuery().string("city.name").in("Madurai", "Sivakaci");
         predicate = condition.query(new PredicateVisitor<>());
-        assertEquals(3L, people.stream().filter(predicate).count(), "Retrieving Inner Primitive In Query");
+        assertEquals(3L, people.stream().filter(predicate).count(),
+                "Retrieving Inner Primitive In Query");
 
     }
 

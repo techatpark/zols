@@ -1,21 +1,29 @@
 {
-    "id": 1,
-    "title": "HP Laptop",
-    "price": 12.50,
-    "tags": ["Official", "Electronics"],
-    "sellers": [{
-            "id": 1,
-            "name": "HP Showroom"
-        }, {
-            "id": 2,
-            "name": "More Showroom"
-        }],
-    "prefererredSeller": {
-        "id": 3,
-        "name": "Muthu"
+  "id": 1,
+  "title": "HP Laptop",
+  "price": 12.50,
+  "tags": [
+    "Official",
+    "Electronics"
+  ],
+  "sellers": [
+    {
+      "id": 1,
+      "name": "HP Showroom"
     },
-    "warehouseLocations": [{
-            "latitude": 1,
-            "longitude": 2
-        }]
+    {
+      "id": 2,
+      "name": "More Showroom"
+    }
+  ],
+  "prefererredSeller": {
+    "id": 3,
+    "name": "Muthu"
+  },
+  "warehouseLocations": [
+    {
+      "latitude": 1,
+      "longitude": 2
+    }
+  ]
 }

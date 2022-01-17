@@ -5,20 +5,20 @@
  */
 package org.zols.datastore;
 
-import java.util.Set;
 import javax.validation.ConstraintViolation;
+import java.util.Set;
 
 /**
- *
  * @author sathish
  */
 public class ConstraintViolationException extends DataStoreException {
     private final Set<ConstraintViolation> violations;
-    
-    private final Object object ;
-    
-    public <T> ConstraintViolationException(T object,Set<ConstraintViolation> violations) {
-        super("Bean validation failed for "+ object.getClass().getName());
+
+    private final Object object;
+
+    public <T> ConstraintViolationException(final T object,
+                                            final Set<ConstraintViolation> violations) {
+        super("Bean validation failed for " + object.getClass().getName());
         this.object = object;
         this.violations = violations;
     }
@@ -30,8 +30,6 @@ public class ConstraintViolationException extends DataStoreException {
     public Object getObject() {
         return object;
     }
-    
-    
-    
-    
+
+
 }

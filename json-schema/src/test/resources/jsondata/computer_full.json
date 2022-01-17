@@ -1,27 +1,34 @@
 {
-    "id": 1,
-
-    "title^it": "Italy title",
-    "price": 12.50,
-    "tags": ["Personal", "Electronics"],
-    "sellers": [{
-            "id": 1,
-            "name": "HP Showroom",
-            "name^it": "Italy name"
-        }, {
-            "id": 2,
-            "name": "More Showroom"
-        }],
-    "prefererredSeller": {
-        "id": 3,
-        "name": "Muthu",
-        "name^it": "Italy name"
+  "id": 1,
+  "title^it": "Italy title",
+  "price": 12.50,
+  "tags": [
+    "Personal",
+    "Electronics"
+  ],
+  "sellers": [
+    {
+      "id": 1,
+      "name": "HP Showroom",
+      "name^it": "Italy name"
     },
-    "warehouseLocations": [{
-            "latitude": 1,
-            "longitude": 2
-        }],
-    "brand": "HP",
-    "brand^it": "Italy brand",
-    "os": "ios"
+    {
+      "id": 2,
+      "name": "More Showroom"
+    }
+  ],
+  "prefererredSeller": {
+    "id": 3,
+    "name": "Muthu",
+    "name^it": "Italy name"
+  },
+  "warehouseLocations": [
+    {
+      "latitude": 1,
+      "longitude": 2
+    }
+  ],
+  "brand": "HP",
+  "brand^it": "Italy brand",
+  "os": "ios"
 }

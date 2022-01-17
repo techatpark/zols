@@ -5,14 +5,15 @@
  */
 package org.zols.datastore.util;
 
-import java.util.Map;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
 import static org.zols.datastore.util.MapUtil.getFieldValue;
 
 /**
- *
  * @author sathish
  */
 public class MapUtilTest {
@@ -21,9 +22,11 @@ public class MapUtilTest {
     public void testSomeMethod() {
         Map<String, Object> computer = sampleJson("computer_full");
 
-        assertEquals("ios", getFieldValue(computer, "os"), "Retrieving Basic Primitive");
+        assertEquals("ios", getFieldValue(computer, "os"),
+                "Retrieving Basic Primitive");
 
-        assertEquals(3, getFieldValue(computer, "prefererredSeller.id"), "Retrieving Inner Primitive");
+        assertEquals(3, getFieldValue(computer, "prefererredSeller.id"),
+                "Retrieving Inner Primitive");
 
         System.out.println(computer);
     }

@@ -5,16 +5,16 @@
  */
 package org.zols.jsonschema.util;
 
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 import static org.zols.jsonschema.util.TestUtil.getTestSchema;
 
 /**
- *
  * @author sathish
  */
 public class JsonSchemaUtilTest {
-    
+
 
     /**
      * Test of validateSchema method, of class JsonSchemaUtil.
@@ -22,10 +22,12 @@ public class JsonSchemaUtilTest {
     @Test
     public void testValidateSchema() {
 
-        assertTrue("Checking valid schema", JsonSchemaUtil.validateSchema(getTestSchema("product")).isEmpty());
-        assertTrue("Checking invalid schema", !JsonSchemaUtil.validateSchema(getTestSchema("product_invalid")).isEmpty());
+        assertTrue("Checking valid schema",
+                JsonSchemaUtil.validateSchema(getTestSchema("product"))
+                        .isEmpty());
+        assertTrue("Checking invalid schema", !JsonSchemaUtil.validateSchema(
+                getTestSchema("product_invalid")).isEmpty());
     }
 
-    
-    
+
 }

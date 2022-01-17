@@ -1,12 +1,12 @@
 {
-    "copyFiles": [
-        {
-            "from": "src/images/**",
-            "to": "dist/images"
-        },
-        {
-            "from": "src/images/icons/favicon.ico",
-            "to": "dist/favicon.ico"
-        }
-    ]
+  "copyFiles": [
+    {
+      "from": "src/images/**",
+      "to": "dist/images"
+    },
+    {
+      "from": "src/images/icons/favicon.ico",
+      "to": "dist/favicon.ico"
+    }
+  ]
 }

@@ -6,6 +6,12 @@
 package org.zols.datastore;
 
 import com.github.rutledgepaulv.qbuilders.conditions.Condition;
+import org.zols.datastore.persistence.DataStorePersistence;
+import org.zols.datastore.query.MapQuery;
+import org.zols.jsonschema.JsonSchema;
+import org.zols.jsonschema.everit.EveritJsonSchema;
+
+import javax.validation.ConstraintViolation;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,16 +19,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static java.util.stream.Collectors.toList;
-import javax.validation.ConstraintViolation;
-import org.zols.datastore.persistence.DataStorePersistence;
-import org.zols.datastore.query.MapQuery;
-import org.zols.jsonschema.JsonSchema;
-import org.zols.jsonschema.everit.EveritJsonSchema;
 import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 
 /**
- *
  * @author sathish
  */
 public final class SchemaManager {
@@ -31,36 +32,45 @@ public final class SchemaManager {
 
     private final JsonSchema jsonSchemaForSchema;
 
-    public SchemaManager(DataStorePersistence dataStorePersistence) {
+    public SchemaManager(final DataStorePersistence dataStorePersistence) {
         this.dataStorePersistence = dataStorePersistence;
         jsonSchemaForSchema = jsonSchemaForSchema();
     }
 
-    public Map<String, Object> create(Map<String, Object> schemaMap)
+    public Map<String, Object> create(final Map<String, Object> schemaMap)
             throws DataStoreException {
-        Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
+        Set<ConstraintViolation> violations =
+                jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
-            Map<String, Object> schemaMapCreated = dataStorePersistence.create(jsonSchemaForSchema, schemaMap);
-            dataStorePersistence.onNewSchema(getJsonSchema(schemaMap.get("$id").toString()));
+            Map<String, Object> schemaMapCreated =
+                    dataStorePersistence.create(jsonSchemaForSchema,
+                            schemaMap);
+            dataStorePersistence.onNewSchema(
+                    getJsonSchema(schemaMap.get("$id").toString()));
             return schemaMapCreated;
         } else {
             throw new ConstraintViolationException(schemaMap, violations);
         }
     }
 
-    public Map<String, Object> get(String schemaId)
+    public Map<String, Object> get(final String schemaId)
             throws DataStoreException {
-        return dataStorePersistence.read(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        return dataStorePersistence.read(jsonSchemaForSchema,
+                new SimpleEntry("$id", schemaId));
     }
 
-    public boolean update(String schemaId, Map<String, Object> schemaMap)
+    public boolean update(final String schemaId, final Map<String, Object> schemaMap)
             throws DataStoreException {
-        Set<ConstraintViolation> violations = jsonSchemaForSchema.validate(schemaMap);
+        Set<ConstraintViolation> violations =
+                jsonSchemaForSchema.validate(schemaMap);
         if (violations.isEmpty()) {
             JsonSchema oldSchemaMap = this.getJsonSchema(schemaId);
-            boolean updated = dataStorePersistence.update(jsonSchemaForSchema, schemaMap, new SimpleEntry("$id", schemaId));
+            boolean updated =
+                    dataStorePersistence.update(jsonSchemaForSchema, schemaMap,
+                            new SimpleEntry("$id", schemaId));
             if (updated) {
-                dataStorePersistence.onUpdateSchema(oldSchemaMap, this.getJsonSchema(schemaId));
+                dataStorePersistence.onUpdateSchema(oldSchemaMap,
+                        this.getJsonSchema(schemaId));
             }
             return updated;
         } else {
@@ -68,36 +78,39 @@ public final class SchemaManager {
         }
     }
 
-    public Boolean delete(String schemaId) throws DataStoreException {
+    public Boolean delete(final String schemaId) throws DataStoreException {
         boolean isDeleted;
         JsonSchema jsonSchema = getJsonSchema(schemaId);
-        isDeleted = dataStorePersistence.delete(jsonSchemaForSchema, new SimpleEntry("$id", schemaId));
+        isDeleted = dataStorePersistence.delete(jsonSchemaForSchema,
+                new SimpleEntry("$id", schemaId));
         if (isDeleted) {
             dataStorePersistence.onDeleteSchema(jsonSchema);
         }
         return isDeleted;
     }
 
-    public Map<String, Object> getCompositeSchema(String schemaId)
+    public Map<String, Object> getCompositeSchema(final String schemaId)
             throws DataStoreException {
         JsonSchema jsonSchema = getJsonSchema(schemaId);
         return jsonSchema == null ? null : jsonSchema.getCompositeSchema();
     }
 
-    public Set<ConstraintViolation> validate(String schemaId,
-            Map<String, Object> jsonData)
+    public Set<ConstraintViolation> validate(final String schemaId,
+                                             final Map<String, Object> jsonData)
             throws DataStoreException {
         JsonSchema jsonSchema = getJsonSchema(schemaId);
         return jsonSchema == null ? null : jsonSchema.validate(jsonData);
     }
 
-    public List<Map<String, Object>> listExtenstions(String schemaId) throws DataStoreException {
+    public List<Map<String, Object>> listExtenstions(final String schemaId)
+            throws DataStoreException {
         List<Map<String, Object>> list = listChildren(schemaId);
         if (list != null && !list.isEmpty()) {
             List<Map<String, Object>> childrenOfChidrens = new ArrayList();
             list.forEach(schema -> {
                 try {
-                    List<Map<String, Object>> children = listExtenstions(schema.get("$id").toString());
+                    List<Map<String, Object>> children =
+                            listExtenstions(schema.get("$id").toString());
                     if (children != null) {
                         childrenOfChidrens.addAll(children);
                     }
@@ -113,36 +126,42 @@ public final class SchemaManager {
         return list;
     }
 
-    public List<String> listExtenstionTypes(String schemaId) throws DataStoreException {
+    public List<String> listExtenstionTypes(final String schemaId)
+            throws DataStoreException {
         List<Map<String, Object>> list = listExtenstions(schemaId);
 
         if (list != null) {
-            return list.stream().map(schema -> schema.get("$id").toString()).collect(toList());
+            return list.stream().map(schema -> schema.get("$id").toString())
+                    .collect(toList());
         }
 
         return null;
     }
 
-    public List<Map<String, Object>> listChildren(String schemaId) throws DataStoreException {
+    public List<Map<String, Object>> listChildren(final String schemaId)
+            throws DataStoreException {
         if (jsonSchemaForSchema.getId().equals(schemaId)) {
             return null;
         }
-        return dataStorePersistence.list(jsonSchemaForSchema, new MapQuery().string("$ref").eq(schemaId));
+        return dataStorePersistence.list(jsonSchemaForSchema,
+                new MapQuery().string("$ref").eq(schemaId));
     }
 
-    public List<Map<String, Object>> list(Condition<MapQuery> condition) throws DataStoreException {
+    public List<Map<String, Object>> list(final Condition<MapQuery> condition)
+            throws DataStoreException {
         return dataStorePersistence.list(jsonSchemaForSchema, condition);
     }
 
     public List<Map<String, Object>> list() throws DataStoreException {
-        return dataStorePersistence.list(jsonSchemaForSchema, (Condition<MapQuery>) null);
+        return dataStorePersistence.list(jsonSchemaForSchema,
+                (Condition<MapQuery>) null);
     }
 
-    public JsonSchema getJsonSchema(String schemaId) {
+    public JsonSchema getJsonSchema(final String schemaId) {
         return new EveritJsonSchema(schemaId, this::supplySchema);
     }
 
-    private Map<String, Object> supplySchema(String schemaId) {
+    private Map<String, Object> supplySchema(final String schemaId) {
         try {
             return get(schemaId);
 

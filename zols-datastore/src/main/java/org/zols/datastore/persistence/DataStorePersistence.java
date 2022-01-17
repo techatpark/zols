@@ -9,18 +9,18 @@ import com.github.rutledgepaulv.qbuilders.conditions.Condition;
 import com.github.rutledgepaulv.qbuilders.visitors.RSQLVisitor;
 import cz.jirutka.rsql.parser.RSQLParser;
 import cz.jirutka.rsql.parser.ast.Node;
+import org.zols.datastore.DataStore;
+import org.zols.datastore.DataStoreException;
+import org.zols.datastore.query.MapQuery;
+import org.zols.datastore.query.Page;
+import org.zols.jsonschema.JsonSchema;
+
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
 import java.util.Map;
-import org.zols.datastore.DataStore;
-import org.zols.datastore.query.MapQuery;
-import org.zols.datastore.query.Page;
-import org.zols.datastore.DataStoreException;
-import org.zols.jsonschema.JsonSchema;
 
 /**
- *
  * @author sathish
  */
 public interface DataStorePersistence {
@@ -31,7 +31,7 @@ public interface DataStorePersistence {
      * @param dataStore
      * @throws DataStoreException
      */
-    abstract void onIntialize(DataStore dataStore);
+    void onIntialize(DataStore dataStore);
 
     /**
      * Called when new schema is created
@@ -39,7 +39,7 @@ public interface DataStorePersistence {
      * @param jsonSchema
      * @throws DataStoreException
      */
-    abstract void onNewSchema(JsonSchema jsonSchema)
+    void onNewSchema(JsonSchema jsonSchema)
             throws DataStoreException;
 
     /**
@@ -49,7 +49,7 @@ public interface DataStorePersistence {
      * @param newSchema
      * @throws DataStoreException
      */
-    abstract void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema)
+    void onUpdateSchema(JsonSchema oldSchema, JsonSchema newSchema)
             throws DataStoreException;
 
     /**
@@ -58,136 +58,130 @@ public interface DataStorePersistence {
      * @param jsonSchema
      * @throws DataStoreException
      */
-    abstract void onDeleteSchema(JsonSchema jsonSchema)
+    void onDeleteSchema(JsonSchema jsonSchema)
             throws DataStoreException;
 
     /**
-     *
-     * @param jsonData validated object
+     * @param jsonData   validated object
      * @param jsonSchema schema of dynamic data
      * @return dynamic data as map
      * @throws DataStoreException
      */
-    abstract Map<String, Object> create(
+    Map<String, Object> create(
             JsonSchema jsonSchema,
             Map<String, Object> jsonData)
             throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param idValues dynamic object name
+     * @param idValues   dynamic object name
      * @return dynamic data as map
      * @throws DataStoreException
      */
-    abstract Map<String, Object> read(
+    Map<String, Object> read(
             JsonSchema jsonSchema,
             SimpleEntry<String, Object>... idValues) throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param idValues dynamic object name
+     * @param idValues   dynamic object name
      * @return status of the delete operation
      * @throws DataStoreException
      */
-    abstract boolean delete(JsonSchema jsonSchema,
-            SimpleEntry<String, Object>... idValues) throws DataStoreException;
+    boolean delete(JsonSchema jsonSchema,
+                   SimpleEntry<String, Object>... idValues)
+            throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema
      * @param query
      * @return
      * @throws DataStoreException
      */
-    default boolean delete(JsonSchema jsonSchema, Condition<MapQuery> query)
+    default boolean delete(final JsonSchema jsonSchema, final Condition<MapQuery> query)
             throws DataStoreException {
         return this.delete(jsonSchema, getNode(query));
     }
 
     /**
-     *
      * @param jsonSchema
      * @param queryNode
      * @return
      * @throws DataStoreException
      */
-    abstract boolean delete(JsonSchema jsonSchema, Node queryNode)
+    boolean delete(JsonSchema jsonSchema, Node queryNode)
             throws DataStoreException;
 
-    abstract boolean update(JsonSchema jsonSchema,
-            Map<String, Object> jsonData, SimpleEntry<String, Object>... idValues) throws DataStoreException;
+    boolean update(JsonSchema jsonSchema,
+                   Map<String, Object> jsonData,
+                   SimpleEntry<String, Object>... idValues)
+            throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param idValue
-     * @param jsonData validated Object
+     * @param jsonData   validated Object
      * @return status of the update operation
      * @throws DataStoreException
      */
-    abstract boolean updatePartially(JsonSchema jsonSchema,
-            Map<String, Object> jsonData, AbstractMap.SimpleEntry<String, Object>... idValues)
+    boolean updatePartially(JsonSchema jsonSchema,
+                            Map<String, Object> jsonData,
+                            AbstractMap.SimpleEntry<String, Object>... idValues)
             throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param query query to consider
+     * @param query      query to consider
      * @return list of dynamic objects
      * @throws DataStoreException
      */
-    default List<Map<String, Object>> list(JsonSchema jsonSchema,
-            Condition<MapQuery> query)
+    default List<Map<String, Object>> list(final JsonSchema jsonSchema,
+                                           final Condition<MapQuery> query)
             throws DataStoreException {
         return this.list(jsonSchema, getNode(query));
     }
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param queryNode query to consider
+     * @param queryNode  query to consider
      * @return list of dynamic objects
      * @throws DataStoreException
      */
-    abstract List<Map<String, Object>> list(JsonSchema jsonSchema,
-            Node queryNode)
+    List<Map<String, Object>> list(JsonSchema jsonSchema,
+                                   Node queryNode)
             throws DataStoreException;
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param query query to consider
+     * @param query      query to consider
      * @param pageNumber
      * @param pageSize
      * @return list of dynamic objects
      * @throws DataStoreException
      */
-    default Page<Map<String, Object>> list(JsonSchema jsonSchema,
-            Condition<MapQuery> query,
-            Integer pageNumber,
-            Integer pageSize)
+    default Page<Map<String, Object>> list(final JsonSchema jsonSchema,
+                                           final Condition<MapQuery> query,
+                                           final Integer pageNumber,
+                                           final Integer pageSize)
             throws DataStoreException {
         return this.list(jsonSchema, getNode(query), pageNumber, pageSize);
     }
 
     /**
-     *
      * @param jsonSchema schema of dynamic data
-     * @param queryNode query to consider
+     * @param queryNode  query to consider
      * @param pageNumber
      * @param pageSize
      * @return list of dynamic objects
      * @throws DataStoreException
      */
-    abstract Page<Map<String, Object>> list(JsonSchema jsonSchema,
-            Node queryNode,
-            Integer pageNumber,
-            Integer pageSize)
+    Page<Map<String, Object>> list(JsonSchema jsonSchema,
+                                   Node queryNode,
+                                   Integer pageNumber,
+                                   Integer pageSize)
             throws DataStoreException;
 
-    default Node getNode(Condition<MapQuery> query) {
-        return query == null ? null : new RSQLParser().parse(query.query(new RSQLVisitor()));
+    default Node getNode(final Condition<MapQuery> query) {
+        return query == null ? null :
+                new RSQLParser().parse(query.query(new RSQLVisitor()));
     }
 }

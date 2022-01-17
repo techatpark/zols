@@ -5,33 +5,35 @@
  */
 package org.zols.datastore.util;
 
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.reflections.Reflections;
 import org.zols.datastore.DataStore;
 import org.zols.datastore.persistence.BrowsableDataStorePersistence;
 import org.zols.datastore.persistence.DataStorePersistence;
 
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
- *
  * @author sathish
  */
 public interface DataStoreProvider {
-    DataStore buildDataStore();
-    
     static DataStore getDataStore() {
         Reflections reflections = new Reflections("org.zols.datastore");
-        
-        Set<Class<? extends DataStorePersistence>> subTypes = reflections.getSubTypesOf(DataStorePersistence.class);
+
+        Set<Class<? extends DataStorePersistence>> subTypes =
+                reflections.getSubTypesOf(DataStorePersistence.class);
         subTypes.remove(BrowsableDataStorePersistence.class);
-        if(subTypes.size() == 1) {
+        if (subTypes.size() == 1) {
             try {
                 return new DataStore(subTypes.iterator().next().newInstance());
             } catch (InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(DataStoreProvider.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(DataStoreProvider.class.getName())
+                        .log(Level.SEVERE, null, ex);
             }
         }
         return null;
     }
+
+    DataStore buildDataStore();
 }

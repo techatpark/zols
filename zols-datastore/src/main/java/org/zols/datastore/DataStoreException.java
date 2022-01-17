@@ -6,17 +6,16 @@
 package org.zols.datastore;
 
 /**
- *
  * @author mshind
  */
 public class DataStoreException extends Exception {
 
-    public DataStoreException(String message) {
+    public DataStoreException(final String message) {
         super(message);
     }
 
-    public DataStoreException(String message, Throwable cause) {
+    public DataStoreException(final String message, final Throwable cause) {
         super(message, cause);
     }
-    
+
 }

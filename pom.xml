@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/maven-v4_0_0.xsd">
-  
+
     <name>Zols</name>
     <description>Open Source Data Mesh</description>
     <modelVersion>4.0.0</modelVersion>
@@ -11,26 +11,28 @@
     <artifactId>zols</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    
+
     <scm>
         <connection>scm:git:git://github.com/sathishk/zols.git</connection>
         <developerConnection>scm:git:https://sathishk@github.com/sathishk/zols.git</developerConnection>
         <url>https://github.com/sathishk/zols</url>
     </scm>
-    
+
     <properties>
         <java.version>11</java.version>
         <elasticsearch.version>7.16.2</elasticsearch.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
-    </properties>  
-    
-    
+        <maven.checkstyle.version>3.1.2</maven.checkstyle.version>
+        <checkstyle.version>9.0.1</checkstyle.version>
+    </properties>
+
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.6.2</version>
     </parent>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -53,7 +55,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <modules>
         <module>json-schema</module>
         <module>zols-datastore</module>
@@ -65,29 +67,38 @@
         <module>zols-datastore-mongo</module>
         -->
     </modules>
-    
-<!--      <build>-->
-<!--		<plugins>-->
-<!--            <plugin>-->
-<!--				<groupId>org.apache.maven.plugins</groupId>-->
-<!--				<artifactId>maven-checkstyle-plugin</artifactId>-->
-<!--				<version>3.1.1</version>-->
-<!--				<configuration>-->
-<!--					<suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>-->
-<!--				</configuration>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>checkstyle</id>-->
-<!--						<phase>validate</phase>-->
-<!--						<goals>-->
-<!--							<goal>check</goal>-->
-<!--						</goals>-->
-<!--						<configuration>-->
-<!--							<failOnViolation>false</failOnViolation>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
-<!--		</plugins>-->
-<!--	</build>-->
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven.checkstyle.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>true</failsOnError>
+                    <linkXRef>false</linkXRef>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
- * @author sathish
  * @param <T> type of the content
+ * @author sathish
  */
 public class Page<T> {
 
@@ -20,7 +19,8 @@ public class Page<T> {
     private final Long total;
     private final List<T> content;
 
-    public Page(Integer pageNumber, Integer pageSize, Long total, List<T> content) {
+    public Page(final Integer pageNumber, final Integer pageSize, final Long total,
+                final List<T> content) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
         this.total = total;
@@ -54,7 +54,7 @@ public class Page<T> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -74,12 +74,8 @@ public class Page<T> {
         if (!Objects.equals(this.total, other.total)) {
             return false;
         }
-        if (!Objects.equals(this.content, other.content)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.content, other.content);
     }
-    
-    
+
 
 }

@@ -6,26 +6,27 @@
 package org.zols.datastore.elasticsearch;
 
 import com.github.rutledgepaulv.qbuilders.conditions.Condition;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.zols.datastore.DataStoreException;
+import org.zols.datastore.query.MapQuery;
+import org.zols.jsonschema.JsonSchema;
+
+import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.getJsonSchema;
 import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
-import org.zols.datastore.query.MapQuery;
-import org.zols.datastore.DataStoreException;
-import org.zols.jsonschema.JsonSchema;
 
 /**
- *
  * @author sathish
  */
 public class ElasticSearchDataStorePersistenceTest {
@@ -39,7 +40,8 @@ public class ElasticSearchDataStorePersistenceTest {
                 RestClient.builder(
                         new HttpHost("localhost", 9200, "http"),
                         new HttpHost("localhost", 9201, "http")));
-        dataStorePersistence = new ElasticSearchDataStorePersistence("zols", client);
+        dataStorePersistence =
+                new ElasticSearchDataStorePersistence("zols", client);
         jsonSchema = getJsonSchema("person");
     }
 
@@ -57,56 +59,82 @@ public class ElasticSearchDataStorePersistenceTest {
 
     @Test
     public void testCreate() throws DataStoreException {
-        assertNotNull(dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1")), "Crated Simple Object");
+        assertNotNull(dataStorePersistence.read(jsonSchema,
+                new SimpleEntry("id", "1")), "Crated Simple Object");
     }
 
     @Test
     public void testDelete() throws DataStoreException {
         dataStorePersistence.delete(jsonSchema, new SimpleEntry("id", "1"));
-        assertNull(dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1")), "Deleted Simple Object");
+        assertNull(dataStorePersistence.read(jsonSchema,
+                new SimpleEntry("id", "1")), "Deleted Simple Object");
     }
 
     @Test
     public void testUpdate() throws DataStoreException {
-        Map<String, Object> personMap = dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1"));
+        Map<String, Object> personMap = dataStorePersistence.read(jsonSchema,
+                new SimpleEntry("id", "1"));
         personMap.remove("age");
-        dataStorePersistence.update(jsonSchema, personMap, new SimpleEntry("id", "1"));
-        assertNull(dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1")).get("age"), "Updated Simple Object");
+        dataStorePersistence.update(jsonSchema, personMap,
+                new SimpleEntry("id", "1"));
+        assertNull(dataStorePersistence.read(jsonSchema,
+                        new SimpleEntry("id", "1")).get("age"),
+                "Updated Simple Object");
     }
 
     @Test
     public void testUpdatePartially() throws DataStoreException {
         Map<String, Object> personMap = new HashMap<>();
         personMap.put("age", 32);
-        dataStorePersistence.updatePartially(jsonSchema, personMap, new SimpleEntry("id", "1"));
+        dataStorePersistence.updatePartially(jsonSchema, personMap,
+                new SimpleEntry("id", "1"));
 
-        assertEquals(32, Integer.parseInt(dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1")).get("age").toString()), "Updated Simple Object Partially");
+        assertEquals(32, Integer.parseInt(dataStorePersistence.read(jsonSchema,
+                        new SimpleEntry("id", "1")).get("age").toString()),
+                "Updated Simple Object Partially");
 
-        assertNotNull(dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1")).get("firstName"), "Updated Simple Object");
+        assertNotNull(dataStorePersistence.read(jsonSchema,
+                        new SimpleEntry("id", "1")).get("firstName"),
+                "Updated Simple Object");
     }
 
     @Test
     public void testList() throws DataStoreException {
-       assertEquals(1, dataStorePersistence.list(jsonSchema, (Condition<MapQuery>) null).size(), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema,
+                (Condition<MapQuery>) null).size(), "Listing Simple Object");
     }
-    
+
     @Test
     public void testListWithQuery() throws DataStoreException {
-        Map<String, Object> personMap = dataStorePersistence.read(jsonSchema, new SimpleEntry("id", "1"));
+        Map<String, Object> personMap = dataStorePersistence.read(jsonSchema,
+                new SimpleEntry("id", "1"));
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").eq(35)).size(), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema,
+                        new MapQuery().intNum("age").eq(35)).size(),
+                "Listing Simple Object");
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").ne(25)).size(), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema,
+                        new MapQuery().intNum("age").ne(25)).size(),
+                "Listing Simple Object");
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").exists()).size(), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema,
+                        new MapQuery().intNum("age").exists()).size(),
+                "Listing Simple Object");
 
         personMap.remove("age");
-        dataStorePersistence.update(jsonSchema, personMap, new SimpleEntry("id", "1"));
-        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().intNum("age").exists()), "Listing Simple Object");
+        dataStorePersistence.update(jsonSchema, personMap,
+                new SimpleEntry("id", "1"));
+        assertNull(dataStorePersistence.list(jsonSchema,
+                        new MapQuery().intNum("age").exists()),
+                "Listing Simple Object");
 
-        assertEquals(1, dataStorePersistence.list(jsonSchema, new MapQuery().string("lastName").in("thyagarajan")).size(), "Listing Simple Object");
+        assertEquals(1, dataStorePersistence.list(jsonSchema,
+                        new MapQuery().string("lastName").in("thyagarajan")).size(),
+                "Listing Simple Object");
 
-        assertNull(dataStorePersistence.list(jsonSchema, new MapQuery().string("firstName").nin("sathish kumar")), "Listing Simple Object");
+        assertNull(dataStorePersistence.list(jsonSchema,
+                        new MapQuery().string("firstName").nin("sathish kumar")),
+                "Listing Simple Object");
 
 //        query = new Query();
 //

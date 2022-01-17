@@ -5,6 +5,13 @@
  */
 package org.zols.documents.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.zols.datastore.DataStoreException;
+import org.zols.documents.domain.Document;
+import org.zols.documents.domain.DocumentRepository;
+import org.zols.documents.domain.Upload;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,16 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.zols.datastore.DataStoreException;
-import org.zols.documents.domain.Document;
-import org.zols.documents.domain.DocumentRepository;
-import org.zols.documents.domain.Upload;
 
 /**
  * DocumentService provides methods to access and add files to the file systems.
- *
  */
 
 public class DocumentService {
@@ -31,25 +31,27 @@ public class DocumentService {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(DocumentService.class);
 
-    
+
     private final DocumentRepositoryService documentRepositoryService;
 
-    public DocumentService(DocumentRepositoryService documentRepositoryService) {
+    public DocumentService(
+            final DocumentRepositoryService documentRepositoryService) {
         this.documentRepositoryService = documentRepositoryService;
     }
-    
-    
+
 
     /**
      * Upload documents
      *
      * @param documentRepositoryName name of the repository
-     * @param upload documents to be uploaded
-     * @param rootFolderPath source path of the document
+     * @param upload                 documents to be uploaded
+     * @param rootFolderPath         source path of the document
      */
-    
-    public void upload(String documentRepositoryName, Upload upload, String rootFolderPath) throws DataStoreException {
-        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+
+    public void upload(final String documentRepositoryName, final Upload upload,
+                       final String rootFolderPath) throws DataStoreException {
+        Optional<DocumentRepository> documentRepository =
+                documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.get().getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
@@ -60,13 +62,17 @@ public class DocumentService {
                 //Handle file content - multipartFile.getInputStream()
                 byte[] bytes;
                 try {
-                    
+
                     BufferedOutputStream stream
-                            = new BufferedOutputStream(new FileOutputStream(new File(folderPath + File.separator + multipartFile.getAbsolutePath())));
-                    
+                            = new BufferedOutputStream(new FileOutputStream(
+                            new File(folderPath + File.separator +
+                                    multipartFile.getAbsolutePath())));
+
                     stream.close();
                 } catch (IOException ex) {
-                    java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
+                    java.util.logging.Logger.getLogger(
+                                    DocumentService.class.getName())
+                            .log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -76,11 +82,13 @@ public class DocumentService {
      * Creates a directory in the given document path
      *
      * @param documentRepositoryName the path in which the directory will be
-     * created
-     * @param directoryName the name of the directory to be created
+     *                               created
+     * @param directoryName          the name of the directory to be created
      */
-    
-    public void createDirectory(String documentRepositoryName, String directoryName) throws DataStoreException {
+
+    public void createDirectory(final String documentRepositoryName,
+                                final String directoryName)
+            throws DataStoreException {
         createDirectory(documentRepositoryName, null, directoryName);
     }
 
@@ -88,13 +96,16 @@ public class DocumentService {
      * Creates a directory in the given document path
      *
      * @param documentRepositoryName the path in which the directory will be
-     * created
-     * @param rootFolderPath folder where we need to create directory
-     * @param directoryName the name of the directory to be created
+     *                               created
+     * @param rootFolderPath         folder where we need to create directory
+     * @param directoryName          the name of the directory to be created
      */
-    
-    public void createDirectory(String documentRepositoryName, String rootFolderPath, String directoryName) throws DataStoreException {
-        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+
+    public void createDirectory(final String documentRepositoryName,
+                                final String rootFolderPath, final String directoryName)
+            throws DataStoreException {
+        Optional<DocumentRepository> documentRepository =
+                documentRepositoryService.read(documentRepositoryName);
         String folderPath = documentRepository.get().getPath();
         if (rootFolderPath != null && rootFolderPath.trim().length() != 0) {
             folderPath = folderPath + File.separator + rootFolderPath;
@@ -103,9 +114,11 @@ public class DocumentService {
         newFolder.mkdirs();
     }
 
-    
-    public void delete(String documentRepositoryName, String filePath) throws DataStoreException {
-        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+
+    public void delete(final String documentRepositoryName, final String filePath)
+            throws DataStoreException {
+        Optional<DocumentRepository> documentRepository =
+                documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
         if (filePath != null && filePath.trim().length() != 0) {
             path = path + File.separator + filePath;
@@ -115,11 +128,12 @@ public class DocumentService {
         try {
             delete(file);
         } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(DocumentService.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(DocumentService.class.getName())
+                    .log(Level.SEVERE, null, ex);
         }
     }
 
-    private void delete(File f) throws IOException {
+    private void delete(final File f) throws IOException {
         if (f.isDirectory()) {
             for (File c : f.listFiles()) {
                 delete(c);
@@ -134,12 +148,14 @@ public class DocumentService {
      * List all the files in the current directory
      *
      * @param documentRepositoryName type of storage
-     * @param folderPath the directory to list the files
+     * @param folderPath             the directory to list the files
      * @return list of documents
      */
-    
-    public List<Document> list(String documentRepositoryName, String folderPath) throws DataStoreException {
-        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+
+    public List<Document> list(final String documentRepositoryName,
+                               final String folderPath) throws DataStoreException {
+        Optional<DocumentRepository> documentRepository =
+                documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
@@ -149,12 +165,13 @@ public class DocumentService {
 
         List<Document> documents = new ArrayList<>();
         Document document;
-            for (File innerFile : new File(path).listFiles()) {
+        for (File innerFile : new File(path).listFiles()) {
             document = new Document();
             document.setRepositoryName(documentRepositoryName);
             document.setFileName(innerFile.getName());
             document.setIsDir(innerFile.isDirectory());
-            document.setPath(innerFile.getPath().replaceAll(documentRepository.get().getPath(), ""));
+            document.setPath(innerFile.getPath()
+                    .replaceAll(documentRepository.get().getPath(), ""));
             documents.add(document);
         }
         return documents;
@@ -164,12 +181,15 @@ public class DocumentService {
      * List all the files in the current directory
      *
      * @param documentRepositoryName type of storage
-     * @param folderPath the directory to list the files
+     * @param folderPath             the directory to list the files
      * @return list of documents
      */
-    
-    public List<Document> listAll(String documentRepositoryName, String folderPath) throws DataStoreException {
-        Optional<DocumentRepository> documentRepository = documentRepositoryService.read(documentRepositoryName);
+
+    public List<Document> listAll(final String documentRepositoryName,
+                                  final String folderPath)
+            throws DataStoreException {
+        Optional<DocumentRepository> documentRepository =
+                documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();
         if (folderPath != null && folderPath.trim().length() != 0) {
             path = path + File.separator + folderPath;
@@ -180,7 +200,8 @@ public class DocumentService {
         return getFiles(path, documentRepositoryName, new File(path));
     }
 
-    private List<Document> getFiles(String path, String documentRepositoryName, File folder) {
+    private List<Document> getFiles(final String path, final String documentRepositoryName,
+                                    final File folder) {
         Document document;
         String filePath;
         List<Document> documents = new ArrayList<>();
@@ -191,10 +212,12 @@ public class DocumentService {
                     document.setRepositoryName(documentRepositoryName);
                     document.setFileName(innerFile.getName());
                     filePath = innerFile.getPath();
-                    document.setPath(filePath.substring(filePath.indexOf(new File(path).getPath())));
+                    document.setPath(filePath.substring(
+                            filePath.indexOf(new File(path).getPath())));
                     documents.add(document);
                 } else {
-                    documents.addAll(getFiles(path, documentRepositoryName, innerFile));
+                    documents.addAll(
+                            getFiles(path, documentRepositoryName, innerFile));
                 }
             }
         }

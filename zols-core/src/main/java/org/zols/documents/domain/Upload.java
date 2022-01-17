@@ -11,7 +11,7 @@ public class Upload {
         return files;
     }
 
-    public void setFiles(List<File> files) {
+    public void setFiles(final List<File> files) {
         this.files = files;
     }
 

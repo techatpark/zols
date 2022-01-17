@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.zols</groupId>
@@ -10,22 +11,21 @@
     <artifactId>zols-datastore-test</artifactId>
     <packaging>jar</packaging>
     <dependencies>
-        
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>zols-datastore</artifactId>
             <version>${project.version}</version>
-        </dependency>	
-        
+        </dependency>
 
-        
+
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
             <version>0.9.11</version>
         </dependency>
-        
-        
+
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -46,7 +46,7 @@
             <artifactId>junit-platform-runner</artifactId>
             <scope>compile</scope>
         </dependency>
-        
+
 
     </dependencies>
 </project>

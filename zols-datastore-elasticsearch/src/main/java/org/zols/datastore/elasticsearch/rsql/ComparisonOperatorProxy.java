@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * ComparisonOperatorProxy Enum
- *
+ * <p>
  * Convert RSQLOperators to an Enumeration type.
  *
  * @author AntonioRabelo
@@ -31,10 +31,9 @@ public enum ComparisonOperatorProxy {
     IN(RSQLOperators.IN),
     NOT_IN(RSQLOperators.NOT_IN);
 
-    private ComparisonOperator operator;
-
     private static final Map<ComparisonOperator, ComparisonOperatorProxy> CACHE
-            = Collections.synchronizedMap(new HashMap<ComparisonOperator, ComparisonOperatorProxy>());
+            = Collections.synchronizedMap(
+            new HashMap<ComparisonOperator, ComparisonOperatorProxy>());
 
     static {
         for (ComparisonOperatorProxy proxy : values()) {
@@ -42,15 +41,17 @@ public enum ComparisonOperatorProxy {
         }
     }
 
-    ComparisonOperatorProxy(ComparisonOperator operator) {
+    private final ComparisonOperator operator;
+
+    ComparisonOperatorProxy(final ComparisonOperator operator) {
         this.operator = operator;
+    }
+
+    public static ComparisonOperatorProxy asEnum(final ComparisonOperator operator) {
+        return CACHE.get(operator);
     }
 
     public ComparisonOperator getOperator() {
         return this.operator;
-    }
-
-    public static ComparisonOperatorProxy asEnum(ComparisonOperator operator) {
-        return CACHE.get(operator);
     }
 }

@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author sathish_ku
  */
 public class Query {
@@ -25,6 +24,7 @@ public class Query {
 
     /**
      * gets filters from the query
+     *
      * @return list of filters
      */
     public List<Filter> getFilters() {
@@ -33,10 +33,11 @@ public class Query {
 
     /**
      * Adds a Filter to the query
+     *
      * @param filter filter to be added
      */
-    public void addFilter(Filter filter) {
-        if(!filters.contains(filter)) {
+    public void addFilter(final Filter filter) {
+        if (!filters.contains(filter)) {
             filters.add(filter);
         }
     }

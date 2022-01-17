@@ -5,8 +5,6 @@
  */
 package org.zols;
 
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,16 +15,17 @@ import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 
 @Configuration
 public class ZolsApplicationConfiguration {
-    
+
     @Value("${spring.application.name}")
     private String indexName;
 
     @Autowired
     private RestHighLevelClient restHighLevelClient;
-        
+
     @Bean
     public DataStore dataStore() {
-        return new DataStore(new ElasticSearchDataStorePersistence(indexName,restHighLevelClient));
+        return new DataStore(new ElasticSearchDataStorePersistence(indexName,
+                restHighLevelClient));
     }
 
 }
