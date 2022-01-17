@@ -17,8 +17,13 @@ import java.util.List;
  * @author sathish
  */
 @ControllerAdvice(basePackages = "org.zols")
-public class ApiExceptionHandlerAdvice {
+public final class ApiExceptionHandlerAdvice {
 
+    /**
+     * hanles exception.
+     * @param e
+     * @return errors
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
     public List<ObjectError> handleValidationException(
