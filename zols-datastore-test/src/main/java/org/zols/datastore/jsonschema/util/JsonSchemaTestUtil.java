@@ -32,7 +32,7 @@ public class JsonSchemaTestUtil {
     }
 
     public static Map<String, Object> getJsonSchemaAsMap(
-                                          final String dataName) {
+            final String dataName) {
         return asMap(getJsonSchemaAsText(dataName));
     }
 

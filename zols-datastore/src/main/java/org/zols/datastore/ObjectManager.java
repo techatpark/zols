@@ -12,13 +12,8 @@ import org.zols.jsonschema.JsonSchema;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.AbstractMap;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 import static org.zols.datastore.util.MapUtil.asObject;
@@ -50,7 +45,7 @@ public final class ObjectManager<T> {
     }
 
     public T create(final T object, final Locale locale)
-                                           throws DataStoreException {
+            throws DataStoreException {
         T createdObject = null;
         if (object != null) {
             Set violations = validator.validate(object);
@@ -156,7 +151,7 @@ public final class ObjectManager<T> {
     }
 
     public List<T> list(final Condition<MapQuery> query)
-                                     throws DataStoreException {
+            throws DataStoreException {
         return list(query, null);
     }
 
@@ -174,14 +169,14 @@ public final class ObjectManager<T> {
     }
 
     public Page<T> list(final Locale locale, final Integer pageNumber,
-                                                 final Integer pageSize)
+                        final Integer pageSize)
             throws DataStoreException {
 
         return list(null, locale, pageNumber, pageSize);
     }
 
     public Page<T> list(final Condition<MapQuery> query,
-                                                final Integer pageNumber,
+                        final Integer pageNumber,
                         final Integer pageSize) throws DataStoreException {
         return list(query, null, pageNumber, pageSize);
     }

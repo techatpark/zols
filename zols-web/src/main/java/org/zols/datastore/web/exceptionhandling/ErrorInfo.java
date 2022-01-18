@@ -21,7 +21,8 @@ public class ErrorInfo {
 
     /**
      * this is the constructor.
-     * @param anField an field
+     *
+     * @param anField   an field
      * @param anMessage an message
      */
     public ErrorInfo(final String anField, final String anMessage) {

@@ -7,11 +7,7 @@ package org.zols.datastore.util;
 
 import org.zols.jsonschema.util.JsonUtil;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author sathish
@@ -19,7 +15,7 @@ import java.util.Map;
 public class MapUtil {
 
     public static Object getFieldValue(final Map<String, Object> o,
-                                                 final String s) {
+                                       final String s) {
         if (s == null || o == null) {
             return null;
         }
@@ -54,7 +50,7 @@ public class MapUtil {
                             collectionData -> {
                                 if (collectionData instanceof Map) {
                                     deepRemove(
-                                           (Map<String, Object>) collectionData,
+                                            (Map<String, Object>) collectionData,
                                             elements);
                                 }
                             });

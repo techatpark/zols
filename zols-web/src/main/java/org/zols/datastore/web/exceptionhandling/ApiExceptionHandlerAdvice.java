@@ -1,6 +1,3 @@
-/**
- * package.info.
- */
 package org.zols.datastore.web.exceptionhandling;
 
 import org.springframework.validation.ObjectError;
@@ -19,6 +16,7 @@ public final class ApiExceptionHandlerAdvice {
 
     /**
      * hanles exception.
+     *
      * @param e
      * @return errors
      */

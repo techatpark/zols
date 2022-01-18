@@ -16,12 +16,13 @@ public class Filter<T> {
     private final String name;
     private final Operator operator;
     private final Object value;
+
     /**
      * Intialize the Filter
      *
-     * @param aName     name of the filter
+     * @param aName      name of the filter
      * @param anOperator an operator of the filter
-     * @param value    value of the filter
+     * @param value      value of the filter
      */
     public Filter(final String aName, final Operator anOperator,
                   final T value) {
@@ -34,7 +35,7 @@ public class Filter<T> {
      * Intialize the Filter.
      *
      * @param anOperator operator of the filter
-     * @param aValue    value of the filter
+     * @param aValue     value of the filter
      */
     public Filter(final Operator anOperator, final T aValue) {
         this.name = null;
@@ -45,7 +46,7 @@ public class Filter<T> {
     /**
      * Intialize the Filter.
      *
-     * @param aName     name of the filter
+     * @param aName      name of the filter
      * @param anOperator operator of the filter
      * @param value
      */
@@ -59,7 +60,7 @@ public class Filter<T> {
     /**
      * Intialize the Filter without value.
      *
-     * @param aName     name of the filter
+     * @param aName      name of the filter
      * @param anOperator operator of the filter
      */
     public Filter(final String aName, final Operator anOperator) {

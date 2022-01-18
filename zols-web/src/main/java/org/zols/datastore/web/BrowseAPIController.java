@@ -44,10 +44,11 @@ public class BrowseAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param keyword the keyword
-     * @param pageable the pageable
-     * @param request the request
+     *
+     * @param schemaName the jsonSchema
+     * @param keyword    the keyword
+     * @param pageable   the pageable
+     * @param request    the request
      * @return schema
      */
     @RequestMapping(value = "/search/{schemaName}")
@@ -63,11 +64,12 @@ public class BrowseAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param keyword the keyword
-     * @param pageable the pageable
-     * @param request the request
-     * @param locale the locale
+     *
+     * @param schemaName the jsonSchema
+     * @param keyword    the keyword
+     * @param pageable   the pageable
+     * @param request    the request
+     * @param locale     the locale
      * @return schema
      */
     @RequestMapping(value = "/browse/{schemaName}")
@@ -75,7 +77,7 @@ public class BrowseAPIController {
             @PathVariable("schemaName") final String schemaName,
             @RequestParam(required = false, value = "q") final String keyword,
             final Pageable pageable, final HttpServletRequest request,
-                                                  final Locale locale)
+            final Locale locale)
             throws DataStoreException {
         return getAggregatedResults(
                 browseService.browseSchema(schemaName, keyword,

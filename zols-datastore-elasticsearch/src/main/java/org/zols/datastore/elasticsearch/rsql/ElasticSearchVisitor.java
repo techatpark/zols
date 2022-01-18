@@ -1,12 +1,6 @@
 package org.zols.datastore.elasticsearch.rsql;
 
-import cz.jirutka.rsql.parser.ast.AndNode;
-import cz.jirutka.rsql.parser.ast.ComparisonNode;
-import cz.jirutka.rsql.parser.ast.LogicalNode;
-import cz.jirutka.rsql.parser.ast.LogicalOperator;
-import cz.jirutka.rsql.parser.ast.NoArgRSQLVisitorAdapter;
-import cz.jirutka.rsql.parser.ast.Node;
-import cz.jirutka.rsql.parser.ast.OrNode;
+import cz.jirutka.rsql.parser.ast.*;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -22,7 +16,7 @@ public class ElasticSearchVisitor
 
     public ElasticSearchVisitor(
             final ComparisonNodeInterpreter<QueryBuilder>
-                                        comparisonNodeInterpreter) {
+                    comparisonNodeInterpreter) {
         this.comparisonNodeInterpreter = comparisonNodeInterpreter;
     }
 

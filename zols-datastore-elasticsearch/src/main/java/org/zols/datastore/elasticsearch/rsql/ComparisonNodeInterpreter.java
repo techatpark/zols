@@ -10,5 +10,10 @@ import cz.jirutka.rsql.parser.ast.ComparisonNode;
 @FunctionalInterface
 public interface ComparisonNodeInterpreter<T> {
 
+    /**
+     * intercept Node.
+     * @param comparisonNode
+     * @return
+     */
     T interpret(ComparisonNode comparisonNode);
 }

@@ -20,7 +20,7 @@ public class Page<T> {
     private final List<T> content;
 
     public Page(final Integer thePageNumber, final Integer thePageSize,
-                                                 final Long theTotal,
+                final Long theTotal,
                 final List<T> theContent) {
         this.pageNumber = thePageNumber;
         this.pageSize = thePageSize;

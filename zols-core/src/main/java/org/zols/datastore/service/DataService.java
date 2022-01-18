@@ -26,6 +26,7 @@ public class DataService {
 
     /**
      * this is the constructor.
+     *
      * @param anDataStore an dataStore
      */
     public DataService(final DataStore anDataStore) {
@@ -34,11 +35,12 @@ public class DataService {
 
     /**
      * getId Field.
+     *
      * @param schemaId schemaId
      * @return schema list
      */
     public final String getIdField(final String schemaId)
-                                               throws DataStoreException {
+            throws DataStoreException {
         String idPropertyName = null;
         List<String> idProps =
                 dataStore.getSchemaManager().getJsonSchema(schemaId)
@@ -51,9 +53,10 @@ public class DataService {
 
     /**
      * inserts data.
-     * @param schemaName  the schemaName
-     * @param jsonData  the jsonData
-     * @param loc the loc
+     *
+     * @param schemaName the schemaName
+     * @param jsonData   the jsonData
+     * @param loc        the loc
      * @return schema
      */
     public Map<String, Object> create(final String schemaName,
@@ -65,9 +68,10 @@ public class DataService {
 
     /**
      * reads from dataStore.
-     * @param schemaName  the schemaName
-     * @param idValues the idValues
-     * @param loc the loc
+     *
+     * @param schemaName the schemaName
+     * @param idValues   the idValues
+     * @param loc        the loc
      * @return schema
      */
     public Optional<Map<String, Object>> read(final String schemaName,
@@ -79,10 +83,11 @@ public class DataService {
 
     /**
      * updates the schema.
-     * @param schemaId  the schemaId
+     *
+     * @param schemaId the schemaId
      * @param idValues the idValues
      * @param jsonData the jsonData
-     * @param loc the loc
+     * @param loc      the loc
      * @return schema
      */
     public Map<String, Object> update(final String schemaId,
@@ -95,8 +100,9 @@ public class DataService {
 
     /**
      * updates the schema.
-     * @param schemaName  the schemaName
-     * @param idValues the idValues
+     *
+     * @param schemaName the schemaName
+     * @param idValues   the idValues
      * @return data
      */
     public boolean delete(final String schemaName,
@@ -107,8 +113,9 @@ public class DataService {
 
     /**
      * updates the schema.
-     * @param schemaName  the schemaName
-     * @param loc the loc
+     *
+     * @param schemaName the schemaName
+     * @param loc        the loc
      * @return schema
      */
     public List<Map<String, Object>> list(final String schemaName,
@@ -119,11 +126,12 @@ public class DataService {
 
     /**
      * updates the schema.
-     * @param schemaName  the schemaName
-     * @param pageSize the pageSize
-     * @param query the query
+     *
+     * @param schemaName the schemaName
+     * @param pageSize   the pageSize
+     * @param query      the query
      * @param pageNumber the pageNumber
-     * @param loc the loc
+     * @param loc        the loc
      * @return schema
      */
     public Page<Map<String, Object>> list(final String schemaName,
@@ -135,13 +143,15 @@ public class DataService {
 
         return dataStore.list(schemaName, query, pageNumber, pageSize);
     }
+
     /**
      * updates the schema.
+     *
      * @param schemaName  the schemaName
-     * @param pageSize the pageSize
+     * @param pageSize    the pageSize
      * @param queryString the queryString
-     * @param pageNumber the pageNumber
-     * @param loc the loc
+     * @param pageNumber  the pageNumber
+     * @param loc         the loc
      * @return schema
      */
     public Page<Map<String, Object>> list(final String schemaName,

@@ -12,11 +12,7 @@ import org.zols.documents.domain.Document;
 import org.zols.documents.domain.DocumentRepository;
 import org.zols.documents.domain.Upload;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +37,7 @@ public class DocumentService {
 
     /**
      * this is the constructor.
+     *
      * @param anDocumentRepositoryService an dataStore
      */
     public DocumentService(
@@ -128,10 +125,10 @@ public class DocumentService {
      *
      * @param documentRepositoryName the path in which the directory will be
      *                               created
-     * @param filePath the file path in which directory will be created
+     * @param filePath               the file path in which directory will be created
      */
     public void delete(final String documentRepositoryName,
-                                       final String filePath)
+                       final String filePath)
             throws DataStoreException {
         Optional<DocumentRepository> documentRepository =
                 documentRepositoryService.read(documentRepositoryName);
@@ -151,6 +148,7 @@ public class DocumentService {
 
     /**
      * Deletes a directory in the given document path.
+     *
      * @param f f
      */
     private void delete(final File f) throws IOException {
@@ -174,7 +172,7 @@ public class DocumentService {
 
     public List<Document> list(final String documentRepositoryName,
                                final String folderPath)
-                                       throws DataStoreException {
+            throws DataStoreException {
         Optional<DocumentRepository> documentRepository =
                 documentRepositoryService.read(documentRepositoryName);
         String path = documentRepository.get().getPath();

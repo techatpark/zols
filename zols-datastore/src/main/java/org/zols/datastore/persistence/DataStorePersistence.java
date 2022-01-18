@@ -99,7 +99,7 @@ public interface DataStorePersistence {
      * @throws DataStoreException
      */
     default boolean delete(final JsonSchema jsonSchema,
-                               final Condition<MapQuery> query)
+                           final Condition<MapQuery> query)
             throws DataStoreException {
         return this.delete(jsonSchema, getNode(query));
     }
@@ -115,8 +115,8 @@ public interface DataStorePersistence {
 
     /**
      * @param jsonSchema
-     * @param jsonData jsonData
-     * @param idValues idValues
+     * @param jsonData   jsonData
+     * @param idValues   idValues
      * @return schema
      * @throws DataStoreException
      */
@@ -128,7 +128,7 @@ public interface DataStorePersistence {
     /**
      * @param jsonSchema schema of dynamic data
      * @param jsonData   validated Object
-     * @param idValues the idValues
+     * @param idValues   the idValues
      * @return status of the update operation
      * @throws DataStoreException
      */

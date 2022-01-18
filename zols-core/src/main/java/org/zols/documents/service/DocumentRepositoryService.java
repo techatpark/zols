@@ -34,6 +34,7 @@ public class DocumentRepositoryService {
 
     /**
      * this is the constructor.
+     *
      * @param anDataStore an dataStore
      */
     public DocumentRepositoryService(final DataStore anDataStore) {
@@ -81,7 +82,7 @@ public class DocumentRepositoryService {
      * @return status of the update operation
      */
     public DocumentRepository update(final DocumentRepository
-                                               documentRepository)
+                                             documentRepository)
             throws DataStoreException {
         DocumentRepository updated = null;
         if (documentRepository != null) {

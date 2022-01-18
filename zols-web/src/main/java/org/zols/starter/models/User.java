@@ -1,15 +1,6 @@
 package org.zols.starter.models;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -52,8 +43,8 @@ public class User {
     /**
      * Instantiates a user.
      *
-     * @param anUsername  an username
-     * @param anEmail an email
+     * @param anUsername an username
+     * @param anEmail    an email
      * @param anPassword an password
      */
     public User(final String anUsername, final String anEmail,

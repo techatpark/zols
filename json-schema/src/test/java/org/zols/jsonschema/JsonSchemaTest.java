@@ -17,17 +17,10 @@ import org.zols.jsonschema.everit.EveritJsonSchema;
 import org.zols.jsonschema.util.TestUtil;
 
 import javax.validation.ConstraintViolation;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.zols.jsonschema.JsonSchema.LOCALE_SEPARATOR;
 import static org.zols.jsonschema.util.TestUtil.getTestData;
 

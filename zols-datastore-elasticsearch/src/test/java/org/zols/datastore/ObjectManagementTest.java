@@ -14,9 +14,7 @@ import org.zols.datastore.model.Employee;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ObjectManagementTest {
 

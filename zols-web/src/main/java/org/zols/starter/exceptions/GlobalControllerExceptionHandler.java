@@ -28,7 +28,6 @@ public class GlobalControllerExceptionHandler
             LoggerFactory.getLogger(GlobalControllerExceptionHandler.class);
 
     /**
-     *
      * @param constraintViolationException constraintViolationException
      * @return query
      */

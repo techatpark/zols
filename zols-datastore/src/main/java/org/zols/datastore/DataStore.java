@@ -9,11 +9,7 @@ import org.zols.datastore.query.Page;
 import org.zols.jsonschema.JsonSchema;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 
@@ -43,6 +39,7 @@ public class DataStore {
 
     /**
      * this is the constructor.
+     *
      * @param anDataStorePersistence dataStorePersistence
      */
     public DataStore(final DataStorePersistence anDataStorePersistence) {
@@ -53,7 +50,8 @@ public class DataStore {
 
     /**
      * creates the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param dataMap  the dataMap
      * @return data
      */
@@ -65,9 +63,10 @@ public class DataStore {
 
     /**
      * creates the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param dataMap  the dataMap
-     * @param locale the locale
+     * @param locale   the locale
      * @return data
      */
     public Map<String, Object> create(final String schemaId,
@@ -105,8 +104,9 @@ public class DataStore {
 
     /**
      * reads the schema.
-     * @param schemaId    the schemaId
-     * @param locale the locale
+     *
+     * @param schemaId the schemaId
+     * @param locale   the locale
      * @param idValues the idValues
      * @return data
      */
@@ -123,8 +123,9 @@ public class DataStore {
 
     /**
      * reads the schema.
-     * @param schemaId    the schemaId
-     * @param idValues   the idValues
+     *
+     * @param schemaId the schemaId
+     * @param idValues the idValues
      * @return data
      */
     public Optional<Map<String, Object>> read(final String schemaId,
@@ -135,7 +136,8 @@ public class DataStore {
 
     /**
      * updates the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param dataMap  the dataMap
      * @param idValues the idValues
      * @return data
@@ -149,9 +151,10 @@ public class DataStore {
 
     /**
      * updates the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param dataMap  the dataMap
-     * @param locale the locale
+     * @param locale   the locale
      * @param idValues the idValues
      * @return data
      */
@@ -194,7 +197,8 @@ public class DataStore {
 
     /**
      * updates the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param dataMap  the dataMap
      * @param idValues the idValues
      */
@@ -210,7 +214,8 @@ public class DataStore {
 
     /**
      * deletes the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @return data
      */
     public boolean delete(final String schemaId) throws DataStoreException {
@@ -220,7 +225,8 @@ public class DataStore {
 
     /**
      * delete the schema.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @param idValues the idValues
      * @return data
      */
@@ -232,8 +238,9 @@ public class DataStore {
 
     /**
      * delete the schema.
-     * @param schemaId    the schemaId
-     * @param query the query
+     *
+     * @param schemaId the schemaId
+     * @param query    the query
      * @return data
      */
     public boolean delete(final String schemaId,
@@ -245,9 +252,10 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param schemaId    the schemaId
-     * @param query the query
-     * @param locale the locale
+     *
+     * @param schemaId the schemaId
+     * @param query    the query
+     * @param locale   the locale
      * @return data
      */
     public List<Map<String, Object>> list(final String schemaId,
@@ -267,7 +275,8 @@ public class DataStore {
 
     /**
      * list the schema with id.
-     * @param schemaId    the schemaId
+     *
+     * @param schemaId the schemaId
      * @return data
      */
     public List<Map<String, Object>> list(final String schemaId)
@@ -278,8 +287,9 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param schemaId    the schemaId
-     * @param locale the locale
+     *
+     * @param schemaId the schemaId
+     * @param locale   the locale
      * @return data
      */
     public List<Map<String, Object>> list(final String schemaId,
@@ -290,8 +300,9 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param schemaId    the schemaId
-     * @param query  the query
+     *
+     * @param schemaId the schemaId
+     * @param query    the query
      * @return data
      */
     public List<Map<String, Object>> list(final String schemaId,
@@ -302,9 +313,10 @@ public class DataStore {
 
     /**
      * list of page in the schema.
-     * @param schemaId    the schemaId
-     * @param pageNumber  the pageNumber
-     * @param pageSize the pageSize
+     *
+     * @param schemaId   the schemaId
+     * @param pageNumber the pageNumber
+     * @param pageSize   the pageSize
      * @return data
      */
     public Page<Map<String, Object>> list(final String schemaId,
@@ -316,10 +328,11 @@ public class DataStore {
 
     /**
      * list of page in the schema.
-     * @param schemaId    the schemaId
-     * @param pageNumber  the pageNumber
-     * @param pageSize the pageSize
-     * @param locale the locale
+     *
+     * @param schemaId   the schemaId
+     * @param pageNumber the pageNumber
+     * @param pageSize   the pageSize
+     * @param locale     the locale
      * @return data
      */
     public Page<Map<String, Object>> list(final String schemaId,
@@ -333,10 +346,11 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param schemaId    the schemaId
-     * @param query the query
-     * @param pageNumber  the pageNumber
-     * @param pageSize the pageSize
+     *
+     * @param schemaId   the schemaId
+     * @param query      the query
+     * @param pageNumber the pageNumber
+     * @param pageSize   the pageSize
      * @return data
      */
     public Page<Map<String, Object>> list(final String schemaId,
@@ -349,11 +363,12 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param schemaId    the schemaId
-     * @param query the query
-     * @param pageNumber  the pageNumber
-     * @param locale the locale
-     * @param pageSize the pageSize
+     *
+     * @param schemaId   the schemaId
+     * @param query      the query
+     * @param pageNumber the pageNumber
+     * @param locale     the locale
+     * @param pageSize   the pageSize
      * @return data
      */
     public Page<Map<String, Object>> list(final String schemaId,
@@ -378,7 +393,8 @@ public class DataStore {
 
     /**
      * Implements the schema.
-     * @param jsonSchema    the jsonSchema
+     *
+     * @param jsonSchema the jsonSchema
      * @return data
      */
     public List<String> getImplementationsOf(final JsonSchema jsonSchema)
@@ -388,6 +404,7 @@ public class DataStore {
 
     /**
      * gets the schema Manager.
+     *
      * @return schemaManager
      */
     public SchemaManager getSchemaManager() {
@@ -396,6 +413,7 @@ public class DataStore {
 
     /**
      * gets the ObjectManager.
+     *
      * @param <T>
      * @param clazz the clazz
      * @return ObjectManager
@@ -406,8 +424,9 @@ public class DataStore {
 
     /**
      * reads the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param dataAsMap the dataAsMap
+     *
+     * @param jsonSchema the jsonSchema
+     * @param dataAsMap  the dataAsMap
      * @return data
      */
     Map<String, Object> create(final JsonSchema jsonSchema,
@@ -419,21 +438,23 @@ public class DataStore {
 
     /**
      * reads the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param idValues  the idValues
+     *
+     * @param jsonSchema the jsonSchema
+     * @param idValues   the idValues
      * @return data
      */
     Map<String, Object> read(final JsonSchema jsonSchema,
-                                 final SimpleEntry... idValues)
+                             final SimpleEntry... idValues)
             throws DataStoreException {
         return dataStorePersistence.read(jsonSchema, idValues);
     }
 
     /**
      * reads the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param locale the locale
-     * @param idValues  the idValues
+     *
+     * @param jsonSchema the jsonSchema
+     * @param locale     the locale
+     * @param idValues   the idValues
      * @return data
      */
     Map<String, Object> read(final JsonSchema jsonSchema, final Locale locale,
@@ -445,9 +466,10 @@ public class DataStore {
 
     /**
      * updates the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param dataAsMap the dataAsMap
-     * @param idValues  the idValues
+     *
+     * @param jsonSchema the jsonSchema
+     * @param dataAsMap  the dataAsMap
+     * @param idValues   the idValues
      * @return data
      */
     boolean update(final JsonSchema jsonSchema,
@@ -459,7 +481,8 @@ public class DataStore {
 
     /**
      * deletes the schema.
-     * @param jsonSchema    the jsonSchema
+     *
+     * @param jsonSchema the jsonSchema
      * @return data
      */
     boolean delete(final JsonSchema jsonSchema) throws DataStoreException {
@@ -469,8 +492,9 @@ public class DataStore {
 
     /**
      * deletes the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param query the query
+     *
+     * @param jsonSchema the jsonSchema
+     * @param query      the query
      * @return data
      */
     boolean delete(final JsonSchema jsonSchema, final Condition<MapQuery> query)
@@ -480,8 +504,9 @@ public class DataStore {
 
     /**
      * deletes the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param idValues  the idValues
+     *
+     * @param jsonSchema the jsonSchema
+     * @param idValues   the idValues
      * @return data
      */
     boolean delete(final JsonSchema jsonSchema, final SimpleEntry... idValues)
@@ -491,15 +516,16 @@ public class DataStore {
 
     /**
      * updates the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param dataAsMap the dataAsMap
-     * @param idValues  the idValues
+     *
+     * @param jsonSchema the jsonSchema
+     * @param dataAsMap  the dataAsMap
+     * @param idValues   the idValues
      * @return data
      */
     boolean updatePartial(final JsonSchema jsonSchema,
                           final Map<String, Object> dataAsMap,
                           final SimpleEntry... idValues)
-                                       throws DataStoreException {
+            throws DataStoreException {
         dataAsMap.put("$type", jsonSchema.getId());
         return dataStorePersistence.updatePartially(jsonSchema, dataAsMap,
                 idValues);
@@ -507,8 +533,9 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param query the query
+     *
+     * @param jsonSchema the jsonSchema
+     * @param query      the query
      * @return data
      */
     List<Map<String, Object>> list(final JsonSchema jsonSchema,
@@ -522,10 +549,11 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param jsonSchema    the jsonSchema
-     * @param query the query
-     * @param pageNumber  the pageNumber
-     * @param pageSize the pageSize
+     *
+     * @param jsonSchema the jsonSchema
+     * @param query      the query
+     * @param pageNumber the pageNumber
+     * @param pageSize   the pageSize
      * @return data
      */
     Page<Map<String, Object>> list(final JsonSchema jsonSchema,
@@ -539,7 +567,8 @@ public class DataStore {
 
     /**
      * list the schema.
-     * @param jsonSchema    the jsonSchema
+     *
+     * @param jsonSchema the jsonSchema
      * @return data
      */
     List<Map<String, Object>> list(final JsonSchema jsonSchema)
@@ -549,22 +578,23 @@ public class DataStore {
 
     /**
      * browsw the schema.
-     * @param schemaId    the schemaId
-     * @param locale the locale
-     * @param query the query
-     * @param pageNumber  the pageNumber
-     * @param pageSize the pageSize
-     * @param keyword the keyword
+     *
+     * @param schemaId   the schemaId
+     * @param locale     the locale
+     * @param query      the query
+     * @param pageNumber the pageNumber
+     * @param pageSize   the pageSize
+     * @param keyword    the keyword
      * @return data
      */
     public AggregatedResults browse(final String schemaId, final String keyword,
-                           final Condition<MapQuery> query, final Locale locale,
-                           final Integer pageNumber, final Integer pageSize)
+                                    final Condition<MapQuery> query, final Locale locale,
+                                    final Integer pageNumber, final Integer pageSize)
             throws DataStoreException {
         if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
             JsonSchema schema = schemaManager.getJsonSchema(schemaId);
             AggregatedResults aggregatedResults =
-                  ((BrowsableDataStorePersistence) dataStorePersistence).browse(
+                    ((BrowsableDataStorePersistence) dataStorePersistence).browse(
                             schema, keyword, query, pageNumber, pageSize);
             if (aggregatedResults != null) {
                 Page<Map<String, Object>> page = aggregatedResults.getPage();

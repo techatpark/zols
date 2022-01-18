@@ -75,13 +75,16 @@ public class DocumentRepository {
     public String getLabel() {
         return label;
     }
+
     /**
      * sets a label.
+     *
      * @param aLabel aLabel
      */
     public void setLabel(final String aLabel) {
         this.label = aLabel;
     }
+
     /**
      * gets host.
      *
@@ -90,8 +93,10 @@ public class DocumentRepository {
     public String getHost() {
         return host;
     }
+
     /**
      * sets host.
+     *
      * @param anHost an host
      */
     public void setHost(final String anHost) {
@@ -115,6 +120,7 @@ public class DocumentRepository {
     public void setUserName(final String aUserName) {
         this.userName = aUserName;
     }
+
     /**
      * gets password.
      *
@@ -123,14 +129,16 @@ public class DocumentRepository {
     public String getPassword() {
         return password;
     }
+
     /**
      * sets rootFolder.
      *
-     * @param aPassword  aPassword
+     * @param aPassword aPassword
      */
     public void setPassword(final String aPassword) {
         this.password = aPassword;
     }
+
     /**
      * gets rootFolder.
      *
@@ -139,6 +147,7 @@ public class DocumentRepository {
     public String getRootFolder() {
         return rootFolder;
     }
+
     /**
      * sets rootFolder.
      *
@@ -147,6 +156,7 @@ public class DocumentRepository {
     public void setRootFolder(final String aRootFolder) {
         this.rootFolder = aRootFolder;
     }
+
     /**
      * gets path.
      *
@@ -155,6 +165,7 @@ public class DocumentRepository {
     public String getPath() {
         return path;
     }
+
     /**
      * sets path.
      *
@@ -163,6 +174,7 @@ public class DocumentRepository {
     public void setPath(final String aPath) {
         this.path = aPath;
     }
+
     /**
      * gets name.
      *
@@ -171,6 +183,7 @@ public class DocumentRepository {
     public String getName() {
         return name;
     }
+
     /**
      * sets name.
      *
@@ -179,6 +192,7 @@ public class DocumentRepository {
     public void setName(final String theName) {
         this.name = theName;
     }
+
     /**
      * gets description.
      *
@@ -187,6 +201,7 @@ public class DocumentRepository {
     public String getDescription() {
         return description;
     }
+
     /**
      * sets description.
      *
@@ -195,6 +210,7 @@ public class DocumentRepository {
     public void setDescription(final String anDescription) {
         this.description = anDescription;
     }
+
     /**
      * gets type.
      *
@@ -203,6 +219,7 @@ public class DocumentRepository {
     public String getType() {
         return type;
     }
+
     /**
      * sets type.
      *
@@ -211,6 +228,7 @@ public class DocumentRepository {
     public void setType(final String theType) {
         this.type = theType;
     }
+
     /**
      * gets baseUrl.
      *
@@ -219,10 +237,11 @@ public class DocumentRepository {
     public String getBaseUrl() {
         return baseUrl;
     }
+
     /**
      * sets baseUrl.
      *
-     * @param aBaseUrl  baseUrl
+     * @param aBaseUrl baseUrl
      */
     public void setBaseUrl(final String aBaseUrl) {
         this.baseUrl = aBaseUrl;

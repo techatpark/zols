@@ -32,8 +32,8 @@ public class Document {
 
     /**
      * sets Repository Name.
-     * @param anRepositoryName repository name
      *
+     * @param anRepositoryName repository name
      */
     public void setRepositoryName(final String anRepositoryName) {
         this.repositoryName = anRepositoryName;
@@ -59,6 +59,7 @@ public class Document {
 
     /**
      * gets dir.
+     *
      * @return isDir dir
      */
     public Boolean isIsDir() {
@@ -67,6 +68,7 @@ public class Document {
 
     /**
      * sets dir.
+     *
      * @param isADir is dir
      */
     public void setIsDir(final Boolean isADir) {
@@ -84,7 +86,8 @@ public class Document {
 
     /**
      * sets path.
-     * @param aPath  a path
+     *
+     * @param aPath a path
      */
     public void setPath(final String aPath) {
         this.path = aPath;

@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.zols.datastore.query.Filter.Operator.EQUALS;
-import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
-import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
+import static org.zols.datastore.query.Filter.Operator.*;
 
 /**
  *
@@ -40,7 +38,7 @@ public class HttpUtil {
     }
 
     public static Condition<MapQuery> getQuery(
-                                  final HttpServletRequest request) {
+            final HttpServletRequest request) {
         Condition<MapQuery> condition = null;
         Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null) {
@@ -48,7 +46,7 @@ public class HttpUtil {
 //            parameterMap.remove("size");
             if (!parameterMap.isEmpty()) {
                 for (Map.Entry<String, String[]> entrySet
-                                        : parameterMap.entrySet()) {
+                        : parameterMap.entrySet()) {
                     String k = entrySet.getKey();
                     String[] v = entrySet.getValue();
                     if (!k.equals("page") && !k.equals("size")
@@ -102,6 +100,7 @@ public class HttpUtil {
 
     /**
      * get the legacy query.
+     *
      * @param request the request
      * @return query
      */
@@ -114,7 +113,7 @@ public class HttpUtil {
             if (!parameterMap.isEmpty()) {
                 query = new Query();
                 for (Map.Entry<String,
-                              String[]> entrySet : parameterMap.entrySet()) {
+                        String[]> entrySet : parameterMap.entrySet()) {
                     String k = entrySet.getKey();
                     String[] v = entrySet.getValue();
                     if (!k.equals("page") && !k.equals("size")

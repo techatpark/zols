@@ -19,11 +19,12 @@ public interface BrowsableDataStorePersistence extends DataStorePersistence {
 
     /**
      * updates the schema.
-     * @param jsonSchema   the jsonSchema
-     * @param keyword the keyword
-     * @param query the query
+     *
+     * @param jsonSchema the jsonSchema
+     * @param keyword    the keyword
+     * @param query      the query
      * @param pageNumber the pageNumber
-     * @param pageSize the pageSize
+     * @param pageSize   the pageSize
      * @return schema
      */
     default AggregatedResults browse(final JsonSchema jsonSchema,
@@ -37,11 +38,11 @@ public interface BrowsableDataStorePersistence extends DataStorePersistence {
     }
 
     /**
-     * @param jsonSchema   the jsonSchema
-     * @param keyword the keyword
-     * @param queryNode the queryNode
+     * @param jsonSchema the jsonSchema
+     * @param keyword    the keyword
+     * @param queryNode  the queryNode
      * @param pageNumber the pageNumber
-     * @param pageSize the pageSize
+     * @param pageSize   the pageSize
      * @return schema
      */
     AggregatedResults browse(JsonSchema jsonSchema,

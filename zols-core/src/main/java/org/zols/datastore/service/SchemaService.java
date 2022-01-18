@@ -32,6 +32,7 @@ public class SchemaService {
 
     /**
      * this is the constructor.
+     *
      * @param anDataStore an dataStore
      */
     public SchemaService(final DataStore anDataStore) {
@@ -85,7 +86,7 @@ public class SchemaService {
     /**
      * Update a JsonSchema with given Object.
      *
-     * @param schemaId id of the schema
+     * @param schemaId  id of the schema
      * @param schemaMap Object to be update
      * @return status of the Update Operation
      */

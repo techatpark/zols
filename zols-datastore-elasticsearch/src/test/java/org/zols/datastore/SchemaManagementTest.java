@@ -17,9 +17,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.createAllSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.deleteAllSchema;
-import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.sampleJson;
+import static org.zols.datastore.jsonschema.util.JsonSchemaTestUtil.*;
 
 @RunWith(JUnitPlatform.class)
 public class SchemaManagementTest {

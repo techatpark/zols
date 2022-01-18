@@ -7,16 +7,8 @@ package org.zols.jsonschema;
 
 import javax.validation.ConstraintViolation;
 import java.lang.reflect.InvocationTargetException;
-import java.util.AbstractMap;
+import java.util.*;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,7 +59,7 @@ public abstract class JsonSchema {
     /**
      * Instantiates a new Json schema.
      *
-     * @param schemaId       the schema id
+     * @param schemaId         the schema id
      * @param anschemaSupplier the schema supplier
      */
     public JsonSchema(final String schemaId,
@@ -234,7 +226,7 @@ public abstract class JsonSchema {
     public String getIdValuesAsString(final Object[] idValues) {
         return idValues == null ? null
                 : Arrays.asList(idValues).stream().map(n -> n.toString())
-                        .collect(Collectors.joining("-"));
+                .collect(Collectors.joining("-"));
     }
 
     /**
@@ -432,7 +424,7 @@ public abstract class JsonSchema {
                             Map<String, Object> itemsMap =
                                     (Map<String, Object>)
                                             propertyEntry.getValue()
-                                            .get("items");
+                                                    .get("items");
                             if (itemsMap != null) {
                                 referencePath = (String) itemsMap.get("$ref");
                                 if (referencePath != null) {
@@ -729,6 +721,7 @@ public abstract class JsonSchema {
 
     /**
      * toString method.
+     *
      * @return string
      */
     @Override

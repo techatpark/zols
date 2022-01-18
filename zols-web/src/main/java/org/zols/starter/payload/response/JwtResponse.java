@@ -3,12 +3,12 @@ package org.zols.starter.payload.response;
 import java.util.List;
 
 public class JwtResponse {
+    private final List<String> roles;
     private String token;
     private String type = "Bearer";
     private Long id;
     private String username;
     private String email;
-    private final List<String> roles;
 
     public JwtResponse(final String accessToken, final Long anId,
                        final String anUsername,

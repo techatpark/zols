@@ -5,12 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.zols.datastore.DataStoreException;
 import org.zols.datastore.service.DataService;
 
@@ -20,10 +15,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.slf4j.LoggerFactory.getLogger;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-import static org.springframework.web.bind.annotation.RequestMethod.PUT;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 import static org.zols.datastore.web.util.SpringConverter.getPage;
 
 @RestController
@@ -43,9 +35,10 @@ public class DataAPIController {
 
     /**
      * creates the schema.
-     * @param schemaName   the jsonSchema
-     * @param jsonData the jsonData
-     * @param loc the loc
+     *
+     * @param schemaName the jsonSchema
+     * @param jsonData   the jsonData
+     * @param loc        the loc
      * @return schema
      */
     @RequestMapping(method = POST)
@@ -59,10 +52,11 @@ public class DataAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param idname the idname
-     * @param id the id
-     * @param loc the loc
+     *
+     * @param schemaName the jsonSchema
+     * @param idname     the idname
+     * @param id         the id
+     * @param loc        the loc
      * @return schema
      */
     @RequestMapping(value = "/{idname}/{id}", method = GET)
@@ -79,20 +73,20 @@ public class DataAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param idname the idname
-     * @param id the id
-     * @param jsonData the jsonData
-     * @param loc the loc
+     *
+     * @param schemaName the jsonSchema
+     * @param idname     the idname
+     * @param id         the id
+     * @param jsonData   the jsonData
+     * @param loc        the loc
      */
     @RequestMapping(value = "/{idname}/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@PathVariable(value = "schemaId")
-                                        final String schemaName,
+    public void update(@PathVariable(value = "schemaId") final String schemaName,
                        @PathVariable(value = "idname") final String idname,
                        @PathVariable(value = "id") final String id,
                        @RequestBody final Map<String, Object> jsonData,
-                                        final Locale loc)
+                       final Locale loc)
             throws DataStoreException {
         dataService.update(schemaName, jsonData, loc,
                 new SimpleEntry(idname, id));
@@ -101,14 +95,14 @@ public class DataAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param idname the idname
-     * @param id the id
+     *
+     * @param schemaName the jsonSchema
+     * @param idname     the idname
+     * @param id         the id
      */
     @RequestMapping(value = "/{idname}/{id}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "schemaId")
-                                          final String schemaName,
+    public void delete(@PathVariable(value = "schemaId") final String schemaName,
                        @PathVariable(value = "idname") final String idname,
                        @PathVariable(value = "id") final String id)
             throws DataStoreException {
@@ -118,19 +112,19 @@ public class DataAPIController {
 
     /**
      * updates the schema.
-     * @param schemaName   the jsonSchema
-     * @param loc the loc
-     * @param pageable the pageable
+     *
+     * @param schemaName  the jsonSchema
+     * @param loc         the loc
+     * @param pageable    the pageable
      * @param queryString the queryString
      * @return schema
      */
     @RequestMapping(method = GET)
     public Page<Map<String, Object>> list(
             @PathVariable(value = "schemaId") final String schemaName,
-            @RequestParam(value = "q", required = false)
-                                          final String queryString,
+            @RequestParam(value = "q", required = false) final String queryString,
             final Pageable pageable, final Locale loc)
-                                         throws DataStoreException {
+            throws DataStoreException {
         LOGGER.info("Getting Data for {}", schemaName);
         return getPage(dataService.list(schemaName, queryString,
                         pageable.getPageNumber(), pageable.getPageSize(), loc),

@@ -83,6 +83,7 @@ public class EveritJsonSchema extends JsonSchema {
 
     /**
      * validate method.
+     *
      * @param jsonData the json data
      * @return
      */
@@ -110,6 +111,7 @@ public class EveritJsonSchema extends JsonSchema {
 
     /**
      * getConstraintViolation method.
+     *
      * @param ve
      * @return null.
      */
@@ -121,6 +123,7 @@ public class EveritJsonSchema extends JsonSchema {
 
     /**
      * asString method.
+     *
      * @return string
      */
     @Override

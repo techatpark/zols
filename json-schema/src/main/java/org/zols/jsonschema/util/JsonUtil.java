@@ -24,17 +24,15 @@ import java.util.logging.Logger;
  */
 public final class JsonUtil {
 
-    private JsonUtil() {
-        throw new UnsupportedOperationException("This is a"
-                + " utility class and cannot be instantiated");
-    }
-
     /**
      * Initialize ObjectMapper.
      */
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-
+    private JsonUtil() {
+        throw new UnsupportedOperationException("This is a"
+                + " utility class and cannot be instantiated");
+    }
 
     /**
      * Clone map map.

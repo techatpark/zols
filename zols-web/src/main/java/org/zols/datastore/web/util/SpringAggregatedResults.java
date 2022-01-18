@@ -23,7 +23,7 @@ public class SpringAggregatedResults {
         buckets = aggregatedResults.getBuckets();
         page = (aggregatedResults.getPage() == null) ? null
                 : new PageImpl<>(aggregatedResults.getPage().getContent(),
-                        pageable, aggregatedResults.getPage().getTotal());
+                pageable, aggregatedResults.getPage().getTotal());
     }
 
     public List<Map<String, Object>> getBuckets() {
