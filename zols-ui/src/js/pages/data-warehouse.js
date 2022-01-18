@@ -238,9 +238,13 @@ class DataWarehouseScreen {
 			}
 		});
 
-		html += `<th scope="col">${
-			this.schema.properties[this.schema.label].title
-		}</th>
+		if (this.schema.label) {
+			html += `<th scope="col">${
+				this.schema.properties[this.schema.label].title
+			}</th>
+	`;
+		}
+		html += `
 <th scope="col" style="width:100px"></th>
 </tr>`;
 
@@ -256,10 +260,13 @@ class DataWarehouseScreen {
 			idProperties.forEach((property) => {
 				html += `<td scope="col">${data[property.id]}</td>`;
 			});
+			if (this.schema.label) {
+				html += `<td scope="col">${data[this.schema.label]}</td>`;
+			}
 
-			html += `<td scope="col">${data[this.schema.label]}</td>
-			<td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
-	</tr>`;
+			html += `
+	<td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
+</tr>`;
 		});
 
 		document.getElementById("table-content").innerHTML = html;

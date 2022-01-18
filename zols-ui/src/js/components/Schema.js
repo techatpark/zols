@@ -120,22 +120,22 @@ class Schema {
 			});
 		document.querySelector(".fa-save").addEventListener("click", () => {
 			if (this.isValidSchema()) {
-				fetch("/api/schema/", {
-					method: "POST",
-					body: JSON.stringify(this.schema),
-					headers: {
-						"content-type": "application/json",
-						Authorization:
-							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-					},
-				})
-					.then((response) => response.json())
-					.then((schema) => {
-						console.log(schema);
-					})
-					.catch((err) => {
-						console.error(err);
-					});
+				// fetch("/api/schema/", {
+				// 	method: "POST",
+				// 	body: JSON.stringify(this.schema),
+				// 	headers: {
+				// 		"content-type": "application/json",
+				// 		Authorization:
+				// 			"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+				// 	},
+				// })
+				// 	.then((response) => response.json())
+				// 	.then((schema) => {
+				// 		console.log(schema);
+				// 	})
+				// 	.catch((err) => {
+				// 		console.error(err);
+				// 	});
 
 				this.goBack();
 

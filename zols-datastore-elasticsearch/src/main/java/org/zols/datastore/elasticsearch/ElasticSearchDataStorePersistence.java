@@ -469,7 +469,6 @@ public class ElasticSearchDataStorePersistence
                     dataStore.getImplementationsOf(jsonSchema);
             if (implementations == null || implementations.isEmpty()) {
                 bool_builder.must(termQuery("$type", jsonSchema.getId()));
-
             } else {
                 implementations.add(jsonSchema.getId());
                 bool_builder.must(termsQuery("$type", implementations));
