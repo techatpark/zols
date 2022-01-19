@@ -21,14 +21,37 @@ import java.util.Map;
  * @since 2015-02-10
  */
 public enum ComparisonOperatorProxy {
-
+    /**
+     * Compare with =.
+     */
     EQUAL(RSQLOperators.EQUAL),
+    /**
+     * Compare with !=.
+     */
     NOT_EQUAL(RSQLOperators.NOT_EQUAL),
+    /**
+     * Compare with >.
+     */
     GREATER_THAN(RSQLOperators.GREATER_THAN),
+    /**
+     * Compare with >=.
+     */
     GREATER_THAN_OR_EQUAL(RSQLOperators.GREATER_THAN_OR_EQUAL),
+    /**
+     * Compare with <.
+     */
     LESS_THAN(RSQLOperators.LESS_THAN),
+    /**
+     * Compare with <=.
+     */
     LESS_THAN_OR_EQUAL(RSQLOperators.LESS_THAN_OR_EQUAL),
+    /**
+     * Compare with IN.
+     */
     IN(RSQLOperators.IN),
+    /**
+     * Compare with NOT_IN.
+     */
     NOT_IN(RSQLOperators.NOT_IN);
 
     private static final Map<ComparisonOperator, ComparisonOperatorProxy> CACHE
@@ -43,8 +66,8 @@ public enum ComparisonOperatorProxy {
 
     private final ComparisonOperator operator;
 
-    ComparisonOperatorProxy(final ComparisonOperator operator) {
-        this.operator = operator;
+    ComparisonOperatorProxy(final ComparisonOperator anOperator) {
+        this.operator = anOperator;
     }
 
     public static ComparisonOperatorProxy asEnum(final

@@ -37,6 +37,12 @@ public class HttpUtil {
         return url;
     }
 
+    /**
+     * get the query.
+     *
+     * @param request the request
+     * @return query
+     */
     public static Condition<MapQuery> getQuery(
             final HttpServletRequest request) {
         Condition<MapQuery> condition = null;

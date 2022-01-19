@@ -588,13 +588,16 @@ public class DataStore {
      * @return data
      */
     public AggregatedResults browse(final String schemaId, final String keyword,
-                                    final Condition<MapQuery> query, final Locale locale,
-                                    final Integer pageNumber, final Integer pageSize)
+                                    final Condition<MapQuery> query,
+                                    final Locale locale,
+                                    final Integer pageNumber,
+                                    final Integer pageSize)
             throws DataStoreException {
         if (dataStorePersistence instanceof BrowsableDataStorePersistence) {
             JsonSchema schema = schemaManager.getJsonSchema(schemaId);
             AggregatedResults aggregatedResults =
-                    ((BrowsableDataStorePersistence) dataStorePersistence).browse(
+                    ((BrowsableDataStorePersistence) dataStorePersistence)
+                            .browse(
                             schema, keyword, query, pageNumber, pageSize);
             if (aggregatedResults != null) {
                 Page<Map<String, Object>> page = aggregatedResults.getPage();

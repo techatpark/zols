@@ -18,9 +18,9 @@ import org.zols.jsonschema.JsonSchema;
 public interface BrowsableDataStorePersistence extends DataStorePersistence {
 
     /**
-     * updates the schema.
+     * browse the schema.
      *
-     * @param jsonSchema the jsonSchema
+     * @param jsonSchema schema of dynamic data
      * @param keyword    the keyword
      * @param query      the query
      * @param pageNumber the pageNumber
@@ -38,7 +38,7 @@ public interface BrowsableDataStorePersistence extends DataStorePersistence {
     }
 
     /**
-     * @param jsonSchema the jsonSchema
+     * @param jsonSchema schema of dynamic data
      * @param keyword    the keyword
      * @param queryNode  the queryNode
      * @param pageNumber the pageNumber

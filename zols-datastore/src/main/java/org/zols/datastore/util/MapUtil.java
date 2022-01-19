@@ -50,7 +50,7 @@ public class MapUtil {
                             collectionData -> {
                                 if (collectionData instanceof Map) {
                                     deepRemove(
-                                            (Map<String, Object>) collectionData,
+                                          (Map<String, Object>) collectionData,
                                             elements);
                                 }
                             });

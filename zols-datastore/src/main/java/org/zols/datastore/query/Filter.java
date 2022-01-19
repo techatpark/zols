@@ -13,22 +13,31 @@ import java.util.Objects;
  */
 public class Filter<T> {
 
+    /**
+     * declares variable name.
+     */
     private final String name;
+    /**
+     * declares variable operator.
+     */
     private final Operator operator;
+    /**
+     * declares variable value.
+     */
     private final Object value;
 
     /**
-     * Intialize the Filter
+     * Intialize the Filter.
      *
      * @param aName      name of the filter
      * @param anOperator an operator of the filter
-     * @param value      value of the filter
+     * @param aValue      value of the filter
      */
     public Filter(final String aName, final Operator anOperator,
-                  final T value) {
+                  final T aValue) {
         this.name = aName;
         this.operator = anOperator;
-        this.value = value;
+        this.value = aValue;
     }
 
     /**
@@ -48,13 +57,13 @@ public class Filter<T> {
      *
      * @param aName      name of the filter
      * @param anOperator operator of the filter
-     * @param value
+     * @param aValue value of the filter
      */
     public Filter(final String aName, final Operator anOperator,
-                  final T... value) {
+                  final T... aValue) {
         this.name = aName;
         this.operator = anOperator;
-        this.value = value;
+        this.value = aValue;
     }
 
     /**

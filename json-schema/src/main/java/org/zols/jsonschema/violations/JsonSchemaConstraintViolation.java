@@ -17,20 +17,25 @@ import java.util.Map;
  */
 public class JsonSchemaConstraintViolation implements ConstraintViolation {
 
+    /**
+     * declares variable message.
+     */
     private final String message;
-
+    /**
+     * declares variable jsonData.
+     */
     private final Map<String, Object> jsonData;
 
     /**
      * Instantiates a new Json schema constraint violation.
      *
-     * @param message  the message
-     * @param jsonData the json data
+     * @param theMessage  the message
+     * @param theJsonData the json data
      */
-    public JsonSchemaConstraintViolation(final String message,
-                                         final Map<String, Object> jsonData) {
-        this.message = message;
-        this.jsonData = jsonData;
+    public JsonSchemaConstraintViolation(final String theMessage,
+                               final Map<String, Object> theJsonData) {
+        this.message = theMessage;
+        this.jsonData = theJsonData;
     }
 
     @Override

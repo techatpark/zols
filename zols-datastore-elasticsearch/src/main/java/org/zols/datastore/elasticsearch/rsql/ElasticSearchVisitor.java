@@ -16,8 +16,8 @@ public class ElasticSearchVisitor
 
     public ElasticSearchVisitor(
             final ComparisonNodeInterpreter<QueryBuilder>
-                    comparisonNodeInterpreter) {
-        this.comparisonNodeInterpreter = comparisonNodeInterpreter;
+                    anComparisonNodeInterpreter) {
+        this.comparisonNodeInterpreter = anComparisonNodeInterpreter;
     }
 
     @Override

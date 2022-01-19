@@ -125,7 +125,7 @@ public class DocumentService {
      *
      * @param documentRepositoryName the path in which the directory will be
      *                               created
-     * @param filePath               the file path in which directory will be created
+     * @param filePath      the file path in which directory will be created
      */
     public void delete(final String documentRepositoryName,
                        final String filePath)

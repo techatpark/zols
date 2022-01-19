@@ -31,7 +31,7 @@ public class ConstraintViolationException extends DataStoreException {
      * @param <T>
      */
     public <T> ConstraintViolationException(final T anObject,
-                                            final Set<ConstraintViolation> anViolations) {
+                             final Set<ConstraintViolation> anViolations) {
         super("Bean validation failed for " + anObject.getClass().getName());
         this.object = anObject;
         this.violations = anViolations;

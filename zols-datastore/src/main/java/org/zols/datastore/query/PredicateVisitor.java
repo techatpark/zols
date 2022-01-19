@@ -181,7 +181,8 @@ public class PredicateVisitor<T>
         }
     }
 
-    protected boolean greaterThanOrEqualTo(final Object actual, final Object query) {
+    protected boolean greaterThanOrEqualTo(final Object actual,
+                                           final Object query) {
         if (query instanceof Number && actual instanceof Number) {
             return ((Number) actual).doubleValue()
                     >= ((Number) query).doubleValue();

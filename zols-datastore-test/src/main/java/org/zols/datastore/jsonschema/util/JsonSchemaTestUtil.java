@@ -26,16 +26,34 @@ import static org.zols.jsonschema.util.JsonUtil.asMap;
  */
 public class JsonSchemaTestUtil {
 
+    /**
+     * get a JsonSchema with given Object.
+     *
+     * @param schamaName Object to be Create
+     * @return created JsonSchema object
+     */
     public static JsonSchema getJsonSchema(final String schamaName) {
         return new EveritJsonSchema(schamaName,
                 JsonSchemaTestUtil::getJsonSchemaAsMap);
     }
 
+    /**
+     * get a JsonSchema as a map.
+     *
+     * @param dataName the dataName
+     * @return  JsonSchema data
+     */
     public static Map<String, Object> getJsonSchemaAsMap(
             final String dataName) {
         return asMap(getJsonSchemaAsText(dataName));
     }
 
+    /**
+     * Get a JsonSchema as a Text.
+     *
+     * @param schamaName Object to be Create
+     * @return  JsonSchema object as Text
+     */
     public static String getJsonSchemaAsText(final String schamaName) {
         String schemaContent = null;
         try {
@@ -48,13 +66,19 @@ public class JsonSchemaTestUtil {
         return schemaContent;
     }
 
+    /**
+     * Get a JsonSData as a Text.
+     *
+     * @param dataName Object to be Create
+     * @return  JsonSchema object as Text
+     */
     public static String getJsonDataAsText(final String dataName) {
         String schemaContent = null;
         try {
 
             schemaContent =
-                    getFile("json-schema/src/test/resources/jsondata/" +
-                            dataName + ".json");
+                    getFile("json-schema/src/test/resources/jsondata/"
+                            + dataName + ".json");
         } catch (IOException ex) {
             Logger.getLogger(JsonSchemaTestUtil.class.getName())
                     .log(Level.SEVERE, null, ex);
@@ -62,6 +86,12 @@ public class JsonSchemaTestUtil {
         return schemaContent;
     }
 
+    /**
+     * Sample JsonSchema.
+     *
+     * @param dataName Object to be Create
+     * @return  JsonSchema object as Text
+     */
     public static Map<String, Object> sampleJson(final String dataName) {
         return asMap(getJsonDataAsText(dataName));
     }

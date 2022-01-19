@@ -15,7 +15,13 @@ import java.util.Map;
 
 public class SpringAggregatedResults {
 
+    /**
+     * declares variable list of buckets.
+     */
     private final List<Map<String, Object>> buckets;
+    /**
+     * declares variable page.
+     */
     private final Page<Map<String, Object>> page;
 
     public SpringAggregatedResults(final AggregatedResults aggregatedResults,
@@ -26,10 +32,20 @@ public class SpringAggregatedResults {
                 pageable, aggregatedResults.getPage().getTotal());
     }
 
+    /**
+     * gets the buckets.
+     *
+     * @return buckets
+     */
     public List<Map<String, Object>> getBuckets() {
         return buckets;
     }
 
+    /**
+     * gets the page.
+     *
+     * @return page
+     */
     public Page<Map<String, Object>> getPage() {
         return page;
     }

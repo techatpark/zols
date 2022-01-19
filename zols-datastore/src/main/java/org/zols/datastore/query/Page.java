@@ -14,11 +14,31 @@ import java.util.Objects;
  */
 public class Page<T> {
 
+    /**
+     * declares variable pageNumber.
+     */
     private final Integer pageNumber;
+    /**
+     * declares variable pageSize.
+     */
     private final Integer pageSize;
+    /**
+     * declares variable total.
+     */
     private final Long total;
+    /**
+     * declares variable content.
+     */
     private final List<T> content;
 
+    /**
+     * Instantiates a new Page.
+     *
+     * @param thePageNumber the PageNumber
+     * @param thePageSize the PageSize
+     * @param theTotal the Total
+     * @param theContent the Content
+     */
     public Page(final Integer thePageNumber, final Integer thePageSize,
                 final Long theTotal,
                 final List<T> theContent) {
@@ -28,18 +48,38 @@ public class Page<T> {
         this.content = theContent;
     }
 
+    /**
+     * gets the pageNumber.
+     *
+     * @return pageNumber
+     */
     public Integer getPageNumber() {
         return pageNumber;
     }
 
+    /**
+     * gets the pageSize.
+     *
+     * @return pageSize
+     */
     public Integer getPageSize() {
         return pageSize;
     }
 
+    /**
+     * gets the total.
+     *
+     * @return total
+     */
     public Long getTotal() {
         return total;
     }
 
+    /**
+     * gets the content.
+     *
+     * @return content
+     */
     public List<T> getContent() {
         return content;
     }

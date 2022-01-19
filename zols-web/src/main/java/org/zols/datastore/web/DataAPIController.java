@@ -82,7 +82,8 @@ public class DataAPIController {
      */
     @RequestMapping(value = "/{idname}/{id}", method = PUT)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void update(@PathVariable(value = "schemaId") final String schemaName,
+    public void update(@PathVariable(
+                              value = "schemaId") final String schemaName,
                        @PathVariable(value = "idname") final String idname,
                        @PathVariable(value = "id") final String id,
                        @RequestBody final Map<String, Object> jsonData,
@@ -102,7 +103,8 @@ public class DataAPIController {
      */
     @RequestMapping(value = "/{idname}/{id}", method = DELETE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable(value = "schemaId") final String schemaName,
+    public void delete(@PathVariable(
+                               value = "schemaId") final String schemaName,
                        @PathVariable(value = "idname") final String idname,
                        @PathVariable(value = "id") final String id)
             throws DataStoreException {
@@ -122,7 +124,8 @@ public class DataAPIController {
     @RequestMapping(method = GET)
     public Page<Map<String, Object>> list(
             @PathVariable(value = "schemaId") final String schemaName,
-            @RequestParam(value = "q", required = false) final String queryString,
+            @RequestParam(
+                    value = "q", required = false) final String queryString,
             final Pageable pageable, final Locale loc)
             throws DataStoreException {
         LOGGER.info("Getting Data for {}", schemaName);

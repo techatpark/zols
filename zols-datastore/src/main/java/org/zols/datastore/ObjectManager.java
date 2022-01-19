@@ -26,24 +26,53 @@ import static org.zols.jsonschema.util.JsonUtil.asMap;
  */
 public final class ObjectManager<T> {
 
+    /**
+     * declares variable dataStore.
+     */
     private final DataStore dataStore;
+    /**
+     * declares variable validator.
+     */
     private final Validator validator;
-
+    /**
+     * declares variable clazz .
+     */
     private final Class<T> clazz;
+    /**
+     * declares variable jsonSchema.
+     */
     private final JsonSchema jsonSchema;
 
-    public ObjectManager(final Class<T> clazz, final DataStore dataStore) {
-        this.clazz = clazz;
+    /**
+     * Instantiates a new ObjectManager.
+     *
+     * @param anClazz an clazz
+     * @param anDataStore an dataStore
+     */
+    public ObjectManager(final Class<T> anClazz, final DataStore anDataStore) {
+        this.clazz = anClazz;
         this.jsonSchema = getJsonSchema(clazz);
-        this.dataStore = dataStore;
+        this.dataStore = anDataStore;
         this.validator =
                 Validation.buildDefaultValidatorFactory().getValidator();
     }
 
+    /**
+     * Create object.
+     *
+     * @param object  object
+     * @return object
+     */
     public T create(final T object) throws DataStoreException {
         return create(object, null);
     }
-
+    /**
+     * Create an object.
+     *
+     * @param object T
+     * @param locale  the locale
+     * @return createdObject
+     */
     public T create(final T object, final Locale locale)
             throws DataStoreException {
         T createdObject = null;
@@ -69,7 +98,13 @@ public final class ObjectManager<T> {
         }
         return createdObject;
     }
-
+    /**
+     * Read the object.
+     *
+     * @param locale the locale
+     * @param idValues  the idValues
+     * @return the optional empty
+     */
     public Optional<T> read(final Locale locale, final SimpleEntry... idValues)
             throws DataStoreException {
 
@@ -83,16 +118,36 @@ public final class ObjectManager<T> {
                 asObject(clazz, jsonSchema.delocalizeData(dataAsMap, locale)));
     }
 
+    /**
+     * Read the object.
+     *
+     * @param idValues  the idValues
+     * @return the idValue
+     */
     public Optional<T> read(final AbstractMap.SimpleEntry... idValues)
             throws DataStoreException {
         return read(null, idValues);
     }
 
+    /**
+     * Update the object.
+     *
+     * @param object the object
+     * @param idValues  the idValues
+     * @return the optional object
+     */
     public T update(final T object, final SimpleEntry... idValues)
             throws DataStoreException {
         return update(object, null, idValues);
     }
 
+    /**
+     * update the object.
+     * @param object the object
+     * @param locale the locale
+     * @param idValues  the idValues
+     * @return the update object
+     */
     public T update(final T object, final Locale locale,
                     final SimpleEntry... idValues)
             throws DataStoreException {
@@ -123,38 +178,86 @@ public final class ObjectManager<T> {
         return updatedObject;
     }
 
+    /**
+     * delete the object.
+     *
+     * @return the jsonSchema
+     */
     public boolean delete() throws DataStoreException {
         return dataStore.delete(jsonSchema);
     }
 
+    /**
+     * delete the object.
+     *
+     * @param idValues the idValue
+     * @return the jsonSchema
+     */
     public boolean delete(final AbstractMap.SimpleEntry... idValues)
             throws DataStoreException {
         return dataStore.delete(jsonSchema, idValues);
     }
 
+    /**
+     * delete the object.
+     *
+     * @param query the query
+     * @return the jsonSchema
+     */
     public boolean delete(final Condition<MapQuery> query)
             throws DataStoreException {
         return dataStore.delete(jsonSchema, query);
     }
 
+    /**
+     * List the object.
+     *
+     * @param query the query
+     * @param locale the locale
+     * @return the jsonSchema
+     */
     public List<T> list(final Condition<MapQuery> query, final Locale locale)
             throws DataStoreException {
         return getObjects(dataStore.list(jsonSchema, query), locale);
     }
 
+    /**
+     * List the object.
+     *
+     * @return the list
+     */
     public List<T> list() throws DataStoreException {
         return list((Locale) null);
     }
 
+    /**
+     * List the object.
+     *
+     * @param locale the locale
+     * @return the list of  query
+     */
     public List<T> list(final Locale locale) throws DataStoreException {
         return list(null, locale);
     }
 
+    /**
+     * List the object.
+     *
+     * @param query the query
+     * @return the list of query
+     */
     public List<T> list(final Condition<MapQuery> query)
             throws DataStoreException {
         return list(query, null);
     }
 
+    /**
+     * Gets the object.
+     *
+     * @param maps the list
+     * @param locale the locale
+     * @return the maps
+     */
     private List<T> getObjects(final List<Map<String, Object>> maps,
                                final Locale locale) {
         return maps == null ? null : maps.parallelStream().map(dataAsMap
@@ -163,11 +266,26 @@ public final class ObjectManager<T> {
         ).collect(toList());
     }
 
+    /**
+     * List the object page.
+     *
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return the list of page
+     */
     public Page<T> list(final Integer pageNumber, final Integer pageSize)
             throws DataStoreException {
         return list(null, null, pageNumber, pageSize);
     }
 
+    /**
+     * List the object page.
+     *
+     * @param locale the locale
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return the list of page
+     */
     public Page<T> list(final Locale locale, final Integer pageNumber,
                         final Integer pageSize)
             throws DataStoreException {
@@ -175,12 +293,29 @@ public final class ObjectManager<T> {
         return list(null, locale, pageNumber, pageSize);
     }
 
+    /**
+     * List the object page.
+     *
+     * @param query the query
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return the list of page
+     */
     public Page<T> list(final Condition<MapQuery> query,
                         final Integer pageNumber,
                         final Integer pageSize) throws DataStoreException {
         return list(query, null, pageNumber, pageSize);
     }
 
+    /**
+     * List the object page.
+     *
+     * @param locale the locale
+     * @param query the query
+     * @param pageNumber the pageNumber
+     * @param pageSize the pageSize
+     * @return the list of page
+     */
     public Page<T> list(final Condition<MapQuery> query, final Locale locale,
                         final Integer pageNumber, final Integer pageSize)
             throws DataStoreException {

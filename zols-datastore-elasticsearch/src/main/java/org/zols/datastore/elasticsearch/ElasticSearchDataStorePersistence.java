@@ -99,7 +99,7 @@ public class ElasticSearchDataStorePersistence
      * @param anClient    an client
      */
     public ElasticSearchDataStorePersistence(final String anIndexName,
-                                             final RestHighLevelClient anClient) {
+                                  final RestHighLevelClient anClient) {
         this.indexName = anIndexName;
         this.client = anClient;
     }
@@ -155,7 +155,7 @@ public class ElasticSearchDataStorePersistence
      */
     @Override
     public Map<String, Object> read(final JsonSchema jsonSchema,
-                                    final SimpleEntry<String, Object>... idValues)
+                        final SimpleEntry<String, Object>... idValues)
             throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
@@ -225,8 +225,8 @@ public class ElasticSearchDataStorePersistence
      */
     @Override
     public boolean updatePartially(final JsonSchema jsonSchema,
-                                   final Map<String, Object> validatedData,
-                                   final SimpleEntry<String, Object>... idValues)
+                                  final Map<String, Object> validatedData,
+                                  final SimpleEntry<String, Object>... idValues)
             throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
         String ids = jsonSchema.getIdValuesAsString(idValues);
@@ -404,7 +404,8 @@ public class ElasticSearchDataStorePersistence
      */
     @Override
     public Page<Map<String, Object>> list(final JsonSchema jsonSchema,
-                                          final Node queryNode, final Integer pageNumber,
+                                          final Node queryNode,
+                                          final Integer pageNumber,
                                           final Integer pageSize)
             throws DataStoreException {
         String typeName = getTypeName(jsonSchema);
@@ -568,7 +569,7 @@ public class ElasticSearchDataStorePersistence
                         Object title =
                                 ((Map<String, Object>) ((Map<String, Object>)
                                         aggregations.get(
-                                                entrySet.getKey())).get("meta")).get(
+                                           entrySet.getKey())).get("meta")).get(
                                         "title");
                         if (aggregationName.startsWith("min_")) {
                             bucket.put("name",
@@ -683,7 +684,7 @@ public class ElasticSearchDataStorePersistence
      * @param searchRequestBuilder the searchRequestBuilder
      */
     private void addAggregations(final JsonSchema jsonSchema,
-                                 final SearchSourceBuilder searchRequestBuilder) {
+                        final SearchSourceBuilder searchRequestBuilder) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("title", "Types");
         searchRequestBuilder.aggregation(
@@ -771,10 +772,10 @@ public class ElasticSearchDataStorePersistence
     /**
      * refresh the schema with index.
      *
-     * @param indexName the indexName
+     * @param anIndexName the indexName
      */
-    private void refreshIndex(final String indexName) throws IOException {
-        RefreshRequest request = new RefreshRequest(indexName);
+    private void refreshIndex(final String anIndexName) throws IOException {
+        RefreshRequest request = new RefreshRequest(anIndexName);
         client.indices().refresh(request, RequestOptions.DEFAULT);
     }
 
