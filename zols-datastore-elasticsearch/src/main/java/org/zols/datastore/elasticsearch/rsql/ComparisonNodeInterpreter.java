@@ -13,6 +13,7 @@ public interface ComparisonNodeInterpreter<T> {
     /**
      * intercept Node.
      * @param comparisonNode the comparison Node
+     * @return node
      */
     T interpret(ComparisonNode comparisonNode);
 }

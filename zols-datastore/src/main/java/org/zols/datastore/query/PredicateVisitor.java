@@ -274,8 +274,8 @@ public class PredicateVisitor<T>
     }
 
     private boolean resolveMultiField(final Object root, final String field,
-                                      final ComparisonNode node,
-                                      final BiPredicate<Object, Collection<?>> func) {
+                              final ComparisonNode node,
+                              final BiPredicate<Object, Collection<?>> func) {
         if (root == null || node.getField() == null) {
             return func.test(null, node.getValues());
         } else {
@@ -290,8 +290,8 @@ public class PredicateVisitor<T>
     }
 
     private boolean recurseMulti(final Object root, final String field,
-                                 final ComparisonNode node,
-                                 final BiPredicate<Object, Collection<?>> func) {
+                               final ComparisonNode node,
+                               final BiPredicate<Object, Collection<?>> func) {
 
         if (root.getClass().isArray()) {
             return Arrays.stream((Object[]) root)

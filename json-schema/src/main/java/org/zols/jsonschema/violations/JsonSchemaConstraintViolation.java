@@ -38,26 +38,50 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         this.jsonData = theJsonData;
     }
 
+    /**
+     * gets the message.
+     *
+     * @return message
+     */
     @Override
     public String getMessage() {
         return message;
     }
 
+    /**
+     * gets the message template.
+     *
+     * @return message
+     */
     @Override
     public String getMessageTemplate() {
         return message;
     }
 
+    /**
+     * gets the jsonData.
+     *
+     * @return jsonData
+     */
     @Override
     public Object getRootBean() {
         return jsonData;
     }
 
+    /**
+     * gets the RootBean Class.
+     *
+     * @return map of class
+     */
     @Override
     public Class getRootBeanClass() {
         return Map.class;
     }
 
+    /**
+     * gets the LeafBean.
+     *
+     */
     @Override
     public Object getLeafBean() {
         throw new UnsupportedOperationException(
@@ -65,6 +89,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the ExecutableParameters of an Object.
+     */
     @Override
     public Object[] getExecutableParameters() {
         throw new UnsupportedOperationException(
@@ -72,6 +99,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the Executable ReturnValue of an Object.
+     */
     @Override
     public Object getExecutableReturnValue() {
         throw new UnsupportedOperationException(
@@ -79,6 +109,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the PropertyPath.
+     */
     @Override
     public Path getPropertyPath() {
         throw new UnsupportedOperationException(
@@ -86,6 +119,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the Invalid Value.
+     */
     @Override
     public Object getInvalidValue() {
         throw new UnsupportedOperationException(
@@ -93,6 +129,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the Constraint Descriptor.
+     */
     @Override
     public ConstraintDescriptor getConstraintDescriptor() {
         throw new UnsupportedOperationException(
@@ -100,6 +139,9 @@ public class JsonSchemaConstraintViolation implements ConstraintViolation {
         //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * gets the unwrap Object.
+     */
     @Override
     public Object unwrap(final Class type) {
         throw new UnsupportedOperationException(

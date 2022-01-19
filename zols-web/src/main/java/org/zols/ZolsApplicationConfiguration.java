@@ -16,12 +16,22 @@ import org.zols.datastore.elasticsearch.ElasticSearchDataStorePersistence;
 @Configuration
 public class ZolsApplicationConfiguration {
 
+    /**
+     * declares variable indexName.
+     */
     @Value("${spring.application.name}")
     private String indexName;
 
+    /**
+     * declares variable restHighLevelClient.
+     */
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    /**
+     * dataStore of an application.
+     * @return dataStore
+     */
     @Bean
     public DataStore dataStore() {
         return new DataStore(new ElasticSearchDataStorePersistence(indexName,

@@ -14,6 +14,9 @@ import java.util.HashMap;
 
 @Component
 public class TokenProvider {
+    /**
+     * Logger Facade.
+     */
     private static final Logger logger =
             LoggerFactory.getLogger(TokenProvider.class);
 

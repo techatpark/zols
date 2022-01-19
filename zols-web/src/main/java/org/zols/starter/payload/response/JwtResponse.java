@@ -123,7 +123,7 @@ public class JwtResponse {
     /**
      * Sets username.
      *
-     * @param anUsername an username
+     * @param anUsername username
      */
     public void setUsername(final String anUsername) {
         this.username = anUsername;

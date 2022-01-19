@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.zols.datastore.DataStoreException;
 import org.zols.starter.models.User;
 
 import java.util.Collection;
@@ -50,9 +49,10 @@ public class UserDetailsImpl implements UserDetails {
      * @param anPassword  password
      * @param anAuthorities an Authorities
      */
-    public UserDetailsImpl(final Long anId, final String aUsername, final String anEmail,
-                           final String anPassword,
-                           final Collection<? extends GrantedAuthority> anAuthorities) {
+    public UserDetailsImpl(final Long anId, final String aUsername,
+                                            final String anEmail,
+                                            final String anPassword,
+                final Collection<? extends GrantedAuthority> anAuthorities) {
         this.id = anId;
         this.username = aUsername;
         this.email = anEmail;

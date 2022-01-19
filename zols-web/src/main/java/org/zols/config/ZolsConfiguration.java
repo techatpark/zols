@@ -20,30 +20,48 @@ import org.zols.documents.service.DocumentService;
 @Configuration
 public class ZolsConfiguration implements WebMvcConfigurer {
 
+    /**
+     * dataStore.
+     */
     @Autowired
     private DataStore dataStore;
 
-
+    /**
+     * this is schemaService.
+     * @return new SchemaService of an dataStore
+     */
     @Bean
     SchemaService schemaService() {
         return new SchemaService(dataStore);
     }
-
+    /**
+     * this is dataService.
+     * @return new DataService of an dataStore
+     */
     @Bean
     DataService dataService() {
         return new DataService(dataStore);
     }
-
+    /**
+     * this is browseService.
+     * @return new BrowseService of an dataStore
+     */
     @Bean
     BrowseService browseService() {
         return new BrowseService(dataService(), dataStore);
     }
-
+    /**
+     * this is documentService.
+     * @return new documentRepositoryService of an dataStore
+     */
     @Bean
     DocumentService documentService() {
         return new DocumentService(documentRepositoryService());
     }
-
+    /**
+     * this is documentRepositoryService.
+     * @return new DocumentRepositoryService of an dataStore
+     */
     @Bean
     DocumentRepositoryService documentRepositoryService() {
         return new DocumentRepositoryService(dataStore);
