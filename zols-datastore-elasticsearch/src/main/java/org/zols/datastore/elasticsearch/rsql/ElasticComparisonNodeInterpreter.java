@@ -16,6 +16,9 @@ import static org.elasticsearch.index.query.QueryBuilders.wildcardQuery;
 public class ElasticComparisonNodeInterpreter
         implements ComparisonNodeInterpreter<QueryBuilder> {
 
+    /**
+     * declares variable WILDCARD_CHAR.
+     */
     private static final String WILDCARD_CHAR = "*";
 
     private static QueryBuilder createEqualQuery(
@@ -87,6 +90,10 @@ public class ElasticComparisonNodeInterpreter
         return comparisonNode.getArguments().get(0);
     }
 
+    /**
+     * @param comparisonNode the comparison Node
+     * @return Query
+     */
     @Override
     public QueryBuilder interpret(final ComparisonNode comparisonNode) {
         final ComparisonOperatorProxy operator =

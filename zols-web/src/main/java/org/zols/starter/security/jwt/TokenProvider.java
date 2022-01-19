@@ -1,6 +1,10 @@
 package org.zols.starter.security.jwt;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,12 +24,21 @@ public class TokenProvider {
     private static final Logger logger =
             LoggerFactory.getLogger(TokenProvider.class);
 
+    /**
+     * jwtSecret.
+     */
     @Value("${app.auth.tokenSecret}")
     private String jwtSecret;
-
+    /**
+     * jwtExpirationMs.
+     */
     @Value("${app.auth.tokenExpirationMsec}")
     private int jwtExpirationMs;
 
+    /**
+     * @param authentication
+     * @return generated JwtToken
+     */
     public String generateJwtToken(final Authentication authentication) {
 
         final Date now = new Date();
@@ -40,6 +53,10 @@ public class TokenProvider {
                 .signWith(tkey).compact();
     }
 
+    /**
+     * @param token
+     * @return UserNameFromJwtToken
+     */
     public String getUserNameFromJwtToken(final String token) {
         final SecretKey tkey = Keys.hmacShaKeyFor(jwtSecret.getBytes());
         final Claims claims = Jwts.parserBuilder().setSigningKey(tkey).build()
@@ -49,6 +66,10 @@ public class TokenProvider {
         return claims.getSubject();
     }
 
+    /**
+     * @param authToken
+     * @return boolean
+     */
     public boolean validateJwtToken(final String authToken) {
         try {
             final SecretKey tkey = Keys.hmacShaKeyFor(jwtSecret.getBytes());

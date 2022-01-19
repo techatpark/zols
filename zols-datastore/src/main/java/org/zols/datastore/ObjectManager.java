@@ -12,8 +12,13 @@ import org.zols.jsonschema.JsonSchema;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.util.*;
+import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 import static org.zols.datastore.util.MapUtil.asObject;

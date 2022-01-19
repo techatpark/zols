@@ -11,10 +11,18 @@ import org.zols.starter.repository.UserRepository;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
+    /**
+     * userRepository.
+     */
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
 
+    /**
+     * @param username
+     * @return user
+     * @throws UsernameNotFoundException
+     */
     @Override
     @Transactional
     public UserDetails loadUserByUsername(final String username)
@@ -26,6 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
+    /**
+     * @param entity the entity
+     * @param <S>
+     * @return user
+     */
     public <S extends User> S save(final S entity) {
         return userRepository.save(entity);
     }

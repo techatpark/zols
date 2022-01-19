@@ -10,10 +10,17 @@ package org.zols.datastore;
  */
 public class DataStoreException extends Exception {
 
+    /**
+     * @param message
+     */
     public DataStoreException(final String message) {
         super(message);
     }
 
+    /**
+     * @param message
+     * @param cause
+     */
     public DataStoreException(final String message, final Throwable cause) {
         super(message, cause);
     }

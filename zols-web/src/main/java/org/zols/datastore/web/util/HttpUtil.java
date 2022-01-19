@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
 
-import static org.zols.datastore.query.Filter.Operator.*;
+import static org.zols.datastore.query.Filter.Operator.EQUALS;
+import static org.zols.datastore.query.Filter.Operator.EXISTS_IN;
+import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
 
 /**
  *

@@ -7,13 +7,22 @@ package org.zols.datastore.util;
 
 import org.zols.jsonschema.util.JsonUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author sathish
  */
 public class MapUtil {
 
+    /**
+     * @param o the Object
+     * @param s the String
+     * @return value
+     */
     public static Object getFieldValue(final Map<String, Object> o,
                                        final String s) {
         if (s == null || o == null) {
@@ -34,6 +43,10 @@ public class MapUtil {
         return value;
     }
 
+    /**
+     * @param sourceMap the sourceMap
+     * @param elements the elements
+     */
     public static void deepRemove(final Map<String, Object> sourceMap,
                                   final String... elements) {
         if (elements != null && sourceMap != null) {
@@ -61,6 +74,12 @@ public class MapUtil {
 
     }
 
+    /**
+     * @param clazz
+     * @param dataAsMap
+     * @param <T>
+     * @return json Object
+     */
     public static <T> T asObject(final Class<T> clazz,
                                  final Map<String, Object> dataAsMap) {
         if (dataAsMap == null) {

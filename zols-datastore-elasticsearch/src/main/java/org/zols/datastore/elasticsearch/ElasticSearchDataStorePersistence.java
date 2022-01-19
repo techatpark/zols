@@ -30,7 +30,11 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
-import org.elasticsearch.client.*;
+import org.elasticsearch.client.GetAliasesResponse;
+import org.elasticsearch.client.Request;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.cluster.metadata.AliasMetadata;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -53,10 +57,17 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
-import static org.elasticsearch.action.DocWriteResponse.Result.*;
+import static org.elasticsearch.action.DocWriteResponse.Result.CREATED;
+import static org.elasticsearch.action.DocWriteResponse.Result.DELETED;
+import static org.elasticsearch.action.DocWriteResponse.Result.UPDATED;
 import static org.elasticsearch.index.query.QueryBuilders.termQuery;
 import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
 import static org.slf4j.LoggerFactory.getLogger;
@@ -69,6 +80,9 @@ import static org.zols.jsonschema.util.JsonUtil.asMap;
 public class ElasticSearchDataStorePersistence
         implements BrowsableDataStorePersistence {
 
+    /**
+     * Logger Facade.
+     */
     private static final org.slf4j.Logger LOGGER =
             getLogger(ElasticSearchDataStorePersistence.class);
     /**
@@ -84,6 +98,9 @@ public class ElasticSearchDataStorePersistence
      */
     private DataStore dataStore;
 
+    /**
+     * ElasticSearchDataStorePersistence.
+     */
     public ElasticSearchDataStorePersistence() {
         this.client = new RestHighLevelClient(
                 RestClient.builder(

@@ -15,12 +15,22 @@ import org.zols.datastore.query.AggregatedResults;
  */
 public class SpringConverter {
 
+    /**
+     * @param page
+     * @param pageable
+     * @return page
+     */
     public static Page getPage(final org.zols.datastore.query.Page page,
                                final Pageable pageable) {
         return (page == null) ? null
                 : new PageImpl<>(page.getContent(), pageable, page.getTotal());
     }
 
+    /**
+     * @param aggregatedResults
+     * @param pageable
+     * @return aggregatedResults
+     */
     public static SpringAggregatedResults getAggregatedResults(
             final AggregatedResults aggregatedResults,
             final Pageable pageable) {

@@ -18,6 +18,9 @@ import static org.zols.datastore.util.MapUtil.getFieldValue;
  */
 public class MapUtilTest {
 
+    /**
+     * testSomeMethod
+     */
     @Test
     public void testSomeMethod() {
         Map<String, Object> computer = sampleJson("computer_full");

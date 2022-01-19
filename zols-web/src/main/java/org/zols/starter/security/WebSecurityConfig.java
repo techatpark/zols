@@ -35,12 +35,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * userDetailsService.
      */
     @Autowired
-    UserDetailsServiceImpl userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
     /**
      * roleRepository.
      */
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     /**
      * unauthorizedHandler.
      */
@@ -55,6 +55,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AuthTokenFilter();
     }
 
+    /**
+     * @param authenticationManagerBuilder the authenticationManagerBuilder
+     * @throws Exception
+     */
     @Override
     public void configure(
             final AuthenticationManagerBuilder authenticationManagerBuilder)
@@ -64,6 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         intialize();
     }
 
+    /**
+     * intialize.
+     */
     void intialize() {
         Role role = new Role();
         role.setName(ERole.valueOf("ROLE_USER"));
@@ -84,17 +91,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    /**
+     * @return authenticationManagerBean
+     * @throws Exception
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * passwordEncoder.
+     * @return BCrypt Password Encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * @param http the http
+     * @throws Exception
+     */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()

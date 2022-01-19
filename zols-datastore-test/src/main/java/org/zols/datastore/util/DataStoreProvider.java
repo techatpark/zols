@@ -18,6 +18,10 @@ import java.util.logging.Logger;
  * @author sathish
  */
 public interface DataStoreProvider {
+    /**
+     * get the DataStore.
+     * @return DataStore
+     */
     static DataStore getDataStore() {
         Reflections reflections = new Reflections("org.zols.datastore");
 
@@ -35,5 +39,8 @@ public interface DataStoreProvider {
         return null;
     }
 
+    /**
+     * @return DataStore.
+     */
     DataStore buildDataStore();
 }

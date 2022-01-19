@@ -9,13 +9,25 @@ package org.zols;
 
 import org.springframework.stereotype.Component;
 
-import javax.servlet.*;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
 public class SimpleCORSFilter implements Filter {
 
+    /**
+     * @param req the request
+     * @param res the response
+     * @param chain the chain
+     * @throws IOException
+     * @throws ServletException
+     */
     public void doFilter(final ServletRequest req, final ServletResponse res,
                          final FilterChain chain)
             throws IOException, ServletException {
@@ -29,9 +41,15 @@ public class SimpleCORSFilter implements Filter {
         chain.doFilter(req, res);
     }
 
+    /**
+     * @param filterConfig the filterConfig
+     */
     public void init(final FilterConfig filterConfig) {
     }
 
+    /**
+     * destroy.
+     */
     public void destroy() {
     }
 

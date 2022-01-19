@@ -9,7 +9,11 @@ import org.zols.datastore.query.Page;
 import org.zols.jsonschema.JsonSchema;
 
 import java.util.AbstractMap.SimpleEntry;
-import java.util.*;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import static java.util.stream.Collectors.toList;
 

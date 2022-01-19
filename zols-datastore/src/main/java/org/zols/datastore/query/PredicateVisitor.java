@@ -27,18 +27,30 @@ import static org.zols.datastore.util.MapUtil.getFieldValue;
 public class PredicateVisitor<T>
         extends AbstractVoidContextNodeVisitor<Predicate<T>> {
 
+    /**
+     * @param node
+     * @return
+     */
     @Override
     protected Predicate<T> visit(final AndNode node) {
         return (t) -> node.getChildren().stream().map(this::visitAny)
                 .allMatch(p -> p.test(t));
     }
 
+    /**
+     * @param node the or node
+     * @return node
+     */
     @Override
     protected Predicate<T> visit(final OrNode node) {
         return (t) -> node.getChildren().stream().map(this::visitAny)
                 .anyMatch(p -> p.test(t));
     }
 
+    /**
+     * @param node the node
+     * @return node
+     */
     @Override
     protected Predicate<T> visit(final ComparisonNode node) {
 
@@ -79,6 +91,11 @@ public class PredicateVisitor<T>
                         + ".");
     }
 
+    /**
+     * @param actual the actual
+     * @param func the func
+     * @return boolean
+     */
     protected boolean subquery(final Object actual,
                                final Predicate<Object> func) {
         if (actual != null && actual.getClass().isArray()) {
@@ -117,6 +134,11 @@ public class PredicateVisitor<T>
         return false;
     }
 
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return query equals or not
+     */
     protected boolean equality(final Object actual, final Object query) {
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
@@ -130,6 +152,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return query of actual
+     */
     protected boolean inequality(final Object actual, final Object query) {
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
@@ -143,6 +170,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual  the actual
+     * @param queries the queries
+     * @return queries
+     */
     protected boolean nin(final Object actual, final Collection<?> queries) {
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
@@ -156,6 +188,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual the actual
+     * @param queries the queries
+     * @return queries contains actual
+     */
     protected boolean in(final Object actual, final Collection<?> queries) {
         if (actual != null && actual.getClass().isArray()) {
             Object[] values = (Object[]) actual;
@@ -168,7 +205,11 @@ public class PredicateVisitor<T>
             return queries.contains(actual);
         }
     }
-
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return boolean
+     */
     protected boolean greaterThan(final Object actual, final Object query) {
         if (query instanceof Number && actual instanceof Number) {
             return ((Number) actual).doubleValue()
@@ -181,6 +222,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return boolean
+     */
     protected boolean greaterThanOrEqualTo(final Object actual,
                                            final Object query) {
         if (query instanceof Number && actual instanceof Number) {
@@ -194,6 +240,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return boolean
+     */
     protected boolean lessThan(final Object actual, final Object query) {
         if (query instanceof Number && actual instanceof Number) {
             return ((Number) actual).doubleValue()
@@ -205,7 +256,11 @@ public class PredicateVisitor<T>
                     "Incompatible types provided.");
         }
     }
-
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return boolean
+     */
     protected boolean lessThanOrEqualTo(final Object actual,
                                         final Object query) {
         if (query instanceof Number && actual instanceof Number) {
@@ -218,27 +273,48 @@ public class PredicateVisitor<T>
                     "Incompatible types provided.");
         }
     }
-
+    /**
+     * @param node the node
+     * @return node
+     */
     private Predicate<T> doesNotExist(final ComparisonNode node) {
         return t -> resolveSingleField(t, node.getField().asKey(), node,
                 (one, two) -> Objects.isNull(one));
     }
-
+    /**
+     * @param node the node
+     * @return node
+     */
     private Predicate<T> exists(final ComparisonNode node) {
         return t -> resolveSingleField(t, node.getField().asKey(), node,
                 (one, two) -> Objects.nonNull(one));
     }
-
+    /**
+     * @param node the node
+     * @param func the func
+     * @return resolveMultiField
+     */
     private Predicate<T> single(final ComparisonNode node,
                                 final BiPredicate<Object, Object> func) {
         return t -> resolveSingleField(t, node.getField().asKey(), node, func);
     }
 
+    /**
+     * @param node the node
+     * @param func the func
+     * @return resolveMultiField
+     */
     private Predicate<T> multi(final ComparisonNode node,
                                final BiPredicate<Object, Collection<?>> func) {
         return t -> resolveMultiField(t, node.getField().asKey(), node, func);
     }
-
+    /**
+     * @param root the root
+     * @param field the field
+     * @param node the node
+     * @param func the func
+     * @return func test
+     */
     private boolean resolveSingleField(final Object root, final String field,
                                        final ComparisonNode node,
                                        final BiPredicate<Object, Object> func) {
@@ -255,7 +331,13 @@ public class PredicateVisitor<T>
             }
         }
     }
-
+    /**
+     * @param root the root
+     * @param field the field
+     * @param node the node
+     * @param func the func
+     * @return resolveSingleField
+     */
     private boolean recurseSingle(final Object root, final String field,
                                   final ComparisonNode node,
                                   final BiPredicate<Object, Object> func) {
@@ -273,6 +355,13 @@ public class PredicateVisitor<T>
         return resolveSingleField(root, field, node, func);
     }
 
+    /**
+     * @param root the root
+     * @param field the field
+     * @param node the node
+     * @param func the func
+     * @return recurseMulti
+     */
     private boolean resolveMultiField(final Object root, final String field,
                               final ComparisonNode node,
                               final BiPredicate<Object, Collection<?>> func) {
@@ -289,6 +378,13 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param root the root
+     * @param field the field
+     * @param node the node
+     * @param func the func
+     * @return resolveMultiField
+     */
     private boolean recurseMulti(final Object root, final String field,
                                final ComparisonNode node,
                                final BiPredicate<Object, Collection<?>> func) {
@@ -306,6 +402,11 @@ public class PredicateVisitor<T>
         return resolveMultiField(root, field, node, func);
     }
 
+    /**
+     * @param o the Object
+     * @param s the String
+     * @return read fields
+     */
     private Object getFieldValueFromString(final Object o, final String s) {
 
         if (o instanceof Map) {

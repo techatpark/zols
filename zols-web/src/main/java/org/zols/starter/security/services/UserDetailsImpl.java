@@ -164,10 +164,10 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
+
     /**
-     * Object says that equality is the same as object identity.
-     *
-     * @return boolean
+     * @param o
+     * @return
      */
     @Override
     public boolean equals(final Object o) {
