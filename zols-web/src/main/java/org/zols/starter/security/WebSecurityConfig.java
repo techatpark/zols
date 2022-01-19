@@ -31,15 +31,25 @@ import java.util.Set;
         // jsr250Enabled = true,
         prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    /**
+     * userDetailsService.
+     */
     @Autowired
     UserDetailsServiceImpl userDetailsService;
-
+    /**
+     * roleRepository.
+     */
     @Autowired
     RoleRepository roleRepository;
-
+    /**
+     * unauthorizedHandler.
+     */
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
-
+    /**
+     * authenticationJwtTokenFilter.
+     * @return new AuthTokenFilter
+     */
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
