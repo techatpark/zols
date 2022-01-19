@@ -8,8 +8,11 @@ package org.zols.datastore.elasticsearch.rsql;
 import cz.jirutka.rsql.parser.ast.ComparisonNode;
 import org.elasticsearch.index.query.QueryBuilder;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
-
+import static org.elasticsearch.index.query.QueryBuilders.boolQuery;
+import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termQuery;
+import static org.elasticsearch.index.query.QueryBuilders.termsQuery;
+import static org.elasticsearch.index.query.QueryBuilders.wildcardQuery;
 public class ElasticComparisonNodeInterpreter
         implements ComparisonNodeInterpreter<QueryBuilder> {
 

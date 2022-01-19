@@ -8,8 +8,19 @@ import java.util.Optional;
 
 @Repository
 public interface WorkspaceRepository extends JpaRepository<Workspace, Long> {
+    /**
+     * Finding the workspace by Name.
+     *
+     * @param workspaceName the workspaceName
+     * @return workspaceName
+     */
     Optional<Workspace> findByWorkspaceName(String workspaceName);
-
+    /**
+     * Exists the workspace by Name.
+     *
+     * @param workspaceName the workspaceName
+     * @return workspaceName
+     */
     Boolean existsByWorkspaceName(String workspaceName);
 
 }

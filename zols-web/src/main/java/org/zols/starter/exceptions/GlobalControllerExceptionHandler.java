@@ -1,4 +1,8 @@
+/**
+ * package.info.
+ */
 package org.zols.starter.exceptions;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +53,9 @@ public class GlobalControllerExceptionHandler
         logger.error(errorMessage);
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
     }
-
+    /**
+     * handleConflict.
+     */
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void handleConflict() {

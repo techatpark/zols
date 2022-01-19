@@ -165,7 +165,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     /**
-     * Check the user details equals.
+     * Object says that equality is the same as object identity.
      *
      * @return boolean
      */

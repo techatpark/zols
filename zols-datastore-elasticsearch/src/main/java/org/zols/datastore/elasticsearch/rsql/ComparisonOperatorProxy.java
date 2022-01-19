@@ -54,6 +54,9 @@ public enum ComparisonOperatorProxy {
      */
     NOT_IN(RSQLOperators.NOT_IN);
 
+    /**
+     * Cache.
+     */
     private static final Map<ComparisonOperator, ComparisonOperatorProxy> CACHE
             = Collections.synchronizedMap(
             new HashMap<ComparisonOperator, ComparisonOperatorProxy>());
@@ -64,17 +67,34 @@ public enum ComparisonOperatorProxy {
         }
     }
 
+    /**
+     * declares variable operator.
+     */
     private final ComparisonOperator operator;
 
+    /**
+     * Instantiates a new ComparisonOperatorProxy.
+     *
+     * @param anOperator an Operator
+     */
     ComparisonOperatorProxy(final ComparisonOperator anOperator) {
         this.operator = anOperator;
     }
 
+    /**
+     * asEnum.
+     * @param operator the operator
+     * @return  cache
+     */
     public static ComparisonOperatorProxy asEnum(final
                                                  ComparisonOperator operator) {
         return CACHE.get(operator);
     }
-
+    /**
+     * gets the operator.
+     *
+     * @return operator
+     */
     public ComparisonOperator getOperator() {
         return this.operator;
     }

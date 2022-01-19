@@ -1,4 +1,9 @@
+/**
+ * package.info.
+ */
+
 package org.zols.starter.models;
+
 
 import javax.persistence.*;
 
@@ -21,7 +26,7 @@ public class Role {
     private ERole name;
 
     /**
-     * Method the Role.
+     * Role.
      *
      */
     public Role() {

@@ -121,6 +121,11 @@ public class JsonSchemaTestUtil {
 
     }
 
+    /**
+     * Creates all JsonSchema.
+     *
+     * @param dataStore Object to be Create
+     */
     public static void createAllSchema(final DataStore dataStore)
             throws DataStoreException {
         dataStore.getSchemaManager().create(getJsonSchemaAsMap("geo"));
@@ -136,6 +141,12 @@ public class JsonSchemaTestUtil {
         dataStore.getSchemaManager().create(getJsonSchemaAsMap("mobile"));
     }
 
+    /**
+     * deletes all JsonSchema data.
+     *
+     * @param dataStore Object to be Create
+     * @throws DataStoreException
+     */
     public static void deleteAllData(final DataStore dataStore)
             throws DataStoreException {
 
@@ -146,7 +157,12 @@ public class JsonSchemaTestUtil {
         dataStore.delete("geo");
         dataStore.delete("seller");
     }
-
+    /**
+     * deletes all JsonSchema.
+     *
+     * @param dataStore Object to be Create
+     * @throws DataStoreException
+     */
     public static void deleteAllSchema(final DataStore dataStore)
             throws DataStoreException {
 
@@ -169,7 +185,12 @@ public class JsonSchemaTestUtil {
 
     }
 
-
+    /**
+     * creates all JsonSchema data.
+     *
+     * @param dataStore Object to be Create
+     * @throws DataStoreException
+     */
     public static void createAllData(final DataStore dataStore)
             throws DataStoreException {
         dataStore.create("computer", sampleJson("computer"));

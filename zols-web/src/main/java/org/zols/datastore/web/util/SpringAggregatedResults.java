@@ -5,6 +5,7 @@
  */
 package org.zols.datastore.web.util;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,10 @@ public class SpringAggregatedResults {
      */
     private final Page<Map<String, Object>> page;
 
+    /**
+     * @param pageable the pageable
+     * @param aggregatedResults the aggregatedResults
+     */
     public SpringAggregatedResults(final AggregatedResults aggregatedResults,
                                    final Pageable pageable) {
         buckets = aggregatedResults.getBuckets();
