@@ -3,22 +3,25 @@
  */
 package org.zols;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 
-import static org.springframework.boot.SpringApplication.run;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 
 /**
  * The type Application.
  */
 @SpringBootApplication
-public final class Application {
+public class Application {
 
     /**
-     * Application default constructor.
+     * Logger Facade.
      */
-    private Application() {
-    }
+    private final Logger logger =
+            LoggerFactory.getLogger(Application.class);
 
     /**
      * Main method of this application.
@@ -26,6 +29,16 @@ public final class Application {
      * @param args the args
      */
     public static void main(final String[] args) {
-        ApplicationContext ctx = run(Application.class, args);
+        SpringApplication.run(Application.class, args);
+    }
+
+    /**
+     * This will be invoked one the application is started.
+     * @param event
+     */
+    @EventListener
+    public void onApplicationEvent(final ContextRefreshedEvent event) {
+        logger.info("Application Started", event.getTimestamp());
     }
 }
+
