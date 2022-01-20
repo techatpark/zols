@@ -65,7 +65,7 @@ public class EveritJsonSchema extends JsonSchema {
                                     schemaSupplier) {
         super(schemaId, schemaSupplier);
         schemaStreams = new HashMap<>();
-        schema = SchemaLoader.load(new JSONObject(schemaMap),
+        schema = SchemaLoader.load(new JSONObject(getSchemaMap()),
                 this::getSchemaInputStream);
     }
 
@@ -74,7 +74,7 @@ public class EveritJsonSchema extends JsonSchema {
         if (inputStream == null) {
             inputStream = new ByteArrayInputStream(
                     new JSONObject(
-                            schemaSupplier.apply(schemaId)).toString()
+                            getSchemaSupplier().apply(schemaId)).toString()
                             .getBytes());
             schemaStreams.put(schemaId, inputStream);
         }

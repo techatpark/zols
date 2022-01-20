@@ -166,8 +166,9 @@ public class UserDetailsImpl implements UserDetails {
 
 
     /**
+     * checks equality.
      * @param o
-     * @return
+     * @return flag
      */
     @Override
     public boolean equals(final Object o) {
@@ -179,5 +180,14 @@ public class UserDetailsImpl implements UserDetails {
         }
         UserDetailsImpl user = (UserDetailsImpl) o;
         return Objects.equals(id, user.id);
+    }
+
+    /**
+     * hash code.
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, username, email, password, authorities);
     }
 }

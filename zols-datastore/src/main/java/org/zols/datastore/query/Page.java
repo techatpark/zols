@@ -107,6 +107,11 @@ public class Page<T> {
         return hash;
     }
 
+    /**
+     * Chcks equality.
+     * @param obj
+     * @return flag
+     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

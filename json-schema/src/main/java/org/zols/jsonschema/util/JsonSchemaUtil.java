@@ -38,7 +38,7 @@ public final class JsonSchemaUtil {
     /**
      * initialises JSONSCHEMA_FOR_SCHEMA.
      */
-    private static JsonSchema JSONSCHEMA_FOR_SCHEMA = null;
+    private static JsonSchema jsonSchema = null;
 
     /**
      * private constructor.
@@ -65,7 +65,7 @@ public final class JsonSchemaUtil {
      * @return the json schema
      */
     public static JsonSchema jsonSchemaForSchema() {
-        if (JSONSCHEMA_FOR_SCHEMA == null) {
+        if (jsonSchema == null) {
 
             Map<String, Object> schema;
             try {
@@ -73,7 +73,7 @@ public final class JsonSchemaUtil {
                                 "/org/zols/jsonschema/schema.json"),
                         new TypeReference<HashMap<String, Object>>() {
                         });
-                JSONSCHEMA_FOR_SCHEMA = new EveritJsonSchema(schema, null);
+                jsonSchema = new EveritJsonSchema(schema, null);
             } catch (IOException ex) {
                 Logger.getLogger(JsonSchemaUtil.class.getName())
                         .log(Level.SEVERE, null, ex);
@@ -81,7 +81,7 @@ public final class JsonSchemaUtil {
 
         }
 
-        return JSONSCHEMA_FOR_SCHEMA;
+        return jsonSchema;
     }
 
     /**

@@ -128,6 +128,11 @@ public class Filter<T> {
         return hash;
     }
 
+    /**
+     * Checks equality.
+     * @param obj
+     * @return flag
+     */
     @Override
     public boolean equals(final Object obj) {
         if (this == obj) {

@@ -33,17 +33,17 @@ public abstract class JsonSchema {
     /**
      * The constant LOCALE_SEPARATOR.
      */
-    protected final static String LOCALE_SEPARATOR = "^";
+    protected static final  String LOCALE_SEPARATOR = "^";
 
     /**
      * The Schema map.
      */
-    protected final Map<String, Object> schemaMap;
+    private final Map<String, Object> schemaMap;
 
     /**
      * The Schema supplier.
      */
-    protected final Function<String, Map<String, Object>> schemaSupplier;
+    private final Function<String, Map<String, Object>> schemaSupplier;
 
     /**
      * The jsonschema.
@@ -98,8 +98,8 @@ public abstract class JsonSchema {
             properties.putAll((Map<String, Map<String, Object>>) schemaMap.get(
                     "properties"));
         }
-
-        if ((reference = (String) schemaMap.get("$ref")) != null) {
+        reference = (String) schemaMap.get("$ref");
+        if (reference != null) {
             parent = getJsonSchema(reference);
 
             if (parent != null) {
@@ -367,9 +367,9 @@ public abstract class JsonSchema {
                 return "Float";
             case "boolean":
                 return "Boolean";
+            default:
+                return null;
         }
-        // Custom Object.
-        return null;
     }
 
     /**
@@ -718,11 +718,14 @@ public abstract class JsonSchema {
         if (map != null) {
             schemaId = (String) map.get("$ref");
             // Might be array item. So check inside items property
-            if (schemaId == null
-                    && (map = (Map<String, Object>) map.get("items")) != null) {
-                schemaId = (String) map.get("$ref");
+            if (schemaId == null) {
+                map = (Map<String, Object>) map.get("items");
+                if (map != null) {
+                    schemaId = (String) map.get("$ref");
+                }
             }
         }
+
 
         return getJsonSchema(schemaId);
     }
@@ -735,6 +738,22 @@ public abstract class JsonSchema {
     @Override
     public String toString() {
         return asString();
+    }
+
+    /**
+     * get schemaMap.
+     * @return schemaMap
+     */
+    public Map<String, Object> getSchemaMap() {
+        return schemaMap;
+    }
+
+    /**
+     * get schemaSupplier.
+     * @return schemaSupplier
+     */
+    public Function<String, Map<String, Object>> getSchemaSupplier() {
+        return schemaSupplier;
     }
 
     /**
