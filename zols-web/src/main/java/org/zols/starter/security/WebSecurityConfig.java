@@ -138,6 +138,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/data/**")
                 .hasIpAddress(dataIncomingIP)
+                .antMatchers(HttpMethod.PUT, "/api/data/**")
+                .hasIpAddress(dataIncomingIP)
+                .antMatchers(HttpMethod.DELETE, "/api/data/**")
+                .hasIpAddress(dataIncomingIP)
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll();
 
