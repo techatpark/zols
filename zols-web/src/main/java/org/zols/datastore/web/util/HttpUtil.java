@@ -23,6 +23,10 @@ import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
  */
 public class HttpUtil {
 
+    private HttpUtil() {
+
+    }
+
     /**
      * Removes page,size kind of parameters from request url.
      *

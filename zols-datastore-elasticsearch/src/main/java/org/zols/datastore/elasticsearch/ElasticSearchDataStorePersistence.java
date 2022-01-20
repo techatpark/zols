@@ -85,6 +85,17 @@ public class ElasticSearchDataStorePersistence
      */
     private static final org.slf4j.Logger LOGGER =
             getLogger(ElasticSearchDataStorePersistence.class);
+
+
+    /**
+     * ES HTTP Port.
+     */
+    public static final int PORT = 9200;
+    /**
+     * ES TCP Port.
+     */
+    public static final int PORT1 = 9201;
+
     /**
      * tells the client.
      */
@@ -104,8 +115,8 @@ public class ElasticSearchDataStorePersistence
     public ElasticSearchDataStorePersistence() {
         this.client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("localhost", 9200, "http"),
-                        new HttpHost("localhost", 9201, "http")));
+                        new HttpHost("localhost", PORT, "http"),
+                        new HttpHost("localhost", PORT1, "http")));
         this.indexName = "zols";
     }
 
@@ -477,25 +488,25 @@ public class ElasticSearchDataStorePersistence
                                          final Node queryNode)
             throws DataStoreException {
 
-        BoolQueryBuilder bool_builder = QueryBuilders.boolQuery();
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         if (queryNode != null) {
-            bool_builder.must(queryNode.accept(new ElasticSearchVisitor(
+            boolQueryBuilder.must(queryNode.accept(new ElasticSearchVisitor(
                     new ElasticComparisonNodeInterpreter())));
         }
         if (jsonSchemaForSchema() != jsonSchema) {
             List<String> implementations =
                     dataStore.getImplementationsOf(jsonSchema);
             if (implementations == null || implementations.isEmpty()) {
-                bool_builder.must(termQuery("$type", jsonSchema.getId()));
+                boolQueryBuilder.must(termQuery("$type", jsonSchema.getId()));
             } else {
                 implementations.add(jsonSchema.getId());
-                bool_builder.must(termsQuery("$type", implementations));
+                boolQueryBuilder.must(termsQuery("$type", implementations));
             }
         }
 
         //QueryBuilder builder = condition.query(new ElasticsearchVisitor(),
         //                                  new ElasticsearchVisitor.Context());
-        return bool_builder;
+        return boolQueryBuilder;
     }
 
     /**
@@ -736,6 +747,9 @@ public class ElasticSearchDataStorePersistence
                                                         + ".keyword"));
 
                                 break;
+                            default:
+                                throw
+                                new UnsupportedOperationException("Not Supported");
                         }
                     }
 

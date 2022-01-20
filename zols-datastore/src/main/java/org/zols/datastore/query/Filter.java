@@ -13,6 +13,8 @@ import java.util.Objects;
  */
 public class Filter<T> {
 
+    public static final int HASH = 5;
+    public static final int INT = 83;
     /**
      * declares variable name.
      */
@@ -107,10 +109,10 @@ public class Filter<T> {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.name);
-        hash = 83 * hash + Objects.hashCode(this.operator);
-        hash = 83 * hash + Objects.hashCode(this.value);
+        int hash = HASH;
+        hash = INT * hash + Objects.hashCode(this.name);
+        hash = INT * hash + Objects.hashCode(this.operator);
+        hash = INT * hash + Objects.hashCode(this.value);
         return hash;
     }
 
@@ -136,7 +138,7 @@ public class Filter<T> {
     }
 
     /**
-     * Describes Operator for Filters
+     * Describes Operator for Filters.
      */
     public enum Operator {
 
