@@ -1,4 +1,6 @@
 /*eslint no-undef: 0*/
+import { JSONPath } from "../../../node_modules/jsonpath-plus/dist/index-browser-esm.js";
+
 class DataWarehouseScreen {
 	constructor() {
 		this.userForm = document.createElement("div");
@@ -9,6 +11,7 @@ class DataWarehouseScreen {
 	}
 
 	setUp() {
+		console.log(JSONPath({ path: "a", json: { a: 1 } })[0]);
 		document.querySelector("i.fa-plus").addEventListener("click", () => {
 			this.showUserForm();
 		});
@@ -234,14 +237,12 @@ class DataWarehouseScreen {
 			if (this.schema["ids"].includes(propertyName)) {
 				idProperties.push(this.schema.properties[propertyName]);
 				this.schema.properties[propertyName].id = propertyName;
-				html += `<th scope="col">${this.schema.properties[propertyName].title}</th>`;
+				html += `<th scope="col">ID</th>`;
 			}
 		});
 
 		if (this.schema.label) {
-			html += `<th scope="col">${
-				this.schema.properties[this.schema.label].title
-			}</th>
+			html += `<th scope="col">Label</th>
 	`;
 		}
 		html += `
@@ -261,7 +262,9 @@ class DataWarehouseScreen {
 				html += `<td scope="col">${data[property.id]}</td>`;
 			});
 			if (this.schema.label) {
-				html += `<td scope="col">${data[this.schema.label]}</td>`;
+				html += `<td scope="col">${
+					JSONPath({ path: this.schema.label, json: data })[0]
+				}</td>`;
 			}
 
 			html += `
