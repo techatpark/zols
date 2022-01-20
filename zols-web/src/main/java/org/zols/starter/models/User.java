@@ -31,7 +31,7 @@ public class User {
     /**
      * MAXSIZE2.
      */
-    public static final int MAXSIZE2 = 50;
+    public static final int MAXSIZE2 = 8;
     /**
      * MAXSIZE3.
      */
@@ -61,7 +61,6 @@ public class User {
      * password.
      */
     @NotBlank
-    @Size(max = MAXSIZE1)
     private String password;
 
     /**
