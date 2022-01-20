@@ -15,6 +15,14 @@ import java.util.Objects;
 public class Page<T> {
 
     /**
+     * HASH.
+     */
+    public static final int HASH = 5;
+    /**
+     * INT.
+     */
+    public static final int INT = 83;
+    /**
      * declares variable pageNumber.
      */
     private final Integer pageNumber;
@@ -84,13 +92,18 @@ public class Page<T> {
         return content;
     }
 
+    /**
+     * HASH.
+     * INT.
+     * @return hash
+     */
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.pageNumber);
-        hash = 89 * hash + Objects.hashCode(this.pageSize);
-        hash = 89 * hash + Objects.hashCode(this.total);
-        hash = 89 * hash + Objects.hashCode(this.content);
+        int hash = HASH;
+        hash = INT * hash + Objects.hashCode(this.pageNumber);
+        hash = INT * hash + Objects.hashCode(this.pageSize);
+        hash = INT * hash + Objects.hashCode(this.total);
+        hash = INT * hash + Objects.hashCode(this.content);
         return hash;
     }
 

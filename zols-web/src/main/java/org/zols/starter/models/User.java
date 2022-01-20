@@ -23,6 +23,19 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 public class User {
+
+    /**
+     * MAXSIZE1.
+     */
+    public static final int MAXSIZE1 = 20;
+    /**
+     * MAXSIZE2.
+     */
+    public static final int MAXSIZE2 = 50;
+    /**
+     * MAXSIZE3.
+     */
+    public static final int MAXSIZE3 = 120;
     /**
      * id.
      */
@@ -33,14 +46,14 @@ public class User {
      * username.
      */
     @NotBlank
-    @Size(max = 20)
+    @Size(max = MAXSIZE1)
     private String username;
 
     /**
      * email.
      */
     @NotBlank
-    @Size(max = 50)
+    @Size(max = MAXSIZE1)
     @Email
     private String email;
 
@@ -48,7 +61,7 @@ public class User {
      * password.
      */
     @NotBlank
-    @Size(max = 120)
+    @Size(max = MAXSIZE1)
     private String password;
 
     /**
@@ -69,9 +82,9 @@ public class User {
     /**
      * Instantiates a user.
      *
-     * @param anUsername an username
-     * @param anEmail    an email
-     * @param anPassword an password
+     * @param anUsername  username
+     * @param anEmail     email
+     * @param anPassword  password
      */
     public User(final String anUsername, final String anEmail,
                 final String anPassword) {

@@ -21,7 +21,7 @@ import static org.zols.datastore.query.Filter.Operator.IN_BETWEEN;
 /**
  *
  */
-public class HttpUtil {
+public final class HttpUtil {
 
     private HttpUtil() {
 

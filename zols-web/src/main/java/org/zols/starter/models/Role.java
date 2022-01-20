@@ -1,8 +1,8 @@
 /**
  * package.info.
  */
-
 package org.zols.starter.models;
+
 
 
 import javax.persistence.Column;
@@ -19,6 +19,10 @@ import javax.persistence.Table;
 public class Role {
 
     /**
+     * LENGTH.
+     */
+    public static final int LENGTH = 20;
+    /**
      * declares variable id.
      */
     @Id
@@ -29,7 +33,7 @@ public class Role {
      * declares variable name.
      */
     @Enumerated(EnumType.STRING)
-    @Column(length = 20)
+    @Column(length = LENGTH)
     private ERole name;
 
     /**

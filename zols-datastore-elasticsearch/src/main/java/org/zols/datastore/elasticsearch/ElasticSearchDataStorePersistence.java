@@ -749,7 +749,8 @@ public class ElasticSearchDataStorePersistence
                                 break;
                             default:
                                 throw
-                                new UnsupportedOperationException("Not Supported");
+                                new UnsupportedOperationException(
+                                                      "Not Supported");
                         }
                     }
 

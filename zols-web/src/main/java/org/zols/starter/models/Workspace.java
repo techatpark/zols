@@ -17,6 +17,14 @@ import javax.validation.constraints.Size;
 public class Workspace {
 
     /**
+     * MAX1.
+     */
+    public static final int MAX1 = 100;
+    /**
+     * MAX2.
+     */
+    public static final int MAX2 = 100;
+    /**
      * declares variable id.
      */
     @Id
@@ -27,13 +35,13 @@ public class Workspace {
      * declares variable workspaceName.
      */
     @NotBlank
-    @Size(max = 100)
+    @Size(max = MAX1)
     private String workspaceName;
 
     /**
      * declares variable description.
      */
-    @Size(max = 2000)
+    @Size(max = MAX2)
     private String description;
 
     /**

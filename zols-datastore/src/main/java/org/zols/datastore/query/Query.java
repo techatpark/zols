@@ -5,7 +5,6 @@
  */
 package org.zols.datastore.query;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

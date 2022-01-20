@@ -111,6 +111,11 @@ public class PredicateVisitor<T>
         }
     }
 
+    /**
+     * @param actual the actual
+     * @param query the query
+     * @return boolean regex
+     */
     protected boolean regex(final Object actual, final Object query) {
         Predicate<String> test;
 

@@ -13,7 +13,13 @@ import java.util.Objects;
  */
 public class Filter<T> {
 
+    /**
+     * HASH.
+     */
     public static final int HASH = 5;
+    /**
+     * INT.
+     */
     public static final int INT = 83;
     /**
      * declares variable name.
@@ -107,6 +113,12 @@ public class Filter<T> {
         return value;
     }
 
+
+    /**
+     * HASH.
+     * INT.
+     * @return hash
+     */
     @Override
     public int hashCode() {
         int hash = HASH;

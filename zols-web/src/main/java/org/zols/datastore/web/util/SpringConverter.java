@@ -13,7 +13,13 @@ import org.zols.datastore.query.AggregatedResults;
 /**
  * @author sathish
  */
-public class SpringConverter {
+public final class SpringConverter {
+
+    /**
+     * SpringConverter default constructor.
+     */
+    private SpringConverter() {
+    }
 
     /**
      * @param page

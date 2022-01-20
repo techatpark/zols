@@ -16,7 +16,13 @@ import java.util.Map;
 /**
  * @author sathish
  */
-public class MapUtil {
+public final class MapUtil {
+
+    /**
+     * MapUtil default constructor.
+     */
+    private MapUtil() {
+    }
 
     /**
      * @param o the Object

@@ -24,7 +24,13 @@ import static org.zols.jsonschema.util.JsonUtil.asMap;
 /**
  * @author WZ07
  */
-public class JsonSchemaTestUtil {
+public final class JsonSchemaTestUtil {
+
+    /**
+     * JsonSchemaTestUtil default constructor.
+     */
+    private JsonSchemaTestUtil() {
+    }
 
     /**
      * get a JsonSchema with given Object.

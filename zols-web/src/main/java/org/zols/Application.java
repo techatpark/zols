@@ -12,7 +12,13 @@ import static org.springframework.boot.SpringApplication.run;
  * The type Application.
  */
 @SpringBootApplication
-public class Application {
+public final class Application {
+
+    /**
+     * Application default constructor.
+     */
+    private Application() {
+    }
 
     /**
      * Main method of this application.

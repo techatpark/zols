@@ -19,7 +19,11 @@ import static org.zols.datastore.util.MapUtil.getFieldValue;
 public class MapUtilTest {
 
     /**
-     * testSomeMethod
+     * EXPECTED.
+     */
+    public static final int EXPECTED = 3;
+    /**
+     * testSomeMethod.
      */
     @Test
     public void testSomeMethod() {
@@ -28,8 +32,9 @@ public class MapUtilTest {
         assertEquals("ios", getFieldValue(computer, "os"),
                 "Retrieving Basic Primitive");
 
-        assertEquals(3, getFieldValue(computer, "prefererredSeller.id"),
-                "Retrieving Inner Primitive");
+        assertEquals("EXPECTED", getFieldValue(computer,
+                                        "prefererredSeller.id"),
+                                  "Retrieving Inner Primitive");
 
         System.out.println(computer);
     }
