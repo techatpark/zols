@@ -1,6 +1,7 @@
 package org.zols.starter.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,6 +48,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
     /**
+     * Default Password.
+     */
+    @Value("${security.user.password:password}")
+    private String password;
+
+    /**
      * authenticationJwtTokenFilter.
      * @return new AuthTokenFilter
      */
@@ -82,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         User user = new User();
         user.setUsername("admin");
-        user.setPassword(passwordEncoder().encode("password"));
+        user.setPassword(passwordEncoder().encode(password));
         user.setEmail("admin@email.com");
         Set<Role> roleSet = new HashSet<>();
         roleSet.add(role);
