@@ -3,32 +3,43 @@ import { JSONPath } from "../../../node_modules/jsonpath-plus/dist/index-browser
 
 class DataWarehouseScreen {
 	constructor() {
-		this.userForm = document.createElement("div");
-		this.userForm.classList.add("row");
-		this.userForm.classList.add("g-3");
+		this.dataForm = document.createElement("div");
+		this.dataForm.classList.add("row");
+		this.dataForm.classList.add("g-3");
 		this.container = document.getElementById("content");
 		this.setUp();
 	}
 
 	setUp() {
-		console.log(JSONPath({ path: "a", json: { a: 1 } })[0]);
 		document.querySelector("i.fa-plus").addEventListener("click", () => {
-			this.showUserForm();
+			this.showDataForm();
 		});
+
+		document
+			.querySelector("i.fa-fast-forward")
+			.addEventListener("click", () => {
+				this.showNextPage();
+			});
+
+		document
+			.querySelector("i.fa-fast-backward")
+			.addEventListener("click", () => {
+				this.showPreviousPage();
+			});
 
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
 			.addEventListener("click", () => {
-				this.showUsers();
+				this.showListOfData();
 			});
 
 		document.querySelector("i.fa-save").addEventListener("click", () => {
-			this.showUsers();
+			this.showListOfData();
 		});
 
 		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
 			el.addEventListener("click", () => {
-				this.showUserForm();
+				this.showDataForm();
 			});
 		});
 
@@ -56,7 +67,7 @@ class DataWarehouseScreen {
 	setSchemas(schemas) {
 		if (schemas && schemas.length !== 0) {
 			this.schemas = schemas;
-			this.rootSchemas = schemas.filter((schema) => !schema["$ref"]);
+			this.rootSchemas = schemas.filter((schema) => schema["ids"]);
 			this.setSelectedSchema(this.rootSchemas[0]);
 		} else {
 			document.getElementById("content").innerHTML = `<main class="p-5 m-5">
@@ -77,18 +88,8 @@ class DataWarehouseScreen {
 
 	setSelectedSchema(schema) {
 		this.schema = schema;
-		fetch("/api/data/" + schema["$id"] + "", {
-			headers: {
-				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-			},
-		})
-			.then((response) => response.json())
-			.then((dataPage) => {
-				this.showDataPage(dataPage);
-			})
-			.catch((e) => {
-				console.log("No Data", e);
-			});
+
+		this.showDataPage();
 
 		const schemaList = document.getElementById("schemaList");
 		document.getElementById("schemaMenuLink").innerHTML = schema.title;
@@ -113,7 +114,7 @@ class DataWarehouseScreen {
 		}
 	}
 
-	showUserForm() {
+	showDataForm() {
 		document.querySelector("i.fa-warehouse").classList.add("d-none");
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
@@ -174,7 +175,7 @@ class DataWarehouseScreen {
 		// Finally, get your form...
 		const jsonSchemaForm = JsonSchemaForms.build(schema, submitCallback);
 
-		this.userForm.appendChild(jsonSchemaForm);
+		this.dataForm.appendChild(jsonSchemaForm);
 
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
@@ -182,97 +183,125 @@ class DataWarehouseScreen {
 				this.container.removeChild(this.container.firstChild)
 			);
 		}
-		this.container.appendChild(this.userForm);
+		this.container.appendChild(this.dataForm);
 	}
 
-	showDataPage(dataPage) {
-		console.log(dataPage);
-		document.querySelector("i.fa-warehouse").classList.remove("d-none");
-		document
-			.querySelector("i.fa-arrow-alt-circle-left")
-			.classList.add("d-none");
+	showNextPage() {
+		this.showDataPage(this.pageNumber + 1);
+	}
 
-		document
-			.querySelector("i.fa-plus")
-			.parentElement.parentElement.classList.remove("d-none");
-		document
-			.querySelector("i.fa-save")
-			.parentElement.parentElement.classList.add("d-none");
+	showPreviousPage() {
+		this.showDataPage(this.pageNumber - 1);
+	}
 
-		if (dataPage.first) {
-			document
-				.querySelector("i.fa-fast-backward")
-				.parentElement.classList.add("disabled");
+	showDataPage(pageNumber) {
+		let requestVariable = "";
+
+		if (pageNumber) {
+			this.pageNumber = pageNumber;
+			requestVariable = "?size=3&page=" + pageNumber;
 		} else {
-			document
-				.querySelector("i.fa-fast-backward")
-				.parentElement.classList.remove("disabled");
+			this.pageNumber = 0;
+			requestVariable = "?size=3";
 		}
 
-		if (dataPage.last) {
-			document
-				.querySelector("i.fa-fast-forward")
-				.parentElement.classList.add("disabled");
-		} else {
-			document
-				.querySelector("i.fa-fast-forward")
-				.parentElement.classList.remove("disabled");
-		}
+		fetch("/api/data/" + this.schema["$id"] + requestVariable, {
+			headers: {
+				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+			},
+		})
+			.then((response) => response.json())
+			.then((dataPage) => {
+				document.querySelector("i.fa-warehouse").classList.remove("d-none");
+				document
+					.querySelector("i.fa-arrow-alt-circle-left")
+					.classList.add("d-none");
 
-		if (this.oldChildNodes) {
-			// Navigate Back to Listing Screen
-			this.container.removeChild(this.container.lastChild);
-			this.oldChildNodes.forEach((child) => {
-				this.container.appendChild(child);
-			});
-		}
+				document
+					.querySelector("i.fa-plus")
+					.parentElement.parentElement.classList.remove("d-none");
+				document
+					.querySelector("i.fa-save")
+					.parentElement.parentElement.classList.add("d-none");
 
-		let html = `<tr>
+				if (dataPage.first) {
+					document
+						.querySelector("i.fa-fast-backward")
+						.parentElement.classList.add("disabled");
+				} else {
+					document
+						.querySelector("i.fa-fast-backward")
+						.parentElement.classList.remove("disabled");
+				}
+
+				if (dataPage.last) {
+					document
+						.querySelector("i.fa-fast-forward")
+						.parentElement.classList.add("disabled");
+				} else {
+					document
+						.querySelector("i.fa-fast-forward")
+						.parentElement.classList.remove("disabled");
+				}
+
+				if (this.oldChildNodes) {
+					// Navigate Back to Listing Screen
+					this.container.removeChild(this.container.lastChild);
+					this.oldChildNodes.forEach((child) => {
+						this.container.appendChild(child);
+					});
+				}
+
+				let html = `<tr>
 
 		`;
 
-		const idProperties = [];
+				const idProperties = [];
 
-		Object.keys(this.schema.properties).forEach((propertyName) => {
-			if (this.schema["ids"].includes(propertyName)) {
-				idProperties.push(this.schema.properties[propertyName]);
-				this.schema.properties[propertyName].id = propertyName;
-				html += `<th scope="col">ID</th>`;
-			}
-		});
+				Object.keys(this.schema.properties).forEach((propertyName) => {
+					if (this.schema["ids"].includes(propertyName)) {
+						idProperties.push(this.schema.properties[propertyName]);
+						this.schema.properties[propertyName].id = propertyName;
+						html += `<th scope="col">ID</th>`;
+					}
+				});
 
-		if (this.schema.label) {
-			html += `<th scope="col">Label</th>
+				if (this.schema.label) {
+					html += `<th scope="col">Label</th>
 	`;
-		}
-		html += `
+				}
+				html += `
 <th scope="col" style="width:100px"></th>
 </tr>`;
 
-		document.getElementById("table-header").innerHTML = html;
+				document.getElementById("table-header").innerHTML = html;
 
-		html = ``;
+				html = ``;
 
-		dataPage.content.forEach((data) => {
-			html += `<tr>
+				dataPage.content.forEach((data) => {
+					html += `<tr>
 
 		`;
 
-			idProperties.forEach((property) => {
-				html += `<td scope="col">${data[property.id]}</td>`;
-			});
-			if (this.schema.label) {
-				html += `<td scope="col">${
-					JSONPath({ path: this.schema.label, json: data })[0]
-				}</td>`;
-			}
+					idProperties.forEach((property) => {
+						html += `<td scope="col">${data[property.id]}</td>`;
+					});
+					if (this.schema.label) {
+						html += `<td scope="col">${
+							JSONPath({ path: this.schema.label, json: data })[0]
+						}</td>`;
+					}
 
-			html += `
+					html += `
 	<td><i data-bs-toggle="modal" data-bs-target="#exampleModal" class="fas fa-trash px-2"></i><i class="fas fa-pencil-alt"></i></td>
 </tr>`;
-		});
+				});
 
-		document.getElementById("table-content").innerHTML = html;
+				document.getElementById("table-content").innerHTML = html;
+			})
+			.catch((e) => {
+				console.log("No Data", e);
+			});
 	}
 }
 new DataWarehouseScreen();
