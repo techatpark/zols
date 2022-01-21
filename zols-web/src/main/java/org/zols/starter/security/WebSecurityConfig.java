@@ -24,7 +24,9 @@ import org.zols.starter.security.jwt.AuthTokenFilter;
 import org.zols.starter.security.services.UserDetailsServiceImpl;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 @EnableWebSecurity
@@ -58,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * Default Password.
      */
     @Value("${data.incoming.ip:::1}")
-    private String dataIncomingIP;
+    private String[] dataIncomingIPs;
 
     /**
      * authenticationJwtTokenFilter.
@@ -130,18 +132,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
+        String ipFilterExprsions = List.of(dataIncomingIPs).stream()
+                .map(ip -> "hasIpAddress('" + ip + "')")
+                .collect(Collectors.joining(" or "));
         http.cors().and().csrf().disable()
                 .exceptionHandling()
                 .authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/api/auth/**").permitAll()
+                .authorizeRequests().antMatchers("/api/auth/**")
+                .permitAll()
                 .antMatchers(HttpMethod.POST, "/api/data/**")
-                .hasIpAddress(dataIncomingIP)
+                .access(ipFilterExprsions)
                 .antMatchers(HttpMethod.PUT, "/api/data/**")
-                .hasIpAddress(dataIncomingIP)
+                .access(ipFilterExprsions)
                 .antMatchers(HttpMethod.DELETE, "/api/data/**")
-                .hasIpAddress(dataIncomingIP)
+                .access(ipFilterExprsions)
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll();
 
