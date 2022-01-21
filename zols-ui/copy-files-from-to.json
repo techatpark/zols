@@ -5,8 +5,8 @@
       "to": "dist/images"
     },
     {
-      "from": "src/images/icons/favicon.ico",
-      "to": "dist/favicon.ico"
+      "from": "src/images/icons/**",
+      "to": "dist"
     }
   ]
 }

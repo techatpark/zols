@@ -224,6 +224,11 @@ class DataWarehouseScreen {
 					.querySelector("i.fa-save")
 					.parentElement.parentElement.classList.add("d-none");
 
+				const startingfrom = dataPage.number * dataPage.size + 1;
+				document.getElementById("page-details").innerHTML = `${startingfrom}-${
+					startingfrom + dataPage.numberOfElements - 1
+				} of ${dataPage.totalElements}`;
+
 				if (dataPage.first) {
 					document
 						.querySelector("i.fa-fast-backward")
