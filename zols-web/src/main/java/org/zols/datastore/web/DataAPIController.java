@@ -1,7 +1,6 @@
 package org.zols.datastore.web;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -28,7 +27,7 @@ import static org.zols.datastore.web.util.SpringConverter.getPage;
 
 @RestController
 @RequestMapping(value = "/api/data/{schemaId}")
-public class DataAPIController {
+class DataAPIController {
 
     /**
      * Logger.
@@ -38,8 +37,15 @@ public class DataAPIController {
     /**
      * The DataService.
      */
-    @Autowired
-    private DataService dataService;
+    private final DataService dataService;
+
+    /**
+     * Build Controller.
+     * @param aDataService
+     */
+    DataAPIController(final DataService aDataService) {
+        this.dataService = aDataService;
+    }
 
     /**
      * creates the schema.

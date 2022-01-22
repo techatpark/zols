@@ -1,7 +1,6 @@
 package org.zols.datastore.web;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
 
 @RestController
 @RequestMapping(value = "/api/schema")
-public class SchemaAPIController {
+class SchemaAPIController {
 
     /**
      * logger.
@@ -34,8 +33,15 @@ public class SchemaAPIController {
     /**
      * schemaService.
      */
-    @Autowired
-    private SchemaService schemaService;
+    private final SchemaService schemaService;
+
+    /**
+     * Build Controller.
+     * @param aSchemaService
+     */
+    SchemaAPIController(final SchemaService aSchemaService) {
+        this.schemaService = aSchemaService;
+    }
 
     /**
      * Create response entity.

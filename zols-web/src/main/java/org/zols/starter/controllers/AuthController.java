@@ -1,6 +1,5 @@
 package org.zols.starter.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,43 +17,58 @@ import org.zols.starter.repository.UserRepository;
 import org.zols.starter.security.jwt.TokenProvider;
 import org.zols.starter.security.services.UserDetailsImpl;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+class AuthController {
 
     /**
      * declare Authentication Manager authenticationManager.
      */
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
     /**
      * declare a UserRepository userRepository.
      */
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     /**
      * declare a RoleRepository roleRepository.
      */
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
     /**
      * declare a PasswordEncoder encoder.
      */
-    @Autowired
-    private PasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
     /**
      * declare a TokenProvider jwtUtils.
      */
-    @Autowired
-    private TokenProvider jwtUtils;
+    private final TokenProvider jwtUtils;
+
+    /**
+     * Build Controller.
+     *
+     * @param aAuthenticationManager
+     * @param aUserRepository
+     * @param aRoleRepository
+     * @param anEncoder
+     * @param aJwtUtils
+     */
+    AuthController(final AuthenticationManager aAuthenticationManager,
+                          final UserRepository aUserRepository,
+                          final RoleRepository aRoleRepository,
+                          final PasswordEncoder anEncoder,
+                          final TokenProvider aJwtUtils) {
+        this.authenticationManager = aAuthenticationManager;
+        this.userRepository = aUserRepository;
+        this.roleRepository = aRoleRepository;
+        this.encoder = anEncoder;
+        this.jwtUtils = aJwtUtils;
+    }
 
     /**
      * performs the signin function.
@@ -63,7 +77,7 @@ public class AuthController {
      * @return void response entity
      */
     @PostMapping("/signin")
-    public final ResponseEntity<?> authenticateUser(@Valid @RequestBody final
+    public final ResponseEntity<?> authenticateUser(final @RequestBody
                                                     LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(

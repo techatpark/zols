@@ -59,7 +59,8 @@ class BrowseAPIController {
             @RequestParam(required = false, value = "q") final String keyword,
             final Pageable pageable, final HttpServletRequest request)
             throws DataStoreException {
-        return ResponseEntity.ok(getPage(browseService.searchSchema(schemaName, keyword,
+        return ResponseEntity.ok(getPage(browseService.searchSchema(
+                                                      schemaName, keyword,
                 getQuery(request), pageable.getPageNumber(),
                 pageable.getPageSize()), pageable));
     }
