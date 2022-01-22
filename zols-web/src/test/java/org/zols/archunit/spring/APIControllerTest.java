@@ -45,6 +45,7 @@ public class APIControllerTest {
                 .andShould().onlyDependOnClassesThat()
                 .resideInAnyPackage(
                         "org.zols.core.controller.api"
+                        , "org.slf4j"
                         , "javax.servlet.http"
                         , "javax.servlet"
                         , "java.io"
