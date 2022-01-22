@@ -95,21 +95,30 @@ class DataWarehouseScreen {
 		document.getElementById("schemaMenuLink").innerHTML = schema.title;
 		schemaList.innerHTML = "";
 		this.schema = schema;
-		for (var i = 0; i < this.rootSchemas.length; i++) {
-			if (this.rootSchemas[i] != schema) {
-				var li = document.createElement("li");
-				var link = document.createElement("a");
-				link.classList.add("dropdown-item");
-				const cSchema = this.rootSchemas[i];
-				link.innerHTML = cSchema.title;
-				link.href = "javascript://";
+		if (this.rootSchemas.length === 1) {
+			document
+				.getElementById("schemaMenuLink")
+				.classList.remove("dropdown-toggle");
+		} else {
+			document
+				.getElementById("schemaMenuLink")
+				.classList.add("dropdown-toggle");
+			for (var i = 0; i < this.rootSchemas.length; i++) {
+				if (this.rootSchemas[i] != schema) {
+					var li = document.createElement("li");
+					var link = document.createElement("a");
+					link.classList.add("dropdown-item");
+					const cSchema = this.rootSchemas[i];
+					link.innerHTML = cSchema.title;
+					link.href = "javascript://";
 
-				link.addEventListener("click", () => {
-					this.setSelectedSchema(cSchema);
-				});
+					link.addEventListener("click", () => {
+						this.setSelectedSchema(cSchema);
+					});
 
-				li.appendChild(link);
-				schemaList.appendChild(li);
+					li.appendChild(link);
+					schemaList.appendChild(li);
+				}
 			}
 		}
 	}

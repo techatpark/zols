@@ -22,6 +22,7 @@
         <java.version>11</java.version>
         <elasticsearch.version>7.16.2</elasticsearch.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
+        <archunit.version>0.22.0</archunit.version>
         <maven.checkstyle.version>3.1.2</maven.checkstyle.version>
         <checkstyle.version>9.0.1</checkstyle.version>
     </properties>
@@ -35,6 +36,12 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.tngtech.archunit</groupId>
+                <artifactId>archunit</artifactId>
+                <version>${archunit.version}</version>
+                <scope>test</scope>
+            </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter-api</artifactId>
