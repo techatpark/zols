@@ -3,10 +3,14 @@ import { JSONPath } from "../../../node_modules/jsonpath-plus/dist/index-browser
 
 class DataWarehouseScreen {
 	constructor() {
+		// Set an option globally
+		JSONEditor.defaults.options.theme = "bootstrap4";
+
 		this.dataForm = document.createElement("div");
 		this.dataForm.classList.add("row");
 		this.dataForm.classList.add("g-3");
 		this.container = document.getElementById("content");
+
 		this.setUp();
 	}
 
@@ -56,7 +60,6 @@ class DataWarehouseScreen {
 		})
 			.then((response) => response.json())
 			.then((schemas) => {
-				console.log(schemas);
 				this.setSchemas(schemas);
 			})
 			.catch(() => {
@@ -138,62 +141,26 @@ class DataWarehouseScreen {
 			.querySelector("i.fa-plus")
 			.parentElement.parentElement.classList.add("d-none");
 
-		const schema = {
-			$id: "product",
-			$schema: "http://json-schema.org/draft-07/schema#",
-			description: "A product from Acme's catalog",
-			title: "Product",
-			label: "name",
-			type: "object",
-			properties: {
-				id: {
-					description: "The unique identifier for a product",
-					type: "integer",
-					title: "Id",
-				},
-				name: {
-					description: "Name of the product",
-					type: "string",
-					title: "Name",
-				},
-				price: {
-					description: "The price for a product",
-					type: "number",
-					title: "Price",
-				},
-				availablity: {
-					description: "The availablity for a product",
-					type: "boolean",
-					title: "is Available",
-				},
-			},
-			required: ["id"],
-			ids: ["id"],
-		};
-
-		// Also, you can define the form behavior on submission, e.g.:
-		const submitCallback = (rootFormElement) => {
-			// Show the resulting JSON instance in your page.
-			document.getElementById("json-result").innerText = JSON.stringify(
-				rootFormElement.getInstance(),
-				null,
-				2
-			);
-			// (For testing purposes, return false to prevent automatic redirect.)
-			return false;
-		};
-
-		// Finally, get your form...
-		const jsonSchemaForm = JsonSchemaForms.build(schema, submitCallback);
-
-		this.dataForm.appendChild(jsonSchemaForm);
-
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(
 				this.container.removeChild(this.container.firstChild)
 			);
 		}
+
+		fetch("/api/schema/" + this.schema["$id"] + "?enlarged", {
+			headers: {
+				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+			},
+		})
+			.then((response) => response.json())
+			.then((enlargedSchema) => {
+				this.editor = new JSONEditor(this.dataForm, { schema: enlargedSchema });
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+
 		this.container.appendChild(this.dataForm);
 	}
 
@@ -315,7 +282,7 @@ class DataWarehouseScreen {
 
 				document.getElementById("table-content").innerHTML = html;
 			})
-			.catch((e) => {
+			.catch(() => {
 				document.getElementById("content").innerHTML = `<main class="p-5 m-5">
 
 			<p class="lead">
@@ -332,6 +299,11 @@ class DataWarehouseScreen {
 					this.showDataForm();
 				});
 			});
+	}
+
+	onSubmit(rootFormElement) {
+		console.log(JSON.stringify(rootFormElement.getInstance(), null, 2));
+		return false;
 	}
 }
 new DataWarehouseScreen();
