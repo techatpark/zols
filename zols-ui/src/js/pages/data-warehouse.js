@@ -30,11 +30,11 @@ class DataWarehouseScreen {
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
 			.addEventListener("click", () => {
-				this.showListOfData();
+				this.showDataPage();
 			});
 
 		document.querySelector("i.fa-save").addEventListener("click", () => {
-			this.showListOfData();
+			this.showDataPage();
 		});
 
 		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
@@ -99,10 +99,12 @@ class DataWarehouseScreen {
 			document
 				.getElementById("schemaMenuLink")
 				.classList.remove("dropdown-toggle");
+			document.getElementById("schemaList").classList.remove("dropdown-menu");
 		} else {
 			document
 				.getElementById("schemaMenuLink")
 				.classList.add("dropdown-toggle");
+			document.getElementById("schemaList").classList.add("dropdown-menu");
 			for (var i = 0; i < this.rootSchemas.length; i++) {
 				if (this.rootSchemas[i] != schema) {
 					var li = document.createElement("li");
@@ -314,7 +316,21 @@ class DataWarehouseScreen {
 				document.getElementById("table-content").innerHTML = html;
 			})
 			.catch((e) => {
-				console.log("No Data", e);
+				document.getElementById("content").innerHTML = `<main class="p-5 m-5">
+
+			<p class="lead">
+			There are no ${this.schema.title} available.
+			</p>
+			<p class="lead">
+			  <a href="#" class="btn btn-primary fw-bold">Create New</a>
+			</p>
+		  </main>`;
+				document.querySelector(".btn-primary").addEventListener("click", () => {
+					document
+						.querySelector("ul.call-to-action")
+						.classList.remove("d-none");
+					this.showDataForm();
+				});
 			});
 	}
 }
