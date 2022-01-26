@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * Default Password.
      */
-    @Value("${data.incoming.ip:::1}")
+    @Value("${data.incoming.ip:::1,localhost}")
     private String[] dataIncomingIPs;
 
     /**

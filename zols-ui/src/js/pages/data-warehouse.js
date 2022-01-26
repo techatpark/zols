@@ -85,7 +85,7 @@ class DataWarehouseScreen {
 		const schemaList = document.getElementById("schemaList");
 		document.getElementById("schemaMenuLink").innerHTML = schema.title;
 		schemaList.innerHTML = "";
-		this.schema = schema;
+
 		if (this.rootSchemas.length === 1) {
 			document
 				.getElementById("schemaMenuLink")
@@ -312,7 +312,7 @@ class DataWarehouseScreen {
 							}
 						)
 							.then(() => {
-								console.log("Delete Success ");
+								this.showDataPage();
 							})
 							.catch((e) => {
 								console.log("Delete failed ", e);
@@ -320,7 +320,8 @@ class DataWarehouseScreen {
 					});
 				});
 			})
-			.catch(() => {
+			.catch((e) => {
+				console.log(e);
 				document.getElementById("content").innerHTML = `<main class="p-5 m-5">
 
 			<p class="lead">
