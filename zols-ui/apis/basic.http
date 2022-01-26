@@ -11,10 +11,6 @@ Content-Type: application/json
     "password" : "password"
 }
 
-### TEST
-GET {{base}}/api/test/admin
-Authorization: Bearer {{login.response.body.accessToken}}
-Content-Type: application/json
 
 #### Index a document with Id
 POST {{base}}/api/schema
@@ -162,6 +158,12 @@ Authorization: Bearer {{login.response.body.accessToken}}
             "longitude": 2
         }]
 }
+
+
+#### GET , PUT  , DELETE Point One Delete
+GET {{base}}/api/data/product/id/4
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
 
 #### Get Mapping
 GET {{base}}/api/data/product

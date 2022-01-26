@@ -41,18 +41,6 @@ class DataWarehouseScreen {
 			this.showDataPage();
 		});
 
-		document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
-			el.addEventListener("click", () => {
-				this.showDataForm();
-			});
-		});
-
-		document.querySelectorAll("i.fa-trash").forEach((el) => {
-			el.addEventListener("on-confirmation", () => {
-				console.log("Call to action for Delete");
-			});
-		});
-
 		fetch("/api/schema", {
 			headers: {
 				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
@@ -128,7 +116,7 @@ class DataWarehouseScreen {
 		}
 	}
 
-	showDataForm() {
+	showDataForm(value) {
 		document.querySelector("i.fa-warehouse").classList.add("d-none");
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
@@ -155,7 +143,17 @@ class DataWarehouseScreen {
 		})
 			.then((response) => response.json())
 			.then((enlargedSchema) => {
-				this.editor = new JSONEditor(this.dataForm, { schema: enlargedSchema });
+				this.editor = new JSONEditor(this.dataForm, {
+					schema: enlargedSchema,
+					disable_collapse: true,
+					disable_edit_json: true,
+					disable_properties: true,
+					no_additional_properties: true,
+				});
+
+				if (value) {
+					this.editor.setValue(value);
+				}
 			})
 			.catch((e) => {
 				console.log(e);
@@ -190,6 +188,7 @@ class DataWarehouseScreen {
 		})
 			.then((response) => response.json())
 			.then((dataPage) => {
+				this.dataPage = dataPage;
 				document.querySelector("i.fa-warehouse").classList.remove("d-none");
 				document
 					.querySelector("i.fa-arrow-alt-circle-left")
@@ -281,6 +280,45 @@ class DataWarehouseScreen {
 				});
 
 				document.getElementById("table-content").innerHTML = html;
+				document.querySelectorAll("i.fa-pencil-alt").forEach((el) => {
+					el.addEventListener("click", () => {
+						const tr = el.parentElement.parentElement;
+						const tbody = tr.parentElement;
+						const selectedIndex = Array.prototype.indexOf.call(
+							tbody.children,
+							tr
+						);
+						this.showDataForm(this.dataPage.content[selectedIndex]);
+					});
+				});
+				document.querySelectorAll("i.fa-trash").forEach((el) => {
+					el.addEventListener("on-confirmation", () => {
+						const tr = el.parentElement.parentElement;
+						const tbody = tr.parentElement;
+						const selectedIndex = Array.prototype.indexOf.call(
+							tbody.children,
+							tr
+						);
+
+						fetch(
+							"/api/data" +
+								this.getDataEndpoint(this.dataPage.content[selectedIndex]),
+							{
+								method: "DELETE",
+								headers: {
+									Authorization:
+										"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+								},
+							}
+						)
+							.then(() => {
+								console.log("Delete Success ");
+							})
+							.catch((e) => {
+								console.log("Delete failed ", e);
+							});
+					});
+				});
 			})
 			.catch(() => {
 				document.getElementById("content").innerHTML = `<main class="p-5 m-5">
@@ -301,9 +339,15 @@ class DataWarehouseScreen {
 			});
 	}
 
-	onSubmit(rootFormElement) {
-		console.log(JSON.stringify(rootFormElement.getInstance(), null, 2));
-		return false;
+	getDataEndpoint(data) {
+		let ep = "/" + this.schema["$id"];
+
+		Object.keys(this.schema.properties).forEach((propertyName) => {
+			if (this.schema["ids"].includes(propertyName)) {
+				ep += "/" + propertyName + `/` + data[propertyName];
+			}
+		});
+		return ep;
 	}
 }
 new DataWarehouseScreen();
