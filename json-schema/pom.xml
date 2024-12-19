@@ -19,10 +19,11 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.everit-org.json-schema</groupId>
-            <artifactId>org.everit.json.schema</artifactId>
-            <version>1.14.0</version>
+            <groupId>com.github.erosb</groupId>
+            <artifactId>everit-json-schema</artifactId>
+            <version>1.14.4</version>
         </dependency>
+
 
         <dependency>
             <groupId>org.glassfish</groupId>
