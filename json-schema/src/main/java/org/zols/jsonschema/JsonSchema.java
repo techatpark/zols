@@ -647,8 +647,9 @@ public abstract class JsonSchema {
             if (value instanceof Map) {
                 Map<String, Object> nestedObjectMap =
                         (Map<String, Object>) value;
+                JsonSchema schema = getSchemaOf(key);
                 localizedJsonData.put(key,
-                        getSchemaOf(key).localizeData(nestedObjectMap, locale,
+                        schema.localizeData(nestedObjectMap, locale,
                                 keepDefault));
             } else if (value instanceof List) {
                 List nestedList = (List) value;
