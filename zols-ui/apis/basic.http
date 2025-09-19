@@ -166,6 +166,6 @@ Content-Type: application/json
 Authorization: Bearer {{login.response.body.accessToken}}
 
 #### Get Mapping
-DELETE {{base}}/api/data/product/4
+DELETE {{base}}/api/data/product/id/4
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.accessToken}}
