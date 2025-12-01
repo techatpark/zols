@@ -94,6 +94,13 @@ public abstract class JsonSchema {
         properties = new HashMap<>();
         String reference;
 
+        // Handle null schemaMap (e.g., when schema doesn't exist)
+        if (schemaMap == null) {
+            parent = null;
+            idPropertyNames = null;
+            return;
+        }
+
         if (schemaMap.get("properties") != null) {
             properties.putAll((Map<String, Map<String, Object>>) schemaMap.get(
                     "properties"));

@@ -29,6 +29,11 @@ import static org.zols.jsonschema.util.JsonSchemaUtil.jsonSchemaForSchema;
 public final class SchemaManager {
 
     /**
+     * The logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(SchemaManager.class.getName());
+
+    /**
      * The dataStore persistence.
      */
     private final DataStorePersistence dataStorePersistence;
@@ -117,8 +122,20 @@ public final class SchemaManager {
      * @return status of the Delete Operation
      */
     public Boolean delete(final String schemaId) throws DataStoreException {
+        Map<String, Object> schemaMap = get(schemaId);
+        if (schemaMap == null) {
+            LOGGER.warning("Schema with id " + schemaId + " does not exist");
+            return false;
+        }
+
         boolean isDeleted;
         JsonSchema jsonSchema = getJsonSchema(schemaId);
+        
+        if (jsonSchema.getSchemaMap() == null) {
+            LOGGER.warning("Cannot create JsonSchema for deletion of schema " + schemaId);
+            return false;
+        }
+        
         isDeleted = dataStorePersistence.delete(jsonSchemaForSchema,
                 new SimpleEntry("$id", schemaId));
         if (isDeleted) {
