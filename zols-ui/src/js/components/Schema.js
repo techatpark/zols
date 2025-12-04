@@ -19,6 +19,8 @@ class Schema {
 		this.propertiesListListenerAttached = false; // Track if listener is attached
 		this.propertyToDelete = null; // Track property to delete
 		this.modalSetupComplete = false; // Track if modal is set up
+		this.allSchemas = []; // Cache all schemas for parent selection
+		this.allSchemasLoaded = false; // Track if schemas are loaded
 
 		this.schemaManager = document.createElement("div");
 		this.schemaManager.classList.add("row", "g-4");
@@ -105,6 +107,20 @@ class Schema {
 			</div>
 		</div>
 
+		<div class="row mb-3">
+							<label for="parentSchemaSelect" class="col-sm-3 col-form-label">
+								Parent Schema
+							</label>
+							<div class="col-sm-9">
+								<select class="form-select" id="parentSchemaSelect">
+									<option value="">-- No Parent --</option>
+								</select>
+								<div class="form-text">Select a parent schema to inherit properties from (prevents circular references)</div>
+								<div id="parentSchemaError" class="text-danger small mt-1 d-none"></div>
+        </div>
+			</div>
+		</div>
+
 					<!-- Property Editor Section (hidden when editing schema general) -->
 					<div id="propertyEditorSection" class="d-none">
 						<h6 class="text-muted mb-3">
@@ -164,6 +180,20 @@ class Schema {
 								<textarea class="form-control" id="propertyDescriptionTxt" 
 									rows="2" placeholder="Describe this property..."
 									autocomplete="off"></textarea>
+        </div>
+    </div>
+  </div>
+
+  <div class="row mb-3 d-none" id="propertyParentSchemaRow">
+							<label for="propertyParentSchemaSelect" class="col-sm-3 col-form-label">
+								Parent Schema
+							</label>
+							<div class="col-sm-9">
+								<select class="form-select" id="propertyParentSchemaSelect">
+									<option value="">-- No Parent --</option>
+								</select>
+								<div class="form-text">Select a parent schema for this object property (prevents circular references)</div>
+								<div id="propertyParentSchemaError" class="text-danger small mt-1 d-none"></div>
         </div>
     </div>
   </div>
@@ -253,6 +283,158 @@ class Schema {
 				this.saveSchema();
 			});
 		}
+
+		// Load all schemas for parent selection
+		this.loadAllSchemas();
+	}
+
+	/**
+	 * Load all schemas for parent selection dropdowns
+	 */
+	async loadAllSchemas() {
+		try {
+			this.allSchemas = await SchemaService.list();
+			this.allSchemas = Array.isArray(this.allSchemas) ? this.allSchemas : [];
+			this.allSchemasLoaded = true;
+		} catch (error) {
+			console.error("Error loading schemas for parent selection:", error);
+			this.allSchemas = [];
+			this.allSchemasLoaded = false;
+		}
+	}
+
+	/**
+	 * Check if selecting a parent would create a circular reference
+	 * @param {string} schemaId - ID of schema that would have the parent
+	 * @param {string} parentId - ID of potential parent schema
+	 * @param {Array} allSchemas - All available schemas
+	 * @returns {boolean} True if circular reference would be created
+	 */
+	checkCircularReference(schemaId, parentId, allSchemas) {
+		if (!schemaId || !parentId || !allSchemas) {
+			return false;
+		}
+
+		// Direct self-reference
+		if (schemaId === parentId) {
+			return true;
+		}
+
+		// Build a map of schema IDs to their parent references
+		const schemaMap = new Map();
+		allSchemas.forEach((schema) => {
+			if (schema && schema["$id"]) {
+				schemaMap.set(schema["$id"], schema);
+			}
+		});
+
+		// Check if parentId or any of its ancestors would lead back to schemaId
+		const visited = new Set();
+		const checkChain = (currentId) => {
+			if (visited.has(currentId)) {
+				return false; // Already checked this path
+			}
+			visited.add(currentId);
+
+			// If we've reached the schemaId, it's a circular reference
+			if (currentId === schemaId) {
+				return true;
+			}
+
+			// Get the schema and check its parent
+			const currentSchema = schemaMap.get(currentId);
+			if (!currentSchema) {
+				return false;
+			}
+
+			// Check if this schema has a $ref (parent)
+			const parentRef = currentSchema["$ref"];
+			if (parentRef && typeof parentRef === "string" && parentRef.trim()) {
+				// Recursively check the parent chain
+				return checkChain(parentRef);
+			}
+
+			return false;
+		};
+
+		// Start checking from the potential parent
+		return checkChain(parentId);
+	}
+
+	/**
+	 * Get available parent schemas (filtered to prevent circular references)
+	 * @param {string} schemaId - ID of schema that would have the parent
+	 * @param {Array} allSchemas - All available schemas
+	 * @returns {Array} Filtered list of available parent schemas
+	 */
+	getAvailableParentSchemas(schemaId, allSchemas) {
+		if (!allSchemas || !Array.isArray(allSchemas)) {
+			return [];
+		}
+
+		return allSchemas.filter((schema) => {
+			if (!schema || !schema["$id"]) {
+				return false;
+			}
+
+			// Exclude the current schema itself
+			if (schema["$id"] === schemaId) {
+				return false;
+			}
+
+			// Exclude schemas that would create circular references
+			if (this.checkCircularReference(schemaId, schema["$id"], allSchemas)) {
+				return false;
+			}
+
+			return true;
+		});
+	}
+
+	/**
+	 * Update parent schema dropdowns with available options
+	 */
+	updateParentDropdowns() {
+		if (!this.schema || !this.allSchemasLoaded) {
+			return;
+		}
+
+		const currentSchemaId = this.schema["$id"] || "";
+		const availableParents = this.getAvailableParentSchemas(
+			currentSchemaId,
+			this.allSchemas
+		);
+
+		// Update schema-level parent dropdown
+		const schemaParentSelect = document.getElementById("parentSchemaSelect");
+		if (schemaParentSelect) {
+			schemaParentSelect.innerHTML = '<option value="">-- No Parent --</option>';
+			availableParents.forEach((schema) => {
+				const option = document.createElement("option");
+				option.value = schema["$id"];
+				option.textContent = schema.title || schema["$id"];
+				schemaParentSelect.appendChild(option);
+			});
+
+			// Set current value if schema has a parent
+			if (this.schema["$ref"]) {
+				schemaParentSelect.value = this.schema["$ref"];
+			}
+		}
+
+		// Update property-level parent dropdown
+		const propertyParentSelect = document.getElementById(
+			"propertyParentSchemaSelect"
+		);
+		if (propertyParentSelect) {
+			propertyParentSelect.innerHTML = '<option value="">-- No Parent --</option>';
+			availableParents.forEach((schema) => {
+				const option = document.createElement("option");
+				option.value = schema["$id"];
+				option.textContent = schema.title || schema["$id"];
+				propertyParentSelect.appendChild(option);
+			});
+		}
 	}
 
 	/**
@@ -299,6 +481,35 @@ class Schema {
 		const typeSelect = document.getElementById("typeSelect");
 		if (typeSelect) {
 			typeSelect.addEventListener("change", () => {
+				// Show/hide parent schema dropdown based on type
+				this.togglePropertyParentDropdown();
+				this.saveCurrentEditorValues();
+				this.updatePropertyList();
+			});
+		}
+
+		// Schema-level parent selection
+		const schemaParentSelect = document.getElementById("parentSchemaSelect");
+		if (schemaParentSelect) {
+			schemaParentSelect.addEventListener("change", () => {
+				this.validateParentSelection(
+					schemaParentSelect.value,
+					"parentSchemaError"
+				);
+				this.saveCurrentEditorValues();
+			});
+		}
+
+		// Property-level parent selection
+		const propertyParentSelect = document.getElementById(
+			"propertyParentSchemaSelect"
+		);
+		if (propertyParentSelect) {
+			propertyParentSelect.addEventListener("change", () => {
+				this.validateParentSelection(
+					propertyParentSelect.value,
+					"propertyParentSchemaError"
+				);
 				this.saveCurrentEditorValues();
 				this.updatePropertyList();
 			});
@@ -314,6 +525,61 @@ class Schema {
 				});
 			});
 		}
+	}
+
+	/**
+	 * Toggle property parent dropdown visibility based on type
+	 */
+	togglePropertyParentDropdown() {
+		const typeSelect = document.getElementById("typeSelect");
+		const propertyParentRow = document.getElementById("propertyParentSchemaRow");
+
+		if (typeSelect && propertyParentRow) {
+			if (typeSelect.value === "object") {
+				propertyParentRow.classList.remove("d-none");
+			} else {
+				propertyParentRow.classList.add("d-none");
+				// Clear parent selection if type is not object
+				const propertyParentSelect = document.getElementById(
+					"propertyParentSchemaSelect"
+				);
+				if (propertyParentSelect) {
+					propertyParentSelect.value = "";
+				}
+			}
+		}
+	}
+
+	/**
+	 * Validate parent selection to prevent circular references
+	 * @param {string} parentId - Selected parent schema ID
+	 * @param {string} errorElementId - ID of error display element
+	 */
+	validateParentSelection(parentId, errorElementId) {
+		const errorDiv = document.getElementById(errorElementId);
+		if (!errorDiv) {
+			return true;
+		}
+
+		if (!parentId || !parentId.trim()) {
+			errorDiv.classList.add("d-none");
+			return true;
+		}
+
+		if (!this.schema || !this.allSchemasLoaded) {
+			return true;
+		}
+
+		const currentSchemaId = this.schema["$id"] || "";
+		if (this.checkCircularReference(currentSchemaId, parentId, this.allSchemas)) {
+			errorDiv.textContent =
+				"Selecting this parent would create a circular reference";
+			errorDiv.classList.remove("d-none");
+			return false;
+		}
+
+		errorDiv.classList.add("d-none");
+		return true;
 	}
 
 	/**
@@ -398,10 +664,30 @@ class Schema {
 			const nameField = document.getElementById("nameTxt");
 			const titleField = document.getElementById("titleTxt");
 			const descField = document.getElementById("descriptionTxt");
+			const parentSelect = document.getElementById("parentSchemaSelect");
 
 			if (nameField) this.schema["$id"] = nameField.value.trim();
 			if (titleField) this.schema.title = titleField.value.trim();
 			if (descField) this.schema.description = descField.value.trim();
+
+			// Handle parent schema selection
+			if (parentSelect) {
+				const selectedParent = parentSelect.value.trim();
+				if (selectedParent) {
+					// Validate before setting
+					if (
+						this.validateParentSelection(
+							selectedParent,
+							"parentSchemaError"
+						)
+					) {
+						this.schema["$ref"] = selectedParent;
+					}
+				} else {
+					// Remove parent if no selection
+					delete this.schema["$ref"];
+				}
+			}
 		} else if (this.selectedObject && this.schema.properties) {
 			// Editing a property
 			const propertyNameField = document.getElementById("propertyNameTxt");
@@ -434,6 +720,33 @@ class Schema {
 				this.selectedObject.description = propertyDescField
 					? propertyDescField.value.trim()
 					: "";
+
+				// Handle property parent schema selection (only for object type)
+				if (typeSelect.value === "object") {
+					const propertyParentSelect = document.getElementById(
+						"propertyParentSchemaSelect"
+					);
+					if (propertyParentSelect) {
+						const selectedParent = propertyParentSelect.value.trim();
+						if (selectedParent) {
+							// Validate before setting
+							if (
+								this.validateParentSelection(
+									selectedParent,
+									"propertyParentSchemaError"
+								)
+							) {
+								this.selectedObject["$ref"] = selectedParent;
+							}
+						} else {
+							// Remove parent if no selection
+							delete this.selectedObject["$ref"];
+						}
+					}
+				} else {
+					// Remove $ref if type is not object
+					delete this.selectedObject["$ref"];
+				}
 			}
 
 			// Handle property renaming
@@ -604,6 +917,9 @@ class Schema {
 			this.isNewSchema = false;
 			this.originalSchemaId = savedSchema["$id"];
 
+			// Reload schemas after save to refresh parent dropdowns
+			await this.loadAllSchemas();
+
 			this.goBack();
 		} catch (error) {
 			console.error("Error saving schema:", error);
@@ -691,6 +1007,10 @@ class Schema {
 			nameField.value = tempId;
 			setTimeout(() => nameField.focus(), 100);
 		}
+
+		// Ensure parent dropdown is updated and visible if type is object
+		this.updateParentDropdowns();
+		this.togglePropertyParentDropdown();
 	}
 
 	/**
@@ -776,6 +1096,11 @@ class Schema {
 		this.setupPropertyFieldListeners();
 		this.setupDeleteModal();
 
+		// Reload schemas when entering edit mode
+		this.loadAllSchemas().then(() => {
+			this.updateParentDropdowns();
+		});
+
 		if (_schemaId) {
 			try {
 				this.schema = await SchemaService.get(_schemaId);
@@ -852,10 +1177,18 @@ class Schema {
 			const nameField = document.getElementById("nameTxt");
 			const titleField = document.getElementById("titleTxt");
 			const descField = document.getElementById("descriptionTxt");
+			const parentSelect = document.getElementById("parentSchemaSelect");
 
 			if (nameField) nameField.value = _input["$id"] || "";
 			if (titleField) titleField.value = _input.title || "";
 			if (descField) descField.value = _input.description || "";
+
+			// Update parent dropdown
+			this.updateParentDropdowns();
+			if (parentSelect) {
+				parentSelect.value = _input["$ref"] || "";
+			}
+
 			this.selectedObject = this.schema;
 			this.currentPropertyKey = null;
 		} else {
@@ -872,12 +1205,22 @@ class Schema {
 				const typeSelect = document.getElementById("typeSelect");
 				const descField = document.getElementById("propertyDescriptionTxt");
 				const errorDiv = document.getElementById("propertyNameError");
+				const propertyParentSelect = document.getElementById(
+					"propertyParentSchemaSelect"
+				);
 
 				if (nameField) nameField.value = propertyName;
 				if (titleField) titleField.value = _input.title || "";
 				if (typeSelect) typeSelect.value = _input.type || "string";
 				if (descField) descField.value = _input.description || "";
 				if (errorDiv) errorDiv.classList.add("d-none");
+
+				// Update parent dropdown and show/hide based on type
+				this.updateParentDropdowns();
+				this.togglePropertyParentDropdown();
+				if (propertyParentSelect && _input.type === "object") {
+					propertyParentSelect.value = _input["$ref"] || "";
+				}
 
 				this.selectedObject = _input;
 			}
@@ -927,6 +1270,7 @@ class Schema {
 					const type = prop.type || "string";
 					const typeBadge = this.getTypeBadge(type);
 					const isSelected = this.currentPropertyKey === propName;
+					const hasParent = prop["$ref"] ? `<span class="badge bg-info ms-2" title="Parent: ${prop["$ref"]}"><i class="fas fa-link"></i> ${prop["$ref"]}</span>` : "";
 
 					return `
 					<div class="list-group-item" 
@@ -936,6 +1280,7 @@ class Schema {
 								<h6 class="mb-1">
 									${title}
 									${typeBadge}
+									${hasParent}
 									${isSelected ? '<i class="fas fa-edit ms-2 text-primary"></i>' : ""}
 								</h6>
 								<small class="text-muted">
