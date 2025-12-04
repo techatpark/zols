@@ -97,7 +97,7 @@ class DataWarehouseScreen {
 				.classList.add("dropdown-toggle");
 			document.getElementById("schemaList").classList.add("dropdown-menu");
 			for (var i = 0; i < this.rootSchemas.length; i++) {
-				if (this.rootSchemas[i] != schema) {
+				if (this.rootSchemas[i] !== schema) {
 					var li = document.createElement("li");
 					var link = document.createElement("a");
 					link.classList.add("dropdown-item");

@@ -408,7 +408,8 @@ class Schema {
 		// Update schema-level parent dropdown
 		const schemaParentSelect = document.getElementById("parentSchemaSelect");
 		if (schemaParentSelect) {
-			schemaParentSelect.innerHTML = '<option value="">-- No Parent --</option>';
+			schemaParentSelect.innerHTML =
+				'<option value="">-- No Parent --</option>';
 			availableParents.forEach((schema) => {
 				const option = document.createElement("option");
 				option.value = schema["$id"];
@@ -427,7 +428,8 @@ class Schema {
 			"propertyParentSchemaSelect"
 		);
 		if (propertyParentSelect) {
-			propertyParentSelect.innerHTML = '<option value="">-- No Parent --</option>';
+			propertyParentSelect.innerHTML =
+				'<option value="">-- No Parent --</option>';
 			availableParents.forEach((schema) => {
 				const option = document.createElement("option");
 				option.value = schema["$id"];
@@ -532,7 +534,9 @@ class Schema {
 	 */
 	togglePropertyParentDropdown() {
 		const typeSelect = document.getElementById("typeSelect");
-		const propertyParentRow = document.getElementById("propertyParentSchemaRow");
+		const propertyParentRow = document.getElementById(
+			"propertyParentSchemaRow"
+		);
 
 		if (typeSelect && propertyParentRow) {
 			if (typeSelect.value === "object") {
@@ -571,7 +575,9 @@ class Schema {
 		}
 
 		const currentSchemaId = this.schema["$id"] || "";
-		if (this.checkCircularReference(currentSchemaId, parentId, this.allSchemas)) {
+		if (
+			this.checkCircularReference(currentSchemaId, parentId, this.allSchemas)
+		) {
 			errorDiv.textContent =
 				"Selecting this parent would create a circular reference";
 			errorDiv.classList.remove("d-none");
@@ -676,10 +682,7 @@ class Schema {
 				if (selectedParent) {
 					// Validate before setting
 					if (
-						this.validateParentSelection(
-							selectedParent,
-							"parentSchemaError"
-						)
+						this.validateParentSelection(selectedParent, "parentSchemaError")
 					) {
 						this.schema["$ref"] = selectedParent;
 					}
@@ -1270,7 +1273,9 @@ class Schema {
 					const type = prop.type || "string";
 					const typeBadge = this.getTypeBadge(type);
 					const isSelected = this.currentPropertyKey === propName;
-					const hasParent = prop["$ref"] ? `<span class="badge bg-info ms-2" title="Parent: ${prop["$ref"]}"><i class="fas fa-link"></i> ${prop["$ref"]}</span>` : "";
+					const hasParent = prop["$ref"]
+						? `<span class="badge bg-info ms-2" title="Parent: ${prop["$ref"]}"><i class="fas fa-link"></i> ${prop["$ref"]}</span>`
+						: "";
 
 					return `
 					<div class="list-group-item" 
