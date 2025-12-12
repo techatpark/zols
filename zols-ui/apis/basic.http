@@ -169,3 +169,317 @@ Authorization: Bearer {{login.response.body.accessToken}}
 DELETE {{base}}/api/data/product/id/4
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.accessToken}}
+
+
+#### Complex Example: Schema with Parent Relationships
+#### This demonstrates schema-level and property-level parent selection with $ref
+
+#### Step 1: Create Base Schema (Person)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "person",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person",
+  "description": "Base person schema with common properties",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "ID",
+      "description": "Unique identifier"
+    },
+    "firstName": {
+      "type": "string",
+      "title": "First Name",
+      "description": "Person's first name"
+    },
+    "lastName": {
+      "type": "string",
+      "title": "Last Name",
+      "description": "Person's last name"
+    },
+    "email": {
+      "type": "string",
+      "title": "Email",
+      "description": "Email address",
+      "format": "email"
+    },
+    "dateOfBirth": {
+      "type": "string",
+      "title": "Date of Birth",
+      "description": "Date of birth",
+      "format": "date"
+    }
+  },
+  "required": ["id", "firstName", "lastName", "email"]
+}
+
+#### Step 2: Create Employee Schema (inherits from Person - schema-level parent)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "employee",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "person",
+  "title": "Employee",
+  "description": "Employee schema that extends Person",
+  "type": "object",
+  "properties": {
+    "employeeId": {
+      "type": "string",
+      "title": "Employee ID",
+      "description": "Company employee identifier"
+    },
+    "department": {
+      "type": "string",
+      "title": "Department",
+      "description": "Department name"
+    },
+    "salary": {
+      "type": "number",
+      "title": "Salary",
+      "description": "Annual salary",
+      "minimum": 0
+    },
+    "hireDate": {
+      "type": "string",
+      "title": "Hire Date",
+      "description": "Date of hire",
+      "format": "date"
+    },
+    "manager": {
+      "type": "object",
+      "title": "Manager",
+      "description": "Employee's manager",
+      "$ref": "employee"
+    }
+  },
+  "required": ["employeeId", "department"]
+}
+
+#### Step 3: Create Address Schema (standalone)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "address",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Address",
+  "description": "Physical address information",
+  "type": "object",
+  "properties": {
+    "street": {
+      "type": "string",
+      "title": "Street",
+      "description": "Street address"
+    },
+    "city": {
+      "type": "string",
+      "title": "City",
+      "description": "City name"
+    },
+    "state": {
+      "type": "string",
+      "title": "State",
+      "description": "State or province"
+    },
+    "zipCode": {
+      "type": "string",
+      "title": "Zip Code",
+      "description": "Postal code"
+    },
+    "country": {
+      "type": "string",
+      "title": "Country",
+      "description": "Country name"
+    }
+  },
+  "required": ["street", "city", "country"]
+}
+
+#### Step 4: Create Company Schema (with property-level parent references)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "company",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Company",
+  "description": "Company information with employees and addresses",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "title": "Company ID",
+      "description": "Unique company identifier"
+    },
+    "name": {
+      "type": "string",
+      "title": "Company Name",
+      "description": "Name of the company"
+    },
+    "foundedYear": {
+      "type": "integer",
+      "title": "Founded Year",
+      "description": "Year the company was founded",
+      "minimum": 1800,
+      "maximum": 2100
+    },
+    "headquarters": {
+      "type": "object",
+      "title": "Headquarters",
+      "description": "Company headquarters address",
+      "$ref": "address"
+    },
+    "offices": {
+      "type": "array",
+      "title": "Offices",
+      "description": "List of company office locations",
+      "items": {
+        "type": "object",
+        "$ref": "address"
+      },
+      "minItems": 0
+    },
+    "ceo": {
+      "type": "object",
+      "title": "CEO",
+      "description": "Chief Executive Officer",
+      "$ref": "employee"
+    },
+    "employees": {
+      "type": "array",
+      "title": "Employees",
+      "description": "List of company employees",
+      "items": {
+        "type": "object",
+        "$ref": "employee"
+      },
+      "minItems": 0
+    },
+    "contactPerson": {
+      "type": "object",
+      "title": "Contact Person",
+      "description": "Primary contact person",
+      "$ref": "person"
+    }
+  },
+  "required": ["id", "name", "foundedYear"]
+}
+
+#### Step 5: Create Customer Schema (inherits from Person, has Address property)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "customer",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$ref": "person",
+  "title": "Customer",
+  "description": "Customer schema extending Person with address and orders",
+  "type": "object",
+  "properties": {
+    "customerId": {
+      "type": "string",
+      "title": "Customer ID",
+      "description": "Unique customer identifier"
+    },
+    "billingAddress": {
+      "type": "object",
+      "title": "Billing Address",
+      "description": "Customer billing address",
+      "$ref": "address"
+    },
+    "shippingAddress": {
+      "type": "object",
+      "title": "Shipping Address",
+      "description": "Customer shipping address",
+      "$ref": "address"
+    },
+    "preferredAddresses": {
+      "type": "array",
+      "title": "Preferred Addresses",
+      "description": "List of preferred addresses",
+      "items": {
+        "type": "object",
+        "$ref": "address"
+      }
+    },
+    "loyaltyPoints": {
+      "type": "integer",
+      "title": "Loyalty Points",
+      "description": "Customer loyalty points balance",
+      "minimum": 0
+    }
+  },
+  "required": ["customerId"]
+}
+
+#### Step 6: Create Order Schema (complex nested structure)
+POST {{base}}/api/schema
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "$id": "order",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Order",
+  "description": "Customer order with products and shipping information",
+  "type": "object",
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "title": "Order ID",
+      "description": "Unique order identifier"
+    },
+    "orderDate": {
+      "type": "string",
+      "title": "Order Date",
+      "description": "Date when order was placed",
+      "format": "date-time"
+    },
+    "customer": {
+      "type": "object",
+      "title": "Customer",
+      "description": "Customer who placed the order",
+      "$ref": "customer"
+    },
+    "shippingAddress": {
+      "type": "object",
+      "title": "Shipping Address",
+      "description": "Order shipping address",
+      "$ref": "address"
+    },
+    "items": {
+      "type": "array",
+      "title": "Order Items",
+      "description": "List of items in the order",
+      "items": {
+        "type": "object",
+        "$ref": "product"
+      },
+      "minItems": 1
+    },
+    "totalAmount": {
+      "type": "number",
+      "title": "Total Amount",
+      "description": "Total order amount",
+      "minimum": 0
+    },
+    "status": {
+      "type": "string",
+      "title": "Order Status",
+      "description": "Current order status",
+      "enum": ["pending", "processing", "shipped", "delivered", "cancelled"]
+    }
+  },
+  "required": ["orderId", "orderDate", "customer", "items", "totalAmount", "status"]
+}
