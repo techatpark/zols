@@ -31,7 +31,8 @@ public final class SchemaManager {
     /**
      * The logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(SchemaManager.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SchemaManager.class
+            .getName());
 
     /**
      * The dataStore persistence.
@@ -130,12 +131,13 @@ public final class SchemaManager {
 
         boolean isDeleted;
         JsonSchema jsonSchema = getJsonSchema(schemaId);
-        
+
         if (jsonSchema.getSchemaMap() == null) {
-            LOGGER.warning("Cannot create JsonSchema for deletion of schema " + schemaId);
+            LOGGER.warning("Cannot create JsonSchema for deletion of schema "
+                    + schemaId);
             return false;
         }
-        
+
         isDeleted = dataStorePersistence.delete(jsonSchemaForSchema,
                 new SimpleEntry("$id", schemaId));
         if (isDeleted) {
