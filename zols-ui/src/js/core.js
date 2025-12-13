@@ -13,21 +13,38 @@ class Core {
 		var myModalEl = document.getElementById("exampleModal");
 		let cRelatedTarget = null;
 		myModalEl.addEventListener("shown.bs.modal", function (event) {
-			cRelatedTarget = event.relatedTarget;
-			myModalEl
-				.querySelector(".btn-primary")
-				.addEventListener("click", (event) => {
-					if (!event.calledFlag) {
-						event.calledFlag = true;
-						const confirmationEvent = new Event("on-confirmation");
-						cRelatedTarget.dispatchEvent(confirmationEvent, {
-							bubbles: false,
-							detail: { text: () => "textarea.value" },
-						});
-						// eslint-disable-next-line no-undef
-						bootstrap.Modal.getInstance(myModalEl).hide();
-					}
+			cRelatedTarget = event.relatedTarget || null;
+
+			const confirmBtn = myModalEl.querySelector(".btn-primary");
+			if (!confirmBtn) return;
+
+			const handler = (evt) => {
+				if (evt.calledFlag) return;
+				evt.calledFlag = true;
+
+				const textarea = myModalEl.querySelector("textarea");
+
+				const confirmationEvent = new CustomEvent("on-confirmation", {
+					bubbles: false,
+					detail: {
+						text: () => (textarea ? textarea.value : ""),
+					},
 				});
+
+				const targetToDispatch =
+					cRelatedTarget && typeof cRelatedTarget.dispatchEvent === "function"
+						? cRelatedTarget
+						: myModalEl;
+
+				try {
+					targetToDispatch.dispatchEvent(confirmationEvent);
+				} catch (e) {
+					console.error("Error dispatching confirmation event:", e);
+				}
+				// eslint-disable-next-line no-undef
+				bootstrap.Modal.getInstance(myModalEl).hide();
+			};
+			confirmBtn.addEventListener("click", handler, { once: true });
 		});
 
 		const showStatus = (type, statusMessage) => {

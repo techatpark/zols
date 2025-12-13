@@ -1,0 +1,59 @@
+@base = http://localhost:8080
+
+
+#### Login
+# @name login 
+POST {{base}}/api/auth/signin
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "password" : "password"
+}
+
+
+#### Index a document with Id
+POST {{base}}/api/schema
+Authorization: Bearer {{login.response.body.accessToken}}
+Content-Type: application/json
+
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "employee",
+    "description": "Employee Schema",
+    "title": "Employee",
+    "type": "object",
+    "properties": {
+      "id": {
+        "description": "Id of Employee",
+        "title": "Id",
+        "type": "integer"
+      },
+      "name": {
+        "description": "Name of the Employee",
+        "title": "Name",
+        "type": "string"
+      }
+    },
+    "ids": ["id"]
+  }
+
+#### Index a document with Id
+GET {{base}}/api/schema/employee
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+#### Index a document with Id
+POST {{base}}/api/data/employee
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+
+{
+  "id": 1,
+  "name" : "Sathish"
+}
+
+#### Index a document with Id
+GET {{base}}/api/data/employee
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
