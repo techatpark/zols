@@ -10,41 +10,46 @@ class Core {
 		}
 
 		// Confirmation Modal pop up logic
-		var myModalEl = document.getElementById("exampleModal");
+		const myModalEl = document.getElementById("exampleModal");
+		const confirmBtn = myModalEl.querySelector(".btn-primary");
 		let cRelatedTarget = null;
-		myModalEl.addEventListener("shown.bs.modal", function (event) {
+
+		// When modal opens
+		myModalEl.addEventListener("shown.bs.modal", (event) => {
 			cRelatedTarget = event.relatedTarget || null;
+		});
 
-			const confirmBtn = myModalEl.querySelector(".btn-primary");
-			if (!confirmBtn) return;
+		// Confirm click handler (attach ONCE)
+		confirmBtn.addEventListener("click", () => {
+			const textarea = myModalEl.querySelector("textarea");
 
-			const handler = (evt) => {
-				if (evt.calledFlag) return;
-				evt.calledFlag = true;
+			const confirmationEvent = new CustomEvent("on-confirmation", {
+				bubbles: false,
+				detail: {
+					text: () => (textarea ? textarea.value : ""),
+				},
+			});
 
-				const textarea = myModalEl.querySelector("textarea");
+			const target =
+				cRelatedTarget && typeof cRelatedTarget.dispatchEvent === "function"
+					? cRelatedTarget
+					: myModalEl;
 
-				const confirmationEvent = new CustomEvent("on-confirmation", {
-					bubbles: false,
-					detail: {
-						text: () => (textarea ? textarea.value : ""),
-					},
-				});
+			try {
+				target.dispatchEvent(confirmationEvent);
+			} catch (e) {
+				console.error("Error dispatching confirmation event:", e);
+			}
 
-				const targetToDispatch =
-					cRelatedTarget && typeof cRelatedTarget.dispatchEvent === "function"
-						? cRelatedTarget
-						: myModalEl;
+			// Clear textarea AFTER delete
+			if (textarea) textarea.value = "";
 
-				try {
-					targetToDispatch.dispatchEvent(confirmationEvent);
-				} catch (e) {
-					console.error("Error dispatching confirmation event:", e);
-				}
-				// eslint-disable-next-line no-undef
-				bootstrap.Modal.getInstance(myModalEl).hide();
-			};
-			confirmBtn.addEventListener("click", handler, { once: true });
+			bootstrap.Modal.getInstance(myModalEl).hide();
+		});
+
+		// Reset state when modal closes
+		myModalEl.addEventListener("hidden.bs.modal", () => {
+			cRelatedTarget = null;
 		});
 
 		const showStatus = (type, statusMessage) => {
