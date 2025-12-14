@@ -35,6 +35,9 @@ class Schema {
 				<a id="generalLink" class="d-inline-flex align-items-center rounded active" href="#">
 					<i class="fas fa-cog me-2"></i> General
 				</a>
+				<button type="button" class="btn btn-sm btn-success" id="addPropertyBtn">
+					<i class="fas fa-plus me-1"></i> Add Property
+				</button>
 			  </li>
               <li class="my-2">
                 <button class="btn d-inline-flex align-items-center collapsed w-100 text-start" 
@@ -185,26 +188,6 @@ class Schema {
     </div>
   </div>
 
-					<!-- Properties List Section -->
-					<div id="propertiesListSection" class="mt-4">
-						<div class="d-flex justify-content-between align-items-center mb-3">
-							<h6 class="text-muted mb-0">
-								<i class="fas fa-list me-2"></i>Properties
-							</h6>
-							<button type="button" class="btn btn-sm btn-success" id="addPropertyBtn">
-								<i class="fas fa-plus me-1"></i> Add Property
-							</button>
-        </div>
-						
-						<div id="propertiesList" class="list-group">
-							<!-- Properties will be dynamically added here -->
-						</div>
-						
-						<div id="noPropertiesMessage" class="alert alert-info">
-							<i class="fas fa-info-circle me-2"></i>
-							No properties added yet. Click "Add Property" to get started.
-    </div>
-  </div>
   
 					<!-- Required Fields Section -->
 					<div id="requiredFieldsSection" class="mt-4">
@@ -250,7 +233,7 @@ class Schema {
 			});
 
 		// Add property button
-		const addPropertyBtn = this.scemaEditor.querySelector("#addPropertyBtn");
+		const addPropertyBtn = this.scemaNavigator.querySelector("#addPropertyBtn");
 		if (addPropertyBtn) {
 			addPropertyBtn.addEventListener("click", () => {
 				this.addNewProperty();
