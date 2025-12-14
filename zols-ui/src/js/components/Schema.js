@@ -61,11 +61,9 @@ class Schema {
 			</div>
 			<div class="card-body">
 		<form class="needs-validation" id="editForm" novalidate>
-					<!-- Schema General Information -->
+					
 					<div id="schemaGeneralSection">
-						<h6 class="text-muted mb-3">
-							<i class="fas fa-info-circle me-2"></i>General Information
-						</h6>
+						
 						
 		<div class="row mb-3">
 							<label for="nameTxt" class="col-sm-3 col-form-label">
@@ -107,18 +105,7 @@ class Schema {
 			</div>
 		</div>
 
-		<div class="row mb-3">
-							<label for="parentSchemaSelect" class="col-sm-3 col-form-label">
-								Parent Schema
-							</label>
-							<div class="col-sm-9">
-								<select class="form-select" id="parentSchemaSelect">
-									<option value="">-- No Parent --</option>
-								</select>
-								<div class="form-text">Select a parent schema to inherit properties from (prevents circular references)</div>
-								<div id="parentSchemaError" class="text-danger small mt-1 d-none"></div>
-        </div>
-			</div>
+
 		</div>
 
 					<!-- Property Editor Section (hidden when editing schema general) -->
@@ -1070,9 +1057,6 @@ class Schema {
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
 			.classList.remove("d-none");
-		this.container.parentElement
-			.querySelector(".dropdown")
-			.classList.add("d-none");
 
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
@@ -1081,9 +1065,6 @@ class Schema {
 			);
 		}
 
-		document
-			.querySelector(".fa-code-branch")
-			.parentElement.parentElement.classList.add("d-none");
 		document
 			.querySelector(".fa-save")
 			.parentElement.parentElement.classList.remove("d-none");
