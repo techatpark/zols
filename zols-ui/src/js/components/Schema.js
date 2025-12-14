@@ -1058,6 +1058,13 @@ class Schema {
 			.querySelector("i.fa-arrow-alt-circle-left")
 			.classList.remove("d-none");
 
+		const callToAction = document.querySelector("ul.call-to-action");
+		if (callToAction) {
+			const createNavItem =
+				callToAction.querySelector(".fa-plus")?.parentElement?.parentElement;
+			if (createNavItem) createNavItem.classList.add("d-none");
+		}
+
 		this.oldChildNodes = [];
 		while (this.container.firstChild) {
 			this.oldChildNodes.push(
