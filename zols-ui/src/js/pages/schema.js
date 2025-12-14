@@ -199,7 +199,17 @@ class SchemaScreen {
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
 			.classList.add("d-none");
-		document.querySelector("ul.call-to-action").classList.remove("d-none");
+		// Ensure only the Create action is visible in list view
+		const callToAction = document.querySelector("ul.call-to-action");
+		if (callToAction) {
+			callToAction.classList.remove("d-none");
+			const saveNavItem =
+				callToAction.querySelector(".fa-save")?.parentElement?.parentElement;
+			const createNavItem =
+				callToAction.querySelector(".fa-plus")?.parentElement?.parentElement;
+			if (saveNavItem) saveNavItem.classList.add("d-none");
+			if (createNavItem) createNavItem.classList.remove("d-none");
+		}
 		this.currentSchema = null;
 	}
 
@@ -247,7 +257,7 @@ class SchemaScreen {
 		}
 
 		container.innerHTML = `
-			<div class="row g-4 mt-2">
+			<div class="row g-4 mt-2 12121">
 				${rootSchemas.map((schema) => this.createSchemaCard(schema)).join("")}
 			</div>
 		`;
