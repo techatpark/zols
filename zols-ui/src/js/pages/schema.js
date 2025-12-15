@@ -246,7 +246,6 @@ class SchemaScreen {
 			return;
 		}
 
-		// Filter root schemas (those without $ref)
 		const rootSchemas = this.schemas.filter(
 			(schema) => !schema["$ref"] || !schema["$ref"].trim()
 		);
@@ -257,13 +256,22 @@ class SchemaScreen {
 		}
 
 		container.innerHTML = `
-			<div class="row g-4 mt-2 12121">
-				${rootSchemas.map((schema) => this.createSchemaCard(schema)).join("")}
-			</div>
-		`;
-
-		// Event listeners are already attached via event delegation
-		// No need to call attachCardEventListeners() again
+		<div class="table-responsive mt-3">
+			<table class="table table-bordered align-middle">
+				<thead class="table-light">
+					<tr>
+						<th style="padding:15px 10px;">ID</th>
+						<th>Title</th>
+						<th>Description</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody id="schema-table-body">
+					${rootSchemas.map((schema) => this.createSchemaRow(schema)).join("")}
+				</tbody>
+			</table>
+		</div>
+	`;
 	}
 
 	/**
@@ -271,42 +279,36 @@ class SchemaScreen {
 	 * @param {Object} schema - Schema object
 	 * @returns {string} HTML string for the card
 	 */
-	createSchemaCard(schema) {
+	createSchemaRow(schema) {
 		const schemaId = schema["$id"] || "N/A";
 		const title = schema.title || schemaId;
 		const description = schema.description || "No description available";
-		const type = schema.type || "object";
 
 		return `
-			<div class="col-md-4 col-lg-3" data-schema-id="${schemaId}">
-				<div class="card h-100 shadow-sm">
-					<div class="card-body">
-						<h5 class="card-title text-truncate" title="${title}">${title}</h5>
-						<p class="card-text text-muted small" style="min-height: 40px;">
-							${description.substring(0, 100)}${description.length > 100 ? "..." : ""}
-						</p>
-						<div class="mb-2">
-							<small class="text-muted">
-								<strong>ID:</strong> <code class="small">${schemaId}</code>
-							</small>
-						</div>
-						<div class="mb-2">
-							<span class="badge bg-secondary">${type}</span>
-						</div>
-					</div>
-					<div class="card-footer bg-transparent border-top-0">
-						<div class="btn-group w-100" role="group">
-							<button class="btn btn-sm btn-outline-primary view-schema" data-schema-id="${schemaId}" title="View/Edit">
-								<i class="fas fa-eye"></i> View
-							</button>
-							<button class="btn btn-sm btn-outline-danger delete-schema" data-schema-id="${schemaId}" title="Delete">
-								<i class="fas fa-trash"></i>
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		`;
+	<tr>
+		<td style="padding:15px 10px;">${schemaId}</td>
+		<td>${title}</td>
+		<td>
+			${description.substring(0, 100)}
+			${description.length > 100 ? "..." : ""}
+		</td>
+		<td>
+			<button
+				class="btn btn-sm btn-outline-primary view-schema"
+				data-schema-id="${schemaId}"
+				title="View/Edit">
+				<i class="fas fa-eye"></i> View
+			</button>
+
+			<button
+				class="btn btn-sm btn-outline-danger delete-schema"
+				data-schema-id="${schemaId}"
+				title="Delete">
+				<i class="fas fa-trash"></i>
+			</button>
+		</td>
+	</tr>
+	`;
 	}
 
 	/**
