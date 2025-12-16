@@ -28,3 +28,21 @@ $body-bg: #f0f3f5 !default;
 .nav-link>.fa-2x {
     font-size: 1.5em ;
 }
+
+/* Hide buttons by default */
+.schema-row .row-actions {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.2s ease-in-out;
+}
+
+/* Show buttons on row hover */
+.schema-row:hover .row-actions {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* Optional: nicer hover effect */
+tr.schema-row:hover {
+	background-color: #ddd;
+}

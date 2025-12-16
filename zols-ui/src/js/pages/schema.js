@@ -279,13 +279,45 @@ class SchemaScreen {
 	 * @param {Object} schema - Schema object
 	 * @returns {string} HTML string for the card
 	 */
+	// createSchemaRow(schema) {
+	// 	const schemaId = schema["$id"] || "N/A";
+	// 	const title = schema.title || schemaId;
+	// 	const description = schema.description || "No description available";
+
+	// 	return `
+	// <tr>
+	// 	<td style="padding:15px 10px;">${schemaId}</td>
+	// 	<td>${title}</td>
+	// 	<td>
+	// 		${description.substring(0, 100)}
+	// 		${description.length > 100 ? "..." : ""}
+	// 	</td>
+	// 	<td>
+	// 		<button
+	// 			class="btn btn-sm btn-outline-primary view-schema"
+	// 			data-schema-id="${schemaId}"
+	// 			title="View/Edit">
+	// 			<i class="fas fa-eye"></i> View
+	// 		</button>
+
+	// 		<button
+	// 			class="btn btn-sm btn-outline-danger delete-schema"
+	// 			data-schema-id="${schemaId}"
+	// 			title="Delete">
+	// 			<i class="fas fa-trash"></i>
+	// 		</button>
+	// 	</td>
+	// </tr>
+	// `;
+	// }
+
 	createSchemaRow(schema) {
 		const schemaId = schema["$id"] || "N/A";
 		const title = schema.title || schemaId;
 		const description = schema.description || "No description available";
 
 		return `
-	<tr>
+	<tr class="schema-row">
 		<td style="padding:15px 10px;">${schemaId}</td>
 		<td>${title}</td>
 		<td>
@@ -293,27 +325,27 @@ class SchemaScreen {
 			${description.length > 100 ? "..." : ""}
 		</td>
 		<td>
+			<div class="row-actions">
+				<button
+					class="btn btn-sm btn-outline-primary view-schema"
+					data-schema-id="${schemaId}"
+					title="View/Edit">
+					<i class="fas fa-eye"></i> View
+				</button>
 
-			<a
+							<a
 				class="btn btn-sm btn-outline-primary"
 				href="/pages/data-warehouse.html?id=${schemaId}"
 				title="Datawarehouse">
 				<i class="fas fa-warehouse"></i>
 			</a>
-
-			<button
-				class="btn btn-sm btn-outline-primary view-schema"
-				data-schema-id="${schemaId}"
-				title="View/Edit">
-				<i class="fas fa-pencil-alt"></i>
-			</button>
-
-			<button
-				class="btn btn-sm btn-outline-danger delete-schema"
-				data-schema-id="${schemaId}"
-				title="Delete">
-				<i class="fas fa-trash"></i>
-			</button>
+				<button
+					class="btn btn-sm btn-outline-danger delete-schema"
+					data-schema-id="${schemaId}"
+					title="Delete">
+					<i class="fas fa-trash"></i>
+				</button>
+			</div>
 		</td>
 	</tr>
 	`;
