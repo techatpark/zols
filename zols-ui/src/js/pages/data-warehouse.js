@@ -41,41 +41,50 @@ class DataWarehouseScreen {
 			this.showDataPage();
 		});
 
-		fetch("/api/schema", {
+		// Get the query string part of the current URL
+		const queryString = window.location.search;
+
+		// Create a URLSearchParams object
+		const urlParams = new URLSearchParams(queryString);
+
+		// Get a specific parameter by name
+		const id = urlParams.get("id");
+
+		fetch("/api/schema/" + id, {
 			headers: {
 				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
 			},
 		})
 			.then((response) => response.json())
 			.then((schemas) => {
-				this.setSchemas(schemas);
+				this.setSelectedSchema(schemas);
 			})
 			.catch(() => {
-				this.setSchemas();
+				console.error("No Schema found for " + id);
 			});
 	}
 
-	setSchemas(schemas) {
-		if (schemas && schemas.length !== 0) {
-			this.schemas = schemas;
-			this.rootSchemas = schemas.filter((schema) => schema["ids"]);
-			this.setSelectedSchema(this.rootSchemas[0]);
-		} else {
-			document.getElementById("content").innerHTML = `<main class="p-5 m-5">
+	// setSchemas(schemas) {
+	// 	if (schemas && schemas.length !== 0) {
+	// 		this.schemas = schemas;
+	// 		this.rootSchemas = schemas.filter((schema) => schema["ids"]);
+	// 		this.setSelectedSchema(this.rootSchemas[0]);
+	// 	} else {
+	// 		document.getElementById("content").innerHTML = `<main class="p-5 m-5">
 
-			<p class="lead">
-			There are no schema available.
-			</p>
-			<p class="lead">
-			  <a href="#" class="btn btn-primary fw-bold">Create New</a>
-			</p>
-		  </main>`;
-			document.querySelector(".btn-primary").addEventListener("click", () => {
-				document.querySelector("ul.call-to-action").classList.remove("d-none");
-				this.schemaEditor.createSchema();
-			});
-		}
-	}
+	// 		<p class="lead">
+	// 		There are no schema available.
+	// 		</p>
+	// 		<p class="lead">
+	// 		  <a href="#" class="btn btn-primary fw-bold">Create New</a>
+	// 		</p>
+	// 	  </main>`;
+	// 		document.querySelector(".btn-primary").addEventListener("click", () => {
+	// 			document.querySelector("ul.call-to-action").classList.remove("d-none");
+	// 			this.schemaEditor.createSchema();
+	// 		});
+	// 	}
+	// }
 
 	setSelectedSchema(schema) {
 		this.schema = schema;
