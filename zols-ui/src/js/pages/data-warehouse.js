@@ -38,7 +38,9 @@ class DataWarehouseScreen {
 			});
 
 		document.querySelector("i.fa-save").addEventListener("click", () => {
-			this.showDataPage();
+			console.log(this.editor.getValue());
+
+			// this.showDataPage();
 		});
 
 		// Get the query string part of the current URL
@@ -126,6 +128,8 @@ class DataWarehouseScreen {
 	}
 
 	showDataForm(value) {
+		console.log("Show Data Form " + value);
+
 		document.querySelector("i.fa-warehouse").classList.add("d-none");
 		document
 			.querySelector("i.fa-arrow-alt-circle-left")
@@ -152,6 +156,7 @@ class DataWarehouseScreen {
 		})
 			.then((response) => response.json())
 			.then((enlargedSchema) => {
+				this.dataForm.innerHTML = "";
 				this.editor = new JSONEditor(this.dataForm, {
 					schema: enlargedSchema,
 					disable_collapse: true,
@@ -161,7 +166,9 @@ class DataWarehouseScreen {
 				});
 
 				if (value) {
-					this.editor.setValue(value);
+					this.editor.on("ready", () => {
+						this.editor.setValue(value);
+					});
 				}
 			})
 			.catch((e) => {
