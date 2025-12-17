@@ -37,12 +37,6 @@ class DataWarehouseScreen {
 				this.showDataPage();
 			});
 
-		document.querySelector("i.fa-save").addEventListener("click", () => {
-			console.log(this.editor.getValue());
-
-			// this.showDataPage();
-		});
-
 		// Get the query string part of the current URL
 		const queryString = window.location.search;
 
@@ -50,9 +44,54 @@ class DataWarehouseScreen {
 		const urlParams = new URLSearchParams(queryString);
 
 		// Get a specific parameter by name
-		const id = urlParams.get("id");
+		this.id = urlParams.get("id");
 
-		fetch("/api/schema/" + id, {
+		document.querySelector("i.fa-save").addEventListener("click", () => {
+			const value = this.editor.getValue();
+
+			if (this.isAdd) {
+				fetch("/api/data/" + this.id, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization:
+							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+					},
+					body: JSON.stringify(value),
+				})
+					.then((created) => {
+						this.showDataPage();
+					})
+					.catch(() => {
+						console.error("No Schema found for " + this.id);
+					});
+			} else {
+				let enpoint = "/api/data/" + this.id;
+				this.schema.ids.forEach((id) => {
+					enpoint += "/" + id + "/" + value[id];
+				});
+
+				fetch(enpoint, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization:
+							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
+					},
+					body: JSON.stringify(value),
+				})
+					.then((created) => {
+						this.showDataPage();
+					})
+					.catch(() => {
+						console.error("No Schema found for " + this.id);
+					});
+			}
+
+			// this.showDataPage();
+		});
+
+		fetch("/api/schema/" + this.id, {
 			headers: {
 				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
 			},
@@ -62,7 +101,7 @@ class DataWarehouseScreen {
 				this.setSelectedSchema(schemas);
 			})
 			.catch(() => {
-				console.error("No Schema found for " + id);
+				console.error("No Schema found for " + this.id);
 			});
 	}
 
@@ -128,6 +167,11 @@ class DataWarehouseScreen {
 	}
 
 	showDataForm(value) {
+		if (value) {
+			this.isAdd = false;
+		} else {
+			this.isAdd = true;
+		}
 		console.log("Show Data Form " + value);
 
 		document.querySelector("i.fa-warehouse").classList.add("d-none");
