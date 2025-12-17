@@ -57,11 +57,7 @@ class Schema {
 		this.scemaEditor.classList.add("col-9");
 		this.scemaEditor.innerHTML = `
 		<div class="card shadow-sm">
-			<div class="card-header bg-primary text-white">
-				<h5 class="mb-0" id="editorTitle">
-					<i class="fas fa-edit me-2"></i>Schema Editor
-				</h5>
-			</div>
+			
 			<div class="card-body">
 		<form class="needs-validation" id="editForm" novalidate>
 					
@@ -126,9 +122,7 @@ class Schema {
 
 					<!-- Property Editor Section (hidden when editing schema general) -->
 					<div id="propertyEditorSection" class="d-none">
-						<h6 class="text-muted mb-3">
-							<i class="fas fa-tag me-2"></i>Property Details
-						</h6>
+					
 						
 						<div class="row mb-3">
 							<label for="propertyNameTxt" class="col-sm-3 col-form-label">
