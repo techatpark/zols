@@ -106,8 +106,21 @@ class Schema {
 								<div class="form-text">Optional description of the schema</div>
         </div>
 			</div>
-		</div>
+		
 
+		<!-- Required Fields Section -->
+					<div id="requiredFieldsSection" class="row mb-3">
+						<h6 class="text-muted mb-3">
+							<i class="fas fa-asterisk me-2"></i>Required Fields
+						</h6>
+						<div id="requiredChoices" class="row g-2">
+							<!-- Required checkboxes will be dynamically added here -->
+      </div>
+						<div class="form-text mt-2">
+							Select which properties are required when creating instances of this schema
+      </div>
+    </div>
+</div>
 
 		</div>
 
@@ -174,6 +187,8 @@ class Schema {
     </div>
   </div>
 
+  					
+
   <div class="row mb-3 d-none" id="propertyParentSchemaRow">
 							<label for="propertyParentSchemaSelect" class="col-sm-3 col-form-label">
 								Parent Schema
@@ -189,18 +204,7 @@ class Schema {
   </div>
 
   
-					<!-- Required Fields Section -->
-					<div id="requiredFieldsSection" class="mt-4">
-						<h6 class="text-muted mb-3">
-							<i class="fas fa-asterisk me-2"></i>Required Fields
-						</h6>
-						<div id="requiredChoices" class="row g-2">
-							<!-- Required checkboxes will be dynamically added here -->
-      </div>
-						<div class="form-text mt-2">
-							Select which properties are required when creating instances of this schema
-      </div>
-    </div>
+
 
   <button id="submitBtn" class="btn btn-primary d-none" type="submit">Submit form</button>
 </form>
