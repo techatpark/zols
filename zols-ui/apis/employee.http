@@ -19,6 +19,9 @@ Content-Type: application/json
 
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
+      "localized": [
+    "title"
+  ],
     "$id": "employee",
     "description": "Employee Schema",
     "title": "Employee",
@@ -35,7 +38,9 @@ Content-Type: application/json
         "type": "string"
       }
     },
-    "ids": ["id"]
+    "ids": ["id"],
+     "required": ["id", "name"],
+    "localized": ["name"]
   }
 
 #### Index a document with Id
