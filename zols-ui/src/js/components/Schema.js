@@ -106,12 +106,20 @@ class Schema {
 
 		<!-- Required Fields Section -->
 					<div id="requiredFieldsSection" class="row mb-3">
-						<h6 class="text-muted mb-3">
+						<p class="text-muted">
 							<i class="fas fa-asterisk me-2"></i>Required Fields
-						</h6>
-						<div id="requiredChoices" class="row g-2">
+						</p>
+						<div id="requiredChoices" class="row mb-3">
 							<!-- Required checkboxes will be dynamically added here -->
       </div>
+
+	  <p class="text-muted">
+							<i class="fas fa-asterisk me-2"></i>Localized Fields
+						</p>
+						<div id="requiredLocalized" class="row">
+							<!-- Required checkboxes will be dynamically added here -->
+      </div>
+						
 						<div class="form-text mt-2">
 							Select which properties are required when creating instances of this schema
       </div>
@@ -910,8 +918,19 @@ class Schema {
 		const checkboxes = document.querySelectorAll(
 			"#requiredChoices input[type='checkbox']"
 		);
+		const checkboxes1 = document.querySelectorAll(
+			"#requiredLocalized input[type='checkbox']"
+		);
 		const required = [];
 		checkboxes.forEach((checkbox) => {
+			if (checkbox.checked) {
+				const propertyName = checkbox.value;
+				if (propertyName && this.schema.properties[propertyName]) {
+					required.push(propertyName);
+				}
+			}
+		});
+		checkboxes1.forEach((checkbox) => {
 			if (checkbox.checked) {
 				const propertyName = checkbox.value;
 				if (propertyName && this.schema.properties[propertyName]) {
@@ -1534,7 +1553,12 @@ class Schema {
 	 */
 	updateRequiredFieldsSection() {
 		const requiredChoices = document.getElementById("requiredChoices");
+		const requiredLocalized = document.getElementById("requiredLocalized");
 		if (!requiredChoices || !this.schema || !this.schema.properties) {
+			return;
+		}
+
+		if (!requiredLocalized || !this.schema || !this.schema.localized) {
 			return;
 		}
 
@@ -1548,16 +1572,20 @@ class Schema {
 				'<div class="col-12"><small class="text-muted">Add properties first to mark them as required</small></div>';
 			return;
 		}
+		if (propertyKeys.length === 0) {
+			requiredLocalized.innerHTML =
+				'<div class="col-12"><small class="text-muted">Add properties first to mark them as required</small></div>';
+			return;
+		}
 
-		requiredChoices.innerHTML = propertyKeys
-			.map((propName) => {
-				const prop = properties[propName];
-				const title = prop.title || propName;
-				const isRequired =
-					this.schema.required && this.schema.required.includes(propName);
-				const checkboxId = `required-${propName.replace(/[^a-zA-Z0-9]/g, "-")}`;
+		(requiredChoices.innerHTML = propertyKeys.map((propName) => {
+			const prop = properties[propName];
+			const title = prop.title || propName;
+			const isRequired =
+				this.schema.required && this.schema.required.includes(propName);
+			const checkboxId = `required-${propName.replace(/[^a-zA-Z0-9]/g, "-")}`;
 
-				return `
+			return `
 				<div class="col-md-6 col-lg-4">
 					<div class="form-check">
 						<input class="form-check-input" type="checkbox" 
@@ -1569,8 +1597,33 @@ class Schema {
 					</div>
 				</div>
 			`;
-			})
-			.join("");
+		})),
+			(requiredLocalized.innerHTML = propertyKeys
+				.map((propName) => {
+					const prop = properties[propName];
+					const title = prop.title || propName;
+					const isRequired =
+						this.schema.required && this.schema.required.includes(propName);
+					const checkboxId = `required-${propName.replace(
+						/[^a-zA-Z0-9]/g,
+						"-"
+					)}`;
+
+					return `
+				<div class="col-md-12 col-lg-4">
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox" 
+							name="requiredFiedss" name="${checkboxId}" 
+							value="${propName}" ${isRequired ? "checked" : ""}>
+							<label class="form-check-label" for="${checkboxId}">
+					${title}
+					</label>
+					</div>
+				</div>
+			`;
+				})
+
+				.join(""));
 	}
 
 	/**
