@@ -919,10 +919,14 @@ class Schema {
 			"#requiredChoices input[type='checkbox']"
 		);
 		const localizedCheckboxes = document.querySelectorAll(
-			"#requiredLocalized input[type='checkbox']"
+			"#requiredLocalized input[name='requiredLocalizedFields']"
+		);
+		const idsCheckboxes = document.querySelectorAll(
+			"#requiredLocalized input[name='idsSelector']"
 		);
 		const required = [];
 		const localized = [];
+		const ids = [];
 
 		checkboxes.forEach((checkbox) => {
 			if (checkbox.checked) {
@@ -944,6 +948,7 @@ class Schema {
 
 		this.schema.required = required.length > 0 ? required : undefined;
 		this.schema.localized = localized.length > 0 ? localized : undefined;
+		this.schema.ids = ids.length > 0 ? ids : undefined;
 	}
 
 	/**
@@ -1606,49 +1611,79 @@ class Schema {
 			.join("");
 
 		if (requiredLocalized) {
-			requiredLocalized.innerHTML = propertyKeys
-				.map((propName) => {
-					const prop = properties[propName];
-					const title = prop.title || propName;
-					const isLocalized =
-						this.schema.localized && this.schema.localized.includes(propName);
-					const checkboxId = `required-localized-${propName.replace(
-						/[^a-zA-Z0-9]/g,
-						"-"
-					)}`;
+			const isAnyId =
+				Array.isArray(this.schema.ids) && this.schema.ids.length > 0;
+			const idsSet = new Set(this.schema.ids || []);
 
-					return `
+			requiredLocalized.innerHTML = `
+
+
+				<div class="row mt-2">
+					${propertyKeys
+						.map((propName) => {
+							const prop = properties[propName];
+							const title = prop.title || propName;
+							const isLocalized =
+								this.schema.localized &&
+								this.schema.localized.includes(propName);
+							const checkboxId = `required-localized-${propName.replace(
+								/[^a-zA-Z0-9]/g,
+								"-"
+							)}`;
+
+							return `
+							<div class="col-md-12 col-lg-4">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" 
+										name="requiredLocalizedFields" id="${checkboxId}" 
+										value="${propName}" ${isLocalized ? "checked" : ""}>
+									<label class="form-check-label" for="${checkboxId}">
+									${title}
+									</label>
+								</div>
+							</div>
+							`;
+						})
+						.join("")}
+										
 					<div class="col-md-12 col-lg-4">
-						<div class="form-check">
-							<input class="form-check-input" type="checkbox" 
-								name="requiredLocalizedFields" id="${checkboxId}" 
-								value="${propName}" ${isLocalized ? "checked" : ""}>
-							<label class="form-check-label" for="${checkboxId}">
-							${title}
-							</label>
+						<div class="form-check me-3">
+							<input class="form-check-input" type="checkbox" id="globalIdsToggle" name="globalIdsToggle" ${
+								isAnyId ? "checked" : ""
+							}>
+							<label class="form-check-label" for="globalIdsToggle">Id's</label>
 						</div>
-					</div>
-				`;
-				})
-				.join("");
-		}
+						</div>
+				
 
-		// Normalize localized checkbox IDs to ensure uniqueness and correct label associations
-		const localizedContainer = document.getElementById("requiredLocalized");
-		if (localizedContainer) {
-			Array.from(
-				localizedContainer.querySelectorAll("input[type=checkbox]")
-			).forEach((cb) => {
-				const propName = cb.value;
-				const newId = `required-localized-${String(propName).replace(
-					/[^a-zA-Z0-9]/g,
-					"-"
-				)}`;
-				cb.id = newId;
-				// Update the nearby label's 'for' attribute if present
-				const label = cb.parentElement.querySelector("label");
-				if (label) label.setAttribute("for", newId);
-			});
+				<div id="idsSelector" class="col-12 mb-2 ${isAnyId ? "" : "d-none"}">
+					${propertyKeys
+						.map((propName) => {
+							const isId = idsSet.has(propName);
+							const selId = `ids-selector-${String(propName).replace(
+								/[^a-zA-Z0-9]/g,
+								"-"
+							)}`;
+							return `
+							
+							`;
+						})
+						.join("")}
+				</div>
+				</div>
+			`;
+
+			// Update listeners for selector and localized checkboxes
+			requiredLocalized
+				.querySelectorAll("input[name='idsSelector']")
+				.forEach((cb) =>
+					cb.addEventListener("change", () => this.updateRequiredFields())
+				);
+			requiredLocalized
+				.querySelectorAll("input[name='requiredLocalizedFields']")
+				.forEach((cb) =>
+					cb.addEventListener("change", () => this.updateRequiredFields())
+				);
 		}
 	}
 
