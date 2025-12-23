@@ -918,10 +918,12 @@ class Schema {
 		const checkboxes = document.querySelectorAll(
 			"#requiredChoices input[type='checkbox']"
 		);
-		const checkboxes1 = document.querySelectorAll(
+		const localizedCheckboxes = document.querySelectorAll(
 			"#requiredLocalized input[type='checkbox']"
 		);
 		const required = [];
+		const localized = [];
+
 		checkboxes.forEach((checkbox) => {
 			if (checkbox.checked) {
 				const propertyName = checkbox.value;
@@ -930,15 +932,18 @@ class Schema {
 				}
 			}
 		});
-		checkboxes1.forEach((checkbox) => {
+
+		localizedCheckboxes.forEach((checkbox) => {
 			if (checkbox.checked) {
 				const propertyName = checkbox.value;
 				if (propertyName && this.schema.properties[propertyName]) {
-					required.push(propertyName);
+					localized.push(propertyName);
 				}
 			}
 		});
+
 		this.schema.required = required.length > 0 ? required : undefined;
+		this.schema.localized = localized.length > 0 ? localized : undefined;
 	}
 
 	/**
@@ -1558,9 +1563,8 @@ class Schema {
 			return;
 		}
 
-		if (!requiredLocalized || !this.schema || !this.schema.localized) {
-			return;
-		}
+		// Don't early-return if localized settings are absent; render localized section only if the container exists
+		// (this allows localized checkboxes to be shown when the schema doesn't yet have a `localized` array)
 
 		const properties = this.schema.properties;
 		const propertyKeys = Object.keys(properties).filter(
@@ -1578,52 +1582,74 @@ class Schema {
 			return;
 		}
 
-		(requiredChoices.innerHTML = propertyKeys.map((propName) => {
-			const prop = properties[propName];
-			const title = prop.title || propName;
-			const isRequired =
-				this.schema.required && this.schema.required.includes(propName);
-			const checkboxId = `required-${propName.replace(/[^a-zA-Z0-9]/g, "-")}`;
+		requiredChoices.innerHTML = propertyKeys
+			.map((propName) => {
+				const prop = properties[propName];
+				const title = prop.title || propName;
+				const isRequired =
+					this.schema.required && this.schema.required.includes(propName);
+				const checkboxId = `required-${propName.replace(/[^a-zA-Z0-9]/g, "-")}`;
 
-			return `
-				<div class="col-md-6 col-lg-4">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" 
-							name="requiredFields" id="${checkboxId}" 
-							value="${propName}" ${isRequired ? "checked" : ""}>
-						<label class="form-check-label" for="${checkboxId}">
-					${title}
-					</label>
+				return `
+					<div class="col-md-6 col-lg-4">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" 
+								name="requiredFields" id="${checkboxId}" 
+								value="${propName}" ${isRequired ? "checked" : ""}>
+							<label class="form-check-label" for="${checkboxId}">
+							${title}
+							</label>
+						</div>
 					</div>
-				</div>
-			`;
-		})),
-			(requiredLocalized.innerHTML = propertyKeys
+				`;
+			})
+			.join("");
+
+		if (requiredLocalized) {
+			requiredLocalized.innerHTML = propertyKeys
 				.map((propName) => {
 					const prop = properties[propName];
 					const title = prop.title || propName;
-					const isRequired =
-						this.schema.required && this.schema.required.includes(propName);
-					const checkboxId = `required-${propName.replace(
+					const isLocalized =
+						this.schema.localized && this.schema.localized.includes(propName);
+					const checkboxId = `required-localized-${propName.replace(
 						/[^a-zA-Z0-9]/g,
 						"-"
 					)}`;
 
 					return `
-				<div class="col-md-12 col-lg-4">
-					<div class="form-check">
-						<input class="form-check-input" type="checkbox" 
-							name="requiredFiedss" name="${checkboxId}" 
-							value="${propName}" ${isRequired ? "checked" : ""}>
+					<div class="col-md-12 col-lg-4">
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" 
+								name="requiredLocalizedFields" id="${checkboxId}" 
+								value="${propName}" ${isLocalized ? "checked" : ""}>
 							<label class="form-check-label" for="${checkboxId}">
-					${title}
-					</label>
+							${title}
+							</label>
+						</div>
 					</div>
-				</div>
-			`;
+				`;
 				})
+				.join("");
+		}
 
-				.join(""));
+		// Normalize localized checkbox IDs to ensure uniqueness and correct label associations
+		const localizedContainer = document.getElementById("requiredLocalized");
+		if (localizedContainer) {
+			Array.from(
+				localizedContainer.querySelectorAll("input[type=checkbox]")
+			).forEach((cb) => {
+				const propName = cb.value;
+				const newId = `required-localized-${String(propName).replace(
+					/[^a-zA-Z0-9]/g,
+					"-"
+				)}`;
+				cb.id = newId;
+				// Update the nearby label's 'for' attribute if present
+				const label = cb.parentElement.querySelector("label");
+				if (label) label.setAttribute("for", newId);
+			});
+		}
 	}
 
 	/**
