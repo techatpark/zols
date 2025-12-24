@@ -9,12 +9,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jsonSchema.factories.SchemaFactoryWrapper;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import org.zols.jsonschema.JsonSchema;
 import org.zols.jsonschema.bind.annotation.Localized;
 import org.zols.jsonschema.everit.EveritJsonSchema;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.validation.ConstraintViolation;
 import java.io.IOException;
 import java.io.InputStream;
