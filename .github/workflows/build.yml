@@ -29,4 +29,4 @@ jobs:
       - name: Build the Infrastructure
         run: docker compose up -d
       - name: Quality Check
-        run: mvn -B package--file pom.xml
+        run: mvn -B package --file pom.xml
