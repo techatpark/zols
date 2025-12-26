@@ -1,7 +1,7 @@
 class IndexScreen {
 	constructor() {
 		if (sessionStorage.auth) {
-			window.location.href = "pages/home.html";
+			window.location.href = "pages/setting.html";
 		}
 
 		document.querySelector("#userName").focus();
@@ -35,7 +35,7 @@ class IndexScreen {
 			})
 			.then((data) => {
 				sessionStorage.auth = JSON.stringify(data);
-				window.location.href = "pages/home.html";
+				window.location.href = "pages/setting.html";
 			})
 			.catch((err) => {
 				document.querySelector(".invisible").classList.remove("invisible");
