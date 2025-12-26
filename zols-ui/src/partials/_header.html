@@ -31,18 +31,20 @@
 
 				</li> -->
 
-				<li class="nav-item">
-					<div class="nav-link dropdown">
-         			   <span aria-expanded="false" class="dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuLink"
-						  role="button">
-				 		<i class="fas fa-globe"></i>  
-         			   </span>
-					   <ul aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-lg-end">
-							<li><a class="dropdown-item" href="#">English</a></li>
-							<li><a class="dropdown-item" href="#">Tamil</a></li>
-					   </ul>
-					</div>
-				</li>
+		<li class="nav-item">
+         <div class="nav-link dropdown">
+   			 <span aria-expanded="false" class="dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuLink"
+   			   role="button">
+ 			     <i class="fas fa-globe"></i>
+  			    <span id="selectedLanguage">English</span>  
+  		    </span>
+
+ 			   <ul aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-lg-end">
+  			    <li><a class="dropdown-item language-option" href="#">English</a></li>
+  			    <li><a class="dropdown-item language-option" href="#">Tamil</a></li>
+  	 		 </ul> 
+ 		 </div>
+		</li>
 
 				<li class="nav-item">
 					<div class="nav-link dropdown">
@@ -65,3 +67,16 @@
 		</div>
 	</div>
 </nav>
+
+<script>
+	const selectedLanguage = document.getElementById('selectedLanguage');
+
+    const languageOptions = document.querySelectorAll('.language-option');
+
+    languageOptions.forEach(option => {
+    option.addEventListener('click', function (e) {
+    e.preventDefault();
+    selectedLanguage.textContent = this.textContent.trim(); 
+  });
+});
+</script>
