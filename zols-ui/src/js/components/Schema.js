@@ -4,6 +4,7 @@ import SchemaService from "../services/SchemaService";
  * Schema - Component for editing schema definitions
  * Handles both creating new schemas and editing existing ones
  */
+/*eslint no-undef: 0*/
 class Schema {
 	constructor(_caller, _container) {
 		this.container = _container;
@@ -921,9 +922,9 @@ class Schema {
 		const localizedCheckboxes = document.querySelectorAll(
 			"#requiredLocalized input[name='requiredLocalizedFields']"
 		);
-		const idsCheckboxes = document.querySelectorAll(
-			"#requiredLocalized input[name='idsSelector']"
-		);
+		// const idsCheckboxes = document.querySelectorAll(
+		// 	"#requiredLocalized input[name='idsSelector']"
+		// );
 		const required = [];
 		const localized = [];
 		const ids = [];
@@ -1613,7 +1614,7 @@ class Schema {
 		if (requiredLocalized) {
 			const isAnyId =
 				Array.isArray(this.schema.ids) && this.schema.ids.length > 0;
-			const idsSet = new Set(this.schema.ids || []);
+			// const idsSet = new Set(this.schema.ids || []);
 
 			requiredLocalized.innerHTML = `
 
@@ -1658,12 +1659,12 @@ class Schema {
 
 				<div id="idsSelector" class="col-12 mb-2 ${isAnyId ? "" : "d-none"}">
 					${propertyKeys
-						.map((propName) => {
-							const isId = idsSet.has(propName);
-							const selId = `ids-selector-${String(propName).replace(
-								/[^a-zA-Z0-9]/g,
-								"-"
-							)}`;
+						.map(() => {
+							// const isId = idsSet.has(propName);
+							// const selId = `ids-selector-${String(propName).replace(
+							// 	/[^a-zA-Z0-9]/g,
+							// 	"-"
+							// )}`;
 							return `
 							
 							`;

@@ -59,7 +59,7 @@ class DataWarehouseScreen {
 					},
 					body: JSON.stringify(value),
 				})
-					.then((created) => {
+					.then(() => {
 						this.showDataPage();
 					})
 					.catch(() => {
@@ -80,7 +80,7 @@ class DataWarehouseScreen {
 					},
 					body: JSON.stringify(value),
 				})
-					.then((created) => {
+					.then(() => {
 						this.showDataPage();
 					})
 					.catch(() => {

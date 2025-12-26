@@ -5,9 +5,16 @@
  */
 package org.zols.jsonschema.everit;
 
-import org.everit.json.schema.Schema;
-import org.everit.json.schema.ValidationException;
-import org.everit.json.schema.loader.SchemaLoader;
+import com.github.erosb.jsonsKema.Schema;
+import com.github.erosb.jsonsKema.SchemaLoader;
+import com.github.erosb.jsonsKema.SchemaLoaderConfig;
+import com.github.erosb.jsonsKema.ValidationFailure;
+import com.github.erosb.jsonsKema.Validator;
+import com.github.erosb.jsonsKema.ValidatorConfig;
+import com.github.erosb.jsonsKema.FormatValidationPolicy;
+import com.github.erosb.jsonsKema.JsonValue;
+import com.github.erosb.jsonsKema.JsonParser;
+
 import org.json.JSONObject;
 import org.zols.jsonschema.JsonSchema;
 import org.zols.jsonschema.violations.JsonSchemaConstraintViolation;
@@ -15,12 +22,17 @@ import org.zols.jsonschema.violations.JsonSchemaConstraintViolation;
 import javax.validation.ConstraintViolation;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
+import java.util.HashSet;
+
 import java.util.function.Function;
 
+import static com.github.erosb.jsonsKema.SchemaLoaderKt.createDefaultConfig;
 import static java.util.stream.Collectors.toSet;
 
 /**
@@ -50,8 +62,13 @@ public class EveritJsonSchema extends JsonSchema {
                                     schemaSupplier) {
         super(schemaMap, schemaSupplier);
         schemaStreams = new HashMap<>();
-        schema = SchemaLoader.load(new JSONObject(schemaMap),
-                this::getSchemaInputStream);
+        schema = new SchemaLoader(getJsonValue(schemaMap),
+                getSchemaLoaderConfig()).load();
+
+
+
+        //        schema = SchemaLoader.load(new JSONObject(schemaMap),
+//                this::getSchemaInputStream);
     }
 
     /**
@@ -65,8 +82,9 @@ public class EveritJsonSchema extends JsonSchema {
                                     schemaSupplier) {
         super(schemaId, schemaSupplier);
         schemaStreams = new HashMap<>();
-        schema = SchemaLoader.load(new JSONObject(getSchemaMap()),
-                this::getSchemaInputStream);
+        schema = new SchemaLoader(getJsonValue(getSchemaMap()),
+                getSchemaLoaderConfig())
+                .load();
     }
 
     private InputStream getSchemaInputStream(final String schemaId) {
@@ -90,21 +108,26 @@ public class EveritJsonSchema extends JsonSchema {
     @Override
     public Set<ConstraintViolation> validate(
             final Map<String, Object> jsonData) {
-        try {
-            schema.validate(new JSONObject(jsonData));
-        } catch (ValidationException ve) {
-            if (ve.getCausingExceptions().isEmpty()) {
+
+        // create a validator instance for each validation (one-time use object)
+        Validator validator = Validator.create(schema,
+                new ValidatorConfig(FormatValidationPolicy.ALWAYS));
+
+        ValidationFailure failure = validator.validate(getJsonValue(jsonData));
+
+        if (failure != null) {
+            if (failure.getCauses().isEmpty()) {
                 Set<ConstraintViolation> constraintViolations =
                         new HashSet<>();
-                constraintViolations.add(getConstraintViolation(ve));
+                constraintViolations.add(getConstraintViolation(failure));
                 return constraintViolations;
             } else {
-                return ve.getCausingExceptions().stream()
+                return failure.getCauses().stream()
                         .map(this::getConstraintViolation)
                         .collect(toSet());
             }
-
         }
+
 
         return new HashSet<>();
     }
@@ -116,7 +139,7 @@ public class EveritJsonSchema extends JsonSchema {
      * @return null.
      */
     private JsonSchemaConstraintViolation getConstraintViolation(
-            final ValidationException ve) {
+            final ValidationFailure ve) {
         return null;
 
     }
@@ -130,5 +153,37 @@ public class EveritJsonSchema extends JsonSchema {
     protected String asString() {
         return schema.toString();
     }
+
+    private JsonValue getJsonValue(final Map<String, Object> jsonMap) {
+        return new JsonParser(new JSONObject(jsonMap).toString())
+                .parse();
+
+    }
+
+    private SchemaLoaderConfig getSchemaLoaderConfig() {
+        SchemaLoaderConfig config = createDefaultConfig(new HashMap<>());
+        // Creating a SchemaLoader config with a pre-registered schema by URI
+        try {
+            List<String> references = getReferences(getSchemaMap());
+
+            Map<URI, String> schemaEntries = new HashMap<>();
+
+            for (String reference: references) {
+                schemaEntries.put(new URI(reference),
+
+                        // then it will resolve it to this schema json
+                        new JSONObject(this.getSchemaSupplier()
+                                .apply(reference))
+                                .toString());
+            }
+
+            config = createDefaultConfig(schemaEntries);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+        return config;
+    }
+
+
 
 }

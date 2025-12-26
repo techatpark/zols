@@ -20,8 +20,14 @@
 
         <dependency>
             <groupId>com.github.erosb</groupId>
-            <artifactId>everit-json-schema</artifactId>
-            <version>1.14.6</version>
+            <artifactId>json-sKema</artifactId>
+            <version>0.25.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>1.9.10</version>
         </dependency>
 
 
