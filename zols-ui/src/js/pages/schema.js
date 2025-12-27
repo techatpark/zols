@@ -330,7 +330,7 @@ class SchemaScreen {
 					class="btn btn-sm btn-outline-primary view-schema"
 					data-schema-id="${schemaId}"
 					title="View/Edit">
-					<i class="fas fa-eye"></i> View
+					<i class="fas fa-eye"></i>
 				</button>
 
 							<a
