@@ -19,7 +19,7 @@
     </scm>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>25</java.version>
         <elasticsearch.version>7.16.2</elasticsearch.version>
         <junit.jupiter.version>5.5.2</junit.jupiter.version>
         <archunit.version>0.22.0</archunit.version>
