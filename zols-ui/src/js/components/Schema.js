@@ -107,24 +107,37 @@ class Schema {
 
 		<!-- Required Fields Section -->
 					<div id="requiredFieldsSection" class="row mb-3">
-						<p class="text-muted">
+						<div class="text-muted mb-2">
 							<i class="fas fa-asterisk me-2"></i>Required Fields
-						</p>
-						<div id="requiredChoices" class="row mb-3">
+						</div>
+						<div id="requiredChoices" class="row mb-2">
 							<!-- Required checkboxes will be dynamically added here -->
       </div>
+	  <div class="form-text mb-3">
+							Select which properties are required fields when creating instances of this schema
+      </div>
 
-	  <p class="text-muted">
+	  <div class="text-muted mb-2">
 							<i class="fas fa-asterisk me-2"></i>Localized Fields
-						</p>
+						</div>
 						<div id="requiredLocalized" class="row">
 							<!-- Required checkboxes will be dynamically added here -->
       </div>
 						
-						<div class="form-text mt-2">
-							Select which properties are required when creating instances of this schema
+						<div class="form-text">
+							Select which properties are required localized fields when creating instances of this schema
       </div>
     </div>
+
+		<div class="text-muted mb-2">
+			<i class="fas fa-asterisk me-2"></i>Id's
+		</div>
+		<div id="requiredIds" class="row">
+			<!-- Id checkboxes will be dynamically added here -->
+		</div>
+		<div class="form-text mb-3">
+			Select which properties act as identifiers (ids) for this schema
+		</div>
 </div>
 
 		</div>
@@ -922,9 +935,7 @@ class Schema {
 		const localizedCheckboxes = document.querySelectorAll(
 			"#requiredLocalized input[name='requiredLocalizedFields']"
 		);
-		// const idsCheckboxes = document.querySelectorAll(
-		// 	"#requiredLocalized input[name='idsSelector']"
-		// );
+		const idsOnlyToggle = document.querySelector("#requiredIds #idsOnlyToggle");
 		const required = [];
 		const localized = [];
 		const ids = [];
@@ -949,7 +960,16 @@ class Schema {
 
 		this.schema.required = required.length > 0 ? required : undefined;
 		this.schema.localized = localized.length > 0 ? localized : undefined;
-		this.schema.ids = ids.length > 0 ? ids : undefined;
+
+		// If the single "Id only" toggle is present and checked, mark all properties as ids
+		if (idsOnlyToggle && idsOnlyToggle.checked) {
+			this.schema.ids = Object.keys(this.schema.properties).filter(
+				(k) => k && k.trim()
+			);
+		} else {
+			// Otherwise remove ids (no per-property ids UI in this mode)
+			this.schema.ids = undefined;
+		}
 	}
 
 	/**
@@ -1618,68 +1638,61 @@ class Schema {
 
 			requiredLocalized.innerHTML = `
 
+			<div class="row mt-2">
+				${propertyKeys
+					.map((propName) => {
+						const prop = properties[propName];
+						const title = prop.title || propName;
+						const isLocalized =
+							this.schema.localized && this.schema.localized.includes(propName);
+						const checkboxId = `required-localized-${propName.replace(
+							/[^a-zA-Z0-9]/g,
+							"-"
+						)}`;
 
-				<div class="row mt-2">
-					${propertyKeys
-						.map((propName) => {
-							const prop = properties[propName];
-							const title = prop.title || propName;
-							const isLocalized =
-								this.schema.localized &&
-								this.schema.localized.includes(propName);
-							const checkboxId = `required-localized-${propName.replace(
-								/[^a-zA-Z0-9]/g,
-								"-"
-							)}`;
-
-							return `
-							<div class="col-md-12 col-lg-4">
-								<div class="form-check">
-									<input class="form-check-input" type="checkbox" 
-										name="requiredLocalizedFields" id="${checkboxId}" 
-										value="${propName}" ${isLocalized ? "checked" : ""}>
-									<label class="form-check-label" for="${checkboxId}">
-									${title}
-									</label>
-								</div>
+						return `
+						<div class="col-md-12 col-lg-4">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" 
+									name="requiredLocalizedFields" id="${checkboxId}" 
+									value="${propName}" ${isLocalized ? "checked" : ""}>
+								<label class="form-check-label" for="${checkboxId}">
+								${title}
+								</label>
 							</div>
-							`;
-						})
-						.join("")}
-										
-					<div class="col-md-12 col-lg-4">
-						<div class="form-check me-3">
-							<input class="form-check-input" type="checkbox" id="globalIdsToggle" name="globalIdsToggle" ${
-								isAnyId ? "checked" : ""
-							}>
-							<label class="form-check-label" for="globalIdsToggle">Id's</label>
 						</div>
-						</div>
-				
-
-				<div id="idsSelector" class="col-12 mb-2 ${isAnyId ? "" : "d-none"}">
-					${propertyKeys
-						.map(() => {
-							// const isId = idsSet.has(propName);
-							// const selId = `ids-selector-${String(propName).replace(
-							// 	/[^a-zA-Z0-9]/g,
-							// 	"-"
-							// )}`;
-							return `
-							
-							`;
-						})
-						.join("")}
-				</div>
-				</div>
+						`;
+					})
+					.join("")}
+			</div>
 			`;
 
-			// Update listeners for selector and localized checkboxes
-			requiredLocalized
-				.querySelectorAll("input[name='idsSelector']")
-				.forEach((cb) =>
-					cb.addEventListener("change", () => this.updateRequiredFields())
-				);
+			// Render Ids section separately (if container exists)
+			const requiredIds = document.getElementById("requiredIds");
+			if (requiredIds) {
+				const idsSet = new Set(this.schema.ids || []);
+				const isAllIds =
+					propertyKeys.length > 0 && propertyKeys.every((k) => idsSet.has(k));
+
+				requiredIds.innerHTML = `
+					<div class="col-md-12 col-lg-4">
+						<div class="form-check me-3">
+							<input class="form-check-input" type="checkbox" id="idsOnlyToggle" name="idsOnlyToggle" ${
+								isAllIds ? "checked" : ""
+							}>
+							<label class="form-check-label" for="idsOnlyToggle">Id</label>
+						</div>
+					</div>
+				`;
+
+				const idsOnlyEl = requiredIds.querySelector("#idsOnlyToggle");
+				if (idsOnlyEl)
+					idsOnlyEl.addEventListener("change", () =>
+						this.updateRequiredFields()
+					);
+			}
+
+			// Attach localized checkbox listeners
 			requiredLocalized
 				.querySelectorAll("input[name='requiredLocalizedFields']")
 				.forEach((cb) =>
