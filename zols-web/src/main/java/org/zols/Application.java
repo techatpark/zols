@@ -35,7 +35,7 @@ public class Application {
      */
     @EventListener
     public void onApplicationEvent(final ContextRefreshedEvent event) {
-        logger.info("Application Started", event.getTimestamp());
+        logger.info("Application Started at {}", event.getTimestamp());
     }
 }
 

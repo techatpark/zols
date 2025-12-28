@@ -90,6 +90,27 @@ class Core {
 		window.info = (statusMesaage) => {
 			showStatus("info", statusMesaage);
 		};
+
+		this.handleLanguage();
+	}
+
+	handleLanguage() {
+		const selectedLanguage = document.getElementById("selectedLanguage");
+		const languageOptions = document.querySelectorAll(".language-option");
+
+		const savedLanguage = localStorage.getItem("selectedLanguage");
+		if (savedLanguage) {
+			selectedLanguage.textContent = savedLanguage;
+		}
+
+		languageOptions.forEach((option) => {
+			option.addEventListener("click", function (e) {
+				e.preventDefault();
+				const lang = this.textContent.trim();
+				selectedLanguage.textContent = lang;
+				localStorage.setItem("selectedLanguage", lang);
+			});
+		});
 	}
 }
 new Core();
