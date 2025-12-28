@@ -938,7 +938,7 @@ class Schema {
 		const idsOnlyToggle = document.querySelector("#requiredIds #idsOnlyToggle");
 		const required = [];
 		const localized = [];
-		const ids = [];
+		// const ids = [];
 
 		checkboxes.forEach((checkbox) => {
 			if (checkbox.checked) {
@@ -1632,8 +1632,8 @@ class Schema {
 			.join("");
 
 		if (requiredLocalized) {
-			const isAnyId =
-				Array.isArray(this.schema.ids) && this.schema.ids.length > 0;
+			// const isAnyId =
+			// 	Array.isArray(this.schema.ids) && this.schema.ids.length > 0;
 			// const idsSet = new Set(this.schema.ids || []);
 
 			requiredLocalized.innerHTML = `
