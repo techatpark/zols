@@ -92,6 +92,7 @@ class Core {
 		};
 
 		this.handleLanguage();
+		this.applyAcceptLanguageHeaders();
 	}
 
 	handleLanguage() {
@@ -104,13 +105,32 @@ class Core {
 		}
 
 		languageOptions.forEach((option) => {
-			option.addEventListener("click", function (e) {
+			option.addEventListener("click", (e) => {
 				e.preventDefault();
-				const lang = this.textContent.trim();
+				const lang = option.textContent.trim();
 				selectedLanguage.textContent = lang;
 				localStorage.setItem("selectedLanguage", lang);
+
+				this.applyAcceptLanguageHeaders();
 			});
 		});
+	}
+
+	applyAcceptLanguageHeaders() {
+		const savedLanguage = localStorage.getItem("selectedLanguage");
+
+		const langCode = savedLanguage === "Tamil" ? "ta" : "en";
+
+		if (window.axios) {
+			window.axios.defaults.headers.common["Accept-Language"] = langCode;
+		}
+
+		const originalFetch = window.fetch;
+		window.fetch = function (url, options = {}) {
+			options.headers = options.headers || {};
+			options.headers["Accept-Language"] = langCode;
+			return originalFetch(url, options);
+		};
 	}
 }
 new Core();
