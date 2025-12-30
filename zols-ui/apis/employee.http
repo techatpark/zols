@@ -69,6 +69,23 @@ Authorization: Bearer {{login.response.body.accessToken}}
 }
 
 #### Index a document with Id
+PUT {{base}}/api/data/employee/id/1
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+Accept-Language: ta
+
+{
+  "id": 1,
+  "name" : "Sathish Tamil"
+}
+
+#### Index a document with Id
 GET {{base}}/api/data/employee
 Content-Type: application/json
 Authorization: Bearer {{login.response.body.accessToken}}
+
+#### Index a document with Id
+GET {{base}}/api/data/employee
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.accessToken}}
+Accept-Language: ta

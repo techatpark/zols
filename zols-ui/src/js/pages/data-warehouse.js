@@ -4,7 +4,7 @@ import { JSONPath } from "../../../node_modules/jsonpath-plus/dist/index-browser
 class DataWarehouseScreen {
 	constructor() {
 		// Set an option globally
-		JSONEditor.defaults.options.theme = "bootstrap4";
+		JSONEditor.defaults.options.theme = "bootstrap5";
 
 		this.dataForm = document.createElement("div");
 		this.dataForm.classList.add("row");
@@ -52,11 +52,7 @@ class DataWarehouseScreen {
 			if (this.isAdd) {
 				fetch("/api/data/" + this.id, {
 					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization:
-							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-					},
+					headers: window.ApplicationHeader(),
 					body: JSON.stringify(value),
 				})
 					.then(() => {
@@ -73,11 +69,7 @@ class DataWarehouseScreen {
 
 				fetch(enpoint, {
 					method: "PUT",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization:
-							"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-					},
+					headers: window.ApplicationHeader(),
 					body: JSON.stringify(value),
 				})
 					.then(() => {
@@ -91,10 +83,10 @@ class DataWarehouseScreen {
 			// this.showDataPage();
 		});
 
+		console.log(window.ApplicationHeader());
+
 		fetch("/api/schema/" + this.id, {
-			headers: {
-				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-			},
+			headers: window.ApplicationHeader(),
 		})
 			.then((response) => response.json())
 			.then((schemas) => {
@@ -172,9 +164,7 @@ class DataWarehouseScreen {
 		}
 
 		fetch("/api/schema/" + this.schema["$id"] + "?enlarged", {
-			headers: {
-				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-			},
+			headers: window.ApplicationHeader(),
 		})
 			.then((response) => response.json())
 			.then((enlargedSchema) => {
@@ -219,10 +209,10 @@ class DataWarehouseScreen {
 			requestVariable = "?size=3";
 		}
 
+		console.log(window.ApplicationHeader());
+
 		fetch("/api/data/" + this.schema["$id"] + requestVariable, {
-			headers: {
-				Authorization: "Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-			},
+			headers: window.ApplicationHeader(),
 		})
 			.then((response) => response.json())
 			.then((dataPage) => {
@@ -343,10 +333,7 @@ class DataWarehouseScreen {
 								this.getDataEndpoint(this.dataPage.content[selectedIndex]),
 							{
 								method: "DELETE",
-								headers: {
-									Authorization:
-										"Bearer " + JSON.parse(sessionStorage.auth).accessToken,
-								},
+								headers: window.ApplicationHeader(),
 							}
 						)
 							.then(() => {

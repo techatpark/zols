@@ -91,6 +91,23 @@ class Core {
 			showStatus("info", statusMesaage);
 		};
 
+		window.ApplicationHeader = () => {
+			const header = {
+				"content-type": "application/json",
+			};
+			if (sessionStorage.auth) {
+				header["Authorization"] =
+					"Bearer " + JSON.parse(sessionStorage.auth).accessToken;
+			}
+			if (window.LANGUAGE != null && window.LANGUAGE !== "en") {
+				header["Accept-Language"] = window.LANGUAGE;
+			}
+
+			console.log(window.LANGUAGE);
+
+			return header;
+		};
+
 		this.handleLanguage();
 		this.applyAcceptLanguageHeaders();
 	}
@@ -101,14 +118,21 @@ class Core {
 
 		const savedLanguage = localStorage.getItem("selectedLanguage");
 		if (savedLanguage) {
-			selectedLanguage.textContent = savedLanguage;
+			selectedLanguage.textContent = document.querySelector(
+				"[data-langcode='" + savedLanguage + "']"
+			).textContent;
 		}
+
+		window.LANGUAGE = "en" === savedLanguage ? null : savedLanguage;
 
 		languageOptions.forEach((option) => {
 			option.addEventListener("click", (e) => {
 				e.preventDefault();
-				const lang = option.textContent.trim();
-				selectedLanguage.textContent = lang;
+				const lang = option.dataset.langcode;
+				selectedLanguage.textContent = document.querySelector(
+					"[data-langcode='" + lang + "']"
+				).textContent;
+
 				localStorage.setItem("selectedLanguage", lang);
 
 				this.applyAcceptLanguageHeaders();
