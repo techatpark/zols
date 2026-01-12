@@ -99,11 +99,17 @@ class Core {
 				header["Authorization"] =
 					"Bearer " + JSON.parse(sessionStorage.auth).accessToken;
 			}
-			if (window.LANGUAGE != null && window.LANGUAGE !== "en") {
+			// Always include Accept-Language (default to 'en') so network requests reflect current language
+			if (window.LANGUAGE) {
 				header["Accept-Language"] = window.LANGUAGE;
+			} else {
+				header["Accept-Language"] = "en";
 			}
 
-			console.log(window.LANGUAGE);
+			console.log(
+				"ApplicationHeader Accept-Language:",
+				header["Accept-Language"]
+			);
 
 			return header;
 		};
@@ -116,45 +122,116 @@ class Core {
 		const selectedLanguage = document.getElementById("selectedLanguage");
 		const languageOptions = document.querySelectorAll(".language-option");
 
-		const savedLanguage = localStorage.getItem("selectedLanguage");
-		if (savedLanguage) {
-			selectedLanguage.textContent = document.querySelector(
-				"[data-langcode='" + savedLanguage + "']"
-			).textContent;
+		// 1️⃣ Default language = English
+		let savedLanguage = localStorage.getItem("selectedLanguage");
+		if (!savedLanguage) {
+			savedLanguage = "en";
+			localStorage.setItem("selectedLanguage", "en");
 		}
 
-		window.LANGUAGE = "en" === savedLanguage ? null : savedLanguage;
+		// 2️⃣ Update UI label
+		const selectedOption = document.querySelector(
+			`[data-langcode="${savedLanguage}"]`
+		);
+		if (selectedOption) {
+			selectedLanguage.textContent = selectedOption.textContent;
+		}
 
+		// 3️⃣ Store globally
+		window.LANGUAGE = savedLanguage;
+
+		// 4️⃣ Apply header on load
+		this.applyAcceptLanguageHeaders();
+
+		// 5️⃣ Handle dropdown change
 		languageOptions.forEach((option) => {
 			option.addEventListener("click", (e) => {
 				e.preventDefault();
-				const lang = option.dataset.langcode;
-				selectedLanguage.textContent = document.querySelector(
-					"[data-langcode='" + lang + "']"
-				).textContent;
 
+				const lang = option.dataset.langcode; // en / ta
+				const label = option.textContent;
+
+				// Update UI
+				selectedLanguage.textContent = label;
+
+				// Save selection
 				localStorage.setItem("selectedLanguage", lang);
+				window.LANGUAGE = lang;
 
+				// Apply to API headers
 				this.applyAcceptLanguageHeaders();
+
+				console.log("Language changed to:", lang);
 			});
 		});
 	}
 
 	applyAcceptLanguageHeaders() {
-		const savedLanguage = localStorage.getItem("selectedLanguage");
+		const langCode = localStorage.getItem("selectedLanguage") || "en";
 
-		const langCode = savedLanguage === "Tamil" ? "ta" : "en";
+		console.log("Applying Accept-Language:", langCode);
 
+		// Apply to Axios defaults and add interceptor so any request uses up-to-date header
 		if (window.axios) {
 			window.axios.defaults.headers.common["Accept-Language"] = langCode;
+
+			// Eject previous interceptor if set
+			if (
+				window._acceptLanguageInterceptorId != null &&
+				window.axios.interceptors &&
+				window.axios.interceptors.request
+			) {
+				try {
+					window.axios.interceptors.request.eject(
+						window._acceptLanguageInterceptorId
+					);
+				} catch (e) {
+					// ignore
+				}
+			}
+
+			if (window.axios.interceptors && window.axios.interceptors.request) {
+				window._acceptLanguageInterceptorId =
+					window.axios.interceptors.request.use((config) => {
+						config.headers = config.headers || {};
+						config.headers["Accept-Language"] = langCode;
+						// Some axios instances use headers.common
+						if (config.headers.common) {
+							config.headers.common["Accept-Language"] = langCode;
+						}
+						return config;
+					});
+			}
 		}
 
-		const originalFetch = window.fetch;
-		window.fetch = function (url, options = {}) {
-			options.headers = options.headers || {};
-			options.headers["Accept-Language"] = langCode;
-			return originalFetch(url, options);
+		// Apply to fetch — guard against double-wrapping by keeping _originalFetch
+		if (!window._originalFetch) {
+			window._originalFetch = window.fetch.bind(window);
+		}
+
+		const originalFetch = window._originalFetch;
+		window.fetch = function (input, options = {}) {
+			options = options || {};
+			// Support Headers instance
+			if (options.headers instanceof Headers) {
+				options.headers.set("Accept-Language", langCode);
+			} else {
+				options.headers = Object.assign({}, options.headers || {}, {
+					"Accept-Language": langCode,
+				});
+			}
+			return originalFetch(input, options);
 		};
+
+		// Notify other modules that might manage their own axios instances
+		try {
+			window.dispatchEvent(
+				new CustomEvent("language-changed", { detail: { langCode } })
+			);
+		} catch (e) {
+			console.warn("Could not dispatch language-changed event", e);
+		}
 	}
 }
+
 new Core();
