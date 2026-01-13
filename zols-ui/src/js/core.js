@@ -231,6 +231,38 @@ class Core {
 		} catch (e) {
 			console.warn("Could not dispatch language-changed event", e);
 		}
+
+		try {
+			const main = document.querySelector("main");
+			if (!main) return;
+
+			const url = window.location.pathname + window.location.search;
+
+			fetch(url, { cache: "no-store" })
+				.then((res) => {
+					if (!res.ok) throw new Error("Failed to reload page fragment");
+					return res.text();
+				})
+				.then((html) => {
+					const doc = new DOMParser().parseFromString(html, "text/html");
+					const newMain = doc.querySelector("main");
+
+					if (newMain) {
+						main.innerHTML = newMain.innerHTML;
+						window.dispatchEvent(
+							new CustomEvent("content-updated", { detail: { langCode } })
+						);
+					}
+				})
+				.catch((err) =>
+					console.warn(
+						"Error reloading page fragment after language change:",
+						err
+					)
+				);
+		} catch (e) {
+			console.warn("Error attempting fragment refresh on language change", e);
+		}
 	}
 }
 
